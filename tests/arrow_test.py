@@ -1,14 +1,13 @@
-from chai import Chai
 from datetime import datetime, timedelta, tzinfo
 import time, calendar
 import arrow
+import unittest
 
 from dateutil import tz
 
-class TimeZoneTests(Chai):
+class TimeZoneTests(unittest.TestCase):
 
     def setUp(self):
-        super(TimeZoneTests, self).setUp()
 
         self.time_zone = arrow.TimeZone('UTC')
         self.datetime = datetime.utcnow()
@@ -16,24 +15,24 @@ class TimeZoneTests(Chai):
     def assert_tzinfo_equal(self, tzinfo_1, tzinfo_2):
 
         dt = datetime.now()
-        assertEqual(tzinfo_1.utcoffset(dt), tzinfo_2.utcoffset(dt))
+        self.assertEqual(tzinfo_1.utcoffset(dt), tzinfo_2.utcoffset(dt))
 
     def test_str(self):
 
-        assertEqual(self.time_zone.__str__(), 'TimeZone(UTC, 0:00:00)')
-        assertEqual(self.time_zone.__repr__(), 'TimeZone(UTC, 0:00:00)')
+        self.assertEqual(self.time_zone.__str__(), 'TimeZone(UTC, 0:00:00)')
+        self.assertEqual(self.time_zone.__repr__(), 'TimeZone(UTC, 0:00:00)')
 
     def test_name(self):
-        assertEqual(self.time_zone.name, 'UTC')
+        self.assertEqual(self.time_zone.name, 'UTC')
 
     def test_utcoffset(self):
-        assertEqual(self.time_zone.utcoffset, timedelta())
+        self.assertEqual(self.time_zone.utcoffset, timedelta())
 
     def test_utc(self):
-        assertTrue(self.time_zone.utc)
+        self.assertTrue(self.time_zone.utc)
 
     def test_tzinfo(self):
-        assertIsInstance(self.time_zone.tzinfo, tzinfo)
+        self.assertIsInstance(self.time_zone.tzinfo, tzinfo)
 
     def test_get_tz_str(self):
 
@@ -53,7 +52,7 @@ class TimeZoneTests(Chai):
 
         result = self.time_zone._get_tzinfo(tz_utc)
 
-        assertEqual(result, tz_utc)
+        self.assertEqual(result, tz_utc)
 
     def test_get_tz_timedelta(self):
 
@@ -63,10 +62,10 @@ class TimeZoneTests(Chai):
 
     def test_get_tz_none(self):
 
-        with assertRaises(Exception):
+        with self.assertRaises(Exception):
             self.time_zone._get_tzinfo(None)
 
-class BaseArrowTests(Chai):
+class BaseArrowTests(unittest.TestCase):
 
     def assert_ts_equal(self, ts_1, ts_2, delta=5.0):
         eq = abs(ts_1 - ts_2) <= delta
@@ -87,7 +86,6 @@ class BaseArrowTests(Chai):
 class ArrowTests(BaseArrowTests):
 
     def setUp(self):
-        super(ArrowTests, self).setUp()
 
         self.utc = arrow.TimeZone()
         self.local = arrow.TimeZone('local')
@@ -103,7 +101,7 @@ class ArrowTests(BaseArrowTests):
 
         result = self.arrow.datetime
 
-        assertEqual(result, dt)
+        self.assertEqual(result, dt)
 
     def test_timestamp_utc(self):
 
@@ -114,7 +112,7 @@ class ArrowTests(BaseArrowTests):
 
         result = self.arrow.timestamp
 
-        assertEqual(result, calendar.timegm(dt.timetuple()))
+        self.assertEqual(result, calendar.timegm(dt.timetuple()))
 
     def test_timestamp_local(self):
 
@@ -125,14 +123,14 @@ class ArrowTests(BaseArrowTests):
 
         result = self.arrow.timestamp
 
-        assertEqual(result, time.mktime(dt.timetuple()))
+        self.assertEqual(result, time.mktime(dt.timetuple()))
 
     def test_get_datetime_none(self):
 
         result = self.arrow._get_datetime(None, self.utc)
 
         self.assert_dt_equal(result, datetime.utcnow())
-        assertEqual(result.tzinfo, self.utc.tzinfo)
+        self.assertEqual(result.tzinfo, self.utc.tzinfo)
 
     def test_get_datetime_int(self):
 
@@ -186,12 +184,12 @@ class ArrowTests(BaseArrowTests):
 
     def test_get_datetime_unrecognized(self):
 
-        with assertRaises(RuntimeError):
+        with self.assertRaises(RuntimeError):
             self.arrow._get_datetime(object, self.utc)
 
     def test_get_datetime_parse_str(self):
 
-        with assertRaises(NotImplementedError):
+        with self.assertRaises(NotImplementedError):
             self.arrow._get_datetime('1-1-2012', self.utc)
 
 

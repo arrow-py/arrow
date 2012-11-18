@@ -1,6 +1,6 @@
 [run]
 omit =
+    setup.py
     */__init__.py
-    */setup.py
     /*/tests/*
     /*/local/*
