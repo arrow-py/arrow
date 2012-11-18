@@ -1,4 +1,0 @@
-python-dateutil
-chai
-nose
-nose-cov

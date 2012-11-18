@@ -7,13 +7,15 @@ requirements = [r for r in map(str.strip, open('requirements.txt').readlines())]
 
 setup(
     name='arrow',
-    version='0.1.0',
+    version='0.1',
+    description="Sensible dates for Python",
+    url='https://github.com/crsmithdev/arrow',
     author='Chris Smith',
     author_email="chris@cir.ca",
+    license='MIT',
     packages=['arrow'],
-    url='https://github.com/crsmithdev/arrow',
-    license='LICENSE.txt',
-    description="sensible dates for Python",
-    keywords=['python'],
-    install_requires=requirements
+    zip_safe=False,
+    install_requires=[
+        'python-dateutil'
+    ]
 )

@@ -1,11 +1,2 @@
 *.pyc
-
-.coverage
-.Python
-nosetests.xml
-
-bin/
-build/
-include/
-lib/
-n
+*.egg-info

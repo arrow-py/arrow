@@ -1,5 +1,6 @@
 [run]
 omit =
     */__init__.py
+    */setup.py
     /*/tests/*
-    /*/lib/*
+    /*/local/*
