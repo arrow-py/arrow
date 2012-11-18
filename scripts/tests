@@ -1,0 +1,3 @@
+#!/bin/sh
+
+nosetests -v --with-cov --cov-report term-missing tests
