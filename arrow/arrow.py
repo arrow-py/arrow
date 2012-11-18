@@ -6,7 +6,11 @@ from dateutil import tz
 
 class TimeZone(object):
 
-    def __init__(self, time_zone=tz.tzutc()):
+    def __init__(self, time_zone=None):
+
+        if time_zone is None:
+            time_zone = tz.tzutc()
+
         self._tzinfo = self._get_tzinfo(time_zone)
 
     def __repr__(self):
@@ -107,3 +111,7 @@ class Arrow(object):
             return calendar.timegm(self._datetime.utctimetuple())
         else:
             return time.mktime(self._datetime.timetuple())
+
+    @property
+    def tz(self):
+        return self._time_zone

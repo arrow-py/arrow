@@ -92,6 +92,12 @@ class ArrowTests(BaseArrowTests):
 
         self.arrow = arrow.Arrow()
 
+    def test_tz(self):
+
+        self.arrow._time_zone = self.utc
+        
+        self.assertEqual(self.arrow.tz, self.utc)
+
     def test_datetime(self):
 
         dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
