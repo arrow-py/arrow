@@ -3,8 +3,6 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requirements = [r for r in map(str.strip, open('requirements.txt').readlines())]
-
 setup(
     name='arrow',
     version='0.1',

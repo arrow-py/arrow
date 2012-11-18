@@ -1,2 +1,5 @@
 *.pyc
 *.egg-info
+
+.coverage
+local/
