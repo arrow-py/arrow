@@ -279,13 +279,16 @@ class ArrowToTests(BaseArrowTests):
         self.assert_dt_equal(result.datetime, datetime.utcnow())
         self.assert_ts_equal(result.timestamp, time.time())
 
+    def test_zone_to_zone(self):
 
+        dt_1 = datetime.utcnow() + timedelta(hours=-2)
+        dt_2 = datetime.utcnow() + timedelta(hours=2)
 
+        arr_1 = arrow.Arrow(dt_1, timedelta(hours=-2))
+        arr_2 = arrow.Arrow(dt_2, timedelta(hours=2))
 
+        result_1 = arr_1.to(timedelta(hours=2))
+        result_2 = arr_2.to(timedelta(hours=-2))
 
-
-
-
-
-
-
+        self.assert_dt_equal(result_1.datetime, arr_2.datetime)
+        self.assert_dt_equal(result_2.datetime, arr_1.datetime)
