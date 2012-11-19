@@ -28,11 +28,8 @@ class TimeZone(object):
         if isinstance(tz_expr, TimeZone):
             _tzinfo = tz_expr.tzinfo
 
-        if isinstance(tz_expr, str):
-            if tz_expr == 'local':
-                tz_expr = None
-
-            _tzinfo = tz.gettz(tz_expr)
+        elif isinstance(tz_expr, str):
+            _tzinfo = tz.gettz() if tz_expr == 'local' else tz.gettz(tz_expr)
 
         elif isinstance(tz_expr, tzinfo):
             _tzinfo = tz_expr
@@ -75,6 +72,9 @@ class Arrow(object):
 
         _datetime = None
 
+        if isinstance(dt_expr, int):
+            dt_expr = float(dt_expr)
+
         if dt_expr is None:
             dt_expr = datetime.utcnow()
 
@@ -83,9 +83,6 @@ class Arrow(object):
                 dt_expr = float(dt_expr)
             except:
                 raise NotImplementedError('String parsing coming soon')
-
-        if isinstance(dt_expr, int):
-            dt_expr = float(dt_expr)
 
         if isinstance(dt_expr, float):
             if time_zone.utc:
