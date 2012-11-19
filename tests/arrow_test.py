@@ -95,8 +95,17 @@ class ArrowTests(BaseArrowTests):
     def test_tz(self):
 
         self.arrow._time_zone = self.utc
-        
+
         self.assertEqual(self.arrow.tz, self.utc)
+
+    def test_to(self):
+
+        self.arrow._datetime = datetime.utcnow().replace(tzinfo=self.utc.tzinfo)
+        self.arrow._time_zone = self.utc
+
+        result = self.arrow.to('local')
+
+        self.assert_dt_equal(result.datetime, self.arrow._datetime.astimezone(self.local.tzinfo))
 
     def test_datetime(self):
 
@@ -199,50 +208,81 @@ class ArrowTests(BaseArrowTests):
             self.arrow._get_datetime('1-1-2012', self.utc)
 
 
+class ArrowInitTests(BaseArrowTests):
 
-# class ArrowInitTests(BaseArrowTests):
+    def test_none_no_tz(self):
 
-#     def test_none_no_tz(self):
+        arw = arrow.Arrow()
 
-#         arrow = Arrow()
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_datetime_no_tz(self):
 
-#     def test_utc_datetime_no_tz(self):
+        arw = arrow.Arrow(datetime.utcnow())
 
-#         arrow = Arrow(datetime.utcnow())
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_int_timestamp_no_tz(self):
 
-#     def test_utc_int_timestamp_no_tz(self):
+        arw = arrow.Arrow(int(time.time()))
 
-#         arrow = Arrow(int(time.time()))
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_float_timestamp_no_tz(self):
 
-#     def test_utc_float_timestamp_no_tz(self):
+        arw = arrow.Arrow(time.time())
 
-#         arrow = Arrow(time.time())
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_int_str_timestamp_no_tz(self):
 
-#     def test_utc_int_str_timestamp_no_tz(self):
+        arw = arrow.Arrow(str(int(time.time())))
 
-#         arrow = Arrow(str(int(time.time())))
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_float_str_timestamp_no_tz(self):
 
-#     def test_utc_float_str_timestamp_no_tz(self):
+        arw = arrow.Arrow(str(time.time()))
 
-#         arrow = Arrow(str(time.time()))
+        self.assert_dt_equal(arw.datetime, datetime.utcnow())
+        self.assert_ts_equal(arw.timestamp, time.time())
 
-#         self.assert_dt_equal(arrow.datetime, datetime.utcnow())
-#         self.assert_ts_equal(arrow.timestamp, time.time())
+    def test_datetime_local(self):
+
+        arw = arrow.Arrow(datetime.now(), tz='local')
+
+        self.assert_dt_equal(arw.datetime, datetime.now())
+        self.assert_ts_equal(arw.timestamp, time.time())
+
+class ArrowToTests(BaseArrowTests):
+
+    def test_utc_to_local(self):
+        
+        arr = arrow.Arrow(datetime.utcnow(), tz='UTC')
+
+        result = arr.to('local')
+
+        self.assert_dt_equal(result.datetime, datetime.now())
+        self.assert_ts_equal(result.timestamp, time.time())
+
+    def test_local_to_utc(self):
+
+        arr = arrow.Arrow(datetime.now(), tz='local')
+
+        result = arr.to('UTC')
+
+        self.assert_dt_equal(result.datetime, datetime.utcnow())
+        self.assert_ts_equal(result.timestamp, time.time())
+
+
+
+
+
 
 
 

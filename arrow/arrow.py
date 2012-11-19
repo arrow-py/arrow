@@ -23,24 +23,27 @@ class TimeZone(object):
     @staticmethod
     def _get_tzinfo(tz_expr):
 
-        _tz_info = None
+        _tzinfo = None
+
+        if isinstance(tz_expr, TimeZone):
+            _tzinfo = tz_expr.tzinfo
 
         if isinstance(tz_expr, str):
             if tz_expr == 'local':
                 tz_expr = None
 
-            _tz_info = tz.gettz(tz_expr)
+            _tzinfo = tz.gettz(tz_expr)
 
         elif isinstance(tz_expr, tzinfo):
-            _tz_info = tz_expr
+            _tzinfo = tz_expr
 
         elif isinstance(tz_expr, timedelta):
-            _tz_info = tz.tzoffset(None, tz_expr.total_seconds())
+            _tzinfo = tz.tzoffset(None, tz_expr.total_seconds())
 
-        if _tz_info is None:
+        if _tzinfo is None:
             raise Exception('Could not recognize time zone')
 
-        return _tz_info
+        return _tzinfo
 
     @property
     def name(self):
@@ -99,10 +102,8 @@ class Arrow(object):
         return _datetime.replace(tzinfo=time_zone.tzinfo)
 
     @property
-    def datetime(self, tz=None):
-
-        time_zone = self._time_zone if tz is None else TimeZone(tz)
-        return self._datetime.astimezone(time_zone.tzinfo)
+    def datetime(self):
+        return self._datetime
 
     @property
     def timestamp(self):
@@ -115,3 +116,11 @@ class Arrow(object):
     @property
     def tz(self):
         return self._time_zone
+
+    def to(self, tz):
+
+        time_zone = TimeZone(tz)
+        _datetime = self._datetime.astimezone(time_zone.tzinfo)
+
+        return Arrow(_datetime, time_zone)
+
