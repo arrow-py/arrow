@@ -1,5 +1,5 @@
 ===================================================
-Arrow - Simple date & time manipulation for Python
+Arrow - Better date & time manipulation for Python
 ===================================================
 
 :Version: 0.1.1
