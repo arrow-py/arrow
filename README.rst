@@ -30,8 +30,9 @@ Importing:
 Instantiation:
 --------------
 
-	# current UTC datetime
-	a = arrow()
+Current UTC time
+
+	>>> a = arrow()
 
 	# current local datetime
 	a = arrow(datetime.now(), tz='local')
