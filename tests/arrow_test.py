@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta, tzinfo
-import time, calendar
-import unittest
-
 from arrow import arrow, Arrow, TimeZone
 
+from datetime import datetime, timedelta, tzinfo
 from dateutil import tz
+
+import time, calendar
+import unittest
 
 class BaseArrowTests(unittest.TestCase):
 
@@ -20,6 +20,7 @@ class BaseArrowTests(unittest.TestCase):
 
         if abs(ts_1 - ts_2) > delta:
             raise AssertionError('{0} != {1} within +/- {2}'.format(dt_1, dt_2, delta))
+
 
 class ArrowTests(BaseArrowTests):
 
