@@ -2,7 +2,7 @@
 Arrow - Better date & time manipulation for Python
 ===================================================
 
-:Version: 0.1.2
+:Version: 0.1.3
 :Author: Chris Smith (chris@cir.ca)
 :Download: http://pypi.python.org/pypi/arrow
 :Source: https://github.com/crsmithdev/arrow
