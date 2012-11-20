@@ -8,6 +8,12 @@ import unittest
 
 class BaseArrowTests(unittest.TestCase):
 
+    def setUp(self):
+        super(BaseArrowTests, self).setUp()
+
+        self.utc = TimeZone()
+        self.local = TimeZone('local')
+
     def assert_ts_equal(self, ts_1, ts_2, delta=5.0):
 
         if abs(ts_1 - ts_2) > delta:
@@ -25,9 +31,7 @@ class BaseArrowTests(unittest.TestCase):
 class ArrowTests(BaseArrowTests):
 
     def setUp(self):
-
-        self.utc = TimeZone()
-        self.local = TimeZone('local')
+        super(ArrowTests, self).setUp()
 
         self.arrow = Arrow(datetime.utcnow(), tz='UTC')
 
@@ -255,6 +259,14 @@ class ArrowFunctionTest(BaseArrowTests):
 
         self.assert_dt_equal(result.datetime, datetime.utcnow())
         self.assert_ts_equal(result.timestamp, time.time())
+
+    def test_two_args_local_datetime_local_str(self):
+
+        result = arrow(datetime.now(), 'local')
+
+        self.assert_dt_equal(result.datetime, datetime.now())
+        self.assert_ts_equal(result.timestamp, time.time())
+        self.assertEqual(result.tz.utcoffset, self.local.utcoffset)
 
     def test_tz_kwarg_local(self):
 

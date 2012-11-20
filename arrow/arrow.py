@@ -6,7 +6,7 @@ from dateutil import tz as _tz
 import time, calendar
 
 def arrow(date=None, tz=None):
-
+    print date, tz
     def _tz_now(tzinfo):
 
         date = datetime.utcnow()
@@ -37,7 +37,7 @@ def arrow(date=None, tz=None):
 
         else:
             date_expr = date
-            time_expr = time
+            tz_expr = tz
 
     return Arrow(date_expr, tz_expr)
 

@@ -43,31 +43,40 @@ Current UTC date & time
 
 Current local date & time
 
-	>>> a = arrow('local')
+	>>> arrow('local')
+	Arrow(11/20/12 07:40:27.473312 -08:00 (PST))
 
 Current date & time in named time zone
 	
-	>>> a = arrow('US/Pacific') 
+	>>> arrow('US/Pacific')
+	Arrow(11/20/12 07:40:36.707704 -08:00 (PST))
 
 Current date & time with offset-based time zone
 
-	>>> a = arrow(timedelta(hours=-1))
+	>>> arrow(timedelta(hours=-1))
+	Arrow(11/20/12 14:40:54.544660 -01:00 (None))
 
 Current UTC date & time from timestamp
 
-	>>> a = arrow(time.time())
+	>>> arrow(time.time())
+	Arrow(11/20/12 15:41:13.112031 +00:00 (UTC))
 
 Another date & time in UTC
 
-	>>> a = arrow(datetime_var)
+	>>> d = datetime.utcnow() + timedelta(hours=-1)
+	>>> arrow(d)
+	Arrow(11/20/12 15:41:22.130000 +00:00 (UTC))
 
 Another date & time in another time zone
 
-	>>> a = arrow(datetime_var, 'US/Pacific')
+	>>> d = datetime.now() + timedelta(hours=-1)
+	>>> arrow(d, 'local')
+	Arrow(11/20/12 15:41:22.130000 +00:00 (UTC))
 
 Another date & time from timestamp
 
-	>>> a = arrow(time.time(), 'local') 
+	>>> arrow(time.time())
+	Arrow(11/20/12 15:46:49.204422 +00:00 (UTC))
 
 Accessing properties
 --------------------
@@ -103,19 +112,19 @@ Converting between time zones
 	>>> a2 = arrow('local')
 	>>> a3 = a1.to('local')
 	>>> a4 = a2.to('UTC')
-	>>> a1.datetime; a4.datetime
-	datetime.datetime(2012, 11, 20, 0, 48, 10, 244547, tzinfo=tzutc())
-	datetime.datetime(2012, 11, 20, 0, 48, 13, 948510, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
-	>>> a2.datetime; a3.datetime
-	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
-	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
+	>>> a1; a4
+	Arrow(11/20/12 15:47:27.388437 +00:00 (UTC))
+	Arrow(11/20/12 15:47:30.821018 +00:00 (UTC))
+	>>> a2; a3
+	Arrow(11/20/12 07:47:30.821018 -08:00 (PST))
+	Arrow(11/20/12 07:47:27.388437 -08:00 (PST))
 
-	>>> a1 = arrow(datetime.now(), tz='local')
+	>>> a1 = arrow('local')
 	>>> a2 = arrow()
 	>>> a3 = a1.utc()
-	>>> a2.datetime; a3.datetime
-	datetime.datetime(2012, 11, 20, 3, 53, 29, 385932, tzinfo=tzutc())
-	datetime.datetime(2012, 11, 20, 3, 53, 25, 985915, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+	>>> a2; a3
+	Arrow(11/20/12 15:48:32.458546 +00:00 (UTC))
+	Arrow(11/20/12 15:48:30.211002 +00:00 (UTC))
 
 .. _arrow-coming-soon:
 
