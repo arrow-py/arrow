@@ -94,25 +94,43 @@ class ArrowTests(BaseArrowTests):
 
     def test_tz(self):
 
-        self.arrow._time_zone = self.utc
+        self.arrow._timezone = self.utc
 
         self.assertEqual(self.arrow.tz, self.utc)
 
     def test_to(self):
 
         self.arrow._datetime = datetime.utcnow().replace(tzinfo=self.utc.tzinfo)
-        self.arrow._time_zone = self.utc
+        self.arrow._timezone = self.utc
 
         result = self.arrow.to('local')
 
         self.assert_dt_equal(result.datetime, self.arrow._datetime.astimezone(self.local.tzinfo))
+
+    def test_utc_utc(self):
+
+        self.arrow._datetime = datetime.now().replace(tzinfo=self.local.tzinfo)
+        self.arrow._timezone = self.local
+
+        result = self.arrow.utc()
+
+        self.assert_dt_equal(result.datetime, self.arrow._datetime.astimezone(self.utc.tzinfo))
+
+    def test_utc_local(self):
+
+        self.arrow._datetime = datetime.utcnow().replace(tzinfo=self.utc.tzinfo)
+        self.arrow._timezone = self.utc
+
+        result = self.arrow.utc()
+
+        self.assert_dt_equal(result.datetime, self.arrow._datetime.astimezone(self.utc.tzinfo))
 
     def test_datetime(self):
 
         dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
 
         self.arrow._datetime = dt
-        self.arrow._time_zone = self.utc
+        self.arrow._timezone = self.utc
 
         result = self.arrow.datetime
 
@@ -123,7 +141,7 @@ class ArrowTests(BaseArrowTests):
         dt = datetime.utcnow()
 
         self.arrow._datetime = dt
-        self.arrow._time_zone = self.utc
+        self.arrow._timezone = self.utc
 
         result = self.arrow.timestamp
 
@@ -134,7 +152,7 @@ class ArrowTests(BaseArrowTests):
         dt = datetime.now()
 
         self.arrow._datetime = dt
-        self.arrow._time_zone = self.local
+        self.arrow._timezone = self.local
 
         result = self.arrow.timestamp
 
@@ -258,6 +276,7 @@ class ArrowInitTests(BaseArrowTests):
 
         self.assert_dt_equal(arw.datetime, datetime.now())
         self.assert_ts_equal(arw.timestamp, time.time())
+
 
 class ArrowToTests(BaseArrowTests):
 

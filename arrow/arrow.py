@@ -11,7 +11,7 @@ class TimeZone(object):
         if time_zone is None:
             time_zone = tz.tzutc()
 
-        self._tzinfo = self._get_tzinfo(time_zone)
+        self._timezoneinfo = self._get_tzinfo(time_zone)
 
     def __repr__(self):
         return '{0}({1}, {2})'.format(self.__class__.__name__, 
@@ -44,13 +44,13 @@ class TimeZone(object):
 
     @property
     def name(self):
-        dt = datetime.now(self._tzinfo)
-        return self._tzinfo.tzname(dt)
+        dt = datetime.now(self._timezoneinfo)
+        return self._timezoneinfo.tzname(dt)
 
     @property
     def utcoffset(self):
-        dt = datetime.now(self._tzinfo)
-        return self._tzinfo.utcoffset(dt)
+        dt = datetime.now(self._timezoneinfo)
+        return self._timezoneinfo.utcoffset(dt)
 
     @property
     def utc(self):
@@ -58,14 +58,14 @@ class TimeZone(object):
 
     @property
     def tzinfo(self):
-        return self._tzinfo
+        return self._timezoneinfo
 
 class Arrow(object):
 
     def __init__(self, date=None, tz='UTC'):
 
-        self._time_zone = TimeZone(tz)
-        self._datetime = self._get_datetime(date, self._time_zone)
+        self._timezone = TimeZone(tz)
+        self._datetime = self._get_datetime(date, self._timezone)
 
     @staticmethod
     def _get_datetime(dt_expr, time_zone):
@@ -105,14 +105,14 @@ class Arrow(object):
     @property
     def timestamp(self):
 
-        if self._time_zone.utc:
+        if self._timezone.utc:
             return calendar.timegm(self._datetime.utctimetuple())
         else:
             return time.mktime(self._datetime.timetuple())
 
     @property
     def tz(self):
-        return self._time_zone
+        return self._timezone
 
     def to(self, tz):
 
@@ -120,4 +120,8 @@ class Arrow(object):
         _datetime = self._datetime.astimezone(time_zone.tzinfo)
 
         return Arrow(_datetime, time_zone)
+
+    def utc(self):
+        return self.to('UTC')
+
 
