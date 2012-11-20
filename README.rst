@@ -1,6 +1,6 @@
-=================================================================
-Arrow - Simple dates, times, timestamps and timezones for Python
-=================================================================
+===================================================
+Arrow - Simple date & time manipulation for Python
+===================================================
 
 :Version: 0.1.1
 :Author: Chris Smith (chris@cir.ca)
