@@ -6,7 +6,6 @@ from dateutil import tz as _tz
 import time, calendar
 
 def arrow(date=None, tz=None):
-    print date, tz
     def _tz_now(tzinfo):
 
         date = datetime.utcnow()

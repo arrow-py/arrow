@@ -71,7 +71,7 @@ Another date & time in another time zone
 
 	>>> d = datetime.now() + timedelta(hours=-1)
 	>>> arrow(d, 'local')
-	Arrow(11/20/12 15:41:22.130000 +00:00 (UTC))
+	Arrow(11/20/12 07:18:55.535649 -08:00 (PST))
 
 Another date & time from timestamp
 
