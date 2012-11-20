@@ -42,23 +42,31 @@ Current UTC date & time
 
 Current local date & time
 
-	>>> a = arrow(datetime.now(), tz='local')
+	>>> a = arrow('local')
 
 Current date & time in named time zone
 	
-	>>> a = arrow(datetime.now(), tz='US/PST') 
+	>>> a = arrow('US/Pacific') 
 
 Current date & time with offset-based time zone
 
-	>>> a = arrow(datetime.now(), tz=timedelta(hours=-1))
+	>>> a = arrow(timedelta(hours=-1))
 
 Current UTC date & time from timestamp
 
 	>>> a = arrow(time.time())
 
-Current local date & time from timestamp
+Another date & time in UTC
 
-	>>> a = arrow(time.time(), tz='local')
+	>>> a = arrow(datetime_var)
+
+Another date & time in another time zone:
+
+	>>> a = arrow(datetime_var, 'US/Pacific')
+
+Another date & time from timestamp
+
+	>>> a = arrow(time.time(), tz='local') 
 
 Accessing properties
 --------------------
@@ -75,7 +83,7 @@ Accessing properties
 	>>> a.tz.utc
 	True
 
-	>>> a = arrow(tz='local')
+	>>> a = arrow('local')
 	>>> a.datetime
 	datetime.datetime(2012, 11, 20, 0, 19, 47, 172338, tzinfo=tzfile('/etc/localtime'))
 	>>> a.timestamp
@@ -91,7 +99,7 @@ Converting between time zones
 -----------------------------
 
 	>>> a1 = arrow()
-	>>> a2 = arrow(datetime.now(), tz='local')
+	>>> a2 = arrow('local')
 	>>> a3 = a1.to('local')
 	>>> a4 = a2.to('UTC')
 	>>> a1.datetime; a4.datetime
