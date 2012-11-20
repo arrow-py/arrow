@@ -1,6 +1,6 @@
-==============================================
-Arrow - Simple dates and timezones for Python
-==============================================
+===================================================
+Arrow - Better date & time manipulation for Python
+===================================================
 
 :Version: 0.1.1
 :Author: Chris Smith (chris@cir.ca)
@@ -8,48 +8,57 @@ Arrow - Simple dates and timezones for Python
 :Source: https://github.com/crsmithdev/arrow
 :Keywords: python, dates, datetime, timezone, timestamp, utc
 
+.. contents::
+    :local:
+
 .. _arrow-overview:
 
 Overview
 ========
 
-Inspired by Requests (http://docs.python-requests.org/en/latest/) and great date / time libraries in other languages (moment.js, etc.), Arrow aims to provide a fast, simple way to manipulate dates & times, timezones and timestamps in Python.
+Inspired by Requests_ and great date / time libraries in other languages (such as moment.js_), Arrow aims to provide a fast, simple way to manipulate dates & times, timezones and timestamps in Python.
 
 Arrow is UTC by default.  When not supplied, the time zone is assumed to be UTC, and when not supplied, the internal date of an Arrow object is set to datetime.utcnow().
 
-.. _arrow-example:
+.. _arrow-examples:
 
 Examples
 ========
 
-Importing:
-----------
+Importing
+---------
 
-	from arrow import arrow
+	>>> from arrow import arrow
 
-Instantiation:
---------------
+Instantiation
+-------------
 
-	# current UTC datetime
-	a = arrow()
+Current UTC date & time
 
-	# current local datetime
-	a = arrow(datetime.now(), tz='local')
+	>>> a = arrow()
 
-	# current datetime in named time zone
-	a = arrow(datetime.now(), tz='US/PST') 
+Current local date & time
 
-	# current datetime with offset-based time zone
-	a = arrow(datetime.now(), tz=timedelta(hours=-1))
+	>>> a = arrow(datetime.now(), tz='local')
 
-	# current utc datetime from timestamp
-	a = arrow(time.time())
+Current date & time in named time zone
+	
+	>>> a = arrow(datetime.now(), tz='US/PST') 
 
-	# current local time from timestamp
-	a = arrow(time.time(), tz='local')
+Current date & time with offset-based time zone
 
-Accessing properties:
----------------------
+	>>> a = arrow(datetime.now(), tz=timedelta(hours=-1))
+
+Current UTC date & time from timestamp
+
+	>>> a = arrow(time.time())
+
+Current local date & time from timestamp
+
+	>>> a = arrow(time.time(), tz='local')
+
+Accessing properties
+--------------------
 
 	>>> a = arrow()
 	>>> a.datetime
@@ -75,18 +84,21 @@ Accessing properties:
 	>>> a.tz.utc
 	False
 
-Converting between time zones:
+Converting between time zones
+-----------------------------
 
-	# UTC to US/PST
-	a1 = arrow()
-	a2 = a1.as('US/PST')
+	>>> a1 = arrow()
+	>>> a2 = arrow(datetime.now(), tz='local')
+	>>> a3 = a1.to('local')
+	>>> a4 = a2.to('UTC')
+	>>> a1.datetime; a4.datetime
+	datetime.datetime(2012, 11, 20, 0, 48, 10, 244547, tzinfo=tzutc())
+	datetime.datetime(2012, 11, 20, 0, 48, 13, 948510, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
+	>>> a2.datetime; a3.datetime
+	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
+	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
 
-Running tests (suggestion, run from top-level repo directory):
-
-	virtualenv local
-	. local/bin/activate
-	pip install python-dateutil nose nose-dov
-	./scripts/tests
+.. _arrow-coming-soon:
 
 Coming soon
 ===========
@@ -95,3 +107,5 @@ Coming soon
 * Additional time zone formats (e.g. arrow(datetime.now(), tz='+01:00'))
 * Humanized relative time (e.g. arrow().since() -> '43 minutes ago')
 
+.. _Requests: http://docs.python-requests.org/
+.. _moment.js: http://momentjs.com/
