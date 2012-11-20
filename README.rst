@@ -95,7 +95,7 @@ Converting between time zones:
 	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
 	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
 
-Running tests:::
+Running tests: ::
 --------------
 
 	virtualenv local
