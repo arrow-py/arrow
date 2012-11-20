@@ -97,7 +97,7 @@ Converting between time zones:
 
 Running tests
 =============
-::
+
 	virtualenv local
 	. local/bin/activate
 	pip install python-dateutil nose nose-dov
