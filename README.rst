@@ -42,8 +42,9 @@ Current date & time in named time zone
 	
 	>>> a = arrow(datetime.now(), tz='US/PST') 
 
-	# current datetime with offset-based time zone
-	a = arrow(datetime.now(), tz=timedelta(hours=-1))
+Current datetime with offset-based time zone
+
+	>>> a = arrow(datetime.now(), tz=timedelta(hours=-1))
 
 	# current utc datetime from timestamp
 	a = arrow(time.time())
