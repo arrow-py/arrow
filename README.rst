@@ -25,7 +25,7 @@ Examples
 Importing:
 ----------
 
-	from arrow import arrow
+	>>> from arrow import arrow
 
 Instantiation:
 --------------
