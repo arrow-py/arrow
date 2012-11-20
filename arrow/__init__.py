@@ -1,4 +1,3 @@
-from arrow import Arrow, TimeZone
+from arrow import arrow, Arrow
+from timezone import TimeZone
 
-def arrow(date=None, tz=None):
-	return Arrow(date, tz)

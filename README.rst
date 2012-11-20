@@ -18,7 +18,10 @@ Overview
 
 Inspired by Requests_ and great date / time libraries in other languages (such as moment.js_), Arrow aims to provide a fast, simple way to manipulate dates & times, timezones and timestamps in Python.
 
-Arrow is UTC by default.  When not supplied, the time zone is assumed to be UTC, and when not supplied, the internal date of an Arrow object is set to datetime.utcnow().
+Important - UTC
+===============
+
+Arrow is UTC by default.  When optional, time zones are assumed to be UTC when none is supplied.
 
 .. _arrow-examples:
 
@@ -97,6 +100,13 @@ Converting between time zones
 	>>> a2.datetime; a3.datetime
 	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
 	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
+
+	>>> a1 = arrow(datetime.now(), tz='local')
+	>>> a2 = arrow()
+	>>> a3 = a1.utc()
+	>>> a2.datetime; a3.datetime
+	datetime.datetime(2012, 11, 20, 3, 53, 29, 385932, tzinfo=tzutc())
+	datetime.datetime(2012, 11, 20, 3, 53, 25, 985915, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
 
 .. _arrow-coming-soon:
 
