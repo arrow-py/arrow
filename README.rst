@@ -38,7 +38,8 @@ Instantiation
 
 Current UTC date & time
 
-	>>> a = arrow()
+	>>> arrow()
+	Arrow(11/20/12 15:40:22.696837 +00:00 (UTC))
 
 Current local date & time
 
