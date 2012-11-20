@@ -17,7 +17,7 @@ Inspired by Requests (http://docs.python-requests.org/en/latest/) and great date
 
 Arrow is UTC by default.  When not supplied, the time zone is assumed to be UTC, and when not supplied, the internal date of an Arrow object is set to datetime.utcnow().
 
-.. _arrow-example:
+.. _arrow-examples:
 
 Examples
 ========
@@ -82,6 +82,7 @@ Accessing properties:
 	False
 
 Converting between time zones:
+------------------------------
 
 	>>> a1 = arrow()
 	>>> a2 = arrow(datetime.now(), tz='local')
@@ -94,12 +95,15 @@ Converting between time zones:
 	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
 	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
 
-Running tests (suggestion, run from top-level repo directory):
+Running tests:
+--------------
 
 	virtualenv local
 	. local/bin/activate
 	pip install python-dateutil nose nose-dov
 	./scripts/tests
+
+.. _arrow-coming-soon:
 
 Coming soon
 ===========
