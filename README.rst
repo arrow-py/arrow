@@ -89,8 +89,8 @@ Converting between time zones
 
 	>>> a1 = arrow()
 	>>> a2 = arrow(datetime.now(), tz='local')
-	>>> a3 = a1.as('local')
-	>>> a4 = a2.as('UTC')
+	>>> a3 = a1.to('local')
+	>>> a4 = a2.to('UTC')
 	>>> a1.datetime; a4.datetime
 	datetime.datetime(2012, 11, 20, 0, 48, 10, 244547, tzinfo=tzutc())
 	datetime.datetime(2012, 11, 20, 0, 48, 13, 948510, tzinfo=tzfile('/usr/share/zoneinfo/UTC'))
