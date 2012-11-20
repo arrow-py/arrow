@@ -60,13 +60,13 @@ Another date & time in UTC
 
 	>>> a = arrow(datetime_var)
 
-Another date & time in another time zone:
+Another date & time in another time zone
 
 	>>> a = arrow(datetime_var, 'US/Pacific')
 
 Another date & time from timestamp
 
-	>>> a = arrow(time.time(), tz='local') 
+	>>> a = arrow(time.time(), 'local') 
 
 Accessing properties
 --------------------
