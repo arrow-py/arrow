@@ -29,10 +29,8 @@ def arrow(date=None, tz=None):
     else:
         if tz is None:
             try:
-                print 'here'
                 tz_expr = TimeZone(date)
                 date_expr = _tz_now(tz_expr.tzinfo)
-                print 'here2'
             except:
                 date_expr = date
                 tz_expr = TimeZone(_tz.tzutc())
@@ -40,7 +38,7 @@ def arrow(date=None, tz=None):
         else:
             date_expr = date
             time_expr = time
-    print '1', date_expr, '2', tz_expr
+
     return Arrow(date_expr, tz_expr)
 
 
