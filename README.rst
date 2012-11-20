@@ -42,14 +42,16 @@ Current date & time in named time zone
 	
 	>>> a = arrow(datetime.now(), tz='US/PST') 
 
-Current date& time with offset-based time zone
+Current date & time with offset-based time zone
 
 	>>> a = arrow(datetime.now(), tz=timedelta(hours=-1))
 
 Current utc date & time from timestamp
+
 	>>> a = arrow(time.time())
 
 Current local date & time from timestamp
+
 	>>> a = arrow(time.time(), tz='local')
 
 Accessing properties:
