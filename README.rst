@@ -25,13 +25,13 @@ Arrow is UTC by default.  When not supplied, the time zone is assumed to be UTC,
 Examples
 ========
 
-Importing:
-----------
+Importing
+---------
 
 	>>> from arrow import arrow
 
-Instantiation:
---------------
+Instantiation
+-------------
 
 Current UTC date & time
 
@@ -57,8 +57,8 @@ Current local date & time from timestamp
 
 	>>> a = arrow(time.time(), tz='local')
 
-Accessing properties:
----------------------
+Accessing properties
+--------------------
 
 	>>> a = arrow()
 	>>> a.datetime
@@ -84,8 +84,8 @@ Accessing properties:
 	>>> a.tz.utc
 	False
 
-Converting between time zones:
-------------------------------
+Converting between time zones
+-----------------------------
 
 	>>> a1 = arrow()
 	>>> a2 = arrow(datetime.now(), tz='local')
