@@ -107,3 +107,4 @@ Coming soon
 * Additional time zone formats (e.g. arrow(datetime.now(), tz='+01:00'))
 * Humanized relative time (e.g. arrow().since() -> '43 minutes ago')
 
+.. Requests: http://docs.python-requests.org/
