@@ -8,6 +8,9 @@ Arrow - Simple dates and timezones for Python
 :Source: https://github.com/crsmithdev/arrow
 :Keywords: python, dates, datetime, timezone, timestamp, utc
 
+.. contents::
+    :local:
+
 .. _arrow-overview:
 
 Overview
@@ -94,14 +97,6 @@ Converting between time zones:
 	>>> a2.datetime; a3.datetime
 	datetime.datetime(2012, 11, 19, 16, 48, 13, 948510, tzinfo=tzfile('/etc/localtime'))
 	datetime.datetime(2012, 11, 19, 16, 48, 10, 244547, tzinfo=tzfile('/etc/localtime'))
-
-Running tests
-=============
-
-	virtualenv local
-	. local/bin/activate
-	pip install python-dateutil nose nose-dov
-	./scripts/tests
 
 .. _arrow-coming-soon:
 
