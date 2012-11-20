@@ -30,15 +30,17 @@ Importing:
 Instantiation:
 --------------
 
-Current UTC time
+Current UTC date & time
 
 	>>> a = arrow()
 
-	# current local datetime
-	a = arrow(datetime.now(), tz='local')
+Current local date & time
 
-	# current datetime in named time zone
-	a = arrow(datetime.now(), tz='US/PST') 
+	>>> a = arrow(datetime.now(), tz='local')
+
+Current date & time in named time zone
+	
+	>>> a = arrow(datetime.now(), tz='US/PST') 
 
 	# current datetime with offset-based time zone
 	a = arrow(datetime.now(), tz=timedelta(hours=-1))
