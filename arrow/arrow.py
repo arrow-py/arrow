@@ -107,5 +107,21 @@ class Arrow(object):
 
     def utc(self):
         return self.to('UTC')
-
-
+        
+    def to_unix_timestamp(self):
+        return int(self._datetime.strftime('%s'))
+        
+    def since(self):
+        self_date = self.to_unix_timestamp()
+        current_time = arrow(datetime.now(), self._timezone).to_unix_timestamp()
+        time_since = current_time - self_date
+        if time_since < 60: # Seconds
+            return str(time_since) + "s"
+        elif time_since < 3600: # Minutes
+            return str(time_since / 60) + "m"
+        elif time_since < 86400: # Hours
+            return str(time_since / 3600) + "h"
+        elif time_since < 31536000: # Days
+            return str(time_since / 86400) + "d"
+        else: # Years 
+            return str(time_since / 31536000) + "y"

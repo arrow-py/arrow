@@ -4,3 +4,4 @@
 .coverage
 local/
 dist/
+test.py
