@@ -16,7 +16,7 @@ Arrow - Better date & time manipulation for Python
 Overview
 ========
 
-Inspired by Requests_ and great date / time libraries in other languages (such as moment.js_), Arrow aims to provide a fast, simple way to manipulate dates & times, timezones and timestamps in Python.
+Inspired by the elegant API of Requests_ and JavaScript's moment.js_, Arrow aims to provide a fast, simple way to manipulate dates & times, timezones and timestamps in Python.
 
 Important - UTC
 ===============
