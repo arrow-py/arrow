@@ -147,6 +147,7 @@ Changelog
 =========
 
 * 0.1.5
+
   * Started tracking changes
   * Added parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
   * Fixed some incorrect timestamps with delta / olson time zones
