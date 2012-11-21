@@ -40,7 +40,7 @@ class TimeZoneTests(unittest.TestCase):
     def test_tzinfo(self):
         self.assertIsInstance(self.time_zone.tzinfo, tzinfo)
 
-    def test_get_tz_str_utc(self):
+    def test_get_tz_str_olson(self):
 
         result = self.time_zone._get_tzinfo('UTC')
 
@@ -51,6 +51,16 @@ class TimeZoneTests(unittest.TestCase):
         result = self.time_zone._get_tzinfo('local')
 
         self.assert_tzinfo_equal(result, tz.tzlocal())
+
+    def test_get_tz_str_iso(self):
+
+        result = self.time_zone._get_tzinfo('+01:02')
+
+        self.assert_tzinfo_equal(result, tz.tzoffset(None, 3720))
+
+        result = self.time_zone._get_tzinfo('-01:02')
+
+        self.assert_tzinfo_equal(result, tz.tzoffset(None, -3720))
 
     def test_get_tz_tzinfo(self):
 

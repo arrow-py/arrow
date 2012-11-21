@@ -2,7 +2,7 @@
 Arrow - Better date & time manipulation for Python
 ===================================================
 
-:Version: 0.1.4
+:Version: 0.1.5
 :Author: Chris Smith (chris@cir.ca)
 :Download: http://pypi.python.org/pypi/arrow
 :Source: https://github.com/crsmithdev/arrow
@@ -55,6 +55,11 @@ Current date & time with offset-based time zone
 
 	>>> arrow(timedelta(hours=-1))
 	Arrow(11/20/12 14:40:54.544660 -01:00 (None))
+
+Current date & time with ISO-format time zone
+
+	>>> arrow('+01:30')
+	Arrow(11/21/12 05:52:45.208020 +01:30 (None))
 
 Current UTC date & time from timestamp
 
@@ -132,8 +137,17 @@ Coming soon
 ===========
 
 * Parsing date strings (e.g. arrow('11-19-2012', format='MM-dd-YYYY'))
-* Additional time zone formats (e.g. arrow(datetime.now(), tz='+01:00'))
+* Formatting date strings (e.g. arrow().format('MM-dd-YYYY'))
 * Humanized relative time (e.g. arrow().since() -> '43 minutes ago')
 
 .. _Requests: http://docs.python-requests.org/
 .. _moment.js: http://momentjs.com/
+
+Changelog
+=========
+
+* 0.1.5
+  * Started tracking changes
+  * Added parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
+  * Fixed some incorrect timestamps with delta / olson time zones
+  * Fixed formatting of UTC offsets in TimeStamp's str method

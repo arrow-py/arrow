@@ -93,7 +93,7 @@ class ArrowTests(BaseArrowTests):
 
         self.assertEqual(result, dt)
 
-    def test_timestamp_utc(self):
+    def test_timestamp(self):
 
         dt = datetime.utcnow()
 
@@ -103,17 +103,6 @@ class ArrowTests(BaseArrowTests):
         result = self.arrow.timestamp
 
         self.assertEqual(result, calendar.timegm(dt.timetuple()))
-
-    def test_timestamp_local(self):
-
-        dt = datetime.now()
-
-        self.arrow._datetime = dt
-        self.arrow._timezone = self.local
-
-        result = self.arrow.timestamp
-
-        self.assertEqual(result, time.mktime(dt.timetuple()))
 
     def test_get_datetime_int(self):
 
@@ -221,7 +210,7 @@ class ArrowFunctionTest(BaseArrowTests):
         self.assert_ts_equal(result.timestamp, time.time())
         self.assertTrue(result.tz.utc)
 
-    def test_one_arg_utc_datetime(self):
+    def test_one_arg_utc_datetime_now(self):
 
         result = arrow(datetime.utcnow())
 
@@ -229,12 +218,22 @@ class ArrowFunctionTest(BaseArrowTests):
         self.assert_ts_equal(result.timestamp, time.time())
         self.assertEqual(result.tz.tzinfo, tz.tzutc())
 
-    def test_one_arg_local_datetime(self):
+    def test_one_arg_local_datetime_now(self):
 
+        # Wrong, but confirms default handling as UTC.
         result = arrow(datetime.now())
 
         self.assert_dt_equal(result.datetime, datetime.now())
         self.assertTrue(result.tz.utc)
+
+    def test_one_arg_utc_datetime_prev(self):
+
+        dt = datetime.utcnow() + timedelta(hours=-1)
+
+        result = arrow(dt)
+
+        self.assert_dt_equal(result.datetime, dt)
+        self.assert_ts_equal(result.timestamp, time.time() - 3600)
 
     def test_one_arg_local_timezone(self):
 
@@ -253,20 +252,48 @@ class ArrowFunctionTest(BaseArrowTests):
         self.assert_dt_equal(result.datetime, dt_expected)
         self.assert_ts_equal(result.timestamp, time.time())
 
-    def test_two_args_utc_datetime_utc_str(self):
+    def test_one_arg_iso_timezone(self):
+
+        result = arrow('-01:30')
+
+        dt_expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(
+            tz.tzoffset(None, -5400))
+
+        self.assert_dt_equal(result.datetime, dt_expected)
+        self.assert_ts_equal(result.timestamp, time.time())
+
+    def test_two_args_utc_datetime_now_utc_str(self):
 
         result = arrow(datetime.utcnow(), 'UTC')
 
         self.assert_dt_equal(result.datetime, datetime.utcnow())
         self.assert_ts_equal(result.timestamp, time.time())
 
-    def test_two_args_local_datetime_local_str(self):
+    def test_two_args_local_datetime_now_local_str(self):
 
         result = arrow(datetime.now(), 'local')
 
         self.assert_dt_equal(result.datetime, datetime.now())
         self.assert_ts_equal(result.timestamp, time.time())
         self.assertEqual(result.tz.utcoffset, self.local.utcoffset)
+
+    def test_two_args_utc_datetime_past_utc_str(self):
+
+        dt = datetime.utcnow() + timedelta(hours=-1)
+
+        result = arrow(dt, 'UTC')
+
+        self.assert_dt_equal(result.datetime, dt)
+        self.assert_ts_equal(result.timestamp, time.time() - 3600)
+
+    def test_two_args_olson_datetime_past_iso_str(self):
+
+        dt = datetime.utcnow() + timedelta(hours=-1)
+
+        result = arrow(dt, '+01:00')
+
+        self.assert_dt_equal(result.datetime, dt)
+        self.assert_ts_equal(result.timestamp, time.time() - 7200)
 
     def test_tz_kwarg_local(self):
 

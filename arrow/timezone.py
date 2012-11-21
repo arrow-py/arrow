@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz
 
+import re
+
 class TimeZone(object):
+
+    tz_re = re.compile(r'(\+|\-)([0-9]{1,2}):([0-9]{1,2})')
 
     def __init__(self, time_zone=None):
 
@@ -13,10 +17,10 @@ class TimeZone(object):
     def __str__(self):
 
         minutes = self.utcoffset.total_seconds() / 60.0
-        hours = minutes / 60.0
+        hours = int(minutes / 60)
         minutes = minutes - hours * 60
 
-        offset_str = '{0:+03g}:{1:02g}'.format(hours, minutes)
+        offset_str = '{0:+03g}:{1:02g}'.format(hours, abs(minutes))
 
         return '{0} ({1})'.format(offset_str, self.name)
 
@@ -32,7 +36,7 @@ class TimeZone(object):
             _tzinfo = tz_expr.tzinfo
 
         elif isinstance(tz_expr, str):
-            _tzinfo = tz.gettz() if tz_expr == 'local' else tz.gettz(tz_expr)
+            _tzinfo = TimeZone._get_tzinfo_str(tz_expr)
 
         elif isinstance(tz_expr, tzinfo):
             _tzinfo = tz_expr
@@ -44,6 +48,26 @@ class TimeZone(object):
             raise Exception('Could not recognize time zone')
 
         return _tzinfo
+
+    @staticmethod
+    def _get_tzinfo_str(tz_expr):
+
+        if tz_expr == 'local':
+           return tz.gettz()
+
+        re_match = TimeZone.tz_re.match(tz_expr)
+
+        if re_match:
+            sign, hours, minutes = re_match.groups()
+            seconds = int(hours) * 3600 + int(minutes) * 60
+
+            if sign == '-':
+                seconds *= -1
+
+            return tz.tzoffset(None, seconds)
+
+        else:
+            return tz.gettz(tz_expr)
 
     @property
     def name(self):

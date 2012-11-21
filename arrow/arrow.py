@@ -37,7 +37,7 @@ def arrow(date=None, tz=None):
         else:
             date_expr = date
             tz_expr = tz
-
+    
     return Arrow(date_expr, tz_expr)
 
 
@@ -92,11 +92,7 @@ class Arrow(object):
 
     @property
     def timestamp(self):
-
-        if self._timezone.utc:
-            return calendar.timegm(self._datetime.utctimetuple())
-        else:
-            return time.mktime(self._datetime.timetuple())
+        return calendar.timegm(self._datetime.utctimetuple())
 
     @property
     def tz(self):
