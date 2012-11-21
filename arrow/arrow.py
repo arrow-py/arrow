@@ -5,6 +5,13 @@ from dateutil import tz as _tz
 
 import time, calendar
 
+#: format string for the arrows,
+#  %H:%M:%S is used instead of %X
+#  to ensure we never encounter AM/PM
+#  even if the locale would mandate it
+FORMAT = "%x %H:%M:%S.%f %z (%Z)"
+
+
 def arrow(date=None, tz=None):
     def _tz_now(tzinfo):
 
@@ -49,14 +56,10 @@ class Arrow(object):
         self._datetime = self._get_datetime(date, self._timezone)
 
     def __repr__(self):
-        return '{0}({1})'.format(self.__class__.__name__, self.__str__())
+        return '{0}({1:s})'.format(self.__class__.__name__, self)
 
     def __str__(self):
-
-        time_str = time.strftime('%x %X', self._datetime.timetuple())
-
-        return '{0}.{1} {2}'.format(time_str, self._datetime.microsecond,
-            str(self._timezone))
+        return format(self._datetime, FORMAT)
 
     @staticmethod
     def _get_datetime(dt_expr, time_zone):
