@@ -8,7 +8,7 @@ class TimeZoneTests(unittest.TestCase):
 
     def setUp(self):
 
-        self.time_zone = timezone.TimeZone('UTC')
+        self.time_zone = timezone.TimeZone('UTC', datetime.utcnow())
         self.datetime = datetime.utcnow()
 
     def assert_tzinfo_equal(self, tzinfo_1, tzinfo_2):
@@ -27,7 +27,7 @@ class TimeZoneTests(unittest.TestCase):
 
     def test_name_delta(self):
 
-        time_zone = timezone.TimeZone(timedelta(hours=-1))
+        time_zone = timezone.TimeZone(timedelta(hours=-1), datetime.utcnow())
 
         self.assertIsNone(time_zone.name)
 
@@ -42,45 +42,39 @@ class TimeZoneTests(unittest.TestCase):
 
     def test_parse_str_olson(self):
 
-        info, name = self.time_zone._parse('UTC')
+        result = self.time_zone._parse('UTC')
 
-        self.assert_tzinfo_equal(info, tz.tzutc())
-        self.assertEqual(name, 'UTC')
+        self.assert_tzinfo_equal(result, tz.tzutc())
 
     def test_parse_str_local(self):
 
-        info, name = self.time_zone._parse('local')
+        result = self.time_zone._parse('local')
 
-        self.assert_tzinfo_equal(info, tz.tzlocal())
-        self.assertEqual(name, 'local')
+        self.assert_tzinfo_equal(result, tz.tzlocal())
 
     def test_parse_str_iso(self):
 
-        info, name = self.time_zone._parse('+01:02')
+        result = self.time_zone._parse('+01:02')
 
-        self.assert_tzinfo_equal(info, tz.tzoffset(None, 3720))
-        self.assertIsNone(name)
+        self.assert_tzinfo_equal(result, tz.tzoffset(None, 3720))
 
-        info, name = self.time_zone._parse('-01:02')
+        result = self.time_zone._parse('-01:02')
 
-        self.assert_tzinfo_equal(info, tz.tzoffset(None, -3720))
-        self.assertIsNone(name)
+        self.assert_tzinfo_equal(result, tz.tzoffset(None, -3720))
 
     def test_parse_tzinfo_utc(self):
 
         tz_utc = tz.tzutc()
 
-        info, name = self.time_zone._parse(tz_utc)
+        result = self.time_zone._parse(tz_utc)
 
-        self.assertEqual(info, tz_utc)
-        self.assertEqual(name, 'UTC')
+        self.assertEqual(result, tz_utc)
 
     def test_parse_timedelta(self):
 
-        info, name = self.time_zone._parse(timedelta(minutes=-60))
+        result = self.time_zone._parse(timedelta(minutes=-60))
 
-        self.assert_tzinfo_equal(info, tz.tzoffset(None, -3600))
-        self.assertIsNone(name)
+        self.assert_tzinfo_equal(result, tz.tzoffset(None, -3600))
 
     def test_parse_none(self):
 

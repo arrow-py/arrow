@@ -3,7 +3,7 @@ from timezone import TimeZone
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as _tz
 
-import time, calendar
+import time, calendar, pytz
 
 def arrow(date=None, tz=None):
     def _tz_now(tzinfo):
@@ -19,20 +19,20 @@ def arrow(date=None, tz=None):
     if date is None:
         if tz is None:
             date_expr = datetime.utcnow()
-            tz_expr = TimeZone(_tz.tzutc())
+            tz_expr = TimeZone(_tz.tzutc(), date_expr)
 
         else:
-            tz_expr = TimeZone(tz)
+            tz_expr = TimeZone(tz, datetime.utcnow())
             date_expr = _tz_now(tz_expr.tzinfo)
 
     else:
         if tz is None:
             try:
-                tz_expr = TimeZone(date)
+                tz_expr = TimeZone(date, datetime.utcnow())
                 date_expr = _tz_now(tz_expr.tzinfo)
             except:
                 date_expr = date
-                tz_expr = TimeZone(_tz.tzutc())
+                tz_expr = None
 
         else:
             date_expr = date
@@ -44,22 +44,21 @@ def arrow(date=None, tz=None):
 class Arrow(object):
 
     def __init__(self, date, tz=None):
+
         if tz is None:
             tz = _tz.tzutc()
 
-        self._timezone = TimeZone(tz)
-        self._datetime = self._parse(date, self._timezone)
+        self._datetime, self._timezone = self._parse(date, tz)
 
     def __eq__(self, other):
 
         eq = False
 
-        if isinstance(other, Arrow):
-            if self._datetime == other._datetime:
-                self_tzoffset = self._timezone.tzinfo.utcoffset(self._datetime)
-                other_tzoffset = other._timezone.tzinfo.utcoffset(other._datetime)
+        if isinstance(other, Arrow) and self._datetime == other._datetime:
+            self_tzoffset = self._timezone.tzinfo.utcoffset(self._datetime)
+            other_tzoffset = other._timezone.tzinfo.utcoffset(other._datetime)
 
-                eq = self_tzoffset == other_tzoffset
+            eq = self_tzoffset == other_tzoffset
 
         return eq
 
@@ -74,32 +73,41 @@ class Arrow(object):
             str(self._timezone))
 
     @staticmethod
-    def _parse(dt_expr, time_zone):
+    def _parse(dt_expr, tz_expr):
 
-        _datetime = None
+        _datetime = Arrow._try_parse_timestamp(dt_expr, tz_expr)
 
-        if isinstance(dt_expr, int):
-            dt_expr = float(dt_expr)
+        if _datetime is None:
 
-        if isinstance(dt_expr, str):
-            try:
-                dt_expr = float(dt_expr)
-            except:
-                pass
-
-        if isinstance(dt_expr, float):
-            if time_zone.utc:
-                _datetime = datetime.utcfromtimestamp(dt_expr)
-            else:
-                _datetime = datetime.fromtimestamp(dt_expr)
-
-        elif isinstance(dt_expr, datetime):
-            _datetime = dt_expr
+            if isinstance(dt_expr, datetime):
+                _datetime = dt_expr
 
         if _datetime is None:
             raise ValueError('Could not recognize datetime')
 
-        return _datetime.replace(tzinfo=time_zone.tzinfo)
+        timezone = TimeZone(tz_expr, _datetime)
+        _datetime = _datetime.replace(tzinfo=timezone.tzinfo)
+
+        return _datetime, timezone
+
+    @staticmethod
+    def _try_parse_timestamp(dt_expr, timezone):
+        
+        _datetime = None
+
+        try:
+            dt_expr = float(dt_expr)
+            
+            _datetime = datetime.utcfromtimestamp(dt_expr)
+            timezone = TimeZone(timezone, _datetime)
+
+            if not timezone.utc:
+                _datetime = _datetime.replace(tzinfo=_tz.tzutc()).astimezone(timezone.tzinfo)
+
+        except:
+            pass
+
+        return _datetime
 
     @property
     def datetime(self):
@@ -115,7 +123,8 @@ class Arrow(object):
 
     def to(self, tz):
 
-        time_zone = TimeZone(tz)
+        time_zone = TimeZone(tz, self._datetime)
+
         _datetime = self._datetime.astimezone(time_zone.tzinfo)
 
         return Arrow(_datetime, time_zone)

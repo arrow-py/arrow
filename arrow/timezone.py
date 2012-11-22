@@ -7,12 +7,20 @@ class TimeZone(object):
 
     tz_re = re.compile(r'(\+|\-)([0-9]{1,2}):([0-9]{1,2})')
 
-    def __init__(self, time_zone=None):
+    def __init__(self, time_zone, date):
 
-        if time_zone is None or time_zone == 'UTC':
+        if time_zone == 'UTC':
             time_zone = tz.tzutc()
 
-        self._tzinfo, self._name = self._parse(time_zone)
+        self._tzinfo = self._parse(time_zone)
+        date = date.replace(tzinfo=self._tzinfo)
+
+        try:
+            self._name = self._tzinfo.tzname(date)
+        except:
+            self._name = None
+            
+        self._utcoffset = self._tzinfo.utcoffset(date)
 
     def __str__(self):
 
@@ -31,27 +39,23 @@ class TimeZone(object):
     def _parse(tz_expr):
 
         _tzinfo = None
-        name = None
 
         if isinstance(tz_expr, TimeZone):
             _tzinfo = tz_expr.tzinfo
-            name = tz_expr.name
 
         elif isinstance(tz_expr, str):
-            _tzinfo, name = TimeZone._parse_str(tz_expr)
+            _tzinfo = TimeZone._parse_str(tz_expr)
 
         elif isinstance(tz_expr, tzinfo):
             _tzinfo = tz_expr
-            name = tz_expr.tzname(tz_expr) # correct?
 
         elif isinstance(tz_expr, timedelta):
             _tzinfo = tz.tzoffset(None, tz_expr.total_seconds())
-            name = None
 
         if _tzinfo is None:
             raise ValueError('Could not recognize time zone')
 
-        return _tzinfo, name
+        return _tzinfo
 
     @staticmethod
     def _parse_str(tz_expr):
@@ -61,7 +65,6 @@ class TimeZone(object):
 
         if tz_expr == 'local':
             _tzinfo = tz.gettz()
-            name = tz_expr
 
         else:
 
@@ -78,9 +81,8 @@ class TimeZone(object):
 
             else:
                 _tzinfo = tz.gettz(tz_expr)
-                name = tz_expr
 
-        return _tzinfo, name
+        return _tzinfo
 
     @property
     def name(self):
@@ -88,8 +90,7 @@ class TimeZone(object):
 
     @property
     def utcoffset(self):
-        dt = datetime.now(self._tzinfo)
-        return self._tzinfo.utcoffset(dt)
+        return self._utcoffset
 
     @property
     def utc(self):

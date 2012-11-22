@@ -11,8 +11,8 @@ class BaseArrowTests(unittest.TestCase):
     def setUp(self):
         super(BaseArrowTests, self).setUp()
 
-        self.utc = TimeZone()
-        self.local = TimeZone('local')
+        self.utc = TimeZone('UTC', datetime.utcnow())
+        self.local = TimeZone('local', datetime.now())
 
     def assert_ts_equal(self, ts_1, ts_2, delta=5.0):
 
@@ -106,53 +106,53 @@ class ArrowTests(BaseArrowTests):
 
     def test_parse_int(self):
 
-        result = self.arrow._parse(int(time.time()), self.utc)
+        dt, timezone = self.arrow._parse(int(time.time()), self.utc)
 
-        self.assert_dt_equal(result, datetime.utcnow())
+        self.assert_dt_equal(dt, datetime.utcnow())
 
     def test_parse_float_utc(self):
 
-        result = self.arrow._parse(time.time(), self.utc)
+        dt, timezone = self.arrow._parse(time.time(), self.utc)
 
-        self.assert_dt_equal(result, datetime.utcnow())
+        self.assert_dt_equal(dt, datetime.utcnow())
 
     def test_parse_float_local(self):
 
-        result = self.arrow._parse(time.time(), self.local)
+        dt, timezone = self.arrow._parse(time.time(), self.local)
 
-        self.assert_dt_equal(result, datetime.now())
+        self.assert_dt_equal(dt, datetime.now())
 
     def test_parse_str_float_utc(self):
 
-        result = self.arrow._parse(str(time.time()), self.utc)
+        dt, timezone = self.arrow._parse(str(time.time()), self.utc)
 
-        self.assert_dt_equal(result, datetime.utcnow())
+        self.assert_dt_equal(dt, datetime.utcnow())
 
     def test_parse_str_int_utc(self):
 
-        result = self.arrow._parse(str(int(time.time())), self.utc)
+        dt, timezone = self.arrow._parse(str(int(time.time())), self.utc)
 
-        self.assert_dt_equal(result, datetime.utcnow())
+        self.assert_dt_equal(dt, datetime.utcnow())
 
     def test_parse_str_float_local(self):
 
-        result = self.arrow._parse(str(time.time()), self.local)
+        dt, timezone = self.arrow._parse(str(time.time()), self.local)
 
-        self.assert_dt_equal(result, datetime.now())
+        self.assert_dt_equal(dt, datetime.now())
 
     def test_parse_str_int_local(self):
 
-        result = self.arrow._parse(str(int(time.time())), self.local)
+        dt, timezone = self.arrow._parse(str(int(time.time())), self.local)
         
-        self.assert_dt_equal(result, datetime.now())
+        self.assert_dt_equal(dt, datetime.now())
 
-    def test_parse_datetime(self):
+    # def test_parse_datetime(self):
 
-        dt = datetime.utcnow()
+    #     dt = datetime.utcnow()
 
-        result = self.arrow._parse(dt, self.utc)
+    #     result = self.arrow._parse(dt, self.utc)
 
-        self.assert_dt_equal(result, dt)
+    #     self.assert_dt_equal(result, dt)
 
     def test_parse_parse_str(self):
 
@@ -245,6 +245,13 @@ class ArrowFunctionTest(BaseArrowTests):
 
         self.assert_dt_equal(result.datetime, dt)
         self.assert_ts_equal(result.timestamp, time.time() - 3600)
+
+    def test_one_arg_float_timestamp(self):
+
+        result = arrow(time.time())
+
+        self.assert_dt_equal(result.datetime, datetime.utcnow())
+        self.assert_ts_equal(result.timestamp, time.time())
 
     def test_one_arg_local_timezone(self):
 
