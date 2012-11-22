@@ -320,7 +320,6 @@ class ArrowFunctionTest(BaseArrowTests):
         result = arrow(dt, timedelta(hours=-1))
 
         self.assert_dt_equal(result.datetime, dt)
-        print result.timestamp - time.time()
         self.assert_ts_equal(result.timestamp, time.time() + 7200)
 
     def test_tz_kwarg_local(self):
