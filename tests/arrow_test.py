@@ -1,4 +1,5 @@
 from arrow import arrow, Arrow, TimeZone
+from arrow.arrow import FORMAT
 
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz
@@ -37,17 +38,14 @@ class ArrowTests(BaseArrowTests):
 
     def test_str(self):
 
-        expected = '{0}.{1} +00:00 (UTC)'.format(time.strftime(
-            '%x %X', self.arrow.datetime.timetuple()), self.arrow.datetime.microsecond)
-
-        self.assertEqual(self.arrow.__str__(), expected)
+        expected = format(self.arrow.datetime, FORMAT)
+        self.assertEqual(str(self.arrow), expected)
 
     def test_repr(self):
 
-        expected = 'Arrow({0}.{1} +00:00 (UTC))'.format(time.strftime(
-            '%x %X', self.arrow.datetime.timetuple()), self.arrow.datetime.microsecond)
+        expected = 'Arrow({0:s})'.format(self.arrow)
 
-        self.assertEqual(self.arrow.__repr__(), expected)
+        self.assertEqual(repr(self.arrow), expected)
 
     def test_tz(self):
 
