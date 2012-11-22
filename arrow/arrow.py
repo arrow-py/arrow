@@ -43,10 +43,25 @@ def arrow(date=None, tz=None):
 
 class Arrow(object):
 
-    def __init__(self, date, tz='UTC'):
+    def __init__(self, date, tz=None):
+        if tz is None:
+            tz = _tz.tzutc()
 
         self._timezone = TimeZone(tz)
-        self._datetime = self._get_datetime(date, self._timezone)
+        self._datetime = self._parse(date, self._timezone)
+
+    def __eq__(self, other):
+
+        eq = False
+
+        if isinstance(other, Arrow):
+            if self._datetime == other._datetime:
+                self_tzoffset = self._timezone.tzinfo.utcoffset(self._datetime)
+                other_tzoffset = other._timezone.tzinfo.utcoffset(other._datetime)
+
+                eq = self_tzoffset == other_tzoffset
+
+        return eq
 
     def __repr__(self):
         return '{0}({1})'.format(self.__class__.__name__, self.__str__())
@@ -59,7 +74,7 @@ class Arrow(object):
             str(self._timezone))
 
     @staticmethod
-    def _get_datetime(dt_expr, time_zone):
+    def _parse(dt_expr, time_zone):
 
         _datetime = None
 
@@ -82,7 +97,7 @@ class Arrow(object):
             _datetime = dt_expr
 
         if _datetime is None:
-            raise RuntimeError('Could not recognize datetime')
+            raise ValueError('Could not recognize datetime')
 
         return _datetime.replace(tzinfo=time_zone.tzinfo)
 
@@ -106,6 +121,6 @@ class Arrow(object):
         return Arrow(_datetime, time_zone)
 
     def utc(self):
-        return self.to('UTC')
+        return self.to(_tz.tzutc())
 
 

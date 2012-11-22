@@ -40,43 +40,49 @@ class TimeZoneTests(unittest.TestCase):
     def test_tzinfo(self):
         self.assertIsInstance(self.time_zone.tzinfo, tzinfo)
 
-    def test_get_tz_str_olson(self):
+    def test_parse_str_olson(self):
 
-        result = self.time_zone._get_tzinfo('UTC')
+        info, name = self.time_zone._parse('UTC')
 
-        self.assert_tzinfo_equal(result, tz.tzutc())
+        self.assert_tzinfo_equal(info, tz.tzutc())
+        self.assertEqual(name, 'UTC')
 
-    def test_get_tz_str_local(self):
+    def test_parse_str_local(self):
 
-        result = self.time_zone._get_tzinfo('local')
+        info, name = self.time_zone._parse('local')
 
-        self.assert_tzinfo_equal(result, tz.tzlocal())
+        self.assert_tzinfo_equal(info, tz.tzlocal())
+        self.assertEqual(name, 'local')
 
-    def test_get_tz_str_iso(self):
+    def test_parse_str_iso(self):
 
-        result = self.time_zone._get_tzinfo('+01:02')
+        info, name = self.time_zone._parse('+01:02')
 
-        self.assert_tzinfo_equal(result, tz.tzoffset(None, 3720))
+        self.assert_tzinfo_equal(info, tz.tzoffset(None, 3720))
+        self.assertIsNone(name)
 
-        result = self.time_zone._get_tzinfo('-01:02')
+        info, name = self.time_zone._parse('-01:02')
 
-        self.assert_tzinfo_equal(result, tz.tzoffset(None, -3720))
+        self.assert_tzinfo_equal(info, tz.tzoffset(None, -3720))
+        self.assertIsNone(name)
 
-    def test_get_tz_tzinfo(self):
+    def test_parse_tzinfo_utc(self):
 
         tz_utc = tz.tzutc()
 
-        result = self.time_zone._get_tzinfo(tz_utc)
+        info, name = self.time_zone._parse(tz_utc)
 
-        self.assertEqual(result, tz_utc)
+        self.assertEqual(info, tz_utc)
+        self.assertEqual(name, 'UTC')
 
-    def test_get_tz_timedelta(self):
+    def test_parse_timedelta(self):
 
-        result = self.time_zone._get_tzinfo(timedelta(minutes=-60))
+        info, name = self.time_zone._parse(timedelta(minutes=-60))
 
-        self.assert_tzinfo_equal(result, tz.tzoffset(None, -3600))
+        self.assert_tzinfo_equal(info, tz.tzoffset(None, -3600))
+        self.assertIsNone(name)
 
-    def test_get_tz_none(self):
+    def test_parse_none(self):
 
-        with self.assertRaises(Exception):
-            self.time_zone._get_tzinfo(None)
+        with self.assertRaises(ValueError):
+            self.time_zone._parse(None)

@@ -33,7 +33,7 @@ class ArrowTests(BaseArrowTests):
     def setUp(self):
         super(ArrowTests, self).setUp()
 
-        self.arrow = Arrow(datetime.utcnow(), tz='UTC')
+        self.arrow = Arrow(datetime.utcnow(), tz=tz.tzutc())
 
     def test_str(self):
 
@@ -104,65 +104,65 @@ class ArrowTests(BaseArrowTests):
 
         self.assertEqual(result, calendar.timegm(dt.timetuple()))
 
-    def test_get_datetime_int(self):
+    def test_parse_int(self):
 
-        result = self.arrow._get_datetime(int(time.time()), self.utc)
-
-        self.assert_dt_equal(result, datetime.utcnow())
-
-    def test_get_datetime_float_utc(self):
-
-        result = self.arrow._get_datetime(time.time(), self.utc)
+        result = self.arrow._parse(int(time.time()), self.utc)
 
         self.assert_dt_equal(result, datetime.utcnow())
 
-    def test_get_datetime_float_local(self):
+    def test_parse_float_utc(self):
 
-        result = self.arrow._get_datetime(time.time(), self.local)
+        result = self.arrow._parse(time.time(), self.utc)
+
+        self.assert_dt_equal(result, datetime.utcnow())
+
+    def test_parse_float_local(self):
+
+        result = self.arrow._parse(time.time(), self.local)
 
         self.assert_dt_equal(result, datetime.now())
 
-    def test_get_datetime_str_float_utc(self):
+    def test_parse_str_float_utc(self):
 
-        result = self.arrow._get_datetime(str(time.time()), self.utc)
-
-        self.assert_dt_equal(result, datetime.utcnow())
-
-    def test_get_datetime_str_int_utc(self):
-
-        result = self.arrow._get_datetime(str(int(time.time())), self.utc)
+        result = self.arrow._parse(str(time.time()), self.utc)
 
         self.assert_dt_equal(result, datetime.utcnow())
 
-    def test_get_datetime_str_float_local(self):
+    def test_parse_str_int_utc(self):
 
-        result = self.arrow._get_datetime(str(time.time()), self.local)
+        result = self.arrow._parse(str(int(time.time())), self.utc)
+
+        self.assert_dt_equal(result, datetime.utcnow())
+
+    def test_parse_str_float_local(self):
+
+        result = self.arrow._parse(str(time.time()), self.local)
 
         self.assert_dt_equal(result, datetime.now())
 
-    def test_get_datetime_str_int_local(self):
+    def test_parse_str_int_local(self):
 
-        result = self.arrow._get_datetime(str(int(time.time())), self.local)
+        result = self.arrow._parse(str(int(time.time())), self.local)
         
         self.assert_dt_equal(result, datetime.now())
 
-    def test_get_datetime_datetime(self):
+    def test_parse_datetime(self):
 
         dt = datetime.utcnow()
 
-        result = self.arrow._get_datetime(dt, self.utc)
+        result = self.arrow._parse(dt, self.utc)
 
         self.assert_dt_equal(result, dt)
 
-    def test_get_datetime_parse_str(self):
+    def test_parse_parse_str(self):
 
-        with self.assertRaises(RuntimeError):
-            self.arrow._get_datetime('abcdefg', self.utc)
+        with self.assertRaises(ValueError):
+            self.arrow._parse('abcdefg', self.utc)
 
-    def test_get_datetime_unrecognized(self):
+    def test_parse_unrecognized(self):
 
-        with self.assertRaises(RuntimeError):
-            self.arrow._get_datetime(object, self.utc)
+        with self.assertRaises(ValueError):
+            self.arrow._parse(object, self.utc)
 
 
 class ArrowToTests(BaseArrowTests):
@@ -199,6 +199,17 @@ class ArrowToTests(BaseArrowTests):
         self.assert_dt_equal(result_1.datetime, arr_2.datetime)
         self.assert_dt_equal(result_2.datetime, arr_1.datetime)
 
+class ArrowCompareTests(BaseArrowTests):
+
+    def test_eq_utc_converstions(self):
+
+        arr = Arrow(datetime(11, 1, 1))
+
+        utc_1 = arr.utc()
+        utc_2 = arr.to('UTC')
+
+        self.assertEqual(utc_1.datetime, utc_2.datetime)
+        self.assertEqual(utc_1, utc_2)
 
 class ArrowFunctionTest(BaseArrowTests):
 
@@ -286,7 +297,7 @@ class ArrowFunctionTest(BaseArrowTests):
         self.assert_dt_equal(result.datetime, dt)
         self.assert_ts_equal(result.timestamp, time.time() - 3600)
 
-    def test_two_args_olson_datetime_past_iso_str(self):
+    def test_two_args_datetime_past_iso_str(self):
 
         dt = datetime.utcnow() + timedelta(hours=-1)
 
@@ -294,6 +305,16 @@ class ArrowFunctionTest(BaseArrowTests):
 
         self.assert_dt_equal(result.datetime, dt)
         self.assert_ts_equal(result.timestamp, time.time() - 7200)
+
+    def test_two_args_datetime_future_timedelta(self):
+
+        dt = datetime.utcnow() + timedelta(hours=1)
+
+        result = arrow(dt, timedelta(hours=-1))
+
+        self.assert_dt_equal(result.datetime, dt)
+        print result.timestamp - time.time()
+        self.assert_ts_equal(result.timestamp, time.time() + 7200)
 
     def test_tz_kwarg_local(self):
 
