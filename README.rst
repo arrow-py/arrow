@@ -27,7 +27,7 @@ Arrow is UTC by default.  When optional, time zones are assumed to be UTC when n
 
 Installation
 ============
-::
+
 	$ pip install arrow
 
 Examples
