@@ -1,9 +1,9 @@
-from timezone import TimeZone
+from .timezone import TimeZone
 
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as _tz
 
-import time, calendar, pytz
+import time, calendar
 
 def arrow(date=None, tz=None):
     def _tz_now(tzinfo):
@@ -37,7 +37,7 @@ def arrow(date=None, tz=None):
         else:
             date_expr = date
             tz_expr = tz
-    
+
     return Arrow(date_expr, tz_expr)
 
 
@@ -92,12 +92,12 @@ class Arrow(object):
 
     @staticmethod
     def _try_parse_timestamp(dt_expr, timezone):
-        
+
         _datetime = None
 
         try:
             dt_expr = float(dt_expr)
-            
+
             _datetime = datetime.utcfromtimestamp(dt_expr)
             timezone = TimeZone(timezone, _datetime)
 
