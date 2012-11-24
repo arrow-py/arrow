@@ -1,0 +1,3 @@
+python-dateutil
+nose
+nose-cov

@@ -2,7 +2,7 @@
 Arrow - Better date & time manipulation for Python
 ===================================================
 
-:Version: 0.1.5
+:Version: 0.1.6
 :Author: Chris Smith (chris@cir.ca)
 :Download: http://pypi.python.org/pypi/arrow
 :Source: https://github.com/crsmithdev/arrow
@@ -46,49 +46,47 @@ Instantiation
 Current UTC date & time
 
 	>>> arrow()
-	Arrow(11/20/12 15:40:22.696837 +00:00 (UTC))
+	Arrow(2012-11-24T04:12:55.204282+00:00 UTC)
 
 Current local date & time
 
 	>>> arrow('local')
-	Arrow(11/20/12 07:40:27.473312 -08:00 (PST))
+	Arrow(2012-11-23T20:13:21.092619-08:00 PST)
 
 Current date & time in named time zone
 	
 	>>> arrow('US/Pacific')
-	Arrow(11/20/12 07:40:36.707704 -08:00 (PST))
+	Arrow(2012-11-23T20:13:27.557101-08:00 PST)
 
 Current date & time with offset-based time zone
 
 	>>> arrow(timedelta(hours=-1))
-	Arrow(11/20/12 14:40:54.544660 -01:00 (None))
+	Arrow(2012-11-24T03:13:38.580132-01:00 None)
 
 Current date & time with ISO-format time zone
 
 	>>> arrow('+01:30')
-	Arrow(11/21/12 05:52:45.208020 +01:30 (None))
+	Arrow(2012-11-24T05:43:45.076323+01:30 None)
 
-Current UTC date & time from timestamp
+From a timestamp in UTC
 
 	>>> arrow(time.time())
-	Arrow(11/20/12 15:41:13.112031 +00:00 (UTC))
+	Arrow(2012-11-24T04:13:48.052395+00:00 UTC)
+
+From a timestamp in another time zone
+
+	>>> arrow(time.time(), 'US/Eastern')
+	Arrow(2012-11-23T23:18:34.269432-05:00 EST)
 
 Another date & time in UTC
 
-	>>> d = datetime.utcnow() + timedelta(hours=-1)
-	>>> arrow(d)
-	Arrow(11/20/12 15:41:22.130000 +00:00 (UTC))
+	>>> arrow(datetime(12, 1, 1))
+	Arrow(0012-01-01T00:00:00+00:00 UTC)
 
 Another date & time in another time zone
 
-	>>> d = datetime.now() + timedelta(hours=-1)
-	>>> arrow(d, 'local')
-	Arrow(11/20/12 07:18:55.535649 -08:00 (PST))
-
-Another date & time from timestamp
-
-	>>> arrow(time.time())
-	Arrow(11/20/12 15:46:49.204422 +00:00 (UTC))
+	>>> arrow(datetime(12, 1, 1), 'US/Central')
+	Arrow(0012-01-01T00:00:00-06:00 CST)
 
 Accessing properties
 --------------------
@@ -140,18 +138,67 @@ Converting between time zones
 
 .. _arrow-coming-soon:
 
+Humanizing differences in time
+------------------------------
+
+Default behavior
+
+	>>> dt_1 = datetime(2012, 1, 1, 3, 3, 3)
+	>>> dt_2 = datetime(2012, 1, 2, 4, 4, 4)
+	>>> arrow(dt_1).humanize(dt_2)
+	'in 1 day'
+	>>> arrow(dt_2).humanize(dt_1)
+	'1 day ago'
+
+Places & precision
+
+	>>> dt_1 = datetime(2012, 1, 1, 3, 3, 3)
+	>>> dt_2 = datetime(2012, 1, 2, 4, 4, 4)
+	>>> arrow(dt_1).humanize(dt_2, places=2)
+	'in 1 day and 1 hour'
+	>>> arrow(dt_1).humanize(dt_2, places=3)
+	'in 1 day, 1 hour and 1 minute'
+	>>> arrow(dt_2).humanize(dt_1)
+	'1 day ago'
+	>>> arrow(dt_2).humanize(dt_1, places=2)
+	'1 day and 1 hour ago'
+	>>> arrow(dt_2).humanize(dt_1, places=3)
+	'1 day, 1 hour and 1 minute ago'
+
+Pre- / post-fixing
+
+	>>> dt_1 = datetime(2012, 1, 1, 3, 3, 3)
+	>>> dt_2 = datetime(2012, 1, 2, 4, 4, 4)
+	>>> arrow(dt_1).humanize(dt_2, fix=False)
+	'1 day'
+	>>> arrow(dt_2).humanize(dt_1, fix=False)
+	'1 day'
+
 Coming soon
 ===========
 
 * Parsing date strings (e.g. arrow('11-19-2012', format='MM-dd-YYYY'))
 * Formatting date strings (e.g. arrow().format('MM-dd-YYYY'))
-* Humanized relative time (e.g. arrow().since() -> '43 minutes ago')
 
 .. _Requests: http://docs.python-requests.org/
 .. _moment.js: http://momentjs.com/
 
+.. _arrow-changelog:
+
+Known issues
+============
+
+* Some round trip conversions are inaccurate (see https://github.com/crsmithdev/arrow/issues/4)
+
 Changelog
 =========
+
+* 0.1.6
+  * Added humanized time deltas
+  * Fixed numerous issues with conversions related to daylight savings time
+  * Fixed some inconsistencies in time zone names
+  * __str__ uses ISO formatting
+  * __eq__ implemented for basic comparison between Arrow objects
 
 * 0.1.5
 

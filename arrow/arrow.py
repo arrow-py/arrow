@@ -2,8 +2,9 @@ from .timezone import TimeZone
 
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as _tz
+from dateutil.relativedelta import relativedelta
 
-import time, calendar
+import time, calendar, math
 
 def arrow(date=None, tz=None):
     def _tz_now(tzinfo):
@@ -63,14 +64,10 @@ class Arrow(object):
         return eq
 
     def __repr__(self):
-        return '{0}({1})'.format(self.__class__.__name__, self.__str__())
+        return '<{0}({1})>'.format(self.__class__.__name__, self.__str__())
 
     def __str__(self):
-
-        time_str = time.strftime('%x %X', self._datetime.timetuple())
-
-        return '{0}.{1} {2}'.format(time_str, self._datetime.microsecond,
-            str(self._timezone))
+        return '{0} {1}'.format(self._datetime.isoformat(), self.tz.name)
 
     @staticmethod
     def _parse(dt_expr, tz_expr):
@@ -132,4 +129,62 @@ class Arrow(object):
     def utc(self):
         return self.to(_tz.tzutc())
 
+    def humanize(self, other=None, places=1, fix=True):
 
+        if isinstance(other, Arrow):
+            other = other._datetime
+
+        elif other is None:
+            other = datetime.utcnow() if self.tz.utc else datetime.now()
+
+        if other.tzinfo is None:
+            other = other.replace(tzinfo=self.tz.tzinfo)
+
+        delta = relativedelta(other, self._datetime)
+        delta = self._humanize_weeks(delta)
+
+        text = self._humanize_format(delta, places)
+
+        if fix and text is not None:
+            if self._datetime < other:
+                text = 'in {0}'.format(text)
+            else:
+                text = '{0} ago'.format(text)
+
+        return text
+
+    def _humanize_weeks(self, delta):
+
+        if abs(delta.days) >= 7:
+            if delta.days > 0:
+                delta.weeks = int(math.floor(delta.days / 7.0))
+            else:
+                delta.weeks = int(math.ceil(delta.days / 7.0))
+
+            delta.days -= delta.weeks * 7
+
+        else:
+            delta.weeks = 0
+
+        return delta
+
+    def _humanize_format(self, delta, places):
+
+        strings = []
+        text = None
+
+        for frame in ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']:
+            value = abs(getattr(delta, frame))
+
+            if value != 0:
+                name = frame if value > 1 else frame[:-1]
+                strings.append('{0} {1}'.format(abs(value), name))
+
+        strings = strings[:places]
+
+        if len(strings) > 1:
+            text = ', '.join(strings[:-1]) + ' and {0}'.format(strings[-1])
+        elif len(strings) > 0:
+            text = strings[-1]
+
+        return text

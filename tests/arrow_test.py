@@ -37,15 +37,13 @@ class ArrowTests(BaseArrowTests):
 
     def test_str(self):
 
-        expected = '{0}.{1} +00:00 (UTC)'.format(time.strftime(
-            '%x %X', self.arrow.datetime.timetuple()), self.arrow.datetime.microsecond)
+        expected = '{0} UTC'.format(self.arrow._datetime.isoformat())
 
         self.assertEqual(self.arrow.__str__(), expected)
 
     def test_repr(self):
 
-        expected = 'Arrow({0}.{1} +00:00 (UTC))'.format(time.strftime(
-            '%x %X', self.arrow.datetime.timetuple()), self.arrow.datetime.microsecond)
+        expected = '<Arrow({0} UTC)>'.format(self.arrow._datetime.isoformat())
 
         self.assertEqual(self.arrow.__repr__(), expected)
 
@@ -146,14 +144,6 @@ class ArrowTests(BaseArrowTests):
         
         self.assert_dt_equal(dt, datetime.now())
 
-    # def test_parse_datetime(self):
-
-    #     dt = datetime.utcnow()
-
-    #     result = self.arrow._parse(dt, self.utc)
-
-    #     self.assert_dt_equal(result, dt)
-
     def test_parse_parse_str(self):
 
         with self.assertRaises(ValueError):
@@ -210,6 +200,81 @@ class ArrowCompareTests(BaseArrowTests):
 
         self.assertEqual(utc_1.datetime, utc_2.datetime)
         self.assertEqual(utc_1, utc_2)
+
+class ArrowHumanizeTests(BaseArrowTests):
+
+    def test_no_diff(self):
+
+        dt = datetime(2011, 1, 1, 1, 1, 1)
+
+        result = arrow(dt).humanize(dt)
+
+        self.assertIsNone(result)
+
+    def test_none(self):
+
+        dt = datetime.utcnow() + timedelta(hours=-1)
+
+        result = arrow(dt).humanize(fix=False)
+
+        self.assertEqual(result, '1 hour')
+
+    def test_arrow(self):
+
+        arr = Arrow(datetime.utcnow() + timedelta(hours=-1))
+
+        result = arrow().humanize(arr, fix=False)
+
+        self.assertEqual(result, '1 hour')
+
+    def test_fix(self):
+
+        dt_1 = arrow(datetime(2012, 1, 1))
+        dt_2 = arrow(datetime(2012, 1, 2))
+
+        self.assertEqual(dt_1.humanize(dt_2), 'in 1 day')
+        self.assertEqual(dt_1.humanize(dt_2, fix=False), '1 day')
+        self.assertEqual(dt_2.humanize(dt_1), '1 day ago')
+        self.assertEqual(dt_2.humanize(dt_1, fix=False), '1 day')
+
+    def test_humanize(self):
+
+        dt_1 = datetime(2012, 2, 2, 2, 2, 2)
+        dt_2 = datetime(2010, 12, 25, 1, 1, 1)
+
+        result = arrow(dt_1).humanize(dt_2, places=7)
+        self.assertEqual(result, '1 year, 1 month, 1 week, 1 day, 1 hour, 1 minute and 1 second ago')
+
+        result = arrow(dt_1).humanize(dt_2, places=6)
+        self.assertEqual(result, '1 year, 1 month, 1 week, 1 day, 1 hour and 1 minute ago')
+
+        result = arrow(dt_1).humanize(dt_2, places=1)
+        self.assertEqual(result, '1 year ago')
+
+        result = arrow(dt_1).humanize(dt_2, places=2)
+        self.assertEqual(result, '1 year and 1 month ago')
+
+        result = arrow(dt_1).humanize(dt_2, places=3)
+        self.assertEqual(result, '1 year, 1 month and 1 week ago')
+
+        dt_1 = datetime(2010, 12, 25, 1, 1, 1)
+        dt_2 = datetime(2012, 2, 2, 2, 2, 2)
+
+        result = arrow(dt_1).humanize(dt_2, places=7)
+        self.assertEqual(result, 'in 1 year, 1 month, 1 week, 1 day, 1 hour, 1 minute and 1 second')
+
+        result = arrow(dt_1).humanize(dt_2, places=6)
+        self.assertEqual(result, 'in 1 year, 1 month, 1 week, 1 day, 1 hour and 1 minute')
+
+        result = arrow(dt_1).humanize(dt_2, places=1)
+        self.assertEqual(result, 'in 1 year')
+
+        result = arrow(dt_1).humanize(dt_2, places=2)
+        self.assertEqual(result, 'in 1 year and 1 month')
+
+        result = arrow(dt_1).humanize(dt_2, places=3)
+        self.assertEqual(result, 'in 1 year, 1 month and 1 week')
+
 
 class ArrowFunctionTest(BaseArrowTests):
 
