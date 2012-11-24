@@ -194,6 +194,7 @@ Changelog
 =========
 
 * 0.1.6
+
   * Added humanized time deltas
   * Fixed numerous issues with conversions related to daylight savings time
   * Fixed some inconsistencies in time zone names
