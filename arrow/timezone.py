@@ -43,7 +43,7 @@ class TimeZone(object):
         if isinstance(tz_expr, TimeZone):
             _tzinfo = tz_expr.tzinfo
 
-        elif isinstance(tz_expr, str):
+        elif isinstance(tz_expr, (str, unicode)):
             _tzinfo = TimeZone._parse_str(tz_expr)
 
         elif isinstance(tz_expr, tzinfo):
