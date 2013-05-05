@@ -1,0 +1,4 @@
+python-dateutil
+nose
+nose-cov
+chai==0.3.1

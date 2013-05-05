@@ -1,0 +1,7 @@
+[run]
+omit =
+    setup.py
+    /*/tests/*
+    /*/local/*
+    /Library/*
+    ~/Library/*

@@ -1,0 +1,14 @@
+.PHONY: auto build test clean
+
+auto: build
+
+build:
+	virtualenv local
+	local/bin/pip install -r REQUIREMENTS.txt
+
+test:
+	. local/bin/activate && nosetests --all-modules --with-coverage arrow tests
+
+clean:
+	rm -rf local
+
