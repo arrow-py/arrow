@@ -23,11 +23,13 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ## Examples
 
 ### Import
+
 ```python
 >>> import arrow
 ```
 
 ### Current time
+
 ```python
 >>> arrow.utcnow()
 <Arrow [2013-05-05T22:40:24.723023+00:00]>
@@ -38,6 +40,7 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ```
 
 ### From timestamp
+
 ```python
 >>> timestamp = time.time()
 >>> arrow.get(timestamp)
@@ -51,11 +54,12 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ```
 
 ### From datetime / tzinfo
+
 ```python
 >>> arrow.get(datetime.utcnow())
 <Arrow [2013-05-05T22:18:40.031238+00:00]>
 
->>> arrow.get(datetime.now(gettz('US/Pacific')))
+>>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
 <Arrow [2013-05-05T15:18:43.063150-07:00]>
 
 >>> arrow.get(datetime.now(), 'US/Pacific')
@@ -63,21 +67,24 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ```
 
 ### From string / format
+
 ```python
 >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
 <Arrow [2013-05-05T12:30:45+00:00]>
 ```
 
 ### From year, month, day...
+
 ```python
 >>> arrow.get(2013, 5, 5, 12, 30, 45)
 <Arrow [2013-05-05T12:30:45+00:00]>
 
->>> arrow.get(2013, 5, 5, 12, 30, 45, tzinfo=tzlocal())
+>>> arrow.get(2013, 5, 5, 12, 30, 45, tzinfo=tz.tzlocal())
 <Arrow [2013-05-05T12:30:45-07:00]>
 ```
 
 ### Access properties
+
 ```python
 >>> a = arrow.utcnow()
 >>> a
@@ -86,11 +93,19 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 >>> a.datetime
 datetime.datetime(2013, 5, 5, 22, 36, 57, 832340, tzinfo=tzutc())
 
+>>> a.naive
+datetime.datetime(2013, 5, 5, 22, 36, 57, 832340)
+
 >>> a.timestamp
 1367793417
 
 >>> a.tzinfo
 tzutc()
+
+>>> a.hour
+22
+>>> a.hours
+22
 
 >>> a.date()
 datetime.date(2013, 5, 5)
@@ -106,6 +121,7 @@ datetime.timedelta(0)
 ```
 
 ### Update properties
+
 ```python
 >>> a = arrow.utcnow()
 >>> a
@@ -121,12 +137,14 @@ datetime.timedelta(0)
 ```
 
 ### Format
+
 ```python
 >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss Z')
 '2013-05-05 22:31:00 -0000'
 ```
 
 ### Convert
+
 ```python
 >>> arrow.utcnow().to('local')
 <Arrow [2013-05-05T15:33:07.449537-07:00]>
@@ -136,6 +154,7 @@ datetime.timedelta(0)
 ```
 
 ### Span, floor and ceil
+
 ```python
 >>> a = arrow.utcnow()
 >>> a
@@ -153,24 +172,28 @@ datetime.timedelta(0)
 
 ### Clone
 
-    >>> a = arrow.utcnow()
-    >>> a
-    <Arrow [2013-05-05T23:11:41.173136+00:00]>
-    >>> a.clone()
-    <Arrow [2013-05-05T23:11:41.173136+00:00]>
+```python
+>>> a = arrow.utcnow()
+>>> a
+<Arrow [2013-05-05T23:11:41.173136+00:00]>
+>>> a.clone()
+<Arrow [2013-05-05T23:11:41.173136+00:00]>
+```
 
 ### Humanize
 
-    >>> a = arrow.utcnow()
-    >>> a.hours -= 1
-    >>> a.humanize()
-    'an hour ago'
+```python
+>>> a = arrow.utcnow()
+>>> a.hours -= 1
+>>> a.humanize()
+'an hour ago'
+```
 
 Changelog
 =========
 
 * 0.2.0
-  * Implemented as datetime replacement
+  * Reimplemented as datetime replacement
   * Added date parsing
   * Added date formatting
   * Added floor, ceil and span methods
@@ -191,3 +214,4 @@ Changelog
   * Added parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
   * Fixed some incorrect timestamps with delta / olson time zones
   * Fixed formatting of UTC offsets in TimeStamp's str method
+
