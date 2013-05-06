@@ -4,4 +4,4 @@ python:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r REQUIREMENTS.txt
 # command to run tests, e.g. python setup.py test
-script:  make test
+script:  nosetests arrow tests
