@@ -34,18 +34,18 @@ class ArrowFactoryTests(Chai):
 
         assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
-    def test_fromtimestamp(self):
+    #def test_fromtimestamp(self):
 
-        timestamp = time.time()
-        tzinfo = tz.gettz('US/Pacific')
+    #    timestamp = time.time()
+    #    tzinfo = tz.gettz('US/Pacific')
 
-        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo)
-        print result
-        print datetime.now().replace(tzinfo=tzinfo)
+    #    result = arrow.Arrow.fromtimestamp(timestamp, tzinfo)
+    #    print result
+    #    print datetime.now().replace(tzinfo=tzinfo)
 
-        assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tzinfo))
+    #    assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tzinfo))
 
-    def test_formtimestamp_no_tzinfo(self):
+    def test_formtimestamp(self):
 
         timestamp = time.time()
 
