@@ -60,89 +60,96 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 
 >>> arrow.get(datetime.now(), 'US/Pacific')
 <Arrow [2013-05-05T15:19:33.262255-07:00]>
-```python
+```
 
 ### From string / format
-
-    >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
-    <Arrow [2013-05-05T12:30:45+00:00]>
+```python
+>>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
+<Arrow [2013-05-05T12:30:45+00:00]>
+```
 
 ### From year, month, day...
+```python
+>>> arrow.get(2013, 5, 5, 12, 30, 45)
+<Arrow [2013-05-05T12:30:45+00:00]>
 
-    >>> arrow.get(2013, 5, 5, 12, 30, 45)
-    <Arrow [2013-05-05T12:30:45+00:00]>
-
-    >>> arrow.get(2013, 5, 5, 12, 30, 45, tzinfo=tzlocal())
-    <Arrow [2013-05-05T12:30:45-07:00]>
+>>> arrow.get(2013, 5, 5, 12, 30, 45, tzinfo=tzlocal())
+<Arrow [2013-05-05T12:30:45-07:00]>
+```
 
 ### Access properties
+```python
+>>> a = arrow.utcnow()
+>>> a
+<Arrow [2013-05-05T22:36:57.832340+00:00]>
 
-    >>> a = arrow.utcnow()
-    >>> a
-    <Arrow [2013-05-05T22:36:57.832340+00:00]>
+>>> a.datetime
+datetime.datetime(2013, 5, 5, 22, 36, 57, 832340, tzinfo=tzutc())
 
-    >>> a.datetime
-    datetime.datetime(2013, 5, 5, 22, 36, 57, 832340, tzinfo=tzutc())
+>>> a.timestamp
+1367793417
 
-    >>> a.timestamp
-    1367793417
+>>> a.tzinfo
+tzutc()
 
-    >>> a.tzinfo
-    tzutc()
+>>> a.date()
+datetime.date(2013, 5, 5)
 
-    >>> a.date()
-    datetime.date(2013, 5, 5)
+>>> a.time()
+datetime.time(22, 36, 57, 832340)
 
-    >>> a.time()
-    datetime.time(22, 36, 57, 832340)
+>>> a.dst()
+datetime.timedelta(0)
 
-    >>> a.dst()
-    datetime.timedelta(0)
-
-    >>> a.utcoffset()
-    datetime.timedelta(0)
+>>> a.utcoffset()
+datetime.timedelta(0)
+```
 
 ### Update properties
+```python
+>>> a = arrow.utcnow()
+>>> a
+<Arrow [2013-05-05T22:27:52.831671+00:00]>
 
-    >>> a = arrow.utcnow()
-    >>> a
-    <Arrow [2013-05-05T22:27:52.831671+00:00]>
+>>> a.hours += 1
+>>> a
+<Arrow [2013-05-05T23:27:52.831671+00:00]>
 
-    >>> a.hours += 1
-    >>> a
-    <Arrow [2013-05-05T23:27:52.831671+00:00]>
-
-    >>> a.hour += 1
-    >>> a
-    <Arrow [2013-05-06T00:27:52.831671+00:00]>
+>>> a.hour += 1
+>>> a
+<Arrow [2013-05-06T00:27:52.831671+00:00]>
+```
 
 ### Format
-
-    >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss Z')
-    '2013-05-05 22:31:00 -0000'
+```python
+>>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss Z')
+'2013-05-05 22:31:00 -0000'
+```
 
 ### Convert
+```python
+>>> arrow.utcnow().to('local')
+<Arrow [2013-05-05T15:33:07.449537-07:00]>
 
-    >>> arrow.utcnow().to('local')
-    <Arrow [2013-05-05T15:33:07.449537-07:00]>
-
-    >>> arrow.utcnow().to('US/Pacific')
-    <Arrow [2013-05-05T15:33:14.060642-07:00]>
+>>> arrow.utcnow().to('US/Pacific')
+<Arrow [2013-05-05T15:33:14.060642-07:00]>
+```
 
 ### Span, floor and ceil
+```python
+>>> a = arrow.utcnow()
+>>> a
+<Arrow [2013-05-05T23:08:33.592862+00:00]>
 
-    >>> a = arrow.utcnow()
-    >>> a
-    <Arrow [2013-05-05T23:08:33.592862+00:00]>
+>>> a.span('hour')
+(<Arrow [2013-05-05T23:00:00+00:00]>, <Arrow [2013-05-05T23:59:59.999999+00:00]>)
 
-    >>> a.span('hour')
-    (<Arrow [2013-05-05T23:00:00+00:00]>, <Arrow [2013-05-05T23:59:59.999999+00:00]>)
+>>> a.floor('hour')
+<Arrow [2013-05-05T23:00:00+00:00]>
 
-    >>> a.floor('hour')
-    <Arrow [2013-05-05T23:00:00+00:00]>
-
-    >>> a.ceil('hour')
-    <Arrow [2013-05-05T23:59:59.999999+00:00]>
+>>> a.ceil('hour')
+<Arrow [2013-05-05T23:59:59.999999+00:00]>
+```
 
 ### Clone
 
