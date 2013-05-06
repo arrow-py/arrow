@@ -2,6 +2,7 @@ from chai import Chai
 
 from datetime import datetime, timedelta
 from dateutil import tz
+import calendar
 import time
 
 import arrow
@@ -107,6 +108,12 @@ class ArrowRepresentationTests(Chai):
         result = self.arrow.__hash__()
 
         assertEqual(result, self.arrow._datetime.__hash__())
+
+    def test_format(self):
+
+        result = '{0:YYYY-MM-DD}'.format(self.arrow)
+
+        assertEqual(result, '2013-02-03')
 
     def test_clone(self):
 
@@ -227,7 +234,15 @@ class ArrowAttributeTests(Chai):
     def test_tzinfo(self):
 
         self.arrow.tzinfo = tz.gettz('PST')
-        assertEqual(self.arrow.datetime.tzinfo, tz.gettz('PST'))
+        assertEqual(self.arrow.tzinfo, tz.gettz('PST'))
+
+    def test_naive(self):
+
+        assertEqual(self.arrow.naive, self.arrow._datetime.replace(tzinfo=None))
+
+    def test_timestamp(self):
+
+        assertEqual(self.arrow.timestamp, calendar.timegm(self.arrow._datetime.utctimetuple()))
 
 
 class ArrowComparisonTests(Chai):
@@ -298,11 +313,16 @@ class ArrowMathTests(Chai):
 
         self.arrow = arrow.Arrow(2013, 1, 1)
 
-    def test_add(self):
+    def test_add_timedelta(self):
 
         result = self.arrow.__add__(timedelta(days=1))
 
         assertEqual(result._datetime, datetime(2013, 1, 2, tzinfo=tz.tzutc()))
+
+    def test_add_other(self):
+
+        with assertRaises(NotImplementedError):
+            self.arrow.__add__(1)
 
     def test_radd(self):
 
@@ -310,9 +330,32 @@ class ArrowMathTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 2, tzinfo=tz.tzutc()))
 
-    def test_sub(self):
+    def test_sub_timedelta(self):
 
         result = self.arrow.__sub__(timedelta(days=1))
+
+        assertEqual(result._datetime, datetime(2012, 12, 31, tzinfo=tz.tzutc()))
+
+    def test_sub_datetime(self):
+
+        result = self.arrow.__sub__(datetime(2012, 12, 21, tzinfo=tz.tzutc()))
+
+        assertEqual(result, timedelta(days=11))
+
+    def test_sub_arrow(self):
+
+        result = self.arrow.__sub__(arrow.Arrow(2012, 12, 21, tzinfo=tz.tzutc()))
+
+        assertEqual(result, timedelta(days=11))
+
+    def test_sub_other(self):
+
+        with assertRaises(NotImplementedError):
+            self.arrow.__sub__(object())
+
+    def test_rsub(self):
+
+        result = self.arrow.__rsub__(timedelta(days=1))
 
         assertEqual(result._datetime, datetime(2012, 12, 31, tzinfo=tz.tzutc()))
 

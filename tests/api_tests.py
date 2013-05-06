@@ -1,6 +1,7 @@
 from chai import Chai
 from datetime import datetime
 from dateutil import tz
+import time
 
 from arrow import api
 
@@ -65,6 +66,11 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('PDT')))
 
+    def test_two_args_datetime_other(self):
+
+        with assertRaises(TypeError):
+            api.get(datetime.utcnow(), object())
+
     def test_two_args_str_str(self):
 
         result = api.get('2013-01-01', 'YYYY-MM-DD')
@@ -116,6 +122,14 @@ class ArrowTests(Chai):
         result = api.arrow('local')
 
         assertDtEqual(result._datetime, datetime.now(tz.tzlocal()))
+
+    def test_dt_str_none(self):
+
+        dt = datetime(2013, 1, 1)
+
+        result = api.arrow(dt)
+
+        assertDtEqual(result._datetime, dt.replace(tzinfo=tz.tzutc()))
 
     def test_datetime_tzinfo(self):
 
