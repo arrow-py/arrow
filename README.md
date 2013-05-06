@@ -23,13 +23,11 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ## Examples
 
 ### Import
-
 ```python
 >>> import arrow
 ```
 
 ### Current time
-
 ```python
 >>> arrow.utcnow()
 <Arrow [2013-05-05T22:40:24.723023+00:00]>
