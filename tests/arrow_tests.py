@@ -37,7 +37,7 @@ class ArrowFactoryTests(Chai):
     def test_fromtimestamp(self):
 
         timestamp = time.time()
-        tzinfo = tz.gettz('PDT')
+        tzinfo = tz.gettz('US/Pacific')
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo)
 
@@ -61,19 +61,19 @@ class ArrowFactoryTests(Chai):
 
     def test_fromdatetime_dt_tzinfo(self):
 
-        dt = datetime(2013, 2, 3, 12, 30, 45, 1, tzinfo=tz.gettz('PDT'))
+        dt = datetime(2013, 2, 3, 12, 30, 45, 1, tzinfo=tz.gettz('US/Pacific'))
 
         result = arrow.Arrow.fromdatetime(dt)
 
-        assertEqual(result._datetime, dt.replace(tzinfo=tz.gettz('PDT')))
+        assertEqual(result._datetime, dt.replace(tzinfo=tz.gettz('US/Pacific')))
 
     def test_fromdatetime_tzinfo_arg(self):
 
         dt = datetime(2013, 2, 3, 12, 30, 45, 1)
 
-        result = arrow.Arrow.fromdatetime(dt, tz.gettz('PDT'))
+        result = arrow.Arrow.fromdatetime(dt, tz.gettz('US/Pacific'))
 
-        assertEqual(result._datetime, dt.replace(tzinfo=tz.gettz('PDT')))
+        assertEqual(result._datetime, dt.replace(tzinfo=tz.gettz('US/Pacific')))
 
     def test_strptime(self):
 
@@ -466,11 +466,11 @@ class ArrowConversionTests(Chai):
     def test_to(self):
 
         dt_from = datetime.now()
-        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.tzoffset(None, -3600))
+        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.gettz('US/Pacific'))
 
         result = arrow_from.to('UTC')
 
-        expected = dt_from.replace(tzinfo=tz.tzoffset(None, -3600)).astimezone(tz.tzutc())
+        expected = dt_from.replace(tzinfo=tz.gettz('US/Pacific')).astimezone(tz.tzutc())
 
         assertEqual(result.datetime, expected)
 
