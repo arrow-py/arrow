@@ -11,4 +11,5 @@ test:
 
 clean:
 	rm -rf local
+	rm -f arrow/*.pyc tests/*.pyc
 
