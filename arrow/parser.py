@@ -15,7 +15,7 @@ class DateTimeParser(object):
     _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
     _FOUR_DIGIT_RE = re.compile('\d{4}')
     _TWO_DIGIT_RE = re.compile('\d{2}')
-    _TZ_RE = re.compile('[+\-]?\d{2}:?d{2}')
+    _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
 
     _INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,

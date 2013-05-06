@@ -100,6 +100,11 @@ class DateTimeParserParseTests(Chai):
         expected = datetime(1, 1, 1, 1, 0, 0)
         assertEqual(self.parse('1 am', 'H A'), expected)
 
+    def test_parse_tz(self):
+
+        expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
+        assertEqual(self.parse('2013-01-01 -07:00', 'YYYY-MM-DD ZZ'), expected)
+
     def test_parse_subsecond(self):
 
         expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
