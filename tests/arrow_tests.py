@@ -40,6 +40,8 @@ class ArrowFactoryTests(Chai):
         tzinfo = tz.gettz('US/Pacific')
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo)
+        print result
+        print datetime.now().replace(tzinfo=tzinfo)
 
         assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tzinfo))
 
