@@ -461,18 +461,18 @@ class ArrowDatetimeInterfaceTests(Chai):
         assertEqual(result, self.arrow._datetime.strftime('%Y'))
 
 
-#class ArrowConversionTests(Chai):
+class ArrowConversionTests(Chai):
 
-#    def test_to(self):
+    def test_to(self):
 
-#        dt_from = datetime.now()
-#        arrow_from = arrow.Arrow(dt_from, tz.gettz('PDT'))
+        dt_from = datetime.now()
+        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.gettz('PDT'))
 
-#        result = arrow_from.to('UTC')
+        result = arrow_from.to('UTC')
 
-#        expected = dt_from.replace(tzinfo=tz.gettz('PDT')).astimezone(tz.tzutc())
+        expected = dt_from.replace(tzinfo=tz.gettz('PDT')).astimezone(tz.tzutc())
 
-#        assertEqual(result.datetime, expected)
+        assertEqual(result.datetime, expected)
 
 
 class ArrowSpanTests(Chai):
@@ -482,6 +482,11 @@ class ArrowSpanTests(Chai):
 
         self.datetime = datetime(2013, 2, 15, 3, 41, 22, 8923)
         self.arrow = arrow.Arrow.fromdatetime(self.datetime)
+
+    def test_span_attribute(self):
+
+        with assertRaises(AttributeError):
+            self.arrow.span('span')
 
     def test_span_year(self):
 
@@ -642,6 +647,24 @@ class ArrowHumanizeTests(Chai):
         result = arw.humanize(arrow.Arrow.fromdatetime(self.datetime))
 
         assertEqual(result, 'just now')
+
+    def test_datetime_tzinfo(self):
+
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.humanize(self.datetime.replace(tzinfo=tz.tzutc()))
+
+        assertEqual(result, 'just now')
+
+    def test_other(self):
+
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        with assertRaises(TypeError):
+            arw.humanize(object())
+
+
+
 
     def test_none(self):
 

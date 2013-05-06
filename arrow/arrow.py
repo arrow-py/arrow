@@ -294,7 +294,7 @@ class Arrow(object):
         f_single, f_plural = self._get_property_names(frame)
 
         if f_single is None:
-            raise Exception()
+            raise AttributeError()
 
         index = self._ATTRS.index(f_single)
         frames = self._ATTRS[:index + 1]
@@ -335,7 +335,7 @@ class Arrow(object):
                 dt = other.astimezone(self._datetime.tzinfo)
 
         else:
-            raise Exception()
+            raise TypeError()
 
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0
