@@ -84,7 +84,7 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
     def test_timezone(self):
 
-        dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz('PDT'))
+        dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz('US/Pacific'))
         assertEqual(self.format_token(dt, 'ZZ'), '-07:00')
         assertEqual(self.format_token(dt, 'Z'), '-0700')
 

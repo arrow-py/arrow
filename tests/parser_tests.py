@@ -217,7 +217,7 @@ class TzinfoParserTests(Chai):
 
     def test_parse_str(self):
 
-        assertEqual(self.parse('PDT'), tz.gettz('PDT'))
+        assertEqual(self.parse('US/Pacific'), tz.gettz('US/Pacific'))
 
     def test_parse_fails(self):
 
