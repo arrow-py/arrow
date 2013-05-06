@@ -23,10 +23,13 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ## Examples
 
 ### Import
+
 ```python
 >>> import arrow
 ```
+
 ### Current time
+
 ```python
 >>> arrow.utcnow()
 <Arrow [2013-05-05T22:40:24.723023+00:00]>
@@ -35,6 +38,7 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 >>> arrow.now('US/Pacific')
 <Arrow [2013-05-05T15:40:30.195922-07:00]>
 ```
+
 ### From timestamp
 
 ```python
