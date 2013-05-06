@@ -33,32 +33,34 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 <Arrow [2013-05-05T22:40:24.723023+00:00]>
 >>> arrow.now()
 <Arrow [2013-05-05T15:40:26.778693-07:00]>
->>> arrow.now('PDT')
+>>> arrow.now('US/Pacific')
 <Arrow [2013-05-05T15:40:30.195922-07:00]>
 ```
 
 ### From timestamp
+```python
+>>> timestamp = time.time()
+>>> arrow.get(timestamp)
+<Arrow [2013-05-05T22:15:14.864305+00:00]>
 
-    >>> timestamp = time.time()
-    >>> arrow.get(timestamp)
-    <Arrow [2013-05-05T22:15:14.864305+00:00]>
+>>> arrow.get(int(timestamp))
+<Arrow [2013-05-05T22:15:14+00:00]>
 
-    >>> arrow.get(int(timestamp))
-    <Arrow [2013-05-05T22:15:14+00:00]>
-
-    >>> arrow.get(str(timestamp))
-    <Arrow [2013-05-05T22:15:14.860000+00:00]>
+>>> arrow.get(str(timestamp))
+<Arrow [2013-05-05T22:15:14.860000+00:00]>
+```
 
 ### From datetime / tzinfo
+```python
+>>> arrow.get(datetime.utcnow())
+<Arrow [2013-05-05T22:18:40.031238+00:00]>
 
-    >>> arrow.get(datetime.utcnow())
-    <Arrow [2013-05-05T22:18:40.031238+00:00]>
+>>> arrow.get(datetime.now(gettz('US/Pacific')))
+<Arrow [2013-05-05T15:18:43.063150-07:00]>
 
-    >>> arrow.get(datetime.now(gettz('PDT')))
-    <Arrow [2013-05-05T15:18:43.063150-07:00]>
-
-    >>> arrow.get(datetime.now(), 'PDT')
-    <Arrow [2013-05-05T15:19:33.262255-07:00]>
+>>> arrow.get(datetime.now(), 'US/Pacific')
+<Arrow [2013-05-05T15:19:33.262255-07:00]>
+```python
 
 ### From string / format
 
@@ -124,7 +126,7 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
     >>> arrow.utcnow().to('local')
     <Arrow [2013-05-05T15:33:07.449537-07:00]>
 
-    >>> arrow.utcnow().to('PDT')
+    >>> arrow.utcnow().to('US/Pacific')
     <Arrow [2013-05-05T15:33:14.060642-07:00]>
 
 ### Span, floor and ceil
