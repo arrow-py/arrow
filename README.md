@@ -59,6 +59,7 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 >>> arrow.get(datetime.utcnow())
 <Arrow [2013-05-05T22:18:40.031238+00:00]>
 
+>>> from dateutil import tz
 >>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
 <Arrow [2013-05-05T15:18:43.063150-07:00]>
 
@@ -112,9 +113,6 @@ datetime.date(2013, 5, 5)
 
 >>> a.time()
 datetime.time(22, 36, 57, 832340)
-
->>> a.dst()
-datetime.timedelta(0)
 
 >>> a.utcoffset()
 datetime.timedelta(0)
