@@ -23,17 +23,19 @@ Arrow is UTC and timezone aware by default.  When optional, time zones are assum
 ## Examples
 
 ### Import
-
-    >>> import arrow
+```python
+>>> import arrow
+```
 
 ### Current time
-
-    >>> arrow.utcnow()
-    <Arrow [2013-05-05T22:40:24.723023+00:00]>
-    >>> arrow.now()
-    <Arrow [2013-05-05T15:40:26.778693-07:00]>
-    >>> arrow.now('PDT')
-    <Arrow [2013-05-05T15:40:30.195922-07:00]>
+```python
+>>> arrow.utcnow()
+<Arrow [2013-05-05T22:40:24.723023+00:00]>
+>>> arrow.now()
+<Arrow [2013-05-05T15:40:26.778693-07:00]>
+>>> arrow.now('PDT')
+<Arrow [2013-05-05T15:40:30.195922-07:00]>
+```
 
 ### From timestamp
 
