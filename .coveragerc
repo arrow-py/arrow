@@ -1,6 +1,3 @@
 [run]
-omit =
-    setup.py
-    */__init__.py
-    /*/tests/*
-    /*/local/*
+include =
+    arrow/*.py

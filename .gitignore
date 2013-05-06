@@ -2,5 +2,6 @@
 *.egg-info
 
 .coverage
+nosetests.xml
 local/
 dist/
