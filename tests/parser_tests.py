@@ -88,15 +88,17 @@ class DateTimeParserParseTests(Chai):
     def test_parse_names(self):
 
         expected = datetime(2012, 1, 1)
+
         assertEqual(self.parse('January 1, 2012', 'MMMM D, YYYY'), expected)
+        assertEqual(self.parse('Jan 1, 2012', 'MMM D, YYYY'), expected)
 
     def test_parse_pm(self):
 
         expected = datetime(1, 1, 1, 13, 0, 0)
         assertEqual(self.parse('1 pm', 'H a'), expected)
 
-        expected = datetime(1, 1, 1, 13, 0, 0)
-        assertEqual(self.parse('13 pm', 'H a'), expected)
+        expected = datetime(1, 1, 1, 1, 0, 0)
+        assertEqual(self.parse('1 am', 'H A'), expected)
 
     def test_parse_subsecond(self):
 

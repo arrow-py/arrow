@@ -125,8 +125,6 @@ class DateTimeParser(object):
                 parts['am_pm'] = 'am'
             elif value in ['p', 'P', 'pm', 'PM']:
                 parts['am_pm'] = 'pm'
-            else:
-                raise ParserError('Cannot parse value \'{0}\' for token \'a\'')
 
     @classmethod
     def _build_datetime(cls, parts):

@@ -663,9 +663,6 @@ class ArrowHumanizeTests(Chai):
         with assertRaises(TypeError):
             arw.humanize(object())
 
-
-
-
     def test_none(self):
 
         arw = arrow.Arrow.utcnow()
