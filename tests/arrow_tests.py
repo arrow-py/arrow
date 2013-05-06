@@ -466,11 +466,11 @@ class ArrowConversionTests(Chai):
     def test_to(self):
 
         dt_from = datetime.now()
-        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.gettz('PDT'))
+        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.tzoffset(None, -3600))
 
         result = arrow_from.to('UTC')
 
-        expected = dt_from.replace(tzinfo=tz.gettz('PDT')).astimezone(tz.tzutc())
+        expected = dt_from.replace(tzinfo=tz.tzoffset(None, -3600)).astimezone(tz.tzutc())
 
         assertEqual(result.datetime, expected)
 
