@@ -39,15 +39,15 @@ class GetTests(Chai):
 
     def test_one_arg_tzinfo(self):
 
-        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('PDT'))
+        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
 
-        assertDtEqual(api.get(tz.gettz('PDT')), expected)
+        assertDtEqual(api.get(tz.gettz('US/Pacific')), expected)
 
     def test_one_arg_tz_str(self):
 
-        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('PDT'))
+        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
 
-        assertDtEqual(api.get('PDT'), expected)
+        assertDtEqual(api.get('US/Pacific'), expected)
 
     def test_one_arg_other(self):
 
@@ -56,15 +56,15 @@ class GetTests(Chai):
 
     def test_two_args_datetime_tzinfo(self):
 
-        result = api.get(datetime(2013, 1, 1), tz.gettz('PDT'))
+        result = api.get(datetime(2013, 1, 1), tz.gettz('US/Pacific'))
 
-        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('PDT')))
+        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
 
     def test_two_args_datetime_tz_str(self):
 
-        result = api.get(datetime(2013, 1, 1), 'PDT')
+        result = api.get(datetime(2013, 1, 1), 'US/Pacific')
 
-        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('PDT')))
+        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
 
     def test_two_args_datetime_other(self):
 
