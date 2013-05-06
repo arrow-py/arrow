@@ -388,7 +388,7 @@ class ArrowDatetimeInterfaceTests(Chai):
 
     def test_astimezone(self):
 
-        other_tz = tz.gettz('PST')
+        other_tz = tz.gettz('US/Pacific')
 
         result = self.arrow.astimezone(other_tz)
 
