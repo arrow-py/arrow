@@ -116,6 +116,11 @@ class DateTimeParserParseTests(Chai):
         expected = datetime(2013, 1, 1, 12, 30, 45, 999000)
         assertEqual(self.parse('2013-01-01 12:30:45:999', 'YYYY-MM-DD HH:mm:ss:SSS'), expected)
 
+    def test_map_lookup_keyerror(self):
+
+        with assertRaises(parser.ParserError):
+            parser.DateTimeParser._map_lookup({'a': '1'}, 'b')
+
     def test_try_timestamp(self):
 
         assertEqual(parser.DateTimeParser._try_timestamp('1.1'), 1.1)
