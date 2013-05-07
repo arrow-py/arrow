@@ -135,14 +135,61 @@ Get datetime properties:
 Format
 ======
 
+    >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss ZZ')
+    '2013-05-07 05:23:16 -00:00'
+
 Convert
 =======
+
+    Convert to timezones by name or tzinfo:
+
+    >>> utc = arrow.utcnow()
+    >>> utc
+    <Arrow [2013-05-07T05:24:11.823627+00:00]>
+    >>> utc.to('US/Pacific')
+    <Arrow [2013-05-06T22:24:11.823627-07:00]>
+    >>> utc.to(tz.gettz('US/Pacific'))
+    <Arrow [2013-05-06T22:24:11.823627-07:00]>
+
+    Or using shorthand:
+
+    >>> utc.to('local')
+    <Arrow [2013-05-06T22:24:11.823627-07:00]>
+    >>> utc.to('local').to('utc')
+    <Arrow [2013-05-07T05:24:11.823627+00:00]>
+
 
 Humanize
 ========
 
+    Humanize relative to now:
+
+    >>> a = arrow.utcnow()
+    >>> a.hours -= 1
+    >>> a.humanize()
+    'an hour ago'
+
+    Or another Arrow, or datetime:
+
+    >>> b = arrow.utcnow()
+    >>> b.hours += 1
+    >>> b.humanize(a)
+    'in 2 hours'
+
 Timespans
 =========
+
+    Get the timespan of any unit:
+
+    >>> arrow.utcnow().span('hour')
+    (<Arrow [2013-05-07T05:00:00+00:00]>, <Arrow [2013-05-07T05:59:59.999999+00:00]>)
+
+    Or just get the floor and ceiling:
+
+    >>> arrow.utcnow().floor('hour')
+    <Arrow [2013-05-07T05:00:00+00:00]>
+    >>> arrow.utcnow().ceil('hour')
+    <Arrow [2013-05-07T05:59:59.999999+00:00]>
 
 .. toctree::
    :maxdepth: 2
