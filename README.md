@@ -1,45 +1,4 @@
 [![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
-=========================================
-Arrow:  better dates and times for Python
-=========================================
-
-------------
-Introduction
-------------
-
-Arrow is a Python module providing a smooth, sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment/>`_ and `requests <https://github.com/kennethreitz/requests>`_.
-
-Key features
-============
-
-- Implements datetime interface
-- TZ-aware & UTC by default
-- Concise, intelligent interface for creation
-- Attribute manipulation, plural names
-- Rich parsing & formatting options
-- Timezone conversion
-- Simple timestamp handling
-- Time spans, floors and ceilings
-- Humanization
-
-Quickstart
-==========
-
-    >>> import arrow
-    >>> utc = arrow.get()
-    >>> utc
-    <Arrow [2013-05-07T03:56:38.560988+00:00]>
-    >>> utc.hours -=1
-    >>> utc
-    <Arrow [2013-05-07T02:56:38.560988+00:00]>
-    >>> local = utc.to('US/Pacific')
-    >>> local
-    <Arrow [2013-05-06T19:56:38.560988-07:00]>
-    >>> local.timestamp
-    1367895398
-    >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
-    '2013-05-06 19:56:38 -07:00'
-
 # Arrow - Better date & time manipulation for Python
 
 ## Documentation:  crsmithdev.com/arrow
