@@ -6,6 +6,10 @@
 
 /* -- page layout ----------------------------------------------------------- */
 
+div.highlight {
+    background: #f0f0f0
+}
+
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 16px;

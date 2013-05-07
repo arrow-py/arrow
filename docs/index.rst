@@ -44,9 +44,6 @@ Quickstart
     >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
     '2013-05-06 19:56:38 -07:00'
 
-.. attention::
-    Arrow is UTC and timezone aware by default.  When optional, time zones are assumed to be UTC, and Arrow objects behave as time zone-aware datetimes.
-
 ------------
 User's Guide
 ------------
