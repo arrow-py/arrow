@@ -211,15 +211,68 @@
 </div>
 <div class="section" id="format">
 <h3>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
+<span class="go">&#39;2013-05-07 05:23:16 -00:00&#39;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="convert">
 <h3>Convert<a class="headerlink" href="#convert" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Convert to timezones by name or tzinfo:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
+<span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">))</span>
+<span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
+</pre></div>
+</div>
+<p>Or using shorthand:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;utc&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="humanize">
 <h3>Humanize<a class="headerlink" href="#humanize" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Humanize relative to now:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hours</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
+<span class="go">&#39;an hour ago&#39;</span>
+</pre></div>
+</div>
+<p>Or another Arrow, or datetime:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">hours</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">&#39;in 2 hours&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="timespans">
 <h3>Timespans<a class="headerlink" href="#timespans" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Get the timespan of any unit:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">(&lt;Arrow [2013-05-07T05:00:00+00:00]&gt;, &lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;)</span>
+</pre></div>
+</div>
+<p>Or just get the floor and ceiling:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T05:00:00+00:00]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
