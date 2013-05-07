@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
 # Arrow - Better date & time manipulation for Python
 
-### See documentation at:  [crsmithdev.com/arrow](crsmithdev.com/arrow)
+### See documentation at:  [crsmithdev.com/arrow](http://crsmithdev.com/arrow)
 
 ## Overview
 
