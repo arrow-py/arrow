@@ -41,6 +41,7 @@
 <li><a class="reference internal" href="#">Arrow:  better dates and times for Python</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li><a class="reference internal" href="#key-features">Key features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 </ul>
 </li>
@@ -89,7 +90,7 @@
 <h1>Arrow:  better dates and times for Python<a class="headerlink" href="#arrow-better-dates-and-times-for-python" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Arrow is a Python module that offers a smooth, sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+<p>Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
 <div class="section" id="key-features">
 <h3>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -103,6 +104,12 @@
 <li>Time spans, floors and ceilings</li>
 <li>Humanization</li>
 </ul>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install arrow
+</pre></div>
+</div>
 </div>
 <div class="section" id="quickstart">
 <h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h3>
@@ -218,8 +225,7 @@
 </div>
 <div class="section" id="convert">
 <h3>Convert<a class="headerlink" href="#convert" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Convert to timezones by name or tzinfo:</p>
+<p>Convert to timezones by name or tzinfo:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
 <span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
@@ -236,12 +242,10 @@
 <span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="humanize">
 <h3>Humanize<a class="headerlink" href="#humanize" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Humanize relative to now:</p>
+<p>Humanize relative to now:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hours</span> <span class="o">-=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
@@ -255,12 +259,10 @@
 <span class="go">&#39;in 2 hours&#39;</span>
 </pre></div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="timespans">
 <h3>Timespans<a class="headerlink" href="#timespans" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><p>Get the timespan of any unit:</p>
+<p>Get the timespan of any unit:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
 <span class="go">(&lt;Arrow [2013-05-07T05:00:00+00:00]&gt;, &lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;)</span>
 </pre></div>
@@ -272,7 +274,6 @@
 <span class="go">&lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
