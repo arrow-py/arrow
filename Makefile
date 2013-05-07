@@ -4,7 +4,7 @@ auto: build
 
 build:
 	virtualenv local
-	local/bin/pip install -r REQUIREMENTS.txt
+	local/bin/pip install -r requirements.txt
 
 test:
 	. local/bin/activate && nosetests --all-modules --with-coverage arrow tests
