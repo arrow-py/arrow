@@ -3,5 +3,7 @@
 
 .coverage
 nosetests.xml
+
 local/
 dist/
+docs/_build/
