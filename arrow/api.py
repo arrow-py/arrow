@@ -5,6 +5,9 @@ from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
 
 def get(*args, **kwargs):
+    '''GET DOCS
+
+    '''
 
     arg_count = len(args)
 
@@ -74,6 +77,9 @@ def get(*args, **kwargs):
 
 
 def utcnow():
+    '''UTC NOW DOCS
+
+    '''
     return Arrow.utcnow()
 
 
