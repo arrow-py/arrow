@@ -1,13 +1,11 @@
 [![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
 # Arrow - Better date & time manipulation for Python
 
-## Documentation:  crsmithdev.com/arrow
+### See documentation at:  [crsmithdev.com/arrow](crsmithdev.com/arrow)
 
 ## Overview
 
-Inspired by the elegant API of [requests](https://github.com/kennethreitz/requests) and [moment.js](https://github.com/timrwood/moment/), Arrow provides a smooth, sensible approach to creating, manipulating, and formatting dates and times in Python.
-
-Arrow is a Python module providing a smooth, sensible way of creating, maniuplating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
+Arrow is a Python module that offers a smooth, sensible way of creating, maniuplating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
 
 ### Key features
 
