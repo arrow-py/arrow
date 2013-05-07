@@ -1,190 +1,83 @@
 [![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
+=========================================
+Arrow:  better dates and times for Python
+=========================================
+
+------------
+Introduction
+------------
+
+Arrow is a Python module providing a smooth, sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment/>`_ and `requests <https://github.com/kennethreitz/requests>`_.
+
+Key features
+============
+
+- Implements datetime interface
+- TZ-aware & UTC by default
+- Concise, intelligent interface for creation
+- Attribute manipulation, plural names
+- Rich parsing & formatting options
+- Timezone conversion
+- Simple timestamp handling
+- Time spans, floors and ceilings
+- Humanization
+
+Quickstart
+==========
+
+    >>> import arrow
+    >>> utc = arrow.get()
+    >>> utc
+    <Arrow [2013-05-07T03:56:38.560988+00:00]>
+    >>> utc.hours -=1
+    >>> utc
+    <Arrow [2013-05-07T02:56:38.560988+00:00]>
+    >>> local = utc.to('US/Pacific')
+    >>> local
+    <Arrow [2013-05-06T19:56:38.560988-07:00]>
+    >>> local.timestamp
+    1367895398
+    >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
+    '2013-05-06 19:56:38 -07:00'
+
 # Arrow - Better date & time manipulation for Python
+
+## Documentation:  crsmithdev.com/arrow
 
 ## Overview
 
 Inspired by the elegant API of [requests](https://github.com/kennethreitz/requests) and [moment.js](https://github.com/timrwood/moment/), Arrow provides a smooth, sensible approach to creating, manipulating, and formatting dates and times in Python.
 
+Arrow is a Python module providing a smooth, sensible way of creating, maniuplating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
+
 ### Key features
 
-* Drop-in replacement for datetime
-* TZ-aware / UTC by default
-* Concise syntax for creation from common inputs
+* Implements the datetime iterface
+* TZ-aware & UTC by default
+* Concise, intelligent interface for creation
 * Attribute manipulation, plural names
-* Rich parsing / formatting options for dates and timezones
+* Rich parsing & formatting options
 * Timezone conversion
+* Simple timestamp handling
 * Time spans, floors and ceilings
 * Humanization
 
-### Important - UTC and timezones
-
-Arrow is UTC and timezone aware by default.  When optional, time zones are assumed to be UTC when none is supplied.
-
-## Examples
-
-### Import
-
+## Quickstart
 ```python
 >>> import arrow
-```
-
-### Current time
-
-```python
->>> arrow.utcnow()
-<Arrow [2013-05-05T22:40:24.723023+00:00]>
->>> arrow.now()
-<Arrow [2013-05-05T15:40:26.778693-07:00]>
->>> arrow.now('US/Pacific')
-<Arrow [2013-05-05T15:40:30.195922-07:00]>
-```
-
-### From timestamp
-
-```python
->>> timestamp = time.time()
->>> arrow.get(timestamp)
-<Arrow [2013-05-05T22:15:14.864305+00:00]>
-
->>> arrow.get(int(timestamp))
-<Arrow [2013-05-05T22:15:14+00:00]>
-
->>> arrow.get(str(timestamp))
-<Arrow [2013-05-05T22:15:14.860000+00:00]>
-```
-
-### From datetime / tzinfo
-
-```python
->>> arrow.get(datetime.utcnow())
-<Arrow [2013-05-05T22:18:40.031238+00:00]>
-
->>> from dateutil import tz
->>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
-<Arrow [2013-05-05T15:18:43.063150-07:00]>
-
->>> arrow.get(datetime.now(), 'US/Pacific')
-<Arrow [2013-05-05T15:19:33.262255-07:00]>
-```
-
-### From string / format
-
-```python
->>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
-<Arrow [2013-05-05T12:30:45+00:00]>
-```
-
-### From year, month, day...
-
-```python
->>> arrow.get(2013, 5, 5, 12, 30, 45)
-<Arrow [2013-05-05T12:30:45+00:00]>
-
->>> arrow.get(2013, 5, 5, 12, 30, 45, tzinfo=tz.tzlocal())
-<Arrow [2013-05-05T12:30:45-07:00]>
-```
-
-### Access properties
-
-```python
->>> a = arrow.utcnow()
->>> a
-<Arrow [2013-05-05T22:36:57.832340+00:00]>
-
->>> a.datetime
-datetime.datetime(2013, 5, 5, 22, 36, 57, 832340, tzinfo=tzutc())
-
->>> a.naive
-datetime.datetime(2013, 5, 5, 22, 36, 57, 832340)
-
->>> a.timestamp
-1367793417
-
->>> a.tzinfo
-tzutc()
-
->>> a.hour
-22
->>> a.hours
-22
-
->>> a.date()
-datetime.date(2013, 5, 5)
-
->>> a.time()
-datetime.time(22, 36, 57, 832340)
-
->>> a.utcoffset()
-datetime.timedelta(0)
-```
-
-### Update properties
-
-```python
->>> a = arrow.utcnow()
->>> a
-<Arrow [2013-05-05T22:27:52.831671+00:00]>
-
->>> a.hours += 1
->>> a
-<Arrow [2013-05-05T23:27:52.831671+00:00]>
-
->>> a.hour += 1
->>> a
-<Arrow [2013-05-06T00:27:52.831671+00:00]>
-```
-
-### Format
-
-```python
->>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss Z')
-'2013-05-05 22:31:00 -0000'
-```
-
-### Convert
-
-```python
->>> arrow.utcnow().to('local')
-<Arrow [2013-05-05T15:33:07.449537-07:00]>
-
->>> arrow.utcnow().to('US/Pacific')
-<Arrow [2013-05-05T15:33:14.060642-07:00]>
-```
-
-### Span, floor and ceil
-
-```python
->>> a = arrow.utcnow()
->>> a
-<Arrow [2013-05-05T23:08:33.592862+00:00]>
-
->>> a.span('hour')
-(<Arrow [2013-05-05T23:00:00+00:00]>, <Arrow [2013-05-05T23:59:59.999999+00:00]>)
-
->>> a.floor('hour')
-<Arrow [2013-05-05T23:00:00+00:00]>
-
->>> a.ceil('hour')
-<Arrow [2013-05-05T23:59:59.999999+00:00]>
-```
-
-### Clone
-
-```python
->>> a = arrow.utcnow()
->>> a
-<Arrow [2013-05-05T23:11:41.173136+00:00]>
->>> a.clone()
-<Arrow [2013-05-05T23:11:41.173136+00:00]>
-```
-
-### Humanize
-
-```python
->>> a = arrow.utcnow()
->>> a.hours -= 1
->>> a.humanize()
-'an hour ago'
+>>> utc = arrow.get()
+>>> utc
+<Arrow [2013-05-07T03:56:38.560988+00:00]>
+>>> utc.hours -=1
+>>> utc
+<Arrow [2013-05-07T02:56:38.560988+00:00]>
+>>> local = utc.to('US/Pacific')
+>>> local
+<Arrow [2013-05-06T19:56:38.560988-07:00]>
+>>> local.timestamp
+1367895398
+>>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
+'2013-05-06 19:56:38 -07:00'
 ```
 
 Changelog
