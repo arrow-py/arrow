@@ -25,21 +25,13 @@
     <link rel="top" title="Arrow 0.2.0 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <!--<li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>-->
-        <li><a href="#">Arrow 0.2.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Arrow:  better dates and times for Python</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#why">Why?</a></li>
 <li><a class="reference internal" href="#key-features">Key features</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
@@ -95,14 +87,23 @@ src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" a
 <iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&type=follow"
   allowtransparency="true" frameborder="0" scrolling="0" width="150" height="20"></iframe>
 <a href="https://twitter.com/crsmithdev" class="twitter-follow-button" data-show-count="false">Follow @crsmithdev</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<div class="section" id="introduction">
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script><div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+<div class="section" id="why">
+<h3>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h3>
+<p>Python&#8217;s standard library, and some other low-level modules, offer complete functionality but don&#8217;t work very well from a usability perspective:</p>
+<ul class="simple">
+<li>Too many modules:  datetime, time, calendar, dateutil, pytz</li>
+<li>Time zone and timestamp conversions are verbose and error-prone</li>
+<li>Time zones are explicit, naievete is the norm</li>
+<li>Gaps in functionality:  ISO-8601 parsing, for example</li>
+</ul>
+</div>
 <div class="section" id="key-features">
 <h3>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Implements datetime interface</li>
+<li>Implements the datetime interface</li>
 <li>TZ-aware &amp; UTC by default</li>
 <li>Concise, intelligent interface for creation</li>
 <li>Attribute manipulation, plural names</li>
@@ -299,9 +300,6 @@ src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" a
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
         <li><a href="#">Arrow 0.2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>

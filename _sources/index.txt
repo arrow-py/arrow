@@ -12,9 +12,12 @@ Arrow:  better dates and times for Python
     <a href="https://github.com/crsmithdev/arrow"><img style="position: absolute; top: 0; right: 0; border: 0;" 
     src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
     <iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&repo=arrow&type=watch&count=true"
-      allowtransparency="true" frameborder="0" scrolling="0" width="95" height="30"></iframe>
+      allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
     <iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&type=follow"
-      allowtransparency="true" frameborder="0" scrolling="0" width="150" height="30"></iframe>
+      allowtransparency="true" frameborder="0" scrolling="0" width="150" height="20"></iframe>
+    <a href="https://twitter.com/crsmithdev" class="twitter-follow-button" data-show-count="false">Follow @crsmithdev</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
 
 ------------
 Introduction
@@ -22,10 +25,20 @@ Introduction
 
 Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment/>`_ and `requests <https://github.com/kennethreitz/requests>`_.
 
+Why?
+====
+
+Python's standard library, and some other low-level modules, offer complete functionality but don't work very well from a usability perspective:
+
+- Too many modules:  datetime, time, calendar, dateutil, pytz
+- Time zone and timestamp conversions are verbose and error-prone
+- Time zones are explicit, naievete is the norm
+- Gaps in functionality:  ISO-8601 parsing, for example
+
 Key features
 ============
 
-- Implements datetime interface
+- Implements the datetime interface
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
 - Attribute manipulation, plural names
