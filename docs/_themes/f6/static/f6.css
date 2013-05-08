@@ -21,6 +21,7 @@ body {
     min-width: 740px;
     border: 1px solid #d6d6d6;
     background: url("brilliant.png") repeat;
+    margin: 0px 200px 0px 200px;
 }
 
 div.document {
