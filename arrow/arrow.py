@@ -279,6 +279,8 @@ class Arrow(object):
     # datetime methods
 
     def date(self):
+        '''Implementes **datetime**.date(), returning the **date** part.
+        '''
         return self._datetime.date()
 
     def time(self):
