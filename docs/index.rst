@@ -211,3 +211,13 @@ Or just get the floor and ceiling:
 .. toctree::
    :maxdepth: 2
 
+
+---------
+API Guide
+---------
+
+.. automodule:: api
+    :members:
+
+.. automodule:: arrow
+    :members:

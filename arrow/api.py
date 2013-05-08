@@ -5,7 +5,8 @@ from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
 
 def get(*args, **kwargs):
-    '''GET DOCS
+    '''Returns an :class:`Arrow <arrow.Arrow>` object based on flexible inputs.
+
 
     '''
 
@@ -77,20 +78,49 @@ def get(*args, **kwargs):
 
 
 def utcnow():
-    '''UTC NOW DOCS
+    '''Returns an :class:`Arrow <arrow.Arrow>` object, representing "now" in UTC time.
 
+    Usage::
+
+        >>> import arrow
+        >>> arrow.utcnow()
+        <Arrow [2013-05-08T05:19:07.018993+00:00]>
     '''
+
     return Arrow.utcnow()
 
 
-def now(tz_expr=None):
+def now(tz=None):
+    '''Returns an :class:`Arrow <arrow.Arrow>` object, representing "now".
 
-    if tz_expr is None:
-        tz_expr = dateutil_tz.tzlocal()
-    elif not isinstance(tz_expr, tzinfo):
-        tz_expr = parser.TzinfoParser.parse(tz_expr)
+    :param tz: (optional) An expression representing a timezone.  Defaults to local time.
 
-    return Arrow.now(tz_expr)
+    The timezone expression can be:
+
+        - A tzinfo struct
+        - A string description, e.g. "US/Pacific", or "Europe/Berlin"
+        - An ISO-8601 string, e.g. "+07:00"
+        - A special string, one of:  "local", "utc", or "UTC"
+
+    Usage::
+
+        >>> import arrow
+        >>> arrow.now()
+        <Arrow [2013-05-07T22:19:11.363410-07:00]>
+        >>> arrow.now('US/Pacific')
+        <Arrow [2013-05-07T22:19:15.251821-07:00]>
+        >>> arrow.now('+02:00')
+        <Arrow [2013-05-08T07:19:25.618646+02:00]>
+        >>> arrow.now('local')
+        <Arrow [2013-05-07T22:19:39.130059-07:00]>
+    '''
+
+    if tz is None:
+        tz = dateutil_tz.tzlocal()
+    elif not isinstance(tz, tzinfo):
+        tz = parser.TzinfoParser.parse(tz)
+
+    return Arrow.now(tz)
 
 
 def arrow(date=None, tz=None):

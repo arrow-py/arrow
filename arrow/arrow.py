@@ -7,6 +7,29 @@ import parser, formatter
 
 
 class Arrow(object):
+    '''An :class:`Arrow <arrow.Arrow>` object.
+
+    Implements the datetime iterface, behaving as an aware datetime while implementing
+    additional functionality.
+
+    :param year: calendar year
+    :param month: calendar month
+    :param day: calendar day
+    :param hour: hour, default 0
+    :param minute: minute, default 0
+    :param second: second, default 0
+    :param microsecond: microsecond, default 0
+    :param tzinfo: tzinfo struct, default None
+
+    If tzinfo is None, it is assumed to be UTC on creation.
+
+    Usage::
+
+        >>> import arrow
+        >>> arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+        >>> arw
+        <Arrow [2013-05-05T12:30:45+00:00]>
+    '''
 
     min = datetime.min
     max = datetime.max
@@ -16,6 +39,7 @@ class Arrow(object):
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
+
         tzinfo=None):
 
         tzinfo = tzinfo or dateutil_tz.tzutc()
@@ -28,6 +52,11 @@ class Arrow(object):
 
     @classmethod
     def now(cls, tzinfo=None):
+        '''Constructs an :class:`Arrow <arrow.Arrow>` object, representing "now".
+
+        :param tzinfo: (optional) a tzinfo struct. Defaults to local time.
+        '''
+
         utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
         dt = utc.astimezone(dateutil_tz.tzlocal() if tzinfo is None else tzinfo)
 
@@ -36,6 +65,8 @@ class Arrow(object):
 
     @classmethod
     def utcnow(cls):
+        '''Constructs an :class:`Arrow <arrow.Arrow>` object, representing "now" in UTC time.
+        '''
 
         dt = datetime.utcnow()
 
@@ -44,6 +75,11 @@ class Arrow(object):
 
     @classmethod
     def fromtimestamp(cls, timestamp, tzinfo=None):
+        '''Constructs an :class:`Arrow <arrow.Arrow>` object from a timestamp.
+
+        :param timestamp: an integer or floating-point timestamp.
+        :param tzinfo: (optional) a tzinfo struct.  Defaults to local time.
+        '''
 
         tzinfo = tzinfo or dateutil_tz.tzlocal()
         dt = datetime.fromtimestamp(timestamp, tzinfo)
@@ -53,6 +89,10 @@ class Arrow(object):
 
     @classmethod
     def utcfromtimestamp(cls, timestamp):
+        '''Constructs an :class:`Arrow <arrow.Arrow>` object from a timestamp, in UTC time.
+
+        :param timestamp: an integer or floating-point timestamp.
+        '''
 
         dt = datetime.utcfromtimestamp(timestamp)
 
@@ -140,15 +180,25 @@ class Arrow(object):
 
     @property
     def datetime(self):
+        ''' Returns a datetime representation of the :class:`Arrow <arrow.Arrow>` object.
+        '''
         return self._datetime
 
     @property
     def naive(self):
+        ''' Returns a naive datetime representation of the :class:`Arrow <arrow.Arrow>` object.
+        '''
+
         return self._datetime.replace(tzinfo=None)
 
     @property
-    def timestamp(self):
-        return calendar.timegm(self._datetime.utctimetuple())
+    def timestamp(self, cast=int):
+        ''' Returns a timestamp representation of the :class:`Arrow <arrow.Arrow>` object.
+
+        :param cast: (optional).  A function with which to cast the timestamp.  Defaults to int.
+        '''
+
+        return cast(calendar.timegm(self._datetime.utctimetuple()))
 
 
     # math
