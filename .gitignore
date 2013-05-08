@@ -7,3 +7,5 @@ nosetests.xml
 local/
 dist/
 docs/_build/
+.idea
+.DS_Store
