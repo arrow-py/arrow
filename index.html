@@ -27,16 +27,21 @@
   <body>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+<a href="https://github.com/crsmithdev/arrow"><img style="position: absolute; top: 0; right: 0; border: 0;" 
+    src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+<h2><a style="font-size: .8em;"href="https://github.com/crsmithdev/arrow">github.com/crsmithdev/arrow</a></h2>
+<iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&repo=arrow&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="130" height="40"></iframe>
+
+
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Arrow:  better dates and times for Python</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>
 <li><a class="reference internal" href="#key-features">Key features</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a><ul>
 <li><a class="reference internal" href="#creation">Creation</a></li>
 <li><a class="reference internal" href="#properties">Properties</a></li>
@@ -80,28 +85,19 @@
             
   <div class="section" id="arrow-better-dates-and-times-for-python">
 <h1>Arrow:  better dates and times for Python<a class="headerlink" href="#arrow-better-dates-and-times-for-python" title="Permalink to this headline">¶</a></h1>
-<a href="https://github.com/crsmithdev/arrow"><img style="position: absolute; top: 0; right: 0; border: 0;"
-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
-<iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&repo=arrow&type=watch&count=true"
-  allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-<iframe src="http://ghbtns.com/github-btn.html?user=crsmithdev&type=follow"
-  allowtransparency="true" frameborder="0" scrolling="0" width="150" height="20"></iframe>
-<a href="https://twitter.com/crsmithdev" class="twitter-follow-button" data-show-count="false">Follow @crsmithdev</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script><div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+<p>Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  It is lightweight, Apache-licensed and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
 <div class="section" id="why">
-<h3>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h3>
+<h2>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h2>
 <p>Python&#8217;s standard library, and some other low-level modules, offer complete functionality but don&#8217;t work very well from a usability perspective:</p>
 <ul class="simple">
 <li>Too many modules:  datetime, time, calendar, dateutil, pytz</li>
 <li>Time zone and timestamp conversions are verbose and error-prone</li>
 <li>Time zones are explicit, naievete is the norm</li>
-<li>Gaps in functionality:  ISO-8601 parsing, for example</li>
+<li>Gaps in functionality:  ISO-8601 parsing, timespans, humanization</li>
 </ul>
 </div>
 <div class="section" id="key-features">
-<h3>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h3>
+<h2>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Implements the datetime interface</li>
 <li>TZ-aware &amp; UTC by default</li>
@@ -115,13 +111,13 @@ src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" a
 </ul>
 </div>
 <div class="section" id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install arrow
 </pre></div>
 </div>
 </div>
 <div class="section" id="quickstart">
-<h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h3>
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
@@ -137,7 +133,6 @@ src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" a
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
 <span class="go">&#39;2013-05-06 19:56:38 -07:00&#39;</span>
 </pre></div>
-</div>
 </div>
 </div>
 <div class="section" id="user-s-guide">
