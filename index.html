@@ -286,6 +286,68 @@
 <dt id="api.get">
 <tt class="descclassname">api.</tt><tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#api.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object based on flexible inputs.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
+</pre></div>
+</div>
+<p><strong>No</strong> inputs to get <strong>current UTC time</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="go">&lt;Arrow [2013-05-08T05:51:43.316458+00:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>One str</strong>, <strong>float</strong>, or <strong>int</strong>, convertible to a floating-point timestamp, to get that timestamp in UTC:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">1367992474.293378</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T05:54:34.293378+00:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1367992474</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T05:54:34+00:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367992474.293378&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T05:54:34.293378+00:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367992474&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T05:54:34+00:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>One str</strong>, convertible to a timezone, or <strong>tzinfo</strong>, to get the current time in that timezone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T22:57:11.793643-07:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T22:57:15.609802-07:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-07:00&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T22:57:22.777398-07:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
+<span class="go">&lt;Arrow [2013-05-07T22:57:28.484717-07:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>One</strong> naive <strong>datetime</strong>, to get that datetime in UTC:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="go">&lt;Arrow [2013-05-05T00:00:00+00:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>One</strong> aware <strong>datetime</strong>, to get that datetime:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">()))</span>
+<span class="go">&lt;Arrow [2013-05-05T00:00:00-07:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>Two</strong> arguments, a naive or aware datetime, and a timezone expression (as above):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-05T00:00:00-07:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>Two</strong> arguments, both strings, to parse the first according to the format of the second:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-05-05 12:30:45&#39;</span><span class="p">,</span> <span class="s">&#39;YYYY-MM-DD HH:mm:ss&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-05T12:30:45+00:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>Three or more</strong> arguments, as for the constructor of a <strong>datetime</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-05T12:30:45+00:00]&gt;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
