@@ -5,20 +5,20 @@
 
 ## Overview
 
-Arrow is a Python module that offers a smooth, sensible way of creating, maniuplating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
+Arrow is a Python module that offers a smooth, sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
 
 ## Why?
 
-Python's standard library and some other low-level modules offer complete functionality but don't work very well from a usability perpsective:
+Python's standard library and some other low-level modules offer complete functionality but don't work very well from a usability perspective:
 
 * Too many modules:  datetime, time, calendar, dateutil, pytz
 * Time zones and timestamp conversions are verbose and error-prone
-* Time zones are explicit, naievete is the norm
+* Time zones are explicit, naivete is the norm
 * Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
 ## Key features
 
-* Implements the datetime iterface
+* Implements the datetime interface
 * TZ-aware & UTC by default
 * Concise, intelligent interface for creation
 * Attribute manipulation, plural names

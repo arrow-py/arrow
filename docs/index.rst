@@ -17,7 +17,7 @@ Python's standard library, and some other low-level modules, offer complete func
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz
 - Time zone and timestamp conversions are verbose and error-prone
-- Time zones are explicit, naievete is the norm
+- Time zones are explicit, naivete is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
 ------------
