@@ -193,7 +193,7 @@ Or another Arrow, or datetime:
 >>> b.humanize(a)
 'in 2 hours'
 
-Basic localisations added. Now only russian available (without changing nouns in plural forms), but you can add your language by adding it to `locales.py`
+Basic localisations, currently experimental (see `locales.py` for supported languages):
 
 >>> b = arrow.utcnow()
 >>> b.hours += 1

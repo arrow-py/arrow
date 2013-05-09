@@ -393,7 +393,7 @@ class Arrow(object):
 
         local_dict = getattr(locales, locale, None)
         if local_dict is None:
-            raise ValueError('Invalid language {0}'.format(locale))
+            raise ValueError('Unsupported language {0}'.format(locale))
 
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0
