@@ -9,7 +9,7 @@ import parser, formatter
 class Arrow(object):
     '''An :class:`Arrow <arrow.Arrow>` object.
 
-    Implements the datetime iterface, behaving as an aware datetime while implementing
+    Implements the datetime interface, behaving as an aware datetime while implementing
     additional functionality.
 
     :param year: calendar year
@@ -279,7 +279,7 @@ class Arrow(object):
     # datetime methods
 
     def date(self):
-        '''Implementes **datetime**.date(), returning the **date** part.
+        '''Implements **datetime**.date(), returning the **date** part.
         '''
         return self._datetime.date()
 
