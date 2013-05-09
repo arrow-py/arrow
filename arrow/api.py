@@ -156,12 +156,12 @@ def now(tz=None):
 
     :param tz: (optional) An expression representing a timezone.  Defaults to local time.
 
-    The timezone expression can be:
+    Recognized timezone expressions:
 
-        - A tzinfo struct
-        - A string description, e.g. "US/Pacific", or "Europe/Berlin"
-        - An ISO-8601 string, e.g. "+07:00"
-        - A special string, one of:  "local", "utc", or "UTC"
+        - A **tzinfo** object
+        - A **str** describing a timezone, similar to "US/Pacific", or "Europe/Berlin"
+        - A **str** in ISO-8601 style, as in "+07:00"
+        - A **str**, one of the following:  *local*, *utc*, *UTC*
 
     Usage::
 

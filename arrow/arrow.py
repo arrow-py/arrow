@@ -28,8 +28,7 @@ class Arrow(object):
     Usage::
 
         >>> import arrow
-        >>> arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-        >>> arw
+        >>> arrow.Arrow(2013, 5, 5, 12, 30, 45)
         <Arrow [2013-05-05T12:30:45+00:00]>
     '''
 
@@ -207,6 +206,213 @@ class Arrow(object):
 
         return calendar.timegm(self._datetime.utctimetuple())
 
+    def clone(self):
+        ''' Returns a new :class:`Arrow <arrow.Arrow>` object, cloned from the current one.
+
+        Usage:
+
+            >>> arw = arrow.utcnow()
+            >>> cloned = arw.clone()
+        '''
+
+        return Arrow.fromdatetime(self._datetime)
+
+    def to(self, tz):
+        ''' Returns a new :class:`Arrow <arrow.Arrow>` object, converted to the target
+        timezone.
+
+        :param tz: an expression representing a timezone.
+
+        Recognized timezone expressions:
+
+            - A **tzinfo** object
+            - A **str** describing a timezone, similar to "US/Pacific", or "Europe/Berlin"
+            - A **str** in ISO-8601 style, as in "+07:00"
+            - A **str**, one of the following:  *local*, *utc*, *UTC*
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2013-05-09T03:49:12.311072+00:00]>
+
+            >>> utc.to('US/Pacific')
+            <Arrow [2013-05-08T20:49:12.311072-07:00]>
+
+            >>> utc.to(tz.tzlocal())
+            <Arrow [2013-05-08T20:49:12.311072-07:00]>
+
+            >>> utc.to('-07:00')
+            <Arrow [2013-05-08T20:49:12.311072-07:00]>
+
+            >>> utc.to('local')
+            <Arrow [2013-05-08T20:49:12.311072-07:00]>
+
+            >>> utc.to('local').to('utc')
+            <Arrow [2013-05-09T03:49:12.311072+00:00]>
+        '''
+
+        if not isinstance(tz, tzinfo):
+            tz = parser.TzinfoParser.parse(tz)
+
+        dt = self._datetime.astimezone(tz)
+
+        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+            dt.microsecond, tz)
+
+    def span(self, frame):
+        ''' Returns two new :class:`Arrow <arrow.Arrow>` objects, representing the timespan
+        of the :class:`Arrow <arrow.Arrow>` object in a given timeframe.
+
+        :param frame: the timeframe.  Can be any **datetime** property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow()
+            <Arrow [2013-05-09T03:32:36.186203+00:00]>
+
+            >>> arrow.utcnow().span('hour')
+            (<Arrow [2013-05-09T03:00:00+00:00]>, <Arrow [2013-05-09T03:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
+        '''
+
+        f_single, f_plural = self._get_property_names(frame)
+
+        if f_single is None:
+            raise AttributeError()
+
+        index = self._ATTRS.index(f_single)
+        frames = self._ATTRS[:index + 1]
+        values = [getattr(self._datetime, f) for f in frames]
+
+        for i in range(3 - len(values)):
+            values.append(1)
+
+        floor = datetime(*values, tzinfo=self._datetime.tzinfo)
+
+        ceil = floor + relativedelta(**{f_plural: 1})
+        ceil = ceil + relativedelta(microseconds=-1)
+
+        return Arrow.fromdatetime(floor), Arrow.fromdatetime(ceil)
+
+    def floor(self, frame):
+        ''' Returns a new :class:`Arrow <arrow.Arrow>` object, representing the "floor"
+        of the timespan of the :class:`Arrow <arrow.Arrow>` object in a given timeframe.
+        Equivalent to the first element in the 2-tuple returned by :func:`span <arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any **datetime** property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().ceil('hour')
+            <Arrow [2013-05-09T03:00:00+00:00]>
+        '''
+
+        return self.span(frame)[0]
+
+    def ceil(self, frame):
+        ''' Returns a new :class:`Arrow <arrow.Arrow>` object, representing the "ceiling"
+        of the timespan of the :class:`Arrow <arrow.Arrow>` object in a given timeframe.
+        Equivalent to the second element in the 2-tuple returned by :func:`span <arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any **datetime** property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().ceil('hour')
+            <Arrow [2013-05-09T03:59:59.999999+00:00]>
+        '''
+
+        return self.span(frame)[1]
+
+    def format(self, fmt):
+        ''' Returns a string representation of the :class:`Arrow <arrow.Arrow>` object,
+        formatted according to a format string.
+
+        :param fmt: the format string.
+
+        *TBA: format string tokens / example outputs*.
+
+        Usage::
+
+            >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss ZZ')
+            '2013-05-09 03:56:47 -00:00'
+
+            >>> arrow.utcnow().format('X')
+            '1368071882'
+
+            >>> arrow.utcnow().format('MMMM DD, YYYY')
+            'May 09, 2013'
+        '''
+
+        return formatter.DateTimeFormatter.format(self._datetime, fmt)
+
+    def humanize(self, other=None, locale='english'):
+
+        if other is None:
+            utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
+            dt = utc.astimezone(self._datetime.tzinfo)
+
+        elif isinstance(other, Arrow):
+            dt = other._datetime
+
+        elif isinstance(other, datetime):
+            if other.tzinfo is None:
+                dt = other.replace(tzinfo=self._datetime.tzinfo)
+            else:
+                dt = other.astimezone(self._datetime.tzinfo)
+
+        else:
+            raise TypeError()
+
+        local_dict = getattr(locales, locale, None)
+        if local_dict is None:
+            raise ValueError('Unsupported language {0}'.format(locale))
+
+        delta = int((self._datetime - dt).total_seconds())
+        past = delta < 0
+        delta = abs(delta)
+
+        if delta < 10:
+            return local_dict['now']
+
+        if delta < 45:
+            expr = local_dict['seconds']
+
+        elif delta < 90:
+            expr = local_dict['minute']
+        elif delta < 2700:
+            minutes = max(delta / 60, 2)
+            expr = local_dict['minutes'].format(minutes)
+
+        elif delta < 5400:
+            expr = local_dict['hour']
+        elif delta < 79200:
+            hours = max(delta / 3600, 2)
+            expr = local_dict['hours'].format(hours)
+
+        elif delta < 129600:
+            expr = local_dict['day']
+        elif delta < 2160000:
+            days = max(delta / 86400, 2)
+            expr = local_dict['days'].format(days)
+
+        elif delta < 3888000:
+            expr = local_dict['month']
+        elif delta < 29808000:
+            months = max(abs(dt.month - self._datetime.month), 2)
+            expr = local_dict['months'].format(months)
+
+        elif delta < 47260800:
+            expr = local_dict['year']
+        else:
+            years = max(delta / 31536000, 2)
+            expr = local_dict['years'].format(years)
+
+        return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)
+
 
     # math
 
@@ -348,111 +554,3 @@ class Arrow(object):
         return self._datetime.strftime(format)
 
 
-    # NEW
-
-    def clone(self):
-        return Arrow.fromdatetime(self._datetime)
-
-    def to(self, tz):
-
-        if not isinstance(tz, tzinfo):
-            tz = parser.TzinfoParser.parse(tz)
-
-        dt = self._datetime.astimezone(tz)
-
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, tz)
-
-    def span(self, frame):
-
-        f_single, f_plural = self._get_property_names(frame)
-
-        if f_single is None:
-            raise AttributeError()
-
-        index = self._ATTRS.index(f_single)
-        frames = self._ATTRS[:index + 1]
-        values = [getattr(self._datetime, f) for f in frames]
-
-        for i in range(3 - len(values)):
-            values.append(1)
-
-        floor = datetime(*values, tzinfo=self._datetime.tzinfo)
-
-        ceil = floor + relativedelta(**{f_plural: 1})
-        ceil = ceil + relativedelta(microseconds=-1)
-
-        return Arrow.fromdatetime(floor), Arrow.fromdatetime(ceil)
-
-    def floor(self, frame):
-        return self.span(frame)[0]
-
-    def ceil(self, frame):
-        return self.span(frame)[1]
-
-    def format(self, fmt):
-        return formatter.DateTimeFormatter.format(self._datetime, fmt)
-
-    def humanize(self, other=None, locale='english'):
-
-        if other is None:
-            utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
-            dt = utc.astimezone(self._datetime.tzinfo)
-
-        elif isinstance(other, Arrow):
-            dt = other._datetime
-
-        elif isinstance(other, datetime):
-            if other.tzinfo is None:
-                dt = other.replace(tzinfo=self._datetime.tzinfo)
-            else:
-                dt = other.astimezone(self._datetime.tzinfo)
-
-        else:
-            raise TypeError()
-
-        local_dict = getattr(locales, locale, None)
-        if local_dict is None:
-            raise ValueError('Unsupported language {0}'.format(locale))
-
-        delta = int((self._datetime - dt).total_seconds())
-        past = delta < 0
-        delta = abs(delta)
-
-        if delta < 10:
-            return local_dict['now']
-
-        if delta < 45:
-            expr = local_dict['seconds']
-
-        elif delta < 90:
-            expr = local_dict['minute']
-        elif delta < 2700:
-            minutes = max(delta / 60, 2)
-            expr = local_dict['minutes'].format(minutes)
-
-        elif delta < 5400:
-            expr = local_dict['hour']
-        elif delta < 79200:
-            hours = max(delta / 3600, 2)
-            expr = local_dict['hours'].format(hours)
-
-        elif delta < 129600:
-            expr = local_dict['day']
-        elif delta < 2160000:
-            days = max(delta / 86400, 2)
-            expr = local_dict['days'].format(days)
-
-        elif delta < 3888000:
-            expr = local_dict['month']
-        elif delta < 29808000:
-            months = max(abs(dt.month - self._datetime.month), 2)
-            expr = local_dict['months'].format(months)
-
-        elif delta < 47260800:
-            expr = local_dict['year']
-        else:
-            years = max(delta / 31536000, 2)
-            expr = local_dict['years'].format(years)
-
-        return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)
