@@ -197,7 +197,7 @@ Basic localisations, currently experimental (see `locales.py` for supported lang
 
 >>> b = arrow.utcnow()
 >>> b.hours += 1
->>> b.humanize(a, locale='russian')
+>>> b.humanize(a, locale='ru')
 'через 2 час(а,ов)'
 
 
