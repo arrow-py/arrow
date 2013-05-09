@@ -57,6 +57,7 @@ class _BasicLocale(_Locale):
 
 
 class _English(_BasicLocale):
+
     intervals = {
         'now': 'just now',
         'seconds': 'seconds',
@@ -73,6 +74,26 @@ class _English(_BasicLocale):
 
         'past': '{0} ago',
         'future': 'in {0}',
+    }
+
+class GreekLocale(_BasicLocale):
+
+    intervals = {
+        'now': 'τώρα',
+        'seconds': 'δευτερόλεπτα',
+        'minute': 'ένα λεπτό',
+        'minutes': '{0} λεπτά',
+        'hour': 'μια ώρα',
+        'hours': '{0} ώρες',
+        'day': 'μια μέρα',
+        'days': '{0} μέρες',
+        'month': 'ένα μήνα',
+        'months': '{0} μήνες',
+        'year': 'ένα χρόνο',
+        'years': '{0} χρόνια',
+
+        'past': '{0} πριν',
+        'future': 'σε {0}',
     }
 
 
