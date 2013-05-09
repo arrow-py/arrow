@@ -15,23 +15,27 @@ class _Locale(object):
         pass
 
 
-class _English(_Locale):
+class _BasicLocale(_Locale):
+    """
+    Locale for languages without complex plurals handling logic
+    All you need - just define intervals dict
+    """
     intervals = {
-        'now': 'just now',
-        'seconds': 'seconds',
-        'minute': 'a minute',
-        'minutes': '{0} minutes',
-        'hour': 'an hour',
-        'hours': '{0} hours',
-        'day': 'a day',
-        'days': '{0} days',
-        'month': 'a month',
-        'months': '{0} months',
-        'year': 'a year',
-        'years': '{0} years',
+        'now': '',
+        'seconds': '',
+        'minute': '',
+        'minutes': '',
+        'hour': '',
+        'hours': '',
+        'day': '',
+        'days': '',
+        'month': '',
+        'months': '',
+        'year': '',
+        'years': '',
 
-        'past': '{0} ago',
-        'future': 'in {0}',
+        'past': '',
+        'future': '',
     }
 
     def format_humanize(self, time_delta, time_unit, past):
@@ -50,6 +54,26 @@ class _English(_Locale):
         else:
             expr = _English.intervals[time_unit].format(time_delta)
         return _English.intervals['past'].format(expr) if past else _English.intervals['future'].format(expr)
+
+
+class _English(_BasicLocale):
+    intervals = {
+        'now': 'just now',
+        'seconds': 'seconds',
+        'minute': 'a minute',
+        'minutes': '{0} minutes',
+        'hour': 'an hour',
+        'hours': '{0} hours',
+        'day': 'a day',
+        'days': '{0} days',
+        'month': 'a month',
+        'months': '{0} months',
+        'year': 'a year',
+        'years': '{0} years',
+
+        'past': '{0} ago',
+        'future': 'in {0}',
+    }
 
 
 class _Russian(_Locale):
