@@ -1,25 +1,39 @@
 # -*- coding: utf-8 -*-
-from abc import abstractmethod
 
 
-class _Locale(object):
-    @abstractmethod
-    def format_humanize(self, time_delta, time_unit, past):
-        """
-        Format string to humanise
-        :param time_delta: int, representing time_delta, if negative - then it's in past
-        :param time_unit: str, representing time_unit of measurement
-        :param past: bool flag, showing if this interval in the past
-        :return: formatted string with humanized info
-        """
-        pass
+def get_locale_by_name(locale_name):
+    '''Returns an appropriate :class:`Locale <locale.Locale>` corresponding
+    to an inpute locale name.
+
+    :param locale_name: the name of the locale.
+    '''
+
+    locale_name = locale_name.lower()
+    locale_cls = available_locales.get(locale_name)
+
+    if locale_cls is None:
+        raise ValueError('Unsupported locale \'{0}\''.format(locale_name))
+
+    return locale_cls()
 
 
-class _BasicLocale(_Locale):
-    """
-    Locale for languages without complex plurals handling logic
-    All you need - just define intervals dict
-    """
+class Locale(object):
+
+    def format_humanize(self, quantity, unit, past):
+        '''Formats a quantity of units of time into a humanized string.
+
+        :param quantity: int, representing the number of time units.
+        :param unit: str, representing the unit of time being humanized.
+        :param past: bool flag, describing whether this represents a time in the past or future.
+        '''
+
+        raise NotImplementedError()
+
+
+class BasicLocale(Locale):
+    '''Base class for locales with no complex plurality logic.
+    '''
+
     intervals = {
         'now': '',
         'seconds': '',
@@ -38,25 +52,28 @@ class _BasicLocale(_Locale):
         'future': '',
     }
 
-    def format_humanize(self, time_delta, time_unit, past):
-        """
-        Format string to humanise
-        :param time_delta: int, representing time_delta, if negative - then it's in past
-        :param time_unit: str, representing time_unit of measurement
-        :param past: bool flag, showing if this interval in the past
-        :return: formatted string with humanized info
-        """
-        if time_unit == "now":
-            return _English.intervals[time_unit]
+    def format_humanize(self, quantity, unit, past):
+        '''Formats a quantity of units of time into a humanized string.
 
-        if time_delta == 0:
-            expr = _English.intervals[time_unit]
+        :param quantity: int, representing the number of time units.
+        :param unit: str, representing the unit of time being humanized.
+        :param past: bool flag, describing whether this represents a time in the past or future.
+        '''
+
+        if unit == 'now':
+            return self.intervals[unit]
+
+        if quantity == 0:
+            expr = self.intervals[unit]
         else:
-            expr = _English.intervals[time_unit].format(time_delta)
-        return _English.intervals['past'].format(expr) if past else _English.intervals['future'].format(expr)
+            expr = self.intervals[unit].format(quantity)
+
+        direction = self.intervals['past'] if past else self.intervals['future']
+
+        return direction.format(expr)
 
 
-class _English(_BasicLocale):
+class EnglishLocale(BasicLocale):
 
     intervals = {
         'now': 'just now',
@@ -76,7 +93,8 @@ class _English(_BasicLocale):
         'future': 'in {0}',
     }
 
-class GreekLocale(_BasicLocale):
+
+class GreekLocale(BasicLocale):
 
     intervals = {
         'now': 'τώρα',
@@ -97,7 +115,8 @@ class GreekLocale(_BasicLocale):
     }
 
 
-class _Russian(_Locale):
+class RussianLocale(Locale):
+
     intervals = {
         'now': 'сейчас',
         'seconds': 'несколько секунд',
@@ -117,12 +136,12 @@ class _Russian(_Locale):
     }
 
     def _chose_plural(self, num, plurals):
-        """
-        Chose correct plural form fur russian nouns
-        :param num: numerator, used with nouns
-        :param plurals: three plural forms of nouns
-        :return: correct plural form
-        """
+        '''Selects the correct plural form for russian nouns.
+
+        :param num: numerator, used with nouns.
+        :param plurals: the three plural forms of a noun.
+        '''
+
         if num % 10 == 1 and num % 100 != 11:
             return plurals[0]
         elif 2 <= num % 10 <= 4 and (num % 100 < 10 or num % 100 >= 20):
@@ -130,40 +149,31 @@ class _Russian(_Locale):
         else:
             return plurals[2]
 
-    def format_humanize(self, time_delta, time_unit, past):
-        """
-        Format string to humanise
-        :param time_delta: int, representing time_delta, if negative - then it's in past
-        :param time_unit: str, representing time_unit of measurement
-        :param past: bool flag, showing if this interval in the past
-        :return: formatted string with humanized info
-        """
-        if time_unit == "now":
-            return _Russian.intervals[time_unit]
+    def format_humanize(self, quantity, unit, past):
+        '''Formats a quantity of units of time into a humanized string.
 
-        if time_delta == 0:
-            expr = _Russian.intervals[time_unit]
+        :param quantity: int, representing the number of time units.
+        :param unit: str, representing the unit of time being humanized.
+        :param past: bool flag, describing whether this represents a time in the past or future.
+        '''
+
+        if unit == 'now':
+            return self.intervals[unit]
+
+        if quantity == 0:
+            expr = self.intervals[unit]
         else:
-            plural = self._chose_plural(time_delta, _Russian.intervals[time_unit])
-            expr = "{0} {1}".format(time_delta, plural)
-        return _Russian.intervals['past'].format(expr) if past else _Russian.intervals['future'].format(expr)
+            plural = self._chose_plural(quantity, self.intervals[unit])
+            expr = "{0} {1}".format(quantity, plural)
+
+        return self.intervals['past'].format(expr) if past else self.intervals['future'].format(expr)
 
 
 available_locales = {
-    'en': _English,
-    'en_us': _English,
-    'ru': _Russian,
-    'ru_ru': _Russian,
+    'en': EnglishLocale,
+    'en_us': EnglishLocale,
+    'ru': RussianLocale,
+    'ru_ru': RussianLocale,
+    'el': GreekLocale
 }
 
-def get_locale_by_name(locale_name):
-    """
-    Return corresponding locale by it's name
-    :param locale_name: str with desired locale name
-    :return: Locale instance for given language
-    """
-    locale_name = locale_name.lower()
-    if locale_name not in available_locales:
-        raise ValueError('Invalid language {0}'.format(locale_name))
-
-    return available_locales[locale_name]()
