@@ -88,7 +88,7 @@
 <ul class="simple">
 <li>Too many modules:  datetime, time, calendar, dateutil, pytz</li>
 <li>Time zone and timestamp conversions are verbose and error-prone</li>
-<li>Time zones are explicit, naievete is the norm</li>
+<li>Time zones are explicit, naivete is the norm</li>
 <li>Gaps in functionality:  ISO-8601 parsing, timespans, humanization</li>
 </ul>
 </div>
@@ -259,6 +259,13 @@
 <span class="go">&#39;in 2 hours&#39;</span>
 </pre></div>
 </div>
+<p>Basic localisations, currently experimental (see <cite>locales.py</cite> for supported languages):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">hours</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">locale</span><span class="o">=</span><span class="s">&#39;russian&#39;</span><span class="p">)</span>
+<span class="go">&#39;через 2 час(а,ов)&#39;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="timespans">
 <h3>Timespans<a class="headerlink" href="#timespans" title="Permalink to this headline">¶</a></h3>
@@ -401,7 +408,7 @@
 <dt id="arrow.Arrow">
 <em class="property">class </em><tt class="descclassname">arrow.</tt><tt class="descname">Arrow</tt><big>(</big><em>year</em>, <em>month</em>, <em>day</em>, <em>hour=0</em>, <em>minute=0</em>, <em>second=0</em>, <em>microsecond=0</em>, <em>tzinfo=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow" title="Permalink to this definition">¶</a></dt>
 <dd><p>An <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</p>
-<p>Implements the datetime iterface, behaving as an aware datetime while implementing
+<p>Implements the datetime interface, behaving as an aware datetime while implementing
 additional functionality.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -505,6 +512,12 @@ additional functionality.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.date">
+<tt class="descname">date</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements <strong>datetime</strong>.date(), returning the <strong>date</strong> part.</p>
 </dd></dl>
 
 </dd></dl>

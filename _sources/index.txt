@@ -17,7 +17,7 @@ Python's standard library, and some other low-level modules, offer complete func
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz
 - Time zone and timestamp conversions are verbose and error-prone
-- Time zones are explicit, naievete is the norm
+- Time zones are explicit, naivete is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
 ------------
@@ -192,6 +192,14 @@ Or another Arrow, or datetime:
 >>> b.hours += 1
 >>> b.humanize(a)
 'in 2 hours'
+
+Basic localisations, currently experimental (see `locales.py` for supported languages):
+
+>>> b = arrow.utcnow()
+>>> b.hours += 1
+>>> b.humanize(a, locale='russian')
+'через 2 час(а,ов)'
+
 
 Timespans
 =========
