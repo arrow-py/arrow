@@ -3,7 +3,9 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 import calendar
 
-import parser, formatter
+import parser
+import formatter
+import locales
 
 
 class Arrow(object):
@@ -371,7 +373,7 @@ class Arrow(object):
     def format(self, fmt):
         return formatter.DateTimeFormatter.format(self._datetime, fmt)
 
-    def humanize(self, other=None):
+    def humanize(self, other=None, locale='english'):
 
         if other is None:
             utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
@@ -389,45 +391,48 @@ class Arrow(object):
         else:
             raise TypeError()
 
+        local_dict = getattr(locales, locale, None)
+        if local_dict is None:
+            raise ValueError('Invalid language {0}'.format(locale))
+
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0
         delta = abs(delta)
 
         if delta < 10:
-            return 'just now'
+            return local_dict['now']
 
         if delta < 45:
-            expr = 'seconds'
+            expr = local_dict['seconds']
 
         elif delta < 90:
-            expr = 'a minute'
+            expr = local_dict['minute']
         elif delta < 2700:
             minutes = max(delta / 60, 2)
-            expr = '{0} minutes'.format(minutes)
+            expr = local_dict['minutes'].format(minutes)
 
         elif delta < 5400:
-            expr = 'an hour'
+            expr = local_dict['hour']
         elif delta < 79200:
             hours = max(delta / 3600, 2)
-            expr = '{0} hours'.format(hours)
+            expr = local_dict['hours'].format(hours)
 
         elif delta < 129600:
-            expr = 'a day'
+            expr = local_dict['day']
         elif delta < 2160000:
             days = max(delta / 86400, 2)
-            expr = '{0} days'.format(days)
+            expr = local_dict['days'].format(days)
 
         elif delta < 3888000:
-            expr = 'a month'
+            expr = local_dict['month']
         elif delta < 29808000:
             months = max(abs(dt.month - self._datetime.month), 2)
-            expr = '{0} months'.format(months)
+            expr = local_dict['months'].format(months)
 
         elif delta < 47260800:
-            expr = 'a year'
+            expr = local_dict['year']
         else:
             years = max(delta / 31536000, 2)
-            expr = '{0} years'.format(years)
+            expr = local_dict['years'].format(years)
 
-        return '{0} ago'.format(expr) if past else 'in {0}'.format(expr)
-
+        return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)

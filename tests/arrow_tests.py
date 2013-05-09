@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from chai import Chai
 
 from datetime import datetime, timedelta
@@ -665,6 +667,13 @@ class ArrowHumanizeTests(Chai):
         with assertRaises(TypeError):
             arw.humanize(object())
 
+    def test_invalid_locale(self):
+
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        with assertRaises(ValueError):
+            arw.humanize(locale='klingon')
+
     def test_none(self):
 
         arw = arrow.Arrow.utcnow()
@@ -673,3 +682,26 @@ class ArrowHumanizeTests(Chai):
 
         assertEqual(result, 'just now')
 
+
+class ArrowHumanizeTestsWithLocale(Chai):
+
+    def setUp(self):
+        super(ArrowHumanizeTestsWithLocale, self).setUp()
+
+        self.datetime = datetime(2013, 1, 1)
+
+    def test_seconds(self):
+
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
+
+        result = arw.humanize(self.datetime, locale='russian')
+
+        assertEqual(result, 'через несколько секунд')
+
+    def test_years(self):
+
+        arw = arrow.Arrow(2011, 7, 2)
+
+        result = arw.humanize(self.datetime, locale='russian')
+
+        assertEqual(result, '2 года/лет назад')
