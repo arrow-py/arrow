@@ -340,12 +340,12 @@
 <span class="go">&lt;Arrow [2013-05-05T00:00:00-07:00]&gt;</span>
 </pre></div>
 </div>
-<p><strong>Two</strong> arguments, a naive or aware datetime, and a timezone expression (as above):</p>
+<p><strong>Two</strong> arguments, a naive or aware <strong>datetime</strong>, and a timezone expression (as above):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T00:00:00-07:00]&gt;</span>
 </pre></div>
 </div>
-<p><strong>Two</strong> arguments, both strings, to parse the first according to the format of the second:</p>
+<p><strong>Two</strong> arguments, both <strong>str</strong>, to parse the first according to the format of the second:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-05-05 12:30:45&#39;</span><span class="p">,</span> <span class="s">&#39;YYYY-MM-DD HH:mm:ss&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T12:30:45+00:00]&gt;</span>
 </pre></div>
@@ -489,6 +489,12 @@ additional functionality.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="arrow.Arrow.tzinfo">
+<tt class="descname">tzinfo</tt><a class="headerlink" href="#arrow.Arrow.tzinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the <strong>tzinfo</strong> of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="arrow.Arrow.datetime">
 <tt class="descname">datetime</tt><a class="headerlink" href="#arrow.Arrow.datetime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a datetime representation of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</p>
@@ -504,20 +510,44 @@ additional functionality.</p>
 <dt id="arrow.Arrow.timestamp">
 <tt class="descname">timestamp</tt><a class="headerlink" href="#arrow.Arrow.timestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a timestamp representation of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.date">
+<tt class="descname">date</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>date</strong> object with the same year, month and day.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.time">
+<tt class="descname">time</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>time</strong> object with the same hour, minute, second, microsecond.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.timetz">
+<tt class="descname">timetz</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.timetz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>time</strong> object with the same hour, minute, second, microsecond and tzinfo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.astimezone">
+<tt class="descname">astimezone</tt><big>(</big><em>tz</em><big>)</big><a class="headerlink" href="#arrow.Arrow.astimezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>datetime</strong> object, adjusted to the specified tzinfo.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cast</strong> &#8211; (optional).  A function with which to cast the timestamp.  Defaults to int.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tz</strong> &#8211; a <strong>tzinfo</strong> object.</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="arrow.Arrow.date">
-<tt class="descname">date</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.date" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements <strong>datetime</strong>.date(), returning the <strong>date</strong> part.</p>
+<dt id="arrow.Arrow.utcoffset">
+<tt class="descname">utcoffset</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.utcoffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>timedelta</strong> object representing the whole number of minutes difference from UTC time.</p>
 </dd></dl>
 
 </dd></dl>
