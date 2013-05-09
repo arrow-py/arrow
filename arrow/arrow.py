@@ -5,7 +5,7 @@ import calendar
 
 import parser
 import formatter
-import locales
+from locales import get_locale_by_name
 
 
 class Arrow(object):
@@ -373,7 +373,7 @@ class Arrow(object):
     def format(self, fmt):
         return formatter.DateTimeFormatter.format(self._datetime, fmt)
 
-    def humanize(self, other=None, locale='english'):
+    def humanize(self, other=None, locale='en'):
 
         if other is None:
             utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
@@ -391,48 +391,44 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        local_dict = getattr(locales, locale, None)
-        if local_dict is None:
-            raise ValueError('Invalid language {0}'.format(locale))
+        act_locale = get_locale_by_name(locale)
 
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0
         delta = abs(delta)
 
         if delta < 10:
-            return local_dict['now']
+            return act_locale.format_humanize(0, 'now', past)
 
         if delta < 45:
-            expr = local_dict['seconds']
+            return act_locale.format_humanize(0, 'seconds', past)
 
         elif delta < 90:
-            expr = local_dict['minute']
+            return act_locale.format_humanize(0, 'minute', past)
         elif delta < 2700:
             minutes = max(delta / 60, 2)
-            expr = local_dict['minutes'].format(minutes)
+            return act_locale.format_humanize(minutes, 'minutes', past)
 
         elif delta < 5400:
-            expr = local_dict['hour']
+            return act_locale.format_humanize(0, 'hour', past)
         elif delta < 79200:
             hours = max(delta / 3600, 2)
-            expr = local_dict['hours'].format(hours)
+            return act_locale.format_humanize(hours, 'hours', past)
 
         elif delta < 129600:
-            expr = local_dict['day']
+            return act_locale.format_humanize(0, 'day', past)
         elif delta < 2160000:
             days = max(delta / 86400, 2)
-            expr = local_dict['days'].format(days)
+            return act_locale.format_humanize(days, 'days', past)
 
         elif delta < 3888000:
-            expr = local_dict['month']
+            return act_locale.format_humanize(0, 'month', past)
         elif delta < 29808000:
             months = max(abs(dt.month - self._datetime.month), 2)
-            expr = local_dict['months'].format(months)
+            return act_locale.format_humanize(months, 'months', past)
 
         elif delta < 47260800:
-            expr = local_dict['year']
+            return act_locale.format_humanize(0, 'year', past)
         else:
             years = max(delta / 31536000, 2)
-            expr = local_dict['years'].format(years)
-
-        return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)
+            return act_locale.format_humanize(years, 'years', past)
