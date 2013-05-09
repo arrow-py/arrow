@@ -1,4 +1,4 @@
-# Arrow - Better date & time manipulation for Python
+# Arrow - Better dates & times for Python
 [![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
 
 ### See documentation at:  [crsmithdev.com/arrow](http://crsmithdev.com/arrow)
