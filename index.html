@@ -381,13 +381,13 @@
 </tr>
 </tbody>
 </table>
-<p>The timezone expression can be:</p>
+<p>Recognized timezone expressions:</p>
 <blockquote>
 <div><ul class="simple">
-<li>A tzinfo struct</li>
-<li>A string description, e.g. &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
-<li>An ISO-8601 string, e.g. &#8220;+07:00&#8221;</li>
-<li>A special string, one of:  &#8220;local&#8221;, &#8220;utc&#8221;, or &#8220;UTC&#8221;</li>
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
 </ul>
 </div></blockquote>
 <p>Usage:</p>
@@ -431,8 +431,7 @@ additional functionality.</p>
 <p>If tzinfo is None, it is assumed to be UTC on creation.</p>
 <p>Usage:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T12:30:45+00:00]&gt;</span>
 </pre></div>
 </div>
@@ -510,6 +509,157 @@ additional functionality.</p>
 <dt id="arrow.Arrow.timestamp">
 <tt class="descname">timestamp</tt><a class="headerlink" href="#arrow.Arrow.timestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a timestamp representation of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.clone">
+<tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.Arrow.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, cloned from the current one.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cloned</span> <span class="o">=</span> <span class="n">arw</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.to">
+<tt class="descname">to</tt><big>(</big><em>tz</em><big>)</big><a class="headerlink" href="#arrow.Arrow.to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, converted to the target
+timezone.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tz</strong> &#8211; an expression representing a timezone.</td>
+</tr>
+</tbody>
+</table>
+<p>Recognized timezone expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
+</ul>
+</div></blockquote>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
+<span class="go">&lt;Arrow [2013-05-09T03:49:12.311072+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T20:49:12.311072-07:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
+<span class="go">&lt;Arrow [2013-05-08T20:49:12.311072-07:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;-07:00&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T20:49:12.311072-07:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T20:49:12.311072-07:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;utc&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-09T03:49:12.311072+00:00]&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.span">
+<tt class="descname">span</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#arrow.Arrow.span" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns two new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing the timespan
+of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object in a given timeframe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</td>
+</tr>
+</tbody>
+</table>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="go">&lt;Arrow [2013-05-09T03:32:36.186203+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">(&lt;Arrow [2013-05-09T03:00:00+00:00]&gt;, &lt;Arrow [2013-05-09T03:59:59.999999+00:00]&gt;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">)</span>
+<span class="go">(&lt;Arrow [2013-05-09T00:00:00+00:00]&gt;, &lt;Arrow [2013-05-09T23:59:59.999999+00:00]&gt;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.floor">
+<tt class="descname">floor</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#arrow.Arrow.floor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing the &#8220;floor&#8221;
+of the timespan of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object in a given timeframe.
+Equivalent to the first element in the 2-tuple returned by <a class="reference internal" href="#arrow.Arrow.span" title="arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</td>
+</tr>
+</tbody>
+</table>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-09T03:00:00+00:00]&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.ceil">
+<tt class="descname">ceil</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#arrow.Arrow.ceil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing the &#8220;ceiling&#8221;
+of the timespan of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object in a given timeframe.
+Equivalent to the second element in the 2-tuple returned by <a class="reference internal" href="#arrow.Arrow.span" title="arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</td>
+</tr>
+</tbody>
+</table>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-09T03:59:59.999999+00:00]&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.format">
+<tt class="descname">format</tt><big>(</big><em>fmt</em><big>)</big><a class="headerlink" href="#arrow.Arrow.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string representation of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object,
+formatted according to a format string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fmt</strong> &#8211; the format string.</td>
+</tr>
+</tbody>
+</table>
+<p><em>TBA: format string tokens / example outputs</em>.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
+<span class="go">&#39;2013-05-09 03:56:47 -00:00&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;X&#39;</span><span class="p">)</span>
+<span class="go">&#39;1368071882&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;MMMM DD, YYYY&#39;</span><span class="p">)</span>
+<span class="go">&#39;May 09, 2013&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
