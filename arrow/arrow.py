@@ -174,16 +174,23 @@ class Arrow(object):
 
     @property
     def tzinfo(self):
+        ''' Gets the **tzinfo** of the :class:`Arrow <arrow.Arrow>` object.
+        '''
+
         return self._datetime.tzinfo
 
     @tzinfo.setter
-    def tzinfo(self, _tzinfo):
-        self._datetime = self._datetime.replace(tzinfo=_tzinfo)
+    def tzinfo(self, tzinfo):
+        ''' Sets the **tzinfo** of the :class:`Arrow <arrow.Arrow>` object.
+        '''
+
+        self._datetime = self._datetime.replace(tzinfo=tzinfo)
 
     @property
     def datetime(self):
         ''' Returns a datetime representation of the :class:`Arrow <arrow.Arrow>` object.
         '''
+
         return self._datetime
 
     @property
@@ -194,13 +201,11 @@ class Arrow(object):
         return self._datetime.replace(tzinfo=None)
 
     @property
-    def timestamp(self, cast=int):
+    def timestamp(self):
         ''' Returns a timestamp representation of the :class:`Arrow <arrow.Arrow>` object.
-
-        :param cast: (optional).  A function with which to cast the timestamp.  Defaults to int.
         '''
 
-        return cast(calendar.timegm(self._datetime.utctimetuple()))
+        return calendar.timegm(self._datetime.utctimetuple())
 
 
     # math
@@ -281,20 +286,35 @@ class Arrow(object):
     # datetime methods
 
     def date(self):
-        '''Implements **datetime**.date(), returning the **date** part.
+        ''' Returns a **date** object with the same year, month and day.
         '''
+
         return self._datetime.date()
 
     def time(self):
+        ''' Returns a **time** object with the same hour, minute, second, microsecond.
+        '''
+
         return self._datetime.time()
 
     def timetz(self):
+        ''' Returns a **time** object with the same hour, minute, second, microsecond and tzinfo.
+        '''
+
         return self._datetime.timetz()
 
     def astimezone(self, tz):
+        ''' Returns a **datetime** object, adjusted to the specified tzinfo.
+
+        :param tz: a **tzinfo** object.
+        '''
+
         return self._datetime.astimezone(tz)
 
     def utcoffset(self):
+        ''' Returns a **timedelta** object representing the whole number of minutes difference from UTC time.
+        '''
+
         return self._datetime.utcoffset()
 
     def dst(self):

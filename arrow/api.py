@@ -55,12 +55,12 @@ def get(*args, **kwargs):
         >>> arrow.get(datetime(2013, 5, 5, tzinfo=tz.tzlocal()))
         <Arrow [2013-05-05T00:00:00-07:00]>
 
-    **Two** arguments, a naive or aware datetime, and a timezone expression (as above)::
+    **Two** arguments, a naive or aware **datetime**, and a timezone expression (as above)::
 
         >>> arrow.get(datetime(2013, 5, 5), 'US/Pacific')
         <Arrow [2013-05-05T00:00:00-07:00]>
 
-    **Two** arguments, both strings, to parse the first according to the format of the second::
+    **Two** arguments, both **str**, to parse the first according to the format of the second::
 
         >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
         <Arrow [2013-05-05T12:30:45+00:00]>
