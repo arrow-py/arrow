@@ -690,11 +690,18 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         self.datetime = datetime(2013, 1, 1)
 
-    def test_seconds(self):
+    def test_now(self):
 
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+
+        result = arw.humanize(self.datetime, locale='ru')
+
+        assertEqual(result, 'сейчас')
+
+    def test_seconds(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
 
-        result = arw.humanize(self.datetime, locale='russian')
+        result = arw.humanize(self.datetime, locale='ru')
 
         assertEqual(result, 'через несколько секунд')
 
@@ -702,6 +709,6 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         arw = arrow.Arrow(2011, 7, 2)
 
-        result = arw.humanize(self.datetime, locale='russian')
+        result = arw.humanize(self.datetime, locale='ru')
 
-        assertEqual(result, '2 года/лет назад')
+        assertEqual(result, '2 года назад')

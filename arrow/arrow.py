@@ -5,7 +5,7 @@ import calendar
 
 import parser
 import formatter
-import locales
+from locales import get_locale_by_name
 
 
 class Arrow(object):
@@ -349,7 +349,8 @@ class Arrow(object):
 
         return formatter.DateTimeFormatter.format(self._datetime, fmt)
 
-    def humanize(self, other=None, locale='english'):
+
+    def humanize(self, other=None, locale='en'):
 
         if other is None:
             utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
@@ -367,51 +368,111 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        local_dict = getattr(locales, locale, None)
-        if local_dict is None:
-            raise ValueError('Unsupported language {0}'.format(locale))
+        act_locale = get_locale_by_name(locale)
 
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0
         delta = abs(delta)
 
         if delta < 10:
-            return local_dict['now']
+            return act_locale.format_humanize(0, 'now', past)
 
         if delta < 45:
-            expr = local_dict['seconds']
+            return act_locale.format_humanize(0, 'seconds', past)
 
         elif delta < 90:
-            expr = local_dict['minute']
+            return act_locale.format_humanize(0, 'minute', past)
         elif delta < 2700:
             minutes = max(delta / 60, 2)
-            expr = local_dict['minutes'].format(minutes)
+            return act_locale.format_humanize(minutes, 'minutes', past)
 
         elif delta < 5400:
-            expr = local_dict['hour']
+            return act_locale.format_humanize(0, 'hour', past)
         elif delta < 79200:
             hours = max(delta / 3600, 2)
-            expr = local_dict['hours'].format(hours)
+            return act_locale.format_humanize(hours, 'hours', past)
 
         elif delta < 129600:
-            expr = local_dict['day']
+            return act_locale.format_humanize(0, 'day', past)
         elif delta < 2160000:
             days = max(delta / 86400, 2)
-            expr = local_dict['days'].format(days)
+            return act_locale.format_humanize(days, 'days', past)
 
         elif delta < 3888000:
-            expr = local_dict['month']
+            return act_locale.format_humanize(0, 'month', past)
         elif delta < 29808000:
             months = max(abs(dt.month - self._datetime.month), 2)
-            expr = local_dict['months'].format(months)
+            return act_locale.format_humanize(months, 'months', past)
 
         elif delta < 47260800:
-            expr = local_dict['year']
+            return act_locale.format_humanize(0, 'year', past)
         else:
             years = max(delta / 31536000, 2)
-            expr = local_dict['years'].format(years)
+            return act_locale.format_humanize(years, 'years', past)
 
-        return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)
+    #def humanize(self, other=None, locale='english'):
+
+    #    if other is None:
+    #        utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
+    #        dt = utc.astimezone(self._datetime.tzinfo)
+
+    #    elif isinstance(other, Arrow):
+    #        dt = other._datetime
+
+    #    elif isinstance(other, datetime):
+    #        if other.tzinfo is None:
+    #            dt = other.replace(tzinfo=self._datetime.tzinfo)
+    #        else:
+    #            dt = other.astimezone(self._datetime.tzinfo)
+
+    #    else:
+    #        raise TypeError()
+
+    #    local_dict = getattr(locales, locale, None)
+    #    if local_dict is None:
+    #        raise ValueError('Unsupported language {0}'.format(locale))
+
+    #    delta = int((self._datetime - dt).total_seconds())
+    #    past = delta < 0
+    #    delta = abs(delta)
+
+    #    if delta < 10:
+    #        return local_dict['now']
+
+    #    if delta < 45:
+    #        expr = local_dict['seconds']
+
+    #    elif delta < 90:
+    #        expr = local_dict['minute']
+    #    elif delta < 2700:
+    #        minutes = max(delta / 60, 2)
+    #        expr = local_dict['minutes'].format(minutes)
+
+    #    elif delta < 5400:
+    #        expr = local_dict['hour']
+    #    elif delta < 79200:
+    #        hours = max(delta / 3600, 2)
+    #        expr = local_dict['hours'].format(hours)
+
+    #    elif delta < 129600:
+    #        expr = local_dict['day']
+    #    elif delta < 2160000:
+    #        days = max(delta / 86400, 2)
+    #        expr = local_dict['days'].format(days)
+
+    #    elif delta < 3888000:
+    #        expr = local_dict['month']
+    #    elif delta < 29808000:
+    #        months = max(abs(dt.month - self._datetime.month), 2)
+    #        expr = local_dict['months'].format(months)
+
+    #    elif delta < 47260800:
+    #        expr = local_dict['year']
+    #    else:
+    #        years = max(delta / 31536000, 2)
+    #        expr = local_dict['years'].format(years)
+
+    #    return local_dict['past'].format(expr) if past else local_dict['future'].format(expr)
 
 
     # math
@@ -554,3 +615,51 @@ class Arrow(object):
         return self._datetime.strftime(format)
 
 
+#<<<<<<< HEAD
+#=======
+#    # NEW
+
+#    def clone(self):
+#        return Arrow.fromdatetime(self._datetime)
+
+#    def to(self, tz):
+
+#        if not isinstance(tz, tzinfo):
+#            tz = parser.TzinfoParser.parse(tz)
+
+#        dt = self._datetime.astimezone(tz)
+
+#        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+#            dt.microsecond, tz)
+
+#    def span(self, frame):
+
+#        f_single, f_plural = self._get_property_names(frame)
+
+#        if f_single is None:
+#            raise AttributeError()
+
+#        index = self._ATTRS.index(f_single)
+#        frames = self._ATTRS[:index + 1]
+#        values = [getattr(self._datetime, f) for f in frames]
+
+#        for i in range(3 - len(values)):
+#            values.append(1)
+
+#        floor = datetime(*values, tzinfo=self._datetime.tzinfo)
+
+#        ceil = floor + relativedelta(**{f_plural: 1})
+#        ceil = ceil + relativedelta(microseconds=-1)
+
+#        return Arrow.fromdatetime(floor), Arrow.fromdatetime(ceil)
+
+#    def floor(self, frame):
+#        return self.span(frame)[0]
+
+#    def ceil(self, frame):
+#        return self.span(frame)[1]
+
+#    def format(self, fmt):
+#        return formatter.DateTimeFormatter.format(self._datetime, fmt)
+
+#    >>>>>>> 2c3b9d833d88b9f1a4585dd055b0bbb347655cf4
