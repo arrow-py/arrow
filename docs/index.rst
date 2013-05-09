@@ -47,7 +47,7 @@ Quickstart
 ----------
 
 >>> import arrow
->>> utc = arrow.get()
+>>> utc = arrow.utcnow()
 >>> utc
 <Arrow [2013-05-07T03:56:38.560988+00:00]>
 >>> utc.hours -=1
