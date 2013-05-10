@@ -468,6 +468,31 @@ class ArrowConversionTests(Chai):
         assertEqual(result.datetime, expected)
 
 
+class ArrowRangeTests(Chai):
+
+    def test_year(self):
+
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6))
+
+        assertEqual(result, [
+            arrow.get(2013, 1, 2, 3),
+            arrow.get(2014, 1, 2, 3),
+            arrow.get(2015, 1, 2, 3),
+            arrow.get(2016, 1, 2, 3),
+        ])
+
+    def test_tz_str(self):
+
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6), 'US/Pacific')
+
+        assertEqual(result, [
+            arrow.get(datetime(2013, 1, 2, 3), 'US/Pacific'),
+            arrow.get(datetime(2014, 1, 2, 3), 'US/Pacific'),
+            arrow.get(datetime(2015, 1, 2, 3), 'US/Pacific'),
+            arrow.get(datetime(2016, 1, 2, 3), 'US/Pacific'),
+        ])
+
+
 class ArrowSpanRangeTests(Chai):
 
     def test_year(self):

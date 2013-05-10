@@ -282,17 +282,18 @@ class Arrow(object):
             self._datetime.tzinfo)[0]
 
     @classmethod
-    def span_range(cls, frame, since, until, tz=None, limit=None):
-        ''' Returns an array of tuples, each :class:`Arrow <arrow.Arrow>` objects, representing
-        a series of timeframes between two inputs.
+    def range(cls, frame, since, until, tz=None, limit=None):
+        ''' Returns an array of :class:`Arrow <arrow.Arrow>` objects, representing
+        an iteration of time between two inputs.
 
         :param frame: the timeframe.  Can be any **datetime** property (day, hour, minute...).
         :param since: the start of the range.  **datetime** or :class:`Arrow <arrow.Arrow>` object.
         :param until: the end of the range.  **datetime** or :class:`Arrow <arrow.Arrow>` object.
-        :param tz: A timezone expression.
+        :param tz: (optional) A timezone expression.  Defaults to UTC.
         :param limit: (optional) A maximum number of tuples to return.
 
-        *TODO:  support timespans as inputs for since / until*
+        *TODO:  support timestamps as inputs for since / until*
+        *TODO:  respect limit parameter*
 
         Recognized timezone expressions:
 
@@ -305,7 +306,66 @@ class Arrow(object):
 
             >>> start = datetime(2013, 5, 5, 12, 30)
             >>> end = datetime(2013, 5, 5, 17, 15)
+            >>> for r in arrow.Arrow.range('hour', start, end):
+            ...     print repr(r)
+            ...
+            <Arrow [2013-05-05T12:30:00+00:00]>
+            <Arrow [2013-05-05T13:30:00+00:00]>
+            <Arrow [2013-05-05T14:30:00+00:00]>
+            <Arrow [2013-05-05T15:30:00+00:00]>
+            <Arrow [2013-05-05T16:30:00+00:00]>
 
+        '''
+
+        if tz is None:
+            tz = dateutil_tz.tzutc()
+        elif not isinstance(tz, tzinfo):
+            tz = parser.TzinfoParser.parse(tz)
+
+        f_single, f_plural = cls._get_property_names(frame)
+
+        if f_single is None:
+            raise AttributeError()
+
+        since = cls._cmp_convert(since).replace(tzinfo=tz)
+        until = cls._cmp_convert(until).replace(tzinfo=tz)
+
+        current = Arrow.fromdatetime(since, tz)
+        results = []
+
+        while current <= until:
+            results.append(current)
+
+            values = [getattr(current, f) for f in cls._ATTRS]
+            current = Arrow(*values, tzinfo=tz) + relativedelta(**{f_plural: 1})
+
+        return results
+
+    @classmethod
+    def span_range(cls, frame, since, until, tz=None, limit=None):
+        ''' Returns an array of tuples, each :class:`Arrow <arrow.Arrow>` objects, representing
+        a series of timeframes between two inputs.
+
+        :param frame: the timeframe.  Can be any **datetime** property (day, hour, minute...).
+        :param since: the start of the range.  **datetime** or :class:`Arrow <arrow.Arrow>` object.
+        :param until: the end of the range.  **datetime** or :class:`Arrow <arrow.Arrow>` object.
+        :param tz: (optional) A timezone expression.  Defaults to UTC.
+        :param limit: (optional) A maximum number of tuples to return.
+
+        *TODO:  support timestamps as inputs for since / until*
+        *TODO:  respect limit parameter*
+
+        Recognized timezone expressions:
+
+            - A **tzinfo** object
+            - A **str** describing a timezone, similar to "US/Pacific", or "Europe/Berlin"
+            - A **str** in ISO-8601 style, as in "+07:00"
+            - A **str**, one of the following:  *local*, *utc*, *UTC*
+
+        Usage:
+
+            >>> start = datetime(2013, 5, 5, 12, 30)
+            >>> end = datetime(2013, 5, 5, 17, 15)
             >>> for r in arrow.Arrow.span_range('hour', start, end):
             ...     print r
             ...
@@ -317,7 +377,6 @@ class Arrow(object):
             >>>
 
         '''
-
 
         if tz is None:
             tz = dateutil_tz.tzutc()
@@ -470,7 +529,7 @@ class Arrow(object):
 
     def __add__(self, other):
 
-        if isinstance(other, timedelta):
+        if isinstance(other, (timedelta, relativedelta)):
             return Arrow.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
         raise NotImplementedError()
