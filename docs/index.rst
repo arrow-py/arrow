@@ -31,8 +31,7 @@ Key features
 - Rich parsing & formatting options
 - Timezone conversion
 - Simple timestamp handling
-- Time spans, floors and ceilings
-  Time and time span ranges
+- Time spans, ranges, floors and ceilings
 - Humanization
 
 ------------
@@ -203,7 +202,7 @@ Basic localisations, currently experimental (see `locales.py` for supported lang
 
 
 Ranges & Spans
-=========
+==============
 
 Get the timespan of any unit:
 
