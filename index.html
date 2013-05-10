@@ -594,6 +594,52 @@ of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="arrow.Arrow.range">
+<em class="property">classmethod </em><tt class="descname">range</tt><big>(</big><em>frame</em>, <em>since</em>, <em>until</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
+an iteration of time between two inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</li>
+<li><strong>since</strong> &#8211; the start of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
+<li><strong>until</strong> &#8211; the end of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
+<li><strong>tz</strong> &#8211; A timezone expression.</li>
+<li><strong>limit</strong> &#8211; (optional) A maximum number of tuples to return.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><em>TODO:  support timestamps as inputs for since / until</em>
+<em>TODO:  respect limit parameter</em></p>
+<p>Recognized timezone expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
+</ul>
+</div></blockquote>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">&lt;Arrow [2013-05-05T12:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T13:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T14:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T15:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T16:30:00+00:00]&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="arrow.Arrow.span_range">
 <em class="property">classmethod </em><tt class="descname">span_range</tt><big>(</big><em>frame</em>, <em>since</em>, <em>until</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.span_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an array of tuples, each <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
@@ -613,7 +659,8 @@ a series of timeframes between two inputs.</p>
 </tr>
 </tbody>
 </table>
-<p><em>TODO:  support timespans as inputs for since / until</em></p>
+<p><em>TODO:  support timestamps as inputs for since / until</em>
+<em>TODO:  respect limit parameter</em></p>
 <p>Recognized timezone expressions:</p>
 <blockquote>
 <div><ul class="simple">
@@ -626,9 +673,7 @@ a series of timeframes between two inputs.</p>
 <p>Usage:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">span_range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">span_range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="n">r</span>
 <span class="gp">...</span>
 <span class="go">(&lt;Arrow [2013-05-05T12:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T12:59:59.999999+00:00]&gt;)</span>
