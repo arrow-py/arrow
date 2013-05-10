@@ -36,17 +36,6 @@ class ArrowFactoryTests(Chai):
 
         assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
-    #def test_fromtimestamp(self):
-
-    #    timestamp = time.time()
-    #    tzinfo = tz.gettz('US/Pacific')
-
-    #    result = arrow.Arrow.fromtimestamp(timestamp, tzinfo)
-    #    print result
-    #    print datetime.now().replace(tzinfo=tzinfo)
-
-    #    assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tzinfo))
-
     def test_formtimestamp(self):
 
         timestamp = time.time()
@@ -477,6 +466,86 @@ class ArrowConversionTests(Chai):
         expected = dt_from.replace(tzinfo=tz.gettz('US/Pacific')).astimezone(tz.tzutc())
 
         assertEqual(result.datetime, expected)
+
+
+class ArrowSpanRangeTests(Chai):
+
+    def test_year(self):
+
+        result = arrow.Arrow.span_range('year', datetime(2013, 1, 1), datetime(2016, 12, 31))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2014, 1, 1), arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2015, 1, 1), arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2016, 1, 1), arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999)),
+        ])
+
+    def test_month(self):
+
+        result = arrow.Arrow.span_range('month', datetime(2013, 1, 1), datetime(2013, 4, 30))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 1, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 1), arrow.Arrow(2013, 2, 28, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 3, 1), arrow.Arrow(2013, 3, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 4, 30, 23, 59, 59, 999999)),
+        ])
+
+    def test_day(self):
+
+        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1), datetime(2013, 1, 4, 23, 59))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 2, 0), arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 3, 0), arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 4, 0), arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999)),
+        ])
+
+    def test_hour(self):
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 2), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
+        ])
+
+    def test_minute(self):
+
+        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 0, 3, 59))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 1), arrow.Arrow(2013, 1, 1, 0, 1, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 2), arrow.Arrow(2013, 1, 1, 0, 2, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 3), arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999)),
+        ])
+
+    def test_minute(self):
+
+        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 0, 0, 3))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 0, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 0, 1), arrow.Arrow(2013, 1, 1, 0, 0, 1, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 0, 2), arrow.Arrow(2013, 1, 1, 0, 0, 2, 999999)),
+            (arrow.Arrow(2013, 1, 1, 0, 0, 3), arrow.Arrow(2013, 1, 1, 0, 0, 3, 999999)),
+        ])
+
+    def test_tz_str(self):
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59), 'US/Pacific')
+
+        assertEqual(result, [
+            (arrow.get(datetime(2013, 1, 1, 0), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 0, 59, 59, 999999), 'US/Pacific')),
+            (arrow.get(datetime(2013, 1, 1, 1), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 1, 59, 59, 999999), 'US/Pacific')),
+            (arrow.get(datetime(2013, 1, 1, 2), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 2, 59, 59, 999999), 'US/Pacific')),
+            (arrow.get(datetime(2013, 1, 1, 3), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 3, 59, 59, 999999), 'US/Pacific')),
+        ])
 
 
 class ArrowSpanTests(Chai):
