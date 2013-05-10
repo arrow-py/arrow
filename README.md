@@ -25,7 +25,7 @@ Python's standard library and some other low-level modules offer complete functi
 * Rich parsing & formatting options
 * Timezone conversion
 * Simple timestamp handling
-* Time spans, floors and ceilings
+* Time spans, ranges, floors and ceilings
 * Humanization
 
 ## Installation
