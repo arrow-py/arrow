@@ -238,8 +238,8 @@ available_locales = {
     'ru_ru': RussianLocale,
     'el': GreekLocale,
     'zh': ChineseCNLocale,
-    'zh_CN': ChineseCNLocale,
-    'zh_TW': ChineseTWLocale,
+    'zh_cn': ChineseCNLocale,
+    'zh_tw': ChineseTWLocale,
     'ko': KoreanLocale,
-    'ko_KR': KoreanLocale
+    'ko_kr': KoreanLocale
 }
