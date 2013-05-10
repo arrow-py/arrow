@@ -211,6 +211,26 @@ class ChineseTWLocale(BasicLocale):
     }
 
 
+class KoreanLocale(BasicLocale):
+
+    intervals = {
+        'now': '현재',
+        'seconds': '초',
+        'minute': '일 분',
+        'minutes': '{0}분',
+        'hour': '1시간',
+        'hours': '{0}시간',
+        'day': '1일',
+        'days': '{0}일',
+        'month': '1개월',
+        'months': '{0}개월',
+        'year': '1년',
+        'years': '{0}년',
+        'past': '{0} 전',
+        'future': '{0} 후',
+    }
+
+
 available_locales = {
     'en': EnglishLocale,
     'en_us': EnglishLocale,
@@ -219,6 +239,7 @@ available_locales = {
     'el': GreekLocale,
     'zh': ChineseCNLocale,
     'zh_CN': ChineseCNLocale,
-    'zh_TW': ChineseTWLocale
+    'zh_TW': ChineseTWLocale,
+    'ko': KoreanLocale,
+    'ko_KR': KoreanLocale
 }
-
