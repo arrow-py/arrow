@@ -32,6 +32,7 @@ Key features
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, floors and ceilings
+  Time and time span ranges
 - Humanization
 
 ------------
@@ -201,7 +202,7 @@ Basic localisations, currently experimental (see `locales.py` for supported lang
 'через 2 час(а,ов)'
 
 
-Timespans
+Ranges & Spans
 =========
 
 Get the timespan of any unit:
@@ -215,6 +216,32 @@ Or just get the floor and ceiling:
 <Arrow [2013-05-07T05:00:00+00:00]>
 >>> arrow.utcnow().ceil('hour')
 <Arrow [2013-05-07T05:59:59.999999+00:00]>
+
+You can also get a range of timepans:
+
+>>> start = datetime(2013, 5, 5, 12, 30)
+>>> end = datetime(2013, 5, 5, 17, 15)
+>>> for r in arrow.Arrow.span_range('hour', start, end):
+...     print r
+...
+(<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T14:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T15:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
+
+Or just iterate over a range of time:
+
+>>> start = datetime(2013, 5, 5, 12, 30)
+>>> end = datetime(2013, 5, 5, 17, 15)
+>>> for r in arrow.Arrow.range('hour', start, end):
+...     print repr(r)
+...
+<Arrow [2013-05-05T12:30:00+00:00]>
+<Arrow [2013-05-05T13:30:00+00:00]>
+<Arrow [2013-05-05T14:30:00+00:00]>
+<Arrow [2013-05-05T15:30:00+00:00]>
+<Arrow [2013-05-05T16:30:00+00:00]>
 
 .. toctree::
    :maxdepth: 2
