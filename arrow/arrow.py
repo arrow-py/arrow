@@ -5,7 +5,7 @@ import calendar
 
 import parser
 import formatter
-from locales import get_locale_by_name
+import locales
 
 
 class Arrow(object):
@@ -484,7 +484,7 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        act_locale = get_locale_by_name(locale)
+        act_locale = locales.get_locale_by_name(locale)
 
         delta = int((self._datetime - dt).total_seconds())
         past = delta < 0

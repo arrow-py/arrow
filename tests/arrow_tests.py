@@ -492,6 +492,11 @@ class ArrowRangeTests(Chai):
             arrow.get(datetime(2016, 1, 2, 3), 'US/Pacific'),
         ])
 
+    def test_unsupported(self):
+
+        with assertRaises(AttributeError):
+            arrow.Arrow.range('abc', datetime.utcnow(), datetime.utcnow())
+
 
 class ArrowSpanRangeTests(Chai):
 
