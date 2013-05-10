@@ -169,11 +169,56 @@ class RussianLocale(Locale):
         return self.intervals['past'].format(expr) if past else self.intervals['future'].format(expr)
 
 
+class ChineseCNLocale(BasicLocale):
+
+    intervals = {
+        'now': '刚才',
+        'seconds': '秒',
+        'minute': '1分钟',
+        'minutes': '{0}分钟',
+        'hour': '1小时',
+        'hours': '{0}小时',
+        'day': '1天',
+        'days': '{0}天',
+        'month': '1个月',
+        'months': '{0}个月',
+        'year': '1年',
+        'years': '{0}年',
+
+        'past': '{0}前',
+        'future': '{0}后',
+    }
+
+
+class ChineseTWLocale(BasicLocale):
+
+    intervals = {
+        'now': '剛才',
+        'seconds': '秒',
+        'minute': '1分鐘',
+        'minutes': '{0}分鐘',
+        'hour': '1小時',
+        'hours': '{0}小時',
+        'day': '1天',
+        'days': '{0}天',
+        'month': '1個月',
+        'months': '{0}個月',
+        'year': '1年',
+        'years': '{0}年',
+
+        'past': '{0}前',
+        'future': '{0}後',
+    }
+
+
 available_locales = {
     'en': EnglishLocale,
     'en_us': EnglishLocale,
     'ru': RussianLocale,
     'ru_ru': RussianLocale,
-    'el': GreekLocale
+    'el': GreekLocale,
+    'zh': ChineseCNLocale,
+    'zh_CN': ChineseCNLocale,
+    'zh_TW': ChineseTWLocale
 }
 
