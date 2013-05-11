@@ -118,16 +118,26 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
 <span class="go">&lt;Arrow [2013-05-07T03:56:38.560988+00:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">hours</span> <span class="o">-=</span><span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
 <span class="go">&lt;Arrow [2013-05-07T02:56:38.560988+00:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span> <span class="o">=</span> <span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span>
 <span class="go">&lt;Arrow [2013-05-06T19:56:38.560988-07:00]&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">timestamp</span>
 <span class="go">1367895398</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
 <span class="go">&#39;2013-05-06 19:56:38 -07:00&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
+<span class="go">&#39;an hour ago&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">locale</span><span class="o">=</span><span class="s">&#39;ko_kr&#39;</span><span class="p">)</span>
+<span class="go">&#39;1시간 전&#39;</span>
 </pre></div>
 </div>
 </div>
