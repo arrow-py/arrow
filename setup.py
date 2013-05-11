@@ -5,11 +5,11 @@ except ImportError:
 
 setup(
     name='arrow',
-    version='0.2.0',
+    version='0.2.1',
     description='Better dates and times for Python',
-    url='https://github.com/crsmithdev/arrow',
+    url='http://crsmithdev.com/arrow',
     author='Chris Smith',
-    author_email="chris@cir.ca",
+    author_email="crsmithdev@gmail.com",
     license='Apache 2.0',
     packages=['arrow'],
     zip_safe=False,

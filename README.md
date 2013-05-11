@@ -54,6 +54,10 @@ $ pip install arrow
 Changelog
 =========
 
+* 0.2.1
+  * Support for localized humanization
+  * English, Russian, Greek, Korean, Chinese locales
+
 * 0.2.0
   * Reimplemented as datetime replacement
   * Added date parsing
