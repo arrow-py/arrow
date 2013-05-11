@@ -32,7 +32,7 @@ Key features
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization
+- Humanization, inluding i18n
 
 ------------
 Installation
