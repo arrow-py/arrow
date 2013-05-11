@@ -219,20 +219,20 @@ class Arrow(object):
 
     def update(self, **kwargs):
 
-        absolute_args = []
-        relative_args = []
+        absolute_kwargs = {}
+        relative_kwargs = {}
 
-        for key in kwargs:
+        for key, value in kwargs.iteritems():
 
             if key in self._ATTRS:
-                absolute_args.append(key)
+                absolute_kwargs[key] = value
             elif key in self._ATTRS_PLURAL:
-                relative_args.append(key)
+                relative_kwargs[key] = value
             else:
                 raise AttributeError()
 
-        current = self._datetime.replace(**{k: kwargs[k] for k in absolute_args})
-        current += relativedelta(**{k: kwargs[k] for k in relative_args})
+        current = self._datetime.replace(**absolute_kwargs)
+        current += relativedelta(**relative_kwargs)
 
         return self.fromdatetime(current)
 
