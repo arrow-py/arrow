@@ -204,6 +204,27 @@ class Arrow(object):
         return Arrow.fromdatetime(self._datetime)
 
     def update(self, **kwargs):
+        ''' Returns a new :class:`Arrow <arrow.Arrow>` object with attributes updated according to inputs.
+
+        Use absolute attributes (single versions of properties) to set the attribute:
+
+        >>> import arrow
+        >>> arw = arrow.utcnow()
+        >>> arw
+        <Arrow [2013-05-11T22:27:34.787885+00:00]>
+        >>> arw.update(year=2014, month=6)
+        <Arrow [2014-06-11T22:27:34.787885+00:00]>
+
+        Use relative attributes (plural property names) to shift the attribute:
+
+        >>> arw.update(years=1, months=-1)
+        <Arrow [2014-04-11T22:27:34.787885+00:00]>
+
+        Tzinfos can also be replaced:
+
+        >>> arw.update(tzinfo=tz.tzlocal())
+        <Arrow [2013-05-11T22:27:34.787885-07:00]>
+        '''
 
         tzinfo = kwargs.get('tzinfo')
         absolute_kwargs = {}
