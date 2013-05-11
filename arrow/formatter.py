@@ -85,7 +85,6 @@ class DateTimeFormatter(object):
             sign = '-' if total_minutes > 0 else '-'
             total_minutes = abs(total_minutes)
             hour, minute = divmod(total_minutes, 60)
-            print total_minutes, hour, minute
 
             return '{0}{1:02d}{2}{3:02d}'.format(sign, hour, separator, minute)
 

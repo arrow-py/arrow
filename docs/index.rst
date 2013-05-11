@@ -17,7 +17,7 @@ Python's standard library, and some other low-level modules, offer complete func
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz
 - Time zone and timestamp conversions are verbose and error-prone
-- Time zones are explicit, naievete is the norm
+- Time zones are explicit, naivete is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
 ------------
@@ -31,7 +31,7 @@ Key features
 - Rich parsing & formatting options
 - Timezone conversion
 - Simple timestamp handling
-- Time spans, floors and ceilings
+- Time spans, ranges, floors and ceilings
 - Humanization
 
 ------------
@@ -47,7 +47,7 @@ Quickstart
 ----------
 
 >>> import arrow
->>> utc = arrow.get()
+>>> utc = arrow.utcnow()
 >>> utc
 <Arrow [2013-05-07T03:56:38.560988+00:00]>
 >>> utc.hours -=1
@@ -193,16 +193,16 @@ Or another Arrow, or datetime:
 >>> b.humanize(a)
 'in 2 hours'
 
-Basic localisations added. Now only russian available (without changing nouns in plural forms), but you can add your language by adding it to `locales.py`
+Basic localisations, currently experimental (see `locales.py` for supported languages):
 
 >>> b = arrow.utcnow()
 >>> b.hours += 1
->>> b.humanize(a, locale='russian')
+>>> b.humanize(a, locale='ru')
 'через 2 час(а,ов)'
 
 
-Timespans
-=========
+Ranges & Spans
+==============
 
 Get the timespan of any unit:
 
@@ -215,6 +215,32 @@ Or just get the floor and ceiling:
 <Arrow [2013-05-07T05:00:00+00:00]>
 >>> arrow.utcnow().ceil('hour')
 <Arrow [2013-05-07T05:59:59.999999+00:00]>
+
+You can also get a range of timepans:
+
+>>> start = datetime(2013, 5, 5, 12, 30)
+>>> end = datetime(2013, 5, 5, 17, 15)
+>>> for r in arrow.Arrow.span_range('hour', start, end):
+...     print r
+...
+(<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T14:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T15:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
+(<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
+
+Or just iterate over a range of time:
+
+>>> start = datetime(2013, 5, 5, 12, 30)
+>>> end = datetime(2013, 5, 5, 17, 15)
+>>> for r in arrow.Arrow.range('hour', start, end):
+...     print repr(r)
+...
+<Arrow [2013-05-05T12:30:00+00:00]>
+<Arrow [2013-05-05T13:30:00+00:00]>
+<Arrow [2013-05-05T14:30:00+00:00]>
+<Arrow [2013-05-05T15:30:00+00:00]>
+<Arrow [2013-05-05T16:30:00+00:00]>
 
 .. toctree::
    :maxdepth: 2

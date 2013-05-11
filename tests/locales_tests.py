@@ -2,11 +2,21 @@
 
 from chai import Chai
 
-from arrow.locales import get_locale_by_name
+from arrow import locales
 
 
-class RussianPluralisationTest(Chai):
-    def test_possible_cases(self):
+class LocaleTests(Chai):
+
+    def test_format_humanize(self):
+
+        with assertRaises(NotImplementedError):
+            locales.Locale().format_humanize(1, 'hour', True)
+
+
+class RussianLocalesTests(Chai):
+
+    def test_plurals(self):
+
         plurals = ['матрешка', 'матрешки', 'матрешек']
         cases = {
             0: plurals[2],
@@ -19,6 +29,7 @@ class RussianPluralisationTest(Chai):
             25: plurals[2],
         }
 
-        rus = get_locale_by_name('ru')
+        rus = locales.get_locale_by_name('ru')
+
         for num, exp_pl in cases.items():
             assertEqual(rus._chose_plural(num, plurals), exp_pl)

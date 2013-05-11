@@ -55,12 +55,12 @@ def get(*args, **kwargs):
         >>> arrow.get(datetime(2013, 5, 5, tzinfo=tz.tzlocal()))
         <Arrow [2013-05-05T00:00:00-07:00]>
 
-    **Two** arguments, a naive or aware datetime, and a timezone expression (as above)::
+    **Two** arguments, a naive or aware **datetime**, and a timezone expression (as above)::
 
         >>> arrow.get(datetime(2013, 5, 5), 'US/Pacific')
         <Arrow [2013-05-05T00:00:00-07:00]>
 
-    **Two** arguments, both strings, to parse the first according to the format of the second::
+    **Two** arguments, both **str**, to parse the first according to the format of the second::
 
         >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
         <Arrow [2013-05-05T12:30:45+00:00]>
@@ -156,12 +156,12 @@ def now(tz=None):
 
     :param tz: (optional) An expression representing a timezone.  Defaults to local time.
 
-    The timezone expression can be:
+    Recognized timezone expressions:
 
-        - A tzinfo struct
-        - A string description, e.g. "US/Pacific", or "Europe/Berlin"
-        - An ISO-8601 string, e.g. "+07:00"
-        - A special string, one of:  "local", "utc", or "UTC"
+        - A **tzinfo** object
+        - A **str** describing a timezone, similar to "US/Pacific", or "Europe/Berlin"
+        - A **str** in ISO-8601 style, as in "+07:00"
+        - A **str**, one of the following:  *local*, *utc*, *UTC*
 
     Usage::
 
