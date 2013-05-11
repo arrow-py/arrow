@@ -217,6 +217,25 @@ class Arrow(object):
 
         return Arrow.fromdatetime(self._datetime)
 
+    def update(self, **kwargs):
+
+        absolute_args = []
+        relative_args = []
+
+        for key in kwargs:
+
+            if key in self._ATTRS:
+                absolute_args.append(key)
+            elif key in self._ATTRS_PLURAL:
+                relative_args.append(key)
+            else:
+                raise AttributeError()
+
+        current = self._datetime.replace(**{k: kwargs[k] for k in absolute_args})
+        current += relativedelta(**{k: kwargs[k] for k in relative_args})
+
+        return self.fromdatetime(current)
+
     def to(self, tz):
         ''' Returns a new :class:`Arrow <arrow.Arrow>` object, converted to the target
         timezone.

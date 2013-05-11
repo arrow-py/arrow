@@ -468,6 +468,35 @@ class ArrowConversionTests(Chai):
         assertEqual(result.datetime, expected)
 
 
+class ArrowUpdateTests(Chai):
+
+    def test_not_attr(self):
+
+        with assertRaises(AttributeError):
+            arrow.utcnow().update(abc=1)
+
+    def test_update_absolute(self):
+
+        arw = arrow.get(2013, 5, 5, 12, 30, 45)
+
+        assertEqual(arw.update(year=2012), arrow.get(2012, 5, 5, 12, 30, 45))
+        assertEqual(arw.update(month=1), arrow.get(2013, 1, 5, 12, 30, 45))
+        assertEqual(arw.update(day=1), arrow.get(2013, 5, 1, 12, 30, 45))
+        assertEqual(arw.update(hour=1), arrow.get(2013, 5, 5, 1, 30, 45))
+        assertEqual(arw.update(minute=1), arrow.get(2013, 5, 5, 12, 1, 45))
+        assertEqual(arw.update(second=1), arrow.get(2013, 5, 5, 12, 30, 1))
+
+    def test_update_relative(self):
+
+        arw = arrow.get(2013, 5, 5, 12, 30, 45)
+
+        assertEqual(arw.update(years=1), arrow.get(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.update(months=1), arrow.get(2013, 6, 5, 12, 30, 45))
+        assertEqual(arw.update(days=1), arrow.get(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.update(hours=1), arrow.get(2013, 5, 5, 13, 30, 45))
+        assertEqual(arw.update(minutes=1), arrow.get(2013, 5, 5, 12, 31, 45))
+        assertEqual(arw.update(seconds=1), arrow.get(2013, 5, 5, 12, 30, 46))
+
 class ArrowRangeTests(Chai):
 
     def test_year(self):
