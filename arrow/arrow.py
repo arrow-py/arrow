@@ -142,23 +142,12 @@ class Arrow(object):
 
     def __getattr__(self, name):
 
-        n_single, n_plural = self._get_property_names(name)
+        value = getattr(self._datetime, name, None)
 
-        if n_single is not None:
-            return getattr(self._datetime, n_single)
+        if value is not None:
+            return value
 
         return object.__getattribute__(self, name)
-
-    def __setattr__(self, name, value):
-
-        n_single, n_plural = self._get_property_names(name)
-
-        if n_single is not None:
-            delta = value - getattr(self._datetime, n_single)
-            self._datetime += relativedelta(**{n_plural: delta})
-
-        else:
-            object.__setattr__(self, name, value)
 
     @classmethod
     def _get_property_names(cls, name):
@@ -166,10 +155,7 @@ class Arrow(object):
         if name in cls._ATTRS:
             return name, '{0}s'.format(name)
 
-        if name in cls._ATTRS_PLURAL:
-            return name[:-1], name
-
-        return None, None
+        raise AttributeError()
 
     @property
     def tzinfo(self):
@@ -219,6 +205,7 @@ class Arrow(object):
 
     def update(self, **kwargs):
 
+        tzinfo = kwargs.get('tzinfo')
         absolute_kwargs = {}
         relative_kwargs = {}
 
@@ -228,11 +215,14 @@ class Arrow(object):
                 absolute_kwargs[key] = value
             elif key in self._ATTRS_PLURAL:
                 relative_kwargs[key] = value
-            else:
+            elif key !='tzinfo':
                 raise AttributeError()
 
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs)
+
+        if tzinfo is not None:
+            current = current.replace(tzinfo=tzinfo)
 
         return self.fromdatetime(current)
 
@@ -343,9 +333,6 @@ class Arrow(object):
 
         f_single, f_plural = cls._get_property_names(frame)
 
-        if f_single is None:
-            raise AttributeError()
-
         since = cls._cmp_convert(since).replace(tzinfo=tz)
         until = cls._cmp_convert(until).replace(tzinfo=tz)
 
@@ -402,9 +389,6 @@ class Arrow(object):
             tz = parser.TzinfoParser.parse(tz)
 
         f_single, f_plural = cls._get_property_names(frame)
-
-        if f_single is None:
-            raise AttributeError()
 
         index = cls._ATTRS.index(f_single)
         frames = cls._ATTRS[:index + 1]

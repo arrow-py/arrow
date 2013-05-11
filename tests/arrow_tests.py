@@ -128,101 +128,9 @@ class ArrowAttributeTests(Chai):
         with assertRaises(AttributeError):
             self.arrow.prop
 
-    def test_plurals(self):
+    def test_getattr_dt_value(self):
 
-        assertEqual(self.arrow.years, self.arrow.year)
-        assertEqual(self.arrow.months, self.arrow.month)
-        assertEqual(self.arrow.days, self.arrow.day)
-        assertEqual(self.arrow.hours, self.arrow.hour)
-        assertEqual(self.arrow.minutes, self.arrow.minute)
-        assertEqual(self.arrow.seconds, self.arrow.second)
-        assertEqual(self.arrow.microseconds, self.arrow.microsecond)
-
-    def test_year(self):
-
-        self.arrow.year = 2012
-        assertEqual(self.arrow.year, 2012)
-
-        self.arrow.year += 1
         assertEqual(self.arrow.year, 2013)
-
-    def test_month(self):
-
-        self.arrow.month = 2
-        assertEqual(self.arrow.month, 2)
-
-        self.arrow.month = -1
-        assertEqual(self.arrow.month, 11)
-        assertEqual(self.arrow.year, 2012)
-
-        self.arrow.month += 2
-        assertEqual(self.arrow.month, 1)
-        assertEqual(self.arrow.year, 2013)
-
-    def test_day(self):
-
-        self.arrow.day = 2
-        assertEqual(self.arrow.day, 2)
-
-        self.arrow.day = -1
-        assertEqual(self.arrow.day, 30)
-        assertEqual(self.arrow.year, 2012)
-
-        self.arrow.day += 2
-        assertEqual(self.arrow.day, 1)
-        assertEqual(self.arrow.year, 2013)
-
-    def test_hour(self):
-
-        self.arrow.hour = 1
-        assertEqual(self.arrow.hour, 1)
-
-        self.arrow.hour = -1
-        assertEqual(self.arrow.hour, 23)
-        assertEqual(self.arrow.day, 31)
-
-        self.arrow.hour += 1
-        assertEqual(self.arrow.hour, 0)
-        assertEqual(self.arrow.day, 1)
-
-    def test_minute(self):
-
-        self.arrow.minute = 1
-        assertEqual(self.arrow.minute, 1)
-
-        self.arrow.minute = -1
-        assertEqual(self.arrow.minute, 59)
-        assertEqual(self.arrow.hour, 23)
-
-        self.arrow.minute += 1
-        assertEqual(self.arrow.minute, 0)
-        assertEqual(self.arrow.hour, 0)
-
-    def test_second(self):
-
-        self.arrow.second = 1
-        assertEqual(self.arrow.second, 1)
-
-        self.arrow.second = -1
-        assertEqual(self.arrow.second, 59)
-        assertEqual(self.arrow.minute, 59)
-
-        self.arrow.second += 1
-        assertEqual(self.arrow.second, 0)
-        assertEqual(self.arrow.minute, 0)
-
-    def test_microsecond(self):
-
-        self.arrow.microsecond = 1
-        assertEqual(self.arrow.microsecond, 1)
-
-        self.arrow.microsecond = -1
-        assertEqual(self.arrow.microsecond, 999999)
-        assertEqual(self.arrow.second, 59)
-
-        self.arrow.microsecond += 1
-        assertEqual(self.arrow.microsecond, 0)
-        assertEqual(self.arrow.second, 0)
 
     def test_tzinfo(self):
 
@@ -243,7 +151,7 @@ class ArrowComparisonTests(Chai):
     def setUp(self):
         super(ArrowComparisonTests, self).setUp()
 
-        self.arrow = arrow.Arrow.utcnow()
+        self.arrow = arrow.utcnow()
 
     def test_cmp_convert(self):
 
@@ -266,14 +174,13 @@ class ArrowComparisonTests(Chai):
 
     def test_gt(self):
 
-        arrow_cmp = self.arrow.clone()
-        self.arrow.minutes += 1
+        arrow_cmp = self.arrow.update(minutes=1)
 
         assertFalse(self.arrow > self.arrow)
         assertFalse(self.arrow > self.arrow.datetime)
         assertFalse(self.arrow > 'abc')
-        assertTrue(self.arrow > arrow_cmp)
-        assertTrue(self.arrow > arrow_cmp.datetime)
+        assertTrue(self.arrow < arrow_cmp)
+        assertTrue(self.arrow < arrow_cmp.datetime)
 
     def test_ge(self):
 
@@ -283,8 +190,7 @@ class ArrowComparisonTests(Chai):
 
     def test_lt(self):
 
-        arrow_cmp = self.arrow.clone()
-        arrow_cmp.minutes += 1
+        arrow_cmp = self.arrow.update(minutes=1)
 
         assertFalse(self.arrow < self.arrow)
         assertFalse(self.arrow < self.arrow.datetime)
@@ -496,6 +402,15 @@ class ArrowUpdateTests(Chai):
         assertEqual(arw.update(hours=1), arrow.get(2013, 5, 5, 13, 30, 45))
         assertEqual(arw.update(minutes=1), arrow.get(2013, 5, 5, 12, 31, 45))
         assertEqual(arw.update(seconds=1), arrow.get(2013, 5, 5, 12, 30, 46))
+
+    def test_update_tzinfo(self):
+
+        arw = arrow.get('US/Eastern')
+
+        result = arw.update(tzinfo=tz.gettz('US/Pacific'))
+
+        assertEqual(result, arrow.get(arw.datetime, tz.gettz('US/Pacific')))
+
 
 class ArrowRangeTests(Chai):
 
