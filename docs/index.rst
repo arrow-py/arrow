@@ -32,7 +32,7 @@ Key features
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization
+- Humanization, inluding i18n
 
 ------------
 Installation
@@ -50,16 +50,27 @@ Quickstart
 >>> utc = arrow.utcnow()
 >>> utc
 <Arrow [2013-05-07T03:56:38.560988+00:00]>
+>>>
 >>> utc.hours -=1
 >>> utc
 <Arrow [2013-05-07T02:56:38.560988+00:00]>
+>>>
 >>> local = utc.to('US/Pacific')
 >>> local
 <Arrow [2013-05-06T19:56:38.560988-07:00]>
+>>>
 >>> local.timestamp
 1367895398
+>>>
 >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
 '2013-05-06 19:56:38 -07:00'
+>>>
+>>> local.humanize()
+'an hour ago'
+>>>
+>>> local.humanize(locale='ko_kr')
+'1시간 전'
+
 
 ------------
 User's Guide

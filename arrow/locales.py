@@ -115,24 +115,24 @@ class GreekLocale(BasicLocale):
     }
 
 
-class RussianLocale(Locale):
+class PluralChangingLocale(Locale):
 
     intervals = {
-        'now': 'сейчас',
-        'seconds': 'несколько секунд',
-        'minute': 'минуту',
-        'minutes': ['минута', 'минуты', 'минут'],
-        'hour': 'час',
-        'hours': ['час', 'часа', 'часов'],
-        'day': 'день',
-        'days': ['день', 'дня', 'дней'],
-        'month': 'месяц',
-        'months': ['месяц', 'месяца', 'месяцев'],
-        'year': 'год',
-        'years': ['год', 'года', 'лет'],
+        'now': '',
+        'seconds': '',
+        'minute': '',
+        'minutes': '',
+        'hour': '',
+        'hours': '',
+        'day': '',
+        'days': '',
+        'month': '',
+        'months': '',
+        'year': '',
+        'years': '',
 
-        'past': '{0} назад',
-        'future': 'через {0}',
+        'past': '',
+        'future': '',
     }
 
     def _chose_plural(self, num, plurals):
@@ -167,6 +167,46 @@ class RussianLocale(Locale):
             expr = "{0} {1}".format(quantity, plural)
 
         return self.intervals['past'].format(expr) if past else self.intervals['future'].format(expr)
+
+
+class RussianLocale(PluralChangingLocale):
+    intervals = {
+        'now': 'сейчас',
+        'seconds': 'несколько секунд',
+        'minute': 'минуту',
+        'minutes': ['минута', 'минуты', 'минут'],
+        'hour': 'час',
+        'hours': ['час', 'часа', 'часов'],
+        'day': 'день',
+        'days': ['день', 'дня', 'дней'],
+        'month': 'месяц',
+        'months': ['месяц', 'месяца', 'месяцев'],
+        'year': 'год',
+        'years': ['год', 'года', 'лет'],
+
+        'past': '{0} назад',
+        'future': 'через {0}',
+    }
+
+
+class UkrainianLocale(PluralChangingLocale):
+    intervals = {
+        'now': 'зараз',
+        'seconds': 'кілька секунд',
+        'minute': 'хвилину',
+        'minutes': ['хвилина', 'хвилини', 'хвилин'],
+        'hour': 'годину',
+        'hours': ['година', 'години', 'годин'],
+        'day': 'день',
+        'days': ['день', 'дні', 'днів'],
+        'month': 'місяць',
+        'months': ['місяць', 'місяці', 'місяців'],
+        'year': 'рік',
+        'years': ['рік', 'роки', 'років'],
+
+        'past': '{0} тому',
+        'future': 'за {0}',
+    }
 
 
 class ChineseCNLocale(BasicLocale):
@@ -241,5 +281,7 @@ available_locales = {
     'zh_cn': ChineseCNLocale,
     'zh_tw': ChineseTWLocale,
     'ko': KoreanLocale,
-    'ko_kr': KoreanLocale
+    'ko_kr': KoreanLocale,
+    'ua': UkrainianLocale,
+    'uk_ua': UkrainianLocale,
 }

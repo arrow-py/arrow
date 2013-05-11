@@ -666,4 +666,3 @@ class Arrow(object):
 
     def strftime(self, format):
         return self._datetime.strftime(format)
-
