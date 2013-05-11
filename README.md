@@ -58,7 +58,7 @@ $ pip install arrow
 >>> local.humanize()
 'an hour ago'
 >>>
->>> locale.humanize(locale='ko_kr')
+>>> local.humanize(locale='ko_kr')
 '1시간 전'
 ```
 
