@@ -44,7 +44,7 @@ Quickstart
     >>> utc
     <Arrow [2013-05-11T21:23:58.970460+00:00]>
 
-    >>> utc = utc.update(hours=-1)
+    >>> utc = utc.replace(hours=-1)
     >>> utc
     <Arrow [2013-05-11T20:23:58.970460+00:00]>
 
