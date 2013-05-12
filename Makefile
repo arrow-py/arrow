@@ -1,4 +1,4 @@
-.PHONY: auto build test clean
+.PHONY: auto build test docs clean
 
 auto: build
 
@@ -9,6 +9,10 @@ build:
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests --all-modules --with-coverage arrow tests
+
+docs:
+	touch docs/index.rst
+	cd docs; make html
 
 clean:
 	rm -rf local

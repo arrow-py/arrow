@@ -14,7 +14,7 @@ def get(*args, **kwargs):
 
         >>> import arrow
 
-    **No** inputs to get **current UTC time**::
+    **No inputs** to get current UTC time::
 
         >>> arrow.get()
         <Arrow [2013-05-08T05:51:43.316458+00:00]>
@@ -23,13 +23,13 @@ def get(*args, **kwargs):
 
         >>> arrow.get(1367992474.293378)
         <Arrow [2013-05-08T05:54:34.293378+00:00]>
-        >>>
+
         >>> arrow.get(1367992474)
         <Arrow [2013-05-08T05:54:34+00:00]>
-        >>>
+
         >>> arrow.get('1367992474.293378')
         <Arrow [2013-05-08T05:54:34.293378+00:00]>
-        >>>
+
         >>> arrow.get('1367992474')
         <Arrow [2013-05-08T05:54:34+00:00]>
 
@@ -37,13 +37,13 @@ def get(*args, **kwargs):
 
         >>> arrow.get('local')
         <Arrow [2013-05-07T22:57:11.793643-07:00]>
-        >>>
+
         >>> arrow.get('US/Pacific')
         <Arrow [2013-05-07T22:57:15.609802-07:00]>
-        >>>
+
         >>> arrow.get('-07:00')
         <Arrow [2013-05-07T22:57:22.777398-07:00]>
-        >>>
+
         >>> arrow.get(tz.tzlocal())
         <Arrow [2013-05-07T22:57:28.484717-07:00]>
 
@@ -170,10 +170,13 @@ def now(tz=None):
         >>> import arrow
         >>> arrow.now()
         <Arrow [2013-05-07T22:19:11.363410-07:00]>
+
         >>> arrow.now('US/Pacific')
         <Arrow [2013-05-07T22:19:15.251821-07:00]>
+
         >>> arrow.now('+02:00')
         <Arrow [2013-05-08T07:19:25.618646+02:00]>
+
         >>> arrow.now('local')
         <Arrow [2013-05-07T22:19:39.130059-07:00]>
     '''

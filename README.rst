@@ -44,7 +44,7 @@ Get started
         >>> utc = arrow.utcnow()
         >>> utc
         <Arrow [2013-05-11T21:23:58.970460+00:00]>
-        >>>
+        >>>  
         >>> utc = utc.replace(hours=-1)
         >>> utc
         <Arrow [2013-05-11T20:23:58.970460+00:00]>
@@ -68,7 +68,7 @@ Get started
 Documentation
 -------------
 
-Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
+Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_.
 
 History
 -------

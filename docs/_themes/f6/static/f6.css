@@ -6,10 +6,6 @@
 
 /* -- page layout ----------------------------------------------------------- */
 
-div.highlight {
-    background: #f0f0f0
-}
-
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 16px;
@@ -240,6 +236,7 @@ hr {
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+    background: #f0f0f0 !important;
 }
 
 .highlighted {
@@ -253,7 +250,7 @@ pre {
     font-style: normal;
 	font-size: 0.9em;
     letter-spacing: 0.015em;
-    line-height: 120%;
+    line-height: 130%;
     padding: 0.7em;
 	white-space: pre-wrap;       /* css-3 */
 	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
