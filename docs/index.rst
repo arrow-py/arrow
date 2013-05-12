@@ -133,7 +133,6 @@ Arrow objects can be instantiated directly too, with the same arguments as a dat
     >>> arrow.Arrow(2013, 5, 5)
     <Arrow [2013-05-05T00:00:00+00:00]>
 
-
 Properties
 ==========
 
@@ -174,6 +173,27 @@ Call datetime functions that return properties:
 
     >>> a.time()
     datetime.time(4, 38, 15, 447644)
+
+Replace & shift
+===============
+
+Get a new :class:`Arrow <arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw
+    <Arrow [2013-05-12T03:29:35.334214+00:00]>
+
+    >>> arw.replace(hour=4, minute=40)
+    <Arrow [2013-05-12T04:40:35.334214+00:00]>
+
+Or, get one with attributes shifted forward or backward:
+
+.. code-block:: python
+
+    >>> arw.replace(hours=+4, minutes=-20)
+    <Arrow [2013-05-12T07:09:35.334214+00:00]>
 
 Format
 ======
@@ -240,7 +260,7 @@ Support for a growing number of locales (see `locales.py` for supported language
     'через 2 час(а,ов)'
 
 
-Ranges & Spans
+Ranges & spans
 ==============
 
 Get the timespan of any unit:
