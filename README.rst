@@ -18,7 +18,6 @@ Python's standard library and some other low-level modules offer complete functi
 - Time zones are explicit, naivete is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-
 Features
 --------
 
