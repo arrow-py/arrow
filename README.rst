@@ -48,7 +48,7 @@ Quickstart
         >>> utc
         <Arrow [2013-05-11T21:23:58.970460+00:00]>
         >>>
-        >>> utc = utc.update(hours=-1)
+        >>> utc = utc.replace(hours=-1)
         >>> utc
         <Arrow [2013-05-11T20:23:58.970460+00:00]>
         >>>
@@ -74,10 +74,11 @@ History
 - 0.3.0
 
   - Arrow objects are no longer mutable
-  - Arrow.update method
+  - Arrow.replace method
   - Plural attribute name semantics altered: single -> absolute, plural -> relative
   - Plural names no longer supported as properties (e.g. arrow.utcnow().years)
   - Limit parameters are respected in range and span_range
+  - Accept timestamps, datetimes and Arrows for datetime inputs, where reasonable
 
 - 0.2.1
 
