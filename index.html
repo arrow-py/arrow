@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Arrow: better dates and times for Python &mdash; Arrow 0.2.0 documentation</title>
+    <title>Arrow: better dates and times for Python &mdash; Arrow 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +13,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Arrow 0.2.0 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <link rel="top" title="Arrow 0.3.0 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
   </head>
   <body>
       <div class="sphinxsidebar">
@@ -40,7 +40,6 @@
 <li><a class="reference internal" href="#">Arrow:  better dates and times for Python</a><ul>
 <li><a class="reference internal" href="#why">Why?</a></li>
 <li><a class="reference internal" href="#key-features">Key features</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a><ul>
 <li><a class="reference internal" href="#creation">Creation</a></li>
@@ -81,7 +80,7 @@
             
   <div class="section" id="arrow-better-dates-and-times-for-python">
 <h1>Arrow:  better dates and times for Python<a class="headerlink" href="#arrow-better-dates-and-times-for-python" title="Permalink to this headline">¶</a></h1>
-<p>Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  It is lightweight, Apache-licensed and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment/">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+<p>Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
 <div class="section" id="why">
 <h2>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h2>
 <p>Python&#8217;s standard library, and some other low-level modules, offer complete functionality but don&#8217;t work very well from a usability perspective:</p>
@@ -98,44 +97,41 @@
 <li>Implements the datetime interface</li>
 <li>TZ-aware &amp; UTC by default</li>
 <li>Concise, intelligent interface for creation</li>
-<li>Attribute manipulation, plural names</li>
+<li>Easily replace and shift attributes</li>
 <li>Rich parsing &amp; formatting options</li>
 <li>Timezone conversion</li>
 <li>Simple timestamp handling</li>
 <li>Time spans, ranges, floors and ceilings</li>
-<li>Humanization, inluding i18n</li>
+<li>Humanization, with support for a growing number of locales</li>
 </ul>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install arrow
-</pre></div>
-</div>
 </div>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install arrow
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
-<span class="go">&lt;Arrow [2013-05-07T03:56:38.560988+00:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">hours</span> <span class="o">-=</span><span class="mi">1</span>
+<span class="go">&lt;Arrow [2013-05-11T21:23:58.970460+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">utc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hours</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
-<span class="go">&lt;Arrow [2013-05-07T02:56:38.560988+00:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&lt;Arrow [2013-05-11T20:23:58.970460+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span> <span class="o">=</span> <span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span>
-<span class="go">&lt;Arrow [2013-05-06T19:56:38.560988-07:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&lt;Arrow [2013-05-11T13:23:58.970460-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">timestamp</span>
-<span class="go">1367895398</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="go">1368303838</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
-<span class="go">&#39;2013-05-06 19:56:38 -07:00&#39;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&#39;2013-05-11 13:23:58 -07:00&#39;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
 <span class="go">&#39;an hour ago&#39;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">locale</span><span class="o">=</span><span class="s">&#39;ko_kr&#39;</span><span class="p">)</span>
 <span class="go">&#39;1시간 전&#39;</span>
 </pre></div>
@@ -148,26 +144,38 @@
 <p>Get &#8216;now&#8217; easily:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="go">&lt;Arrow [2013-05-07T04:20:39.369271+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="go">&lt;Arrow [2013-05-06T21:20:40.841085-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-06T21:20:44.761511-07:00]&gt;</span>
 </pre></div>
 </div>
-<p>Create from timestamps (ints or floats, or strings that parse as either):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
-<span class="go">&lt;Arrow [2013-05-07T04:24:04.616438+00:00]&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
-<span class="go">&lt;Arrow [2013-05-07T04:24:12.690000+00:00]&gt;</span>
+<p>Create from timestamps (ints or floats, or strings that convert to a float):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1367900664</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T04:24:24+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367900664&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T04:24:24+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">1367900664.152325</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T04:24:24.152325+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367900664.152325&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-07T04:24:24.152325+00:00]&gt;</span>
 </pre></div>
 </div>
 <p>Use a datetime, a timezone-aware datetime, a tzinfo or a timezone string:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span>
 <span class="go">&lt;Arrow [2013-05-07T04:24:24.152325+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-06T21:24:32.736373-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">))</span>
 <span class="go">&lt;Arrow [2013-05-06T21:24:41.129262-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)))</span>
 <span class="go">&lt;Arrow [2013-05-06T21:24:49.552236-07:00]&gt;</span>
 </pre></div>
@@ -180,6 +188,7 @@
 <p>Arrow objects can be instantiated directly too, with the same arguments as a datetime:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T00:00:00+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T00:00:00+00:00]&gt;</span>
 </pre></div>
@@ -191,6 +200,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">datetime</span>
 <span class="go">datetime.datetime(2013, 5, 7, 4, 38, 15, 447644, tzinfo=tzutc())</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">timestamp</span>
 <span class="go">1367901495</span>
 </pre></div>
@@ -198,29 +208,20 @@
 <p>Get a naive datetime, and tzinfo:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">naive</span>
 <span class="go">datetime.datetime(2013, 5, 7, 4, 38, 15, 447644)</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">tzinfo</span>
 <span class="go">tzutc()</span>
 </pre></div>
 </div>
-<p>Get values by single or plural name:</p>
+<p>Get any datetime value:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">year</span>
 <span class="go">2013</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">years</span>
-<span class="go">2013</span>
 </pre></div>
 </div>
-<p>Set values by the same single or plural names:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hours</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hours</span>
-<span class="go">5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hour</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hour</span>
-<span class="go">6</span>
-</pre></div>
-</div>
-<p>Get datetime properties:</p>
+<p>Call datetime functions that return properties:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
 <span class="go">datetime.date(2013, 5, 7)</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="go">datetime.time(4, 38, 15, 447644)</span>
 </pre></div>
@@ -239,8 +240,10 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span>
 <span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">))</span>
 <span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
 </pre></div>
@@ -248,6 +251,7 @@
 <p>Or using shorthand:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-06T22:24:11.823627-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;utc&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T05:24:11.823627+00:00]&gt;</span>
 </pre></div>
@@ -256,23 +260,21 @@
 <div class="section" id="humanize">
 <h3>Humanize<a class="headerlink" href="#humanize" title="Permalink to this headline">¶</a></h3>
 <p>Humanize relative to now:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">hours</span> <span class="o">-=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">past</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hours</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">past</span><span class="o">.</span><span class="n">humanize</span><span class="p">()</span>
 <span class="go">&#39;an hour ago&#39;</span>
 </pre></div>
 </div>
 <p>Or another Arrow, or datetime:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">hours</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">present</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">future</span> <span class="o">=</span> <span class="n">present</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">future</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">present</span><span class="p">)</span>
 <span class="go">&#39;in 2 hours&#39;</span>
 </pre></div>
 </div>
-<p>Basic localisations, currently experimental (see <cite>locales.py</cite> for supported languages):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">hours</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">locale</span><span class="o">=</span><span class="s">&#39;ru&#39;</span><span class="p">)</span>
+<p>Support for a growing number of locales (see <cite>locales.py</cite> for supported languages):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">future</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">future</span><span class="o">.</span><span class="n">humanize</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">locale</span><span class="o">=</span><span class="s">&#39;ru&#39;</span><span class="p">)</span>
 <span class="go">&#39;через 2 час(а,ов)&#39;</span>
 </pre></div>
 </div>
@@ -287,6 +289,7 @@
 <p>Or just get the floor and ceiling:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T05:00:00+00:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;</span>
 </pre></div>
@@ -333,7 +336,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
 </pre></div>
 </div>
-<p><strong>No</strong> inputs to get <strong>current UTC time</strong>:</p>
+<p><strong>No inputs</strong> to get current UTC time:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 <span class="go">&lt;Arrow [2013-05-08T05:51:43.316458+00:00]&gt;</span>
 </pre></div>
@@ -341,13 +344,13 @@
 <p><strong>One str</strong>, <strong>float</strong>, or <strong>int</strong>, convertible to a floating-point timestamp, to get that timestamp in UTC:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">1367992474.293378</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T05:54:34.293378+00:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1367992474</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T05:54:34+00:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367992474.293378&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T05:54:34.293378+00:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;1367992474&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T05:54:34+00:00]&gt;</span>
 </pre></div>
@@ -355,13 +358,13 @@
 <p><strong>One str</strong>, convertible to a timezone, or <strong>tzinfo</strong>, to get the current time in that timezone:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T22:57:11.793643-07:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T22:57:15.609802-07:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-07:00&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T22:57:22.777398-07:00]&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
 <span class="go">&lt;Arrow [2013-05-07T22:57:28.484717-07:00]&gt;</span>
 </pre></div>
@@ -430,10 +433,13 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="go">&lt;Arrow [2013-05-07T22:19:11.363410-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T22:19:15.251821-07:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="s">&#39;+02:00&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T07:19:25.618646+02:00]&gt;</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-07T22:19:39.130059-07:00]&gt;</span>
 </pre></div>
@@ -523,6 +529,174 @@ additional functionality.</p>
 </table>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="arrow.Arrow.fromdatetime">
+<em class="property">classmethod </em><tt class="descname">fromdatetime</tt><big>(</big><em>dt</em>, <em>tzinfo=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.fromdatetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object from a <strong>datetime</strong> and optional
+<strong>tzinfo</strong> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dt</strong> &#8211; the <strong>datetime</strong></li>
+<li><strong>tzinfo</strong> &#8211; (optional) a <strong>tzinfo</strong> object.  Defaults to UTC</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="arrow.Arrow.fromdate">
+<em class="property">classmethod </em><tt class="descname">fromdate</tt><big>(</big><em>date</em>, <em>tzinfo=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.fromdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object from a <strong>date</strong> and optional
+<strong>tzinfo</strong> object.  Time values are set to 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>date</strong> &#8211; the <strong>date</strong></li>
+<li><strong>tzinfo</strong> &#8211; (optional) a <strong>tzinfo</strong> object.  Defaults to UTC</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="arrow.Arrow.strptime">
+<em class="property">classmethod </em><tt class="descname">strptime</tt><big>(</big><em>date_str</em>, <em>fmt</em>, <em>tzinfo=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.strptime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs an <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object from a date string and format,
+in the style of <strong>datetime</strong>.strptime().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>date_str</strong> &#8211; the date string.</li>
+<li><strong>fmt</strong> &#8211; the format string.</li>
+<li><strong>tzinfo</strong> &#8211; (optional) an optional <strong>tzinfo</strong></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="arrow.Arrow.range">
+<em class="property">classmethod </em><tt class="descname">range</tt><big>(</big><em>frame</em>, <em>start</em>, <em>end=None</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
+an iteration of time between two inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</li>
+<li><strong>start</strong> &#8211; A datetime expression, the start of the range.</li>
+<li><strong>end</strong> &#8211; (optional) A datetime expression, the end of the range.</li>
+<li><strong>tz</strong> &#8211; (optional) A timezone expression.  Defaults to UTC.</li>
+<li><strong>limit</strong> &#8211; (optional) A maximum number of tuples to return.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE</strong>: the <strong>end</strong> or <strong>limit</strong> must be provided.  Call with <strong>end</strong> alone to
+return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the start,
+and with both to cap a range at a maximum # of results.</p>
+<p>Recognized datetime expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>An <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object</li>
+<li>A <strong>datetime</strong> object</li>
+<li>A timestamp, as an <strong>int</strong>, <strong>float</strong>, or <strong>str</strong> that converts to one</li>
+</ul>
+</div></blockquote>
+<p>Recognized timezone expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
+</ul>
+</div></blockquote>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">&lt;Arrow [2013-05-05T12:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T13:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T14:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T15:30:00+00:00]&gt;</span>
+<span class="go">&lt;Arrow [2013-05-05T16:30:00+00:00]&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="arrow.Arrow.span_range">
+<em class="property">classmethod </em><tt class="descname">span_range</tt><big>(</big><em>frame</em>, <em>start</em>, <em>end</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.span_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of tuples, each <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
+a series of timespans between two inputs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</li>
+<li><strong>start</strong> &#8211; A datetime expression, the start of the range.</li>
+<li><strong>end</strong> &#8211; (optional) A datetime expression, the end of the range.</li>
+<li><strong>tz</strong> &#8211; (optional) A timezone expression.  Defaults to UTC.</li>
+<li><strong>limit</strong> &#8211; (optional) A maximum number of tuples to return.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE</strong>: the <strong>end</strong> or <strong>limit</strong> must be provided.  Call with <strong>end</strong> alone to
+return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the start,
+and with both to cap a range at a maximum # of results.</p>
+<p>Recognized datetime expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>An <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object</li>
+<li>A <strong>datetime</strong> object</li>
+<li>A timestamp, as an <strong>int</strong>, <strong>float</strong>, or <strong>str</strong> that converts to one</li>
+</ul>
+</div></blockquote>
+<p>Recognized timezone expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
+</ul>
+</div></blockquote>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">span_range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">r</span>
+<span class="gp">...</span>
+<span class="go">(&lt;Arrow [2013-05-05T12:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T12:59:59.999999+00:00]&gt;)</span>
+<span class="go">(&lt;Arrow [2013-05-05T13:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T13:59:59.999999+00:00]&gt;)</span>
+<span class="go">(&lt;Arrow [2013-05-05T14:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T14:59:59.999999+00:00]&gt;)</span>
+<span class="go">(&lt;Arrow [2013-05-05T15:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T15:59:59.999999+00:00]&gt;)</span>
+<span class="go">(&lt;Arrow [2013-05-05T16:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T16:59:59.999999+00:00]&gt;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="arrow.Arrow.tzinfo">
 <tt class="descname">tzinfo</tt><a class="headerlink" href="#arrow.Arrow.tzinfo" title="Permalink to this definition">¶</a></dt>
@@ -556,6 +730,40 @@ additional functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cloned</span> <span class="o">=</span> <span class="n">arw</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="arrow.Arrow.replace">
+<tt class="descname">replace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#arrow.Arrow.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object with attributes updated according to inputs.</p>
+<p>Use single property names to set their value absolutely:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span>
+<span class="go">&lt;Arrow [2013-05-11T22:27:34.787885+00:00]&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2014</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2014-06-11T22:27:34.787885+00:00]&gt;</span>
+</pre></div>
+</div>
+<p>Use plural property names to shift their current value relatively:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">years</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">months</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2014-04-11T22:27:34.787885+00:00]&gt;</span>
+</pre></div>
+</div>
+<p>You can also provide a tzimezone expression can also be replaced:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
+<span class="go">&lt;Arrow [2013-05-11T22:27:34.787885-07:00]&gt;</span>
+</pre></div>
+</div>
+<p>Recognized timezone expressions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <strong>tzinfo</strong> object</li>
+<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
+<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
+<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -625,98 +833,6 @@ of the <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">)</span>
 <span class="go">(&lt;Arrow [2013-05-09T00:00:00+00:00]&gt;, &lt;Arrow [2013-05-09T23:59:59.999999+00:00]&gt;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="arrow.Arrow.range">
-<em class="property">classmethod </em><tt class="descname">range</tt><big>(</big><em>frame</em>, <em>since</em>, <em>until</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an array of <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
-an iteration of time between two inputs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</li>
-<li><strong>since</strong> &#8211; the start of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
-<li><strong>until</strong> &#8211; the end of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
-<li><strong>tz</strong> &#8211; (optional) A timezone expression.  Defaults to UTC.</li>
-<li><strong>limit</strong> &#8211; (optional) A maximum number of tuples to return.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p><em>TODO:  support timestamps as inputs for since / until</em>
-<em>TODO:  respect limit parameter</em></p>
-<p>Recognized timezone expressions:</p>
-<blockquote>
-<div><ul class="simple">
-<li>A <strong>tzinfo</strong> object</li>
-<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
-<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
-<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
-</ul>
-</div></blockquote>
-<p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="gp">...</span>
-<span class="go">&lt;Arrow [2013-05-05T12:30:00+00:00]&gt;</span>
-<span class="go">&lt;Arrow [2013-05-05T13:30:00+00:00]&gt;</span>
-<span class="go">&lt;Arrow [2013-05-05T14:30:00+00:00]&gt;</span>
-<span class="go">&lt;Arrow [2013-05-05T15:30:00+00:00]&gt;</span>
-<span class="go">&lt;Arrow [2013-05-05T16:30:00+00:00]&gt;</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="arrow.Arrow.span_range">
-<em class="property">classmethod </em><tt class="descname">span_range</tt><big>(</big><em>frame</em>, <em>since</em>, <em>until</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.Arrow.span_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an array of tuples, each <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
-a series of timeframes between two inputs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>frame</strong> &#8211; the timeframe.  Can be any <strong>datetime</strong> property (day, hour, minute...).</li>
-<li><strong>since</strong> &#8211; the start of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
-<li><strong>until</strong> &#8211; the end of the range.  <strong>datetime</strong> or <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
-<li><strong>tz</strong> &#8211; (optional) A timezone expression.  Defaults to UTC.</li>
-<li><strong>limit</strong> &#8211; (optional) A maximum number of tuples to return.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p><em>TODO:  support timestamps as inputs for since / until</em>
-<em>TODO:  respect limit parameter</em></p>
-<p>Recognized timezone expressions:</p>
-<blockquote>
-<div><ul class="simple">
-<li>A <strong>tzinfo</strong> object</li>
-<li>A <strong>str</strong> describing a timezone, similar to &#8220;US/Pacific&#8221;, or &#8220;Europe/Berlin&#8221;</li>
-<li>A <strong>str</strong> in ISO-8601 style, as in &#8220;+07:00&#8221;</li>
-<li>A <strong>str</strong>, one of the following:  <em>local</em>, <em>utc</em>, <em>UTC</em></li>
-</ul>
-</div></blockquote>
-<p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">arrow</span><span class="o">.</span><span class="n">Arrow</span><span class="o">.</span><span class="n">span_range</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">r</span>
-<span class="gp">...</span>
-<span class="go">(&lt;Arrow [2013-05-05T12:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T12:59:59.999999+00:00]&gt;)</span>
-<span class="go">(&lt;Arrow [2013-05-05T13:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T13:59:59.999999+00:00]&gt;)</span>
-<span class="go">(&lt;Arrow [2013-05-05T14:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T14:59:59.999999+00:00]&gt;)</span>
-<span class="go">(&lt;Arrow [2013-05-05T15:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T15:59:59.999999+00:00]&gt;)</span>
-<span class="go">(&lt;Arrow [2013-05-05T16:00:00+00:00]&gt;, &lt;Arrow [2013-05-05T16:59:59.999999+00:00]&gt;)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -845,7 +961,7 @@ formatted according to a format string.</p>
         <li class="right" style="margin-right: 10px">
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a></li>
-        <li><a href="#">Arrow 0.2.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Arrow 0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
