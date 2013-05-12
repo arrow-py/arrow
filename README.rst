@@ -17,26 +17,6 @@ Python's standard library and some other low-level modules offer complete functi
 - Time zones are explicit, naivete is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-Features
---------
-
-- Implements the datetime interface
-- TZ-aware & UTC by default
-- Concise, intelligent interface for creation
-- Add and subtract absolute and relative values
-- Rich parsing & formatting options
-- Timezone conversion
-- Simple timestamp handling
-- Time spans, ranges, floors and ceilings
-- Humanization, with support for a growing number of locales
-
-Installation
-------------
-
-.. code-block:: bash
-
-        $ pip install arrow
-
 Quickstart
 ----------
 
@@ -66,6 +46,27 @@ Quickstart
         >>>
         >>> local.humanize(locale='ko_kr')
         '1시간 전'
+
+Features
+--------
+
+- Implements the datetime interface
+- TZ-aware & UTC by default
+- Concise, intelligent interface for creation
+- Add and subtract absolute and relative values
+- Rich parsing & formatting options
+- Timezone conversion
+- Simple timestamp handling
+- Time spans, ranges, floors and ceilings
+- Humanization, with support for a growing number of locales
+
+Installation
+------------
+
+.. code-block:: bash
+
+        $ pip install arrow
+
 
 Documentation
 -------------
