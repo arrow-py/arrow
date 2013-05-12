@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 def get_locale_by_name(locale_name):
     '''Returns an appropriate :class:`Locale <locale.Locale>` corresponding
     to an inpute locale name.

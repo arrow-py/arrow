@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from arrow import Arrow
 import parser
 
