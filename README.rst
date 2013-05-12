@@ -25,7 +25,7 @@ Features
 - Implements the datetime interface
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
-- Add and subtract absolute and relative values
+- Easily replace and shift attributes
 - Rich parsing & formatting options
 - Timezone conversion
 - Simple timestamp handling
