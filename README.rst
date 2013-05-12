@@ -29,7 +29,7 @@ Features
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization
+- Humanization, with support for a growing number of locales
 
 Installation
 ------------

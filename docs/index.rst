@@ -1,13 +1,8 @@
-.. Arrow documentation master file, created by
-   sphinx-quickstart on Mon May  6 15:25:39 2013.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 =========================================
 Arrow:  better dates and times for Python
 =========================================
 
-Arrow is a module for Python that provides a sensible way of creating, manipulating, formatting and converting dates and times.  It is lightweight, Apache-licensed and heavily inspired by `moment.js <https://github.com/timrwood/moment/>`_ and `requests <https://github.com/kennethreitz/requests>`_.
+Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
 
 ----
 Why?
@@ -32,7 +27,7 @@ Key features
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization, with support for a growing list of locales
+- Humanization, with support for a growing number of locales
 
 ------------
 Installation
@@ -46,31 +41,32 @@ Installation
 Quickstart
 ----------
 
->>> import arrow
->>> utc = arrow.utcnow()
->>> utc
-<Arrow [2013-05-07T03:56:38.560988+00:00]>
->>>
->>> utc = utc.update(hours=-1)
->>> utc
-<Arrow [2013-05-07T02:56:38.560988+00:00]>
->>>
->>> local = utc.to('US/Pacific')
->>> local
-<Arrow [2013-05-06T19:56:38.560988-07:00]>
->>>
->>> local.timestamp
-1367895398
->>>
->>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
-'2013-05-06 19:56:38 -07:00'
->>>
->>> local.humanize()
-'an hour ago'
->>>
->>> local.humanize(locale='ko_kr')
-'1시간 전'
+.. code-block:: python
 
+        >>> import arrow
+        >>> utc = arrow.utcnow()
+        >>> utc
+        <Arrow [2013-05-11T21:23:58.970460+00:00]>
+        >>>
+        >>> utc = utc.update(hours=-1)
+        >>> utc
+        <Arrow [2013-05-11T20:23:58.970460+00:00]>
+        >>>
+        >>> local = utc.to('US/Pacific')
+        >>> local
+        <Arrow [2013-05-11T13:23:58.970460-07:00]>
+        >>>
+        >>> local.timestamp
+        1368303838
+        >>>
+        >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
+        '2013-05-11 13:23:58 -07:00'
+        >>>
+        >>> local.humanize()
+        'an hour ago'
+        >>>
+        >>> local.humanize(locale='ko_kr')
+        '1시간 전'
 
 ------------
 User's Guide
