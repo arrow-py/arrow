@@ -44,10 +44,11 @@
 <li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a><ul>
 <li><a class="reference internal" href="#creation">Creation</a></li>
 <li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#replace-shift">Replace &amp; shift</a></li>
 <li><a class="reference internal" href="#format">Format</a></li>
 <li><a class="reference internal" href="#convert">Convert</a></li>
 <li><a class="reference internal" href="#humanize">Humanize</a></li>
-<li><a class="reference internal" href="#ranges-spans">Ranges &amp; Spans</a><ul>
+<li><a class="reference internal" href="#ranges-spans">Ranges &amp; spans</a><ul>
 </ul>
 </li>
 </ul>
@@ -227,6 +228,23 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="replace-shift">
+<h3>Replace &amp; shift<a class="headerlink" href="#replace-shift" title="Permalink to this headline">¶</a></h3>
+<p>Get a new <a class="reference internal" href="#arrow.Arrow" title="arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, with altered attributes, just as you would with a datetime:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span>
+<span class="go">&lt;Arrow [2013-05-12T03:29:35.334214+00:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-12T04:40:35.334214+00:00]&gt;</span>
+</pre></div>
+</div>
+<p>Or, get one with attributes shifted forward or backward:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hours</span><span class="o">=+</span><span class="mi">4</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-12T07:09:35.334214+00:00]&gt;</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="format">
 <h3>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;YYYY-MM-DD HH:mm:ss ZZ&#39;</span><span class="p">)</span>
@@ -280,7 +298,7 @@
 </div>
 </div>
 <div class="section" id="ranges-spans">
-<h3>Ranges &amp; Spans<a class="headerlink" href="#ranges-spans" title="Permalink to this headline">¶</a></h3>
+<h3>Ranges &amp; spans<a class="headerlink" href="#ranges-spans" title="Permalink to this headline">¶</a></h3>
 <p>Get the timespan of any unit:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">)</span>
 <span class="go">(&lt;Arrow [2013-05-07T05:00:00+00:00]&gt;, &lt;Arrow [2013-05-07T05:59:59.999999+00:00]&gt;)</span>
