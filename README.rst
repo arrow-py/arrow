@@ -4,7 +4,6 @@ Arrow - Better dates & times for Python
 .. image:: https://travis-ci.org/crsmithdev/arrow.png
         :target: https://travis-ci.org/crsmithdev/arrow
 
-**See documentation at:** `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
 
 Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
 
@@ -67,6 +66,11 @@ Quickstart
         >>>
         >>> local.humanize(locale='ko_kr')
         '1시간 전'
+
+Documentation
+-------------
+
+Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
 
 History
 -------
