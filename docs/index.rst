@@ -27,12 +27,12 @@ Key features
 - Implements the datetime interface
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
-- Attribute manipulation, plural names
+- Add and subtract absolute and relative values
 - Rich parsing & formatting options
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization, inluding i18n
+- Humanization, with support for a growing list of locales
 
 ------------
 Installation
@@ -51,7 +51,7 @@ Quickstart
 >>> utc
 <Arrow [2013-05-07T03:56:38.560988+00:00]>
 >>>
->>> utc.hours -=1
+>>> utc = utc.update(hours=-1)
 >>> utc
 <Arrow [2013-05-07T02:56:38.560988+00:00]>
 >>>
@@ -88,12 +88,16 @@ Get 'now' easily:
 >>> arrow.now('US/Pacific')
 <Arrow [2013-05-06T21:20:44.761511-07:00]>
 
-Create from timestamps (ints or floats, or strings that parse as either):
+Create from timestamps (ints or floats, or strings that convert to a float):
 
->>> arrow.get(time.time())
-<Arrow [2013-05-07T04:24:04.616438+00:00]>
->>> arrow.get(str(time.time()))
-<Arrow [2013-05-07T04:24:12.690000+00:00]>
+>>> arrow.get(1367900664)
+<Arrow [2013-05-07T04:24:24+00:00]>
+>>> arrow.get('1367900664')
+<Arrow [2013-05-07T04:24:24+00:00]>
+>>> arrow.get(1367900664.152325)
+<Arrow [2013-05-07T04:24:24.152325+00:00]>
+>>> arrow.get('1367900664.152325')
+<Arrow [2013-05-07T04:24:24.152325+00:00]>
 
 Use a datetime, a timezone-aware datetime, a tzinfo or a timezone string:
 
@@ -137,23 +141,12 @@ datetime.datetime(2013, 5, 7, 4, 38, 15, 447644)
 >>> a.tzinfo
 tzutc()
 
-Get values by single or plural name:
+Get any datetime value:
 
 >>> a.year
 2013
->>> a.years
-2013
 
-Set values by the same single or plural names:
-
->>> a.hours += 1
->>> a.hours
-5
->>> a.hour += 1
->>> a.hour
-6
-
-Get datetime properties:
+Call datetime functions that return properties:
 
 >>> a.date()
 datetime.date(2013, 5, 7)
@@ -204,7 +197,7 @@ Or another Arrow, or datetime:
 >>> b.humanize(a)
 'in 2 hours'
 
-Basic localisations, currently experimental (see `locales.py` for supported languages):
+Support for a growing number of locales (see `locales.py` for supported languages):
 
 >>> b = arrow.utcnow()
 >>> b.hours += 1

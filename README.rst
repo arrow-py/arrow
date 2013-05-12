@@ -1,13 +1,15 @@
-# Arrow - Better dates & times for Python
-[![Build Status](https://travis-ci.org/crsmithdev/arrow.png)](https://travis-ci.org/crsmithdev/arrow)
+Arrow - Better dates & times for Python
+=======================================
 
-### See documentation at:  [crsmithdev.com/arrow](http://crsmithdev.com/arrow)
+.. image:: https://travis-ci.org/crsmithdev/arrow.png
+        :target https://travis-ci.org/crsmithdev/arrow
 
-## Overview
+See documentation at: `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
 
 Arrow is a Python module that offers a smooth, sensible way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment/) and [requests](https://github.com/kennethreitz/requests).
 
-## Why?
+Why?
+----
 
 Python's standard library and some other low-level modules offer complete functionality but don't work very well from a usability perspective:
 
@@ -16,7 +18,8 @@ Python's standard library and some other low-level modules offer complete functi
 * Time zones are explicit, naivete is the norm
 * Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-## Key features
+Key features
+------------
 
 * Implements the datetime interface
 * TZ-aware & UTC by default
@@ -28,12 +31,15 @@ Python's standard library and some other low-level modules offer complete functi
 * Time spans, ranges, floors and ceilings
 * Humanization
 
-## Installation
+Installation
+------------
+
 ```bash
 $ pip install arrow
 ```
 
-## Quickstart
+Quickstart
+----------
 ```python
 
 >>> import arrow
@@ -63,7 +69,13 @@ $ pip install arrow
 ```
 
 Changelog
-=========
+---------
+
+* 0.3.0
+  * Arrow objects are no longer mutable
+  * Arrow.update method
+  * Plural attribute name semantics altered: single -> absolute, plural -> relative
+  * Plural names no longer supported as properties (e.g. arrow.utcnow().years)
 
 * 0.2.1
   * Support for localized humanization
