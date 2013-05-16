@@ -73,6 +73,10 @@ Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow
 History
 -------
 
+- 0.3.1
+
+  - Fix for incorrect timestamp handling in old arrow function (for old API compatibility)
+
 - 0.3.0
 
   - Arrow objects are no longer mutable

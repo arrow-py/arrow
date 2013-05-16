@@ -204,7 +204,7 @@ def arrow(date=None, tz=None):
                 pass
 
             if isinstance(date, (float, int)):
-                return Arrow.fromtimestamp(date)
+                return Arrow.utcfromtimestamp(date)
 
             return Arrow.fromdatetime(date)
 

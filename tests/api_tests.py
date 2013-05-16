@@ -6,6 +6,7 @@ import time
 from arrow import api
 
 def assertDtEqual(dt1, dt2, within=10):
+    assertEqual(dt1.tzinfo, dt2.tzinfo)
     assertTrue(abs((dt1 - dt2).total_seconds()) < within)
 
 
@@ -141,4 +142,7 @@ class ArrowTests(Chai):
 
         timestamp = int(time.time())
 
-        result = api.arrow(timestamp)
+        result = api.arrow(time.time())
+
+        assertDtEqual(result, api.utcnow())
+
