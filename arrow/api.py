@@ -201,9 +201,15 @@ def arrow(date=None, tz=None):
                 tz = parser.TzinfoParser.parse(date)
                 return now(tz)
             except:
-                return Arrow.fromdatetime(date)
+                pass
+
+            if isinstance(date, (float, int)):
+                return Arrow.fromtimestamp(date)
+
+            return Arrow.fromdatetime(date)
 
         else:
+
             tz = parser.TzinfoParser.parse(tz)
             return Arrow.fromdatetime(date, tz)
 

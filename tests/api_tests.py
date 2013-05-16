@@ -136,3 +136,9 @@ class ArrowTests(Chai):
         result = api.arrow(datetime(2013, 1, 1), 'local')
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzlocal()))
+
+    def test_int(self):
+
+        timestamp = int(time.time())
+
+        result = api.arrow(timestamp)
