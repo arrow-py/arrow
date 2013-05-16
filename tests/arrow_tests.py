@@ -11,6 +11,7 @@ import sys
 import arrow
 
 def assertDtEqual(dt1, dt2, within=10):
+    assertEqual(dt1.tzinfo, dt2.tzinfo)
     assertTrue(abs((dt1 - dt2).total_seconds()) < within)
 
 
