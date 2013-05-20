@@ -73,6 +73,10 @@ Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow
 History
 -------
 
+- 0.3.2
+
+  - Python 3.0 support / fixes
+
 - 0.3.1
 
   - Fix for incorrect timestamp handling in old arrow function (for old API compatibility)
