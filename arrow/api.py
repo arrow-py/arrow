@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 from arrow import Arrow
-import parser
+import arrow.parser as parser
 
 from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
