@@ -571,19 +571,19 @@ class Arrow(object):
         elif delta < 90:
             return act_locale.format_humanize(0, 'minute', past)
         elif delta < 2700:
-            minutes = max(delta / 60, 2)
+            minutes = int(max(delta / 60, 2))
             return act_locale.format_humanize(minutes, 'minutes', past)
 
         elif delta < 5400:
             return act_locale.format_humanize(0, 'hour', past)
         elif delta < 79200:
-            hours = max(delta / 3600, 2)
+            hours = int(max(delta / 3600, 2))
             return act_locale.format_humanize(hours, 'hours', past)
 
         elif delta < 129600:
             return act_locale.format_humanize(0, 'day', past)
         elif delta < 2160000:
-            days = max(delta / 86400, 2)
+            days = int(max(delta / 86400, 2))
             return act_locale.format_humanize(days, 'days', past)
 
         elif delta < 3888000:
@@ -595,7 +595,7 @@ class Arrow(object):
         elif delta < 47260800:
             return act_locale.format_humanize(0, 'year', past)
         else:
-            years = max(delta / 31536000, 2)
+            years = int(max(delta / 31536000, 2))
             return act_locale.format_humanize(years, 'years', past)
 
 
