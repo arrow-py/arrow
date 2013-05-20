@@ -82,7 +82,7 @@ class DateTimeFormatter(object):
         if token in ['ZZ', 'Z']:
             separator = ':' if token == 'ZZ' else ''
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
-            total_minutes = int(tz.utcoffset(dt).total_seconds()) / 60
+            total_minutes = int(int(tz.utcoffset(dt).total_seconds()) / 60)
 
             sign = '-' if total_minutes > 0 else '-'
             total_minutes = abs(total_minutes)
