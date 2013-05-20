@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as dateutil_tz
@@ -6,9 +7,9 @@ from dateutil.relativedelta import relativedelta
 import calendar
 import sys
 
-import parser
-import formatter
-import locales
+import arrow.parser as parser
+import arrow.formatter as formatter
+import arrow.locales as locales
 
 
 class Arrow(object):
@@ -396,7 +397,7 @@ class Arrow(object):
         absolute_kwargs = {}
         relative_kwargs = {}
 
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
@@ -663,9 +664,6 @@ class Arrow(object):
         return self._datetime < self._get_datetime(other)
 
     def __le__(self, other):
-
-        print self
-        print other
 
         if not isinstance(other, (Arrow, datetime)):
             return False
