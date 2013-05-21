@@ -4,10 +4,12 @@ from dateutil import tz
 import time
 
 from arrow import api
+from arrow.compat26 import get_total_seconds
+
 
 def assertDtEqual(dt1, dt2, within=10):
     assertEqual(dt1.tzinfo, dt2.tzinfo)
-    assertTrue(abs((dt1 - dt2).total_seconds()) < within)
+    assertTrue(abs(get_total_seconds(dt1 - dt2)) < within)
 
 
 class GetTests(Chai):
