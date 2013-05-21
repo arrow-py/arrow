@@ -3,11 +3,15 @@
 from datetime import datetime
 from dateutil import tz
 
+from const import MONTH_VALUE_NAME_MAP, MONTH_VALUE_ABBR_MAP
+
 import calendar
 import re
 
+
 class ParserError(RuntimeError):
     pass
+
 
 class DateTimeParser(object):
 
@@ -44,9 +48,6 @@ class DateTimeParser(object):
         'S': re.compile('\d'),
     }
 
-    _MONTH_NAME_MAP = {name: i + 1 for i, name in enumerate(calendar.month_name[1:])}
-    _MONTH_ABBR_MAP = {name: i + 1 for i, name in enumerate(calendar.month_abbr[1:])}
-
     @classmethod
     def parse(cls, string, fmt):
 
@@ -68,6 +69,7 @@ class DateTimeParser(object):
             if match:
 
                 try:
+                    # TODO value is not used ?
                     value = cls._parse_token(token, match.group(0), parts)
                 except:
                     raise ParserError('Failed to parse value \'{0}\' for token \'{1}\''.format(
@@ -91,9 +93,9 @@ class DateTimeParser(object):
             parts['year'] = 2000 + value if value > 68 else 1900 + value
 
         elif token == 'MMMM':
-            parts['month'] = cls._map_lookup(cls._MONTH_NAME_MAP, value)
+            parts['month'] = cls._map_lookup(MONTH_VALUE_NAME_MAP, value)
         elif token == 'MMM':
-            parts['month'] = cls._map_lookup(cls._MONTH_ABBR_MAP, value)
+            parts['month'] = cls._map_lookup(MONTH_VALUE_ABBR_MAP, value)
         elif token in ['MM', 'M']:
             parts['month'] = int(value)
 
