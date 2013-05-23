@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 import calendar
 import re
 from dateutil import tz as dateutil_tz
-from compat26 import get_total_seconds
-from const import MONTH_NAME_MAP, MONTH_ABBR_MAP, DAY_NAME_MAP, DAY_ABBR_MAP
+from arrow.compat26 import get_total_seconds
+from arrow.const import MONTH_NAME_MAP, MONTH_ABBR_MAP, DAY_NAME_MAP, DAY_ABBR_MAP
 
 
 class DateTimeFormatter(object):
