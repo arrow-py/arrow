@@ -114,6 +114,27 @@ class GreekLocale(BasicLocale):
     }
 
 
+class SwedishLocale(BasicLocale):
+
+    intervals = {
+        'now': 'just nu',
+        'seconds': 'några sekunder',
+        'minute': 'en minut',
+        'minutes': '{0} minuter',
+        'hour': 'en timme',
+        'hours': '{0} timmar',
+        'day': 'en dag',
+        'days': '{0} dagar',
+        'month': 'en månad',
+        'months': '{0} månader',
+        'year': 'ett år',
+        'years': '{0} år',
+
+        'past': 'för {0} sen',
+        'future': 'om {0}',
+    }
+
+
 class PluralChangingLocale(Locale):
 
     intervals = {
@@ -281,6 +302,8 @@ available_locales = {
     'zh_tw': ChineseTWLocale,
     'ko': KoreanLocale,
     'ko_kr': KoreanLocale,
+    'sv': SwedishLocale,
+    'sv_se': SwedishLocale,
     'ua': UkrainianLocale,
     'uk_ua': UkrainianLocale,
 }
