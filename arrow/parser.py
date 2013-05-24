@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 from datetime import datetime
 from dateutil import tz
 
-from const import MONTH_VALUE_NAME_MAP, MONTH_VALUE_ABBR_MAP
+from arrow.const import MONTH_VALUE_NAME_MAP, MONTH_VALUE_ABBR_MAP
 
 import calendar
 import re
