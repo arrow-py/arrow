@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
+import calendar
+
 
 def get_locale_by_name(locale_name):
     '''Returns an appropriate :class:`Locale <locale.Locale>` corresponding
@@ -18,6 +22,11 @@ def get_locale_by_name(locale_name):
 
 class Locale(object):
 
+    def __init__(self):
+
+        self._day_name_to_ordinal = None
+        self._month_name_to_ordinal = None
+
     def format_humanize(self, quantity, unit, past):
         '''Formats a quantity of units of time into a humanized string.
 
@@ -27,6 +36,29 @@ class Locale(object):
         '''
 
         raise NotImplementedError()
+
+    def month_name(self, num):
+        return calendar.month_name[num]
+
+    def month_abbr(self, num):
+        return calendar.month_abbr[num]
+
+    def month_number(self, name):
+
+        if self._month_name_to_ordinal is None:
+            self._month_name_to_ordinal = self._name_to_ordinal(calendar.month_name)
+            self._month_name_to_ordinal.update(self._name_to_ordinal(calendar.month_abbr))
+
+        return self._month_name_to_ordinal.get(name)
+
+    def day_name(self, num):
+        return calendar.day_name[num]
+
+    def day_abbr(self, num):
+        return calendar.day_abbr[num]
+
+    def _name_to_ordinal(self, lst):
+        return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
 
 
 class BasicLocale(Locale):

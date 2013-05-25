@@ -4,19 +4,22 @@ from __future__ import absolute_import
 import calendar
 import re
 from dateutil import tz as dateutil_tz
-from arrow import const, util
+from arrow import util, locales
 
 
 class DateTimeFormatter(object):
 
     _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?|ZZ?|a|A|X)')
 
-    @classmethod
+    def __init__(self, locale='en_us'):
+
+        self.locale = locales.get_locale_by_name(locale)
+
     def format(cls, dt, fmt):
+
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
-    @classmethod
-    def _format_token(cls, dt, token):
+    def _format_token(self, dt, token):
 
         if token == 'YYYY':
             return '{0:04d}'.format(dt.year)
@@ -24,9 +27,9 @@ class DateTimeFormatter(object):
             return '{0:04d}'.format(dt.year)[2:]
 
         if token == 'MMMM':
-            return const.MONTH_NAME_MAP[dt.month]
+            return self.locale.month_name(dt.month)
         if token == 'MMM':
-            return const.MONTH_ABBR_MAP[dt.month]
+            return self.locale.month_abbr(dt.month)
         if token == 'MM':
             return '{0:02d}'.format(dt.month)
         if token == 'M':
@@ -42,9 +45,9 @@ class DateTimeFormatter(object):
             return str(dt.day)
 
         if token == 'dddd':
-            return const.DAY_NAME_MAP[dt.isoweekday()]
+            return self.locale.day_name(dt.isoweekday())
         if token == 'ddd':
-            return const.DAY_ABBR_MAP[dt.isoweekday()]
+            return self.locale.day_abbr(dt.isoweekday())
         if token == 'd':
             return str(dt.isoweekday())
 

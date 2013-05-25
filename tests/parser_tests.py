@@ -11,26 +11,26 @@ class DateTimeParserTests(Chai):
     def setUp(self):
         super(DateTimeParserTests, self).setUp()
 
-        self.parse = parser.DateTimeParser.parse
+        self.parser = parser.DateTimeParser()
 
     def test_parse_multiformat(self):
 
         mock_datetime = mock()
 
-        expect(parser.DateTimeParser.parse).args('str', 'fmt_a').raises(Exception)
-        expect(parser.DateTimeParser.parse).args('str', 'fmt_b').returns(mock_datetime)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_b').returns(mock_datetime)
 
-        result = parser.DateTimeParser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
+        result = self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
 
         assertEqual(result, mock_datetime)
 
     def test_parse_multiformat_all_fail(self):
 
-        expect(parser.DateTimeParser.parse).args('str', 'fmt_a').raises(Exception)
-        expect(parser.DateTimeParser.parse).args('str', 'fmt_b').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_b').raises(Exception)
 
         with assertRaises(Exception):
-            parser.DateTimeParser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
+            self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
 
 
 class DateTimeParserParseTests(Chai):
@@ -38,13 +38,13 @@ class DateTimeParserParseTests(Chai):
     def setUp(self):
         super(DateTimeParserParseTests, self).setUp()
 
-        self.parse = parser.DateTimeParser.parse
+        self.parser = parser.DateTimeParser()
 
     def test_parse_list(self):
 
         expect(parser.DateTimeParser._parse_multiformat).args('str', ['fmt_a', 'fmt_b']).returns('result')
 
-        result = self.parse('str', ['fmt_a', 'fmt_b'])
+        result = self.parser.parse('str', ['fmt_a', 'fmt_b'])
 
         assertEqual(result, 'result')
 
@@ -55,66 +55,59 @@ class DateTimeParserParseTests(Chai):
         expect(mock_input_re_map.__getitem__).args('YYYY').raises(KeyError)
 
         with assertRaises(parser.ParserError):
-            self.parse('2013-01-01', 'YYYY-MM-DD')
-
-    def test_parse_parse_token_error(self):
-
-        expect(parser.DateTimeParser._parse_token).args('YYYY', '2013').raises(Exception)
-
-        with assertRaises(parser.ParserError):
-            self.parse('2013-01-01', 'YYYY-MM-DD')
+            self.parser.parse('2013-01-01', 'YYYY-MM-DD')
 
     def test_parse_parse_no_match(self):
 
         with assertRaises(parser.ParserError):
-            self.parse('01-01', 'YYYY-MM-DD')
+            self.parser.parse('01-01', 'YYYY-MM-DD')
 
     def test_parse_numbers(self):
 
         expected = datetime(2012, 1, 1, 12, 5, 10)
-        assertEqual(self.parse('2012-01-01 12:05:10', 'YYYY-MM-DD HH:mm:ss'), expected)
+        assertEqual(self.parser.parse('2012-01-01 12:05:10', 'YYYY-MM-DD HH:mm:ss'), expected)
 
     def test_parse_year_two_digit(self):
 
         expected = datetime(1955, 1, 1, 12, 5, 10)
-        assertEqual(self.parse('55-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'), expected)
+        assertEqual(self.parser.parse('55-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'), expected)
 
     def test_parse_timestamp(self):
 
         timestamp = int(time.time())
         expected = datetime.fromtimestamp(timestamp)
-        assertEqual(self.parse(str(timestamp), 'X'), expected)
+        assertEqual(self.parser.parse(str(timestamp), 'X'), expected)
 
     def test_parse_names(self):
 
         expected = datetime(2012, 1, 1)
 
-        assertEqual(self.parse('January 1, 2012', 'MMMM D, YYYY'), expected)
-        assertEqual(self.parse('Jan 1, 2012', 'MMM D, YYYY'), expected)
+        assertEqual(self.parser.parse('January 1, 2012', 'MMMM D, YYYY'), expected)
+        assertEqual(self.parser.parse('Jan 1, 2012', 'MMM D, YYYY'), expected)
 
     def test_parse_pm(self):
 
         expected = datetime(1, 1, 1, 13, 0, 0)
-        assertEqual(self.parse('1 pm', 'H a'), expected)
+        assertEqual(self.parser.parse('1 pm', 'H a'), expected)
 
         expected = datetime(1, 1, 1, 1, 0, 0)
-        assertEqual(self.parse('1 am', 'H A'), expected)
+        assertEqual(self.parser.parse('1 am', 'H A'), expected)
 
     def test_parse_tz(self):
 
         expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
-        assertEqual(self.parse('2013-01-01 -07:00', 'YYYY-MM-DD ZZ'), expected)
+        assertEqual(self.parser.parse('2013-01-01 -07:00', 'YYYY-MM-DD ZZ'), expected)
 
     def test_parse_subsecond(self):
 
         expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
-        assertEqual(self.parse('2013-01-01 12:30:45:9', 'YYYY-MM-DD HH:mm:ss:S'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:9', 'YYYY-MM-DD HH:mm:ss:S'), expected)
 
         expected = datetime(2013, 1, 1, 12, 30, 45, 990000)
-        assertEqual(self.parse('2013-01-01 12:30:45:99', 'YYYY-MM-DD HH:mm:ss:SS'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:99', 'YYYY-MM-DD HH:mm:ss:SS'), expected)
 
         expected = datetime(2013, 1, 1, 12, 30, 45, 999000)
-        assertEqual(self.parse('2013-01-01 12:30:45:999', 'YYYY-MM-DD HH:mm:ss:SSS'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:999', 'YYYY-MM-DD HH:mm:ss:SSS'), expected)
 
     def test_map_lookup_keyerror(self):
 
@@ -203,28 +196,28 @@ class TzinfoParserTests(Chai):
     def setUp(self):
         super(TzinfoParserTests, self).setUp()
 
-        self.parse = parser.TzinfoParser.parse
+        self.parser = parser.TzinfoParser()
 
     def test_parse_local(self):
 
-        assertEqual(self.parse('local'), tz.tzlocal())
+        assertEqual(self.parser.parse('local'), tz.tzlocal())
 
     def test_parse_utc(self):
 
-        assertEqual(self.parse('utc'), tz.tzutc())
-        assertEqual(self.parse('UTC'), tz.tzutc())
+        assertEqual(self.parser.parse('utc'), tz.tzutc())
+        assertEqual(self.parser.parse('UTC'), tz.tzutc())
 
     def test_parse_iso(self):
 
-        assertEqual(self.parse('01:00'), tz.tzoffset(None, 3600))
-        assertEqual(self.parse('+01:00'), tz.tzoffset(None, 3600))
-        assertEqual(self.parse('-01:00'), tz.tzoffset(None, -3600))
+        assertEqual(self.parser.parse('01:00'), tz.tzoffset(None, 3600))
+        assertEqual(self.parser.parse('+01:00'), tz.tzoffset(None, 3600))
+        assertEqual(self.parser.parse('-01:00'), tz.tzoffset(None, -3600))
 
     def test_parse_str(self):
 
-        assertEqual(self.parse('US/Pacific'), tz.gettz('US/Pacific'))
+        assertEqual(self.parser.parse('US/Pacific'), tz.gettz('US/Pacific'))
 
     def test_parse_fails(self):
 
         with assertRaises(parser.ParserError):
-            self.parse('fail')
+            self.parser.parse('fail')

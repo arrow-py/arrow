@@ -75,6 +75,7 @@ def get(*args, **kwargs):
     '''
 
     arg_count = len(args)
+    locale = kwargs.get('locale', 'en_us')
 
     if arg_count == 0:
         return Arrow.utcnow()
@@ -133,7 +134,7 @@ def get(*args, **kwargs):
 
         # (str, format) -> parsed.
         elif isinstance(arg_1, str) and isinstance(arg_2, str):
-            dt = parser.DateTimeParser.parse(args[0], args[1])
+            dt = parser.DateTimeParser(locale).parse(args[0], args[1])
             return Arrow.fromdatetime(dt)
 
         else:

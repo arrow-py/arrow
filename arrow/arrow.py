@@ -513,7 +513,7 @@ class Arrow(object):
 
     # string output and formatting.
 
-    def format(self, fmt):
+    def format(self, fmt, locale='en_us'):
         ''' Returns a string representation of the :class:`Arrow <arrow.Arrow>` object,
         formatted according to a format string.
 
@@ -533,7 +533,7 @@ class Arrow(object):
             'May 09, 2013'
         '''
 
-        return formatter.DateTimeFormatter.format(self._datetime, fmt)
+        return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
 
 
     def humanize(self, other=None, locale='en'):

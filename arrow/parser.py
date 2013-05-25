@@ -4,10 +4,10 @@ from __future__ import absolute_import
 from datetime import datetime
 from dateutil import tz
 
-from arrow.const import MONTH_VALUE_NAME_MAP, MONTH_VALUE_ABBR_MAP
-
 import calendar
 import re
+
+from arrow import locales
 
 
 class ParserError(RuntimeError):
@@ -49,19 +49,22 @@ class DateTimeParser(object):
         'S': re.compile('\d'),
     }
 
-    @classmethod
-    def parse(cls, string, fmt):
+    def __init__(self, locale='en_us'):
+
+        self.locale = locales.get_locale_by_name(locale)
+
+    def parse(self, string, fmt):
 
         if isinstance(fmt, list):
-            return cls._parse_multiformat(string, fmt)
+            return self._parse_multiformat(string, fmt)
 
-        tokens = cls._FORMAT_RE.findall(fmt)
+        tokens = self._FORMAT_RE.findall(fmt)
         parts = {}
 
         for token in tokens:
 
             try:
-                input_re = cls._INPUT_RE_MAP[token]
+                input_re = self._INPUT_RE_MAP[token]
             except KeyError:
                 raise ParserError('Unrecognized token \'{0}\''.format(token))
 
@@ -69,12 +72,7 @@ class DateTimeParser(object):
 
             if match:
 
-                try:
-                    # TODO value is not used ?
-                    value = cls._parse_token(token, match.group(0), parts)
-                except:
-                    raise ParserError('Failed to parse value \'{0}\' for token \'{1}\''.format(
-                        match.group(0), token))
+                self._parse_token(token, match.group(0), parts)
 
                 index = match.span(0)[1]
                 string = string[index:]
@@ -82,10 +80,9 @@ class DateTimeParser(object):
             else:
                 raise ParserError('Failed to match token \'{0}\''.format(token))
 
-        return cls._build_datetime(parts)
+        return self._build_datetime(parts)
 
-    @classmethod
-    def _parse_token(cls, token, value, parts):
+    def _parse_token(self, token, value, parts):
 
         if token == 'YYYY':
             parts['year'] = int(value)
@@ -93,10 +90,8 @@ class DateTimeParser(object):
             value = int(value)
             parts['year'] = 2000 + value if value > 68 else 1900 + value
 
-        elif token == 'MMMM':
-            parts['month'] = cls._map_lookup(MONTH_VALUE_NAME_MAP, value)
-        elif token == 'MMM':
-            parts['month'] = cls._map_lookup(MONTH_VALUE_ABBR_MAP, value)
+        elif token in ['MMMM', 'MMM']:
+            parts['month'] = self.locale.month_number(value)
         elif token in ['MM', 'M']:
             parts['month'] = int(value)
 
@@ -150,14 +145,13 @@ class DateTimeParser(object):
             second=parts.get('second', 0), microsecond=parts.get('microsecond', 0),
             tzinfo=parts.get('tzinfo'))
 
-    @classmethod
-    def _parse_multiformat(cls, string, formats):
+    def _parse_multiformat(self, string, formats):
 
         _datetime = None
 
         for fmt in formats:
             try:
-                _datetime = cls.parse(string, fmt)
+                _datetime = self.parse(string, fmt)
                 break
             except:
                 pass
