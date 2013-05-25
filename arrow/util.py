@@ -5,7 +5,7 @@ from datetime import timedelta
 import sys
 
 
-def _total_seconds_27(td):
+def _total_seconds_27(td): # pragma: no cover
     return td.total_seconds()
 
 
@@ -13,8 +13,7 @@ def _total_seconds_26(td):
     return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
 
 
-info = sys.version_info
-version = '{0}.{1}.{2}'.format(info.major, info.minor, info.micro)
+version = '{0}.{1}.{2}'.format(*sys.version_info[:3])
 
 if version < '2.7': # pragma: no cover
     total_seconds = _total_seconds_26

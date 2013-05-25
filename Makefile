@@ -1,9 +1,13 @@
 .PHONY: auto build test docs clean
 
-auto: build
+auto: build27
 
-build:
-	virtualenv local
+build27:
+	virtualenv local --python=python2.7
+	local/bin/pip install -r requirements.txt
+
+build26:
+	virtualenv local --python=python2.6
 	local/bin/pip install -r requirements.txt
 
 test:
