@@ -270,7 +270,6 @@ class ArrowDatetimeInterfaceTests(Chai):
         super(ArrowDatetimeInterfaceTests, self).setUp()
 
         self.arrow = arrow.Arrow.utcnow()
-        print self.arrow
 
     def test_date(self):
 
