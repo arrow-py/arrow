@@ -77,12 +77,14 @@ def get(*args, **kwargs):
     arg_count = len(args)
     locale = kwargs.get('locale', 'en_us')
 
+    # () -> now, @ utc.
     if arg_count == 0:
         return Arrow.utcnow()
 
     if arg_count == 1:
         arg = args[0]
 
+        # (None) -> now, @ utc.
         if arg is None:
             return Arrow.utcnow()
 
