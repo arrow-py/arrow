@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from arrow import Arrow
-import arrow.parser as parser
+from arrow.arrow import Arrow
+from arrow import parser
 
 from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
@@ -81,6 +81,10 @@ def get(*args, **kwargs):
 
     if arg_count == 1:
         arg = args[0]
+
+        if arg is None:
+            return Arrow.utcnow()
+
         timestamp = None
 
         try:

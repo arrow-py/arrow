@@ -3,22 +3,23 @@ from datetime import datetime
 from dateutil import tz
 import time
 
-from arrow import api
-from arrow.compat26 import get_total_seconds
+from arrow import api, util
 
 
 def assertDtEqual(dt1, dt2, within=10):
     assertEqual(dt1.tzinfo, dt2.tzinfo)
-    assertTrue(abs(get_total_seconds(dt1 - dt2)) < within)
+    assertTrue(abs(util.total_seconds(dt1 - dt2)) < within)
 
 
 class GetTests(Chai):
 
     def test_no_args(self):
 
-        result = api.get()
+        assertDtEqual(api.get(), datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
-        assertDtEqual(result, datetime.utcnow().replace(tzinfo=tz.tzutc()))
+    def test_one_arg_non(self):
+
+        assertDtEqual(api.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
     def test_one_arg_timestamp(self):
 

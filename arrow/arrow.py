@@ -7,10 +7,7 @@ from dateutil.relativedelta import relativedelta
 import calendar
 import sys
 
-from arrow.compat26 import get_total_seconds
-import arrow.parser as parser
-import arrow.formatter as formatter
-import arrow.locales as locales
+from arrow import util, locales, parser, formatter
 
 
 class Arrow(object):
@@ -559,7 +556,7 @@ class Arrow(object):
 
         act_locale = locales.get_locale_by_name(locale)
 
-        delta = int(get_total_seconds(self._datetime - dt))
+        delta = int(util.total_seconds(self._datetime - dt))
         past = delta < 0
         delta = abs(delta)
 

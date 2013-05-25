@@ -4,8 +4,7 @@ from __future__ import absolute_import
 import calendar
 import re
 from dateutil import tz as dateutil_tz
-from arrow.compat26 import get_total_seconds
-from arrow.const import MONTH_NAME_MAP, MONTH_ABBR_MAP, DAY_NAME_MAP, DAY_ABBR_MAP
+from arrow import const, util
 
 
 class DateTimeFormatter(object):
@@ -25,9 +24,9 @@ class DateTimeFormatter(object):
             return '{0:04d}'.format(dt.year)[2:]
 
         if token == 'MMMM':
-            return MONTH_NAME_MAP[dt.month]
+            return const.MONTH_NAME_MAP[dt.month]
         if token == 'MMM':
-            return MONTH_ABBR_MAP[dt.month]
+            return const.MONTH_ABBR_MAP[dt.month]
         if token == 'MM':
             return '{0:02d}'.format(dt.month)
         if token == 'M':
@@ -43,9 +42,9 @@ class DateTimeFormatter(object):
             return str(dt.day)
 
         if token == 'dddd':
-            return DAY_NAME_MAP[dt.isoweekday()]
+            return const.DAY_NAME_MAP[dt.isoweekday()]
         if token == 'ddd':
-            return DAY_ABBR_MAP[dt.isoweekday()]
+            return const.DAY_ABBR_MAP[dt.isoweekday()]
         if token == 'd':
             return str(dt.isoweekday())
 
@@ -81,7 +80,7 @@ class DateTimeFormatter(object):
         if token in ['ZZ', 'Z']:
             separator = ':' if token == 'ZZ' else ''
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
-            total_minutes = int(get_total_seconds(tz.utcoffset(dt)) / 60)
+            total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)
 
             sign = '-' if total_minutes > 0 else '-'
             total_minutes = abs(total_minutes)

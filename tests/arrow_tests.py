@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 
 from chai import Chai
 
@@ -8,13 +9,12 @@ import calendar
 import time
 import sys
 
-import arrow
-from arrow.compat26 import get_total_seconds
+from arrow import arrow, util
 
 
 def assertDtEqual(dt1, dt2, within=10):
     assertEqual(dt1.tzinfo, dt2.tzinfo)
-    assertTrue(abs(get_total_seconds(dt1 - dt2)) < within)
+    assertTrue(abs(util.total_seconds(dt1 - dt2)) < within)
 
 
 class ArrowInitTests(Chai):
@@ -163,7 +163,7 @@ class ArrowComparisonTests(Chai):
     def setUp(self):
         super(ArrowComparisonTests, self).setUp()
 
-        self.arrow = arrow.utcnow()
+        self.arrow = arrow.Arrow.utcnow()
 
     def test_eq(self):
 
@@ -384,37 +384,37 @@ class ArrowReplaceTests(Chai):
     def test_not_attr(self):
 
         with assertRaises(AttributeError):
-            arrow.utcnow().update(abc=1)
+            arrow.Arrow.utcnow().replace(abc=1)
 
     def test_replace_absolute(self):
 
-        arw = arrow.get(2013, 5, 5, 12, 30, 45)
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
-        assertEqual(arw.replace(year=2012), arrow.get(2012, 5, 5, 12, 30, 45))
-        assertEqual(arw.replace(month=1), arrow.get(2013, 1, 5, 12, 30, 45))
-        assertEqual(arw.replace(day=1), arrow.get(2013, 5, 1, 12, 30, 45))
-        assertEqual(arw.replace(hour=1), arrow.get(2013, 5, 5, 1, 30, 45))
-        assertEqual(arw.replace(minute=1), arrow.get(2013, 5, 5, 12, 1, 45))
-        assertEqual(arw.replace(second=1), arrow.get(2013, 5, 5, 12, 30, 1))
+        assertEqual(arw.replace(year=2012), arrow.Arrow(2012, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(month=1), arrow.Arrow(2013, 1, 5, 12, 30, 45))
+        assertEqual(arw.replace(day=1), arrow.Arrow(2013, 5, 1, 12, 30, 45))
+        assertEqual(arw.replace(hour=1), arrow.Arrow(2013, 5, 5, 1, 30, 45))
+        assertEqual(arw.replace(minute=1), arrow.Arrow(2013, 5, 5, 12, 1, 45))
+        assertEqual(arw.replace(second=1), arrow.Arrow(2013, 5, 5, 12, 30, 1))
 
     def test_replace_relative(self):
 
-        arw = arrow.get(2013, 5, 5, 12, 30, 45)
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
-        assertEqual(arw.replace(years=1), arrow.get(2014, 5, 5, 12, 30, 45))
-        assertEqual(arw.replace(months=1), arrow.get(2013, 6, 5, 12, 30, 45))
-        assertEqual(arw.replace(days=1), arrow.get(2013, 5, 6, 12, 30, 45))
-        assertEqual(arw.replace(hours=1), arrow.get(2013, 5, 5, 13, 30, 45))
-        assertEqual(arw.replace(minutes=1), arrow.get(2013, 5, 5, 12, 31, 45))
-        assertEqual(arw.replace(seconds=1), arrow.get(2013, 5, 5, 12, 30, 46))
+        assertEqual(arw.replace(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
+        assertEqual(arw.replace(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.replace(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
+        assertEqual(arw.replace(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
+        assertEqual(arw.replace(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
 
     def test_replace_tzinfo(self):
 
-        arw = arrow.get('US/Eastern')
+        arw = arrow.Arrow.utcnow().to('US/Eastern')
 
         result = arw.replace(tzinfo=tz.gettz('US/Pacific'))
 
-        assertEqual(result, arrow.get(arw.datetime, tz.gettz('US/Pacific')))
+        assertEqual(result, arw.datetime.replace(tzinfo=tz.gettz('US/Pacific')))
 
     def test_replace_other_kwargs(self):
 
@@ -429,10 +429,10 @@ class ArrowRangeTests(Chai):
         result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6))
 
         assertEqual(result, [
-            arrow.get(2013, 1, 2, 3),
-            arrow.get(2014, 1, 2, 3),
-            arrow.get(2015, 1, 2, 3),
-            arrow.get(2016, 1, 2, 3),
+            arrow.Arrow(2013, 1, 2, 3),
+            arrow.Arrow(2014, 1, 2, 3),
+            arrow.Arrow(2015, 1, 2, 3),
+            arrow.Arrow(2016, 1, 2, 3),
         ])
 
     def test_tz_str(self):
@@ -440,10 +440,10 @@ class ArrowRangeTests(Chai):
         result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6), 'US/Pacific')
 
         assertEqual(result, [
-            arrow.get(datetime(2013, 1, 2, 3), 'US/Pacific'),
-            arrow.get(datetime(2014, 1, 2, 3), 'US/Pacific'),
-            arrow.get(datetime(2015, 1, 2, 3), 'US/Pacific'),
-            arrow.get(datetime(2016, 1, 2, 3), 'US/Pacific'),
+            arrow.Arrow(2013, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2014, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2015, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2016, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
         ])
 
     def test_unsupported(self):
@@ -522,13 +522,15 @@ class ArrowSpanRangeTests(Chai):
 
     def test_tz_str(self):
 
+        tzinfo = tz.gettz('US/Pacific')
+
         result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59), 'US/Pacific')
 
         assertEqual(result, [
-            (arrow.get(datetime(2013, 1, 1, 0), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 0, 59, 59, 999999), 'US/Pacific')),
-            (arrow.get(datetime(2013, 1, 1, 1), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 1, 59, 59, 999999), 'US/Pacific')),
-            (arrow.get(datetime(2013, 1, 1, 2), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 2, 59, 59, 999999), 'US/Pacific')),
-            (arrow.get(datetime(2013, 1, 1, 3), 'US/Pacific'), arrow.get(datetime(2013, 1, 1, 3, 59, 59, 999999), 'US/Pacific')),
+            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo)),
+            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo)),
+            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo)),
+            (arrow.Arrow(2013, 1, 1, 3, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999, tzinfo=tzinfo)),
         ])
 
 
@@ -773,13 +775,13 @@ class ArrowUtilTests(Chai):
 
         get_datetime = arrow.Arrow._get_datetime
 
-        arw = arrow.utcnow()
+        arw = arrow.Arrow.utcnow()
         dt = datetime.utcnow()
         timestamp = time.time()
 
         assertEqual(get_datetime(arw), arw.datetime)
         assertEqual(get_datetime(dt), dt)
-        assertEqual(get_datetime(timestamp), arrow.get(timestamp).datetime)
+        assertEqual(get_datetime(timestamp), arrow.Arrow.utcfromtimestamp(timestamp).datetime)
 
         with assertRaises(ValueError):
             get_datetime('abc')
