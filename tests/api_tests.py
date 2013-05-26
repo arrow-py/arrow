@@ -39,6 +39,5 @@ class ModuleTests(Chai):
         result = api.factory(MockCustomArrowClass)
 
         assertIsInstance(result, factory.ArrowFactory)
-        print type(result.utcnow())
         assertIsInstance(result.utcnow(), MockCustomArrowClass)
 
