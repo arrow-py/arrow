@@ -23,7 +23,7 @@ class Arrow(object):
     :param minute: minute, default 0
     :param second: second, default 0
     :param microsecond: microsecond, default 0
-    :param tzinfo: tzinfo struct, default None
+    :param tzinfo: a ``tzinfo`` object, default None
 
     If tzinfo is None, it is assumed to be UTC on creation.
 
@@ -54,7 +54,7 @@ class Arrow(object):
     def now(cls, tzinfo=None):
         '''Constructs an :class:`Arrow <arrow.Arrow>` object, representing "now".
 
-        :param tzinfo: (optional) a tzinfo struct. Defaults to local time.
+        :param tzinfo: (optional) a ``tzinfo`` object. Defaults to local time.
         '''
 
         utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
@@ -78,7 +78,7 @@ class Arrow(object):
         '''Constructs an :class:`Arrow <arrow.Arrow>` object from a timestamp.
 
         :param timestamp: an integer or floating-point timestamp.
-        :param tzinfo: (optional) a tzinfo struct.  Defaults to local time.
+        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
         '''
 
         tzinfo = tzinfo or dateutil_tz.tzlocal()
