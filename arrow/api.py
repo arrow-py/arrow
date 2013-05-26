@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from datetime import datetime, tzinfo
-from dateutil import tz as dateutil_tz
-
 from arrow.factory import ArrowFactory
+
 
 _factory = ArrowFactory()
 
@@ -130,3 +128,4 @@ def factory(type):
 def arrow(date=None, tz=None):
 
     return _factory.arrow(date=date, tz=tz)
+
