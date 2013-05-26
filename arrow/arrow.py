@@ -40,7 +40,6 @@ class Arrow(object):
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
-
         tzinfo=None):
 
         tzinfo = tzinfo or dateutil_tz.tzutc()
@@ -61,7 +60,7 @@ class Arrow(object):
         utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
         dt = utc.astimezone(dateutil_tz.tzlocal() if tzinfo is None else tzinfo)
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
 
     @classmethod
@@ -71,7 +70,7 @@ class Arrow(object):
 
         dt = datetime.utcnow()
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dateutil_tz.tzutc())
 
     @classmethod
@@ -85,7 +84,7 @@ class Arrow(object):
         tzinfo = tzinfo or dateutil_tz.tzlocal()
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
 
     @classmethod
@@ -97,7 +96,7 @@ class Arrow(object):
 
         dt = datetime.utcfromtimestamp(timestamp)
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dateutil_tz.tzutc())
 
     @classmethod
@@ -111,7 +110,7 @@ class Arrow(object):
 
         tzinfo = tzinfo or dt.tzinfo or dateutil_tz.tzutc()
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
 
     @classmethod
@@ -125,7 +124,7 @@ class Arrow(object):
 
         tzinfo = tzinfo or dateutil_tz.tzutc()
 
-        return Arrow(date.year, date.month, date.day, tzinfo=tzinfo)
+        return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
     @classmethod
     def strptime(cls, date_str, fmt, tzinfo=None):
@@ -140,7 +139,7 @@ class Arrow(object):
         dt = datetime.strptime(date_str, fmt)
         tzinfo = tzinfo or dt.tzinfo
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
 
 
@@ -196,14 +195,14 @@ class Arrow(object):
         end, limit = cls._get_iteration_params(end, limit)
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
 
-        current = Arrow.fromdatetime(start)
+        current = cls.fromdatetime(start)
         results = []
 
         while current <= end and len(results) < limit:
             results.append(current)
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = Arrow(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: 1})
+            current = cls(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: 1})
 
         return results
 
@@ -275,7 +274,7 @@ class Arrow(object):
             ceil = floor + relativedelta(**{frame_relative: 1})
             ceil = ceil + relativedelta(microseconds=-1)
 
-            results.append((Arrow.fromdatetime(floor), Arrow.fromdatetime(ceil)))
+            results.append((cls.fromdatetime(floor), cls.fromdatetime(ceil)))
 
             current += relativedelta(**{frame_relative: 1})
 
@@ -359,7 +358,7 @@ class Arrow(object):
             >>> cloned = arw.clone()
         '''
 
-        return Arrow.fromdatetime(self._datetime)
+        return self.fromdatetime(self._datetime)
 
     def replace(self, **kwargs):
         ''' Returns a new :class:`Arrow <arrow.Arrow>` object with attributes updated according to inputs.
@@ -455,7 +454,7 @@ class Arrow(object):
 
         dt = self._datetime.astimezone(tz)
 
-        return Arrow(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+        return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tz)
 
     def span(self, frame):
@@ -602,7 +601,7 @@ class Arrow(object):
     def __add__(self, other):
 
         if isinstance(other, (timedelta, relativedelta)):
-            return Arrow.fromdatetime(self._datetime + other, self._datetime.tzinfo)
+            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
         raise NotImplementedError()
 
@@ -612,7 +611,7 @@ class Arrow(object):
     def __sub__(self, other):
 
         if isinstance(other, timedelta):
-            return Arrow.fromdatetime(self._datetime - other, self._datetime.tzinfo)
+            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
 
         elif isinstance(other, datetime):
             return self._datetime - other
@@ -760,7 +759,7 @@ class Arrow(object):
 
         try:
             expr = float(expr)
-            return Arrow.utcfromtimestamp(expr).datetime
+            return cls.utcfromtimestamp(expr).datetime
         except:
             raise ValueError('\'{0}\' not recognized as a timestamp or datetime')
 

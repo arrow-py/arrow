@@ -12,6 +12,7 @@ class ArrowFactory(object):
 
     def __init__(self, type=Arrow):
         self.type = type
+        print self.type
 
     def get(self, *args, **kwargs):
 
@@ -89,7 +90,7 @@ class ArrowFactory(object):
             return self.type(*args, **kwargs)
 
     def utcnow(self):
-
+        print self.type
         return self.type.utcnow()
 
     def now(self, tz=None):
@@ -119,6 +120,7 @@ class ArrowFactory(object):
                 if isinstance(date, (float, int)):
                     return Arrow.utcfromtimestamp(date)
 
+                print date
                 return Arrow.fromdatetime(date)
 
             else:
