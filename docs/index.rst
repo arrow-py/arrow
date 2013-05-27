@@ -318,8 +318,20 @@ Or just iterate over a range of time:
 API Guide
 ---------
 
+arrow.api
+=========
+
 .. automodule:: arrow.api
     :members:
+
+arrow.factory
+=============
+
+.. automodule:: arrow.factory
+    :members:
+
+arrow.arrow
+===========
 
 .. automodule:: arrow.arrow
     :members:
