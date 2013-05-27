@@ -28,6 +28,7 @@ Key features
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
 - Humanization, with support for a growing number of locales
+- Extensible factories for custom Arrow-derived types
 
 ----------
 Quickstart
@@ -313,6 +314,36 @@ Or just iterate over a range of time:
 .. toctree::
    :maxdepth: 2
 
+Factories
+=========
+
+Use factories to harness Arrow's module API for a custom Arrow-derived type.  First, derive your type:
+
+.. code-block:: python
+
+    >>> class CustomArrow(arrow.Arrow):
+    ...
+    ...     def days_till_xmas(self):
+    ...
+    ...         xmas = arrow.Arrow(self.year, 12, 25)
+    ...
+    ...         if self > xmas:
+    ...             xmas = xmas.replace(years=1)
+    ...
+    ...         return (xmas - self).days
+
+
+Then get and use a factory for it:
+
+.. code-block:: python
+
+    >>> factory = arrow.Factory(CustomArrow)
+    >>> custom = factory.utcnow()
+    >>> custom
+    >>> <CustomArrow [2013-05-27T23:35:35.533160+00:00]>
+
+    >>> custom.days_till_xmas()
+    >>> 211
 
 ---------
 API Guide
