@@ -71,11 +71,11 @@ class DateTimeFormatter(object):
             return str(dt.second)
 
         if token == 'SSS':
-            return str(dt.microsecond / 1000)
+            return str(int(dt.microsecond / 1000))
         if token == 'SS':
-            return str(dt.microsecond / 10000)
+            return str(int(dt.microsecond / 10000))
         if token == 'S':
-            return str(dt.microsecond / 100000)
+            return str(int(dt.microsecond / 100000))
 
         if token == 'X':
             return str(calendar.timegm(dt.utctimetuple()))

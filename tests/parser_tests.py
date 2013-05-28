@@ -42,7 +42,7 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_list(self):
 
-        expect(parser.DateTimeParser._parse_multiformat).args('str', ['fmt_a', 'fmt_b']).returns('result')
+        expect(self.parser._parse_multiformat).args('str', ['fmt_a', 'fmt_b']).returns('result')
 
         result = self.parser.parse('str', ['fmt_a', 'fmt_b'])
 

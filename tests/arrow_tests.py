@@ -790,7 +790,7 @@ class ArrowUtilTests(Chai):
 
     def test_get_iteration_params(self):
 
-        assertEqual(arrow.Arrow._get_iteration_params('end', None), ('end', sys.maxint))
+        assertEqual(arrow.Arrow._get_iteration_params('end', None), ('end', sys.maxsize))
         assertEqual(arrow.Arrow._get_iteration_params(None, 100), (arrow.Arrow.max, 100))
 
         with assertRaises(Exception):

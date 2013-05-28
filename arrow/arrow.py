@@ -617,7 +617,6 @@ class Arrow(object):
             return locale.describe('year', sign)
         else:
             years = sign * int(max(delta / 31536000, 2))
-            print locale
             return locale.describe('years', years)
 
 
@@ -827,7 +826,7 @@ class Arrow(object):
             return cls.max, limit
 
         else:
-            return end, sys.maxint
+            return end, sys.maxsize
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)
