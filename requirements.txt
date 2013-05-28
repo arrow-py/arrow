@@ -1,5 +1,5 @@
 python-dateutil==2.1
 nose==1.3.0
 nose-cov==1.6
-git+git://github.com/agoragames/chai.git@cb1ad9e87ab9f2f78fceae9d8f16ccee06274605
+chai==0.3.3
 sphinx==1.2b1
