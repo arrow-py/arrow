@@ -27,9 +27,9 @@ def get_locale(name):
 class Locale(object):
     ''' Represents locale-specific data and functionality. '''
 
-    _names = []
+    names = []
 
-    _intervals = {
+    timeframes = {
         'now': '',
         'seconds': '',
         'minute': '',
@@ -44,23 +44,23 @@ class Locale(object):
         'years': '',
     }
 
-    _past = None
-    _future = None
+    past = None
+    future = None
 
-    _month_names = []
-    _month_abbrs = []
+    month_names = []
+    month_abbreviations = []
 
-    _day_names = []
-    _day_abbrs = []
+    day_names = []
+    day_abbreviations = []
 
     def __init__(self):
 
         self._month_name_to_ordinal = None
 
     def describe(self, timeframe, delta=0):
-        '''Formats a quantity of units of time into a humanized string.
+        ''' Describes a delta within a timeframe in plain language.
 
-        :param timeframe: a string representing a humanizing timeframe.
+        :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
 
         '''
@@ -70,23 +70,52 @@ class Locale(object):
 
         return humanized
 
-    def day_name(self, num):
-        return self._day_names[num]
+    def day_name(self, day):
+        ''' Returns the day name for a specified day of the week.
 
-    def day_abbr(self, num):
-        return self._day_abbrs[num]
+        :param day: the ``int`` day of the week (1-7).
 
-    def month_name(self, num):
-        return self._month_names[num]
+        '''
 
-    def month_abbr(self, num):
-        return self._month_abbrs[num]
+        return self.day_names[day]
+
+    def day_abbreviation(self, day):
+        ''' Returns the day abbreviation for a specified day of the week.
+
+        :param day: the ``int`` day of the week (1-7).
+
+        '''
+
+        return self.day_abbreviations[day]
+
+    def month_name(self, month):
+        ''' Returns the month name for a specified month of the year.
+
+        :param month: the ``int`` month of the year (1-12).
+
+        '''
+
+        return self.month_names[month]
+
+    def month_abbreviation(self, month):
+        ''' Returns the month abbreviation for a specified month of the year.
+
+        :param month: the ``int`` month of the year (1-12).
+
+        '''
+
+        return self.month_abbreviations[month]
 
     def month_number(self, name):
+        ''' Returns the month number for a month specified by name or abbreviation.
+
+        :param name: the month name or abbreviation.
+
+        '''
 
         if self._month_name_to_ordinal is None:
-            self._month_name_to_ordinal = self._name_to_ordinal(self._month_names)
-            self._month_name_to_ordinal.update(self._name_to_ordinal(self._month_abbrs))
+            self._month_name_to_ordinal = self._name_to_ordinal(self.month_names)
+            self._month_name_to_ordinal.update(self._name_to_ordinal(self.month_abbreviations))
 
         return self._month_name_to_ordinal.get(name)
 
@@ -96,14 +125,14 @@ class Locale(object):
 
     def _format_timeframe(self, timeframe, delta):
 
-        return self._intervals[timeframe].format(abs(delta))
+        return self.timeframes[timeframe].format(abs(delta))
 
     def _format_relative(self, humanized, timeframe, delta):
 
         if timeframe == 'now':
             return humanized
 
-        direction = self._past if delta < 0 else self._future
+        direction = self.past if delta < 0 else self.future
 
         return direction.format(humanized)
 
@@ -112,12 +141,12 @@ class Locale(object):
 
 class EnglishLocale(Locale):
 
-    _names = ['en', 'en_us']
+    names = ['en', 'en_us']
 
-    _past = '{0} ago'
-    _future = 'in {0}'
+    past = '{0} ago'
+    future = 'in {0}'
 
-    _intervals = {
+    timeframes = {
         'now': 'just now',
         'seconds': 'seconds',
         'minute': 'a minute',
@@ -132,24 +161,24 @@ class EnglishLocale(Locale):
         'years': '{0} years',
     }
 
-    _month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+    month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December']
-    _month_abbrs = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
         'Sep', 'Oct', 'Nov', 'Dec']
 
-    _day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
         'Saturday', 'Sunday']
-    _day_abbrs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    day_abbreviations = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
 class GreekLocale(Locale):
 
-    _names = ['el']
+    names = ['el']
 
-    _past = '{0} πριν'
-    _future = 'σε {0}'
+    past = '{0} πριν'
+    future = 'σε {0}'
 
-    _intervals = {
+    timeframes = {
         'now': 'τώρα',
         'seconds': 'δευτερόλεπτα',
         'minute': 'ένα λεπτό',
@@ -167,12 +196,12 @@ class GreekLocale(Locale):
 
 class SwedishLocale(Locale):
 
-    _names = ['sv', 'sv_se']
+    names = ['sv', 'sv_se']
 
-    _past = 'för {0} sen'
-    _future = 'om {0}'
+    past = 'för {0} sen'
+    future = 'om {0}'
 
-    _intervals = {
+    timeframes = {
         'now': 'just nu',
         'seconds': 'några sekunder',
         'minute': 'en minut',
@@ -190,12 +219,12 @@ class SwedishLocale(Locale):
 
 class ChineseCNLocale(Locale):
 
-    _names = ['zh', 'zh_cn']
+    names = ['zh', 'zh_cn']
 
-    _past = '{0}前'
-    _future = '{0}后'
+    past = '{0}前'
+    future = '{0}后'
 
-    _intervals = {
+    timeframes = {
         'now': '刚才',
         'seconds': '秒',
         'minute': '1分钟',
@@ -213,12 +242,12 @@ class ChineseCNLocale(Locale):
 
 class ChineseTWLocale(Locale):
 
-    _names = ['zh_tw']
+    names = ['zh_tw']
 
-    _past = '{0}前'
-    _future = '{0}後'
+    past = '{0}前'
+    future = '{0}後'
 
-    _intervals = {
+    timeframes = {
         'now': '剛才',
         'seconds': '秒',
         'minute': '1分鐘',
@@ -236,12 +265,12 @@ class ChineseTWLocale(Locale):
 
 class KoreanLocale(Locale):
 
-    _names = ['ko', 'ko_kr']
+    names = ['ko', 'ko_kr']
 
-    _past = '{0} 전'
-    _future = '{0} 후'
+    past = '{0} 전'
+    future = '{0} 후'
 
-    _intervals = {
+    timeframes = {
         'now': '현재',
         'seconds': '초',
         'minute': '일 분',
@@ -263,7 +292,7 @@ class BaseRussianLocale(Locale):
 
     def _format_timeframe(self, timeframe, delta):
 
-        form = self._intervals[timeframe]
+        form = self.timeframes[timeframe]
         delta = abs(delta)
 
         if isinstance(form, list):
@@ -280,12 +309,12 @@ class BaseRussianLocale(Locale):
 
 class RussianLocale(BaseRussianLocale):
 
-    _names = ['ru', 'ru_ru']
+    names = ['ru', 'ru_ru']
 
-    _past = '{0} назад'
-    _future = 'через {0}'
+    past = '{0} назад'
+    future = 'через {0}'
 
-    _intervals = {
+    timeframes = {
         'now': 'сейчас',
         'seconds': 'несколько секунд',
         'minute': 'минуту',
@@ -303,12 +332,12 @@ class RussianLocale(BaseRussianLocale):
 
 class UkrainianLocale(BaseRussianLocale):
 
-    _names = ['ua', 'uk_ua']
+    names = ['ua', 'uk_ua']
 
-    _past = '{0} тому'
-    _future = 'за {0}'
+    past = '{0} тому'
+    future = 'за {0}'
 
-    _intervals = {
+    timeframes = {
         'now': 'зараз',
         'seconds': 'кілька секунд',
         'minute': 'хвилину',
@@ -329,7 +358,7 @@ def _map_locales():
 
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
-            for name in cls._names:
+            for name in cls.names:
                 locales[name] = cls
 
     return locales

@@ -29,7 +29,7 @@ class DateTimeFormatter(object):
         if token == 'MMMM':
             return self.locale.month_name(dt.month)
         if token == 'MMM':
-            return self.locale.month_abbr(dt.month)
+            return self.locale.month_abbreviation(dt.month)
         if token == 'MM':
             return '{0:02d}'.format(dt.month)
         if token == 'M':
@@ -47,7 +47,7 @@ class DateTimeFormatter(object):
         if token == 'dddd':
             return self.locale.day_name(dt.isoweekday())
         if token == 'ddd':
-            return self.locale.day_abbr(dt.isoweekday())
+            return self.locale.day_abbreviation(dt.isoweekday())
         if token == 'd':
             return str(dt.isoweekday())
 

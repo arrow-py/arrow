@@ -349,10 +349,10 @@ Then get and use a factory for it:
 API Guide
 ---------
 
-arrow.api
-=========
+arrow.arrow
+===========
 
-.. automodule:: arrow.api
+.. automodule:: arrow.arrow
     :members:
 
 arrow.factory
@@ -361,8 +361,15 @@ arrow.factory
 .. automodule:: arrow.factory
     :members:
 
-arrow.arrow
-===========
+arrow.api
+=========
 
-.. automodule:: arrow.arrow
+.. automodule:: arrow.api
     :members:
+
+arrow.locale
+============
+
+.. automodule:: arrow.locales
+    :members:
+
