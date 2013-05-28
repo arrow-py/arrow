@@ -161,19 +161,18 @@ class EnglishLocale(Locale):
         'years': '{0} years',
     }
 
-    month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December']
+    month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December']
     month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
         'Sep', 'Oct', 'Nov', 'Dec']
 
-    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
-        'Saturday', 'Sunday']
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_abbreviations = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
 class GreekLocale(Locale):
 
-    names = ['el']
+    names = ['el', 'el_gr']
 
     past = '{0} πριν'
     future = 'σε {0}'
@@ -193,6 +192,13 @@ class GreekLocale(Locale):
         'years': '{0} χρόνια',
     }
 
+    month_names = ['', 'Ιανουαρίου', 'Φεβρουαρίου', 'Μαρτίου', 'Απριλίου', 'Μαΐου', 'Ιουνίου',
+        'Ιουλίου', 'Αυγούστου', 'Σεπτεμβρίου', 'Οκτωβρίου', 'Νοεμβρίου', 'Δεκεμβρίου']
+    month_abbreviations = ['', 'Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαϊ', 'Ιον', 'Ιολ', 'Αυγ',
+        'Σεπ', 'Οκτ', 'Νοε', 'Δεκ']
+
+    day_names = ['Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο', 'Κυριακή']
+    day_abbreviations = ['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ']
 
 class SwedishLocale(Locale):
 
@@ -215,6 +221,14 @@ class SwedishLocale(Locale):
         'year': 'ett år',
         'years': '{0} år',
     }
+
+    month_names = ['', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli',
+        'Augusti', 'September', 'Oktober', 'November', 'December']
+    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul',
+        'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+
+    day_names = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag']
+    day_abbreviations = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']
 
 
 class ChineseCNLocale(Locale):
@@ -239,6 +253,13 @@ class ChineseCNLocale(Locale):
         'years': '{0}年',
     }
 
+    month_names = ['', '一月', '二月', '三月', '四月', '五月', '六月', '七月',
+        '八月', '九月', '十月', '十一月', '十二月']
+    month_abbreviations = ['', ' 1', ' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8',
+        ' 9', '10', '11', '12']
+
+    day_names = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+    day_abbreviations = ['一', '二', '三', '四', '五', '六', '日']
 
 class ChineseTWLocale(Locale):
 
@@ -262,6 +283,14 @@ class ChineseTWLocale(Locale):
         'years': '{0}年',
     }
 
+    month_names = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月',
+        '9月', '10月', '11月', '12月']
+    month_abbreviations = ['', ' 1', ' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8',
+        ' 9', '10', '11', '12']
+
+    day_names = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    day_abbreviations = ['一', '二', '三', '四', '五', '六', '日']
+
 
 class KoreanLocale(Locale):
 
@@ -284,6 +313,14 @@ class KoreanLocale(Locale):
         'year': '1년',
         'years': '{0}년',
     }
+
+    month_names = ['', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+        '9월', '10월', '11월', '12월']
+    month_abbreviations = ['', ' 1', ' 2', ' 3', ' 4', ' 5', ' 6', ' 7', ' 8',
+        ' 9', '10', '11', '12']
+
+    day_names = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
+    day_abbreviations = ['월', '화', '수', '목', '금', '토', '일']
 
 
 # derived locale types & implementations.
@@ -329,6 +366,15 @@ class RussianLocale(BaseRussianLocale):
         'years': ['{0} год', '{0} года', '{0} лет'],
     }
 
+    month_names = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+    month_abbreviations = ['', 'янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл',
+        'авг', 'сен', 'окт', 'ноя', 'дек']
+
+    day_names = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница',
+        'суббота', 'воскресенье']
+    day_abbreviations = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
+
 
 class UkrainianLocale(BaseRussianLocale):
 
@@ -351,6 +397,15 @@ class UkrainianLocale(BaseRussianLocale):
         'year': 'рік',
         'years': ['{0} рік', '{0} роки', '{0} років'],
     }
+
+    month_names = ['', 'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
+        'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня']
+    month_abbreviations = ['', 'січ', 'лют', 'бер', 'кві', 'тра', 'чер', 'лип', 'сер',
+        'вер', 'жов', 'лис', 'гру']
+
+    day_names = ['понеділок', 'вівторок', 'середа', 'четвер', 'п\'ятниця', 'субота', 'неділя']
+    day_abbreviations = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд']
+
 
 def _map_locales():
 
