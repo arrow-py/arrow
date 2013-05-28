@@ -5,5 +5,4 @@ python:
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then make build33; fi
-script:
-    - nosetests --all-modules --with-coverage arrow tests
+script: make test
