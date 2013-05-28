@@ -9,6 +9,7 @@ build27:
 build26:
 	virtualenv local --python=python2.6
 	local/bin/pip install --use-mirrors -r requirements.txt
+	local/bin/pip install -I chai==0.3.1
 
 build33:
 	virtualenv local --python=python3.3
