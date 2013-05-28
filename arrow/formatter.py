@@ -13,7 +13,7 @@ class DateTimeFormatter(object):
 
     def __init__(self, locale='en_us'):
 
-        self.locale = locales.get_locale_by_name(locale)
+        self.locale = locales.get_locale(locale)
 
     def format(cls, dt, fmt):
 

@@ -560,6 +560,8 @@ class Arrow(object):
 
         '''
 
+        locale = locales.get_locale(locale)
+
         if other is None:
             utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
             dt = utc.astimezone(self._datetime.tzinfo)
@@ -576,47 +578,47 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        act_locale = locales.get_locale_by_name(locale)
-
         delta = int(util.total_seconds(self._datetime - dt))
-        past = delta < 0
-        delta = abs(delta)
+        sign = -1 if delta < 0 else 1
+        diff = abs(delta)
+        delta = diff
 
-        if delta < 10:
-            return act_locale.format_humanize(0, 'now', past)
+        if diff < 10:
+            return locale.describe('now')
 
-        if delta < 45:
-            return act_locale.format_humanize(0, 'seconds', past)
+        if diff < 45:
+            return locale.describe('seconds', sign)
 
-        elif delta < 90:
-            return act_locale.format_humanize(0, 'minute', past)
-        elif delta < 2700:
-            minutes = int(max(delta / 60, 2))
-            return act_locale.format_humanize(minutes, 'minutes', past)
+        elif diff < 90:
+            return locale.describe('minute', sign)
+        elif diff < 2700:
+            minutes = sign * int(max(delta / 60, 2))
+            return locale.describe('minutes', minutes)
 
-        elif delta < 5400:
-            return act_locale.format_humanize(0, 'hour', past)
-        elif delta < 79200:
-            hours = int(max(delta / 3600, 2))
-            return act_locale.format_humanize(hours, 'hours', past)
+        elif diff < 5400:
+            return locale.describe('hour', sign)
+        elif diff < 79200:
+            hours = sign * int(max(delta / 3600, 2))
+            return locale.describe('hours', hours)
 
-        elif delta < 129600:
-            return act_locale.format_humanize(0, 'day', past)
-        elif delta < 2160000:
-            days = int(max(delta / 86400, 2))
-            return act_locale.format_humanize(days, 'days', past)
+        elif diff < 129600:
+            return locale.describe('day', sign)
+        elif diff < 2160000:
+            days = sign * int(max(delta / 86400, 2))
+            return locale.describe('days', days)
 
-        elif delta < 3888000:
-            return act_locale.format_humanize(0, 'month', past)
-        elif delta < 29808000:
-            months = max(abs(dt.month - self._datetime.month), 2)
-            return act_locale.format_humanize(months, 'months', past)
+        elif diff < 3888000:
+            return locale.describe('month', sign)
+        elif diff < 29808000:
+            months = sign * max(abs(dt.month - self._datetime.month), 2)
+            return locale.describe('months', months)
 
-        elif delta < 47260800:
-            return act_locale.format_humanize(0, 'year', past)
+        elif diff < 47260800:
+            return locale.describe('year', sign)
         else:
-            years = int(max(delta / 31536000, 2))
-            return act_locale.format_humanize(years, 'years', past)
+            years = sign * int(max(delta / 31536000, 2))
+            print locale
+            return locale.describe('years', years)
 
 
     # math

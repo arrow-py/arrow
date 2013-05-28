@@ -609,88 +609,84 @@ class ArrowHumanizeTests(Chai):
         super(ArrowHumanizeTests, self).setUp()
 
         self.datetime = datetime(2013, 1, 1)
+        self.now = arrow.Arrow.utcnow()
 
     def test_seconds(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
+        later = self.now.replace(seconds=10)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in seconds')
+        assertEqual(self.now.humanize(later), 'seconds ago')
+        assertEqual(later.humanize(self.now), 'in seconds')
 
     def test_minute(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 0, 0, 45)
+        later = self.now.replace(minutes=1)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in a minute')
+        assertEqual(self.now.humanize(later), 'a minute ago')
+        assertEqual(later.humanize(self.now), 'in a minute')
 
     def test_minutes(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 0, 1, 30)
+        later = self.now.replace(minutes=2)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in 2 minutes')
+        assertEqual(self.now.humanize(later), '2 minutes ago')
+        assertEqual(later.humanize(self.now), 'in 2 minutes')
 
     def test_hour(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 0, 45)
+        later = self.now.replace(hours=1)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in an hour')
+        assertEqual(self.now.humanize(later), 'an hour ago')
+        assertEqual(later.humanize(self.now), 'in an hour')
 
     def test_hours(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 1, 30)
+        later = self.now.replace(hours=2)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in 2 hours')
+        assertEqual(self.now.humanize(later), '2 hours ago')
+        assertEqual(later.humanize(self.now), 'in 2 hours')
 
     def test_day(self):
 
-        arw = arrow.Arrow(2013, 1, 1, 22)
+        later = self.now.replace(days=1)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in a day')
+        assertEqual(self.now.humanize(later), 'a day ago')
+        assertEqual(later.humanize(self.now), 'in a day')
 
     def test_days(self):
 
-        arw = arrow.Arrow(2013, 1, 2, 12)
+        later = self.now.replace(days=2)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in 2 days')
+        assertEqual(self.now.humanize(later), '2 days ago')
+        assertEqual(later.humanize(self.now), 'in 2 days')
 
     def test_month(self):
 
-        arw = arrow.Arrow(2013, 1, 26)
+        later = self.now.replace(months=1)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in a month')
+        assertEqual(self.now.humanize(later), 'a month ago')
+        assertEqual(later.humanize(self.now), 'in a month')
 
     def test_months(self):
 
-        arw = arrow.Arrow(2013, 2, 15)
+        later = self.now.replace(months=2)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in 2 months')
+        assertEqual(self.now.humanize(later), '2 months ago')
+        assertEqual(later.humanize(self.now), 'in 2 months')
 
     def test_year(self):
 
-        arw = arrow.Arrow(2014, 1, 1)
+        later = self.now.replace(years=1)
 
-        result = arw.humanize(self.datetime)
-
-        assertEqual(result, 'in a year')
+        assertEqual(self.now.humanize(later), 'a year ago')
+        assertEqual(later.humanize(self.now), 'in a year')
 
     def test_years(self):
+
+        later = self.now.replace(years=2)
+
+        assertEqual(self.now.humanize(later), '2 years ago')
+        assertEqual(later.humanize(self.now), 'in 2 years')
 
         arw = arrow.Arrow(2014, 7, 2)
 
