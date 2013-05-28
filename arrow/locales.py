@@ -42,23 +42,19 @@ class Locale(object):
         'months': '',
         'year': '',
         'years': '',
-
-        'past': '',
-        'future': '',
     }
 
     _past = None
     _future = None
 
     _month_names = []
-    _month_abbreviations = []
+    _month_abbrs = []
 
     _day_names = []
-    _day_abbreviations = []
+    _day_abbrs = []
 
     def __init__(self):
 
-        self._day_name_to_ordinal = None
         self._month_name_to_ordinal = None
 
     def describe(self, timeframe, delta=0):
@@ -74,25 +70,26 @@ class Locale(object):
 
         return humanized
 
+    def day_name(self, num):
+        return self._day_names[num]
+
+    def day_abbr(self, num):
+        return self._day_abbrs[num]
+
     def month_name(self, num):
-        return calendar.month_name[num]
+        return self._month_names[num]
 
     def month_abbr(self, num):
-        return calendar.month_abbr[num]
+        return self._month_abbrs[num]
 
     def month_number(self, name):
 
         if self._month_name_to_ordinal is None:
-            self._month_name_to_ordinal = self._name_to_ordinal(calendar.month_name)
-            self._month_name_to_ordinal.update(self._name_to_ordinal(calendar.month_abbr))
+            self._month_name_to_ordinal = self._name_to_ordinal(self._month_names)
+            self._month_name_to_ordinal.update(self._name_to_ordinal(self._month_abbrs))
 
         return self._month_name_to_ordinal.get(name)
 
-    def day_name(self, num):
-        return calendar.day_name[num]
-
-    def day_abbr(self, num):
-        return calendar.day_abbr[num]
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -134,6 +131,15 @@ class EnglishLocale(Locale):
         'year': 'a year',
         'years': '{0} years',
     }
+
+    _month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December']
+    _month_abbrs = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+        'Sep', 'Oct', 'Nov', 'Dec']
+
+    _day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+        'Saturday', 'Sunday']
+    _day_abbrs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
 class GreekLocale(Locale):
