@@ -1,9 +1,10 @@
 language: python
 python:
-  - "2.7"
-  - "3.2"
-  - "3.3"
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: make
-# command to run tests, e.g. python setup.py test
+  - 2.6
+  - 2.7
+  - 3.3
+install:
+    - if [[$TRAVIS_PYTHON_VERSION == '2.6']]; then make build26; fi
+    - if [[$TRAVIS_PYTHON_VERSION == '2.7']]; then make build27; fi
+    - if [[$TRAVIS_PYTHON_VERSION == '3.3']]; then make build33; fi
 script:  make test
