@@ -3,7 +3,10 @@ Arrow - Better dates & times for Python
 
 .. image:: https://travis-ci.org/crsmithdev/arrow.png
         :target: https://travis-ci.org/crsmithdev/arrow
-
+        
+.. image:: https://pypip.in/d/arrow/badge.png
+        :target: https://crate.io/packages/arrow
+        
 **Documentation:** `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_.
 
 Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
