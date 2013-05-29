@@ -5,16 +5,17 @@ auto: build27
 build27:
 	virtualenv local --python=python2.7
 	local/bin/pip install --use-mirrors -r requirements.txt
+	local/bin/pip install --use-mirrors -r requirements27.txt
 
 build26:
 	virtualenv local --python=python2.6
 	local/bin/pip install --use-mirrors -r requirements.txt
-	local/bin/pip install -I chai==0.3.1
+	local/bin/pip install --use-mirrors -r requirements26.txt
 
 build33:
 	virtualenv local --python=python3.3
 	local/bin/pip install --use-mirrors -r requirements.txt
-	local/bin/pip install -I git+git://github.com/agoragames/chai.git@cb1ad9e87ab9f2f78fceae9d8f16ccee06274605
+	local/bin/pip install --use-mirrors -r requirements33.txt
 
 test:
 	rm -f .coverage

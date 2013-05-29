@@ -20,6 +20,7 @@ Key features
 ------------
 
 - Implements the datetime interface
+- Supports Python 2.6, 2.7 and 3.3
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
 - Easily replace and shift attributes
@@ -28,7 +29,7 @@ Key features
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
 - Humanization, with support for a growing number of locales
-- Extensible factories for custom Arrow-derived types
+- Extensible factory architecture supporting custom Arrow-derived types
 
 ----------
 Quickstart

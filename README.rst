@@ -22,6 +22,7 @@ Features
 --------
 
 - Implements the datetime interface
+- Supports Python 2.6, 2.7 and 3.3
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
 - Easily replace and shift attributes
@@ -30,6 +31,7 @@ Features
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
 - Humanization, with support for a growing number of locales
+- Extensible factory architecture supporting custom Arrow-derived types
 
 Get started
 -----------
@@ -73,6 +75,13 @@ Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow
 History
 -------
 
+- 0.3.3
+
+  - Python 2.6 and 3.3 fully supported, including tests
+  - Initial support for locale-based parsing and formatting
+  - ArrowFactory class, now proxied as the module API
+  - arrow.factory() method to obtain a factory for a custom type
+
 - 0.3.2
 
   - Python 3.0 support / fixes
@@ -97,7 +106,7 @@ History
 
 - 0.2.0
 
-  - Reimplemented as datetime replacement
+  - Rewrite, re-implemented as datetime replacement
   - Added date parsing
   - Added date formatting
   - Added floor, ceil and span methods
