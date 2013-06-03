@@ -610,7 +610,10 @@ class Arrow(object):
         elif diff < 3888000:
             return locale.describe('month', sign)
         elif diff < 29808000:
-            months = sign * max(abs(dt.month - self._datetime.month), 2)
+            self_months = self._datetime.year * 12 + self._datetime.month
+            other_months = dt.year * 12 + dt.month
+            months = sign * abs(other_months - self_months)
+
             return locale.describe('months', months)
 
         elif diff < 47260800:
