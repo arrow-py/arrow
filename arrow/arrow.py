@@ -304,7 +304,11 @@ class Arrow(object):
         return self._datetime.isoformat()
 
     def __format__(self, formatstr):
-        return self.format(formatstr)
+
+        if len(formatstr) > 0:
+            return self.format(formatstr)
+
+        return str(self)
 
     def __hash__(self):
         return self._datetime.__hash__()

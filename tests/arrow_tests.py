@@ -120,6 +120,12 @@ class ArrowRepresentationTests(Chai):
 
         assertEqual(result, '2013-02-03')
 
+    def test_format_no_format_string(self):
+
+        result = '{0}'.format(self.arrow)
+
+        assertEqual(result, str(self.arrow))
+
     def test_clone(self):
 
         result = self.arrow.clone()
