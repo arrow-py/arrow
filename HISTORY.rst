@@ -1,6 +1,12 @@
 History
 -------
 
+0.3.4
++++++
+
+- Fix for incorrect month delta in .humanize
+- Fix for empty result when using str.format and no format string
+
 0.3.3
 +++++
 

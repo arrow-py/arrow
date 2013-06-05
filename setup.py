@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='arrow',
-    version='0.3.3',
+    version='0.3.4',
     description='Better dates and times for Python',
     url='http://crsmithdev.com/arrow',
     author='Chris Smith',
