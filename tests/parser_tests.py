@@ -69,8 +69,8 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_year_two_digit(self):
 
-        expected = datetime(1955, 1, 1, 12, 5, 10)
-        assertEqual(self.parser.parse('55-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'), expected)
+        expected = datetime(1979, 1, 1, 12, 5, 10)
+        assertEqual(self.parser.parse('79-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'), expected)
 
     def test_parse_timestamp(self):
 

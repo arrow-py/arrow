@@ -88,7 +88,7 @@ class DateTimeParser(object):
             parts['year'] = int(value)
         elif token == 'YY':
             value = int(value)
-            parts['year'] = 2000 + value if value > 68 else 1900 + value
+            parts['year'] = 1900 + value if value > 68 else 2000 + value
 
         elif token in ['MMMM', 'MMM']:
             parts['month'] = self.locale.month_number(value)
