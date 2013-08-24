@@ -200,7 +200,10 @@ class Arrow(object):
 
         frame_absolute, frame_relative = cls._get_frames(frame)
 
-        tzinfo = cls._get_tzinfo(tz)
+        if tz is None:
+            tzinfo = cls._get_tzinfo(start.tzinfo)
+        else:
+            tzinfo = cls._get_tzinfo(tz)
         start = cls._get_datetime(start).replace(tzinfo=tzinfo)
         end, limit = cls._get_iteration_params(end, limit)
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
@@ -262,7 +265,10 @@ class Arrow(object):
 
         frame_absolute, frame_relative = cls._get_frames(frame)
 
-        tzinfo = cls._get_tzinfo(tz)
+        if tz is None:
+            tzinfo = cls._get_tzinfo(start.tzinfo)
+        else:
+            tzinfo = cls._get_tzinfo(tz)
         start = cls._get_datetime(start).replace(tzinfo=tzinfo)
         end, limit = cls._get_iteration_params(end, limit)
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
