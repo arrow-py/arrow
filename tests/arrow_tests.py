@@ -440,6 +440,18 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2016, 1, 2, 3),
         ])
 
+    def test_day(self):
+
+        result = arrow.Arrow.range('day', datetime(2013, 1, 1), datetime(2013, 1, 5))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 1),
+            arrow.Arrow(2013, 1, 2),
+            arrow.Arrow(2013, 1, 3),
+            arrow.Arrow(2013, 1, 4),
+            arrow.Arrow(2013, 1, 5),
+        ])
+
     def test_tz_str(self):
 
         result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6), 'US/Pacific')
@@ -449,6 +461,36 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2014, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
             arrow.Arrow(2015, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
             arrow.Arrow(2016, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
+        ])
+
+    def test_input_dates_have_same_timezone(self):
+
+        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')),
+        ])
+
+    def test_input_dates_have_different_timezone(self):
+
+        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')),
+            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Eastern')),
+            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Eastern')),
+        ])
+
+    def test_range_timezone_clobbers_input_date_timezones(self):
+
+        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')), tz=tz.gettz('US/Central'))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Central')),
+            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Central')),
+            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Central')),
         ])
 
     def test_unsupported(self):
@@ -536,6 +578,41 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo)),
             (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo)),
             (arrow.Arrow(2013, 1, 1, 3, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999, tzinfo=tzinfo)),
+        ])
+
+    def test_input_dates_have_same_timezone(self):
+
+        tzinfo = tz.gettz('US/Pacific')
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo), datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo)),
+            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo)),
+            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo)),
+        ])
+
+    def test_input_dates_have_different_timezone(self):
+
+        tzinfo1 = tz.gettz('US/Pacific')
+        tzinfo2 = tz.gettz('US/Eastern')
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo1), datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo2))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo1)),
+            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo1)),
+            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo1)),
+        ])
+
+    def test_range_timezone_clobbers_input_date_timezones(self):
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tz.gettz('US/Eastern')), datetime(2013, 1, 1, 2, 59, tzinfo=tz.gettz('US/Eastern')), tz='US/Central')
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
+            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
+            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
         ])
 
 
