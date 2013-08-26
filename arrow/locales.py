@@ -199,6 +199,35 @@ class SpanishLocale(Locale):
     day_abbreviations = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
 
 
+class FrenchLocale(Locale):
+    names = ['fr', 'fr_fr']
+    past = 'il y a {0}'
+    future = 'dans {0}'
+
+    timeframes = {
+        'now': 'maintenant',
+        'seconds': 'quelques secondes',
+        'minute': 'une minute',
+        'minutes': '{0} minutes',
+        'hour': 'une heure',
+        'hours': '{0} heures',
+        'day': 'un jour',
+        'days': '{0} jours',
+        'month': 'un mois',
+        'months': '{0} mois',
+        'year': 'un an',
+        'years': '{0} ans',
+    }
+
+    month_names = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+        'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+    month_abbreviations = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août',
+        'Sept', 'Oct', 'Nov', 'Déc']
+
+    day_names = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+    day_abbreviations = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+
+
 class GreekLocale(Locale):
 
     names = ['el', 'el_gr']
