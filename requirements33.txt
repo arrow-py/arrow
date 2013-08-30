@@ -1,1 +1,1 @@
-git+git://github.com/agoragames/chai.git@cb1ad9e87ab9f2f78fceae9d8f16ccee06274605
+git+git://github.com/agoragames/chai.git@85db11776e21b6444afca5e217042c69f847eb75
