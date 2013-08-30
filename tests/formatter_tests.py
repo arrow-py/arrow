@@ -43,8 +43,8 @@ class DateTimeFormatterFormatTokenTests(Chai):
         assertEqual(self.formatter._format_token(dt, 'DD'), '01')
         assertEqual(self.formatter._format_token(dt, 'D'), '1')
 
-        assertEqual(self.formatter._format_token(dt, 'dddd'), 'Saturday')
-        assertEqual(self.formatter._format_token(dt, 'ddd'), 'Sat')
+        assertEqual(self.formatter._format_token(dt, 'dddd'), 'Friday')
+        assertEqual(self.formatter._format_token(dt, 'ddd'), 'Fri')
         assertEqual(self.formatter._format_token(dt, 'd'), '5')
 
     def test_hour(self):
