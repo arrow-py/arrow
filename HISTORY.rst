@@ -1,6 +1,14 @@
 History
 -------
 
+0.3.5
++++++
+
+- Fix for losing source timezones in range calculation (Ftobia)
+- French locale added (Cynddl)
+- Spanish locale added (Slapresta)
+ 
+
 0.3.4
 +++++
 
