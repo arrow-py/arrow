@@ -1,1 +1,1 @@
-git+git://github.com/agoragames/chai.git@python3#egg=chai
+chai==0.4.0
