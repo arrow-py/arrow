@@ -535,6 +535,72 @@ class GermanLocale(Locale):
     day_abbreviations = ['', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
 
+class NorwegianLocale(Locale):
+
+    names = ['nb', 'nb_no']
+
+    past = 'for {0} siden'
+    future = 'om {0}'
+
+    timeframes = {
+        'now': 'nå nettopp',
+        'seconds': 'noen sekunder',
+        'minute': 'ett minutt',
+        'minutes': '{0} minutter',
+        'hour': 'en time',
+        'hours': '{0} timer',
+        'day': 'en dag',
+        'days': '{0} dager',
+        'month': 'en måned',
+        'months': '{0} måneder',
+        'year': 'ett år',
+        'years': '{0} år',
+    }
+
+    month_names = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
+                   'Juli', 'August', 'September', 'Oktober', 'November',
+                   'Desember']
+    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul',
+                           'Aug', 'Sep', 'Okt', 'Nov', 'Des']
+
+    day_names = ['', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag',
+                 'Lørdag', 'Søndag']
+    day_abbreviations = ['', 'Ma', 'Ti', 'On', 'To', 'Fr', 'Lø', 'Sø']
+
+
+class NewNorwegianLocale(Locale):
+
+    names = ['nn', 'nn_no']
+
+    past = 'for {0} sidan'
+    future = 'om {0}'
+
+    timeframes = {
+        'now': 'no nettopp',
+        'seconds': 'nokre sekund',
+        'minute': 'ett minutt',
+        'minutes': '{0} minutt',
+        'hour': 'ein time',
+        'hours': '{0} timar',
+        'day': 'ein dag',
+        'days': '{0} dagar',
+        'month': 'en månad',
+        'months': '{0} månader',
+        'year': 'Eit år',
+        'years': '{0} år',
+    }
+
+    month_names = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
+                   'Juli', 'August', 'September', 'Oktober', 'November',
+                   'Desember']
+    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul',
+                           'Aug', 'Sep', 'Okt', 'Nov', 'Des']
+
+    day_names = ['', 'Måndag', 'Tysdag', 'Onsdag', 'Torsdag', 'Fredag',
+                 'Laurdag', 'Sundag']
+    day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
+
+
 def _map_locales():
 
     locales = {}
