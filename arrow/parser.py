@@ -16,8 +16,11 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
 
+    _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
+    _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
+    _ONE_THROUGH_FOUR_DIGIT_RE = re.compile('\d{1,4}')
     _ONE_TWO_OR_THREE_DIGIT_RE = re.compile('\d{1,3}')
     _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
     _FOUR_DIGIT_RE = re.compile('\d{4}')
@@ -44,6 +47,10 @@ class DateTimeParser(object):
         'X': re.compile('\d+'),
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
+        'SSSSSS': _ONE_THROUGH_SIX_DIGIT_RE,
+        'SSSSS': _ONE_THROUGH_FIVE_DIGIT_RE,
+        'SSSS': _ONE_THROUGH_FOUR_DIGIT_RE,
+        'SSS': _ONE_TWO_OR_THREE_DIGIT_RE,
         'SSS': _ONE_TWO_OR_THREE_DIGIT_RE,
         'SS': _ONE_OR_TWO_DIGIT_RE,
         'S': re.compile('\d'),
@@ -107,6 +114,12 @@ class DateTimeParser(object):
         elif token in ['ss', 's']:
             parts['second'] = int(value)
 
+        elif token == 'SSSSSS':
+            parts['microsecond'] = int(value)
+        elif token == 'SSSSS':
+            parts['microsecond'] = int(value) * 10
+        elif token == 'SSSS':
+            parts['microsecond'] = int(value) * 100
         elif token == 'SSS':
             parts['microsecond'] = int(value) * 1000
         elif token == 'SS':
