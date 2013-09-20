@@ -109,6 +109,15 @@ class DateTimeParserParseTests(Chai):
         expected = datetime(2013, 1, 1, 12, 30, 45, 999000)
         assertEqual(self.parser.parse('2013-01-01 12:30:45:999', 'YYYY-MM-DD HH:mm:ss:SSS'), expected)
 
+        expected = datetime(2013, 1, 1, 12, 30, 45, 999900)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:9999', 'YYYY-MM-DD HH:mm:ss:SSSS'), expected)
+
+        expected = datetime(2013, 1, 1, 12, 30, 45, 999990)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:99999', 'YYYY-MM-DD HH:mm:ss:SSSSS'), expected)
+
+        expected = datetime(2013, 1, 1, 12, 30, 45, 999999)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45:999999', 'YYYY-MM-DD HH:mm:ss:SSSSSS'), expected)
+
     def test_map_lookup_keyerror(self):
 
         with assertRaises(parser.ParserError):
@@ -154,7 +163,8 @@ class DateTimeParserRegexTests(Chai):
 
     def test_format_subsecond(self):
 
-        assertEqual(self.format_regex.findall('SSS-SS-S'), ['SSS', 'SS', 'S'])
+        assertEqual(self.format_regex.findall('SSSSSS-SSSSS-SSSS-SSS-SS-S'),
+                ['SSSSSS', 'SSSSS', 'SSSS', 'SSS', 'SS', 'S'])
 
     def test_format_tz(self):
 
