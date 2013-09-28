@@ -61,9 +61,5 @@ def factory(type):
     return ArrowFactory(type)
 
 
-def arrow(date=None, tz=None):
-    return _factory.arrow(date=date, tz=tz)
-
-
-__all__ = ['get', 'utcnow', 'now', 'factory', 'arrow']
+__all__ = ['get', 'utcnow', 'now', 'factory', 'iso']
 

@@ -25,11 +25,11 @@ class ModuleTests(Chai):
 
         assertEqual(api.now('tz'), 'now')
 
-    def test_arrow(self):
+    def test_iso(self):
 
-        expect(api._factory.arrow).args(date='date', tz='tz').returns('arrow')
+        expect(api._factory.iso).args('str').returns('iso')
 
-        assertEqual(api.arrow('date', 'tz'), 'arrow')
+        assertEqual(api.iso('str'), 'iso')
 
     def test_factory(self):
 

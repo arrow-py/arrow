@@ -228,27 +228,3 @@ class ArrowFactory(object):
         dt = parser.DateTimeParser('en_us').parse_iso(string)
         return Arrow.fromdatetime(dt)
         
-    def arrow(self, date=None, tz=None):
-
-        if date is None:
-            return self.utcnow() if tz is None else self.now(tz)
-
-        else:
-
-            if tz is None:
-                try:
-                    tz = parser.TzinfoParser.parse(date)
-                    return self.now(tz)
-                except:
-                    pass
-
-                if isinstance(date, (float, int)):
-                    return Arrow.utcfromtimestamp(date)
-
-                return Arrow.fromdatetime(date)
-
-            else:
-
-                tz = parser.TzinfoParser.parse(tz)
-                return Arrow.fromdatetime(date, tz)
-
