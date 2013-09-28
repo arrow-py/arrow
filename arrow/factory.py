@@ -212,6 +212,10 @@ class ArrowFactory(object):
 
         return self.type.now(tz)
 
+    def iso(self, string, locale='en_us'):
+
+        return parser.DateTimeParser(locale).parse_iso(string)
+        
     def arrow(self, date=None, tz=None):
 
         if date is None:

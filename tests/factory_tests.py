@@ -123,6 +123,20 @@ class NowTests(Chai):
         assertDtEqual(self.factory.now('EST'), datetime.now(tz.gettz('EST')))
 
 
+class ISOTests(Chai):
+
+    def setUp(self):
+        super(ISOTests, self).setUp()
+
+        self.factory = factory.ArrowFactory()
+
+    def test_iso(self):
+
+        dt = datetime.utcnow()
+
+        assertDtEqual(self.factory.iso(dt.isoformat()), dt)
+
+
 class ArrowTests(Chai):
 
     def setUp(self):

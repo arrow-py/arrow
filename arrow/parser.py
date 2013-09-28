@@ -51,7 +51,6 @@ class DateTimeParser(object):
         'SSSSS': _ONE_THROUGH_FIVE_DIGIT_RE,
         'SSSS': _ONE_THROUGH_FOUR_DIGIT_RE,
         'SSS': _ONE_TWO_OR_THREE_DIGIT_RE,
-        'SSS': _ONE_TWO_OR_THREE_DIGIT_RE,
         'SS': _ONE_OR_TWO_DIGIT_RE,
         'S': re.compile('\d'),
     }
@@ -59,6 +58,41 @@ class DateTimeParser(object):
     def __init__(self, locale='en_us'):
 
         self.locale = locales.get_locale(locale)
+
+    def parse_iso(self, string):
+
+        has_time = 'T' in string
+
+        if has_time:
+            date_string, time_string = string.split('T', 1)
+            time_parts = re.split('[+-]', time_string, 1)
+            has_tz = len(time_parts) > 1
+            has_seconds = time_parts[0].count(':') > 1
+            has_subseconds = '.' in time_parts[0]
+
+        else:
+            has_tz = has_seconds = has_subseconds = False
+            
+        if has_time:
+
+            if has_subseconds:
+                formats = ['YYYY-MM-DDTHH:mm:ss.SSSSSS']
+            elif has_seconds:
+                formats = ['YYYY-MM-DDTHH:mm:ss']
+            else:
+                formats = ['YYYY-MM-DDTHH:mm']
+
+        else:
+            formats = [
+                'YYYY-MM-DD',
+                'YYYY-MM',
+                'YYYY',
+            ]
+
+        if has_time and has_tz:
+            formats = [f + 'Z' for f in formats]
+
+        return self._parse_multiformat(string, formats)
 
     def parse(self, string, fmt):
 
