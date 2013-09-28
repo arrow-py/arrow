@@ -134,7 +134,7 @@ class ISOTests(Chai):
 
         dt = datetime.utcnow()
 
-        assertDtEqual(self.factory.iso(dt.isoformat()), dt)
+        assertDtEqual(self.factory.iso(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
 
 class ArrowTests(Chai):

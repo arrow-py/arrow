@@ -212,9 +212,21 @@ class ArrowFactory(object):
 
         return self.type.now(tz)
 
-    def iso(self, string, locale='en_us'):
+    def iso(self, string):
+        '''Returns an :class:`Arrow <arrow.arrow.Arrow>` object, converted from an ISO-8601-formatted
+        string, without requiring a format string for parsing.
 
-        return parser.DateTimeParser(locale).parse_iso(string)
+        Usage::
+
+            >>> import arrow
+            >>> from datetime import datetime
+            >>> arrow.iso(datetime.utcnow().isoformat()) 
+            <Arrow [2013-09-28T17:49:16.325951+00:00]>
+
+        '''
+
+        dt = parser.DateTimeParser('en_us').parse_iso(string)
+        return Arrow.fromdatetime(dt)
         
     def arrow(self, date=None, tz=None):
 
