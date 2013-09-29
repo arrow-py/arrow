@@ -220,8 +220,8 @@ class Arrow(object):
 
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None):
-        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects, representing
-        a series of timespans between two inputs.
+        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        representing a series of timespans between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
@@ -230,8 +230,8 @@ class Arrow(object):
         :param limit: (optional) A maximum number of tuples to return.
 
         **NOTE**: the **end** or **limit** must be provided.  Call with **end** alone to
-        return the entire range, with **limit** alone to return a maximum # of results from the start,
-        and with both to cap a range at a maximum # of results.
+        return the entire range, with **limit** alone to return a maximum # of results from the
+        start, and with both to cap a range at a maximum # of results.
 
         Recognized datetime expressions:
 
@@ -261,38 +261,16 @@ class Arrow(object):
 
         '''
 
-        frame_absolute, frame_relative = cls._get_frames(frame)
+        floors = cls.range(frame, start, end, tz, limit)
 
-        if tz is None:
-            tzinfo = cls._get_tzinfo(start.tzinfo)
-        else:
-            tzinfo = cls._get_tzinfo(tz)
-        start = cls._get_datetime(start).replace(tzinfo=tzinfo)
-        end, limit = cls._get_iteration_params(end, limit)
-        end = cls._get_datetime(end).replace(tzinfo=tzinfo)
+        frame_relative = cls._get_frames(frame)[1]
+        last = floors[-1].replace(**{frame_relative:1})
+        floors.append(last)
 
-        index = cls._ATTRS.index(frame_absolute)
-        frames = cls._ATTRS[:index + 1]
+        ceils = [f.replace(microseconds=-1) for f in floors[1:]] 
 
-        results = []
-        current = start
+        return [(f, c) for f, c in zip(floors, ceils)]
 
-        while current <= end and len(results) < limit:
-            values = [getattr(current, f) for f in frames]
-
-            for i in range(3 - len(values)):
-                values.append(1)
-
-            floor = datetime(*values, tzinfo=tzinfo)
-
-            ceil = floor + relativedelta(**{frame_relative: 1})
-            ceil = ceil + relativedelta(microseconds=-1)
-
-            results.append((cls.fromdatetime(floor), cls.fromdatetime(ceil)))
-
-            current += relativedelta(**{frame_relative: 1})
-
-        return results
 
     # representations
 
