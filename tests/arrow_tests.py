@@ -612,7 +612,6 @@ class ArrowSpanRangeTests(Chai):
     def test_week(self):
 
         result = arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28))
-        print result
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
