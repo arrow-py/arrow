@@ -240,7 +240,6 @@ class Arrow(object):
 
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
-            - A timestamp, as an ``int``, ``float``, or ``str`` that converts to one.
 
         Recognized timezone expressions:
 

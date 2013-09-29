@@ -13,6 +13,8 @@ History
 - [BUGFIX] Fixed issues w/ microsecond parsing (Bsidhom)
 - [BUGFIX] Fixed day of week number off-by-one in locales (Cynddl)
 - [REMOVED] Old 0.1 .arrow module method
+- [REMOVED] Timestamp support in .range, .span_range (bugged and never worked correctly) 
+- [REMOVED] Parsing of single string as tz string in factory .get method (replaced by ISO-8601) 
 
 0.3.5
 +++++
@@ -21,7 +23,6 @@ History
 - French locale added (Cynddl)
 - Spanish locale added (Slapresta)
  
-
 0.3.4
 +++++
 
