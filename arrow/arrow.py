@@ -174,7 +174,6 @@ class Arrow(object):
 
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
-            - A timestamp, as an ``int``, ``float``, or ``str`` that converts to one.
 
         Recognized timezone expressions:
 
@@ -198,7 +197,6 @@ class Arrow(object):
 
         '''
 
-        # 
         frame_relative = cls._get_frames(frame)[1]
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 

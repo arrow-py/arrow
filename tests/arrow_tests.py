@@ -444,85 +444,132 @@ class ArrowRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3),
-            datetime(2016, 4, 5, 6))
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2016, 4, 5, 6, 7, 8))
 
         assertEqual(result, [
-            arrow.Arrow(2013, 1, 2, 3),
-            arrow.Arrow(2014, 1, 2, 3),
-            arrow.Arrow(2015, 1, 2, 3),
-            arrow.Arrow(2016, 1, 2, 3),
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2014, 1, 2, 3, 4, 5),
+            arrow.Arrow(2015, 1, 2, 3, 4, 5),
+            arrow.Arrow(2016, 1, 2, 3, 4, 5),
+        ])
+
+    def test_month(self):
+
+        result = arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 2, 3, 4, 5, 6),
+            arrow.Arrow(2013, 3, 3, 4, 5, 6),
+            arrow.Arrow(2013, 4, 3, 4, 5, 6),
+            arrow.Arrow(2013, 5, 3, 4, 5, 6),
         ])
 
     def test_week(self):
 
-        result = arrow.Arrow.range('week', datetime(2013, 9, 1),
-            datetime(2013, 10, 1))
+        result = arrow.Arrow.range('week', datetime(2013, 9, 1, 2, 3, 4),
+            datetime(2013, 10, 1, 2, 3, 4))
 
         assertEqual(result, [
-            arrow.Arrow(2013, 9, 1),
-            arrow.Arrow(2013, 9, 8),
-            arrow.Arrow(2013, 9, 15),
-            arrow.Arrow(2013, 9, 22),
-            arrow.Arrow(2013, 9, 29)
+            arrow.Arrow(2013, 9, 1, 2, 3, 4),
+            arrow.Arrow(2013, 9, 8, 2, 3, 4),
+            arrow.Arrow(2013, 9, 15, 2, 3, 4),
+            arrow.Arrow(2013, 9, 22, 2, 3, 4),
+            arrow.Arrow(2013, 9, 29, 2, 3, 4)
         ])
 
     def test_day(self):
 
-        result = arrow.Arrow.range('day', datetime(2013, 1, 1), datetime(2013, 1, 5))
+        result = arrow.Arrow.range('day', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 5, 6, 7, 8))
 
         assertEqual(result, [
-            arrow.Arrow(2013, 1, 1),
-            arrow.Arrow(2013, 1, 2),
-            arrow.Arrow(2013, 1, 3),
-            arrow.Arrow(2013, 1, 4),
-            arrow.Arrow(2013, 1, 5),
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 3, 3, 4, 5),
+            arrow.Arrow(2013, 1, 4, 3, 4, 5),
+            arrow.Arrow(2013, 1, 5, 3, 4, 5),
         ])
 
-    def test_tz_str(self):
+    def test_hour(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3),
-            datetime(2016, 4, 5, 6), 'US/Pacific')
+        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 6, 7, 8))
 
         assertEqual(result, [
-            arrow.Arrow(2013, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2014, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2015, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2016, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 2, 4, 4, 5),
+            arrow.Arrow(2013, 1, 2, 5, 4, 5),
+            arrow.Arrow(2013, 1, 2, 6, 4, 5),
         ])
 
-    def test_input_dates_have_same_timezone(self):
+    def test_minute(self):
+
+        result = arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 7, 8))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 2, 3, 5, 5),
+            arrow.Arrow(2013, 1, 2, 3, 6, 5),
+            arrow.Arrow(2013, 1, 2, 3, 7, 5),
+        ])
+        
+    def test_second(self):
+
+        result = arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 8))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 2, 3, 4, 6),
+            arrow.Arrow(2013, 1, 2, 3, 4, 7),
+            arrow.Arrow(2013, 1, 2, 3, 4, 8),
+        ])
+
+    def test_arrow(self):
+
+        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 5, 6, 7, 8))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 3, 3, 4, 5),
+            arrow.Arrow(2013, 1, 4, 3, 4, 5),
+            arrow.Arrow(2013, 1, 5, 3, 4, 5),
+        ])
+
+    def test_naive_tz(self):
+
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6),
+            'US/Pacific')
+
+        [assertEqual(r.tzinfo, tz.gettz('US/Pacific')) for r in result]
+
+    def test_aware_same_tz(self):
 
         result = arrow.Arrow.range('day',
             arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific'))
-        )
+            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
 
-        assertEqual(result, [
-            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Pacific')),
-            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')),
-        ])
+        [assertEqual(r.tzinfo, tz.gettz('US/Pacific')) for r in result]
 
-    def test_input_dates_have_different_timezone(self):
+    def test_aware_different_tz(self):
 
-        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
+        result = arrow.Arrow.range('day',
+            datetime(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')),
+            datetime(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
 
-        assertEqual(result, [
-            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')),
-            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Eastern')),
-            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Eastern')),
-        ])
+        [assertEqual(r.tzinfo, tz.gettz('US/Eastern')) for r in result]
 
-    def test_range_timezone_clobbers_input_date_timezones(self):
+    def test_aware_tz(self):
 
-        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')), tz=tz.gettz('US/Central'))
+        result = arrow.Arrow.range('day',
+            datetime(2013, 1, 1, tzinfo=tz.gettz('US/Eastern')),
+            datetime(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')),
+            tz=tz.gettz('US/Central'))
 
-        assertEqual(result, [
-            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Central')),
-            arrow.Arrow(2013, 1, 2, tzinfo=tz.gettz('US/Central')),
-            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Central')),
-        ])
+        [assertEqual(r.tzinfo, tz.gettz('US/Central')) for r in result]
 
     def test_unsupported(self):
 
