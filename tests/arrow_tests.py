@@ -581,7 +581,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.span_range('year', datetime(2013, 1, 1), datetime(2016, 12, 31))
+        result = arrow.Arrow.span_range('year', datetime(2013, 2, 1), datetime(2016, 3, 31))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999)),
@@ -592,7 +592,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_month(self):
 
-        result = arrow.Arrow.span_range('month', datetime(2013, 1, 1), datetime(2013, 4, 30))
+        result = arrow.Arrow.span_range('month', datetime(2013, 1, 2), datetime(2013, 4, 15))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 1, 31, 23, 59, 59, 999999)),
@@ -603,8 +603,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1),
-            datetime(2013, 1, 4, 23, 59))
+        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
+            datetime(2013, 1, 4, 12))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999)),
@@ -615,8 +615,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0),
-            datetime(2013, 1, 1, 3, 59))
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, 30),
+            datetime(2013, 1, 1, 3, 30))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
@@ -627,8 +627,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0),
-            datetime(2013, 1, 1, 0, 3, 59))
+        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0, 0, 30),
+            datetime(2013, 1, 1, 0, 3, 30))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999)),
@@ -637,9 +637,9 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 0, 3), arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999)),
         ])
 
-    def test_minute(self):
+    def test_second(self):
 
-        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1, 0),
+        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1),
             datetime(2013, 1, 1, 0, 0, 3))
 
         assertEqual(result, [
@@ -649,54 +649,50 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 0, 0, 3), arrow.Arrow(2013, 1, 1, 0, 0, 3, 999999)),
         ])
 
-    def test_tz_str(self):
+    def test_naive_tz(self):
+
+        tzinfo = tz.gettz('US/Pacific')
+        
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0),
+            datetime(2013, 1, 1, 3, 59), 'US/Pacific')
+
+        for f, c in result:
+            assertEqual(f.tzinfo, tzinfo)
+            assertEqual(c.tzinfo, tzinfo)
+
+    def test_aware_same_tz(self):
 
         tzinfo = tz.gettz('US/Pacific')
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59), 'US/Pacific')
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo),
+            datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo))
 
-        assertEqual(result, [
-            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo)),
-            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo)),
-            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo)),
-            (arrow.Arrow(2013, 1, 1, 3, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999, tzinfo=tzinfo)),
-        ])
+        for f, c in result:
+            assertEqual(f.tzinfo, tzinfo)
+            assertEqual(c.tzinfo, tzinfo)
 
-    def test_input_dates_have_same_timezone(self):
-
-        tzinfo = tz.gettz('US/Pacific')
-
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo), datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo))
-
-        assertEqual(result, [
-            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo)),
-            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo)),
-            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo)),
-        ])
-
-    def test_input_dates_have_different_timezone(self):
+    def test_aware_different_tz(self):
 
         tzinfo1 = tz.gettz('US/Pacific')
         tzinfo2 = tz.gettz('US/Eastern')
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo1), datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo2))
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tzinfo1),
+            datetime(2013, 1, 1, 2, 59, tzinfo=tzinfo2))
 
-        assertEqual(result, [
-            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tzinfo1)),
-            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tzinfo1)),
-            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tzinfo1), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tzinfo1)),
-        ])
+        for f, c in result:
+            assertEqual(f.tzinfo, tzinfo1)
+            assertEqual(c.tzinfo, tzinfo1)
 
-    def test_range_timezone_clobbers_input_date_timezones(self):
+    def test_aware_tz(self):
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, tzinfo=tz.gettz('US/Eastern')), datetime(2013, 1, 1, 2, 59, tzinfo=tz.gettz('US/Eastern')), tz='US/Central')
+        result = arrow.Arrow.span_range('hour',
+            datetime(2013, 1, 1, 0, tzinfo=tz.gettz('US/Eastern')),
+            datetime(2013, 1, 1, 2, 59, tzinfo=tz.gettz('US/Eastern')),
+            tz='US/Central')
 
-        assertEqual(result, [
-            (arrow.Arrow(2013, 1, 1, 0, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
-            (arrow.Arrow(2013, 1, 1, 1, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
-            (arrow.Arrow(2013, 1, 1, 2, tzinfo=tz.gettz('US/Central')), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999, tzinfo=tz.gettz('US/Central'))),
-        ])
-
+        for f, c in result:
+            assertEqual(f.tzinfo, tz.gettz('US/Central'))
+            assertEqual(c.tzinfo, tz.gettz('US/Central'))
 
 class ArrowSpanTests(Chai):
 

@@ -475,7 +475,6 @@ class Arrow(object):
         if frame_absolute == 'week':
             floor = floor + relativedelta(days=-(self.isoweekday()))
 
-        #ceil = floor.replace(**{frame_relative: 1}).replace(microseconds=-1)
         ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
 
         return self.fromdatetime(floor), self.fromdatetime(ceil)
