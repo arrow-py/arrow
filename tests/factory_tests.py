@@ -52,11 +52,11 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(tz.gettz('US/Pacific')), expected)
 
-    def test_one_arg_tz_str(self):
+    def test_one_arg_iso_str(self):
 
-        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
+        dt = datetime.utcnow()
 
-        assertDtEqual(self.factory.get('US/Pacific'), expected)
+        assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
     def test_one_arg_other(self):
 
@@ -121,18 +121,4 @@ class NowTests(Chai):
     def test_tz_str(self):
 
         assertDtEqual(self.factory.now('EST'), datetime.now(tz.gettz('EST')))
-
-
-class ISOTests(Chai):
-
-    def setUp(self):
-        super(ISOTests, self).setUp()
-
-        self.factory = factory.ArrowFactory()
-
-    def test_iso(self):
-
-        dt = datetime.utcnow()
-
-        assertDtEqual(self.factory.iso(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 

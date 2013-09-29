@@ -25,12 +25,6 @@ class ModuleTests(Chai):
 
         assertEqual(api.now('tz'), 'now')
 
-    def test_iso(self):
-
-        expect(api._factory.iso).args('str').returns('iso')
-
-        assertEqual(api.iso('str'), 'iso')
-
     def test_factory(self):
 
         class MockCustomArrowClass(arrow.Arrow):

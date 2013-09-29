@@ -22,16 +22,6 @@ def get(*args, **kwargs):
 
     return _factory.get(*args, **kwargs)
 
-
-def iso(string):
-    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
-    ``iso`` method.
-
-    '''
-
-    return _factory.iso(string)
-
-
 def utcnow():
     ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
     ``utcnow`` method.
