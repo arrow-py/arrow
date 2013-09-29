@@ -73,7 +73,10 @@ class Arrow(object):
 
     @classmethod
     def utcnow(cls):
-        '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC time. '''
+        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
+        time.
+
+        '''
 
         dt = datetime.utcnow()
 
@@ -82,14 +85,15 @@ class Arrow(object):
 
     @classmethod
     def fromtimestamp(cls, timestamp, tzinfo=None):
-        '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp.
+        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp.
 
-        :param timestamp: an ``int`` or ``float`` timestamp.
+        :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
 
         '''
 
         tzinfo = tzinfo or dateutil_tz.tzlocal()
+        timestamp = cls._get_timestamp_from_input(timestamp)
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
@@ -99,10 +103,11 @@ class Arrow(object):
     def utcfromtimestamp(cls, timestamp):
         '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, in UTC time.
 
-        :param timestamp: an integer or floating-point timestamp.
+        :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
 
         '''
 
+        timestamp = cls._get_timestamp_from_input(timestamp)
         dt = datetime.utcfromtimestamp(timestamp)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
@@ -830,6 +835,14 @@ class Arrow(object):
 
         else:
             return end, sys.maxsize
+
+    @classmethod
+    def _get_timestamp_from_input(cls, timestamp):
+
+        try:
+            return float(timestamp)
+        except:
+            raise ValueError('cannot parse \'{0}\' as a timestamp'.format(timestamp))
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)

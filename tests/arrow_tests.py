@@ -978,6 +978,16 @@ class ArrowUtilTests(Chai):
         with assertRaises(ValueError):
             get_tzinfo('abc')
 
+    def test_get_timestamp_from_input(self):
+
+        assertEqual(arrow.Arrow._get_timestamp_from_input(123), 123)
+        assertEqual(arrow.Arrow._get_timestamp_from_input(123.4), 123.4)
+        assertEqual(arrow.Arrow._get_timestamp_from_input('123'), 123.0)
+        assertEqual(arrow.Arrow._get_timestamp_from_input('123.4'), 123.4)
+
+        with assertRaises(ValueError):
+            arrow.Arrow._get_timestamp_from_input('abc')
+
     def test_get_iteration_params(self):
 
         assertEqual(arrow.Arrow._get_iteration_params('end', None), ('end', sys.maxsize))
