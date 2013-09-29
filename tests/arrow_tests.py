@@ -609,6 +609,19 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 4, 30, 23, 59, 59, 999999)),
         ])
 
+    def test_week(self):
+
+        result = arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28))
+        print result
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 4), arrow.Arrow(2013, 2, 10, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 11), arrow.Arrow(2013, 2, 17, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 18), arrow.Arrow(2013, 2, 24, 23, 59, 59, 999999)),
+        ])
+
+
     def test_day(self):
 
         result = arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
