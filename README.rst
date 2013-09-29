@@ -19,7 +19,7 @@ Python's standard library and some other low-level modules offer complete functi
 - Too many modules:  datetime, time, calendar, dateutil, pytz
 - Time zones and timestamp conversions are verbose and error-prone
 - Time zones are explicit, naivete is the norm
-- Gaps in functionality:  ISO-8601 parsing, timespans, humanization
+- Gaps in functionality:  ISO-8601 parsing, timespans, humanization, weeks
 
 Features
 --------
@@ -28,13 +28,13 @@ Features
 - Supports Python 2.6, 2.7 and 3.3
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
-- Easily replace and shift attributes, including weeks.
+- Easily replace and shift attributes, including weeks
 - Rich parsing & formatting options
-- Automatically parses ISO-8601-formatted strings.
+- Automatically parses ISO-8601-formatted strings
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization, with support for over a dozen locales and growing. 
+- Humanization, with support for over a dozen locales and growing
 - Extensible factory architecture supporting custom Arrow-derived types
 
 Get started
