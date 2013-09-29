@@ -477,7 +477,6 @@ class Arrow(object):
 
         #ceil = floor.replace(**{frame_relative: 1}).replace(microseconds=-1)
         ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
-        print floor, ceil
 
         return self.fromdatetime(floor), self.fromdatetime(ceil)
 
