@@ -1,6 +1,19 @@
 History
 -------
 
+0.4.0
++++++
+
+- [ADDED] Format-free ISO-8601 parsing in factory .get method
+- [ADDED] Support for 'week' / 'weeks' in .span, .range, .span_range, .floor and .ceil
+- [ADDED] Suppott for 'weeks' in .replace
+- [ADDED] Norwegian locale (Martinp)
+- [ADDED] Japanese locale (CortYuming)
+- [BUGFIX] Fixed wrong sign on formatted timezones (Bean)
+- [BUGFIX] Fixed issues w/ microsecond parsing (Bsidhom)
+- [BUGFIX] Fixed day of week number in locales (Cynddl)
+- [REMOVED] Old 0.1 .arrow module method
+
 0.3.5
 +++++
 
