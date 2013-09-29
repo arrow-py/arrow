@@ -167,8 +167,8 @@ class Arrow(object):
         :param limit: (optional) A maximum number of tuples to return.
 
         **NOTE**: the **end** or **limit** must be provided.  Call with **end** alone to
-        return the entire range, with **limit** alone to return a maximum # of results from the start,
-        and with both to cap a range at a maximum # of results.
+        return the entire range, with **limit** alone to return a maximum # of results from the
+        start, and with both to cap a range at a maximum # of results.
 
         Recognized datetime expressions:
 
@@ -261,15 +261,8 @@ class Arrow(object):
 
         '''
 
-        floors = cls.range(frame, start, end, tz, limit)
-
-        frame_relative = cls._get_frames(frame)[1]
-        last = floors[-1].replace(**{frame_relative:1})
-        floors.append(last)
-
-        ceils = [f.replace(microseconds=-1) for f in floors[1:]] 
-
-        return [(f, c) for f, c in zip(floors, ceils)]
+        _range = cls.range(frame, start, end, tz, limit)
+        return [r.span(frame) for r in _range]
 
 
     # representations
@@ -469,14 +462,32 @@ class Arrow(object):
 
         '''
 
-        return self.span_range(frame, self._datetime, self._datetime,
-            self._datetime.tzinfo)[0]
+        frame_absolute, frame_relative = self._get_frames(frame)
 
+        index = self._ATTRS.index('day' if frame_absolute == 'week' else frame_absolute)
+        frames = self._ATTRS[:index + 1]
+
+        values = [getattr(self, f) for f in frames]
+
+        for i in range(3 - len(values)):
+            values.append(1)
+
+        floor = datetime(*values, tzinfo=self.tzinfo)
+
+        if frame_absolute == 'week':
+            floor = floor + relativedelta(days=-(self.isoweekday()))
+
+        #ceil = floor.replace(**{frame_relative: 1}).replace(microseconds=-1)
+        ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
+        print floor, ceil
+
+        return self.fromdatetime(floor), self.fromdatetime(ceil)
 
     def floor(self, frame):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the first element in the 2-tuple returned by :func:`span <arrow.arrow.Arrow.span>`.
+        Equivalent to the first element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
 
@@ -491,7 +502,8 @@ class Arrow(object):
     def ceil(self, frame):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the second element in the 2-tuple returned by :func:`span <arrow.arrow.Arrow.span>`.
+        Equivalent to the second element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
 

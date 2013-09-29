@@ -22,8 +22,9 @@ class ArrowInitTests(Chai):
     def test_init(self):
 
         result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999)
+        expected = datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc())
 
-        assertEqual(result._datetime, datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc()))
+        assertEqual(result._datetime, expected)
 
 
 class ArrowFactoryTests(Chai):
@@ -555,7 +556,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1), datetime(2013, 1, 4, 23, 59))
+        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1),
+            datetime(2013, 1, 4, 23, 59))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999)),
@@ -566,7 +568,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59))
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0),
+            datetime(2013, 1, 1, 3, 59))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
@@ -577,7 +580,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 0, 3, 59))
+        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0),
+            datetime(2013, 1, 1, 0, 3, 59))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999)),
@@ -588,7 +592,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 0, 0, 3))
+        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1, 0),
+            datetime(2013, 1, 1, 0, 0, 3))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 0, 999999)),
@@ -672,6 +677,13 @@ class ArrowSpanTests(Chai):
 
         assertEqual(floor, datetime(2013, 2, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 2, 28, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+    def test_span_week(self):
+
+        floor, ceil = self.arrow.span('week')
+
+        assertEqual(floor, datetime(2013, 2, 10, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 16, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
     def test_span_day(self):
 
