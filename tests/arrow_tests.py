@@ -431,13 +431,27 @@ class ArrowRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6))
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3),
+            datetime(2016, 4, 5, 6))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3),
             arrow.Arrow(2014, 1, 2, 3),
             arrow.Arrow(2015, 1, 2, 3),
             arrow.Arrow(2016, 1, 2, 3),
+        ])
+
+    def test_week(self):
+
+        result = arrow.Arrow.range('week', datetime(2013, 9, 1),
+            datetime(2013, 10, 1))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 9, 1),
+            arrow.Arrow(2013, 9, 8),
+            arrow.Arrow(2013, 9, 15),
+            arrow.Arrow(2013, 9, 22),
+            arrow.Arrow(2013, 9, 29)
         ])
 
     def test_day(self):
@@ -454,7 +468,8 @@ class ArrowRangeTests(Chai):
 
     def test_tz_str(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3), datetime(2016, 4, 5, 6), 'US/Pacific')
+        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3),
+            datetime(2016, 4, 5, 6), 'US/Pacific')
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, tzinfo=tz.gettz('US/Pacific')),
@@ -465,7 +480,10 @@ class ArrowRangeTests(Chai):
 
     def test_input_dates_have_same_timezone(self):
 
-        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')), arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific')))
+        result = arrow.Arrow.range('day',
+            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')),
+            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz('US/Pacific'))
+        )
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')),

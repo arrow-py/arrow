@@ -198,12 +198,10 @@ class Arrow(object):
 
         '''
 
-        frame_absolute, frame_relative = cls._get_frames(frame)
+        # 
+        frame_relative = cls._get_frames(frame)[1]
+        tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
-        if tz is None:
-            tzinfo = cls._get_tzinfo(start.tzinfo)
-        else:
-            tzinfo = cls._get_tzinfo(tz)
         start = cls._get_datetime(start).replace(tzinfo=tzinfo)
         end, limit = cls._get_iteration_params(end, limit)
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
@@ -826,6 +824,9 @@ class Arrow(object):
         if name in cls._ATTRS:
             return name, '{0}s'.format(name)
 
+        elif name in ['week', 'weeks']:
+            return 'week', 'weeks'
+
         raise AttributeError()
 
     @classmethod
@@ -843,3 +844,4 @@ class Arrow(object):
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)
+

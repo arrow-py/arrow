@@ -5,6 +5,7 @@ import time
 
 from arrow import api, factory, arrow, util
 
+
 class ModuleTests(Chai):
 
     def test_get(self):
