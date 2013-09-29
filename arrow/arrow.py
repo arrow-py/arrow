@@ -344,7 +344,8 @@ class Arrow(object):
         return self.fromdatetime(self._datetime)
 
     def replace(self, **kwargs):
-        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated according to inputs.
+        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        according to inputs.
 
         Use single property names to set their value absolutely:
 
@@ -381,8 +382,10 @@ class Arrow(object):
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key in self._ATTRS_PLURAL:
+            elif key in self._ATTRS_PLURAL or key == 'weeks':
                 relative_kwargs[key] = value
+            elif key == 'week':
+                raise AttributeError('setting absolute week is not supported')
             elif key !='tzinfo':
                 raise AttributeError()
 
@@ -470,14 +473,14 @@ class Arrow(object):
         for i in range(3 - len(values)):
             values.append(1)
 
-        floor = datetime(*values, tzinfo=self.tzinfo)
+        floor = self.__class__(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == 'week':
             floor = floor + relativedelta(days=-(self.isoweekday() - 1))
 
         ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
 
-        return self.fromdatetime(floor), self.fromdatetime(ceil)
+        return floor, ceil 
 
     def floor(self, frame):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
