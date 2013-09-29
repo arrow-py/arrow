@@ -28,12 +28,13 @@ Features
 - Supports Python 2.6, 2.7 and 3.3
 - TZ-aware & UTC by default
 - Concise, intelligent interface for creation
-- Easily replace and shift attributes
+- Easily replace and shift attributes, including weeks.
 - Rich parsing & formatting options
+- Automatically parses ISO-8601-formatted strings.
 - Timezone conversion
 - Simple timestamp handling
 - Time spans, ranges, floors and ceilings
-- Humanization, with support for a growing number of locales
+- Humanization, with support for over a dozen locales and growing. 
 - Extensible factory architecture supporting custom Arrow-derived types
 
 Get started
@@ -57,6 +58,9 @@ Get started
         >>> local = utc.to('US/Pacific')
         >>> local
         <Arrow [2013-05-11T13:23:58.970460-07:00]>
+
+        >>> arrow.get('2013-05-11T21:23:58.970460+00:00')
+        <Arrow [2013-05-11T21:23:58.970460+00:00]>
 
         >>> local.timestamp
         1368303838
