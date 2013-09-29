@@ -694,6 +694,7 @@ class ArrowSpanRangeTests(Chai):
             assertEqual(f.tzinfo, tz.gettz('US/Central'))
             assertEqual(c.tzinfo, tz.gettz('US/Central'))
 
+
 class ArrowSpanTests(Chai):
 
     def setUp(self):
@@ -725,8 +726,8 @@ class ArrowSpanTests(Chai):
 
         floor, ceil = self.arrow.span('week')
 
-        assertEqual(floor, datetime(2013, 2, 10, tzinfo=tz.tzutc()))
-        assertEqual(ceil, datetime(2013, 2, 16, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+        assertEqual(floor, datetime(2013, 2, 11, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
     def test_span_day(self):
 
@@ -963,3 +964,4 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
+

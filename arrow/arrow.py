@@ -473,7 +473,7 @@ class Arrow(object):
         floor = datetime(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == 'week':
-            floor = floor + relativedelta(days=-(self.isoweekday()))
+            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
 
         ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
 
