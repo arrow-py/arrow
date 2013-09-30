@@ -7,7 +7,7 @@
 
 ## What?
 
-Arrow is a Python library with a sensible, intelligent approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the ``datetime`` type, compatibly enhancing existing methods and adding new ones, and has an intelligent module API that supports many common creation scenarios.  Chances are, you'll find that it provides the functionality you commonly need with fewer imports and a lot less code.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment>) and [requests](https://github.com/kennethreitz/requests).
+Arrow is a Python library with a sensible, intelligent approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, while offering intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.  Arrow is simple, lightweight and heavily inspired by [moment.js](https://github.com/timrwood/moment>) and [requests](https://github.com/kennethreitz/requests).
 
 ## Why?
 
