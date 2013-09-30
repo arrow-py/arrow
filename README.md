@@ -33,12 +33,15 @@ Python's standard library and some other low-level modules have near-complete da
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
-Get started
------------
+## Get started
+
+First:
 
 ```shell
 $ pip install arrow
 ```
+
+And then:
 
 ```python
 >>> import arrow
@@ -70,8 +73,5 @@ $ pip install arrow
 '1시간 전'
 ```
 
-Documentation
--------------
-
-Documentation is available at `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_.
+## Documentation: [crsmithdev.com/arrow](http://crsmithdev.com/arrow)
 
