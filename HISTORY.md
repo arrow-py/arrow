@@ -3,90 +3,79 @@
 
 ### 0.4.0
 
-- [ADDED] Format-free ISO-8601 parsing in factory .get method
-- [ADDED] Support for 'week' / 'weeks' in .span, .range, .span_range, .floor and .ceil
-- [ADDED] Support for 'weeks' in .replace
-- [ADDED] Norwegian locale (Martinp)
-- [ADDED] Japanese locale (CortYuming)
-- [BUGFIX] Fixed wrong sign on some formatted timezones (Bean)
-- [BUGFIX] Fixed issues w/ microsecond parsing (Bsidhom)
-- [BUGFIX] Fixed day of week number off-by-one in locales (Cynddl)
-- [REMOVED] Old 0.1 .arrow module method
-- [REMOVED] Timestamp support in .range, .span_range (bugged and never worked correctly) 
-- [REMOVED] Parsing of single string as tz string in factory .get method (replaced by ISO-8601) 
+- [NEW] Format-free ISO-8601 parsing in factory ``get`` method
+- [NEW] Support for 'week' / 'weeks' in ``span``, ``range``, ``span_range``, ``floor`` and ``ceil``
+- [NEW] Support for 'weeks' in ``replace``
+- [NEW] Norwegian locale (Martinp)
+- [NEW] Japanese locale (CortYuming)
+- [FIX] Timezones no longer show the wrong sign when formatted (Bean)
+- [FIX] Microseconds are parsed correctly from strings (Bsidhom)
+- [FIX] Locale day-of-week is no longer off by one (Cynddl)
+- [CHANGE] Old 0.1 ``arrow`` module method removed
+- [CHANGE] Timestamp support in ``range`` and ``span_range`` (never worked correctly) 
+- [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO-8601) 
 
-0.3.5
-+++++
+### 0.3.5
 
-- Fix for losing source timezones in range calculation (Ftobia)
-- French locale added (Cynddl)
-- Spanish locale added (Slapresta)
+- [NEW] French locale (Cynddl)
+- [NEW] Spanish locale (Slapresta)
+- [FIX] Ranges handle multiple timezones correctly (Ftobia)
  
-0.3.4
-+++++
+### 0.3.4
 
-- Fix for incorrect month delta in .humanize
-- Fix for empty result when using str.format and no format string
+- [FIX] Humanize no longer sometimes returns the wrong month delta
+- [FIX] ``__format__`` works correctly with no format string
 
-0.3.3
-+++++
+### 0.3.3
 
-- Python 2.6 and 3.3 fully supported, including tests
-- Initial support for locale-based parsing and formatting
-- ArrowFactory class, now proxied as the module API
-- arrow.factory() method to obtain a factory for a custom type
+- [NEW] Python 2.6 support
+- [NEW] Initial support for locale-based parsing and formatting
+- [NEW] ArrowFactory class, now proxied as the module API
+- [NEW] ``factory`` api method to obtain a factory for a custom type
+- [FIX] Python 3 support and tests completely ironed out 
 
-0.3.2
-+++++
+### 0.3.2
 
-- Python 3.0 support / fixes
+- [NEW] Python 3+ support
 
-0.3.1
-+++++
+### 0.3.1
 
-- Fix for incorrect timestamp handling in old arrow function (for old API compatibility)
+- [FIX] The old ``arrow`` module function handles timestamps correctly as it used to
 
-0.3.0
-+++++
+### 0.3.0
 
-- Arrow objects are no longer mutable
-- Arrow.replace method
-- Plural attribute name semantics altered: single -> absolute, plural -> relative
-- Plural names no longer supported as properties (e.g. arrow.utcnow().years)
-- Limit parameters are respected in range and span_range
-- Accept timestamps, datetimes and Arrows for datetime inputs, where reasonable
+- [NEW] ``Arrow.replace`` method
+- [NEW] Accept timestamps, datetimes and Arrows for datetime inputs, where reasonable
+- [FIX] ``range`` and ``span_range`` respect end and limit paremters correctly
+- [CHANGE] Arrow objects are no longer mutable
+- [CHANGE] Plural attribute name semantics altered: single -> absolute, plural -> relative
+- [CHANGE] Plural names no longer supported as properties (e.g. ``arrow.utcnow().years``)
 
-0.2.1
-+++++
+### 0.2.1
 
-- Support for localized humanization
-- English, Russian, Greek, Korean, Chinese locales
+- [NEW] Support for localized humanization
+- [NEW] English, Russian, Greek, Korean, Chinese locales
 
-0.2.0
-+++++
+### 0.2.0
 
-- Rewrite, re-implemented as datetime replacement
-- Added date parsing
-- Added date formatting
-- Added floor, ceil and span methods
-- Added datetime methods for drop-in replacement
-- Added clone method
-- Added get, now and utcnow API methods
+- **REWRITE**
+- [NEW] Date parsing
+- [NEW] Date formatting
+- [NEW] ``floor``, ``ceil`` and ``span`` methods
+- [NEW] ``datetime`` interface implementation 
+- [NEW] ``clone`` method
+- [NEW] ``get``, ``now`` and ``utcnow`` API methods
 
-0.1.6
-+++++
+### 0.1.6
 
-- Added humanized time deltas
-- Fixed numerous issues with conversions related to daylight savings time
-- Fixed some inconsistencies in time zone names
-- __str__ uses ISO formatting
-- __eq__ implemented for basic comparison between Arrow objects
+- [NEW] Humanized time deltas
+- [NEW] ``__eq__`` implemented
+- [FIX] Issues with conversions related to daylight savings time resolved
+- [CHANGE] ``__str__`` uses ISO formatting
 
-0.1.5
-+++++
+### 0.1.5
 
-- Started tracking changes
-- Added parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
-- Fixed some incorrect timestamps with delta / olson time zones
-- Fixed formatting of UTC offsets in TimeStamp's str method
+- **Started tracking changes**
+- [NEW] Parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
+- [NEW] Resolved some issues with timestamps and delta / Olson time zones
 
