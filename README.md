@@ -21,7 +21,7 @@ Python's standard library and some other low-level modules have near-complete da
 
 ## Features 
 
-- Fully implemented, drop-in replacement for ``datetime`` 
+- Fully implemented, drop-in replacement for datetime 
 - Supports Python 2.6, 2.7 and 3.3
 - Time zone-aware & UTC by default
 - Provides a super-simple creation options for many common input scenarios
