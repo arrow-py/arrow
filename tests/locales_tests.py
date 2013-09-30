@@ -56,7 +56,6 @@ class LocaleTests(Chai):
         assertEqual(result, 'an hour ago')
 
 
-
 class RussianLocalesTests(Chai):
 
     def test_plurals2(self):
@@ -73,3 +72,17 @@ class RussianLocalesTests(Chai):
         assertEqual(locale._format_timeframe('hours', 25), '25 часов')
 
 
+class PolishLocalesTests(Chai):
+
+    def test_plurals(self):
+
+        locale = locales.PolishLocale()
+
+        assertEqual(locale._format_timeframe('hours', 0), '0 godzin')
+        assertEqual(locale._format_timeframe('hours', 1), '1 godzin')
+        assertEqual(locale._format_timeframe('hours', 2), '2 godziny')
+        assertEqual(locale._format_timeframe('hours', 4), '4 godziny')
+        assertEqual(locale._format_timeframe('hours', 5), '5 godzin')
+        assertEqual(locale._format_timeframe('hours', 21), '21 godzin')
+        assertEqual(locale._format_timeframe('hours', 22), '22 godziny')
+        assertEqual(locale._format_timeframe('hours', 25), '25 godzin')
