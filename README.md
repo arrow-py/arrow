@@ -75,5 +75,5 @@ And then:
 
 ## Contributing
 
-Contributions are welcome, especially with localization.  See [locales.py](https://github.com/crsmithdev/arrow/blob/0.4/arrow/locales.py) for what's currently supported.
+Contributions are welcome, especially with localization.  See [locales.py](https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py) for what's currently supported.
 
