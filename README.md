@@ -19,7 +19,7 @@ Python's standard library and some other low-level modules have near-complete da
 - Time zone naievety is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-## Features
+## Features 
 
 - Fully implemented, drop-in replacement for ``datetime`` 
 - Supports Python 2.6, 2.7 and 3.3
@@ -33,7 +33,7 @@ Python's standard library and some other low-level modules have near-complete da
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
-## Get started
+## Quick start
 
 First:
 
@@ -73,5 +73,7 @@ And then:
 '1시간 전'
 ```
 
-## Documentation: [crsmithdev.com/arrow](http://crsmithdev.com/arrow)
+## Contributing
+
+Contributions are welcome, especially with localization.  See [locales.py](https://github.com/crsmithdev/arrow/blob/0.4/arrow/locales.py) for what's currently supported.
 
