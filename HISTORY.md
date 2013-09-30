@@ -1,8 +1,7 @@
-History
--------
+## History
 
-0.4.0
-+++++
+
+### 0.4.0
 
 - [ADDED] Format-free ISO-8601 parsing in factory .get method
 - [ADDED] Support for 'week' / 'weeks' in .span, .range, .span_range, .floor and .ceil
