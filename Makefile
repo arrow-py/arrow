@@ -5,7 +5,6 @@ auto: build27
 build27:
 	virtualenv local --python=python2.7
 	local/bin/pip install --use-mirrors -r requirements.txt
-	local/bin/pip install --use-mirrors -r requirements27.txt
 
 build26:
 	virtualenv local --python=python2.6
@@ -15,7 +14,6 @@ build26:
 build33:
 	virtualenv local --python=python3.3
 	local/bin/pip install --use-mirrors -r requirements.txt
-	local/bin/pip install --use-mirrors -r requirements33.txt
 
 test:
 	rm -f .coverage
