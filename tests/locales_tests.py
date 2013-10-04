@@ -71,6 +71,16 @@ class RussianLocalesTests(Chai):
         assertEqual(locale._format_timeframe('hours', 22), '22 часа')
         assertEqual(locale._format_timeframe('hours', 25), '25 часов')
 
+        # feminine grammatical gender should be tested separately
+        assertEqual(locale._format_timeframe('minutes', 0), '0 минут')
+        assertEqual(locale._format_timeframe('minutes', 1), '1 минуту')
+        assertEqual(locale._format_timeframe('minutes', 2), '2 минуты')
+        assertEqual(locale._format_timeframe('minutes', 4), '4 минуты')
+        assertEqual(locale._format_timeframe('minutes', 5), '5 минут')
+        assertEqual(locale._format_timeframe('minutes', 21), '21 минуту')
+        assertEqual(locale._format_timeframe('minutes', 22), '22 минуты')
+        assertEqual(locale._format_timeframe('minutes', 25), '25 минут')
+
 
 class PolishLocalesTests(Chai):
 
