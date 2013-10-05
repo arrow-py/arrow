@@ -174,7 +174,7 @@ class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
     future = 'en {0}'
-    
+
     timeframes = {
         'now': 'ahora',
         'seconds': 'segundos',
@@ -479,7 +479,7 @@ class RussianLocale(SlavicBaseLocale):
         'now': 'сейчас',
         'seconds': 'несколько секунд',
         'minute': 'минуту',
-        'minutes': ['{0} минута', '{0} минуты', '{0} минут'],
+        'minutes': ['{0} минуту', '{0} минуты', '{0} минут'],
         'hour': 'час',
         'hours': ['{0} час', '{0} часа', '{0} часов'],
         'day': 'день',
@@ -511,9 +511,9 @@ class UkrainianLocale(SlavicBaseLocale):
         'now': 'зараз',
         'seconds': 'кілька секунд',
         'minute': 'хвилину',
-        'minutes': ['{0} хвилина', '{0} хвилини', '{0} хвилин'],
+        'minutes': ['{0} хвилину', '{0} хвилини', '{0} хвилин'],
         'hour': 'годину',
-        'hours': ['{0} година', '{0} години', '{0} годин'],
+        'hours': ['{0} годину', '{0} години', '{0} годин'],
         'day': 'день',
         'days': ['{0} день', '{0} дні', '{0} днів'],
         'month': 'місяць',
