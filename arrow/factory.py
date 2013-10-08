@@ -59,7 +59,7 @@ class ArrowFactory(object):
 
         **One** ISO-8601-formatted ``str``, to parse it::
 
-            >>> arrow.get(''2013-09-29T01:26:43.830580')
+            >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
 
         **One** ``tzinfo``, to get the current time in that timezone::
