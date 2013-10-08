@@ -174,7 +174,7 @@ class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
     future = 'en {0}'
-    
+
     timeframes = {
         'now': 'ahora',
         'seconds': 'segundos',
@@ -351,6 +351,7 @@ class ChineseCNLocale(Locale):
     day_names = ['', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
     day_abbreviations = ['', '一', '二', '三', '四', '五', '六', '日']
 
+
 class ChineseTWLocale(Locale):
 
     names = ['zh_tw']
@@ -415,7 +416,7 @@ class KoreanLocale(Locale):
 
 # derived locale types & implementations.
 
-class BaseRussianLocale(Locale):
+class SlavicBaseLocale(Locale):
 
     def _format_timeframe(self, timeframe, delta):
 
@@ -434,7 +435,40 @@ class BaseRussianLocale(Locale):
         return form.format(delta)
 
 
-class RussianLocale(BaseRussianLocale):
+class PolishLocale(SlavicBaseLocale):
+
+    names = ['pl', 'pl_pl']
+
+    past = '{0} temu'
+    future = 'za {0}'
+
+    timeframes = {
+        'now': 'teraz',
+        'seconds': 'kilka sekund',
+        'minute': 'minuta',
+        'minutes': ['{0} minut', '{0} minuty', '{0} minut'],
+        'hour': 'godzina',
+        'hours': ['{0} godzin', '{0} godziny', '{0} godzin'],
+        'day': 'dzień',
+        'days': ['{0} dzień', '{0} dni', '{0} dni'],
+        'month': 'miesiąc',
+        'months': ['{0} miesiąc', '{0} miesiące', '{0} miesięcy'],
+        'year': 'rok',
+        'years': ['{0} rok', '{0} lata', '{0} lat'],
+    }
+
+    month_names = ['', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj',
+        'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
+        'Listopad', 'Grudzień']
+    month_abbreviations = ['', 'sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip',
+        'sie', 'wrz', 'paź', 'lis', 'gru']
+
+    day_names = ['', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek',
+        'Sobota', 'Niedziela']
+    day_abbreviations = ['', 'Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd']
+
+
+class RussianLocale(SlavicBaseLocale):
 
     names = ['ru', 'ru_ru']
 
@@ -445,7 +479,7 @@ class RussianLocale(BaseRussianLocale):
         'now': 'сейчас',
         'seconds': 'несколько секунд',
         'minute': 'минуту',
-        'minutes': ['{0} минута', '{0} минуты', '{0} минут'],
+        'minutes': ['{0} минуту', '{0} минуты', '{0} минут'],
         'hour': 'час',
         'hours': ['{0} час', '{0} часа', '{0} часов'],
         'day': 'день',
@@ -466,7 +500,7 @@ class RussianLocale(BaseRussianLocale):
     day_abbreviations = ['', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
 
 
-class UkrainianLocale(BaseRussianLocale):
+class UkrainianLocale(SlavicBaseLocale):
 
     names = ['ua', 'uk_ua']
 
@@ -477,9 +511,9 @@ class UkrainianLocale(BaseRussianLocale):
         'now': 'зараз',
         'seconds': 'кілька секунд',
         'minute': 'хвилину',
-        'minutes': ['{0} хвилина', '{0} хвилини', '{0} хвилин'],
+        'minutes': ['{0} хвилину', '{0} хвилини', '{0} хвилин'],
         'hour': 'годину',
-        'hours': ['{0} година', '{0} години', '{0} годин'],
+        'hours': ['{0} годину', '{0} години', '{0} годин'],
         'day': 'день',
         'days': ['{0} день', '{0} дні', '{0} днів'],
         'month': 'місяць',
