@@ -295,6 +295,9 @@ class Arrow(object):
 
     def __getattr__(self, name):
 
+        if name == 'week':
+            return self.isocalendar()[1]
+
         value = getattr(self._datetime, name, None)
 
         if value is not None:

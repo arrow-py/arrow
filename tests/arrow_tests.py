@@ -147,6 +147,10 @@ class ArrowAttributeTests(Chai):
         with assertRaises(AttributeError):
             self.arrow.prop
 
+    def test_getattr_week(self):
+
+        assertEqual(self.arrow.week, 1)
+
     def test_getattr_dt_value(self):
 
         assertEqual(self.arrow.year, 2013)
