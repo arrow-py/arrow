@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Arrow: better dates and times for Python &mdash; Arrow 0.3.4 documentation</title>
+    <title>Arrow: better dates and times for Python &mdash; Arrow 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +13,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.4',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Arrow 0.3.4 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'></link>
+    <link rel="top" title="Arrow 0.4.0 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'></link>
 <meta name="description" content="Arrow:  better dates and times for Python.  Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times."></meta>
   </head>
   <body>
@@ -39,8 +39,9 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Arrow:  better dates and times for Python</a><ul>
+<li><a class="reference internal" href="#what">What?</a></li>
 <li><a class="reference internal" href="#why">Why?</a></li>
-<li><a class="reference internal" href="#key-features">Key features</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a><ul>
 <li><a class="reference internal" href="#creation">Creation</a></li>
@@ -58,7 +59,7 @@
 <li><a class="reference internal" href="#api-guide">API Guide</a><ul>
 <li><a class="reference internal" href="#module-arrow.arrow">arrow.arrow</a></li>
 <li><a class="reference internal" href="#module-arrow.factory">arrow.factory</a></li>
-<li><a class="reference internal" href="#module-arrow.api">arrow.api</a></li>
+<li><a class="reference internal" href="#arrow-api">arrow.api</a></li>
 <li><a class="reference internal" href="#module-arrow.locales">arrow.locale</a></li>
 </ul>
 </li>
@@ -89,31 +90,36 @@
             
   <div class="section" id="arrow-better-dates-and-times-for-python">
 <h1>Arrow:  better dates and times for Python<a class="headerlink" href="#arrow-better-dates-and-times-for-python" title="Permalink to this headline">¶</a></h1>
-<p>Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+<div class="section" id="what">
+<h2>What?<a class="headerlink" href="#what" title="Permalink to this headline">¶</a></h2>
+<p>Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.</p>
+<p>Arrow is heavily inspired by <a class="reference external" href="https://github.com/timrwood/moment">moment.js</a> and <a class="reference external" href="https://github.com/kennethreitz/requests">requests</a>.</p>
+</div>
 <div class="section" id="why">
 <h2>Why?<a class="headerlink" href="#why" title="Permalink to this headline">¶</a></h2>
-<p>Python&#8217;s standard library, and some other low-level modules, offer complete functionality but don&#8217;t work very well from a usability perspective:</p>
+<p>Python&#8217;s standard library and some other low-level modules have near-complete date, time and time zone functionality but don&#8217;t work very well from a usability perspective:</p>
 <ul class="simple">
-<li>Too many modules:  datetime, time, calendar, dateutil, pytz</li>
-<li>Time zone and timestamp conversions are verbose and error-prone</li>
-<li>Time zones are explicit, naivete is the norm</li>
+<li>Too many modules:  datetime, time, calendar, dateutil, pytz and more</li>
+<li>Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.</li>
+<li>Time zones and timestamp conversions are verbose and unpleasant</li>
+<li>Time zone naievety is the norm</li>
 <li>Gaps in functionality:  ISO-8601 parsing, timespans, humanization</li>
 </ul>
 </div>
-<div class="section" id="key-features">
-<h2>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Implements the datetime interface</li>
+<li>Fully implemented, drop-in replacement for datetime</li>
 <li>Supports Python 2.6, 2.7 and 3.3</li>
-<li>TZ-aware &amp; UTC by default</li>
-<li>Concise, intelligent interface for creation</li>
-<li>Easily replace and shift attributes</li>
-<li>Rich parsing &amp; formatting options</li>
+<li>Time zone-aware &amp; UTC by default</li>
+<li>Provides a super-simple creation options for many common input scenarios</li>
+<li>Updated .replace method with support for relative offsets, including weeks</li>
+<li>Formats and parses strings, including ISO-8601-formatted strings automatically</li>
 <li>Timezone conversion</li>
-<li>Simple timestamp handling</li>
-<li>Time spans, ranges, floors and ceilings</li>
-<li>Humanization, with support for a growing number of locales</li>
-<li>Extensible factory architecture supporting custom Arrow-derived types</li>
+<li>Timestamp available as a property</li>
+<li>Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond</li>
+<li>Humanizes and supports a growing list of contributed locales</li>
+<li>Extensible for your own Arrow-derived types</li>
 </ul>
 </div>
 <div class="section" id="quickstart">
@@ -133,6 +139,9 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span> <span class="o">=</span> <span class="n">utc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span>
 <span class="go">&lt;Arrow [2013-05-11T13:23:58.970460-07:00]&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-05-11T21:23:58.970460+00:00&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-11T21:23:58.970460+00:00]&gt;</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local</span><span class="o">.</span><span class="n">timestamp</span>
 <span class="go">1368303838</span>
@@ -177,7 +186,7 @@
 <span class="go">&lt;Arrow [2013-05-07T04:24:24.152325+00:00]&gt;</span>
 </pre></div>
 </div>
-<p>Use a datetime, a timezone-aware datetime, a tzinfo or a timezone string:</p>
+<p>Use a naive or timezone-aware datetime, or flexibly specify a time zone:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span>
 <span class="go">&lt;Arrow [2013-05-07T04:24:24.152325+00:00]&gt;</span>
 
@@ -191,9 +200,14 @@
 <span class="go">&lt;Arrow [2013-05-06T21:24:49.552236-07:00]&gt;</span>
 </pre></div>
 </div>
-<p>Or parse from a string:</p>
+<p>Parse from a string:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-05-05 12:30:45&#39;</span><span class="p">,</span> <span class="s">&#39;YYYY-MM-DD HH:mm:ss&#39;</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-05T12:30:45+00:00]&gt;</span>
+</pre></div>
+</div>
+<p>Many ISO-8601 compliant strings are recognized and parsed without a format string:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-09-30T15:34:00.000-07:00&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-09-30T15:34:00-07:00]&gt;</span>
 </pre></div>
 </div>
 <p>Arrow objects can be instantiated directly too, with the same arguments as a datetime:</p>
@@ -250,8 +264,8 @@
 </pre></div>
 </div>
 <p>Or, get one with attributes shifted forward or backward:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hours</span><span class="o">=+</span><span class="mi">4</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
-<span class="go">&lt;Arrow [2013-05-12T07:09:35.334214+00:00]&gt;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">weeks</span><span class="o">=+</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-06-02T03:29:35.334214+00:00]&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -434,7 +448,8 @@ additional functionality.</p>
 <dl class="classmethod">
 <dt id="arrow.arrow.Arrow.utcnow">
 <em class="property">classmethod </em><tt class="descname">utcnow</tt><big>(</big><big>)</big><a class="headerlink" href="#arrow.arrow.Arrow.utcnow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructs an <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing &#8220;now&#8221; in UTC time.</p>
+<dd><p>Constructs an <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing &#8220;now&#8221; in UTC
+time.</p>
 </dd></dl>
 
 <dl class="classmethod">
@@ -446,7 +461,7 @@ additional functionality.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>timestamp</strong> &#8211; an <tt class="docutils literal"><span class="pre">int</span></tt> or <tt class="docutils literal"><span class="pre">float</span></tt> timestamp.</li>
+<li><strong>timestamp</strong> &#8211; an <tt class="docutils literal"><span class="pre">int</span></tt> or <tt class="docutils literal"><span class="pre">float</span></tt> timestamp, or a <tt class="docutils literal"><span class="pre">str</span></tt> that converts to either.</li>
 <li><strong>tzinfo</strong> &#8211; (optional) a <tt class="docutils literal"><span class="pre">tzinfo</span></tt> object.  Defaults to local time.</li>
 </ul>
 </td>
@@ -463,7 +478,7 @@ additional functionality.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timestamp</strong> &#8211; an integer or floating-point timestamp.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timestamp</strong> &#8211; an <tt class="docutils literal"><span class="pre">int</span></tt> or <tt class="docutils literal"><span class="pre">float</span></tt> timestamp, or a <tt class="docutils literal"><span class="pre">str</span></tt> that converts to either.</td>
 </tr>
 </tbody>
 </table>
@@ -548,14 +563,13 @@ an iteration of time between two inputs.</p>
 </tbody>
 </table>
 <p><strong>NOTE</strong>: the <strong>end</strong> or <strong>limit</strong> must be provided.  Call with <strong>end</strong> alone to
-return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the start,
-and with both to cap a range at a maximum # of results.</p>
+return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the
+start, and with both to cap a range at a maximum # of results.</p>
 <p>Recognized datetime expressions:</p>
 <blockquote>
 <div><ul class="simple">
 <li>An <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
 <li>A <tt class="docutils literal"><span class="pre">datetime</span></tt> object.</li>
-<li>A timestamp, as an <tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt>, or <tt class="docutils literal"><span class="pre">str</span></tt> that converts to one.</li>
 </ul>
 </div></blockquote>
 <p>Recognized timezone expressions:</p>
@@ -585,8 +599,8 @@ and with both to cap a range at a maximum # of results.</p>
 <dl class="classmethod">
 <dt id="arrow.arrow.Arrow.span_range">
 <em class="property">classmethod </em><tt class="descname">span_range</tt><big>(</big><em>frame</em>, <em>start</em>, <em>end</em>, <em>tz=None</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#arrow.arrow.Arrow.span_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an array of tuples, each <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects, representing
-a series of timespans between two inputs.</p>
+<dd><p>Returns an array of tuples, each <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> objects,
+representing a series of timespans between two inputs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -603,14 +617,13 @@ a series of timespans between two inputs.</p>
 </tbody>
 </table>
 <p><strong>NOTE</strong>: the <strong>end</strong> or <strong>limit</strong> must be provided.  Call with <strong>end</strong> alone to
-return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the start,
-and with both to cap a range at a maximum # of results.</p>
+return the entire range, with <strong>limit</strong> alone to return a maximum # of results from the
+start, and with both to cap a range at a maximum # of results.</p>
 <p>Recognized datetime expressions:</p>
 <blockquote>
 <div><ul class="simple">
 <li>An <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object.</li>
 <li>A <tt class="docutils literal"><span class="pre">datetime</span></tt> object.</li>
-<li>A timestamp, as an <tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt>, or <tt class="docutils literal"><span class="pre">str</span></tt> that converts to one.</li>
 </ul>
 </div></blockquote>
 <p>Recognized timezone expressions:</p>
@@ -675,7 +688,8 @@ and with both to cap a range at a maximum # of results.</p>
 <dl class="method">
 <dt id="arrow.arrow.Arrow.replace">
 <tt class="descname">replace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#arrow.arrow.Arrow.replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a new <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object with attributes updated according to inputs.</p>
+<dd><p>Returns a new <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object with attributes updated
+according to inputs.</p>
 <p>Use single property names to set their value absolutely:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">arrow</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arw</span> <span class="o">=</span> <span class="n">arrow</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
@@ -782,7 +796,8 @@ of the <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arro
 <tt class="descname">floor</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#arrow.arrow.Arrow.floor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing the &#8220;floor&#8221;
 of the timespan of the <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object in a given timeframe.
-Equivalent to the first element in the 2-tuple returned by <a class="reference internal" href="#arrow.arrow.Arrow.span" title="arrow.arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
+Equivalent to the first element in the 2-tuple returned by
+<a class="reference internal" href="#arrow.arrow.Arrow.span" title="arrow.arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -803,7 +818,8 @@ Equivalent to the first element in the 2-tuple returned by <a class="reference i
 <tt class="descname">ceil</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#arrow.arrow.Arrow.ceil" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a new <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object, representing the &#8220;ceiling&#8221;
 of the timespan of the <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow.arrow.Arrow"><tt class="xref py py-class docutils literal"><span class="pre">Arrow</span></tt></a> object in a given timeframe.
-Equivalent to the second element in the 2-tuple returned by <a class="reference internal" href="#arrow.arrow.Arrow.span" title="arrow.arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
+Equivalent to the second element in the 2-tuple returned by
+<a class="reference internal" href="#arrow.arrow.Arrow.span" title="arrow.arrow.Arrow.span"><tt class="xref py py-func docutils literal"><span class="pre">span</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1014,6 +1030,11 @@ Defaults to <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow
 <span class="go">&lt;Arrow [2013-05-08T05:51:43.316458+00:00]&gt;</span>
 </pre></div>
 </div>
+<p><strong>None</strong> to also get current UTC time:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-05-08T05:51:43.316458+00:00]&gt;      </span>
+</pre></div>
+</div>
 <p><strong>One</strong> <tt class="docutils literal"><span class="pre">str</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt>, or <tt class="docutils literal"><span class="pre">int</span></tt>, convertible to a floating-point timestamp, to get that timestamp in UTC:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">1367992474.293378</span><span class="p">)</span>
 <span class="go">&lt;Arrow [2013-05-08T05:54:34.293378+00:00]&gt;</span>
@@ -1028,17 +1049,13 @@ Defaults to <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow
 <span class="go">&lt;Arrow [2013-05-08T05:54:34+00:00]&gt;</span>
 </pre></div>
 </div>
-<p><strong>One</strong> <tt class="docutils literal"><span class="pre">str</span></tt>, convertible to a timezone, or <tt class="docutils literal"><span class="pre">tzinfo</span></tt>, to get the current time in that timezone:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;local&#39;</span><span class="p">)</span>
-<span class="go">&lt;Arrow [2013-05-07T22:57:11.793643-07:00]&gt;</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;US/Pacific&#39;</span><span class="p">)</span>
-<span class="go">&lt;Arrow [2013-05-07T22:57:15.609802-07:00]&gt;</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;-07:00&#39;</span><span class="p">)</span>
-<span class="go">&lt;Arrow [2013-05-07T22:57:22.777398-07:00]&gt;</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
+<p><strong>One</strong> ISO-8601-formatted <tt class="docutils literal"><span class="pre">str</span></tt>, to parse it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;2013-09-29T01:26:43.830580&#39;</span><span class="p">)</span>
+<span class="go">&lt;Arrow [2013-09-29T01:26:43.830580+00:00]&gt;</span>
+</pre></div>
+</div>
+<p><strong>One</strong> <tt class="docutils literal"><span class="pre">tzinfo</span></tt>, to get the current time in that timezone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">arrow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">())</span>
 <span class="go">&lt;Arrow [2013-05-07T22:57:28.484717-07:00]&gt;</span>
 </pre></div>
 </div>
@@ -1122,9 +1139,9 @@ Defaults to <a class="reference internal" href="#arrow.arrow.Arrow" title="arrow
 </dd></dl>
 
 </div>
-<div class="section" id="module-arrow.api">
-<span id="arrow-api"></span><h3>arrow.api<a class="headerlink" href="#module-arrow.api" title="Permalink to this headline">¶</a></h3>
-<p>Provides the default implementation of <a class="reference internal" href="#arrow.factory.ArrowFactory" title="arrow.factory.ArrowFactory"><tt class="xref py py-class docutils literal"><span class="pre">ArrowFactory</span></tt></a>
+<div class="section" id="arrow-api">
+<h3>arrow.api<a class="headerlink" href="#arrow-api" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-arrow.api"></span><p>Provides the default implementation of <a class="reference internal" href="#arrow.factory.ArrowFactory" title="arrow.factory.ArrowFactory"><tt class="xref py py-class docutils literal"><span class="pre">ArrowFactory</span></tt></a>
 methods for use as a module API.</p>
 <dl class="function">
 <dt id="arrow.api.get">
@@ -1290,7 +1307,7 @@ to an inpute locale name.</p>
         <li class="right" style="margin-right: 10px">
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a></li>
-        <li><a href="#">Arrow 0.3.4 documentation</a> &raquo;</li> 
+        <li><a href="#">Arrow 0.4.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

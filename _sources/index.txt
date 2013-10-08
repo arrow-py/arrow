@@ -2,34 +2,40 @@
 Arrow:  better dates and times for Python
 =========================================
 
-Arrow is a Python library that provides a sensible, intelligent way of creating, manipulating, formatting and converting dates and times.  Arrow is simple, lightweight and heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
+-----
+What?
+-----
+
+Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.
+
+Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
 
 ----
 Why?
 ----
+Python's standard library and some other low-level modules have near-complete date, time and time zone functionality but don't work very well from a usability perspective:
 
-Python's standard library, and some other low-level modules, offer complete functionality but don't work very well from a usability perspective:
-
-- Too many modules:  datetime, time, calendar, dateutil, pytz
-- Time zone and timestamp conversions are verbose and error-prone
-- Time zones are explicit, naivete is the norm
+- Too many modules:  datetime, time, calendar, dateutil, pytz and more
+- Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
+- Time zones and timestamp conversions are verbose and unpleasant 
+- Time zone naievety is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-------------
-Key features
-------------
+--------
+Features
+--------
 
-- Implements the datetime interface
+- Fully implemented, drop-in replacement for datetime 
 - Supports Python 2.6, 2.7 and 3.3
-- TZ-aware & UTC by default
-- Concise, intelligent interface for creation
-- Easily replace and shift attributes
-- Rich parsing & formatting options
+- Time zone-aware & UTC by default
+- Provides a super-simple creation options for many common input scenarios
+- Updated .replace method with support for relative offsets, including weeks
+- Formats and parses strings, including ISO-8601-formatted strings automatically
 - Timezone conversion
-- Simple timestamp handling
-- Time spans, ranges, floors and ceilings
-- Humanization, with support for a growing number of locales
-- Extensible factory architecture supporting custom Arrow-derived types
+- Timestamp available as a property
+- Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond
+- Humanizes and supports a growing list of contributed locales
+- Extensible for your own Arrow-derived types
 
 ----------
 Quickstart
@@ -53,6 +59,9 @@ Quickstart
     >>> local = utc.to('US/Pacific')
     >>> local
     <Arrow [2013-05-11T13:23:58.970460-07:00]>
+
+    >>> arrow.get('2013-05-11T21:23:58.970460+00:00')
+    <Arrow [2013-05-11T21:23:58.970460+00:00]>
 
     >>> local.timestamp
     1368303838
@@ -102,7 +111,7 @@ Create from timestamps (ints or floats, or strings that convert to a float):
     >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
-Use a datetime, a timezone-aware datetime, a tzinfo or a timezone string:
+Use a naive or timezone-aware datetime, or flexibly specify a time zone:
 
 .. code-block:: python
 
@@ -118,12 +127,17 @@ Use a datetime, a timezone-aware datetime, a tzinfo or a timezone string:
     >>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
     <Arrow [2013-05-06T21:24:49.552236-07:00]>
 
-Or parse from a string:
+Parse from a string:
 
 .. code-block:: python
 
     >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
     <Arrow [2013-05-05T12:30:45+00:00]>
+
+Many ISO-8601 compliant strings are recognized and parsed without a format string:
+
+    >>> arrow.get('2013-09-30T15:34:00.000-07:00')
+    <Arrow [2013-09-30T15:34:00-07:00]>
 
 Arrow objects can be instantiated directly too, with the same arguments as a datetime:
 
@@ -194,8 +208,9 @@ Or, get one with attributes shifted forward or backward:
 
 .. code-block:: python
 
-    >>> arw.replace(hours=+4, minutes=-20)
-    <Arrow [2013-05-12T07:09:35.334214+00:00]>
+    >>> arw.replace(weeks=+3)
+    <Arrow [2013-06-02T03:29:35.334214+00:00]>
+
 
 Format
 ======
