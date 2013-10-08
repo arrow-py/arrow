@@ -11,6 +11,7 @@
 - [FIX] Timezones no longer show the wrong sign when formatted (Bean)
 - [FIX] Microseconds are parsed correctly from strings (Bsidhom)
 - [FIX] Locale day-of-week is no longer off by one (Cynddl)
+- [FIX] Corrected plurals of Ukranian and Russina nouns (Catchagain)
 - [CHANGE] Old 0.1 ``arrow`` module method removed
 - [CHANGE] Timestamp support in ``range`` and ``span_range`` (never worked correctly) 
 - [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO-8601) 
