@@ -170,6 +170,34 @@ class EnglishLocale(Locale):
     day_abbreviations = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
+class ItalianLocale(Locale):
+    names = ['it', 'it_it']
+    past = '{0} fa'
+    future = 'tra {0}'
+
+    timeframes = {
+        'now': 'adesso',
+        'seconds': 'qualche secondo',
+        'minute': 'un minuto',
+        'minutes': '{0} minutei',
+        'hour': 'un\'ora',
+        'hours': '{0} ore',
+        'day': 'un giorno',
+        'days': '{0} giorni',
+        'month': 'un mese',
+        'months': '{0} mesi',
+        'year': 'un anno',
+        'years': '{0} anni',
+    }
+
+    month_names = ['', 'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio',
+        'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
+    month_abbreviations = ['', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago',
+        'Set', 'Ott', 'Nov', 'Dic']
+
+    day_names = ['', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
+    day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
+    
 class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
