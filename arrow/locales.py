@@ -415,6 +415,38 @@ class KoreanLocale(Locale):
 
 
 # derived locale types & implementations.
+class DutchLocale(Locale):
+
+    names = ['nl', 'nl_nl']
+
+    past = '{0} geleden'
+    future = 'over {0}'
+
+    timeframes = {
+        'now': 'nu',
+        'seconds': 'seconden',
+        'minute': 'een minuut',
+        'minutes': '{0} minuten',
+        'hour': 'een uur',
+        'hours': '{0} uren',
+        'day': 'een dag',
+        'days': '{0} dagen',
+        'month': 'een maand',
+        'months': '{0} maanden',
+        'year': 'een jaar',
+        'years': '{0} jaren',
+    }
+
+    # In Dutch names of months and days are not starting with a capital letter
+    # like in the English language.
+    month_names = ['', 'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
+        'augustus', 'september', 'oktober', 'november', 'december']
+    month_abbreviations = ['', 'jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug',
+        'sep', 'okt', 'nov', 'dec']
+
+    day_names = ['', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag']
+    day_abbreviations = ['', 'ma', 'di', 'wo', 'do', 'vr', 'za', 'zo']
+
 
 class SlavicBaseLocale(Locale):
 
@@ -634,12 +666,13 @@ class NewNorwegianLocale(Locale):
                  'Laurdag', 'Sundag']
     day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
 
+
 def BrazilianLocale(Locale):
     names=['pt_br']
-    
+
     past = 'fazem {0}'
     future = 'em {0}'
-    
+
     timeframes = {
         'now': 'agora',
         'seconds': 'segundos',
@@ -663,6 +696,7 @@ def BrazilianLocale(Locale):
     day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
     day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
 
+
 def _map_locales():
 
     locales = {}
@@ -675,4 +709,3 @@ def _map_locales():
     return locales
 
 _locales = _map_locales()
-
