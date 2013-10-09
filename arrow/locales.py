@@ -634,10 +634,10 @@ class NewNorwegianLocale(Locale):
                  'Laurdag', 'Sundag']
     day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
 
-def BrazilianLocale(Locale):
+class BrazilianLocale(Locale):
     names=['pt_br']
     
-    past = 'fazem {0}'
+    past = 'faz {0}'
     future = 'em {0}'
     
     timeframes = {
