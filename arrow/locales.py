@@ -179,7 +179,7 @@ class ItalianLocale(Locale):
         'now': 'adesso',
         'seconds': 'qualche secondo',
         'minute': 'un minuto',
-        'minutes': '{0} minutei',
+        'minutes': '{0} minuti',
         'hour': 'un\'ora',
         'hours': '{0} ore',
         'day': 'un giorno',
