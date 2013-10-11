@@ -54,8 +54,21 @@ class DateTimeFormatterFormatTokenTests(Chai):
         assertEqual(self.formatter._format_token(dt, 'H'), '2')
 
         dt = datetime(2013, 1, 1, 13)
+        assertEqual(self.formatter._format_token(dt, 'HH'), '13')
+        assertEqual(self.formatter._format_token(dt, 'H'), '13')
+
+        dt = datetime(2013, 1, 1, 2)
+        assertEqual(self.formatter._format_token(dt, 'hh'), '02')
+        assertEqual(self.formatter._format_token(dt, 'h'), '2')
+
+        dt = datetime(2013, 1, 1, 13)
         assertEqual(self.formatter._format_token(dt, 'hh'), '01')
         assertEqual(self.formatter._format_token(dt, 'h'), '1')
+
+        # test that 12-hour time converts to '12' at midnight
+        dt = datetime(2013, 1, 1, 0)
+        assertEqual(self.formatter._format_token(dt, 'hh'), '12')
+        assertEqual(self.formatter._format_token(dt, 'h'), '12')
 
     def test_minute(self):
 
