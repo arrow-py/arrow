@@ -648,7 +648,7 @@ class AustriaLocale(Locale):
             'days': '{0} Tage',
             'month': 'einem Monat',
             'months': '{0} Monaten',
-            'year': 'einem Jahr'
+            'year': 'einem Jahr',
             'years': '{0} Jahren',
         }
 
