@@ -20,4 +20,16 @@ if version < '2.7': # pragma: no cover
 else: # pragma: no cover
     total_seconds = _total_seconds_27
 
-__all__ = ['total_seconds']
+
+# Generate a Python 2.x or 3.x compatible function 
+# for checking if an arg is a string
+try:
+    basestring  # attempt to evaluate basestring
+    def isstr(s):
+        return isinstance(s, basestring)
+except NameError:
+    def isstr(s):
+        return isinstance(s, str)
+
+
+__all__ = ['total_seconds', 'isstr']
