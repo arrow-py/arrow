@@ -695,7 +695,7 @@ class NewNorwegianLocale(Locale):
     day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
 
 
-def BrazilianLocale(Locale):
+class BrazilianLocale(Locale):
     names=['pt_br']
 
     past = 'fazem {0}'
