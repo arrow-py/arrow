@@ -86,6 +86,12 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
+    def test_two_args_unicode_unicode(self):
+
+        result = self.factory.get(u'2013-01-01', u'YYYY-MM-DD')
+
+        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))    
+
     def test_two_args_other(self):
 
         with assertRaises(TypeError):

@@ -10,6 +10,7 @@ from __future__ import absolute_import
 
 from arrow.arrow import Arrow
 from arrow import parser
+from arrow.util import isstr
 
 from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
@@ -122,7 +123,7 @@ class ArrowFactory(object):
                 return self.type.now(arg)
 
             # (str) -> now, @ tzinfo.
-            elif isinstance(arg, str):
+            elif isstr(arg):
                 dt = parser.DateTimeParser(locale).parse_iso(arg)
                 return self.type.fromdatetime(dt)
 
@@ -140,7 +141,7 @@ class ArrowFactory(object):
                     return self.type.fromdatetime(arg_1, arg_2)
 
                 # (datetime, str) -> fromdatetime @ tzinfo.
-                elif isinstance(arg_2, str):
+                elif isstr(arg_2):
                     _tzinfo = parser.TzinfoParser.parse(arg_2)
                     return self.type.fromdatetime(arg_1, _tzinfo)
 
@@ -149,7 +150,7 @@ class ArrowFactory(object):
                         type(arg_2)))
 
             # (str, format) -> parse.
-            elif isinstance(arg_1, str) and isinstance(arg_2, str):
+            elif isstr(arg_1) and isstr(arg_2):
                 dt = parser.DateTimeParser(locale).parse(args[0], args[1])
                 return self.type.fromdatetime(dt)
 
