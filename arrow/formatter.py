@@ -56,9 +56,9 @@ class DateTimeFormatter(object):
         if token == 'H':
             return str(dt.hour)
         if token == 'hh':
-            return '{0:02d}'.format(dt.hour if dt.hour < 13 else dt.hour - 12)
+            return '{0:02d}'.format(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
         if token == 'h':
-            return str(dt.hour if dt.hour < 13 else dt.hour - 12)
+            return str(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
 
         if token == 'mm':
             return '{0:02d}'.format(dt.minute)
