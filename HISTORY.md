@@ -1,5 +1,15 @@
 ## History
 
+### 0.4.1
+
+- [NEW] Brazilian locale (Augusto2112)
+- [NEW] Dutch locale (OrangeTux)
+- [NEW] Italian locale (Pertux)
+- [NEW] Austrain locale (LeChewbacca)
+- [NEW] Tagalog locale (Marksteve)
+- [FIX] Corrected spelling and day numbers in German locale (LeChewbacca)
+- [FIX] Factory ``get`` method should now handle unicode strings correctly (Bwells)
+- [FIX] Midnight and noon should now parse and format correctly (Bwells)
 
 ### 0.4.0
 
@@ -13,7 +23,7 @@
 - [FIX] Locale day-of-week is no longer off by one (Cynddl)
 - [FIX] Corrected plurals of Ukranian and Russina nouns (Catchagain)
 - [CHANGE] Old 0.1 ``arrow`` module method removed
-- [CHANGE] Timestamp support in ``range`` and ``span_range`` (never worked correctly) 
+- [CHANGE] Dropped timestamp support in ``range`` and ``span_range`` (never worked correctly) 
 - [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO-8601) 
 
 ### 0.3.5
