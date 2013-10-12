@@ -184,8 +184,10 @@ class DateTimeParser(object):
         am_pm = parts.get('am_pm')
         hour = parts.get('hour', 0)
 
-        if am_pm == 'pm' and hour < 13:
+        if am_pm == 'pm' and hour < 12:
             hour += 12
+        elif am_pm == 'am' and hour == 12:
+            hour = 0
 
         return datetime(year=parts.get('year', 1), month=parts.get('month', 1),
             day=parts.get('day', 1), hour=hour, minute=parts.get('minute', 0),
