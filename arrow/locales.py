@@ -197,7 +197,7 @@ class ItalianLocale(Locale):
 
     day_names = ['', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
-    
+
 class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
@@ -738,7 +738,7 @@ class NewNorwegianLocale(Locale):
 
 
 class BrazilianLocale(Locale):
-    names=['pt_br']
+    names = ['pt_br']
 
     past = 'fazem {0}'
     future = 'em {0}'
@@ -763,8 +763,40 @@ class BrazilianLocale(Locale):
     month_abbreviations = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Maio', 'Jun', 'Jul', 'Ago',
         'Set', 'Out', 'Nov', 'Dez']
 
-    day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
+    day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
+        'Sábado', 'Domingo']
     day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+
+
+class TagalogLocale(Locale):
+
+    names = ['tl']
+
+    past = 'nakaraang {0}'
+    future = '{0} mula ngayon'
+
+    timeframes = {
+        'now': 'ngayon lang',
+        'seconds': 'segundo',
+        'minute': 'isang minuto',
+        'minutes': '{0} minuto',
+        'hour': 'isang oras',
+        'hours': '{0} oras',
+        'day': 'isang araw',
+        'days': '{0} araw',
+        'month': 'isang buwan',
+        'months': '{0} buwan',
+        'year': 'isang taon',
+        'years': '{0} taon',
+    }
+
+    month_names = ['', 'Enero', 'Pebrero', 'Marso', 'Abril', 'Mayo', 'Hunyo', 'Hulyo',
+        'Agosto', 'Setyembre', 'Oktubre', 'Nobyembre', 'Disyembre']
+    month_abbreviations = ['', 'Ene', 'Peb', 'Mar', 'Abr', 'May', 'Hun', 'Hul', 'Ago',
+        'Set', 'Okt', 'Nob', 'Dis']
+
+    day_names = ['', 'Lunes', 'Martes', 'Miyerkules', 'Huwebes', 'Biyernes', 'Sabado', 'Linggo']
+    day_abbreviations = ['', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab', 'Lin']
 
 
 def _map_locales():
