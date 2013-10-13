@@ -285,6 +285,28 @@ table {
     margin: 0 -0.5em 0 -0.5em;
 }
 
+table.docutils {
+    width: 100% !important;
+    margin-left: 2px;
+    border: 0;
+}
+
+table.docutils tbody tr td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 0;
+}
+
+table.docutils thead tr th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 0;
+}
+
+.row-even {
+    background-color: #F0F0F0;
+}
+
 table td, table th {
     padding: 0.2em 0.5em 0.2em 0.5em;
 }
