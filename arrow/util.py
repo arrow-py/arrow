@@ -4,15 +4,17 @@ from __future__ import absolute_import
 from datetime import timedelta
 import sys
 
+# python 2.6 / 2.7 definitions for total_seconds function.
 
 def _total_seconds_27(td): # pragma: no cover
     return td.total_seconds()
-
 
 def _total_seconds_26(td):
     return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
 
 
+# get version info and assign correct total_seconds function.
+    
 version = '{0}.{1}.{2}'.format(*sys.version_info[:3])
 
 if version < '2.7': # pragma: no cover
@@ -21,15 +23,18 @@ else: # pragma: no cover
     total_seconds = _total_seconds_27
 
 
-# Generate a Python 2.x or 3.x compatible function 
-# for checking if an arg is a string
-try:
-    basestring  # attempt to evaluate basestring
+# python 2.7 / 3.0+ definitions for isstr function.
+
+try: # pragma: no cover
+    basestring
+
     def isstr(s):
         return isinstance(s, basestring)
-except NameError:
+
+except NameError: #pragma: no cover
+
     def isstr(s):
-        return isinstance(s, str)
+        return isinstance(s, (str, unicode))
 
 
 __all__ = ['total_seconds', 'isstr']

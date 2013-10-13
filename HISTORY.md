@@ -2,6 +2,7 @@
 
 ### 0.4.1
 
+- [NEW] Table / explanation of formatting & parsing tokens in docs
 - [NEW] Brazilian locale (Augusto2112)
 - [NEW] Dutch locale (OrangeTux)
 - [NEW] Italian locale (Pertux)
