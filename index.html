@@ -54,6 +54,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#factories">Factories</a></li>
+<li><a class="reference internal" href="#tokens">Tokens</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#api-guide">API Guide</a><ul>
@@ -392,6 +393,141 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="mi">211</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="tokens">
+<h3>Tokens<a class="headerlink" href="#tokens" title="Permalink to this headline">¶</a></h3>
+<p>Use the following tokens in parsing and formatting:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="16%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">Token</th>
+<th class="head">Output</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><strong>Year</strong></td>
+<td>YYYY</td>
+<td>2000, 2001, 2002 ... 2012, 2013</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>YY</td>
+<td>00, 01, 02 ... 12, 13</td>
+</tr>
+<tr class="row-even"><td><strong>Month</strong></td>
+<td>MMMM</td>
+<td>January, Febuary, March ...</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>MMM</td>
+<td>Jan, Feb, Mar ...</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>MM</td>
+<td>01, 02, 03 ... 11, 12</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>M</td>
+<td>1, 2, 3 ... 11, 12</td>
+</tr>
+<tr class="row-even"><td><strong>Day of Year</strong></td>
+<td>DDDD</td>
+<td>001, 002, 003 ... 364, 365</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>DDD</td>
+<td>1, 2, 3 ... 4, 5</td>
+</tr>
+<tr class="row-even"><td><strong>Day of Month</strong></td>
+<td>DD</td>
+<td>01, 02, 03 ... 30, 31</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>D</td>
+<td>1, 2, 3 ... 30, 31</td>
+</tr>
+<tr class="row-even"><td><strong>Day of Month</strong></td>
+<td>dddd</td>
+<td>Monday, Tuesday, Wednesday ...</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>ddd</td>
+<td>Mon, Tue, Wed ...</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>d</td>
+<td>1, 2, 3 ... 6, 7</td>
+</tr>
+<tr class="row-odd"><td><strong>Hour</strong></td>
+<td>HH</td>
+<td>00, 01, 02 ... 23, 24</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>H</td>
+<td>0, 1, 2 ... 23, 24</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>hh</td>
+<td>01, 02, 03 ... 11, 12</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>h</td>
+<td>1, 2, 3 ... 11, 12</td>
+</tr>
+<tr class="row-odd"><td><strong>AM / PM</strong></td>
+<td>A</td>
+<td>AM, PM</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>a</td>
+<td>am, pm</td>
+</tr>
+<tr class="row-odd"><td><strong>Minute</strong></td>
+<td>mm</td>
+<td>00, 01, 02 ... 58, 59</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>m</td>
+<td>0, 1, 2 ... 58, 59</td>
+</tr>
+<tr class="row-odd"><td><strong>Second</strong></td>
+<td>ss</td>
+<td>00, 01, 02 ... 58, 59</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>s</td>
+<td>0, 1, 2 ... 58, 59</td>
+</tr>
+<tr class="row-odd"><td><strong>Sub-second</strong></td>
+<td>SSS</td>
+<td>0, 1, 2 ... 8, 9</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>SS</td>
+<td>0, 1, 2 ... 98, 99</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>S</td>
+<td>0, 1, 2 ... 998, 999</td>
+</tr>
+<tr class="row-even"><td><strong>Timezone</strong></td>
+<td>ZZ</td>
+<td>-07:00, -06:00 ... +06:00, +07:00</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>Z</td>
+<td>-0700, -0600 ... +0600, +0700</td>
+</tr>
+<tr class="row-even"><td><strong>Timestamp</strong></td>
+<td>X</td>
+<td>1381685817</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="api-guide">
