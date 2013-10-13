@@ -34,7 +34,7 @@ try: # pragma: no cover
 except NameError: #pragma: no cover
 
     def isstr(s):
-        return isinstance(s, (str, unicode))
+        return isinstance(s, str)
 
 
 __all__ = ['total_seconds', 'isstr']
