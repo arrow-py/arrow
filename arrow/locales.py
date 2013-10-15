@@ -807,7 +807,7 @@ class VietnameseLocale(Locale):
     future = '{0} nữa'
 
     timeframes = {
-        'now': 'just now',
+        'now': 'hiện tại',
         'seconds': 'giây',
         'minute': 'một phút',
         'minutes': '{0} phút',
