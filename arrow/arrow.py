@@ -298,10 +298,11 @@ class Arrow(object):
         if name == 'week':
             return self.isocalendar()[1]
 
-        value = getattr(self._datetime, name, None)
+        if not name.startswith('_'):
+            value = getattr(self._datetime, name, None)
 
-        if value is not None:
-            return value
+            if value is not None:
+                return value
 
         return object.__getattribute__(self, name)
 
