@@ -7,6 +7,7 @@ from chai import Chai
 from datetime import date, datetime, timedelta
 from dateutil import tz
 import calendar
+import pickle
 import time
 import sys
 
@@ -388,6 +389,19 @@ class ArrowConversionTests(Chai):
         expected = dt_from.replace(tzinfo=tz.gettz('US/Pacific')).astimezone(tz.tzutc())
 
         assertEqual(result.datetime, expected)
+
+
+class ArrowPicklingTests(Chai):
+
+    def test_pickle_and_unpickle(self):
+
+        dt = arrow.Arrow.utcnow()
+
+        pickled = pickle.dumps(dt)
+
+        unpickled = pickle.loads(pickled)
+
+        assertEqual(unpickled, dt)
 
 
 class ArrowReplaceTests(Chai):
