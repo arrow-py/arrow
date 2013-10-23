@@ -46,7 +46,9 @@ class ArrowFactory(object):
 
         **One** :class:`Arrow <arrow.arrow.Arrow>` object, to get a copy.
 
-            
+            >>> arw = arrow.utcnow()
+            >>> arrow.get(arw)
+            <Arrow [2013-10-23T15:21:54.354846+00:00]> 
 
         **One** ``str``, ``float``, or ``int``, convertible to a floating-point timestamp, to get that timestamp in UTC::
 
