@@ -42,7 +42,7 @@ class ArrowFactory(object):
         **None** to also get current UTC time::
 
             >>> arrow.get(None)
-            <Arrow [2013-05-08T05:51:43.316458+00:00]>      
+            <Arrow [2013-05-08T05:51:43.316458+00:00]>
 
         **One** ``str``, ``float``, or ``int``, convertible to a floating-point timestamp, to get that timestamp in UTC::
 
@@ -86,6 +86,11 @@ class ArrowFactory(object):
         **Two** arguments, both ``str``, to parse the first according to the format of the second::
 
             >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
+            <Arrow [2013-05-05T12:30:45+00:00]>
+
+        **Two** arguments, first a ``str`` to parse and second a ``list`` of formats to try::
+
+            >>> arrow.get('2013-05-05 12:30:45', ['MM/DD/YYYY', 'YYYY-MM-DD HH:mm:ss'])
             <Arrow [2013-05-05T12:30:45+00:00]>
 
         **Three or more** arguments, as for the constructor of a ``datetime``::
@@ -150,7 +155,7 @@ class ArrowFactory(object):
                         type(arg_2)))
 
             # (str, format) -> parse.
-            elif isstr(arg_1) and isstr(arg_2):
+            elif isstr(arg_1) and (isstr(arg_2) or isinstance(arg_2, list)):
                 dt = parser.DateTimeParser(locale).parse(args[0], args[1])
                 return self.type.fromdatetime(dt)
 
