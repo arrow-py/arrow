@@ -40,6 +40,13 @@ class GetTests(Chai):
         assertEqual(self.factory.get(timestamp), timestamp_dt)
         assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
 
+    def test_one_arg_arrow(self):
+
+        arw = self.factory.utcnow()
+        result = self.factory.get(arw)
+
+        assertEqual(arw, result)
+
     def test_one_arg_datetime(self):
 
         dt = datetime.utcnow().replace(tzinfo=tz.tzutc())

@@ -44,6 +44,10 @@ class ArrowFactory(object):
             >>> arrow.get(None)
             <Arrow [2013-05-08T05:51:43.316458+00:00]>
 
+        **One** :class:`Arrow <arrow.arrow.Arrow>` object, to get a copy.
+
+            
+
         **One** ``str``, ``float``, or ``int``, convertible to a floating-point timestamp, to get that timestamp in UTC::
 
             >>> arrow.get(1367992474.293378)
@@ -118,6 +122,10 @@ class ArrowFactory(object):
                 return self.type.utcfromtimestamp(arg)
             except:
                 pass
+
+            # (Arrow) -> from the object's datetime.
+            if isinstance(arg, Arrow):
+                return self.type.fromdatetime(arg.datetime)
 
             # (datetime) -> from datetime.
             if isinstance(arg, datetime):
