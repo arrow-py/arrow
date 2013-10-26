@@ -84,10 +84,13 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
     def test_sub_second(self):
 
-        dt = datetime(2013, 1, 1, 0, 0, 0, 500000)
-        assertEqual(self.formatter._format_token(dt, 'SSS'), '500')
-        assertEqual(self.formatter._format_token(dt, 'SS'), '50')
-        assertEqual(self.formatter._format_token(dt, 'S'), '5')
+        dt = datetime(2013, 1, 1, 0, 0, 0, 123456)
+        assertEqual(self.formatter._format_token(dt, 'SSSSSS'), '123456')
+        assertEqual(self.formatter._format_token(dt, 'SSSSS'), '12345')
+        assertEqual(self.formatter._format_token(dt, 'SSSS'), '1234')
+        assertEqual(self.formatter._format_token(dt, 'SSS'), '123')
+        assertEqual(self.formatter._format_token(dt, 'SS'), '12')
+        assertEqual(self.formatter._format_token(dt, 'S'), '1')
 
     def test_timestamp(self):
 

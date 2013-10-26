@@ -177,8 +177,6 @@ class ArrowAttributeTests(Chai):
         assertEqual(result, self.arrow.microsecond)
 
 
-
-
 class ArrowComparisonTests(Chai):
 
     def setUp(self):
