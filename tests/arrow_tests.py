@@ -170,6 +170,14 @@ class ArrowAttributeTests(Chai):
 
         assertEqual(self.arrow.timestamp, calendar.timegm(self.arrow._datetime.utctimetuple()))
 
+    def test_float_timestamp(self):
+
+        result = self.arrow.float_timestamp - self.arrow.timestamp
+
+        assertEqual(result, self.arrow.microsecond)
+
+
+
 
 class ArrowComparisonTests(Chai):
 

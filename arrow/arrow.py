@@ -336,6 +336,12 @@ class Arrow(object):
 
         return calendar.timegm(self._datetime.utctimetuple())
 
+    @property
+    def float_timestamp(self):
+        ''' Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+
+        return self.timestamp + float(self.microsecond) / 1000000
+
 
     # mutation and duplication.
 
