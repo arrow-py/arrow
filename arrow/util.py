@@ -14,7 +14,7 @@ def _total_seconds_26(td):
 
 
 # get version info and assign correct total_seconds function.
-    
+
 version = '{0}.{1}.{2}'.format(*sys.version_info[:3])
 
 if version < '2.7': # pragma: no cover

@@ -494,7 +494,7 @@ class Arrow(object):
 
         ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
 
-        return floor, ceil 
+        return floor, ceil
 
     def floor(self, frame):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
