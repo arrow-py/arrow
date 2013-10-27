@@ -72,7 +72,7 @@ class DateTimeParser(object):
 
         else:
             has_tz = has_seconds = has_subseconds = False
-            
+
         if has_time:
 
             if has_subseconds:

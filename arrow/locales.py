@@ -624,7 +624,7 @@ class GermanLocale(Locale):
     ]
 
     day_names = [
-       '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 
+       '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag',
        'Samstag', 'Sonntag'
     ]
 
@@ -632,7 +632,7 @@ class GermanLocale(Locale):
 
 
 class AustriaLocale(Locale):
-    
+
     names = ['de', 'de_at']
 
     past = 'vor {0}'
@@ -654,7 +654,7 @@ class AustriaLocale(Locale):
         }
 
     month_names = [
-            '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 
+            '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
             'August', 'September', 'Oktober', 'November', 'Dezember'
         ]
 

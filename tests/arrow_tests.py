@@ -541,7 +541,7 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2013, 1, 2, 3, 6, 5),
             arrow.Arrow(2013, 1, 2, 3, 7, 5),
         ])
-        
+
     def test_second(self):
 
         result = arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
@@ -691,7 +691,7 @@ class ArrowSpanRangeTests(Chai):
     def test_naive_tz(self):
 
         tzinfo = tz.gettz('US/Pacific')
-        
+
         result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0),
             datetime(2013, 1, 1, 3, 59), 'US/Pacific')
 
