@@ -420,8 +420,8 @@ class KoreanLocale(Locale):
     future = '{0} 후'
 
     timeframes = {
-        'now': '현재',
-        'seconds': '초',
+        'now': '지금',
+        'seconds': '몇초',
         'minute': '일 분',
         'minutes': '{0}분',
         'hour': '1시간',
