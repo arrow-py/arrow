@@ -4,6 +4,7 @@
 
 - [NEW] Factory ``get`` method now accepts a single ``Arrow`` argument.
 - [NEW] Tokens SSSS, SSSSS and SSSSSS are supported in parsing.
+- [NEW] ``Arrow`` objects have a ``float_timestamp`` property.
 - [NEW] Vietnamese locale (Iu1nguoi)
 - [NEW] Factory ``get`` method now accepts a list of format strings (Dgilland)
 - [NEW] A MANIFEST.in file has been added (Pypingou)
