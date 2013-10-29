@@ -1,5 +1,17 @@
 ## History
 
+### 0.4.2
+
+- [NEW] Factory ``get`` method now accepts a single ``Arrow`` argument.
+- [NEW] Tokens SSSS, SSSSS and SSSSSS are supported in parsing.
+- [NEW] Vietnamese locale (Iu1nguoi)
+- [NEW] Factory ``get`` method now accepts a list of format strings (Dgilland)
+- [NEW] A MANIFEST.in file has been added (Pypingou)
+- [FIX] Arrow docs now list 'day of week' format tokens correctly (Rudolphfroger)
+- [FIX] Several issues with the Korean locale have been resolved (Yoloseem)
+- [FIX] ``humanize`` now correctly returns unicode (Shvechikov)
+- [FIX] ``Arrow`` objects now pickle / unpickle correctly (Yoloseem)
+
 ### 0.4.1
 
 - [NEW] Table / explanation of formatting & parsing tokens in docs
