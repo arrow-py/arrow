@@ -7,6 +7,7 @@
 - [NEW] Vietnamese locale (Iu1nguoi)
 - [NEW] Factory ``get`` method now accepts a list of format strings (Dgilland)
 - [NEW] A MANIFEST.in file has been added (Pypingou)
+- [NEW] Tests can be run directly from ``setup.py`` (Pypingou)
 - [FIX] Arrow docs now list 'day of week' format tokens correctly (Rudolphfroger)
 - [FIX] Several issues with the Korean locale have been resolved (Yoloseem)
 - [FIX] ``humanize`` now correctly returns unicode (Shvechikov)
