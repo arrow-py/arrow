@@ -101,8 +101,12 @@ class DateTimeFormatterFormatTokenTests(Chai):
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz('US/Pacific'))
-        assertEqual(self.formatter._format_token(dt, 'ZZ'), '-07:00')
-        assertEqual(self.formatter._format_token(dt, 'Z'), '-0700')
+
+        result = self.formatter._format_token(dt, 'ZZ')
+        assertTrue(result == '-07:00' or result == '-08:00')
+
+        result = self.formatter._format_token(dt, 'Z')
+        assertTrue(result == '-0700' or result == '-0800')
 
     def test_am_pm(self):
 
