@@ -831,6 +831,37 @@ class VietnameseLocale(Locale):
     day_abbreviations = ['', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN']
 
 
+class TurkishLocale(Locale):
+
+    names = ['tr', 'tr_TR']
+
+    past = '{0} önce'
+    future = '{0} sonra'
+
+    timeframes = {
+        'now': 'şimdi',
+        'seconds': 'saniye',
+        'minute': 'bir dakika',
+        'minutes': '{0} dakika',
+        'hour': 'bir saat',
+        'hours': '{0} saat',
+        'day': 'bir gün',
+        'days': '{0} gün',
+        'month': 'bir ay',
+        'months': '{0} ay',
+        'year': 'a yıl',
+        'years': '{0} yıl',
+    }
+
+    month_names = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
+        'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+    month_abbreviations = ['', 'Ock', 'Sbt', 'Mar', 'Nsn', 'May', 'Haz', 'Tem', 'Agu',
+        'Eyl', 'Ekm', 'Ksm', 'Arl']
+
+    day_names = ['', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
+    day_abbreviations = ['', 'Pzt', 'Sal', 'Car', 'Per', 'Cum', 'Cmt', 'Pzr']
+
+
 def _map_locales():
 
     locales = {}
