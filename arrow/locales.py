@@ -855,11 +855,11 @@ class TurkishLocale(Locale):
 
     month_names = ['', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
         'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
-    month_abbreviations = ['', 'Ock', 'Sbt', 'Mar', 'Nsn', 'May', 'Haz', 'Tem', 'Agu',
-        'Eyl', 'Ekm', 'Ksm', 'Arl']
+    month_abbreviations = ['', 'Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu',
+        'Eyl', 'Eki', 'Kas', 'Ara']
 
     day_names = ['', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
-    day_abbreviations = ['', 'Pzt', 'Sal', 'Car', 'Per', 'Cum', 'Cmt', 'Pzr']
+    day_abbreviations = ['', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']
 
 
 def _map_locales():
