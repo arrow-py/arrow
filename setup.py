@@ -3,9 +3,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
+import arrow
+
 setup(
     name='arrow',
-    version='0.4.2',
+    version=arrow.__version__,
     description='Better dates and times for Python',
     url='http://crsmithdev.com/arrow',
     author='Chris Smith',
