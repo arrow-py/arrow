@@ -65,10 +65,10 @@ class DateTimeParser(object):
         space_divider = ' ' in string.strip()
 
         if has_time:
-             if space_divider:
-                date_string, time_string = string.split(' ', 1)
+            if space_divider:
+               date_string, time_string = string.split(' ', 1)
             else:
-                date_string, time_string = string.split('T', 1)
+               date_string, time_string = string.split('T', 1)
             time_parts = re.split('[+-]', time_string, 1)
             has_tz = len(time_parts) > 1
             has_seconds = time_parts[0].count(':') > 1
