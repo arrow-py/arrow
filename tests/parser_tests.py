@@ -263,6 +263,34 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6)
         )
 
+    def test_YYYY_MM_DD_HH_mmZ(self):
+
+        assertEqual(
+            self.parser.parse_iso('2013-02-03 04:05+01:00'),
+            datetime(2013, 2, 3, 4, 5, tzinfo=tz.tzoffset(None, 3600))
+        )
+
+    def test_YYYY_MM_DD_HH_mm(self):
+
+        assertEqual(
+            self.parser.parse_iso('2013-02-03 04:05'),
+            datetime(2013, 2, 3, 4, 5)
+        )
+
+    def test_YYYY_MM_DD_HH_mm_ssZ(self):
+
+        assertEqual(
+            self.parser.parse_iso('2013-02-03 04:05:06+01:00'),
+            datetime(2013, 2, 3, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600))
+        )
+
+    def test_YYYY_MM_DD_HH_mm_ss(self):
+
+        assertEqual(
+            self.parser.parse_iso('2013-02-03 04:05:06'),
+            datetime(2013, 2, 3, 4, 5, 6)
+        )
+
     def test_YYYY_MM_DDTHH_mm_ss_S(self):
 
         assertEqual(
