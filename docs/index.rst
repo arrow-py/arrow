@@ -17,7 +17,7 @@ Python's standard library and some other low-level modules have near-complete da
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz and more
 - Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Time zones and timestamp conversions are verbose and unpleasant 
+- Time zones and timestamp conversions are verbose and unpleasant
 - Time zone naievety is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
@@ -25,7 +25,7 @@ Python's standard library and some other low-level modules have near-complete da
 Features
 --------
 
-- Fully implemented, drop-in replacement for datetime 
+- Fully implemented, drop-in replacement for datetime
 - Supports Python 2.6, 2.7 and 3.3
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
@@ -121,6 +121,7 @@ Use a naive or timezone-aware datetime, or flexibly specify a time zone:
     >>> arrow.get(datetime.now(), 'US/Pacific')
     <Arrow [2013-05-06T21:24:32.736373-07:00]>
 
+    >>> from dateutil impot tz
     >>> arrow.get(datetime.now(), tz.gettz('US/Pacific'))
     <Arrow [2013-05-06T21:24:41.129262-07:00]>
 
@@ -456,4 +457,3 @@ arrow.locale
 
 .. automodule:: arrow.locales
     :members:
-
