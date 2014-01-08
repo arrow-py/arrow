@@ -151,15 +151,9 @@ class ArrowFactory(object):
 
             if isinstance(arg_1, datetime):
 
-                # (datetime, tzinfo) -> fromdatetime @ tzinfo.
-                if isinstance(arg_2, tzinfo):
+                # (datetime, tzinfo) -> fromdatetime @ tzinfo/string.
+                if isinstance(arg_2, tzinfo) or isstr(arg_2):
                     return self.type.fromdatetime(arg_1, arg_2)
-
-                # (datetime, str) -> fromdatetime @ tzinfo.
-                elif isstr(arg_2):
-                    _tzinfo = parser.TzinfoParser.parse(arg_2)
-                    return self.type.fromdatetime(arg_1, _tzinfo)
-
                 else:
                     raise TypeError('Can\'t parse two arguments of types \'datetime\', \'{0}\''.format(
                         type(arg_2)))
@@ -223,4 +217,3 @@ class ArrowFactory(object):
             tz = parser.TzinfoParser.parse(tz)
 
         return self.type.now(tz)
-

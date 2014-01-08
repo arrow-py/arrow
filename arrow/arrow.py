@@ -47,8 +47,10 @@ class Arrow(object):
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
-        tzinfo=None):
+                 tzinfo=None):
 
+        if util.isstr(tzinfo):
+            tzinfo = parser.TzinfoParser.parse(tzinfo)
         tzinfo = tzinfo or dateutil_tz.tzutc()
 
         self._datetime = datetime(year, month, day, hour, minute, second,
@@ -855,4 +857,3 @@ class Arrow(object):
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)
-
