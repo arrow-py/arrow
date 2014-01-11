@@ -38,6 +38,8 @@ class DateTimeParser(object):
         'D': _ONE_OR_TWO_DIGIT_RE,
         'HH': _TWO_DIGIT_RE,
         'H': _ONE_OR_TWO_DIGIT_RE,
+        'hh': _TWO_DIGIT_RE,
+        'h': _ONE_OR_TWO_DIGIT_RE,
         'mm': _TWO_DIGIT_RE,
         'm': _ONE_OR_TWO_DIGIT_RE,
         'ss': _TWO_DIGIT_RE,
