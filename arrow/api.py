@@ -32,7 +32,7 @@ def utcnow():
 
 
 def now(tz=None):
-    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>
+    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
     ``now`` method.
 
     '''
