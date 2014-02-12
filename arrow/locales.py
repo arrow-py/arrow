@@ -507,9 +507,9 @@ class PolishLocale(SlavicBaseLocale):
         'now': 'teraz',
         'seconds': 'kilka sekund',
         'minute': 'minuta',
-        'minutes': ['{0} minut', '{0} minuty', '{0} minut'],
+        'minutes': ['{0} minuta', '{0} minuty', '{0} minut'],
         'hour': 'godzina',
-        'hours': ['{0} godzin', '{0} godziny', '{0} godzin'],
+        'hours': ['{0} godzina', '{0} godziny', '{0} godzin'],
         'day': 'dzień',
         'days': ['{0} dzień', '{0} dni', '{0} dni'],
         'month': 'miesiąc',
@@ -527,6 +527,23 @@ class PolishLocale(SlavicBaseLocale):
     day_names = ['', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek',
         'Sobota', 'Niedziela']
     day_abbreviations = ['', 'Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd']
+
+
+    def _format_timeframe(self, timeframe, delta):
+
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+
+        if isinstance(form, list):
+
+            if delta == 1:
+                form = form[0]
+            elif 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
+                form = form[1]
+            else:
+                form = form[2]
+
+        return form.format(delta)
 
 
 class RussianLocale(SlavicBaseLocale):
