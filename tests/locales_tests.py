@@ -97,3 +97,19 @@ class PolishLocalesTests(Chai):
         assertEqual(locale._format_timeframe('hours', 21), '21 godzin')
         assertEqual(locale._format_timeframe('hours', 22), '22 godziny')
         assertEqual(locale._format_timeframe('hours', 25), '25 godzin')
+
+
+class IcelandicLocalesTests(Chai):
+
+    def setUp(self):
+        super(IcelandicLocalesTests, self).setUp()
+
+        self.locale = locales.IcelandicLocale()
+
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('minute', -1), 'einni mínútu')
+        assertEqual(self.locale._format_timeframe('minute', 1), 'eina mínútu')
+
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 tímum')
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 tíma')

@@ -892,6 +892,49 @@ class ArabicLocale(Locale):
     day_names = ['', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
     day_abbreviations = ['', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
 
+
+class IcelandicLocale(Locale):
+
+    def _format_timeframe(self, timeframe, delta):
+
+        timeframe = self.timeframes[timeframe]
+        if delta < 0:
+            timeframe = timeframe[0]
+        elif delta > 0:
+            timeframe = timeframe[1]
+
+        return timeframe.format(abs(delta))
+
+    names = ['is', 'is_is']
+
+    past = 'fyrir {0} síðan'
+    future = 'eftir {0}'
+
+    timeframes = {
+        'now':     'rétt í þessu',
+        'seconds': ('nokkrum sekúndum', 'nokkrar sekúndur'),
+        'minute':  ('einni mínútu', 'eina mínútu'),
+        'minutes': ('{0} mínútum', '{0} mínútur'),
+        'hour':    ('einum tíma', 'einn tíma'),
+        'hours':   ('{0} tímum', '{0} tíma'),
+        'day':     ('einum degi', 'einn dag'),
+        'days':    ('{0} dögum', '{0} daga'),
+        'month':   ('einum mánuði', 'einn mánuð'),
+        'months':  ('{0} mánuðum', '{0} mánuði'),
+        'year':    ('einu ári', 'eitt ár'),
+        'years':   ('{0} árum', '{0} ár'),
+    }
+
+    month_names = ['', 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
+        'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'maí', 'jún',
+        'júl', 'ágú', 'sep', 'okt', 'nóv', 'des']
+
+    day_names = ['', 'mánudagur', 'þriðjudagur', 'miðvikudagur', 'fimmtudagur',
+        'föstudagur', 'laugardagur', 'sunnudagur']
+    day_abbreviations = ['', 'mán', 'þri', 'mið', 'fim', 'fös', 'lau', 'sun']
+
+
 def _map_locales():
 
     locales = {}
