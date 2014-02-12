@@ -45,6 +45,13 @@ class Locale(object):
         'years': '',
     }
 
+    meridians = {
+        'am': '',
+        'pm': '',
+        'AM': '',
+        'PM': '',
+    }
+
     past = None
     future = None
 
@@ -120,6 +127,18 @@ class Locale(object):
 
         return self._month_name_to_ordinal.get(name)
 
+    def meridian(self, hour, token):
+        ''' Returns the meridian indicator for a specified hour and format token.
+
+        :param hour: the ``int`` hour of the day.
+        :param token: the format token.
+        '''
+
+        if token == 'a':
+            return self.meridians['am'] if hour < 12 else self.meridians['pm']
+        if token == 'A':
+            return self.meridians['AM'] if hour < 12 else self.meridians['PM']
+
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -160,6 +179,13 @@ class EnglishLocale(Locale):
         'months': '{0} months',
         'year': 'a year',
         'years': '{0} years',
+    }
+
+    meridians = {
+        'am': 'am',
+        'pm': 'pm',
+        'AM': 'AM',
+        'PM': 'PM',
     }
 
     month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -923,6 +949,13 @@ class IcelandicLocale(Locale):
         'months':  ('{0} mánuðum', '{0} mánuði'),
         'year':    ('einu ári', 'eitt ár'),
         'years':   ('{0} árum', '{0} ár'),
+    }
+
+    meridians = {
+        'am': 'f.h.',
+        'pm': 'e.h.',
+        'AM': 'f.h.',
+        'PM': 'e.h.',
     }
 
     month_names = ['', 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
