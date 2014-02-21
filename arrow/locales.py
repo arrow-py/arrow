@@ -45,6 +45,13 @@ class Locale(object):
         'years': '',
     }
 
+    meridians = {
+        'am': '',
+        'pm': '',
+        'AM': '',
+        'PM': '',
+    }
+
     past = None
     future = None
 
@@ -120,6 +127,18 @@ class Locale(object):
 
         return self._month_name_to_ordinal.get(name)
 
+    def meridian(self, hour, token):
+        ''' Returns the meridian indicator for a specified hour and format token.
+
+        :param hour: the ``int`` hour of the day.
+        :param token: the format token.
+        '''
+
+        if token == 'a':
+            return self.meridians['am'] if hour < 12 else self.meridians['pm']
+        if token == 'A':
+            return self.meridians['AM'] if hour < 12 else self.meridians['PM']
+
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -160,6 +179,13 @@ class EnglishLocale(Locale):
         'months': '{0} months',
         'year': 'a year',
         'years': '{0} years',
+    }
+
+    meridians = {
+        'am': 'am',
+        'pm': 'pm',
+        'AM': 'AM',
+        'PM': 'PM',
     }
 
     month_names = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -891,6 +917,87 @@ class ArabicLocale(Locale):
 
     day_names = ['', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
     day_abbreviations = ['', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
+
+
+class IcelandicLocale(Locale):
+
+    def _format_timeframe(self, timeframe, delta):
+
+        timeframe = self.timeframes[timeframe]
+        if delta < 0:
+            timeframe = timeframe[0]
+        elif delta > 0:
+            timeframe = timeframe[1]
+
+        return timeframe.format(abs(delta))
+
+    names = ['is', 'is_is']
+
+    past = 'fyrir {0} síðan'
+    future = 'eftir {0}'
+
+    timeframes = {
+        'now':     'rétt í þessu',
+        'seconds': ('nokkrum sekúndum', 'nokkrar sekúndur'),
+        'minute':  ('einni mínútu', 'eina mínútu'),
+        'minutes': ('{0} mínútum', '{0} mínútur'),
+        'hour':    ('einum tíma', 'einn tíma'),
+        'hours':   ('{0} tímum', '{0} tíma'),
+        'day':     ('einum degi', 'einn dag'),
+        'days':    ('{0} dögum', '{0} daga'),
+        'month':   ('einum mánuði', 'einn mánuð'),
+        'months':  ('{0} mánuðum', '{0} mánuði'),
+        'year':    ('einu ári', 'eitt ár'),
+        'years':   ('{0} árum', '{0} ár'),
+    }
+
+    meridians = {
+        'am': 'f.h.',
+        'pm': 'e.h.',
+        'AM': 'f.h.',
+        'PM': 'e.h.',
+    }
+
+    month_names = ['', 'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
+        'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'maí', 'jún',
+        'júl', 'ágú', 'sep', 'okt', 'nóv', 'des']
+
+    day_names = ['', 'mánudagur', 'þriðjudagur', 'miðvikudagur', 'fimmtudagur',
+        'föstudagur', 'laugardagur', 'sunnudagur']
+    day_abbreviations = ['', 'mán', 'þri', 'mið', 'fim', 'fös', 'lau', 'sun']
+
+
+class DanishLocale(Locale):
+
+    names = ['da', 'da_dk']
+
+    past = 'for {0} siden'
+    future = 'efter {0}'
+
+    timeframes = {
+        'now':     'lige nu',
+        'seconds': 'et par sekunder',
+        'minute':  'et minut',
+        'minutes': '{0} minutter',
+        'hour':    'en time',
+        'hours':   '{0} timer',
+        'day':     'en dag',
+        'days':    '{0} dage',
+        'month':   'en måned',
+        'months':  '{0} måneder',
+        'year':    'et år',
+        'years':   '{0} år',
+    }
+
+    month_names = ['', 'januar', 'februar', 'marts', 'april', 'maj', 'juni',
+        'juli', 'august', 'september', 'oktober', 'november', 'december']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'maj', 'jun',
+        'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+
+    day_names = ['', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag',
+        'lørdag', 'søndag']
+    day_abbreviations = ['', 'man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn']
 
 def _map_locales():
 

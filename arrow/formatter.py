@@ -97,7 +97,6 @@ class DateTimeFormatter(object):
 
             return '{0}{1:02d}{2}{3:02d}'.format(sign, hour, separator, minute)
 
-        if token == 'a':
-            return 'am' if dt.hour < 12 else 'pm'
-        if token == 'A':
-            return 'AM' if dt.hour < 12 else 'PM'
+        if token in ('a', 'A'):
+            return self.locale.meridian(dt.hour, token)
+
