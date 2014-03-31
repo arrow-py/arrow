@@ -1,5 +1,5 @@
 from chai import Chai
-from datetime import datetime
+from datetime import datetime, date
 from dateutil import tz
 import time
 
@@ -53,6 +53,13 @@ class GetTests(Chai):
 
         assertEqual(self.factory.get(dt), dt)
 
+    def test_one_arg_date(self):
+
+        d = date.today()
+        dt = datetime(d.year, d.month, d.day, tzinfo=tz.tzutc())
+
+        assertEqual(self.factory.get(d), dt)
+
     def test_one_arg_tzinfo(self):
 
         expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
@@ -82,10 +89,27 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
 
+    def test_two_args_date_tzinfo(self):
+
+        result = self.factory.get(date(2013, 1, 1), tz.gettz('US/Pacific'))
+
+        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
+
+    def test_two_args_date_tz_str(self):
+
+        result = self.factory.get(date(2013, 1, 1), 'US/Pacific')
+
+        assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
+
     def test_two_args_datetime_other(self):
 
         with assertRaises(TypeError):
             self.factory.get(datetime.utcnow(), object())
+
+    def test_two_args_date_other(self):
+
+        with assertRaises(TypeError):
+            self.factory.get(date.today(), object())
 
     def test_two_args_str_str(self):
 

@@ -12,7 +12,7 @@ from arrow.arrow import Arrow
 from arrow import parser
 from arrow.util import isstr
 
-from datetime import datetime, tzinfo
+from datetime import datetime, tzinfo, date
 from dateutil import tz as dateutil_tz
 
 
@@ -84,9 +84,19 @@ class ArrowFactory(object):
             >>> arrow.get(datetime(2013, 5, 5, tzinfo=tz.tzlocal()))
             <Arrow [2013-05-05T00:00:00-07:00]>
 
+        **One** naive ``date``, to get that date in UTC::
+
+            >>> arrow.get(date(2013, 5, 5))
+            <Arrow [2013-05-05T00:00:00+00:00]>
+
         **Two** arguments, a naive or aware ``datetime``, and a timezone expression (as above)::
 
             >>> arrow.get(datetime(2013, 5, 5), 'US/Pacific')
+            <Arrow [2013-05-05T00:00:00-07:00]>
+
+        **Two** arguments, a naive ``date``, and a timezone expression (as above)::
+
+            >>> arrow.get(date(2013, 5, 5), 'US/Pacific')
             <Arrow [2013-05-05T00:00:00-07:00]>
 
         **Two** arguments, both ``str``, to parse the first according to the format of the second::
@@ -133,6 +143,10 @@ class ArrowFactory(object):
             if isinstance(arg, datetime):
                 return self.type.fromdatetime(arg)
 
+            # (date) -> from date.
+            if isinstance(arg, date):
+                return self.type.fromdate(arg)
+
             # (tzinfo) -> now, @ tzinfo.
             elif isinstance(arg, tzinfo):
                 return self.type.now(arg)
@@ -156,6 +170,15 @@ class ArrowFactory(object):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
                     raise TypeError('Can\'t parse two arguments of types \'datetime\', \'{0}\''.format(
+                        type(arg_2)))
+
+            # (date, tzinfo/str) -> fromdate @ tzinfo/string.
+            elif isinstance(arg_1, date):
+
+                if isinstance(arg_2, tzinfo) or isstr(arg_2):
+                    return self.type.fromdate(arg_1, tzinfo=arg_2)
+                else:
+                    raise TypeError('Can\'t parse two arguments of types \'date\', \'{0}\''.format(
                         type(arg_2)))
 
             # (str, format) -> parse.
