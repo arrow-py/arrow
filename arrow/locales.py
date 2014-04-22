@@ -376,6 +376,46 @@ class SwedishLocale(Locale):
     day_abbreviations = ['', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']
 
 
+class FinnishLocale(Locale):
+
+    names = ['fi', 'fi_fi']
+
+    # The finnish grammar is very complex, and its hard to convert
+    # 1-to-1 to something like English.
+
+    past = '{0} sitten'
+    future = '{0} kuluttua'
+
+    timeframes = {
+        'now': 'juuri nyt',
+        'seconds': 'muutama sekuntti',
+        'minute': 'minuutti',
+        'minutes': '{0} minuuttia',
+        'hour': 'tunti',
+        'hours': '{0} tuntia',
+        'day': 'päivä',
+        'days': '{0} päivää',
+        'month': 'kuukausi',
+        'months': '{0} kuukautta',
+        'year': 'vuosi',
+        'years': '{0} vuotta',
+    }
+
+    # Months and days are lowercase in Finnish
+    month_names = ['', 'tammikuu', 'helmikuu', 'maaliskuu', 'huhtikuu',
+                       'toukokuu', 'kesäkuu', 'heinäkuu', 'elokuu',
+                       'syyskuu', 'lokakuu', 'marraskuu', 'joulukuu']
+
+    month_abbreviations = ['', 'tammi', 'helmi', 'maalis', 'huhti',
+                               'touko', 'kesä', 'heinä', 'elo',
+                               'syys', 'loka', 'marras', 'joulu']
+
+    day_names = ['', 'maanantai', 'tiistai', 'keskiviikko', 'torstai',
+                     'perjantai', 'lauantai', 'sunnuntai']
+
+    day_abbreviations = ['', 'ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']
+
+
 class ChineseCNLocale(Locale):
 
     names = ['zh', 'zh_cn']
