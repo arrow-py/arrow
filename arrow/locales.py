@@ -388,7 +388,7 @@ class FinnishLocale(Locale):
 
     timeframes = {
         'now': 'juuri nyt',
-        'seconds': 'muutama sekuntti',
+        'seconds': 'muutama sekunti',
         'minute': 'minuutti',
         'minutes': '{0} minuuttia',
         'hour': 'tunti',
