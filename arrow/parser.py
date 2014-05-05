@@ -101,6 +101,7 @@ class DateTimeParser(object):
         if isinstance(fmt, list):
             return self._parse_multiformat(string, fmt)
 
+        original_string = string
         tokens = self._FORMAT_RE.findall(fmt)
         parts = {}
 
@@ -121,7 +122,7 @@ class DateTimeParser(object):
                 string = string[index:]
 
             else:
-                raise ParserError('Failed to match token \'{0}\''.format(token))
+                raise ParserError('Failed to match token \'{0}\' when parsing \'{1}\''.format(token, original_string))
 
         return self._build_datetime(parts)
 
@@ -208,7 +209,7 @@ class DateTimeParser(object):
                 pass
 
         if _datetime is None:
-            raise ParserError('Could not match input to any of {0}'.format(formats))
+            raise ParserError('Could not match input to any of {0} on \'{1}\''.format(formats, string))
 
         return _datetime
 
