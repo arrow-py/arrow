@@ -1,5 +1,5 @@
 from chai import Chai
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import tz
 import time
 
@@ -8,7 +8,8 @@ from arrow import factory, util
 
 def assertDtEqual(dt1, dt2, within=10):
     assertEqual(dt1.tzinfo, dt2.tzinfo)
-    assertTrue(abs(util.total_seconds(dt1 - dt2)) < within)
+    diff = abs(util.total_seconds(dt1 - dt2)) 
+    assertTrue(diff < within, "Diff between {} and {} was {}".format(dt1, dt2, diff))
 
 
 class GetTests(Chai):
@@ -25,6 +26,16 @@ class GetTests(Chai):
     def test_one_arg_non(self):
 
         assertDtEqual(self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc()))
+
+    def test_humanized(self):
+
+        assertDtEqual(self.factory.get("5 minutes ago"),
+            datetime.utcnow().replace(tzinfo=tz.tzutc()) - timedelta(minutes=5))
+
+    def test_struct_time(self):
+
+        assertDtEqual(self.factory.get(time.gmtime()),
+            datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
     def test_one_arg_timestamp(self):
 
@@ -60,9 +71,7 @@ class GetTests(Chai):
         assertDtEqual(self.factory.get(tz.gettz('US/Pacific')), expected)
 
     def test_one_arg_iso_str(self):
-
         dt = datetime.utcnow()
-
         assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
     def test_one_arg_other(self):

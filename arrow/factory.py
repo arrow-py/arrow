@@ -14,6 +14,13 @@ from arrow.util import isstr
 
 from datetime import datetime, tzinfo
 from dateutil import tz as dateutil_tz
+from time import struct_time
+import calendar
+parsedatetime = None
+try:
+    import parsedatetime
+except ImportError, e:# pragma: no cover
+    pass
 
 
 class ArrowFactory(object):
@@ -103,6 +110,11 @@ class ArrowFactory(object):
 
             >>> arrow.get(2013, 5, 5, 12, 30, 45)
             <Arrow [2013-05-05T12:30:45+00:00]>
+
+        **One** time.struct time::
+            >>> arrow.get(gmtime(0))
+            <Arrow [1970-01-01T00:00:00+00:00]>
+
         '''
 
         arg_count = len(args)
@@ -138,9 +150,23 @@ class ArrowFactory(object):
                 return self.type.now(arg)
 
             # (str) -> now, @ tzinfo.
-            elif isstr(arg):
-                dt = parser.DateTimeParser(locale).parse_iso(arg)
-                return self.type.fromdatetime(dt)
+            if isstr(arg):
+                try:
+                    # Try to parse as ISO
+                    dt = parser.DateTimeParser(locale).parse_iso(arg)
+                    return self.type.fromdatetime(dt)
+                except parser.ParserError: 
+                    pass
+
+            # (str) -> from humanized string
+            if isstr(arg) and parsedatetime:
+                cal = parsedatetime.Calendar()
+                time_struct, _ = cal.parse(arg, sourceTime=datetime.utcnow())
+                return self.type.utcfromtimestamp(calendar.timegm(time_struct))
+
+            # (struct_time) -> from struct_time
+            elif isinstance(arg, struct_time):
+                return self.type.utcfromtimestamp(calendar.timegm(arg))
 
             else:
                 raise TypeError('Can\'t parse single argument type of \'{0}\''.format(type(arg)))
