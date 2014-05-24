@@ -566,7 +566,7 @@ class Arrow(object):
         in the past.
 
         :param weekday: day of the week: 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' or 'Sun'.
-        :param weeks: (optional) positive int representing week shift in the future.
+        :param weeks: (optional) positive int representing week shift in the past.
 
         Usage::
 
