@@ -530,6 +530,66 @@ class Arrow(object):
 
         return self.span(frame)[1]
 
+    def next_weekday(self, weekday, weeks=1):
+        '''Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing future
+        instance of specified weekday.
+
+        :param weekday: day of the week: 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' or 'Sun'.
+        :param weeks: (optional) positive int representing week shift in the future.
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2014-05-24T09:55:09.308959+00:00]>
+            >>> utc.next_weekday('Mon')
+            <Arrow [2014-05-26T09:55:09.308959+00:00]>
+            >>> utc.next_weekday('Mon', 2)
+            <Arrow [2014-06-02T09:55:09.308959+00:00]>
+
+        '''
+        if weekday not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
+            raise ValueError("Valid weekdays: 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'")
+        weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].index(weekday)
+        current = self.weekday()
+        if not (weeks == int(weeks) and weeks >= 1):
+            raise ValueError("Value of weeks shall be positive integer")
+        closest = (7 % current) + weekday if current >= weekday else (7 % current) + current - weekday
+        next = self.replace(days =+ (closest + 7 * (weeks - 1)))
+
+        return next
+
+    def previous_weekday(self, weekday, weeks=1):
+        '''Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing past
+        instance of specified weekday. With optional weeks parameter
+        provided, returns instance of specified weekday which occurs several weeks
+        in the past.
+
+        :param weekday: day of the week: 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' or 'Sun'.
+        :param weeks: (optional) positive int representing week shift in the future.
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2014-05-24T09:55:09.308959+00:00]>
+            >>> utc.previous_weekday('Mon')
+            <Arrow [2014-05-19T09:55:09.308959+00:00]>
+            >>> utc.previous_weekday('Mon', 3)
+            <Arrow [2014-05-05T09:55:09.308959+00:00]>
+
+        '''
+        if weekday not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
+            raise ValueError("Valid weekdays: 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'")
+        weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].index(weekday)
+        current = self.weekday()
+        if not (weeks == int(weeks) and weeks >= 1):
+            raise ValueError("Value of weeks shall be positive integer")
+        closest = current - weekday if current > weekday else (7 % weekday) + current
+        previous = self.replace(days =- (closest + 7 * (weeks - 1)))
+
+        return previous
+
 
     # string output and formatting.
 
