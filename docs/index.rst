@@ -298,7 +298,7 @@ Or just get the floor and ceiling:
     >>> arrow.utcnow().ceil('hour')
     <Arrow [2013-05-07T05:59:59.999999+00:00]>
 
-You can also get a range of timepans:
+You can also get a range of timespans:
 
 .. code-block:: python
 
