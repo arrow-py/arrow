@@ -62,6 +62,11 @@ class DateTimeParserParseTests(Chai):
         with assertRaises(parser.ParserError):
             self.parser.parse('01-01', 'YYYY-MM-DD')
 
+    def test_parse_separators(self):
+
+        with assertRaises(parser.ParserError):
+            self.parser.parse('1403549231', 'YYYY-MM-DD')
+
     def test_parse_numbers(self):
 
         expected = datetime(2012, 1, 1, 12, 5, 10)

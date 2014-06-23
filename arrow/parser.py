@@ -103,6 +103,8 @@ class DateTimeParser(object):
 
         original_string = string
         tokens = self._FORMAT_RE.findall(fmt)
+        token_values = []
+        separators = self._parse_separators(fmt, tokens)
         parts = {}
 
         for token in tokens:
@@ -116,6 +118,7 @@ class DateTimeParser(object):
 
             if match:
 
+                token_values.append(match.group(0))
                 self._parse_token(token, match.group(0), parts)
 
                 index = match.span(0)[1]
@@ -124,7 +127,30 @@ class DateTimeParser(object):
             else:
                 raise ParserError('Failed to match token \'{0}\' when parsing \'{1}\''.format(token, original_string))
 
+        parsed = ''.join(self._interleave_lists(token_values, separators))
+        if parsed not in original_string:
+            raise ParserError('Failed to match format \'{0}\' when parsing \'{1}\''.format(fmt, original_string))
+
         return self._build_datetime(parts)
+
+    def _interleave_lists(self, tokens, separators):
+
+        joined = tokens + separators
+        joined[::2] = tokens
+        joined[1::2] = separators
+
+        return joined
+
+    def _parse_separators(self, fmt, tokens):
+
+        separators = []
+
+        for i in range(len(tokens) - 1):
+            start_index = fmt.find(tokens[i]) + len(tokens[i])
+            end_index = fmt.find(tokens[i + 1])
+            separators.append(fmt[start_index:end_index])
+
+        return separators
 
     def _parse_token(self, token, value, parts):
 
