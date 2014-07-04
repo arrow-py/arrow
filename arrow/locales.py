@@ -804,10 +804,10 @@ class NewNorwegianLocale(Locale):
     day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
 
 
-class BrazilianLocale(Locale):
-    names = ['pt_br']
-
-    past = 'fazem {0}'
+class PortugueseLocale(Locale):
+    names = ['pt']
+    
+    past = 'à {0}'
     future = 'em {0}'
 
     timeframes = {
@@ -833,6 +833,16 @@ class BrazilianLocale(Locale):
     day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
         'Sábado', 'Domingo']
     day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+
+
+class EuropeanPortugueseLocale(PortugueseLocale):
+    names = ['pt_pt']
+    
+    
+class BrazilianPortugueseLocale(PortugueseLocale):
+    names = ['pt_br']
+    
+    past = 'fazem {0}'
 
 
 class TagalogLocale(Locale):
