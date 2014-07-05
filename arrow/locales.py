@@ -807,7 +807,7 @@ class NewNorwegianLocale(Locale):
 class PortugueseLocale(Locale):
     names = ['pt', 'pt_pt']
     
-    past = 'à {0}'
+    past = 'há {0}'
     future = 'em {0}'
 
     timeframes = {
