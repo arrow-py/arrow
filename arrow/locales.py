@@ -805,7 +805,7 @@ class NewNorwegianLocale(Locale):
 
 
 class PortugueseLocale(Locale):
-    names = ['pt']
+    names = ['pt', 'pt_pt']
     
     past = 'à {0}'
     future = 'em {0}'
@@ -833,10 +833,6 @@ class PortugueseLocale(Locale):
     day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
         'Sábado', 'Domingo']
     day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
-
-
-class EuropeanPortugueseLocale(PortugueseLocale):
-    names = ['pt_pt']
     
     
 class BrazilianPortugueseLocale(PortugueseLocale):
