@@ -1,2 +1,4 @@
-include LICENSE HISTORY.md README.md
+include LICENSE HISTORY.md README.md tox.ini requirements.txt requirements26.txt
 recursive-include tests *
+recursive-include docs *
+prune docs/_build
