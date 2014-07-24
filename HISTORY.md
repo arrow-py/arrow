@@ -1,5 +1,27 @@
 ## History
 
+### 0.4.3
+
+- [NEW] Turkish locale (Emre)
+- [NEW] Arabic locale (Mosab Ahmad)
+- [NEW] Danish locale (Holmars)
+- [NEW] Icelandic locale (Holmars)
+- [NEW] Hindi locale (Atmb4u)
+- [NEW] Malayalam locale (Atmb4u)
+- [NEW] Finnish locale (Stormpat)
+- [NEW] Portuguese locale (Danielcorreia)
+- [NEW] ``h`` and ``hh`` strings are now supported (Averyonghub)
+- [FIX] An incorrect inflection in the Polish locale has been fixed (Avalanchy)
+- [FIX] ``arrow.get`` now properly handles ``Date``s (Jaapz)
+- [FIX] Tests are now declared in ``setup.py`` and the manifest (Pypingou)
+- [FIX] ``__version__`` has been added to ``__init__.py`` (Sametmax)
+- [FIX] ISO 8601 strings can be parsed without a separator (Ivandiguisto / Root)
+- [FIX] Documentation is now more clear regarding some inputs on ``arrow.get`` (Eriktaubeneck)
+- [FIX] Some documentation links have been fixed (Vrutsky)
+- [FIX] Error messages for parse errors are now more descriptive (Maciej Albin)
+- [FIX] The parser now correctly checks for separators in strings (Mschwager)
+
+
 ### 0.4.2
 
 - [NEW] Factory ``get`` method now accepts a single ``Arrow`` argument.
