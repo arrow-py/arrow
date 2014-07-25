@@ -7,7 +7,7 @@ import arrow
 
 setup(
     name='arrow',
-    version=arrow.__version__,
+    version='0.4.4',
     description='Better dates and times for Python',
     url='http://crsmithdev.com/arrow',
     author='Chris Smith',
