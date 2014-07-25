@@ -3,8 +3,6 @@ try:
 except ImportError:
     from distutils.core import setup
 
-import arrow
-
 setup(
     name='arrow',
     version='0.4.4',
