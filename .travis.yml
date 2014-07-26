@@ -7,6 +7,6 @@ python:
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then make build26; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then make build3; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build3; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then make build33; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
 script: make test
