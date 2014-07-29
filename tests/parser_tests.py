@@ -79,8 +79,9 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_timestamp(self):
 
+        tz_utc = tz.tzutc()
         timestamp = int(time.time())
-        expected = datetime.fromtimestamp(timestamp)
+        expected = datetime.fromtimestamp(timestamp, tz=tz_utc)
         assertEqual(self.parser.parse(str(timestamp), 'X'), expected)
 
     def test_parse_names(self):

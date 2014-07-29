@@ -215,7 +215,8 @@ class DateTimeParser(object):
         timestamp = parts.get('timestamp')
 
         if timestamp:
-            return datetime.fromtimestamp(timestamp)
+            tz_utc = tz.tzutc()
+            return datetime.fromtimestamp(timestamp, tz=tz_utc)
 
         am_pm = parts.get('am_pm')
         hour = parts.get('hour', 0)
