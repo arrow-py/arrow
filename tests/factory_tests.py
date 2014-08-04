@@ -8,8 +8,7 @@ from arrow import factory, util
 
 def assertDtEqual(dt1, dt2, within=10):
     assertEqual(dt1.tzinfo, dt2.tzinfo)
-    diff = abs(util.total_seconds(dt1 - dt2)) 
-    assertTrue(diff < within, "Diff between {} and {} was {}".format(dt1, dt2, diff))
+    assertTrue(abs(util.total_seconds(dt1 - dt2)) < within)
 
 
 class GetTests(Chai):
