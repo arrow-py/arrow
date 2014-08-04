@@ -160,12 +160,8 @@ class ArrowFactory(object):
 
             # (str) -> now, @ tzinfo.
             elif isstr(arg):
-                try:
-                    # Try to parse as ISO
-                    dt = parser.DateTimeParser(locale).parse_iso(arg)
-                    return self.type.fromdatetime(dt)
-                except parser.ParserError: 
-                    pass
+                dt = parser.DateTimeParser(locale).parse_iso(arg)
+                return self.type.fromdatetime(dt)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
