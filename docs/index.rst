@@ -137,7 +137,19 @@ Parse from a string:
 
 Many ISO-8601 compliant strings are recognized and parsed without a format string:
 
+.. code-block:: python
+
     >>> arrow.get('2013-09-30T15:34:00.000-07:00')
+    <Arrow [2013-09-30T15:34:00-07:00]>
+
+Arrow provides parsers for a few standard timestamp formats:
+
+.. code-block:: python
+
+    >>> arrow.get('2013-09-30T15:34:00.000-07:00', arrow.formats.iso8601)
+    <Arrow [2013-09-30T15:34:00-07:00]>
+
+    >>> arrow.get('Mon, 30 Sep 2013 15:34:00 -0700', arrow.formats.rfc2822)
     <Arrow [2013-09-30T15:34:00-07:00]>
 
 Arrow objects can be instantiated directly too, with the same arguments as a datetime:
@@ -220,6 +232,9 @@ Format
 
     >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss ZZ')
     '2013-05-07 05:23:16 -00:00'
+
+    >>> arrow.utcnow().format(arrow.formats.rfc2822)
+    'Tue, 7 May 2013 05:23:16 +0000'
 
 Convert
 =======
@@ -429,7 +444,6 @@ Use the following tokens in parsing and formatting:
 |**Timestamp**                   |X             |1381685817                                 |
 +--------------------------------+--------------+-------------------------------------------+
 
-
 ---------
 API Guide
 ---------
@@ -456,4 +470,10 @@ arrow.locale
 ============
 
 .. automodule:: arrow.locales
+    :members:
+
+arrow.formats
+=============
+
+.. automodule:: arrow.formats
     :members:

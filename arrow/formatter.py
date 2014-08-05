@@ -4,8 +4,10 @@ from __future__ import absolute_import
 import calendar
 import re
 from dateutil import tz as dateutil_tz
-from arrow import util, locales
+from arrow import util, locales, formats
 
+class FormatError(RuntimeError):
+    pass
 
 class DateTimeFormatter(object):
 
@@ -16,8 +18,48 @@ class DateTimeFormatter(object):
         self.locale = locales.get_locale(locale)
 
     def format(cls, dt, fmt):
+        if isinstance(fmt, formats.Format):
+            if fmt is formats.rfc2822:
+                return DateTimeFormatter.format_rfc2822(dt)
+            else:
+                raise FormatError("Output format is undefined for format '{0}'".format(fmt.name))
+        else:
+            return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
-        return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
+
+    def format_rfc2822(dt):
+        """Given a zone-aware datetime.datetime, format an RFC2822-compliant date string.
+
+        Can't do this with email.utils.formatdate because it can't handle timezones!
+        Can't use datetime.datetime.strftime because it won't use the C locale!"""
+        rfc2822_day_names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        rfc2822_month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+        tz_offset = dt.tzinfo.utcoffset(dt)
+        tz_offset_seconds = tz_offset.days * 86400 + tz_offset.seconds
+
+        if tz_offset_seconds < 0:
+          sign = '-'
+          tz_offset_seconds = -tz_offset_seconds
+        else:
+          sign = '+'
+
+        tz_offset_minutes = tz_offset_seconds / 60
+        tz_offset_hours = tz_offset_minutes % 60
+
+        return "%s, %d %s %04d %02d:%02d:%02d %s%02d%02d" % (
+          rfc2822_day_names[dt.weekday()],
+          dt.day,
+          rfc2822_month_names[dt.month - 1],
+          dt.year,
+          dt.hour,
+          dt.minute,
+          dt.second,
+          sign,
+          tz_offset_minutes / 60,
+          tz_offset_minutes % 60
+        )
 
     def _format_token(self, dt, token):
 

@@ -5,9 +5,11 @@ from datetime import datetime
 from dateutil import tz
 
 import calendar
+import email.utils
 import re
 
 from arrow import locales
+import arrow.formats
 
 
 class ParserError(RuntimeError):
@@ -103,10 +105,26 @@ class DateTimeParser(object):
 
         return self._parse_multiformat(string, formats)
 
+    def parse_rfc2822(self, string):
+        parts = email.utils.parsedate_tz(string)
+        if parts is None:
+            raise ParserError('Failed to match format RFC2822 when parsing \'{0}\''.format(string))
+
+        seconds = parts[9]
+        tzinfo = tz.tzoffset(None, seconds)
+        return tzinfo.fromutc(datetime.utcfromtimestamp(email.utils.mktime_tz(parts)).replace(tzinfo=tzinfo))
+
     def parse(self, string, fmt):
 
         if isinstance(fmt, list):
             return self._parse_multiformat(string, fmt)
+        elif isinstance(fmt, arrow.formats.Format):
+            if fmt is arrow.formats.iso8601:
+                return self.parse_iso(string)
+            elif fmt is arrow.formats.rfc2822:
+                return self.parse_rfc2822(string)
+            else:
+                raise ParseError("Failed to parse string with format '{0}': Not implemented".format(fmt.name))
 
         original_string = string
         tokens = self._FORMAT_RE.findall(fmt)
