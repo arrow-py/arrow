@@ -66,6 +66,9 @@ Quickstart
     >>> local.timestamp
     1368303838
 
+    >>> local.format()
+    '2013-05-11 13:23:58 -07:00'
+
     >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
     '2013-05-11 13:23:58 -07:00'
 
