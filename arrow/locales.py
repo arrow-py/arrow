@@ -1121,6 +1121,69 @@ class HindiLocale(Locale):
     day_names = ['', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार']
     day_abbreviations = ['', 'सोम', 'मंगल', 'बुध', 'गुरुवार', 'शुक्र', 'शनि', 'रवि']
 
+class CzechLocale(Locale):
+    names = ['cs', 'cs_cz']
+
+    timeframes = {
+        'now': 'Teď',
+        'seconds': {
+            'past': '{0} sekundami',
+            'future': ['{0} sekundy', '{0} sekund']
+        },
+        'minute': {'past': 'minutou', 'future': 'minutu'},
+        'minutes': {
+            'past': '{0} minutami',
+            'future': ['{0} minuty', '{0} minut']
+        },
+        'hour': {'past': 'hodinou', 'future': 'hodinu'},
+        'hours': {
+            'past': '{0} hodinami',
+            'future': ['{0} hodiny', '{0} hodin']
+        },
+        'day': {'past': 'dnem', 'future': 'den'},
+        'days': {
+            'past': '{0} dny',
+            'future': ['{0} dny', '{0} dnů']
+        },
+        'month': {'past': 'měsícem', 'future': 'měsíc'},
+        'months': {
+            'past': '{0} měsíci',
+            'future': ['{0} měsíce', '{0} měsíců']
+        },
+        'year': {'past': 'rokem', 'future': 'rok'},
+        'years': {
+            'past': '{0} lety',
+            'future': ['{0} roky', '{0} let']
+        }
+    }
+
+    past = 'Před {0}'
+    future = 'Za {0}'
+
+    month_names = ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
+        'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec']
+    month_abbreviations = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc',
+        'Srp', 'Zář', 'Říj', 'Lis', 'Pro']
+
+    day_names = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek',
+        'Sobota', 'Neděle']
+    day_abbreviations = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
+
+
+    def _format_timeframe(self, timeframe, delta):
+        '''Czech aware time frame format function, takes into account the differences between past and future forms.'''
+        form = self.timeframes[timeframe]
+        if isinstance(form, dict):
+            form = form['past'] if delta < 0 else form['future']
+        delta = abs(delta)  
+
+        if isinstance(form, list):
+            if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
+                form = form[0]
+            else:
+                form = form[1]
+
+        return form.format(delta)
 
 def _map_locales():
 
@@ -1129,7 +1192,7 @@ def _map_locales():
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
-                locales[name] = cls
+                locales[name] = cls  
 
     return locales
 
