@@ -121,7 +121,7 @@ Use a naive or timezone-aware datetime, or flexibly specify a time zone:
     >>> arrow.get(datetime.now(), 'US/Pacific')
     <Arrow [2013-05-06T21:24:32.736373-07:00]>
 
-    >>> from dateutil impot tz
+    >>> from dateutil import tz
     >>> arrow.get(datetime.now(), tz.gettz('US/Pacific'))
     <Arrow [2013-05-06T21:24:41.129262-07:00]>
 
