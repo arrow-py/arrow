@@ -22,6 +22,13 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
+    def test_timestamp_one_arg_no_arg(self):
+
+        no_arg = self.factory.get('1406430900').timestamp
+        one_arg = self.factory.get('1406430900', 'X').timestamp
+
+        assertEqual(no_arg, one_arg)
+
     def test_one_arg_non(self):
 
         assertDtEqual(self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc()))
