@@ -760,15 +760,15 @@ class NorwegianLocale(Locale):
         'years': '{0} år',
     }
 
-    month_names = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
-                   'Juli', 'August', 'September', 'Oktober', 'November',
-                   'Desember']
-    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul',
-                           'Aug', 'Sep', 'Okt', 'Nov', 'Des']
+    month_names = ['', 'januar', 'februar', 'mars', 'april', 'mai', 'juni',
+                   'juli', 'august', 'september', 'oktober', 'november',
+                   'desember']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul',
+                           'aug', 'sep', 'okt', 'nov', 'des']
 
-    day_names = ['', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag',
-                 'Lørdag', 'Søndag']
-    day_abbreviations = ['', 'Ma', 'Ti', 'On', 'To', 'Fr', 'Lø', 'Sø']
+    day_names = ['', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag',
+                 'lørdag', 'søndag']
+    day_abbreviations = ['', 'ma', 'ti', 'on', 'to', 'fr', 'lø', 'sø']
 
 
 class NewNorwegianLocale(Locale):
@@ -789,19 +789,19 @@ class NewNorwegianLocale(Locale):
         'days': '{0} dagar',
         'month': 'en månad',
         'months': '{0} månader',
-        'year': 'Eit år',
+        'year': 'eit år',
         'years': '{0} år',
     }
 
-    month_names = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
-                   'Juli', 'August', 'September', 'Oktober', 'November',
-                   'Desember']
-    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul',
-                           'Aug', 'Sep', 'Okt', 'Nov', 'Des']
+    month_names = ['', 'januar', 'februar', 'mars', 'april', 'mai', 'juni',
+                   'juli', 'august', 'september', 'oktober', 'november',
+                   'desember']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'mai', 'jun', 'jul',
+                           'aug', 'sep', 'okt', 'nov', 'des']
 
-    day_names = ['', 'Måndag', 'Tysdag', 'Onsdag', 'Torsdag', 'Fredag',
-                 'Laurdag', 'Sundag']
-    day_abbreviations = ['', 'Må', 'Ty', 'On', 'To', 'Fr', 'La', 'Su']
+    day_names = ['', 'måndag', 'tysdag', 'onsdag', 'torsdag', 'fredag',
+                 'laurdag', 'sundag']
+    day_abbreviations = ['', 'må', 'ty', 'on', 'to', 'fr', 'la', 'su']
 
 
 class PortugueseLocale(Locale):
