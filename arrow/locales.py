@@ -1130,27 +1130,27 @@ class CzechLocale(Locale):
             'past': '{0} sekundami',
             'future': ['{0} sekundy', '{0} sekund']
         },
-        'minute': {'past': 'minutou', 'future': 'minutu'},
+        'minute': {'past': 'minutou', 'future': 'minutu', 'zero': '{0} minut'},
         'minutes': {
             'past': '{0} minutami',
             'future': ['{0} minuty', '{0} minut']
         },
-        'hour': {'past': 'hodinou', 'future': 'hodinu'},
+        'hour': {'past': 'hodinou', 'future': 'hodinu', 'zero': '{0} hodin'},
         'hours': {
             'past': '{0} hodinami',
             'future': ['{0} hodiny', '{0} hodin']
         },
-        'day': {'past': 'dnem', 'future': 'den'},
+        'day': {'past': 'dnem', 'future': 'den', 'zero': '{0} dnů'},
         'days': {
             'past': '{0} dny',
             'future': ['{0} dny', '{0} dnů']
         },
-        'month': {'past': 'měsícem', 'future': 'měsíc'},
+        'month': {'past': 'měsícem', 'future': 'měsíc', 'zero': '{0} měsíců'},
         'months': {
             'past': '{0} měsíci',
             'future': ['{0} měsíce', '{0} měsíců']
         },
-        'year': {'past': 'rokem', 'future': 'rok'},
+        'year': {'past': 'rokem', 'future': 'rok', 'zero': '{0} let'},
         'years': {
             'past': '{0} lety',
             'future': ['{0} roky', '{0} let']
@@ -1174,7 +1174,12 @@ class CzechLocale(Locale):
         '''Czech aware time frame format function, takes into account the differences between past and future forms.'''
         form = self.timeframes[timeframe]
         if isinstance(form, dict):
-            form = form['past'] if delta < 0 else form['future']
+            if delta == 0:
+                form = form['zero'] # And *never* use 0 in the singular!
+            elif delta > 0:
+                form = form['future']
+            else:
+                form = form['past']
         delta = abs(delta)  
 
         if isinstance(form, list):
