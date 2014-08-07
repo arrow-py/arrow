@@ -18,8 +18,8 @@ Python's standard library and some other low-level modules have near-complete da
 - Too many modules:  datetime, time, calendar, dateutil, pytz and more
 - Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
 - Time zones and timestamp conversions are verbose and unpleasant
-- Time zone naievety is the norm
-- Gaps in functionality:  ISO-8601 parsing, timespans, humanization
+- Time zone naivety is the norm
+- Gaps in functionality:  ISO-8601 parsing, time spans, humanization
 
 --------
 Features
@@ -33,7 +33,7 @@ Features
 - Formats and parses strings, including ISO-8601-formatted strings automatically
 - Timezone conversion
 - Timestamp available as a property
-- Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond
+- Generates time spans, ranges, floors and ceilings in time frames from year to microsecond
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
@@ -121,7 +121,7 @@ Use a naive or timezone-aware datetime, or flexibly specify a time zone:
     >>> arrow.get(datetime.now(), 'US/Pacific')
     <Arrow [2013-05-06T21:24:32.736373-07:00]>
 
-    >>> from dateutil impot tz
+    >>> from dateutil import tz
     >>> arrow.get(datetime.now(), tz.gettz('US/Pacific'))
     <Arrow [2013-05-06T21:24:41.129262-07:00]>
 
@@ -281,7 +281,7 @@ Support for a growing number of locales (see `locales.py` for supported language
 Ranges & spans
 ==============
 
-Get the timespan of any unit:
+Get the time span of any unit:
 
 .. code-block:: python
 
@@ -298,7 +298,7 @@ Or just get the floor and ceiling:
     >>> arrow.utcnow().ceil('hour')
     <Arrow [2013-05-07T05:59:59.999999+00:00]>
 
-You can also get a range of timespans:
+You can also get a range of time spans:
 
 .. code-block:: python
 
@@ -374,7 +374,7 @@ Use the following tokens in parsing and formatting:
 +--------------------------------+--------------+-------------------------------------------+
 |                                |YY            |00, 01, 02 ... 12, 13                      |
 +--------------------------------+--------------+-------------------------------------------+
-|**Month**                       |MMMM          |January, Febuary, March ...                |
+|**Month**                       |MMMM          |January, February, March ...                |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |MMM           |Jan, Feb, Mar ...                          |
 +--------------------------------+--------------+-------------------------------------------+
