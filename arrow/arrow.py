@@ -558,7 +558,7 @@ class Arrow(object):
         ''' Returns a localized, humanized representation of a relative difference in time.
 
         :param other: (optional) an :class:`Arrow <arrow.arrow.Arrow>` or ``datetime`` object.
-            Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` objet's timezone.
+            Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
 
         Usage::
