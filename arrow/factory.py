@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Implements the :class:`ArrowFactory <arrow.factory.ArrowFactory>` class,
 providing factory methods for common :class:`Arrow <arrow.arrow.Arrow>`
-contruction scenarios.
+construction scenarios.
 
-'''
+"""
 
 from __future__ import absolute_import
 
