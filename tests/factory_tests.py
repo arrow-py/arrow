@@ -1,7 +1,6 @@
 from chai import Chai
 from datetime import datetime, date
 from dateutil import tz
-import time
 
 from arrow import factory, util
 
