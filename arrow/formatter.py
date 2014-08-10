@@ -32,34 +32,8 @@ class DateTimeFormatter(object):
 
         Can't do this with email.utils.formatdate because it can't handle timezones!
         Can't use datetime.datetime.strftime because it won't use the C locale!"""
-        rfc2822_day_names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        rfc2822_month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-        tz_offset = dt.tzinfo.utcoffset(dt)
-        tz_offset_seconds = tz_offset.days * 86400 + tz_offset.seconds
-
-        if tz_offset_seconds < 0:
-          sign = '-'
-          tz_offset_seconds = -tz_offset_seconds
-        else:
-          sign = '+'
-
-        tz_offset_minutes = tz_offset_seconds / 60
-        tz_offset_hours = tz_offset_minutes % 60
-
-        return "%s, %d %s %04d %02d:%02d:%02d %s%02d%02d" % (
-          rfc2822_day_names[dt.weekday()],
-          dt.day,
-          rfc2822_month_names[dt.month - 1],
-          dt.year,
-          dt.hour,
-          dt.minute,
-          dt.second,
-          sign,
-          tz_offset_minutes / 60,
-          tz_offset_minutes % 60
-        )
+        english_formatter = DateTimeFormatter(locale='en_us')
+        return english_formatter.format(dt, 'ddd, D MMM YYYY HH:mm:ss Z')
 
     def _format_token(self, dt, token):
 
