@@ -43,7 +43,7 @@ class ArrowFactoryTests(Chai):
 
         assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
-    def test_formtimestamp(self):
+    def test_fromtimestamp(self):
 
         timestamp = time.time()
 
