@@ -68,7 +68,7 @@ class Arrow(object):
         '''
 
         utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
-        dt = utc.astimezone(dateutil_tz.tzlocal() if tzinfo is None else tzinfo)
+        dt = util.astimezone(utc, dateutil_tz.tzlocal() if tzinfo is None else tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
@@ -455,10 +455,10 @@ class Arrow(object):
         if not isinstance(tz, tzinfo):
             tz = parser.TzinfoParser.parse(tz)
 
-        dt = self._datetime.astimezone(tz)
+        dt = util.astimezone(self._datetime, tz)
 
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, tz)
+            dt.microsecond, dt.tzinfo)
 
     def span(self, frame):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
@@ -577,7 +577,7 @@ class Arrow(object):
 
         if other is None:
             utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
-            dt = utc.astimezone(self._datetime.tzinfo)
+            dt = util.astimezone(utc, self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):
             dt = other._datetime
@@ -586,7 +586,7 @@ class Arrow(object):
             if other.tzinfo is None:
                 dt = other.replace(tzinfo=self._datetime.tzinfo)
             else:
-                dt = other.astimezone(self._datetime.tzinfo)
+                dt = util.astimezone(other, self._datetime.tzinfo)
 
         else:
             raise TypeError()
@@ -732,7 +732,7 @@ class Arrow(object):
 
         '''
 
-        return self._datetime.astimezone(tz)
+        return util.astimezone(self._datetime, tz)
 
     def utcoffset(self):
         ''' Returns a ``timedelta`` object representing the whole number of minutes difference from UTC time. '''
