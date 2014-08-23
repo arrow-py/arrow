@@ -523,20 +523,20 @@ class DutchLocale(Locale):
         'minute': 'een minuut',
         'minutes': '{0} minuten',
         'hour': 'een uur',
-        'hours': '{0} uren',
+        'hours': '{0} uur',
         'day': 'een dag',
         'days': '{0} dagen',
         'month': 'een maand',
         'months': '{0} maanden',
         'year': 'een jaar',
-        'years': '{0} jaren',
+        'years': '{0} jaar',
     }
 
     # In Dutch names of months and days are not starting with a capital letter
     # like in the English language.
     month_names = ['', 'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
         'augustus', 'september', 'oktober', 'november', 'december']
-    month_abbreviations = ['', 'jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug',
+    month_abbreviations = ['', 'jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug',
         'sep', 'okt', 'nov', 'dec']
 
     day_names = ['', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag']
