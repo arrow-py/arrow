@@ -204,7 +204,8 @@ class Arrow(object):
 
         '''
 
-        frame_relative = cls._get_frames(frame)[1]
+        _, frame_relative, relative_steps = cls._get_frames(frame)
+
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
         start = cls._get_datetime(start).replace(tzinfo=tzinfo)
@@ -218,7 +219,7 @@ class Arrow(object):
             results.append(current)
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: 1})
+            current = cls(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: relative_steps})
 
         return results
 
@@ -479,9 +480,16 @@ class Arrow(object):
 
         '''
 
-        frame_absolute, frame_relative = self._get_frames(frame)
+        frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
-        index = self._ATTRS.index('day' if frame_absolute == 'week' else frame_absolute)
+        if frame_absolute == 'week':
+            attr = 'day'
+        elif frame_absolute == 'quarter':
+            attr = 'month'
+        else:
+            attr = frame_absolute
+
+        index = self._ATTRS.index(attr)
         frames = self._ATTRS[:index + 1]
 
         values = [getattr(self, f) for f in frames]
@@ -493,8 +501,10 @@ class Arrow(object):
 
         if frame_absolute == 'week':
             floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+        elif frame_absolute == 'quarter':
+            floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
+        ceil = floor + relativedelta(**{frame_relative: relative_steps}) + relativedelta(microseconds=-1)
 
         return floor, ceil
 
@@ -827,10 +837,12 @@ class Arrow(object):
     def _get_frames(cls, name):
 
         if name in cls._ATTRS:
-            return name, '{0}s'.format(name)
+            return name, '{0}s'.format(name), 1
 
         elif name in ['week', 'weeks']:
-            return 'week', 'weeks'
+            return 'week', 'weeks', 1
+        elif name in ['quarter', 'quarters']:
+            return 'quarter', 'months', 3
 
         raise AttributeError()
 
