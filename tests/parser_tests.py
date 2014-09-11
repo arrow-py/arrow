@@ -351,6 +351,12 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600))
         )
 
+        # Properly parse string with Z timezone
+        assertEqual(
+            self.parser.parse_iso('2013-02-03T04:05:06.78912Z'),
+            datetime(2013, 2, 3, 4, 5, 6, 789120)
+        )
+
     def test_isoformat(self):
 
         dt = datetime.utcnow()
