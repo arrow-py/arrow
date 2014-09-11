@@ -71,15 +71,15 @@ class DateTimeFormatter(object):
             return str(dt.second)
 
         if token == 'SSSSSS':
-            return str(dt.microsecond)
+            return str(dt.microsecond).zfill(6)
         if token == 'SSSSS':
-            return str(int(dt.microsecond / 10))
+            return str(int(dt.microsecond / 10)).zfill(5)
         if token == 'SSSS':
-            return str(int(dt.microsecond / 100))
+            return str(int(dt.microsecond / 100)).zfill(4)
         if token == 'SSS':
-            return str(int(dt.microsecond / 1000))
+            return str(int(dt.microsecond / 1000)).zfill(3)
         if token == 'SS':
-            return str(int(dt.microsecond / 10000))
+            return str(int(dt.microsecond / 10000)).zfill(2)
         if token == 'S':
             return str(int(dt.microsecond / 100000))
 

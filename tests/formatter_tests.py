@@ -92,6 +92,14 @@ class DateTimeFormatterFormatTokenTests(Chai):
         assertEqual(self.formatter._format_token(dt, 'SS'), '12')
         assertEqual(self.formatter._format_token(dt, 'S'), '1')
 
+        dt = datetime(2013, 1, 1, 0, 0, 0, 2000)
+        assertEqual(self.formatter._format_token(dt, 'SSSSSS'), '002000')
+        assertEqual(self.formatter._format_token(dt, 'SSSSS'), '00200')
+        assertEqual(self.formatter._format_token(dt, 'SSSS'), '0020')
+        assertEqual(self.formatter._format_token(dt, 'SSS'), '002')
+        assertEqual(self.formatter._format_token(dt, 'SS'), '00')
+        assertEqual(self.formatter._format_token(dt, 'S'), '0')
+
     def test_timestamp(self):
 
         timestamp = time.time()

@@ -301,54 +301,54 @@ class DateTimeParserISOTests(Chai):
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.7'),
-            datetime(2013, 2, 3, 4, 5, 6, 7)
+            datetime(2013, 2, 3, 4, 5, 6, 700000)
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.78'),
-            datetime(2013, 2, 3, 4, 5, 6, 78)
+            datetime(2013, 2, 3, 4, 5, 6, 780000)
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.789'),
-            datetime(2013, 2, 3, 4, 5, 6, 789)
+            datetime(2013, 2, 3, 4, 5, 6, 789000)
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.7891'),
-            datetime(2013, 2, 3, 4, 5, 6, 7891)
+            datetime(2013, 2, 3, 4, 5, 6, 789100)
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.78912'),
-            datetime(2013, 2, 3, 4, 5, 6, 78912)
+            datetime(2013, 2, 3, 4, 5, 6, 789120)
         )
 
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.7+01:00'),
-            datetime(2013, 2, 3, 4, 5, 6, 7, tzinfo=tz.tzoffset(None, 3600))
+            datetime(2013, 2, 3, 4, 5, 6, 700000, tzinfo=tz.tzoffset(None, 3600))
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.78+01:00'),
-            datetime(2013, 2, 3, 4, 5, 6, 78, tzinfo=tz.tzoffset(None, 3600))
+            datetime(2013, 2, 3, 4, 5, 6, 780000, tzinfo=tz.tzoffset(None, 3600))
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.789+01:00'),
-            datetime(2013, 2, 3, 4, 5, 6, 789, tzinfo=tz.tzoffset(None, 3600))
+            datetime(2013, 2, 3, 4, 5, 6, 789000, tzinfo=tz.tzoffset(None, 3600))
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.7891+01:00'),
-            datetime(2013, 2, 3, 4, 5, 6, 7891, tzinfo=tz.tzoffset(None, 3600))
+            datetime(2013, 2, 3, 4, 5, 6, 789100, tzinfo=tz.tzoffset(None, 3600))
         )
 
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.78912+01:00'),
-            datetime(2013, 2, 3, 4, 5, 6, 78912, tzinfo=tz.tzoffset(None, 3600))
+            datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600))
         )
 
     def test_isoformat(self):
