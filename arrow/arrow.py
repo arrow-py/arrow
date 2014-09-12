@@ -177,6 +177,8 @@ class Arrow(object):
         return the entire range, with **limit** alone to return a maximum # of results from the
         start, and with both to cap a range at a maximum # of results.
 
+        Supported frame values: year, quarter, month, week, day, hour, minute, second
+
         Recognized datetime expressions:
 
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -238,6 +240,8 @@ class Arrow(object):
         **NOTE**: the **end** or **limit** must be provided.  Call with **end** alone to
         return the entire range, with **limit** alone to return a maximum # of results from the
         start, and with both to cap a range at a maximum # of results.
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second
 
         Recognized datetime expressions:
 
@@ -466,6 +470,8 @@ class Arrow(object):
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second
 
         Usage::
 
