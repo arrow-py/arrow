@@ -161,7 +161,7 @@ class Locale(object):
 
 class EnglishLocale(Locale):
 
-    names = ['en', 'en_us']
+    names = ['en', 'en_us', 'en_gb']
 
     past = '{0} ago'
     future = 'in {0}'
