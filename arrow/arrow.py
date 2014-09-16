@@ -857,3 +857,72 @@ class Arrow(object):
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)
+
+
+class ArrowInterval(object):
+
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def contains(self, other):
+        if hasattr(other, 'timestamp'):
+            return self.start <= other < self.end
+        elif hasattr(other, 'start') and hasattr(other, 'end'):
+            return self.start <= other.start and self.end > other.end
+
+    def abuts(self, other):
+        if hasattr(other, 'timestamp'):
+            return self.start == other or self.end == other
+        elif hasattr(other, 'start') and hasattr(other, 'end'):
+            return other.start <= self.start == other.end \
+                   or other.start == self.end <= other.end
+
+    def overlaps(self, other):
+        if hasattr(other, 'timestamp'):
+            return self.contains(other)
+        elif hasattr(other, 'start') and hasattr(other, 'end'):
+            return self.start <= other.start < self.end or self.start <= other.end < self.end
+
+    def overlap(self, other):
+        if not self.overlaps(other):
+            return None
+
+        if hasattr(other, 'timestamp'):
+            return ArrowInterval(other, other)
+        elif hasattr(other, 'start') and hasattr(other, 'end'):
+            overlap_start = self.start if self.start >= other.start else other.start
+            overlap_end = self.end if self.end <= other.end else other.end
+            return ArrowInterval(overlap_start, overlap_end)
+
+    def gap(self, other):
+        if self.contains(other) or self.abuts(other):
+            return None
+
+        if hasattr(other, 'timestamp'):
+            if self.start >= other:
+                return ArrowInterval(other, self.end)
+            else:
+                return ArrowInterval(self.start, other)
+        elif hasattr(other, 'start') and hasattr(other, 'end'):
+            if self.start >= other.end:
+                return ArrowInterval(other.end, self.start)
+            else:
+                return ArrowInterval(self.end, other.start)
+
+    def duration(self):
+        return self.end - self.start
+
+    def __str__(self):
+        return '[{0}, {1})'.format(self.start, self.end)
+
+    def __repr__(self):
+        return '<{0}: {1}>'.format(self.__class__.__name__, self.__str__())
+
+    # comparisons
+    def __eq__(self, other):
+
+        if not isinstance(other, ArrowInterval):
+            return False
+
+        return self.start == other.start and self.end == other.end

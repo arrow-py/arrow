@@ -1020,3 +1020,81 @@ class ArrowUtilTests(Chai):
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
 
+
+class ArrowIntervalTests(Chai):
+
+    def setUp(self):
+        super(ArrowIntervalTests, self).setUp()
+
+        self.standard = arrow.ArrowInterval('2014-09-15', '2014-10-15')
+        self.within = arrow.ArrowInterval('2014-09-15', '2014-10-14')
+        self.duplicate = arrow.ArrowInterval('2014-09-15', '2014-10-15')
+        self.zero_start = arrow.ArrowInterval('2014-09-15', '2014-09-15')
+        self.zero_within = arrow.ArrowInterval('2014-09-30', '2014-09-30')
+        self.zero_end = arrow.ArrowInterval('2014-10-15', '2014-10-15')
+        self.overlapping = arrow.ArrowInterval('2014-10-01', '2014-10-31')
+        self.abutting_start = arrow.ArrowInterval('2014-08-15', '2014-09-15')
+        self.abutting_end = arrow.ArrowInterval('2014-10-15', '2014-11-15')
+        self.gapper = arrow.ArrowInterval('2014-11-15', '2014-15-15')
+
+    def test_contains(self):
+        assertTrue(self.standard.contains(self.within))
+        assertTrue(self.standard.contains(self.zero_start))
+        assertTrue(self.standard.contains(self.zero_within))
+        assertFalse(self.standard.contains(self.zero_end))
+        assertFalse(self.standard.contains(self.duplicate))
+        assertFalse(self.standard.contains(self.overlapping))
+        assertFalse(self.standard.contains(self.abutting_start))
+        assertFalse(self.standard.contains(self.abutting_end))
+        assertFalse(self.standard.contains(self.gapper))
+
+    def test_abuts(self):
+        assertTrue(self.standard.abuts(self.abutting_start))
+        assertTrue(self.standard.abuts(self.abutting_end))
+        assertTrue(self.standard.abuts(self.zero_start))
+        assertTrue(self.standard.abuts(self.zero_end))
+        assertFalse(self.standard.abuts(self.zero_within))
+        assertFalse(self.standard.abuts(self.within))
+        assertFalse(self.standard.abuts(self.duplicate))
+        assertFalse(self.standard.abuts(self.overlapping))
+        assertFalse(self.standard.abuts(self.gapper))
+
+    def test_overlaps(self):
+        assertTrue(self.standard.overlaps(self.overlapping))
+        assertTrue(self.standard.overlaps(self.zero_start))
+        assertTrue(self.standard.overlaps(self.zero_within))
+        assertTrue(self.standard.overlaps(self.within))
+        assertTrue(self.standard.overlaps(self.duplicate))
+        assertTrue(self.standard.overlaps(self.abutting_start))
+        assertFalse(self.standard.overlaps(self.abutting_end))
+        assertFalse(self.standard.overlaps(self.zero_end))
+        assertFalse(self.standard.overlaps(self.gapper))
+
+    def test_overlap(self):
+        overlap = self.standard.overlap(self.overlapping)
+        assertEqual(overlap, arrow.ArrowInterval(self.overlapping.start, self.standard.end))
+
+        overlap = self.standard.overlap(self.zero_start)
+        assertEqual(overlap, arrow.ArrowInterval(self.zero_start.start, self.zero_start.end))
+
+        overlap = self.standard.overlap(self.zero_within)
+        assertEqual(overlap, arrow.ArrowInterval(self.zero_within.start, self.zero_within.end))
+
+        overlap = self.standard.overlap(self.within)
+        assertEqual(overlap, arrow.ArrowInterval(self.within.start, self.within.end))
+
+        overlap = self.standard.overlap(self.duplicate)
+        assertEqual(overlap, arrow.ArrowInterval(self.standard.start, self.standard.end))
+
+        overlap = self.standard.overlap(self.abutting_start)
+        assertEqual(overlap, arrow.ArrowInterval(self.abutting_start.end, self.standard.start))
+
+
+    def test_gap(self):
+        gap = self.standard.gap(self.gapper)
+        assertEqual(gap, arrow.ArrowInterval(self.standard.end, self.gapper.start))
+
+
+if __name__ == '__main__':
+    import unittest2
+    unittest2.main()
