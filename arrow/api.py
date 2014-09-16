@@ -25,7 +25,7 @@ def get(*args, **kwargs):
 
 def interval(*args, **kwargs):
     ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
-    ``get`` method.
+    ``interval`` method.
 
     '''
 
