@@ -1093,8 +1093,3 @@ class ArrowIntervalTests(Chai):
     def test_gap(self):
         gap = self.standard.gap(self.gapper)
         assertEqual(gap, arrow.ArrowInterval(self.standard.end, self.gapper.start))
-
-
-if __name__ == '__main__':
-    import unittest2
-    unittest2.main()
