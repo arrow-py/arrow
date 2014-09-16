@@ -1026,16 +1026,22 @@ class ArrowIntervalTests(Chai):
     def setUp(self):
         super(ArrowIntervalTests, self).setUp()
 
-        self.standard = arrow.ArrowInterval('2014-09-15', '2014-10-15')
-        self.within = arrow.ArrowInterval('2014-09-15', '2014-10-14')
-        self.duplicate = arrow.ArrowInterval('2014-09-15', '2014-10-15')
-        self.zero_start = arrow.ArrowInterval('2014-09-15', '2014-09-15')
-        self.zero_within = arrow.ArrowInterval('2014-09-30', '2014-09-30')
-        self.zero_end = arrow.ArrowInterval('2014-10-15', '2014-10-15')
-        self.overlapping = arrow.ArrowInterval('2014-10-01', '2014-10-31')
-        self.abutting_start = arrow.ArrowInterval('2014-08-15', '2014-09-15')
-        self.abutting_end = arrow.ArrowInterval('2014-10-15', '2014-11-15')
-        self.gapper = arrow.ArrowInterval('2014-11-15', '2014-15-15')
+        self.standard = arrow.ArrowInterval(arrow.Arrow(2014, 9, 15), arrow.Arrow(2014, 10, 15))
+        self.within = arrow.ArrowInterval(arrow.Arrow(2014, 9, 15), arrow.Arrow(2014, 10, 14))
+        self.duplicate = arrow.ArrowInterval(arrow.Arrow(2014, 9, 15), arrow.Arrow(2014, 10, 15))
+        self.zero_start = arrow.ArrowInterval(arrow.Arrow(2014, 9, 15), arrow.Arrow(2014, 9, 15))
+        self.zero_within = arrow.ArrowInterval(arrow.Arrow(2014, 9, 30), arrow.Arrow(2014, 9, 30))
+        self.zero_end = arrow.ArrowInterval(arrow.Arrow(2014, 10, 15), arrow.Arrow(2014, 10, 15))
+        self.overlapping = arrow.ArrowInterval(arrow.Arrow(2014, 10, 1), arrow.Arrow(2014, 10, 31))
+        self.abutting_start = arrow.ArrowInterval(arrow.Arrow(2014, 8, 15), arrow.Arrow(2014, 9, 15))
+        self.abutting_end = arrow.ArrowInterval(arrow.Arrow(2014, 10, 15), arrow.Arrow(2014, 11, 15))
+        self.gapper = arrow.ArrowInterval(arrow.Arrow(2014, 11, 15), arrow.Arrow(2014, 12, 15))
+
+        self.standard_start = self.standard.start
+        self.standard_middle = arrow.Arrow(2014, 9, 30)
+        self.standard_end = self.standard.end
+        self.before = arrow.Arrow(2014, 9, 1)
+        self.after = arrow.Arrow(2014, 10, 31)
 
     def test_contains(self):
         assertTrue(self.standard.contains(self.within))
@@ -1089,7 +1095,27 @@ class ArrowIntervalTests(Chai):
         overlap = self.standard.overlap(self.abutting_start)
         assertEqual(overlap, arrow.ArrowInterval(self.abutting_start.end, self.standard.start))
 
-
     def test_gap(self):
         gap = self.standard.gap(self.gapper)
         assertEqual(gap, arrow.ArrowInterval(self.standard.end, self.gapper.start))
+
+    def test_contains_dt(self):
+        assertTrue(self.standard.contains(self.standard_start))
+        assertTrue(self.standard.contains(self.standard_middle))
+        assertFalse(self.standard.contains(self.standard_end))
+        assertFalse(self.standard.contains(self.before))
+        assertFalse(self.standard.contains(self.after))
+
+    def test_abuts_dt(self):
+        assertTrue(self.standard.abuts(self.standard_start))
+        assertFalse(self.standard.abuts(self.standard_middle))
+        assertTrue(self.standard.abuts(self.standard_end))
+        assertFalse(self.standard.abuts(self.before))
+        assertFalse(self.standard.abuts(self.after))
+
+    def test_overlaps_dt(self):
+        assertTrue(self.standard.overlaps(self.standard_start))
+        assertTrue(self.standard.overlaps(self.standard_middle))
+        assertFalse(self.standard.overlaps(self.standard_end))
+        assertFalse(self.standard.overlaps(self.before))
+        assertFalse(self.standard.overlaps(self.after))

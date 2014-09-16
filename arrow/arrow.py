@@ -862,6 +862,9 @@ Arrow.max = Arrow.fromdatetime(datetime.max)
 class ArrowInterval(object):
 
     def __init__(self, start, end):
+        if not isinstance(start, Arrow) or not isinstance(end, Arrow):
+            raise TypeError("start and end must be of type Arrow")
+
         self.start = start
         self.end = end
 
