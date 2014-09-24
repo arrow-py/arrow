@@ -829,8 +829,8 @@ class ArrowHumanizeTests(Chai):
 
         later = self.now.replace(seconds=10)
 
-        assertEqual(self.now.humanize(later), 'seconds ago')
-        assertEqual(later.humanize(self.now), 'in seconds')
+        assertEqual(self.now.humanize(later), '10 seconds ago')
+        assertEqual(later.humanize(self.now), 'in 10 seconds')
 
     def test_minute(self):
 
@@ -967,7 +967,7 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         result = arw.humanize(self.datetime, locale='ru')
 
-        assertEqual(result, 'через несколько секунд')
+        assertEqual(result, 'через 44 несколько секунд')
 
     def test_years(self):
 
