@@ -600,7 +600,8 @@ class Arrow(object):
             return locale.describe('now')
 
         if diff < 45:
-            return locale.describe('seconds', sign)
+            seconds = delta * sign
+            return locale.describe('seconds', seconds)
 
         elif diff < 90:
             return locale.describe('minute', sign)

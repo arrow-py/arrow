@@ -37,6 +37,7 @@ class LocaleTests(Chai):
 
         assertEqual(self.locale._format_timeframe('hours', 2), '2 hours')
         assertEqual(self.locale._format_timeframe('hour', 0), 'an hour')
+        assertEqual(self.locale._format_timeframe('seconds', 20), '20 seconds')
 
     def test_format_relative_now(self):
 
