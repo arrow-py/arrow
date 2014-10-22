@@ -50,7 +50,7 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_unrecognized_token(self):
 
-        mock_input_re_map = mock(parser.DateTimeParser, '_INPUT_RE_MAP')
+        mock_input_re_map = mock(self.parser, '_INPUT_RE_MAP')
 
         expect(mock_input_re_map.__getitem__).args('YYYY').raises(KeyError)
 
