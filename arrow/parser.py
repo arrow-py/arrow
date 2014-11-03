@@ -89,11 +89,13 @@ class DateTimeParser(object):
                 formats = ['YYYY-MM-DDTHH:mm']
 
         else:
-            formats = [
-                'YYYY-MM-DD',
-                'YYYY-MM',
-                'YYYY',
-            ]
+            markers = ['YYYY', 'MM', 'DD']
+            seperators = ['-', '/']
+            l = len(markers)
+            formats = []
+            for i in range(l):
+                for seperator in seperators:
+                    formats.append(seperator.join(markers[:l-i]))
 
         if has_time and has_tz:
             formats = [f + 'Z' for f in formats]
