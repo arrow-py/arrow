@@ -792,6 +792,9 @@ class Arrow(object):
 
         return self._datetime.strftime(format)
 
+    def for_json(self):
+        '''Serializes for the ``for_json`` protocol of simplejson.'''
+        return self.isoformat()
 
     # internal tools.
 
