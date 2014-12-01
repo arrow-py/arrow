@@ -202,13 +202,18 @@ class ArrowComparisonTests(Chai):
 
         assertFalse(self.arrow > self.arrow)
         assertFalse(self.arrow > self.arrow.datetime)
-        assertFalse(self.arrow > 'abc')
+
+        with assertRaises(TypeError):
+            self.arrow > 'abc'
+
         assertTrue(self.arrow < arrow_cmp)
         assertTrue(self.arrow < arrow_cmp.datetime)
 
     def test_ge(self):
 
-        assertFalse(self.arrow >= 'abc')
+        with assertRaises(TypeError):
+            self.arrow >= 'abc'
+
         assertTrue(self.arrow >= self.arrow)
         assertTrue(self.arrow >= self.arrow.datetime)
 
@@ -218,13 +223,18 @@ class ArrowComparisonTests(Chai):
 
         assertFalse(self.arrow < self.arrow)
         assertFalse(self.arrow < self.arrow.datetime)
-        assertFalse(self.arrow < 'abc')
+
+        with assertRaises(TypeError):
+            self.arrow < 'abc'
+
         assertTrue(self.arrow < arrow_cmp)
         assertTrue(self.arrow < arrow_cmp.datetime)
 
     def test_le(self):
 
-        assertFalse(self.arrow <= 'abc')
+        with assertRaises(TypeError):
+            self.arrow <= 'abc'
+
         assertTrue(self.arrow <= self.arrow)
         assertTrue(self.arrow <= self.arrow.datetime)
 
