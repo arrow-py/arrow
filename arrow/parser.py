@@ -175,7 +175,7 @@ class DateTimeParser(object):
         elif token in ['DD', 'D']:
             parts['day'] = int(value)
 
-        elif token in ['HH', 'H']:
+        elif token.upper() in ['HH', 'H']:
             parts['hour'] = int(value)
 
         elif token in ['mm', 'm']:
