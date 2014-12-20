@@ -144,6 +144,35 @@ class MalayalamLocaleTests(Chai):
         assertEqual(result, 'ഒരു മണിക്കൂർ മുമ്പ്')
 
 
+class KannadaLocaleTests(Chai):
+
+    def setUp(self):
+        super(KannadaLocaleTests, self).setUp()
+
+        self.locale = locales.KannadaLocale()
+
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 ಘಂಟೆಗಳ')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'ಘಂಟೆ')
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative('ಈಗಷ್ಟೆ', 'now', 0)
+
+        assertEqual(result, 'ಈಗಷ್ಟೆ')
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative('ಒಂದು ಘಂಟೆ', 'hour', 1)
+        assertEqual(result, 'ಒಂದು ಘಂಟೆಗಳ ನಂತರ')
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative('ಒಂದು ಘಂಟೆ', 'hour', -1)
+        assertEqual(result, 'ಒಂದು ಘಂಟೆಗಳ ಮೊದಲು')
+
+
 class HindiLocaleTests(Chai):
 
     def setUp(self):
