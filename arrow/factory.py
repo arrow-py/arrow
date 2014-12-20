@@ -183,7 +183,7 @@ class ArrowFactory(object):
 
             # (str, format) -> parse.
             elif isstr(arg_1) and (isstr(arg_2) or isinstance(arg_2, list)):
-                dt = parser.DateTimeParser(locale).parse(args[0], args[1]) 
+                dt = parser.DateTimeParser(locale).parse(args[0], args[1])
                 return self.type.fromdatetime(dt)
 
             else:
