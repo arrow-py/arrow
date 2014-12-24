@@ -425,7 +425,7 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         'now': '刚才',
-        'seconds': '秒',
+        'seconds': '{0}秒',
         'minute': '1分钟',
         'minutes': '{0}分钟',
         'hour': '1小时',
@@ -456,7 +456,7 @@ class ChineseTWLocale(Locale):
 
     timeframes = {
         'now': '剛才',
-        'seconds': '秒',
+        'seconds': '{0}秒',
         'minute': '1分鐘',
         'minutes': '{0}分鐘',
         'hour': '1小時',
@@ -806,7 +806,7 @@ class NewNorwegianLocale(Locale):
 
 class PortugueseLocale(Locale):
     names = ['pt', 'pt_pt']
-    
+
     past = 'há {0}'
     future = 'em {0}'
 
@@ -833,11 +833,11 @@ class PortugueseLocale(Locale):
     day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
         'Sábado', 'Domingo']
     day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
-    
-    
+
+
 class BrazilianPortugueseLocale(PortugueseLocale):
     names = ['pt_br']
-    
+
     past = 'fazem {0}'
 
 
@@ -1180,7 +1180,7 @@ class CzechLocale(Locale):
                 form = form['future']
             else:
                 form = form['past']
-        delta = abs(delta)  
+        delta = abs(delta)
 
         if isinstance(form, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
@@ -1235,7 +1235,7 @@ def _map_locales():
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
-                locales[name] = cls  
+                locales[name] = cls
 
     return locales
 
