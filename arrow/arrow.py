@@ -591,16 +591,16 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        delta = int(util.total_seconds(self._datetime - dt))
-        sign = -1 if delta < 0 else 1
-        diff = abs(delta)
+        delta_ = int(util.total_seconds(self._datetime - dt))
+        sign = -1 if delta_ < 0 else 1
+        diff = abs(delta_)
         delta = diff
 
         if diff < 10:
             return locale.describe('now')
 
         if diff < 45:
-            return locale.describe('seconds', sign)
+            return locale.describe('seconds', delta_)
 
         elif diff < 90:
             return locale.describe('minute', sign)
