@@ -10,6 +10,7 @@
 - [FIX] Use correct Dutch wording for "hours" (wbolster)
 - [FIX] Complete the list of english locales (indorilftw)
 - [FIX] Change README to reStructuredText (nyuszika7h)
+- [FIX] Parse lower-cased 'h' (tamentis)
 
 ### 0.4.4
 
