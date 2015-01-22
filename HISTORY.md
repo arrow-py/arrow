@@ -6,11 +6,13 @@
 - [NEW] Version grep (eirnym)
 - [NEW] Default to ISO-8601 format (emonty)
 - [NEW] Raise TypeError on comparison (sniekamp)
+- [NEW] Adding Macedonian(mk) locale (krisfremen)
 - [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
 - [FIX] Use correct Dutch wording for "hours" (wbolster)
 - [FIX] Complete the list of english locales (indorilftw)
 - [FIX] Change README to reStructuredText (nyuszika7h)
 - [FIX] Parse lower-cased 'h' (tamentis)
+- [FIX] Slight modifications to Dutch locale (nvie)
 
 ### 0.4.4
 
