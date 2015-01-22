@@ -425,7 +425,7 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         'now': '刚才',
-        'seconds': '秒',
+        'seconds': '几秒',
         'minute': '1分钟',
         'minutes': '{0}分钟',
         'hour': '1小时',
@@ -456,7 +456,7 @@ class ChineseTWLocale(Locale):
 
     timeframes = {
         'now': '剛才',
-        'seconds': '秒',
+        'seconds': '幾秒',
         'minute': '1分鐘',
         'minutes': '{0}分鐘',
         'hour': '1小時',
