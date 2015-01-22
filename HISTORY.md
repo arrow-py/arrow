@@ -3,6 +3,8 @@
 ### 0.5.0
 
 - [NEW] struct_time addition. (mhworth)
+- [NEW] Version grep (eirnym)
+- [NEW] Default to ISO-8601 format (emonty)
 - [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
 
 ### 0.4.4

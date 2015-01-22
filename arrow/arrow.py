@@ -533,7 +533,7 @@ class Arrow(object):
 
     # string output and formatting.
 
-    def format(self, fmt, locale='en_us'):
+    def format(self, fmt='YYYY-MM-DD HH:mm:ssZZ', locale='en_us'):
         ''' Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to a format string.
 
@@ -549,6 +549,10 @@ class Arrow(object):
 
             >>> arrow.utcnow().format('MMMM DD, YYYY')
             'May 09, 2013'
+
+            >>> arrow.utcnow().format()
+            '2013-05-09 03:56:47 -00:00'
+
         '''
 
         return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
