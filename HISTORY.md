@@ -6,6 +6,8 @@
 - [NEW] Version grep (eirnym)
 - [NEW] Default to ISO-8601 format (emonty)
 - [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
+- [FIX] Use correct Dutch wording for "hours" (wbolster)
+- [FIX] Complete the list of english locales (indorilftw)
 
 ### 0.4.4
 
