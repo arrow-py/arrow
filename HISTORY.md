@@ -1,5 +1,29 @@
 ## History
 
+### 0.5.0
+
+- [NEW] struct_time addition. (mhworth)
+- [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
+
+### 0.4.4
+
+- [NEW] Include the docs in the released tarball
+- [NEW] Czech localization Czech localization for Arrow
+- [NEW] Add fa_ir to locales
+- [FIX] Fixes parsing of time strings with a final Z
+- [FIX] Fixes ISO parsing and formatting for fractional seconds
+- [FIX] test_fromtimestamp sp
+- [FIX] some typos fixed
+- [FIX] removed an unused import statement
+- [FIX] docs table fix
+- [FIX] Issue with specify 'X' template and no template at all to arrow.get
+- [FIX] Fix "import" typo in docs/index.rst
+- [FIX] Fix unit tests for zero passed
+- [FIX] Update layout.html
+- [FIX] In Norwegian and new Norwegian months and weekdays should not be capitalized
+- [FIX] Fixed discrepancy between specifying 'X' to arrow.get and specifying no template
+
+
 ### 0.4.3
 
 - [NEW] Turkish locale (Emre)
