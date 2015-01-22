@@ -533,7 +533,7 @@ class Arrow(object):
 
     # string output and formatting.
 
-    def format(self, fmt='YYYY-MM-DD HH:mm:ss ZZ', locale='en_us'):
+    def format(self, fmt='YYYY-MM-DD HH:mm:ssZZ', locale='en_us'):
         ''' Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to a format string.
 
