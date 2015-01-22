@@ -5,6 +5,7 @@
 - [NEW] struct_time addition. (mhworth)
 - [NEW] Version grep (eirnym)
 - [NEW] Default to ISO-8601 format (emonty)
+- [NEW] Raise TypeError on comparison (sniekamp)
 - [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
 - [FIX] Use correct Dutch wording for "hours" (wbolster)
 - [FIX] Complete the list of english locales (indorilftw)
