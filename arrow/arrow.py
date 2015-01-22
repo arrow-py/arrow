@@ -671,6 +671,10 @@ class Arrow(object):
 
     # comparisons
 
+    def _cmperror(self, other):
+        raise TypeError('can\'t compare \'{0}\' to \'{1}\''.format(
+            type(self), type(other)))
+
     def __eq__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
@@ -686,28 +690,28 @@ class Arrow(object):
     def __gt__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            return False
+            self._cmperror(other)
 
         return self._datetime > self._get_datetime(other)
 
     def __ge__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            return False
+            self._cmperror(other)
 
         return self._datetime >= self._get_datetime(other)
 
     def __lt__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            return False
+            self._cmperror(other)
 
         return self._datetime < self._get_datetime(other)
 
     def __le__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            return False
+            self._cmperror(other)
 
         return self._datetime <= self._get_datetime(other)
 
