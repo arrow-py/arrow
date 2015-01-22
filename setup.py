@@ -28,6 +28,7 @@ setup(
     name='arrow',
     version=grep('__version__'),
     description='Better dates and times for Python',
+    long_description=open('README.rst').read(),
     url='http://crsmithdev.com/arrow',
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
