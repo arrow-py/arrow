@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from chai import Chai
-from datetime import timedelta
+from datetime import timedelta, datetime
 import sys
+import pytz
 
 from arrow import util
 
@@ -26,3 +27,19 @@ class UtilTests(Chai):
 
             assertEqual(util._total_seconds_27(td), 30)
 
+    def test_astimezone(self):
+        tz = pytz.timezone("America/Los_Angeles")
+
+        # Test outside of daylight savings time
+        dt = datetime(2014, 1, 1, tzinfo=pytz.utc)
+        dt = util.astimezone(dt, tz)
+        
+        assertFalse(dt.dst())
+        assertEqual(dt.tzinfo._tzinfos, tz._tzinfos)
+
+        # Test inside of daylight savings time
+        dt = datetime(2014, 7, 1, tzinfo=pytz.utc)
+        dt = util.astimezone(dt, tz)
+
+        assertTrue(dt.dst())
+        assertEqual(dt.tzinfo._tzinfos, tz._tzinfos)

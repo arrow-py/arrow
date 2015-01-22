@@ -37,4 +37,22 @@ except NameError: #pragma: no cover
         return isinstance(s, str)
 
 
-__all__ = ['total_seconds', 'isstr']
+def astimezone(date, tz):
+    ''' Returns a ``datetime`` object, adjusted to the specified tzinfo.
+
+        :param date: a ``datetime`` object.
+        :param tz: a ``tzinfo`` object.
+
+    '''
+
+    date = date.astimezone(tz)
+
+    if hasattr(tz, 'normalize'):
+        # A pytz function
+        # See http://pytz.sourceforge.net/#introduction
+        date = tz.normalize(date)
+
+    return date
+
+
+__all__ = ['total_seconds', 'isstr', 'astimezone']
