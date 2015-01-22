@@ -32,6 +32,11 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
+    def test_struct_time(self):
+
+        assertDtEqual(self.factory.get(time.gmtime()),
+            datetime.utcnow().replace(tzinfo=tz.tzutc()))
+
     def test_one_arg_timestamp(self):
 
         timestamp = 12345
