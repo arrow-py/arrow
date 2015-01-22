@@ -64,7 +64,7 @@ class ArrowFactory(object):
             <Arrow [2013-05-08T05:54:34.293378+00:00]>
 
             >>> arrow.get('1367992474')
-            <Arrow [2013-05-08T05:54:34+00:00]>
+            <Arrow [2013-05-08T05:54:34+0struct_time0:00]>
 
         **One** ISO-8601-formatted ``str``, to parse it::
 
