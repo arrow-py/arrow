@@ -523,7 +523,7 @@ class DutchLocale(Locale):
         'minute': 'een minuut',
         'minutes': '{0} minuten',
         'hour': 'een uur',
-        'hours': '{0} uren',
+        'hours': '{0} uur',
         'day': 'een dag',
         'days': '{0} dagen',
         'month': 'een maand',
