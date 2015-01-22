@@ -78,22 +78,13 @@ class DateTimeParser(object):
 
             if has_subseconds:
                 subseconds_token = 'S' * len(re.split('\D+', time_parts[0].split('.')[1], 1)[0])
-            else:
-                subseconds_token = ''
-        else:
-            has_tz = has_seconds = has_subseconds = False
-            subseconds_token = ''
-
-        if has_time:
-
-            if has_subseconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss.%s' % subseconds_token]
             elif has_seconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss']
             else:
                 formats = ['YYYY-MM-DDTHH:mm']
-
         else:
+            has_tz = False
             formats = [
                 'YYYY-MM-DD',
                 'YYYY-MM',
