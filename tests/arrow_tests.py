@@ -127,7 +127,7 @@ class ArrowRepresentationTests(Chai):
 
         result = self.arrow.format()
 
-        assertEqual(result, '2013-02-03 12:30:45 -00:00')
+        assertEqual(result, '2013-02-03 12:30:45-00:00')
 
     def test_format_no_format_string(self):
 
