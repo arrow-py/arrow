@@ -370,6 +370,12 @@ class ArrowDatetimeInterfaceTests(Chai):
 
         assertEqual(result, self.arrow._datetime.isoformat())
 
+    def test_for_json(self):
+
+        result = self.arrow.for_json()
+
+        assertEqual(result, self.arrow._datetime.isoformat())
+
     def test_ctime(self):
 
         result = self.arrow.ctime()
