@@ -6,6 +6,7 @@ from chai import Chai
 
 from datetime import date, datetime, timedelta
 from dateutil import tz
+import simplejson as json
 import calendar
 import pickle
 import time
@@ -370,11 +371,11 @@ class ArrowDatetimeInterfaceTests(Chai):
 
         assertEqual(result, self.arrow._datetime.isoformat())
 
-    def test_for_json(self):
+    def test_simplejson(self):
 
-        result = self.arrow.for_json()
+        result = json.dumps({'v': self.arrow.for_json()}, for_json=True)
 
-        assertEqual(result, self.arrow._datetime.isoformat())
+        assertEqual(json.loads(result)['v'], self.arrow._datetime.isoformat())
 
     def test_ctime(self):
 
