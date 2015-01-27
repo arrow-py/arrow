@@ -198,3 +198,19 @@ class CzechLocaleTests(Chai):
 
         result = self.locale._format_relative('hodinou', 'hour', -1)
         assertEqual(result, 'Před hodinou')
+
+
+class HebrewLocaleTests(Chai):
+
+    def test_couple_of_timeframe(self):
+        locale = locales.HebrewLocale()
+
+        assertEqual(locale._format_timeframe('hours', 2), 'שעתיים')
+        assertEqual(locale._format_timeframe('months', 2), 'חודשיים')
+        assertEqual(locale._format_timeframe('days', 2), 'יומיים')
+        assertEqual(locale._format_timeframe('years', 2), 'שנתיים')
+
+        assertEqual(locale._format_timeframe('hours', 3), '3 שעות')
+        assertEqual(locale._format_timeframe('months', 4), '4 חודשים')
+        assertEqual(locale._format_timeframe('days', 3), '3 ימים')
+        assertEqual(locale._format_timeframe('years', 5), '5 שנים')

@@ -1265,6 +1265,56 @@ class MacedonianLocale(Locale):
     day_abbreviations = ['', 'Пон.', ' Вт.', ' Сре.', ' Чет.', ' Пет.', ' Саб.', ' Нед.']
 
 
+class HebrewLocale(Locale):
+
+    names = ['he', 'he_IL']
+
+    past = 'לפני {0}'
+    future = 'בעוד {0}'
+
+    timeframes = {
+        'now': 'הרגע',
+        'seconds': 'שניות',
+        'minute': 'דקה',
+        'minutes': '{0} דקות',
+        'hour': 'שעה',
+        'hours': '{0} שעות',
+        '2-hours': 'שעתיים',
+        'day': 'יום',
+        'days': '{0} ימים',
+        '2-days': 'יומיים',
+        'month': 'חודש',
+        'months': '{0} חודשים',
+        '2-months': 'חודשיים',
+        'year': 'שנה',
+        'years': '{0} שנים',
+        '2-years': 'שנתיים',
+    }
+
+    meridians = {
+        'am': 'לפנ"צ',
+        'pm': 'אחר"צ',
+        'AM': 'לפני הצהריים',
+        'PM': 'אחרי הצהריים',
+    }
+
+    month_names = ['', 'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי',
+                   'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר']
+    month_abbreviations = ['', 'ינו׳', 'פבר׳', 'מרץ', 'אפר׳', 'מאי', 'יוני', 'יולי', 'אוג׳',
+                           'ספט׳', 'אוק׳', 'נוב׳', 'דצמ׳']
+
+    day_names = ['', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת', 'ראשון']
+    day_abbreviations = ['', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳', 'א׳']
+
+    def _format_timeframe(self, timeframe, delta):
+        '''Hebrew couple of <timeframe> aware'''
+        couple = '2-{0}'.format(timeframe)
+        if abs(delta) == 2 and couple in self.timeframes:
+            return self.timeframes[couple].format(abs(delta))
+        else:
+            return self.timeframes[timeframe].format(abs(delta))
+
+
 def _map_locales():
 
     locales = {}
