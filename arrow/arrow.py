@@ -893,7 +893,9 @@ class ArrowInterval(object):
                    or other.start == self.end <= other.end
 
     def overlaps(self, other):
-        if hasattr(other, 'timestamp'):
+        if self.abuts(other):
+            return False
+        elif hasattr(other, 'timestamp'):
             return self.contains(other)
         elif hasattr(other, 'start') and hasattr(other, 'end'):
             return self.start <= other.start < self.end or self.start <= other.end < self.end
@@ -910,7 +912,7 @@ class ArrowInterval(object):
             return ArrowInterval(overlap_start, overlap_end)
 
     def gap(self, other):
-        if self.contains(other) or self.abuts(other):
+        if self.contains(other) or self.overlaps(other) or self.abuts(other):
             return None
 
         if hasattr(other, 'timestamp'):
