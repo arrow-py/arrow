@@ -76,19 +76,15 @@ class DateTimeParser(object):
             has_seconds = time_parts[0].count(':') > 1
             has_subseconds = '.' in time_parts[0]
 
-        else:
-            has_tz = has_seconds = has_subseconds = False
-
-        if has_time:
-
             if has_subseconds:
-                formats = ['YYYY-MM-DDTHH:mm:ss.SSSSSS']
+                subseconds_token = 'S' * len(re.split('\D+', time_parts[0].split('.')[1], 1)[0])
+                formats = ['YYYY-MM-DDTHH:mm:ss.%s' % subseconds_token]
             elif has_seconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss']
             else:
                 formats = ['YYYY-MM-DDTHH:mm']
-
         else:
+            has_tz = False
             formats = [
                 'YYYY-MM-DD',
                 'YYYY-MM',
@@ -175,7 +171,7 @@ class DateTimeParser(object):
         elif token in ['DD', 'D']:
             parts['day'] = int(value)
 
-        elif token in ['HH', 'H']:
+        elif token.upper() in ['HH', 'H']:
             parts['hour'] = int(value)
 
         elif token in ['mm', 'm']:

@@ -1,6 +1,7 @@
 from chai import Chai
 from datetime import datetime, date
 from dateutil import tz
+import time
 
 from arrow import factory, util
 
@@ -31,6 +32,11 @@ class GetTests(Chai):
     def test_one_arg_non(self):
 
         assertDtEqual(self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc()))
+
+    def test_struct_time(self):
+
+        assertDtEqual(self.factory.get(time.gmtime()),
+            datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
     def test_one_arg_timestamp(self):
 
