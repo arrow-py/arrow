@@ -8,7 +8,7 @@ construction scenarios.
 
 from __future__ import absolute_import
 
-from arrow.arrow import Arrow
+from arrow.arrow import Arrow, ArrowInterval
 from arrow import parser
 from arrow.util import isstr
 
@@ -19,12 +19,12 @@ import calendar
 
 
 class ArrowFactory(object):
-    ''' A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
+    """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
     :param type: (optional) the :class:`Arrow <arrow.arrow.Arrow>`-based class to construct from.
         Defaults to :class:`Arrow <arrow.arrow.Arrow>`.
 
-    '''
+    """
 
     def __init__(self, type=Arrow):
         self.type = type
@@ -204,6 +204,27 @@ class ArrowFactory(object):
         # 3+ args -> datetime-like via constructor.
         else:
             return self.type(*args, **kwargs)
+
+    def interval(self, *args, **kwargs):
+        arg_count = len(args)
+
+        # () -> now, @ utc.
+        if arg_count == 0:
+            return ArrowInterval(self.get(), self.get())
+
+        elif arg_count == 1:
+            now = self.utcnow()
+            interval_bound = self.get(args[0])
+            if interval_bound < now:
+                return ArrowInterval(interval_bound, now)
+            else:
+                return ArrowInterval(now, interval_bound)
+
+        elif arg_count == 2:
+            interval_start = self.get(args[0])
+            interval_end = self.get(args[1])
+
+            return ArrowInterval(interval_start, interval_end)
 
     def utcnow(self):
         '''Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC time.

@@ -25,13 +25,12 @@ def grep(attrname):
 file_text = read(fpath('arrow/__init__.py'))
 
 setup(
-    name='arrow',
+    name='arrow-fatisar',
     version=grep('__version__'),
-    description='Better dates and times for Python',
-    long_description=open('README.rst').read(),
-    url='http://crsmithdev.com/arrow',
-    author='Chris Smith',
-    author_email="crsmithdev@gmail.com",
+    description='("arrow" fork) Better dates and times for Python, with intervals',
+    url='https://github.com/fatisar/arrow',
+    author='Daniel Sarfati',
+    author_email="fatisar@gmail.com",
     license='Apache 2.0',
     packages=['arrow'],
     zip_safe=False,

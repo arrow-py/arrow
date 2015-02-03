@@ -22,6 +22,16 @@ def get(*args, **kwargs):
 
     return _factory.get(*args, **kwargs)
 
+
+def interval(*args, **kwargs):
+    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
+    ``interval`` method.
+
+    '''
+
+    return _factory.interval(*args, **kwargs)
+
+
 def utcnow():
     ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
     ``utcnow`` method.

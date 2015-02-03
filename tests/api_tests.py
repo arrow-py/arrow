@@ -14,6 +14,12 @@ class ModuleTests(Chai):
 
         assertEqual(api.get(1, b=2), 'result')
 
+    def test_interval(self):
+
+        expect(api._factory.interval).args(1, b=2).returns('result')
+
+        assertEqual(api.interval(1, b=2), 'result')
+
     def test_utcnow(self):
 
         expect(api._factory.utcnow).returns('utcnow')
