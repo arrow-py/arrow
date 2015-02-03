@@ -161,7 +161,7 @@ class Locale(object):
 
 class EnglishLocale(Locale):
 
-    names = ['en', 'en_us']
+    names = ['en', 'en_us', 'en_gb', 'en_au', 'en_be', 'en_jp', 'en_za']
 
     past = '{0} ago'
     future = 'in {0}'
@@ -425,7 +425,7 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         'now': '刚才',
-        'seconds': '秒',
+        'seconds': '几秒',
         'minute': '1分钟',
         'minutes': '{0}分钟',
         'hour': '1小时',
@@ -456,7 +456,7 @@ class ChineseTWLocale(Locale):
 
     timeframes = {
         'now': '剛才',
-        'seconds': '秒',
+        'seconds': '幾秒',
         'minute': '1分鐘',
         'minutes': '{0}分鐘',
         'hour': '1小時',
@@ -523,20 +523,20 @@ class DutchLocale(Locale):
         'minute': 'een minuut',
         'minutes': '{0} minuten',
         'hour': 'een uur',
-        'hours': '{0} uren',
+        'hours': '{0} uur',
         'day': 'een dag',
         'days': '{0} dagen',
         'month': 'een maand',
         'months': '{0} maanden',
         'year': 'een jaar',
-        'years': '{0} jaren',
+        'years': '{0} jaar',
     }
 
     # In Dutch names of months and days are not starting with a capital letter
     # like in the English language.
     month_names = ['', 'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli',
         'augustus', 'september', 'oktober', 'november', 'december']
-    month_abbreviations = ['', 'jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug',
+    month_abbreviations = ['', 'jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug',
         'sep', 'okt', 'nov', 'dec']
 
     day_names = ['', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag']
@@ -1226,6 +1226,93 @@ class FarsiLocale(Locale):
 
     day_names = ['', 'دو شنبه', 'سه شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه', 'یکشنبه']
     day_abbreviations = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+
+class MacedonianLocale(Locale):
+    names = ['mk', 'mk_mk']
+
+    past = 'пред {0}'
+    future = 'за {0}'
+
+    timeframes = {
+        'now': 'сега',
+        'seconds': 'секунди',
+        'minute': 'една минута',
+        'minutes': '{0} минути',
+        'hour': 'еден саат',
+        'hours': '{0} саати',
+        'day': 'еден ден',
+        'days': '{0} дена',
+        'month': 'еден месец',
+        'months': '{0} месеци',
+        'year': 'една година',
+        'years': '{0} години',
+    }
+
+    meridians = {
+        'am': 'дп',
+        'pm': 'пп',
+        'AM': 'претпладне',
+        'PM': 'попладне',
+    }
+
+    month_names = ['', 'Јануари', 'Февруари', 'Март', 'Април', 'Мај', 'Јуни', 'Јули', 'Август', 'Септември', 'Октомври',
+                   'Ноември', 'Декември']
+    month_abbreviations = ['', 'Јан.', ' Фев.', ' Мар.', ' Апр.', ' Мај', ' Јун.', ' Јул.', ' Авг.', ' Септ.', ' Окт.',
+                           ' Ноем.', ' Декем.']
+
+    day_names = ['', 'Понеделник', ' Вторник', ' Среда', ' Четврток', ' Петок', ' Сабота', ' Недела']
+    day_abbreviations = ['', 'Пон.', ' Вт.', ' Сре.', ' Чет.', ' Пет.', ' Саб.', ' Нед.']
+
+
+class HebrewLocale(Locale):
+
+    names = ['he', 'he_IL']
+
+    past = 'לפני {0}'
+    future = 'בעוד {0}'
+
+    timeframes = {
+        'now': 'הרגע',
+        'seconds': 'שניות',
+        'minute': 'דקה',
+        'minutes': '{0} דקות',
+        'hour': 'שעה',
+        'hours': '{0} שעות',
+        '2-hours': 'שעתיים',
+        'day': 'יום',
+        'days': '{0} ימים',
+        '2-days': 'יומיים',
+        'month': 'חודש',
+        'months': '{0} חודשים',
+        '2-months': 'חודשיים',
+        'year': 'שנה',
+        'years': '{0} שנים',
+        '2-years': 'שנתיים',
+    }
+
+    meridians = {
+        'am': 'לפנ"צ',
+        'pm': 'אחר"צ',
+        'AM': 'לפני הצהריים',
+        'PM': 'אחרי הצהריים',
+    }
+
+    month_names = ['', 'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי',
+                   'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר']
+    month_abbreviations = ['', 'ינו׳', 'פבר׳', 'מרץ', 'אפר׳', 'מאי', 'יוני', 'יולי', 'אוג׳',
+                           'ספט׳', 'אוק׳', 'נוב׳', 'דצמ׳']
+
+    day_names = ['', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת', 'ראשון']
+    day_abbreviations = ['', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳', 'א׳']
+
+    def _format_timeframe(self, timeframe, delta):
+        '''Hebrew couple of <timeframe> aware'''
+        couple = '2-{0}'.format(timeframe)
+        if abs(delta) == 2 and couple in self.timeframes:
+            return self.timeframes[couple].format(abs(delta))
+        else:
+            return self.timeframes[timeframe].format(abs(delta))
 
 
 def _map_locales():
