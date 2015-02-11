@@ -88,6 +88,8 @@ And then:
 
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
+    
+Further documentation can be found at `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 
 Contributing
 ------------
