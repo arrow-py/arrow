@@ -9,7 +9,7 @@ Arrow - Better dates & times for Python
    :alt: downloads
    :target: https://crate.io/packages/arrow
         
-Documentation: `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
+Documentation: `arrow <http://arrow.readthedocs.org/en/latest/>`_
 --------------------------------------------------------------------
 
 What?
