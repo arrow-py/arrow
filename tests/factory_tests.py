@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from chai import Chai
 from datetime import datetime, date
 from dateutil import tz
@@ -141,6 +143,17 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
+    def test_localized_months(self):
+        for args, locale, expected in [
+                [('Пятница 24 Октября'.lower(), 'dddd D MMMM'), 'ru',
+                 datetime(1, 10, 24, tzinfo=tz.tzutc())],
+                [('Viernes 24 Octubre', 'dddd D MMMM'), 'es',
+                 datetime(1, 10, 24, tzinfo=tz.tzutc())],
+                [('16/Okt/13 6:53 PM', 'DD/MMM/YY H:mm A'), 'de_DE',
+                 datetime(2013, 10, 16, 18, 53, tzinfo=tz.tzutc())]]:
+            result = self.factory.get(*args, locale=locale)
+            self.assertEqual(result, expected)
+
     def test_two_args_other(self):
 
         with assertRaises(TypeError):
@@ -176,4 +189,3 @@ class NowTests(Chai):
     def test_tz_str(self):
 
         assertDtEqual(self.factory.now('EST'), datetime.now(tz.gettz('EST')))
-

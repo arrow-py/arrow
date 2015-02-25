@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-
+import locale
 from datetime import timedelta
 import sys
 
@@ -36,5 +36,16 @@ except NameError: #pragma: no cover
     def isstr(s):
         return isinstance(s, str)
 
+try: # pragma: no cover
+    unicode
+
+    def locale_str(native_str):
+        if not isinstance(native_str, unicode):
+            native_str = native_str.decode(locale.getpreferredencoding(False))
+        return native_str
+except NameError: #pragma: no cover
+    def locale_str(native_str):
+        assert not isinstance(native_str, bytes)
+        return native_str
 
 __all__ = ['total_seconds', 'isstr']

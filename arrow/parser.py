@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-
+from __future__ import unicode_literals
 from datetime import datetime
 from dateutil import tz
 
 import calendar
 import re
 
-from arrow import locales
+from arrow import locales, util
 
 
 class ParserError(RuntimeError):
@@ -30,8 +30,8 @@ class DateTimeParser(object):
     _INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
         'YY': _TWO_DIGIT_RE,
-        'MMMM': re.compile('({0})'.format('|'.join(calendar.month_name[1:]))),
-        'MMM': re.compile('({0})'.format('|'.join(calendar.month_abbr[1:]))),
+        'MMMM': re.compile('({0})'.format('|'.join(map(util.locale_str, calendar.month_name[1:])))),
+        'MMM': re.compile('({0})'.format('|'.join(map(util.locale_str, calendar.month_abbr[1:])))),
         'MM': _TWO_DIGIT_RE,
         'M': _ONE_OR_TWO_DIGIT_RE,
         'DD': _TWO_DIGIT_RE,
@@ -60,6 +60,13 @@ class DateTimeParser(object):
     def __init__(self, locale='en_us'):
 
         self.locale = locales.get_locale(locale)
+        self._INPUT_RE_MAP = DateTimeParser._INPUT_RE_MAP.copy()
+        month_names = self.locale.month_names[1:]
+        if month_names:
+            self._INPUT_RE_MAP['MMMM'] = re.compile('({0})'.format('|'.join(month_names)))
+        month_abbrs = self.locale.month_abbreviations[1:]
+        if month_abbrs:
+            self._INPUT_RE_MAP['MMM'] = re.compile('({0})'.format('|'.join(month_abbrs)))
 
     def parse_iso(self, string):
 
