@@ -9,7 +9,7 @@ Arrow - Better dates & times for Python
    :alt: downloads
    :target: https://crate.io/packages/arrow
         
-Documentation: `crsmithdev.com/arrow <http://crsmithdev.com/arrow>`_
+Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 --------------------------------------------------------------------
 
 What?
@@ -88,6 +88,8 @@ And then:
 
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
+    
+Further documentation can be found at `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 
 Contributing
 ------------
