@@ -398,3 +398,53 @@ class TzinfoParserTests(Chai):
 
         with assertRaises(parser.ParserError):
             self.parser.parse('fail')
+
+
+class DateTimeParserMonthNameTests(Chai):
+
+    def setUp(self):
+        super(DateTimeParserMonthNameTests, self).setUp()
+
+        self.parser = parser.DateTimeParser('en_us')
+
+    def test_shortmonth_capitalized(self):
+
+        assertEqual(
+            self.parser.parse('2013-Jan-01', 'YYYY-MMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_shortmonth_allupper(self):
+
+        assertEqual(
+            self.parser.parse('2013-JAN-01', 'YYYY-MMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_shortmonth_alllower(self):
+
+        assertEqual(
+            self.parser.parse('2013-jan-01', 'YYYY-MMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_month_capitalized(self):
+
+        assertEqual(
+            self.parser.parse('2013-January-01', 'YYYY-MMMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_month_allupper(self):
+
+        assertEqual(
+            self.parser.parse('2013-JANUARY-01', 'YYYY-MMMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_month_alllower(self):
+
+        assertEqual(
+            self.parser.parse('2013-january-01', 'YYYY-MMMM-DD'),
+            datetime(2013, 1, 1)
+        )
