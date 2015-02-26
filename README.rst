@@ -10,7 +10,7 @@ Arrow - Better dates & times for Python
    :target: https://crate.io/packages/arrow
         
 Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
---------------------------------------------------------------------
+---------------------------------------------------------------------------------
 
 What?
 -----
