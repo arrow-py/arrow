@@ -29,7 +29,7 @@ setup(
     version=grep('__version__'),
     description='Better dates and times for Python',
     long_description=open('README.rst').read(),
-    url='http://crsmithdev.com/arrow',
+    url='https://github.com/crsmithdev/arrow/',
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
     license='Apache 2.0',
@@ -40,7 +40,7 @@ setup(
     ],
     test_suite="tests",
     classifiers=[
-        'Development Status :: 5 - Beta',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.6',

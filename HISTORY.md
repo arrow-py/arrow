@@ -1,5 +1,12 @@
 ## History
 
+### 0.5.1 - 0.5.4
+
+- [FIX] test the behavior of simplejson instead of calling for_json directly (tonyseek)
+- [FIX] Add Hebrew Locale (doodyparizada)
+- [FIX] Update documentation location (andrewelkins)
+- [FIX] Update setup.py Development Status level (andrewelkins)
+
 ### 0.5.0
 
 - [NEW] struct_time addition. (mhworth)
