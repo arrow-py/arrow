@@ -6,6 +6,7 @@
 - [FIX] Add Hebrew Locale (doodyparizada)
 - [FIX] Update documentation location (andrewelkins)
 - [FIX] Update setup.py Development Status level (andrewelkins)
+- [FIX] Case insensitive month match (cshowe)
 
 ### 0.5.0
 
