@@ -28,7 +28,7 @@ setup(
     name='arrow',
     version=grep('__version__'),
     description='Better dates and times for Python',
-    long_description=open('README.rst').read(),
+    long_description=read(fpath('README.rst')),
     url='https://github.com/crsmithdev/arrow/',
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
