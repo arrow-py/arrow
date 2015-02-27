@@ -1,3 +1,4 @@
+import codecs
 import os.path
 import re
 
@@ -13,7 +14,7 @@ def fpath(name):
 
 
 def read(fname):
-    return open(fpath(fname)).read()
+    return codecs.open(fpath(fname), encoding='utf-8').read()
 
 
 def grep(attrname):
