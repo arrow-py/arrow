@@ -905,7 +905,7 @@ class VietnameseLocale(Locale):
 
 class TurkishLocale(Locale):
 
-    names = ['tr', 'tr_TR']
+    names = ['tr', 'tr_tr']
 
     past = '{0} önce'
     future = '{0} sonra'
@@ -936,7 +936,7 @@ class TurkishLocale(Locale):
 
 class ArabicLocale(Locale):
 
-    names = ['ar', 'ar_EG']
+    names = ['ar', 'ar_eg']
 
     past = 'منذ {0}'
     future = 'خلال {0}'
