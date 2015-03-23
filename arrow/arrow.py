@@ -508,7 +508,7 @@ class Arrow(object):
 
         Usage::
 
-            >>> arrow.utcnow().ceil('hour')
+            >>> arrow.utcnow().floor('hour')
             <Arrow [2013-05-09T03:00:00+00:00]>
         '''
 
