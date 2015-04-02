@@ -377,7 +377,7 @@ class Arrow(object):
         >>> arw.replace(years=1, months=-1)
         <Arrow [2014-04-11T22:27:34.787885+00:00]>
 
-        You can also provide a tzimezone expression can also be replaced:
+        You can also provide a timezone expression can also be replaced:
 
         >>> arw.replace(tzinfo=tz.tzlocal())
         <Arrow [2013-05-11T22:27:34.787885-07:00]>
