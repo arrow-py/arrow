@@ -387,18 +387,18 @@ class FinnishLocale(Locale):
     future = '{0} kuluttua'
 
     timeframes = {
-        'now': 'juuri nyt',
-        'seconds': 'muutama sekunti',
-        'minute': 'minuutti',
-        'minutes': '{0} minuuttia',
-        'hour': 'tunti',
-        'hours': '{0} tuntia',
-        'day': 'päivä',
-        'days': '{0} päivää',
-        'month': 'kuukausi',
-        'months': '{0} kuukautta',
-        'year': 'vuosi',
-        'years': '{0} vuotta',
+        'now': ['juuri nyt', 'juuri nyt'],
+        'seconds': ['muutama sekunti', 'muutaman sekunnin'],
+        'minute': ['minuutti', 'minuutin'],
+        'minutes': ['{0} minuuttia', '{0} minuutin'],
+        'hour': ['tunti', 'tunnin'],
+        'hours': ['{0} tuntia', '{0} tunnin'],
+        'day': ['päivä', 'päivä'],
+        'days': ['{0} päivää', '{0} päivän'],
+        'month': ['kuukausi', 'kuukauden'],
+        'months': ['{0} kuukautta', '{0} kuukauden'],
+        'year': ['vuosi', 'vuoden'],
+        'years': ['{0} vuotta', '{0} vuoden'],
     }
 
     # Months and days are lowercase in Finnish
@@ -414,6 +414,19 @@ class FinnishLocale(Locale):
                      'perjantai', 'lauantai', 'sunnuntai']
 
     day_abbreviations = ['', 'ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']
+
+    def _format_timeframe(self, timeframe, delta):
+        return (self.timeframes[timeframe][0].format(abs(delta)),
+                self.timeframes[timeframe][1].format(abs(delta)))
+
+    def _format_relative(self, humanized, timeframe, delta):
+        if timeframe == 'now':
+            return humanized[0]
+
+        direction = self.past if delta < 0 else self.future
+        which = 0 if delta < 0 else 1
+
+        return direction.format(humanized[which])
 
 
 class ChineseCNLocale(Locale):
