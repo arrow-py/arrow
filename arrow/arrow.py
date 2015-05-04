@@ -460,11 +460,12 @@ class Arrow(object):
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tz)
 
-    def span(self, frame):
+    def span(self, frame, count=1):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param count: (optional) the number of frames to span.
 
         Usage::
 
@@ -476,6 +477,9 @@ class Arrow(object):
 
             >>> arrow.utcnow().span('day')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day', count=2)
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
 
         '''
 
@@ -494,7 +498,7 @@ class Arrow(object):
         if frame_absolute == 'week':
             floor = floor + relativedelta(days=-(self.isoweekday() - 1))
 
-        ceil = floor + relativedelta(**{frame_relative: 1}) + relativedelta(microseconds=-1)
+        ceil = floor + relativedelta(**{frame_relative: count}) + relativedelta(microseconds=-1)
 
         return floor, ceil
 

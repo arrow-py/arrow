@@ -783,6 +783,13 @@ class ArrowSpanTests(Chai):
         assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
+    def test_span_year_count(self):
+
+        floor, ceil = self.arrow.span('year', 2)
+
+        assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2014, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
     def test_span_month(self):
 
         floor, ceil = self.arrow.span('month')
