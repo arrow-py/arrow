@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 from chai import Chai
 
 from arrow import locales
-
+from arrow.api import now
+from arrow import arrow
 
 class ModuleTests(Chai):
 
@@ -214,3 +215,33 @@ class HebrewLocaleTests(Chai):
         assertEqual(locale._format_timeframe('months', 4), '4 חודשים')
         assertEqual(locale._format_timeframe('days', 3), '3 ימים')
         assertEqual(locale._format_timeframe('years', 5), '5 שנים')
+        
+class MarathiLocaleTests(Chai):
+
+    def setUp(self):
+        super(MarathiLocaleTests, self).setUp()
+
+        self.locale = locales.MarathiLocale()
+        
+    def test_dateCoreFunctionality(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assertEqual (self.locale.month_name(dt.month),'एप्रिल')
+        assertEqual (self.locale.month_abbreviation(dt.month),'एप्रि')
+        assertEqual (self.locale.day_name(dt.isoweekday()),'शनिवार')
+        assertEqual (self.locale.day_abbreviation(dt.isoweekday()), 'शनि')
+        
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 तास')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'एक तास')
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative('सद्य', 'now', 0)
+        assertEqual(result, 'सद्य')
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative('एक तास', 'hour', 1)
+        assertEqual(result, 'एक तास नंतर')
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative('एक तास', 'hour', -1)
+        assertEqual(result, 'एक तास आधी')
