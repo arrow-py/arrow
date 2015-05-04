@@ -918,7 +918,7 @@ class VietnameseLocale(Locale):
 
 class TurkishLocale(Locale):
 
-    names = ['tr', 'tr_TR']
+    names = ['tr', 'tr_tr']
 
     past = '{0} önce'
     future = '{0} sonra'
@@ -949,7 +949,7 @@ class TurkishLocale(Locale):
 
 class ArabicLocale(Locale):
 
-    names = ['ar', 'ar_EG']
+    names = ['ar', 'ar_eg']
 
     past = 'منذ {0}'
     future = 'خلال {0}'
@@ -1338,5 +1338,56 @@ def _map_locales():
                 locales[name] = cls  
 
     return locales
+
+class CatalaLocale(Locale):
+    names = ['ca', 'ca_ca']
+    past = 'Fa {0}'
+    future = '{0}' # I don't know what's the right phrase in catala for the future.
+
+    timeframes = {
+        'now': 'Ara mateix',
+        'seconds': 'segons',
+        'minute': '1 minut',
+        'minutes': '{0} minuts',
+        'hour': 'una hora',
+        'hours': '{0} hores',
+        'day': 'un dia',
+        'days': '{0} dies',
+        'month': 'un mes',
+        'months': '{0} messos',
+        'year': 'un any',
+        'years': '{0} anys',
+    }
+
+    month_names = ['', 'Jener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Decembre']
+    month_abbreviations = ['', 'Jener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Decembre']
+    day_names = ['', 'Dilluns', 'Dimars', 'Dimecres', 'Dijous', 'Divendres', 'Disabte', 'Diumenge']
+    day_abbreviations = ['', 'Dilluns', 'Dimars', 'Dimecres', 'Dijous', 'Divendres', 'Disabte', 'Diumenge']
+
+class BasqueLocale(Locale):
+    names = ['eu', 'eu_eu']
+    past = 'duela {0}'
+    future = '{0}' # I don't know what's the right phrase in Basque for the future.
+
+    timeframes = {
+        'now': 'Orain',
+        'seconds': 'segundu',
+        'minute': 'minutu bat',
+        'minutes': '{0} minutu',
+        'hour': 'ordu bat',
+        'hours': '{0} ordu',
+        'day': 'egun bat',
+        'days': '{0} egun',
+        'month': 'hilabete bat',
+        'months': '{0} hilabet',
+        'year': 'urte bat',
+        'years': '{0} urte',
+    }
+
+    month_names = ['', 'Urtarrilak', 'Otsailak', 'Martxoak', 'Apirilak', 'Maiatzak', 'Ekainak', 'Uztailak', 'Abuztuak', 'Irailak', 'Urriak', 'Azaroak', 'Abenduak']
+    month_abbreviations = ['', 'urt', 'ots', 'mar', 'api', 'mai', 'eka', 'uzt', 'abu', 'ira', 'urr', 'aza', 'abe']
+    day_names = ['', 'Asteleehna', 'Asteartea', 'Asteazkena', 'Osteguna', 'Ostirala', 'Larunbata', 'Igandea']
+    day_abbreviations = ['', 'al', 'ar', 'az', 'og', 'ol', 'lr', 'ig']
+
 
 _locales = _map_locales()
