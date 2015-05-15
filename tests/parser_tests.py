@@ -117,22 +117,40 @@ class DateTimeParserParseTests(Chai):
     def test_parse_subsecond(self):
 
         expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:9', 'YYYY-MM-DD HH:mm:ss:S'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.9', 'YYYY-MM-DD HH:mm:ss.S'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.9'), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 990000)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:99', 'YYYY-MM-DD HH:mm:ss:SS'), expected)
+        expected = datetime(2013, 1, 1, 12, 30, 45, 980000)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.98', 'YYYY-MM-DD HH:mm:ss.SS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.98'), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 999000)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:999', 'YYYY-MM-DD HH:mm:ss:SSS'), expected)
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987000)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987', 'YYYY-MM-DD HH:mm:ss.SSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987'), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 999900)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:9999', 'YYYY-MM-DD HH:mm:ss:SSSS'), expected)
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987600)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.9876', 'YYYY-MM-DD HH:mm:ss.SSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.9876'), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 999990)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:99999', 'YYYY-MM-DD HH:mm:ss:SSSSS'), expected)
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987650)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.98765', 'YYYY-MM-DD HH:mm:ss.SSSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.98765'), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 999999)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45:999999', 'YYYY-MM-DD HH:mm:ss:SSSSSS'), expected)
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654'), expected)
+
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.9876543', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.9876543'), expected)
+
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.98765432', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.98765432'), expected)
+
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
+        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654321'), expected)
 
     def test_map_lookup_keyerror(self):
 

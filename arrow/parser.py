@@ -77,7 +77,7 @@ class DateTimeParser(object):
             has_subseconds = '.' in time_parts[0]
 
             if has_subseconds:
-                subseconds_token = 'S' * len(re.split('\D+', time_parts[0].split('.')[1], 1)[0])
+                subseconds_token = 'S' * min(len(re.split('\D+', time_parts[0].split('.')[1], 1)[0]), 6)
                 formats = ['YYYY-MM-DDTHH:mm:ss.%s' % subseconds_token]
             elif has_seconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss']
