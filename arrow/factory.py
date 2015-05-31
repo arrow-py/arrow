@@ -10,7 +10,7 @@ from __future__ import absolute_import
 
 from arrow.arrow import Arrow
 from arrow import parser
-from arrow.util import isstr
+from arrow.util import is_timestamp, isstr
 
 from datetime import datetime, tzinfo, date
 from dateutil import tz as dateutil_tz
@@ -136,11 +136,12 @@ class ArrowFactory(object):
             if arg is None:
                 return self.type.utcnow()
 
-            # try (int, float, str(int), str(float)) -> utc, from timestamp.
-            try:
-                return self.type.utcfromtimestamp(arg)
-            except:
-                pass
+            if is_timestamp(arg):
+                try:
+                    # try (int, float, str(int), str(float)) -> utc, from timestamp.
+                    return self.type.utcfromtimestamp(arg)
+                except ValueError, e:
+                    raise e
 
             # (Arrow) -> from the object's datetime.
             if isinstance(arg, Arrow):

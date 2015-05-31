@@ -52,6 +52,11 @@ class GetTests(Chai):
         assertEqual(self.factory.get(timestamp), timestamp_dt)
         assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
 
+        # Issue 216
+        timestamp = '99999999999999999999999999'
+        with assertRaises(ValueError):
+            self.factory.get(timestamp)
+
     def test_one_arg_arrow(self):
 
         arw = self.factory.utcnow()
