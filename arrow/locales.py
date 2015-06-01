@@ -139,6 +139,15 @@ class Locale(object):
         if token == 'A':
             return self.meridians['AM'] if hour < 12 else self.meridians['PM']
 
+    def ordinal_number(self, n):
+        ''' Returns the ordinal format of a given integer
+
+        :param n: an integer
+        '''
+        return self._ordinal_number(n)
+
+    def _ordinal_number(self, n):
+        return '{}'.format(n)
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -196,6 +205,17 @@ class EnglishLocale(Locale):
     day_names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_abbreviations = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
+    def _ordinal_number(self, n):
+        if n % 100 not in (11, 12, 13):
+            remainder = abs(n) % 10
+            if remainder == 1:
+                return '{}st'.format(n)
+            elif remainder == 2:
+                return '{}nd'.format(n)
+            elif remainder == 3:
+                return '{}rd'.format(n)
+        return '{}th'.format(n)
+
 
 class ItalianLocale(Locale):
     names = ['it', 'it_it']
@@ -225,6 +245,10 @@ class ItalianLocale(Locale):
     day_names = ['', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
 
+    def _ordinal_number(self, n):
+        return '{}°'.format(n)
+
+
 class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
@@ -252,6 +276,9 @@ class SpanishLocale(Locale):
 
     day_names = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+
+    def _ordinal_number(self, n):
+        return '{}°'.format(n)
 
 
 class FrenchLocale(Locale):
@@ -281,6 +308,11 @@ class FrenchLocale(Locale):
 
     day_names = ['', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+
+    def _ordinal_number(self, n):
+        if abs(n) == 1:
+            return '{}er'.format(n)
+        return '{}e'.format(n)
 
 
 class GreekLocale(Locale):
