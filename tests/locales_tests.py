@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime
+
 from chai import Chai
 
 from arrow import locales
@@ -56,6 +58,62 @@ class LocaleTests(Chai):
         result = self.locale._format_relative('an hour', 'hour', -1)
 
         assertEqual(result, 'an hour ago')
+
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(0), '0th')
+        assertEqual(self.locale.ordinal_number(1), '1st')
+        assertEqual(self.locale.ordinal_number(2), '2nd')
+        assertEqual(self.locale.ordinal_number(3), '3rd')
+        assertEqual(self.locale.ordinal_number(4), '4th')
+        assertEqual(self.locale.ordinal_number(10), '10th')
+        assertEqual(self.locale.ordinal_number(11), '11th')
+        assertEqual(self.locale.ordinal_number(12), '12th')
+        assertEqual(self.locale.ordinal_number(13), '13th')
+        assertEqual(self.locale.ordinal_number(14), '14th')
+        assertEqual(self.locale.ordinal_number(21), '21st')
+        assertEqual(self.locale.ordinal_number(22), '22nd')
+        assertEqual(self.locale.ordinal_number(23), '23rd')
+        assertEqual(self.locale.ordinal_number(24), '24th')
+
+        assertEqual(self.locale.ordinal_number(100), '100th')
+        assertEqual(self.locale.ordinal_number(101), '101st')
+        assertEqual(self.locale.ordinal_number(102), '102nd')
+        assertEqual(self.locale.ordinal_number(103), '103rd')
+        assertEqual(self.locale.ordinal_number(104), '104th')
+        assertEqual(self.locale.ordinal_number(110), '110th')
+        assertEqual(self.locale.ordinal_number(111), '111th')
+        assertEqual(self.locale.ordinal_number(112), '112th')
+        assertEqual(self.locale.ordinal_number(113), '113th')
+        assertEqual(self.locale.ordinal_number(114), '114th')
+        assertEqual(self.locale.ordinal_number(121), '121st')
+        assertEqual(self.locale.ordinal_number(122), '122nd')
+        assertEqual(self.locale.ordinal_number(123), '123rd')
+        assertEqual(self.locale.ordinal_number(124), '124th')
+
+
+class ItalianLocalesTests(Chai):
+
+    def test_ordinal_number(self):
+        locale = locales.ItalianLocale()
+
+        assertEqual(locale.ordinal_number(1), '1°')
+
+
+class SpanishLocalesTests(Chai):
+
+    def test_ordinal_number(self):
+        locale = locales.SpanishLocale()
+
+        assertEqual(locale.ordinal_number(1), '1°')
+
+
+class FrenchLocalesTests(Chai):
+
+    def test_ordinal_number(self):
+        locale = locales.FrenchLocale()
+
+        assertEqual(locale.ordinal_number(1), '1er')
+        assertEqual(locale.ordinal_number(2), '2e')
 
 
 class RussianLocalesTests(Chai):
@@ -245,3 +303,7 @@ class MarathiLocaleTests(Chai):
     def test_format_relative_future(self):
         result = self.locale._format_relative('एक तास', 'hour', -1)
         assertEqual(result, 'एक तास आधी')
+
+    # Not currently implemented
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(1), '1')

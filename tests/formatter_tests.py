@@ -42,6 +42,8 @@ class DateTimeFormatterFormatTokenTests(Chai):
         assertEqual(self.formatter._format_token(dt, 'DDD'), '32')
         assertEqual(self.formatter._format_token(dt, 'DD'), '01')
         assertEqual(self.formatter._format_token(dt, 'D'), '1')
+        assertEqual(self.formatter._format_token(dt, 'Do'), '1st')
+
 
         assertEqual(self.formatter._format_token(dt, 'dddd'), 'Friday')
         assertEqual(self.formatter._format_token(dt, 'ddd'), 'Fri')
