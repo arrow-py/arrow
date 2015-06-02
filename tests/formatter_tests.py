@@ -125,7 +125,3 @@ class DateTimeFormatterFormatTokenTests(Chai):
         dt = datetime(2012, 1, 1, 13)
         assertEqual(self.formatter._format_token(dt, 'a'), 'pm')
         assertEqual(self.formatter._format_token(dt, 'A'), 'PM')
-
-
-
-

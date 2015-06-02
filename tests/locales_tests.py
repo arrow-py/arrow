@@ -173,6 +173,7 @@ class HindiLocaleTests(Chai):
         result = self.locale._format_relative('एक घंट', 'hour', -1)
         assertEqual(result, 'एक घंट पहले')
 
+
 class CzechLocaleTests(Chai):
 
     def setUp(self):
@@ -215,7 +216,8 @@ class HebrewLocaleTests(Chai):
         assertEqual(locale._format_timeframe('months', 4), '4 חודשים')
         assertEqual(locale._format_timeframe('days', 3), '3 ימים')
         assertEqual(locale._format_timeframe('years', 5), '5 שנים')
-        
+
+
 class MarathiLocaleTests(Chai):
 
     def setUp(self):
