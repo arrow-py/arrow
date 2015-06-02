@@ -17,7 +17,7 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
@@ -63,7 +63,8 @@ class DateTimeParser(object):
         self._input_re_map.update({
             'MMMM': self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
             'MMM': self._choice_re(self.locale.month_abbreviations[1:],
-                                   re.IGNORECASE)
+                                   re.IGNORECASE),
+            'Do': re.compile(self.locale.ordinal_day_re)
         })
 
     def parse_iso(self, string):
@@ -116,7 +117,6 @@ class DateTimeParser(object):
         parts = {}
 
         for token in tokens:
-
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
@@ -125,10 +125,11 @@ class DateTimeParser(object):
             match = input_re.search(string)
 
             if match:
-
                 token_values.append(match.group(0))
-                self._parse_token(token, match.group(0), parts)
-
+                if 'value' in match.groupdict():
+                    self._parse_token(token, match.groupdict()['value'], parts)
+                else:
+                    self._parse_token(token, match.group(0), parts)
                 index = match.span(0)[1]
                 string = string[index:]
 
@@ -175,6 +176,9 @@ class DateTimeParser(object):
             parts['month'] = int(value)
 
         elif token in ['DD', 'D']:
+            parts['day'] = int(value)
+
+        elif token in ['Do']:
             parts['day'] = int(value)
 
         elif token.upper() in ['HH', 'H']:

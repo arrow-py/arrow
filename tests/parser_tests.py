@@ -5,6 +5,7 @@ import calendar
 import time
 
 from arrow import parser
+from arrow.parser import ParserError
 
 
 class DateTimeParserTests(Chai):
@@ -485,3 +486,55 @@ class DateTimeParserMonthNameTests(Chai):
             parser_.parse('2013-Gen-01', 'YYYY-MMM-DD'),
             datetime(2013, 1, 1)
         )
+
+class DateTimeParserMonthOrdinalDayTests(Chai):
+
+    def setUp(self):
+        super(DateTimeParserMonthOrdinalDayTests, self).setUp()
+
+        self.parser = parser.DateTimeParser('en_us')
+
+    def test_matches(self):
+        assertEqual(
+            self.parser.parse('January 1st, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 1)
+        )
+        assertEqual(
+            self.parser.parse('January 2nd, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 2)
+        )
+        assertEqual(
+            self.parser.parse('January 3rd, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 3)
+        )
+        assertEqual(
+            self.parser.parse('January 4th, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 4)
+        )
+        assertEqual(
+            self.parser.parse('January 11th, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 11)
+        )
+        assertEqual(
+            self.parser.parse('January 12th, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 12)
+        )
+        assertEqual(
+            self.parser.parse('January 13th, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 13)
+        )
+        assertEqual(
+            self.parser.parse('January 21st, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 21)
+        )
+        assertEqual(
+            self.parser.parse('January 31st, 2013', 'MMMM Do, YYYY'),
+            datetime(2013, 1, 31)
+        )
+
+    def test_no_match(self):
+        with assertRaises(ParserError):
+            self.parser.parse('January 1th, 2013', 'MMMM Do, YYYY')
+
+        with assertRaises(ParserError):
+            self.parser.parse('January 11st, 2013', 'MMMM Do, YYYY')

@@ -61,6 +61,8 @@ class Locale(object):
     day_names = []
     day_abbreviations = []
 
+    ordinal_day_re = r'(\d+)'
+
     def __init__(self):
 
         self._month_name_to_ordinal = None
@@ -204,6 +206,8 @@ class EnglishLocale(Locale):
 
     day_names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_abbreviations = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+    ordinal_day_re = r'((?P<value>[2-3]?1(?=st)|[2-3]?2(?=nd)|[2-3]?3(?=rd)|[1-3]?[04-9](?=th)|1[1-3](?=th))(st|nd|rd|th))'
 
     def _ordinal_number(self, n):
         if n % 100 not in (11, 12, 13):
