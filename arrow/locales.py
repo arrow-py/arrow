@@ -149,7 +149,7 @@ class Locale(object):
         return self._ordinal_number(n)
 
     def _ordinal_number(self, n):
-        return '{}'.format(n)
+        return '{0}'.format(n)
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -213,12 +213,12 @@ class EnglishLocale(Locale):
         if n % 100 not in (11, 12, 13):
             remainder = abs(n) % 10
             if remainder == 1:
-                return '{}st'.format(n)
+                return '{0}st'.format(n)
             elif remainder == 2:
-                return '{}nd'.format(n)
+                return '{0}nd'.format(n)
             elif remainder == 3:
-                return '{}rd'.format(n)
-        return '{}th'.format(n)
+                return '{0}rd'.format(n)
+        return '{0}th'.format(n)
 
 
 class ItalianLocale(Locale):
@@ -252,7 +252,7 @@ class ItalianLocale(Locale):
     ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
 
     def _ordinal_number(self, n):
-        return '{}°'.format(n)
+        return '{0}°'.format(n)
 
 
 class SpanishLocale(Locale):
@@ -286,7 +286,7 @@ class SpanishLocale(Locale):
     ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
 
     def _ordinal_number(self, n):
-        return '{}°'.format(n)
+        return '{0}°'.format(n)
 
 
 class FrenchLocale(Locale):
@@ -321,8 +321,8 @@ class FrenchLocale(Locale):
 
     def _ordinal_number(self, n):
         if abs(n) == 1:
-            return '{}er'.format(n)
-        return '{}e'.format(n)
+            return '{0}er'.format(n)
+        return '{0}e'.format(n)
 
 
 class GreekLocale(Locale):
