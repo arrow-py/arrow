@@ -6,6 +6,7 @@ import time
 
 from arrow import parser
 
+
 class DateTimeParserTests(Chai):
 
     def setUp(self):
@@ -50,7 +51,7 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_unrecognized_token(self):
 
-        mock_input_re_map = mock(parser.DateTimeParser, '_INPUT_RE_MAP')
+        mock_input_re_map = mock(self.parser, '_input_re_map')
 
         expect(mock_input_re_map.__getitem__).args('YYYY').raises(KeyError)
 
@@ -213,18 +214,20 @@ class DateTimeParserRegexTests(Chai):
         assertEqual(self.format_regex.findall('X'), ['X'])
 
     def test_month_names(self):
+        p = parser.DateTimeParser('en_us')
 
         text = '_'.join(calendar.month_name[1:])
 
-        result = parser.DateTimeParser._INPUT_RE_MAP['MMMM'].findall(text)
+        result = p._input_re_map['MMMM'].findall(text)
 
         assertEqual(result, calendar.month_name[1:])
 
     def test_month_abbreviations(self):
+        p = parser.DateTimeParser('en_us')
 
         text = '_'.join(calendar.month_abbr[1:])
 
-        result = parser.DateTimeParser._INPUT_RE_MAP['MMM'].findall(text)
+        result = p._input_re_map['MMM'].findall(text)
 
         assertEqual(result, calendar.month_abbr[1:])
 
@@ -464,5 +467,21 @@ class DateTimeParserMonthNameTests(Chai):
 
         assertEqual(
             self.parser.parse('2013-january-01', 'YYYY-MMMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_localized_month_name(self):
+        parser_ = parser.DateTimeParser('fr_fr')
+
+        assertEqual(
+            parser_.parse('2013-Janvier-01', 'YYYY-MMMM-DD'),
+            datetime(2013, 1, 1)
+        )
+
+    def test_localized_month_abbreviation(self):
+        parser_ = parser.DateTimeParser('it_it')
+
+        assertEqual(
+            parser_.parse('2013-Gen-01', 'YYYY-MMM-DD'),
             datetime(2013, 1, 1)
         )

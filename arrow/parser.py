@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from datetime import datetime
 from dateutil import tz
@@ -27,11 +28,9 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile('\d{2}')
     _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
 
-    _INPUT_RE_MAP = {
+    _BASE_INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
         'YY': _TWO_DIGIT_RE,
-        'MMMM': re.compile('({0})'.format('|'.join(calendar.month_name[1:])), re.IGNORECASE),
-        'MMM': re.compile('({0})'.format('|'.join(calendar.month_abbr[1:])), re.IGNORECASE),
         'MM': _TWO_DIGIT_RE,
         'M': _ONE_OR_TWO_DIGIT_RE,
         'DD': _TWO_DIGIT_RE,
@@ -60,6 +59,12 @@ class DateTimeParser(object):
     def __init__(self, locale='en_us'):
 
         self.locale = locales.get_locale(locale)
+        self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
+        self._input_re_map.update({
+            'MMMM': self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
+            'MMM': self._choice_re(self.locale.month_abbreviations[1:],
+                                   re.IGNORECASE)
+        })
 
     def parse_iso(self, string):
 
@@ -113,7 +118,7 @@ class DateTimeParser(object):
         for token in tokens:
 
             try:
-                input_re = self._INPUT_RE_MAP[token]
+                input_re = self._input_re_map[token]
             except KeyError:
                 raise ParserError('Unrecognized token \'{0}\''.format(token))
 
@@ -259,6 +264,10 @@ class DateTimeParser(object):
             return float(string)
         except:
             return None
+
+    @classmethod
+    def _choice_re(cls, choices, flags=0):
+        return re.compile('({0})'.format('|'.join(choices)), flags=flags)
 
 
 class TzinfoParser(object):
