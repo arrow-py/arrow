@@ -862,12 +862,19 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), 'seconds ago')
         assertEqual(later.humanize(self.now), 'in seconds')
 
+        assertEqual(self.now.humanize(later, only_distance=True), 'seconds')
+        assertEqual(later.humanize(self.now, only_distance=True), 'seconds')
+
     def test_minute(self):
 
         later = self.now.replace(minutes=1)
 
         assertEqual(self.now.humanize(later), 'a minute ago')
         assertEqual(later.humanize(self.now), 'in a minute')
+
+        assertEqual(self.now.humanize(later, only_distance=True), 'a minute')
+        assertEqual(later.humanize(self.now, only_distance=True), 'a minute')
+
 
     def test_minutes(self):
 
@@ -876,12 +883,18 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), '2 minutes ago')
         assertEqual(later.humanize(self.now), 'in 2 minutes')
 
+        assertEqual(self.now.humanize(later, only_distance=True), '2 minutes')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 minutes')
+
     def test_hour(self):
 
         later = self.now.replace(hours=1)
 
         assertEqual(self.now.humanize(later), 'an hour ago')
         assertEqual(later.humanize(self.now), 'in an hour')
+
+        assertEqual(self.now.humanize(later, only_distance=True), 'an hour')
+        assertEqual(later.humanize(self.now, only_distance=True), 'an hour')
 
     def test_hours(self):
 
@@ -890,12 +903,18 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), '2 hours ago')
         assertEqual(later.humanize(self.now), 'in 2 hours')
 
+        assertEqual(self.now.humanize(later, only_distance=True), '2 hours')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 hours')
+
     def test_day(self):
 
         later = self.now.replace(days=1)
 
         assertEqual(self.now.humanize(later), 'a day ago')
         assertEqual(later.humanize(self.now), 'in a day')
+
+        assertEqual(self.now.humanize(later, only_distance=True), 'a day')
+        assertEqual(later.humanize(self.now, only_distance=True), 'a day')
 
     def test_days(self):
 
@@ -904,12 +923,18 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), '2 days ago')
         assertEqual(later.humanize(self.now), 'in 2 days')
 
+        assertEqual(self.now.humanize(later, only_distance=True), '2 days')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 days')
+
     def test_month(self):
 
         later = self.now.replace(months=1)
 
         assertEqual(self.now.humanize(later), 'a month ago')
         assertEqual(later.humanize(self.now), 'in a month')
+
+        assertEqual(self.now.humanize(later, only_distance=True), 'a month')
+        assertEqual(later.humanize(self.now, only_distance=True), 'a month')
 
     def test_months(self):
 
@@ -918,6 +943,9 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), '2 months ago')
         assertEqual(later.humanize(self.now), 'in 2 months')
 
+        assertEqual(self.now.humanize(later, only_distance=True), '2 months')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 months')
+
     def test_year(self):
 
         later = self.now.replace(years=1)
@@ -925,12 +953,18 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later), 'a year ago')
         assertEqual(later.humanize(self.now), 'in a year')
 
+        assertEqual(self.now.humanize(later, only_distance=True), 'a year')
+        assertEqual(later.humanize(self.now, only_distance=True), 'a year')
+
     def test_years(self):
 
         later = self.now.replace(years=2)
 
         assertEqual(self.now.humanize(later), '2 years ago')
         assertEqual(later.humanize(self.now), 'in 2 years')
+
+        assertEqual(self.now.humanize(later, only_distance=True), '2 years')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 years')
 
         arw = arrow.Arrow(2014, 7, 2)
 
