@@ -1426,4 +1426,65 @@ class BasqueLocale(Locale):
     day_abbreviations = ['', 'al', 'ar', 'az', 'og', 'ol', 'lr', 'ig']
 
 
+class HungarianLocale(Locale):
+
+    names = ['hu', 'hu_hu']
+
+    past = '{0} ezelőtt'
+    future = '{0} múlva'
+
+    timeframes = {
+        'now': 'éppen most',
+        'seconds': {
+            'past': 'másodpercekkel',
+            'future': 'pár másodperc'
+        },
+        'minute': {'past': 'egy perccel', 'future': 'egy perc'},
+        'minutes': {'past': '{0} perccel', 'future': '{0} perc'},
+        'hour': {'past': 'egy órával', 'future': 'egy óra'},
+        'hours': {'past': '{0} órával', 'future': '{0} óra'},
+        'day': {
+            'past': 'egy nappal',
+            'future': 'egy nap'
+        },
+        'days': {
+            'past': '{0} nappal',
+            'future': '{0} nap'
+        },
+        'month': {'past': 'egy hónappal', 'future': 'egy hónap'},
+        'months': {'past': '{0} hónappal', 'future': '{0} hónap'},
+        'year': {'past': 'egy évvel', 'future': 'egy év'},
+        'years': {'past': '{0} évvel', 'future': '{0} év'},
+    }
+
+    month_names = ['', 'Január', 'Február', 'Március', 'Április', 'Május',
+                   'Június', 'Július', 'Augusztus', 'Szeptember',
+                   'Október', 'November', 'December']
+    month_abbreviations = ['', 'Jan', 'Febr', 'Márc', 'Ápr', 'Máj', 'Jún',
+                           'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec']
+
+    day_names = ['', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek',
+                 'Szombat', 'Vasárnap']
+    day_abbreviations = ['', 'Hét', 'Kedd', 'Szer', 'Csüt', 'Pént',
+                         'Szom', 'Vas']
+
+    meridians = {
+        'am': 'de',
+        'pm': 'du',
+        'AM': 'DE',
+        'PM': 'DU',
+    }
+
+    def _format_timeframe(self, timeframe, delta):
+        form = self.timeframes[timeframe]
+
+        if isinstance(form, dict):
+            if delta > 0:
+                form = form['future']
+            else:
+                form = form['past']
+
+        return form.format(abs(delta))
+
+
 _locales = _map_locales()
