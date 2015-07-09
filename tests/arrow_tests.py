@@ -510,6 +510,16 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2016, 1, 2, 3, 4, 5),
         ])
 
+    def test_quarter(self):
+
+        result = arrow.Arrow.range('quarter', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 2, 3, 4, 5, 6),
+            arrow.Arrow(2013, 5, 3, 4, 5, 6),
+        ])
+
     def test_month(self):
 
         result = arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
@@ -644,6 +654,15 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2014, 1, 1), arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999)),
             (arrow.Arrow(2015, 1, 1), arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999)),
             (arrow.Arrow(2016, 1, 1), arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999)),
+        ])
+
+    def test_quarter(self):
+
+        result = arrow.Arrow.span_range('quarter', datetime(2013, 2, 2), datetime(2013, 5, 15))
+
+        assertEqual(result, [
+            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 3, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 6, 30, 23, 59, 59, 999999)),
         ])
 
     def test_month(self):
@@ -783,12 +802,30 @@ class ArrowSpanTests(Chai):
         assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
+
+    def test_span_quarter(self):
+
+        floor, ceil = self.arrow.span('quarter')
+
+        assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 3, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
+    def test_span_quarter_count(self):
+
+        floor, ceil = self.arrow.span('quarter', 2)
+
+        assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 6, 30, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
     def test_span_year_count(self):
 
         floor, ceil = self.arrow.span('year', 2)
 
         assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2014, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
 
     def test_span_month(self):
 
