@@ -1,5 +1,6 @@
 python-dateutil==2.1
 nose==1.3.0
 nose-cov==1.6
-chai==0.4.0
+chai==0.4.8
 sphinx==1.2b1
+simplejson==3.6.5

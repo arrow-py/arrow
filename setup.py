@@ -1,13 +1,36 @@
+import codecs
+import os.path
+import re
+
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
+
+
+def fpath(name):
+    return os.path.join(os.path.dirname(__file__), name)
+
+
+def read(fname):
+    return codecs.open(fpath(fname), encoding='utf-8').read()
+
+
+def grep(attrname):
+    pattern = r"{0}\W*=\W*'([^']+)'".format(attrname)
+    strval, = re.findall(pattern, file_text)
+    return strval
+
+
+file_text = read(fpath('arrow/__init__.py'))
+
 setup(
     name='arrow',
-    version='0.4.4',
+    version=grep('__version__'),
     description='Better dates and times for Python',
-    url='http://crsmithdev.com/arrow',
+    long_description=read(fpath('README.rst')),
+    url='https://github.com/crsmithdev/arrow/',
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
     license='Apache 2.0',

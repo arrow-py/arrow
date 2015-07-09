@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from datetime import datetime
 from dateutil import tz
@@ -16,7 +17,7 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
@@ -27,11 +28,9 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile('\d{2}')
     _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
 
-    _INPUT_RE_MAP = {
+    _BASE_INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
         'YY': _TWO_DIGIT_RE,
-        'MMMM': re.compile('({0})'.format('|'.join(calendar.month_name[1:]))),
-        'MMM': re.compile('({0})'.format('|'.join(calendar.month_abbr[1:]))),
         'MM': _TWO_DIGIT_RE,
         'M': _ONE_OR_TWO_DIGIT_RE,
         'DD': _TWO_DIGIT_RE,
@@ -60,6 +59,13 @@ class DateTimeParser(object):
     def __init__(self, locale='en_us'):
 
         self.locale = locales.get_locale(locale)
+        self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
+        self._input_re_map.update({
+            'MMMM': self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
+            'MMM': self._choice_re(self.locale.month_abbreviations[1:],
+                                   re.IGNORECASE),
+            'Do': re.compile(self.locale.ordinal_day_re)
+        })
 
     def parse_iso(self, string):
 
@@ -76,19 +82,15 @@ class DateTimeParser(object):
             has_seconds = time_parts[0].count(':') > 1
             has_subseconds = '.' in time_parts[0]
 
-        else:
-            has_tz = has_seconds = has_subseconds = False
-
-        if has_time:
-
             if has_subseconds:
-                formats = ['YYYY-MM-DDTHH:mm:ss.SSSSSS']
+                subseconds_token = 'S' * min(len(re.split('\D+', time_parts[0].split('.')[1], 1)[0]), 6)
+                formats = ['YYYY-MM-DDTHH:mm:ss.%s' % subseconds_token]
             elif has_seconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss']
             else:
                 formats = ['YYYY-MM-DDTHH:mm']
-
         else:
+            has_tz = False
             formats = [
                 'YYYY-MM-DD',
                 'YYYY-MM',
@@ -115,19 +117,19 @@ class DateTimeParser(object):
         parts = {}
 
         for token in tokens:
-
             try:
-                input_re = self._INPUT_RE_MAP[token]
+                input_re = self._input_re_map[token]
             except KeyError:
                 raise ParserError('Unrecognized token \'{0}\''.format(token))
 
             match = input_re.search(string)
 
             if match:
-
                 token_values.append(match.group(0))
-                self._parse_token(token, match.group(0), parts)
-
+                if 'value' in match.groupdict():
+                    self._parse_token(token, match.groupdict()['value'], parts)
+                else:
+                    self._parse_token(token, match.group(0), parts)
                 index = match.span(0)[1]
                 string = string[index:]
 
@@ -168,14 +170,18 @@ class DateTimeParser(object):
             parts['year'] = 1900 + value if value > 68 else 2000 + value
 
         elif token in ['MMMM', 'MMM']:
-            parts['month'] = self.locale.month_number(value)
+            parts['month'] = self.locale.month_number(value.capitalize())
+
         elif token in ['MM', 'M']:
             parts['month'] = int(value)
 
         elif token in ['DD', 'D']:
             parts['day'] = int(value)
 
-        elif token in ['HH', 'H']:
+        elif token in ['Do']:
+            parts['day'] = int(value)
+
+        elif token.upper() in ['HH', 'H']:
             parts['hour'] = int(value)
 
         elif token in ['mm', 'm']:
@@ -262,6 +268,10 @@ class DateTimeParser(object):
             return float(string)
         except:
             return None
+
+    @classmethod
+    def _choice_re(cls, choices, flags=0):
+        return re.compile('({0})'.format('|'.join(choices)), flags=flags)
 
 
 class TzinfoParser(object):

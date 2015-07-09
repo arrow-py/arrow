@@ -9,7 +9,7 @@ from arrow import util, locales
 
 class DateTimeFormatter(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
 
     def __init__(self, locale='en_us'):
 
@@ -44,6 +44,9 @@ class DateTimeFormatter(object):
         if token == 'D':
             return str(dt.day)
 
+        if token == 'Do':
+            return self.locale.ordinal_number(dt.day)
+
         if token == 'dddd':
             return self.locale.day_name(dt.isoweekday())
         if token == 'ddd':
@@ -71,15 +74,15 @@ class DateTimeFormatter(object):
             return str(dt.second)
 
         if token == 'SSSSSS':
-            return str(dt.microsecond)
+            return str('{0:06d}'.format(int(dt.microsecond)))
         if token == 'SSSSS':
-            return str(int(dt.microsecond / 10))
+            return str('{0:05d}'.format(int(dt.microsecond / 10)))
         if token == 'SSSS':
-            return str(int(dt.microsecond / 100))
+            return str('{0:04d}'.format(int(dt.microsecond / 100)))
         if token == 'SSS':
-            return str(int(dt.microsecond / 1000))
+            return str('{0:03d}'.format(int(dt.microsecond / 1000)))
         if token == 'SS':
-            return str(int(dt.microsecond / 10000))
+            return str('{0:02d}'.format(int(dt.microsecond / 10000)))
         if token == 'S':
             return str(int(dt.microsecond / 100000))
 

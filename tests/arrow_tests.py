@@ -6,6 +6,7 @@ from chai import Chai
 
 from datetime import date, datetime, timedelta
 from dateutil import tz
+import simplejson as json
 import calendar
 import pickle
 import time
@@ -123,6 +124,12 @@ class ArrowRepresentationTests(Chai):
 
         assertEqual(result, '2013-02-03')
 
+    def test_bare_format(self):
+
+        result = self.arrow.format()
+
+        assertEqual(result, '2013-02-03 12:30:45-00:00')
+
     def test_format_no_format_string(self):
 
         result = '{0}'.format(self.arrow)
@@ -202,13 +209,18 @@ class ArrowComparisonTests(Chai):
 
         assertFalse(self.arrow > self.arrow)
         assertFalse(self.arrow > self.arrow.datetime)
-        assertFalse(self.arrow > 'abc')
+
+        with assertRaises(TypeError):
+            self.arrow > 'abc'
+
         assertTrue(self.arrow < arrow_cmp)
         assertTrue(self.arrow < arrow_cmp.datetime)
 
     def test_ge(self):
 
-        assertFalse(self.arrow >= 'abc')
+        with assertRaises(TypeError):
+            self.arrow >= 'abc'
+
         assertTrue(self.arrow >= self.arrow)
         assertTrue(self.arrow >= self.arrow.datetime)
 
@@ -218,13 +230,18 @@ class ArrowComparisonTests(Chai):
 
         assertFalse(self.arrow < self.arrow)
         assertFalse(self.arrow < self.arrow.datetime)
-        assertFalse(self.arrow < 'abc')
+
+        with assertRaises(TypeError):
+            self.arrow < 'abc'
+
         assertTrue(self.arrow < arrow_cmp)
         assertTrue(self.arrow < arrow_cmp.datetime)
 
     def test_le(self):
 
-        assertFalse(self.arrow <= 'abc')
+        with assertRaises(TypeError):
+            self.arrow <= 'abc'
+
         assertTrue(self.arrow <= self.arrow)
         assertTrue(self.arrow <= self.arrow.datetime)
 
@@ -369,6 +386,12 @@ class ArrowDatetimeInterfaceTests(Chai):
         result = self.arrow.isoformat()
 
         assertEqual(result, self.arrow._datetime.isoformat())
+
+    def test_simplejson(self):
+
+        result = json.dumps({'v': self.arrow.for_json()}, for_json=True)
+
+        assertEqual(json.loads(result)['v'], self.arrow._datetime.isoformat())
 
     def test_ctime(self):
 
@@ -779,12 +802,22 @@ class ArrowSpanTests(Chai):
         assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
+
     def test_span_quarter(self):
 
         floor, ceil = self.arrow.span('quarter')
 
         assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 3, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
+    def test_span_year_count(self):
+
+        floor, ceil = self.arrow.span('year', 2)
+
+        assertEqual(floor, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2014, 12, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
 
     def test_span_month(self):
 
