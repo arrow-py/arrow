@@ -4,5 +4,5 @@ from .arrow import Arrow
 from .factory import ArrowFactory
 from .api import get, now, utcnow
 
-__version__ = '0.5.4'
+__version__ = '0.6.0'
 VERSION = __version__

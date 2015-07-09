@@ -1,5 +1,23 @@
 ## History
 
+### 0.6.0
+
+- [FIX] Added support for Python 3
+- [FIX] Avoid truncating oversized epoch timestamps. Fixes #216.
+- [FIX] Fixed month abbreviations for Ukrainian
+- [FIX] Fix typo timezone
+- [FIX] A couple of dialect fixes and two new languages
+- [FIX] Spanish locale: `Miercoles` should have acute accent
+- [Fix] Fix Finnish grammar
+- [FIX] Fix typo in 'Arrow.floor' docstring
+- [FIX] Use read() utility to open README
+- [FIX] span_range for week frame
+- [NEW] Add minimal support for fractional seconds longer than six digits.
+- [NEW] Adding locale support for Marathi (mr)
+- [NEW] Add count argument to span method
+- [NEW] Improved docs
+
+
 ### 0.5.1 - 0.5.4
 
 - [FIX] test the behavior of simplejson instead of calling for_json directly (tonyseek)
