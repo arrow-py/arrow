@@ -61,6 +61,8 @@ class Locale(object):
     day_names = []
     day_abbreviations = []
 
+    ordinal_day_re = r'(\d+)'
+
     def __init__(self):
 
         self._month_name_to_ordinal = None
@@ -139,6 +141,15 @@ class Locale(object):
         if token == 'A':
             return self.meridians['AM'] if hour < 12 else self.meridians['PM']
 
+    def ordinal_number(self, n):
+        ''' Returns the ordinal format of a given integer
+
+        :param n: an integer
+        '''
+        return self._ordinal_number(n)
+
+    def _ordinal_number(self, n):
+        return '{0}'.format(n)
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
@@ -196,6 +207,19 @@ class EnglishLocale(Locale):
     day_names = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_abbreviations = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
+    ordinal_day_re = r'((?P<value>[2-3]?1(?=st)|[2-3]?2(?=nd)|[2-3]?3(?=rd)|[1-3]?[04-9](?=th)|1[1-3](?=th))(st|nd|rd|th))'
+
+    def _ordinal_number(self, n):
+        if n % 100 not in (11, 12, 13):
+            remainder = abs(n) % 10
+            if remainder == 1:
+                return '{0}st'.format(n)
+            elif remainder == 2:
+                return '{0}nd'.format(n)
+            elif remainder == 3:
+                return '{0}rd'.format(n)
+        return '{0}th'.format(n)
+
 
 class ItalianLocale(Locale):
     names = ['it', 'it_it']
@@ -225,6 +249,12 @@ class ItalianLocale(Locale):
     day_names = ['', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
 
+    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
+
+    def _ordinal_number(self, n):
+        return '{0}°'.format(n)
+
+
 class SpanishLocale(Locale):
     names = ['es', 'es_es']
     past = 'hace {0}'
@@ -252,6 +282,11 @@ class SpanishLocale(Locale):
 
     day_names = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+
+    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
+
+    def _ordinal_number(self, n):
+        return '{0}°'.format(n)
 
 
 class FrenchLocale(Locale):
@@ -281,6 +316,13 @@ class FrenchLocale(Locale):
 
     day_names = ['', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
     day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+
+    ordinal_day_re = r'((?P<value>\b1(?=er\b)|[1-3]?[02-9](?=e\b)|[1-3]1(?=e\b))(er|e)\b)'
+
+    def _ordinal_number(self, n):
+        if abs(n) == 1:
+            return '{0}er'.format(n)
+        return '{0}e'.format(n)
 
 
 class GreekLocale(Locale):
