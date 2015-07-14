@@ -43,8 +43,6 @@ class DateTimeParser(object):
         'm': _ONE_OR_TWO_DIGIT_RE,
         'ss': _TWO_DIGIT_RE,
         's': _ONE_OR_TWO_DIGIT_RE,
-        'a': re.compile('(a|A|p|P)'),
-        'A': re.compile('(am|AM|pm|PM)'),
         'X': re.compile('\d+'),
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
@@ -64,7 +62,13 @@ class DateTimeParser(object):
             'MMMM': self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
             'MMM': self._choice_re(self.locale.month_abbreviations[1:],
                                    re.IGNORECASE),
-            'Do': re.compile(self.locale.ordinal_day_re)
+            'Do': re.compile(self.locale.ordinal_day_re),
+            'a': self._choice_re(
+                (self.locale.meridians['am'], self.locale.meridians['pm'])
+            ),
+            # note: 'A' token accepts both 'am/pm' and 'AM/PM' formats to
+            # ensure backwards compatibility of this token
+            'A': self._choice_re(self.locale.meridians.values())
         })
 
     def parse_iso(self, string):
@@ -210,9 +214,15 @@ class DateTimeParser(object):
             parts['tzinfo'] = TzinfoParser.parse(value)
 
         elif token in ['a', 'A']:
-            if value in ['a', 'A', 'am', 'AM']:
+            if value in (
+                    self.locale.meridians['am'],
+                    self.locale.meridians['AM']
+            ):
                 parts['am_pm'] = 'am'
-            elif value in ['p', 'P', 'pm', 'PM']:
+            elif value in (
+                    self.locale.meridians['pm'],
+                    self.locale.meridians['PM']
+            ):
                 parts['am_pm'] = 'pm'
 
     @classmethod
