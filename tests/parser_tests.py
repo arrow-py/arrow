@@ -490,6 +490,61 @@ class DateTimeParserMonthNameTests(Chai):
             datetime(2013, 1, 1)
         )
 
+
+class DateTimeParserMeridiansTests(Chai):
+
+    def setUp(self):
+        super(DateTimeParserMeridiansTests, self).setUp()
+
+        self.parser = parser.DateTimeParser('en_us')
+
+    def test_meridians_lowercase(self):
+        assertEqual(
+            self.parser.parse('2013-01-01 5am', 'YYYY-MM-DD ha'),
+            datetime(2013, 1, 1, 5)
+        )
+
+        assertEqual(
+            self.parser.parse('2013-01-01 5pm', 'YYYY-MM-DD ha'),
+            datetime(2013, 1, 1, 17)
+        )
+
+    def test_meridians_capitalized(self):
+        assertEqual(
+            self.parser.parse('2013-01-01 5AM', 'YYYY-MM-DD hA'),
+            datetime(2013, 1, 1, 5)
+        )
+
+        assertEqual(
+            self.parser.parse('2013-01-01 5PM', 'YYYY-MM-DD hA'),
+            datetime(2013, 1, 1, 17)
+        )
+
+    def test_localized_meridians_lowercase(self):
+        parser_ = parser.DateTimeParser('hu_hu')
+        assertEqual(
+            parser_.parse('2013-01-01 5 de', 'YYYY-MM-DD h a'),
+            datetime(2013, 1, 1, 5)
+        )
+
+        assertEqual(
+            parser_.parse('2013-01-01 5 du', 'YYYY-MM-DD h a'),
+            datetime(2013, 1, 1, 17)
+        )
+
+    def test_localized_meridians_capitalized(self):
+        parser_ = parser.DateTimeParser('hu_hu')
+        assertEqual(
+            parser_.parse('2013-01-01 5 DE', 'YYYY-MM-DD h A'),
+            datetime(2013, 1, 1, 5)
+        )
+
+        assertEqual(
+            parser_.parse('2013-01-01 5 DU', 'YYYY-MM-DD h A'),
+            datetime(2013, 1, 1, 17)
+        )
+
+
 class DateTimeParserMonthOrdinalDayTests(Chai):
 
     def setUp(self):
