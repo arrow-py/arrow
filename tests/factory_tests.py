@@ -152,6 +152,14 @@ class GetTests(Chai):
         with assertRaises(TypeError):
             self.factory.get(object(), object())
 
+    def test_three_args_with_tzinfo(self):
+
+        timefmt = 'YYYYMMDD'
+        d = '20150514'
+
+        assertEqual(self.factory.get(d, timefmt, tzinfo=tz.tzlocal()),
+                    datetime(2015, 5, 14, tzinfo=tz.tzlocal()))
+
     def test_three_args(self):
 
         assertEqual(self.factory.get(2013, 1, 1), datetime(2013, 1, 1, tzinfo=tz.tzutc()))
