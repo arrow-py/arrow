@@ -67,16 +67,17 @@ class Locale(object):
 
         self._month_name_to_ordinal = None
 
-    def describe(self, timeframe, delta=0):
+    def describe(self, timeframe, delta=0, only_distance=False):
         ''' Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
-
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         '''
 
         humanized = self._format_timeframe(timeframe, delta)
-        humanized = self._format_relative(humanized, timeframe, delta)
+        if not only_distance:
+            humanized = self._format_relative(humanized, timeframe, delta)
 
         return humanized
 
