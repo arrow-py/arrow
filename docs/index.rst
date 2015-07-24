@@ -138,6 +138,13 @@ Parse from a string:
     >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
     <Arrow [2013-05-05T12:30:45+00:00]>
 
+Search a date in a string:
+
+.. code-block:: python
+
+    >>> arrow.get('June was born in May 1980', 'MMMM YYYY')
+    <Arrow [1980-05-01T00:00:00+00:00]>
+
 Many ISO-8601 compliant strings are recognized and parsed without a format string:
 
     >>> arrow.get('2013-09-30T15:34:00.000-07:00')

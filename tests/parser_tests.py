@@ -621,3 +621,48 @@ class DateTimeParserMonthOrdinalDayTests(Chai):
 
         assertEqual(parser_.parse('Janvier 11e, 2013', 'MMMM Do, YYYY'),
                     datetime(2013, 1, 11))
+
+
+class DateTimeParserSearchDateTests(Chai):
+
+    def setUp(self):
+        super(DateTimeParserSearchDateTests, self).setUp()
+        self.parser = parser.DateTimeParser()
+
+    def test_parse_search(self):
+
+        assertEqual(
+            self.parser.parse('Today is 25 of September of 2003', 'DD of MMMM of YYYY'),
+            datetime(2003, 9, 25))
+
+    def test_parse_seach_with_numbers(self):
+
+        assertEqual(
+            self.parser.parse('2000 people met the 2012-01-01 12:05:10', 'YYYY-MM-DD HH:mm:ss'),
+            datetime(2012, 1, 1, 12, 5, 10))
+
+        assertEqual(
+            self.parser.parse('Call 01-02-03 on 79-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'),
+            datetime(1979, 1, 1, 12, 5, 10))
+
+    def test_parse_seach_with_names(self):
+
+        assertEqual(
+            self.parser.parse('June was born in May 1980', 'MMMM YYYY'),
+            datetime(1980, 5, 1))
+
+    def test_parse_seach_locale_with_names(self):
+        p = parser.DateTimeParser('sv_se')
+
+        assertEqual(
+            p.parse('Jan föddes den 31 Dec 1980', 'DD MMM YYYY'),
+            datetime(1980, 12, 31))
+
+        assertEqual(
+            p.parse('Jag föddes den 25 Augusti 1975', 'DD MMMM YYYY'),
+            datetime(1975, 8, 25))
+
+    def test_parse_seach_fails(self):
+
+        with assertRaises(parser.ParserError):
+            self.parser.parse('Jag föddes den 25 Augusti 1975', 'DD MMMM YYYY')
