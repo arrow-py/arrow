@@ -225,8 +225,8 @@ class DateTimeParser(object):
             ):
                 parts['am_pm'] = 'pm'
 
-    @classmethod
-    def _build_datetime(cls, parts):
+    @staticmethod
+    def _build_datetime(parts):
 
         timestamp = parts.get('timestamp')
 
@@ -263,24 +263,24 @@ class DateTimeParser(object):
 
         return _datetime
 
-    @classmethod
-    def _map_lookup(cls, input_map, key):
+    @staticmethod
+    def _map_lookup(input_map, key):
 
         try:
             return input_map[key]
         except KeyError:
             raise ParserError('Could not match "{0}" to {1}'.format(key, input_map))
 
-    @classmethod
-    def _try_timestamp(cls, string):
+    @staticmethod
+    def _try_timestamp(string):
 
         try:
             return float(string)
         except:
             return None
 
-    @classmethod
-    def _choice_re(cls, choices, flags=0):
+    @staticmethod
+    def _choice_re(choices, flags=0):
         return re.compile('({0})'.format('|'.join(choices)), flags=flags)
 
 
