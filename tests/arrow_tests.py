@@ -261,7 +261,7 @@ class ArrowMathTests(Chai):
 
     def test_add_other(self):
 
-        with assertRaises(NotImplementedError):
+        with assertRaises(TypeError):
             self.arrow.__add__(1)
 
     def test_radd(self):
@@ -290,7 +290,7 @@ class ArrowMathTests(Chai):
 
     def test_sub_other(self):
 
-        with assertRaises(NotImplementedError):
+        with assertRaises(TypeError):
             self.arrow.__sub__(object())
 
     def test_rsub(self):
@@ -1121,4 +1121,3 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
-
