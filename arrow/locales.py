@@ -1260,14 +1260,14 @@ class CzechLocale(Locale):
     past = 'Před {0}'
     future = 'Za {0}'
 
-    month_names = ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
+    month_names = ['', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
         'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec']
-    month_abbreviations = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc',
+    month_abbreviations = ['', 'Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc',
         'Srp', 'Zář', 'Říj', 'Lis', 'Pro']
 
-    day_names = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek',
+    day_names = ['', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek',
         'Sobota', 'Neděle']
-    day_abbreviations = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
+    day_abbreviations = ['', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
 
 
     def _format_timeframe(self, timeframe, delta):
