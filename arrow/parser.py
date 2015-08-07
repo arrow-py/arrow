@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 from dateutil import tz
-
-import calendar
 import re
 
 from arrow import locales
@@ -78,9 +76,9 @@ class DateTimeParser(object):
 
         if has_time:
             if space_divider:
-               date_string, time_string = string.split(' ', 1)
+                date_string, time_string = string.split(' ', 1)
             else:
-               date_string, time_string = string.split('T', 1)
+                date_string, time_string = string.split('T', 1)
             time_parts = re.split('[+-]', time_string, 1)
             has_tz = len(time_parts) > 1
             has_seconds = time_parts[0].count(':') > 1
@@ -114,56 +112,38 @@ class DateTimeParser(object):
         if isinstance(fmt, list):
             return self._parse_multiformat(string, fmt)
 
-        original_string = string
-        tokens = self._FORMAT_RE.findall(fmt)
-        token_values = []
-        separators = self._parse_separators(fmt, tokens)
-        parts = {}
-
-        for token in tokens:
+        # fmt is a string of tokens like 'YYYY-MM-DD'
+        # we construct a new string by replacing each
+        # token by its pattern:
+        # 'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
+        fmt_pattern = fmt
+        tokens = []
+        offset = 0
+        for m in self._FORMAT_RE.finditer(fmt):
+            token = m.group(0)
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
                 raise ParserError('Unrecognized token \'{0}\''.format(token))
-
-            match = input_re.search(string)
-
-            if match:
-                token_values.append(match.group(0))
-                if 'value' in match.groupdict():
-                    self._parse_token(token, match.groupdict()['value'], parts)
-                else:
-                    self._parse_token(token, match.group(0), parts)
-                index = match.span(0)[1]
-                string = string[index:]
-
+            input_pattern = '(?P<{0}>{1})'.format(token, input_re.pattern)
+            tokens.append(token)
+            # a pattern doesn't have the same length as the token
+            # it replaces! We keep the difference in the offset variable.
+            # This works because the string is scanned left-to-right and matches
+            # are returned in the order found by finditer.
+            fmt_pattern = fmt_pattern[:m.start() + offset] + input_pattern + fmt_pattern[m.end() + offset:]
+            offset += len(input_pattern) - (m.end() - m.start())
+        match = re.search(fmt_pattern, string, flags=re.IGNORECASE)
+        if match is None:
+            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''.format(fmt_pattern, string))
+        parts = {}
+        for token in tokens:
+            if token == 'Do':
+                value = match.group('value')
             else:
-                raise ParserError('Failed to match token \'{0}\' when parsing \'{1}\''.format(token, original_string))
-
-        parsed = ''.join(self._interleave_lists(token_values, separators))
-        if parsed not in original_string:
-            raise ParserError('Failed to match format \'{0}\' when parsing \'{1}\''.format(fmt, original_string))
-
+                value = match.group(token)
+            self._parse_token(token, value, parts)
         return self._build_datetime(parts)
-
-    def _interleave_lists(self, tokens, separators):
-
-        joined = tokens + separators
-        joined[::2] = tokens
-        joined[1::2] = separators
-
-        return joined
-
-    def _parse_separators(self, fmt, tokens):
-
-        separators = []
-
-        for i in range(len(tokens) - 1):
-            start_index = fmt.find(tokens[i]) + len(tokens[i])
-            end_index = fmt.find(tokens[i + 1])
-            separators.append(fmt[start_index:end_index])
-
-        return separators
 
     def _parse_token(self, token, value, parts):
 
