@@ -22,9 +22,9 @@ class DateTimeFormatter(object):
     def _format_token(self, dt, token):
 
         if token == 'YYYY':
-            return '{0:04d}'.format(dt.year)
+            return self.locale.year_full(dt.year)
         if token == 'YY':
-            return '{0:04d}'.format(dt.year)[2:]
+            return self.locale.year_abbreviation(dt.year)
 
         if token == 'MMMM':
             return self.locale.month_name(dt.month)
