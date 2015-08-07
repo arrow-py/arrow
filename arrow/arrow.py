@@ -669,7 +669,7 @@ class Arrow(object):
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
-        raise NotImplementedError()
+        raise TypeError()
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -685,7 +685,7 @@ class Arrow(object):
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
 
-        raise NotImplementedError()
+        raise TypeError()
 
     def __rsub__(self, other):
         return self.__sub__(other)
