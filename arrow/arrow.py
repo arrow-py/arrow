@@ -464,7 +464,7 @@ class Arrow(object):
         dt = self._datetime.astimezone(tz)
 
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, tz)
+            dt.microsecond, dt.tzinfo)
 
     def span(self, frame, count=1):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
