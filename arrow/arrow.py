@@ -828,8 +828,8 @@ class Arrow(object):
 
     # internal tools.
 
-    @classmethod
-    def _get_tzinfo(cls, tz_expr):
+    @staticmethod
+    def _get_tzinfo(tz_expr):
 
         if tz_expr is None:
             return dateutil_tz.tzutc()
@@ -882,8 +882,8 @@ class Arrow(object):
         else:
             return end, sys.maxsize
 
-    @classmethod
-    def _get_timestamp_from_input(cls, timestamp):
+    @staticmethod
+    def _get_timestamp_from_input(timestamp):
 
         try:
             return float(timestamp)
