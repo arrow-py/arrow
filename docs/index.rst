@@ -375,7 +375,7 @@ Then get and use a factory for it:
 Tokens
 ======
 
-Use the following tokens in parsing and formatting:
+Use the following tokens in parsing and formatting.  Note that they're not the same as the tokens for `strptime(3) <https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html#index-strptime>`_:
 
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Token         |Output                                     |
