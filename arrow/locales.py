@@ -1462,10 +1462,10 @@ def _map_locales():
 
     return locales
 
-class CatalaLocale(Locale):
-    names = ['ca', 'ca_ca']
+class CatalanLocale(Locale):
+    names = ['ca', 'ca_es', 'ca_ad', 'ca_fr', 'ca_it']
     past = 'Fa {0}'
-    future = '{0}' # I don't know what's the right phrase in catala for the future.
+    future = 'En {0}'
 
     timeframes = {
         'now': 'Ara mateix',
@@ -1477,15 +1477,15 @@ class CatalaLocale(Locale):
         'day': 'un dia',
         'days': '{0} dies',
         'month': 'un mes',
-        'months': '{0} messos',
+        'months': '{0} mesos',
         'year': 'un any',
         'years': '{0} anys',
     }
 
-    month_names = ['', 'Jener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Decembre']
-    month_abbreviations = ['', 'Jener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Decembre']
-    day_names = ['', 'Dilluns', 'Dimars', 'Dimecres', 'Dijous', 'Divendres', 'Disabte', 'Diumenge']
-    day_abbreviations = ['', 'Dilluns', 'Dimars', 'Dimecres', 'Dijous', 'Divendres', 'Disabte', 'Diumenge']
+    month_names = ['', 'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre']
+    month_abbreviations = ['', 'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre']
+    day_names = ['', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte', 'Diumenge']
+    day_abbreviations = ['', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte', 'Diumenge']
 
 class BasqueLocale(Locale):
     names = ['eu', 'eu_eu']
