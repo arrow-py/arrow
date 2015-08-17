@@ -569,6 +569,13 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2013, 1, 2, 6, 4, 5),
         ])
 
+        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 5))
+
+        assertEqual(result, [
+            arrow.Arrow(2013, 1, 2, 3, 4, 5),
+        ])
+
     def test_minute(self):
 
         result = arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
@@ -710,6 +717,13 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
             (arrow.Arrow(2013, 1, 1, 1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999)),
             (arrow.Arrow(2013, 1, 1, 2), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999)),
+            (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
+        ])
+
+        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 3, 30),
+            datetime(2013, 1, 1, 3, 30))
+
+        assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
         ])
 
