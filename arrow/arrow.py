@@ -839,7 +839,8 @@ class Arrow(object):
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError('\'{0}\' not recognized as a timezone')
+                raise ValueError('\'{0}\' not recognized as a timezone'.format(
+                    tz_expr))
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -854,7 +855,8 @@ class Arrow(object):
             expr = float(expr)
             return cls.utcfromtimestamp(expr).datetime
         except:
-            raise ValueError('\'{0}\' not recognized as a timestamp or datetime')
+            raise ValueError(
+                '\'{0}\' not recognized as a timestamp or datetime'.format(expr))
 
     @classmethod
     def _get_frames(cls, name):
