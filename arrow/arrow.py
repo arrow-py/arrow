@@ -270,7 +270,7 @@ class Arrow(object):
 
         '''
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdate(start, tzinfo).span(frame)[0]
+        start = cls.fromdatetime(start, tzinfo).span(frame)[0]
         _range = cls.range(frame, start, end, tz, limit)
         return [r.span(frame) for r in _range]
 
