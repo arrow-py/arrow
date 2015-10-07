@@ -1,5 +1,18 @@
 ## History
 
+### 0.7.0 
+- [FIX] Parse localized strings #228 (swistakm)
+- [FIX] Modify tzinfo parameter in `get` api #221 (bottleimp)
+- [FIX] Fix Czech locale (PrehistoricTeam)
+- [FIX] Raise TypeError when adding/subtracting non-dates (itsmeolivia)
+- [FIX] Fix pytz conversion error (Kudo)
+- [FIX] Fix overzealous time truncation in span_range (kdeldycke) 
+- [NEW] Humanize for time duration #232 (ybrs)
+- [NEW] Add Thai locale (sipp11)
+- [NEW] Adding Belarusian (be) locale (oire)
+- [NEW] Search date in strings (beenje)
+- [NEW] Note that arrow's tokens differ from strptime's. (offby1)
+
 ### 0.6.0
 
 - [FIX] Added support for Python 3
