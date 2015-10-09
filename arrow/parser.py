@@ -52,6 +52,9 @@ class DateTimeParser(object):
         'S': re.compile('\d'),
     }
 
+    MARKERS = ['YYYY', 'MM', 'DD']
+    SEPARATORS = ['-', '/', '.']
+
     def __init__(self, locale='en_us'):
 
         self.locale = locales.get_locale(locale)
@@ -93,11 +96,12 @@ class DateTimeParser(object):
                 formats = ['YYYY-MM-DDTHH:mm']
         else:
             has_tz = False
-            formats = [
-                'YYYY-MM-DD',
-                'YYYY-MM',
-                'YYYY',
-            ]
+            # generate required formats: YYYY-MM-DD, YYYY-MM-DD, YYYY
+            # using various separators: -, /, .
+            l = len(self.MARKERS)
+            formats = [separator.join(self.MARKERS[:l-i])
+                        for i in range(l)
+                        for separator in self.SEPARATORS]
 
         if has_time and has_tz:
             formats = [f + 'Z' for f in formats]
