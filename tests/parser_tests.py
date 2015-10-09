@@ -8,7 +8,7 @@ import calendar
 import time
 
 from arrow import parser
-from arrow.parser import ParserError
+from arrow.parser import DateTimeParser, ParserError
 
 
 class DateTimeParserTests(Chai):
@@ -258,17 +258,19 @@ class DateTimeParserISOTests(Chai):
 
     def test_YYYY_MM(self):
 
-        assertEqual(
-            self.parser.parse_iso('2013-02'),
-            datetime(2013, 2, 1)
-        )
+        for separator in DateTimeParser.SEPARATORS:
+            assertEqual(
+                self.parser.parse_iso(separator.join(('2013', '02'))),
+                datetime(2013, 2, 1)
+            )
 
     def test_YYYY_MM_DD(self):
 
-        assertEqual(
-            self.parser.parse_iso('2013-02-03'),
-            datetime(2013, 2, 3)
-        )
+        for separator in DateTimeParser.SEPARATORS:
+            assertEqual(
+                self.parser.parse_iso(separator.join(('2013', '02', '03'))),
+                datetime(2013, 2, 3)
+            )
 
     def test_YYYY_MM_DDTHH_mmZ(self):
 
