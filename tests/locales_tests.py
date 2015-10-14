@@ -309,3 +309,15 @@ class MarathiLocaleTests(Chai):
     # Not currently implemented
     def test_ordinal_number(self):
         assertEqual(self.locale.ordinal_number(1), '1')
+
+
+class SwissLocalesTests(Chai):
+
+    def test_ordinal_number(self):
+        self.locale = locales.SwissLocale()
+
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+
+        assertEqual(self.locale._format_timeframe('minute', 1), 'einer Minute')
+        assertEqual(self.locale._format_timeframe('hour', 1), 'einer Stunde')
+        assertEqual(self.locale.day_abbreviation(dt.isoweekday()), 'Sa')
