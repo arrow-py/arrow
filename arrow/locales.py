@@ -167,7 +167,7 @@ class Locale(object):
         return '{0}'.format(n)
 
     def _name_to_ordinal(self, lst):
-        return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
+        return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
 
     def _format_timeframe(self, timeframe, delta):
 
