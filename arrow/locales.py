@@ -485,6 +485,9 @@ class FinnishLocale(Locale):
 
         return direction.format(humanized[which])
 
+    def _ordinal_number(self, n):
+        return '{0}.'.format(n)
+
 
 class ChineseCNLocale(Locale):
 
@@ -796,6 +799,9 @@ class GermanLocale(Locale):
 
     day_abbreviations = ['', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
 
+    def _ordinal_number(self, n):
+        return '{0}.'.format(n)
+
 
 class AustriaLocale(Locale):
 
@@ -837,6 +843,10 @@ class AustriaLocale(Locale):
     day_abbreviations = [
             '', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'
         ]
+
+    def _ordinal_number(self, n):
+        return '{0}.'.format(n)
+
 
 class NorwegianLocale(Locale):
 
