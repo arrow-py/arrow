@@ -161,7 +161,7 @@ class DateTimeParser(object):
             parts['year'] = 1900 + value if value > 68 else 2000 + value
 
         elif token in ['MMMM', 'MMM']:
-            parts['month'] = self.locale.month_number(value.capitalize())
+            parts['month'] = self.locale.month_number(value.lower())
 
         elif token in ['MM', 'M']:
             parts['month'] = int(value)

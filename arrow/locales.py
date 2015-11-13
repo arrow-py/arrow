@@ -167,7 +167,7 @@ class Locale(object):
         return '{0}'.format(n)
 
     def _name_to_ordinal(self, lst):
-        return dict(map(lambda i: (i[1], i[0] + 1), enumerate(lst[1:])))
+        return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
 
     def _format_timeframe(self, timeframe, delta):
 
@@ -256,13 +256,13 @@ class ItalianLocale(Locale):
         'years': '{0} anni',
     }
 
-    month_names = ['', 'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio',
-        'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
-    month_abbreviations = ['', 'Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago',
-        'Set', 'Ott', 'Nov', 'Dic']
+    month_names = ['', 'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio',
+        'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
+    month_abbreviations = ['', 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago',
+        'set', 'ott', 'nov', 'dic']
 
-    day_names = ['', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']
-    day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
+    day_names = ['', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica']
+    day_abbreviations = ['', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom']
 
     ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
 
@@ -290,13 +290,13 @@ class SpanishLocale(Locale):
         'years': '{0} años',
     }
 
-    month_names = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
-        'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-    month_abbreviations = ['', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago',
-        'Sep', 'Oct', 'Nov', 'Dic']
+    month_names = ['', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+        'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    month_abbreviations = ['', 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago',
+        'sep', 'oct', 'nov', 'dic']
 
-    day_names = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-    day_abbreviations = ['', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+    day_names = ['', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
+    day_abbreviations = ['', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']
 
     ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
 
@@ -324,13 +324,13 @@ class FrenchLocale(Locale):
         'years': '{0} ans',
     }
 
-    month_names = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
-        'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-    month_abbreviations = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août',
-        'Sept', 'Oct', 'Nov', 'Déc']
+    month_names = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet',
+        'août', 'septembre', 'octobre', 'novembre', 'décembre']
+    month_abbreviations = ['', 'janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août',
+        'sept', 'oct', 'nov', 'déc']
 
-    day_names = ['', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
-    day_abbreviations = ['', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+    day_names = ['', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    day_abbreviations = ['', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']
 
     ordinal_day_re = r'((?P<value>\b1(?=er\b)|[1-3]?[02-9](?=e\b)|[1-3]1(?=e\b))(er|e)\b)'
 
@@ -424,13 +424,13 @@ class SwedishLocale(Locale):
         'years': '{0} år',
     }
 
-    month_names = ['', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli',
-        'Augusti', 'September', 'Oktober', 'November', 'December']
-    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul',
-        'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+    month_names = ['', 'januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli',
+        'augusti', 'september', 'oktober', 'november', 'december']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul',
+        'aug', 'sep', 'okt', 'nov', 'dec']
 
-    day_names = ['', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag']
-    day_abbreviations = ['', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']
+    day_names = ['', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag', 'söndag']
+    day_abbreviations = ['', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör', 'sön']
 
 
 class FinnishLocale(Locale):
@@ -687,14 +687,14 @@ class PolishLocale(SlavicBaseLocale):
         'years': ['{0} rok', '{0} lata', '{0} lat'],
     }
 
-    month_names = ['', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj',
-        'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik',
-        'Listopad', 'Grudzień']
+    month_names = ['', 'styczeń', 'luty', 'marzec', 'kwiecień', 'maj',
+        'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik',
+        'listopad', 'grudzień']
     month_abbreviations = ['', 'sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip',
         'sie', 'wrz', 'paź', 'lis', 'gru']
 
-    day_names = ['', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek',
-        'Sobota', 'Niedziela']
+    day_names = ['', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek',
+        'sobota', 'niedziela']
     day_abbreviations = ['', 'Pn', 'Wt', 'Śr', 'Czw', 'Pt', 'So', 'Nd']
 
 
@@ -935,14 +935,14 @@ class PortugueseLocale(Locale):
         'years': '{0} anos',
     }
 
-    month_names = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-        'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-    month_abbreviations = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Maio', 'Jun', 'Jul', 'Ago',
-        'Set', 'Out', 'Nov', 'Dez']
+    month_names = ['', 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho',
+        'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+    month_abbreviations = ['', 'jan', 'fev', 'mar', 'abr', 'maio', 'jun', 'jul', 'ago',
+        'set', 'out', 'nov', 'dez']
 
-    day_names = ['', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira',
-        'Sábado', 'Domingo']
-    day_abbreviations = ['', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+    day_names = ['', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira',
+        'sábado', 'domingo']
+    day_abbreviations = ['', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
     
     
 class BrazilianPortugueseLocale(PortugueseLocale):
@@ -1270,14 +1270,14 @@ class CzechLocale(Locale):
     past = 'Před {0}'
     future = 'Za {0}'
 
-    month_names = ['', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen',
-        'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec']
-    month_abbreviations = ['', 'Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc',
-        'Srp', 'Zář', 'Říj', 'Lis', 'Pro']
+    month_names = ['', 'leden', 'únor', 'březen', 'duben', 'květen', 'červen',
+        'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec']
+    month_abbreviations = ['', 'led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc',
+        'srp', 'zář', 'říj', 'lis', 'pro']
 
-    day_names = ['', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek',
-        'Sobota', 'Neděle']
-    day_abbreviations = ['', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
+    day_names = ['', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek',
+        'sobota', 'neděle']
+    day_abbreviations = ['', 'po', 'út', 'st', 'čt', 'pá', 'so', 'ne']
 
 
     def _format_timeframe(self, timeframe, delta):
@@ -1517,9 +1517,9 @@ class BasqueLocale(Locale):
         'years': '{0} urte',
     }
 
-    month_names = ['', 'Urtarrilak', 'Otsailak', 'Martxoak', 'Apirilak', 'Maiatzak', 'Ekainak', 'Uztailak', 'Abuztuak', 'Irailak', 'Urriak', 'Azaroak', 'Abenduak']
+    month_names = ['', 'urtarrilak', 'otsailak', 'martxoak', 'apirilak', 'maiatzak', 'ekainak', 'uztailak', 'abuztuak', 'irailak', 'urriak', 'azaroak', 'abenduak']
     month_abbreviations = ['', 'urt', 'ots', 'mar', 'api', 'mai', 'eka', 'uzt', 'abu', 'ira', 'urr', 'aza', 'abe']
-    day_names = ['', 'Asteleehna', 'Asteartea', 'Asteazkena', 'Osteguna', 'Ostirala', 'Larunbata', 'Igandea']
+    day_names = ['', 'asteleehna', 'asteartea', 'asteazkena', 'osteguna', 'ostirala', 'larunbata', 'igandea']
     day_abbreviations = ['', 'al', 'ar', 'az', 'og', 'ol', 'lr', 'ig']
 
 
@@ -1554,16 +1554,16 @@ class HungarianLocale(Locale):
         'years': {'past': '{0} évvel', 'future': '{0} év'},
     }
 
-    month_names = ['', 'Január', 'Február', 'Március', 'Április', 'Május',
-                   'Június', 'Július', 'Augusztus', 'Szeptember',
-                   'Október', 'November', 'December']
-    month_abbreviations = ['', 'Jan', 'Febr', 'Márc', 'Ápr', 'Máj', 'Jún',
-                           'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec']
+    month_names = ['', 'január', 'február', 'március', 'április', 'május',
+                   'június', 'július', 'augusztus', 'szeptember',
+                   'október', 'november', 'december']
+    month_abbreviations = ['', 'jan', 'febr', 'márc', 'ápr', 'máj', 'jún',
+                           'júl', 'aug', 'szept', 'okt', 'nov', 'dec']
 
-    day_names = ['', 'Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek',
-                 'Szombat', 'Vasárnap']
-    day_abbreviations = ['', 'Hét', 'Kedd', 'Szer', 'Csüt', 'Pént',
-                         'Szom', 'Vas']
+    day_names = ['', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek',
+                 'szombat', 'vasárnap']
+    day_abbreviations = ['', 'hét', 'kedd', 'szer', 'csüt', 'pént',
+                         'szom', 'vas']
 
     meridians = {
         'am': 'de',
