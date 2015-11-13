@@ -15,7 +15,7 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
@@ -25,6 +25,8 @@ class DateTimeParser(object):
     _FOUR_DIGIT_RE = re.compile('\d{4}')
     _TWO_DIGIT_RE = re.compile('\d{2}')
     _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
+    _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
+
 
     _BASE_INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
@@ -42,6 +44,7 @@ class DateTimeParser(object):
         'ss': _TWO_DIGIT_RE,
         's': _ONE_OR_TWO_DIGIT_RE,
         'X': re.compile('\d+'),
+        'ZZZ': _TZ_NAME_RE,
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
         'SSSSSS': _ONE_THROUGH_SIX_DIGIT_RE,
@@ -194,7 +197,7 @@ class DateTimeParser(object):
         elif token == 'X':
             parts['timestamp'] = int(value)
 
-        elif token in ['ZZ', 'Z']:
+        elif token in ['ZZZ', 'ZZ', 'Z']:
             parts['tzinfo'] = TzinfoParser.parse(value)
 
         elif token in ['a', 'A']:

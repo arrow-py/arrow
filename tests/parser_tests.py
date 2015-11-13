@@ -114,10 +114,35 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse('12 pm', 'H A'), expected)
         assertEqual(self.parser.parse('12 pm', 'h A'), expected)
 
-    def test_parse_tz(self):
+    def test_parse_tz_zz(self):
 
         expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
         assertEqual(self.parser.parse('2013-01-01 -07:00', 'YYYY-MM-DD ZZ'), expected)
+
+    def test_parse_tz_name_zzz(self):
+        for tz_name in (
+            # best solution would be to test on every available tz name from
+            # the tz database but it is actualy tricky to retrieve them from
+            # dateutil so here is short list that should match all
+            # naming patterns/conventions in used tz databaze
+            'Africa/Tripoli',
+            'America/Port_of_Spain',
+            'Australia/LHI',
+            'Etc/GMT-11',
+            'Etc/GMT0',
+            'Etc/UCT',
+            'Etc/GMT+9',
+            'GMT+0',
+            'CST6CDT',
+            'GMT-0',
+            'W-SU',
+        ):
+            expected = datetime(2013, 1, 1, tzinfo=tz.gettz(tz_name))
+            assertEqual(self.parser.parse('2013-01-01 %s' % tz_name, 'YYYY-MM-DD ZZZ'), expected)
+
+        # note that offsets are not timezones
+        with assertRaises(ParserError):
+            self.parser.parse('2013-01-01 +1000', 'YYYY-MM-DD ZZZ')
 
     def test_parse_subsecond(self):
 
