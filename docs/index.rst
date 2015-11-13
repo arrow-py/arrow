@@ -434,7 +434,9 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |S             |0, 1, 2 ... 8, 9                           |
 +--------------------------------+--------------+-------------------------------------------+
-|**Timezone**                    |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
+|**Timezone**                    |ZZZ           |Asia/Baku, Europe/Warsaw, GMT ... [#t3]_   |
++--------------------------------+--------------+-------------------------------------------+
+|                                |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Z             |-0700, -0600 ... +0600, +0700              |
 +--------------------------------+--------------+-------------------------------------------+
@@ -445,6 +447,7 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 
 .. [#t1] localization support for parsing and formatting
 .. [#t2] localization support only for formatting
+.. [#t3] timezone names from `tz database <https://www.iana.org/time-zones>`_  provided via dateutil package
 
 ---------
 API Guide
