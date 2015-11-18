@@ -2,11 +2,17 @@ language: python
 python:
   - 2.6
   - 2.7
+  - 3.2
   - 3.3
   - 3.4
+  - pypy
+  - pypy3
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then make build26; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then make build32; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then make build33; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' ]]; then make buildpypy; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == 'pypy3' ]]; then make buildpypy3; fi
 script: make test
