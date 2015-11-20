@@ -1108,15 +1108,17 @@ class ArrowUtilTests(Chai):
         assertEqual(get_datetime(dt), dt)
         assertEqual(get_datetime(timestamp), arrow.Arrow.utcfromtimestamp(timestamp).datetime)
 
-        with assertRaises(ValueError):
+        with assertRaises(ValueError) as raise_ctx:
             get_datetime('abc')
+        assertFalse('{0}' in raise_ctx.exception.message)
 
     def test_get_tzinfo(self):
 
         get_tzinfo = arrow.Arrow._get_tzinfo
 
-        with assertRaises(ValueError):
+        with assertRaises(ValueError) as raise_ctx:
             get_tzinfo('abc')
+        assertFalse('{0}' in raise_ctx.exception.message)
 
     def test_get_timestamp_from_input(self):
 
