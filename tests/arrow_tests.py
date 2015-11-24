@@ -1110,7 +1110,7 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(ValueError) as raise_ctx:
             get_datetime('abc')
-        assertFalse('{0}' in raise_ctx.exception.message)
+        assertFalse('{0}' in str(raise_ctx.exception))
 
     def test_get_tzinfo(self):
 
@@ -1118,7 +1118,7 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(ValueError) as raise_ctx:
             get_tzinfo('abc')
-        assertFalse('{0}' in raise_ctx.exception.message)
+        assertFalse('{0}' in str(raise_ctx.exception))
 
     def test_get_timestamp_from_input(self):
 
