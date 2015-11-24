@@ -413,11 +413,10 @@ class ArrowConversionTests(Chai):
         dt_from = datetime.now()
         arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.gettz('US/Pacific'))
 
-        result = arrow_from.to('UTC')
-
         expected = dt_from.replace(tzinfo=tz.gettz('US/Pacific')).astimezone(tz.tzutc())
 
-        assertEqual(result.datetime, expected)
+        assertEqual(arrow_from.to('UTC').datetime, expected)
+        assertEqual(arrow_from.to(tz.tzutc()).datetime, expected)
 
 
 class ArrowPicklingTests(Chai):

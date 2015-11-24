@@ -26,7 +26,7 @@ build35:
 
 test:
 	rm -f .coverage
-	. local/bin/activate && nosetests --all-modules --with-coverage arrow tests
+	. local/bin/activate && nosetests
 
 docs:
 	touch docs/index.rst

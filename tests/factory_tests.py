@@ -84,6 +84,12 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(tz.gettz('US/Pacific')), expected)
 
+    def test_kwarg_tzinfo(self):
+
+        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
+
+        assertDtEqual(self.factory.get(tzinfo=tz.gettz('US/Pacific')), expected)
+
     def test_one_arg_iso_str(self):
 
         dt = datetime.utcnow()

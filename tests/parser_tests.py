@@ -37,6 +37,19 @@ class DateTimeParserTests(Chai):
         with assertRaises(Exception):
             self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
 
+    def test_parse_token_nonsense(self):
+        parts = {}
+        self.parser._parse_token('NONSENSE', '1900', parts)
+        assertEqual(parts, {})
+
+    def test_parse_token_invalid_meridians(self):
+        parts = {}
+        self.parser._parse_token('A', 'a..m', parts)
+        assertEqual(parts, {})
+        self.parser._parse_token('a', 'p..m', parts)
+        assertEqual(parts, {})
+
+
 
 class DateTimeParserParseTests(Chai):
 

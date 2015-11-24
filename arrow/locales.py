@@ -760,9 +760,7 @@ class UkrainianLocale(SlavicBaseLocale):
     day_abbreviations = ['', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд']
 
 
-class GermanLocale(Locale):
-
-    names = ['de', 'de_de']
+class _DeutschLocaleCommonMixin(object):
 
     past = 'vor {0}'
     future = 'in {0}'
@@ -786,65 +784,39 @@ class GermanLocale(Locale):
         '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
         'August', 'September', 'Oktober', 'November', 'Dezember'
     ]
+
     month_abbreviations = [
         '', 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep',
         'Okt', 'Nov', 'Dez'
     ]
 
     day_names = [
-       '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag',
-       'Samstag', 'Sonntag'
+        '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag',
+        'Samstag', 'Sonntag'
     ]
 
-    day_abbreviations = ['', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+    day_abbreviations = [
+        '', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'
+    ]
 
     def _ordinal_number(self, n):
         return '{0}.'.format(n)
 
 
-class AustriaLocale(Locale):
+class GermanLocale(_DeutschLocaleCommonMixin, Locale):
+
+    names = ['de', 'de_de']
+
+    timeframes = _DeutschLocaleCommonMixin.timeframes.copy()
+    timeframes['days'] = '{0} Tagen'
+
+
+class AustriaLocale(_DeutschLocaleCommonMixin, Locale):
 
     names = ['de', 'de_at']
 
-    past = 'vor {0}'
-    future = 'in {0}'
-
-    timeframes = {
-            'now': 'gerade eben',
-            'seconds':  'Sekunden',
-            'minute': 'einer Minute',
-            'minutes': '{0} Minuten',
-            'hour': 'einer Stunde',
-            'hours': '{0} Stunden',
-            'day': 'einem Tag',
-            'days': '{0} Tage',
-            'month': 'einem Monat',
-            'months': '{0} Monaten',
-            'year': 'einem Jahr',
-            'years': '{0} Jahren',
-        }
-
-    month_names = [
-            '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
-            'August', 'September', 'Oktober', 'November', 'Dezember'
-        ]
-
-    month_abbreviations = [
-            '', 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep',
-            'Okt', 'Nov', 'Dez'
-        ]
-
-    day_names = [
-            '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag',
-            'Samstag', 'Sonntag'
-        ]
-
-    day_abbreviations = [
-            '', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'
-        ]
-
-    def _ordinal_number(self, n):
-        return '{0}.'.format(n)
+    timeframes = _DeutschLocaleCommonMixin.timeframes.copy()
+    timeframes['days'] = '{0} Tage'
 
 
 class NorwegianLocale(Locale):
