@@ -1,6 +1,13 @@
 *.pyc
 *.egg-info
 
+# temporary files created by VIM
+*.swp
+*.swo
+
+# temporary files created by git/patch
+*.orig
+
 .coverage
 nosetests.xml
 
