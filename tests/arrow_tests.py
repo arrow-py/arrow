@@ -205,7 +205,7 @@ class ArrowComparisonTests(Chai):
 
     def test_gt(self):
 
-        arrow_cmp = self.arrow.replace(minutes=1)
+        arrow_cmp = self.arrow.shift(minutes=1)
 
         assertFalse(self.arrow > self.arrow)
         assertFalse(self.arrow > self.arrow.datetime)
@@ -226,7 +226,7 @@ class ArrowComparisonTests(Chai):
 
     def test_lt(self):
 
-        arrow_cmp = self.arrow.replace(minutes=1)
+        arrow_cmp = self.arrow.shift(minutes=1)
 
         assertFalse(self.arrow < self.arrow)
         assertFalse(self.arrow < self.arrow.datetime)
@@ -439,7 +439,7 @@ class ArrowReplaceTests(Chai):
         with assertRaises(AttributeError):
             arrow.Arrow.utcnow().replace(abc=1)
 
-    def test_replace_absolute(self):
+    def test_replace(self):
 
         arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
@@ -449,32 +449,6 @@ class ArrowReplaceTests(Chai):
         assertEqual(arw.replace(hour=1), arrow.Arrow(2013, 5, 5, 1, 30, 45))
         assertEqual(arw.replace(minute=1), arrow.Arrow(2013, 5, 5, 12, 1, 45))
         assertEqual(arw.replace(second=1), arrow.Arrow(2013, 5, 5, 12, 30, 1))
-
-    def test_replace_relative(self):
-
-        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-
-        assertEqual(arw.replace(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
-        assertEqual(arw.replace(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
-        assertEqual(arw.replace(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
-        assertEqual(arw.replace(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
-        assertEqual(arw.replace(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
-        assertEqual(arw.replace(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
-        assertEqual(arw.replace(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
-
-    def test_replace_relative_negative(self):
-
-        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-
-        assertEqual(arw.replace(years=-1), arrow.Arrow(2012, 5, 5, 12, 30, 45))
-        assertEqual(arw.replace(months=-1), arrow.Arrow(2013, 4, 5, 12, 30, 45))
-        assertEqual(arw.replace(weeks=-1), arrow.Arrow(2013, 4, 28, 12, 30, 45))
-        assertEqual(arw.replace(days=-1), arrow.Arrow(2013, 5, 4, 12, 30, 45))
-        assertEqual(arw.replace(hours=-1), arrow.Arrow(2013, 5, 5, 11, 30, 45))
-        assertEqual(arw.replace(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
-        assertEqual(arw.replace(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
-        assertEqual(arw.replace(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
-
 
     def test_replace_tzinfo(self):
 
@@ -493,6 +467,38 @@ class ArrowReplaceTests(Chai):
 
         with assertRaises(AttributeError):
             arrow.utcnow().replace(abc='def')
+
+class ArrowShiftTests(Chai):
+
+    def test_not_attr(self):
+
+        with assertRaises(AttributeError):
+            arrow.Arrow.utcnow().replace(abc=1)
+
+    def test_shift(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        assertEqual(arw.shift(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.shift(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
+        assertEqual(arw.shift(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
+        assertEqual(arw.shift(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.shift(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
+        assertEqual(arw.shift(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
+        assertEqual(arw.shift(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
+
+    def test_shift_negative(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        assertEqual(arw.shift(years=-1), arrow.Arrow(2012, 5, 5, 12, 30, 45))
+        assertEqual(arw.shift(months=-1), arrow.Arrow(2013, 4, 5, 12, 30, 45))
+        assertEqual(arw.shift(weeks=-1), arrow.Arrow(2013, 4, 28, 12, 30, 45))
+        assertEqual(arw.shift(days=-1), arrow.Arrow(2013, 5, 4, 12, 30, 45))
+        assertEqual(arw.shift(hours=-1), arrow.Arrow(2013, 5, 5, 11, 30, 45))
+        assertEqual(arw.shift(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
+        assertEqual(arw.shift(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
+        assertEqual(arw.shift(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
 
 
 class ArrowRangeTests(Chai):
@@ -908,7 +914,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_seconds(self):
 
-        later = self.now.replace(seconds=10)
+        later = self.now.shift(seconds=10)
 
         assertEqual(self.now.humanize(later), 'seconds ago')
         assertEqual(later.humanize(self.now), 'in seconds')
@@ -918,7 +924,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_minute(self):
 
-        later = self.now.replace(minutes=1)
+        later = self.now.shift(minutes=1)
 
         assertEqual(self.now.humanize(later), 'a minute ago')
         assertEqual(later.humanize(self.now), 'in a minute')
@@ -929,7 +935,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_minutes(self):
 
-        later = self.now.replace(minutes=2)
+        later = self.now.shift(minutes=2)
 
         assertEqual(self.now.humanize(later), '2 minutes ago')
         assertEqual(later.humanize(self.now), 'in 2 minutes')
@@ -939,7 +945,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_hour(self):
 
-        later = self.now.replace(hours=1)
+        later = self.now.shift(hours=1)
 
         assertEqual(self.now.humanize(later), 'an hour ago')
         assertEqual(later.humanize(self.now), 'in an hour')
@@ -949,7 +955,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_hours(self):
 
-        later = self.now.replace(hours=2)
+        later = self.now.shift(hours=2)
 
         assertEqual(self.now.humanize(later), '2 hours ago')
         assertEqual(later.humanize(self.now), 'in 2 hours')
@@ -959,7 +965,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_day(self):
 
-        later = self.now.replace(days=1)
+        later = self.now.shift(days=1)
 
         assertEqual(self.now.humanize(later), 'a day ago')
         assertEqual(later.humanize(self.now), 'in a day')
@@ -969,7 +975,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_days(self):
 
-        later = self.now.replace(days=2)
+        later = self.now.shift(days=2)
 
         assertEqual(self.now.humanize(later), '2 days ago')
         assertEqual(later.humanize(self.now), 'in 2 days')
@@ -979,7 +985,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_month(self):
 
-        later = self.now.replace(months=1)
+        later = self.now.shift(months=1)
 
         assertEqual(self.now.humanize(later), 'a month ago')
         assertEqual(later.humanize(self.now), 'in a month')
@@ -989,7 +995,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_months(self):
 
-        later = self.now.replace(months=2)
+        later = self.now.shift(months=2)
 
         assertEqual(self.now.humanize(later), '2 months ago')
         assertEqual(later.humanize(self.now), 'in 2 months')
@@ -999,7 +1005,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_year(self):
 
-        later = self.now.replace(years=1)
+        later = self.now.shift(years=1)
 
         assertEqual(self.now.humanize(later), 'a year ago')
         assertEqual(later.humanize(self.now), 'in a year')
@@ -1009,7 +1015,7 @@ class ArrowHumanizeTests(Chai):
 
     def test_years(self):
 
-        later = self.now.replace(years=2)
+        later = self.now.shift(years=2)
 
         assertEqual(self.now.humanize(later), '2 years ago')
         assertEqual(later.humanize(self.now), 'in 2 years')

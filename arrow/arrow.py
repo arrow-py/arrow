@@ -378,11 +378,6 @@ class Arrow(object):
         >>> arw.replace(year=2014, month=6)
         <Arrow [2014-06-11T22:27:34.787885+00:00]>
 
-        Use plural property names to shift their current value relatively:
-
-        >>> arw.replace(years=1, months=-1)
-        <Arrow [2014-04-11T22:27:34.787885+00:00]>
-
         You can also provide a timezone expression can also be replaced:
 
         >>> arw.replace(tzinfo=tz.tzlocal())
@@ -398,21 +393,17 @@ class Arrow(object):
         '''
 
         absolute_kwargs = {}
-        relative_kwargs = {}
 
         for key, value in kwargs.items():
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key in self._ATTRS_PLURAL or key == 'weeks':
-                relative_kwargs[key] = value
             elif key == 'week':
                 raise AttributeError('setting absolute week is not supported')
             elif key !='tzinfo':
                 raise AttributeError()
 
         current = self._datetime.replace(**absolute_kwargs)
-        current += relativedelta(**relative_kwargs)
 
         tzinfo = kwargs.get('tzinfo')
 
@@ -422,9 +413,37 @@ class Arrow(object):
 
         return self.fromdatetime(current)
 
+    def shift(self, **kwargs):
+        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with
+        attributes updated according to inputs.
+
+        Use plural property names to shift their current value relatively:
+
+        >>> import arrow
+        >>> arw = arrow.utcnow()
+        >>> arw
+        <Arrow [2013-05-11T22:27:34.787885+00:00]>
+        >>> arw.shift(years=1, months=-1)
+        <Arrow [2014-04-11T22:27:34.787885+00:00]>
+
+        '''
+
+        relative_kwargs = {}
+
+        for key, value in kwargs.items():
+
+            if key in self._ATTRS_PLURAL or key == 'weeks':
+                relative_kwargs[key] = value
+            else:
+                raise AttributeError()
+
+        current = self._datetime + relativedelta(**relative_kwargs)
+
+        return self.fromdatetime(current)
+
     def to(self, tz):
-        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted to the target
-        timezone.
+        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        to the target timezone.
 
         :param tz: an expression representing a timezone.
 
