@@ -404,3 +404,31 @@ class ThaiLocaleTests(Chai):
         result = self.locale._format_relative('1 ชั่วโมง', 'hour', -1)
         assertEqual(result, '1 ชั่วโมง ที่ผ่านมา')
 
+
+class BengaliLocaleTests(Chai):
+
+    def setUp(self):
+        super(BengaliLocaleTests, self).setUp()
+
+        self.locale = locales.BengaliLocale()
+
+    def test_ordinal_number(self):
+        result0 = self.locale._ordinal_number(0)
+        result1 = self.locale._ordinal_number(1)
+        result3 = self.locale._ordinal_number(3)
+        result4 = self.locale._ordinal_number(4)
+        result5 = self.locale._ordinal_number(5)
+        result6 = self.locale._ordinal_number(6)
+        result10 = self.locale._ordinal_number(10)
+        result11 = self.locale._ordinal_number(11)
+        result42 = self.locale._ordinal_number(42)
+        assertEqual(result0, '0তম')
+        assertEqual(result1, '1ম')
+        assertEqual(result3, '3য়')
+        assertEqual(result4, '4র্থ')
+        assertEqual(result5, '5ম')
+        assertEqual(result6, '6ষ্ঠ')
+        assertEqual(result10, '10ম')
+        assertEqual(result11, '11তম')
+        assertEqual(result42, '42তম')
+        assertEqual(self.locale._ordinal_number(-1), None)
