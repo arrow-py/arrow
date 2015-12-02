@@ -90,6 +90,11 @@ class LocaleTests(Chai):
         assertEqual(self.locale.ordinal_number(123), '123rd')
         assertEqual(self.locale.ordinal_number(124), '124th')
 
+    def test_meridian_invalid_token(self):
+        assertEqual(self.locale.meridian(7, None), None)
+        assertEqual(self.locale.meridian(7, 'B'), None)
+        assertEqual(self.locale.meridian(7, 'NONSENSE'), None)
+
 
 class ItalianLocalesTests(Chai):
 
@@ -172,6 +177,7 @@ class IcelandicLocalesTests(Chai):
 
         assertEqual(self.locale._format_timeframe('hours', -2), '2 tímum')
         assertEqual(self.locale._format_timeframe('hours', 2), '2 tíma')
+        assertEqual(self.locale._format_timeframe('now', 0), 'rétt í þessu')
 
 
 class MalayalamLocaleTests(Chai):
@@ -242,13 +248,17 @@ class CzechLocaleTests(Chai):
     def test_format_timeframe(self):
 
         assertEqual(self.locale._format_timeframe('hours', 2), '2 hodiny')
+        assertEqual(self.locale._format_timeframe('hours', 5), '5 hodin')
         assertEqual(self.locale._format_timeframe('hour', 0), '0 hodin')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 hodinami')
+        assertEqual(self.locale._format_timeframe('hours', -5), '5 hodinami')
+        assertEqual(self.locale._format_timeframe('now', 0), 'Teď')
 
     def test_format_relative_now(self):
 
         result = self.locale._format_relative('Teď', 'now', 0)
-
         assertEqual(result, 'Teď')
+
     def test_format_relative_future(self):
 
         result = self.locale._format_relative('hodinu', 'hour', 1)
@@ -309,3 +319,88 @@ class MarathiLocaleTests(Chai):
     # Not currently implemented
     def test_ordinal_number(self):
         assertEqual(self.locale.ordinal_number(1), '1')
+
+
+class FinnishLocaleTests(Chai):
+
+    def setUp(self):
+        super(FinnishLocaleTests, self).setUp()
+
+        self.locale = locales.FinnishLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 2),
+                    ('2 tuntia', '2 tunnin'))
+        assertEqual(self.locale._format_timeframe('hour', 0),
+                    ('tunti', 'tunnin'))
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative(['juuri nyt', 'juuri nyt'], 'now', 0)
+        assertEqual(result, 'juuri nyt')
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative(['tunti', 'tunnin'], 'hour', 1)
+        assertEqual(result, 'tunnin kuluttua')
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative(['tunti', 'tunnin'], 'hour', -1)
+        assertEqual(result, 'tunti sitten')
+
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(1), '1.')
+
+
+class GermanLocaleTests(Chai):
+
+    def setUp(self):
+        super(GermanLocaleTests, self).setUp()
+
+        self.locale = locales.GermanLocale()
+
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(1), '1.')
+
+
+class HungarianLocaleTests(Chai):
+
+    def setUp(self):
+        super(HungarianLocaleTests, self).setUp()
+
+        self.locale = locales.HungarianLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 óra')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'egy órával')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 órával')
+        assertEqual(self.locale._format_timeframe('now', 0), 'éppen most')
+
+
+class ThaiLocaleTests(Chai):
+
+    def setUp(self):
+        super(ThaiLocaleTests, self).setUp()
+
+        self.locale = locales.ThaiLocale()
+
+    def test_year_full(self):
+        assertEqual(self.locale.year_full(2015), '2558')
+
+    def test_year_abbreviation(self):
+        assertEqual(self.locale.year_abbreviation(2015), '58')
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative('ขณะนี้', 'now', 0)
+        assertEqual(result, 'ขณะนี้')
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative('1 ชั่วโมง', 'hour', 1)
+        assertEqual(result, 'ในอีก 1 ชั่วโมง')
+        result = self.locale._format_relative('{0} ชั่วโมง', 'hours', 2)
+        assertEqual(result, 'ในอีก {0} ชั่วโมง')
+        result = self.locale._format_relative('ไม่กี่วินาที', 'seconds', 42)
+        assertEqual(result, 'ในอีกไม่กี่วินาที')
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative('1 ชั่วโมง', 'hour', -1)
+        assertEqual(result, '1 ชั่วโมง ที่ผ่านมา')
+

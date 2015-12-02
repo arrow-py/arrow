@@ -1,13 +1,17 @@
 Arrow - Better dates & times for Python
 =======================================
 
-.. image:: https://travis-ci.org/crsmithdev/arrow.png
+.. image:: https://travis-ci.org/crsmithdev/arrow.svg
    :alt: build status
    :target: https://travis-ci.org/crsmithdev/arrow
 
-.. image:: https://pypip.in/d/arrow/badge.png
+.. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
+   :target: https://codecov.io/github/crsmithdev/arrow
+   :alt: Codecov
+
+.. image:: https://img.shields.io/pypi/v/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
-   :target: https://crate.io/packages/arrow
         
 Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 ---------------------------------------------------------------------------------

@@ -127,3 +127,8 @@ class DateTimeFormatterFormatTokenTests(Chai):
         dt = datetime(2012, 1, 1, 13)
         assertEqual(self.formatter._format_token(dt, 'a'), 'pm')
         assertEqual(self.formatter._format_token(dt, 'A'), 'PM')
+
+    def test_nonsense(self):
+        dt = datetime(2012, 1, 1, 11)
+        assertEqual(self.formatter._format_token(dt, None), None)
+        assertEqual(self.formatter._format_token(dt, 'NONSENSE'), None)
