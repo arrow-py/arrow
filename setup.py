@@ -39,7 +39,6 @@ setup(
     ],
     test_suite="tests",
     classifiers=[
-        'Development Status :: 5 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.6',
