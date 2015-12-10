@@ -912,7 +912,7 @@ class ArrowInterval(object):
             return ArrowInterval(overlap_start, overlap_end)
 
     def gap(self, other):
-        if self.contains(other) or self.overlaps(other) or self.abuts(other):
+        if self.contains(other) or self.overlaps(other):
             return None
 
         if hasattr(other, 'timestamp'):
