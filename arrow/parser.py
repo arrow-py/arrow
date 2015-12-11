@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from datetime import datetime
 from dateutil import tz
 import re
-
 from arrow import locales
 
 
@@ -16,6 +15,7 @@ class ParserError(RuntimeError):
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
+    _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
@@ -123,10 +123,16 @@ class DateTimeParser(object):
         # we construct a new string by replacing each
         # token by its pattern:
         # 'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
-        fmt_pattern = fmt
         tokens = []
         offset = 0
-        for m in self._FORMAT_RE.finditer(fmt):
+
+        # Extract the bracketed expressions to be reinserted later.
+        escaped_fmt = re.sub(self._ESCAPE_RE, "#" , fmt)
+        escaped_data = re.findall(self._ESCAPE_RE, fmt)
+
+        fmt_pattern = escaped_fmt
+
+        for m in self._FORMAT_RE.finditer(escaped_fmt):
             token = m.group(0)
             try:
                 input_re = self._input_re_map[token]
@@ -140,9 +146,14 @@ class DateTimeParser(object):
             # are returned in the order found by finditer.
             fmt_pattern = fmt_pattern[:m.start() + offset] + input_pattern + fmt_pattern[m.end() + offset:]
             offset += len(input_pattern) - (m.end() - m.start())
-        match = re.search(fmt_pattern, string, flags=re.IGNORECASE)
+
+        final_fmt_pattern = ""
+        for pattern_part, escaped in zip(fmt_pattern.split("#"), escaped_data + [""]):
+            final_fmt_pattern += pattern_part + escaped[1:-1]
+
+        match = re.search(final_fmt_pattern, string, flags=re.IGNORECASE)
         if match is None:
-            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''.format(fmt_pattern, string))
+            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''.format(final_fmt_pattern, string))
         parts = {}
         for token in tokens:
             if token == 'Do':
