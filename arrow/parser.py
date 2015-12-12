@@ -148,13 +148,12 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-
         a = fmt_pattern.split("#")
         b = escaped_data
 
-        for i in range(max(len(a), len(b))):
-            if i < len(a):
-                final_fmt_pattern += a[i]
+        # Due to the way Python splits, 'a' will always be longer
+        for i in range(len(a)):
+            final_fmt_pattern += a[i]
             if i < len(b):
                 final_fmt_pattern += b[i][1:-1]
 
