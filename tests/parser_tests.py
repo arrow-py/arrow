@@ -719,7 +719,7 @@ class DateTimeParserSearchDateTests(Chai):
             self.parser.parse("MMMM 12 10, 2015 at 5:09pm", format),
             datetime(2015, 12, 10, 17, 9))
 
-        format = "[It happened on] MMMM Do [in the year] YYYY"
+        format = "[It happened on] MMMM Do [in the] [year] YYYY [a long time ago]"
         assertEqual(
-            self.parser.parse("It happened on November 25th in the year 1990", format),
+            self.parser.parse("It happened on November 25th in the year 1990 a long time ago", format),
             datetime(1990, 11, 25))

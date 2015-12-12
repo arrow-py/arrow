@@ -148,8 +148,15 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-        for pattern_part, escaped in zip(fmt_pattern.split("#"), escaped_data + [""]):
-            final_fmt_pattern += pattern_part + escaped[1:-1]
+
+        a = fmt_pattern.split("#")
+        b = escaped_data
+
+        for i in range(max(len(a), len(b))):
+            if i < len(a):
+                final_fmt_pattern += a[i]
+            if i < len(b):
+                final_fmt_pattern += b[i][1:-1]
 
         match = re.search(final_fmt_pattern, string, flags=re.IGNORECASE)
         if match is None:
