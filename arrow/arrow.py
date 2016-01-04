@@ -408,13 +408,20 @@ class Arrow(object):
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key in self._ATTRS_PLURAL or key == 'weeks':
+            elif key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
                 relative_kwargs[key] = value
-            elif key == 'week':
-                raise AttributeError('setting absolute week is not supported')
+            elif key in ['week', 'quarter']:
+                raise AttributeError('setting absolute {} is not supported'.format(key))
             elif key !='tzinfo':
                 raise AttributeError()
 
+        # core datetime does not support quarters, translate to months.
+        if 'quarters' in relative_kwargs.keys():
+            if relative_kwargs.get('months') is None:
+                relative_kwargs['months'] = 0
+            relative_kwargs['months'] += (value * self._MONTHS_PER_QUARTER)
+            relative_kwargs.pop('quarters')
+            
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs)
 

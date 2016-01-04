@@ -168,7 +168,7 @@ class ArrowAttributeTests(Chai):
         assertEqual(q1.quarter, 1)
         assertEqual(q2.quarter, 2)
         assertEqual(q3.quarter, 3)
-        assertEqual(q4.quarter, 4)        
+        assertEqual(q4.quarter, 4)
 
     def test_getattr_dt_value(self):
 
@@ -465,6 +465,8 @@ class ArrowReplaceTests(Chai):
         arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
         assertEqual(arw.replace(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=1), arrow.Arrow(2013, 8, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=1, months=1), arrow.Arrow(2013, 9, 5, 12, 30, 45))
         assertEqual(arw.replace(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
         assertEqual(arw.replace(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
         assertEqual(arw.replace(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
