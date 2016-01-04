@@ -45,6 +45,7 @@ class Arrow(object):
 
     _ATTRS = ['year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond']
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
+    _MONTHS_PER_QUARTER = 3
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
                  tzinfo=None):
@@ -305,6 +306,9 @@ class Arrow(object):
 
         if name == 'week':
             return self.isocalendar()[1]
+
+        if name == 'quarter':
+            return int(self.month/self._MONTHS_PER_QUARTER) + 1
 
         if not name.startswith('_'):
             value = getattr(self._datetime, name, None)

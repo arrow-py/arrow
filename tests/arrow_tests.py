@@ -160,6 +160,16 @@ class ArrowAttributeTests(Chai):
 
         assertEqual(self.arrow.week, 1)
 
+    def test_getattr_quarter(self):
+        q1 = arrow.Arrow(2013, 1, 1)
+        q2 = arrow.Arrow(2013, 4, 1)
+        q3 = arrow.Arrow(2013, 8, 1)
+        q4 = arrow.Arrow(2013, 10, 1)
+        assertEqual(q1.quarter, 1)
+        assertEqual(q2.quarter, 2)
+        assertEqual(q3.quarter, 3)
+        assertEqual(q4.quarter, 4)        
+
     def test_getattr_dt_value(self):
 
         assertEqual(self.arrow.year, 2013)
