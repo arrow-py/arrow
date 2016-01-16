@@ -919,7 +919,7 @@ class NewNorwegianLocale(Locale):
 
 class PortugueseLocale(Locale):
     names = ['pt', 'pt_pt']
-    
+
     past = 'há {0}'
     future = 'em {0}'
 
@@ -946,11 +946,11 @@ class PortugueseLocale(Locale):
     day_names = ['', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira',
         'sábado', 'domingo']
     day_abbreviations = ['', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
-    
-    
+
+
 class BrazilianPortugueseLocale(PortugueseLocale):
     names = ['pt_br']
-    
+
     past = 'fazem {0}'
 
 
@@ -1293,7 +1293,7 @@ class CzechLocale(Locale):
                 form = form['future']
             else:
                 form = form['past']
-        delta = abs(delta)  
+        delta = abs(delta)
 
         if isinstance(form, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
@@ -1463,7 +1463,7 @@ class MarathiLocale(Locale):
 
     day_names = ['', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार']
     day_abbreviations = ['', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि']
-    
+
 def _map_locales():
 
     locales = {}
@@ -1471,7 +1471,7 @@ def _map_locales():
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
-                locales[name.lower()] = cls  
+                locales[name.lower()] = cls
 
     return locales
 
@@ -1698,6 +1698,8 @@ class BengaliLocale(Locale):
             return '{0}র্থ'.format(n)
         if n == 6:
             return '{0}ষ্ঠ'.format(n)
+        else:
+            return '{0}'.format(n)
 
 
 _locales = _map_locales()
