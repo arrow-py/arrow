@@ -208,6 +208,18 @@ class MalayalamLocaleTests(Chai):
         result = self.locale._format_relative('ഒരു മണിക്കൂർ', 'hour', -1)
         assertEqual(result, 'ഒരു മണിക്കൂർ മുമ്പ്')
 
+class BengaliLocaleTests(Chai):
+
+    def test_ordinal_number(self):
+        locale = locales.BengaliLocale()
+
+        assertEqual(locale.ordinal_number(-1), '-1')
+        assertEqual(locale.ordinal_number(0), '0তম')
+        assertEqual(locale.ordinal_number(1), '1ম')
+        assertEqual(locale.ordinal_number(2), '2য়')
+        assertEqual(locale.ordinal_number(4), '4র্থ')
+        assertEqual(locale.ordinal_number(6), '6ষ্ঠ')
+        assertEqual(locale.ordinal_number(11), '11তম')
 
 class HindiLocaleTests(Chai):
 
@@ -292,14 +304,14 @@ class MarathiLocaleTests(Chai):
         super(MarathiLocaleTests, self).setUp()
 
         self.locale = locales.MarathiLocale()
-        
+
     def test_dateCoreFunctionality(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assertEqual (self.locale.month_name(dt.month),'एप्रिल')
         assertEqual (self.locale.month_abbreviation(dt.month),'एप्रि')
         assertEqual (self.locale.day_name(dt.isoweekday()),'शनिवार')
         assertEqual (self.locale.day_abbreviation(dt.isoweekday()), 'शनि')
-        
+
     def test_format_timeframe(self):
         assertEqual(self.locale._format_timeframe('hours', 2), '2 तास')
         assertEqual(self.locale._format_timeframe('hour', 0), 'एक तास')
@@ -403,4 +415,3 @@ class ThaiLocaleTests(Chai):
     def test_format_relative_future(self):
         result = self.locale._format_relative('1 ชั่วโมง', 'hour', -1)
         assertEqual(result, '1 ชั่วโมง ที่ผ่านมา')
-
