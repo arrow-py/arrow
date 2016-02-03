@@ -1,5 +1,10 @@
 ## History
 
+### 0.7.1
+
+- [NEW] Esperanto locale (batisteo)
+
+
 ### 0.7.0 
 - [FIX] Parse localized strings #228 (swistakm)
 - [FIX] Modify tzinfo parameter in `get` api #221 (bottleimp)
