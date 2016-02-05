@@ -293,11 +293,16 @@ class ArrowMathTests(Chai):
         with assertRaises(TypeError):
             self.arrow.__sub__(object())
 
-    def test_rsub(self):
+    def test_rsub_datetime(self):
 
-        result = self.arrow.__rsub__(timedelta(days=1))
+        result = self.arrow.__rsub__(datetime(2012, 12, 21, tzinfo=tz.tzutc()))
 
-        assertEqual(result._datetime, datetime(2012, 12, 31, tzinfo=tz.tzutc()))
+        assertEqual(result, timedelta(days=-11))
+
+    def test_rsub_other(self):
+
+        with assertRaises(TypeError):
+            self.arrow.__rsub__(timedelta(days=1))
 
 
 class ArrowDatetimeInterfaceTests(Chai):
