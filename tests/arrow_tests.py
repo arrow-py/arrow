@@ -6,6 +6,7 @@ from chai import Chai
 
 from datetime import date, datetime, timedelta
 from dateutil import tz
+from dateutil.relativedelta import relativedelta
 import simplejson as json
 import calendar
 import pickle
@@ -259,6 +260,12 @@ class ArrowMathTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 2, tzinfo=tz.tzutc()))
 
+    def test_add_relativedelta(self):
+
+        result = self.arrow.__add__(relativedelta(days=1))
+
+        assertEqual(result._datetime, datetime(2013, 1, 2, tzinfo=tz.tzutc()))
+
     def test_add_other(self):
 
         with assertRaises(TypeError):
@@ -273,6 +280,12 @@ class ArrowMathTests(Chai):
     def test_sub_timedelta(self):
 
         result = self.arrow.__sub__(timedelta(days=1))
+
+        assertEqual(result._datetime, datetime(2012, 12, 31, tzinfo=tz.tzutc()))
+
+    def test_sub_relativedelta(self):
+
+        result = self.arrow.__sub__(relativedelta(days=1))
 
         assertEqual(result._datetime, datetime(2012, 12, 31, tzinfo=tz.tzutc()))
 

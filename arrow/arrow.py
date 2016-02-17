@@ -46,8 +46,8 @@ class Arrow(object):
     _ATTRS = ['year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond']
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
 
-    def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
-                 tzinfo=None):
+    def __init__(self, year, month, day, hour=0, minute=0, second=0,
+                 microsecond=0, tzinfo=None):
 
         if util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
@@ -221,7 +221,8 @@ class Arrow(object):
             results.append(current)
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: relative_steps})
+            current = cls(*values, tzinfo=tzinfo) + \
+                      relativedelta(**{frame_relative: relative_steps})
 
         return results
 
@@ -280,8 +281,8 @@ class Arrow(object):
     def __repr__(self):
 
         dt = self._datetime
-        attrs = ', '.join([str(i) for i in [dt.year, dt.month, dt.day, dt.hour, dt.minute,
-            dt.second, dt.microsecond]])
+        attrs = ', '.join([str(i) for i in [dt.year, dt.month, dt.day, dt.hour,
+                                            dt.minute, dt.second, dt.microsecond]])
 
         return '<{0} [{1}]>'.format(self.__class__.__name__, self.__str__())
 
@@ -408,7 +409,7 @@ class Arrow(object):
                 relative_kwargs[key] = value
             elif key == 'week':
                 raise AttributeError('setting absolute week is not supported')
-            elif key !='tzinfo':
+            elif key != 'tzinfo':
                 raise AttributeError()
 
         current = self._datetime.replace(**absolute_kwargs)
@@ -463,8 +464,8 @@ class Arrow(object):
 
         dt = self._datetime.astimezone(tz)
 
-        return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, dt.tzinfo)
+        return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute,
+                              dt.second, dt.microsecond, dt.tzinfo)
 
     def span(self, frame, count=1):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
@@ -515,8 +516,9 @@ class Arrow(object):
         elif frame_absolute == 'quarter':
             floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(
-            **{frame_relative: count * relative_steps}) + relativedelta(microseconds=-1)
+        ceil = floor + \
+               relativedelta(**{frame_relative: count * relative_steps}) + \
+               relativedelta(microseconds=-1)
 
         return floor, ceil
 
@@ -593,7 +595,7 @@ class Arrow(object):
             >>> earlier.humanize()
             '2 hours ago'
 
-            >>> later = later = earlier.replace(hours=4)
+            >>> later = earlier.replace(hours=4)
             >>> later.humanize(earlier)
             'in 4 hours'
 
@@ -652,7 +654,6 @@ class Arrow(object):
             self_months = self._datetime.year * 12 + self._datetime.month
             other_months = dt.year * 12 + dt.month
             months = sign * abs(other_months - self_months)
-
             return locale.describe('months', months, only_distance=only_distance)
 
         elif diff < 47260800:
@@ -667,7 +668,8 @@ class Arrow(object):
     def __add__(self, other):
 
         if isinstance(other, (timedelta, relativedelta)):
-            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
+            return self.fromdatetime(self._datetime + other,
+                                     self._datetime.tzinfo)
 
         raise TypeError()
 
@@ -676,8 +678,9 @@ class Arrow(object):
 
     def __sub__(self, other):
 
-        if isinstance(other, timedelta):
-            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
+        if isinstance(other, (timedelta, relativedelta)):
+            return self.fromdatetime(self._datetime - other,
+                                     self._datetime.tzinfo)
 
         elif isinstance(other, datetime):
             return self._datetime - other
@@ -701,8 +704,6 @@ class Arrow(object):
 
         if not isinstance(other, (Arrow, datetime)):
             return False
-
-        other = self._get_datetime(other)
 
         return self._datetime == self._get_datetime(other)
 
@@ -771,6 +772,7 @@ class Arrow(object):
 
     def dst(self):
         ''' Returns the daylight savings time adjustment. '''
+
         return self._datetime.dst()
 
     def timetuple(self):
@@ -824,6 +826,7 @@ class Arrow(object):
 
     def for_json(self):
         '''Serializes for the ``for_json`` protocol of simplejson.'''
+
         return self.isoformat()
 
     # internal tools.
