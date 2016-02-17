@@ -30,7 +30,8 @@ Features
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings, including ISO-8601-formatted strings automatically
+- Formats and parses strings automatically
+- Partial ISO-8601 support
 - Timezone conversion
 - Timestamp available as a property
 - Generates time spans, ranges, floors and ceilings in time frames from year to microsecond
@@ -145,7 +146,7 @@ Search a date in a string:
     >>> arrow.get('June was born in May 1980', 'MMMM YYYY')
     <Arrow [1980-05-01T00:00:00+00:00]>
 
-Many ISO-8601 compliant strings are recognized and parsed without a format string:
+Some ISO-8601 compliant strings are recognized and parsed without a format string:
 
     >>> arrow.get('2013-09-30T15:34:00.000-07:00')
     <Arrow [2013-09-30T15:34:00-07:00]>
