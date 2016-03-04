@@ -292,14 +292,14 @@ class MarathiLocaleTests(Chai):
         super(MarathiLocaleTests, self).setUp()
 
         self.locale = locales.MarathiLocale()
-        
+
     def test_dateCoreFunctionality(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assertEqual (self.locale.month_name(dt.month),'एप्रिल')
         assertEqual (self.locale.month_abbreviation(dt.month),'एप्रि')
         assertEqual (self.locale.day_name(dt.isoweekday()),'शनिवार')
         assertEqual (self.locale.day_abbreviation(dt.isoweekday()), 'शनि')
-        
+
     def test_format_timeframe(self):
         assertEqual(self.locale._format_timeframe('hours', 2), '2 तास')
         assertEqual(self.locale._format_timeframe('hour', 0), 'एक तास')
@@ -404,3 +404,24 @@ class ThaiLocaleTests(Chai):
         result = self.locale._format_relative('1 ชั่วโมง', 'hour', -1)
         assertEqual(result, '1 ชั่วโมง ที่ผ่านมา')
 
+
+class BengaliLocaleTests(Chai):
+
+    def setUp(self):
+        super(BengaliLocaleTests, self).setUp()
+        self.locale = locales.BengaliLocale()
+
+    def test_ordinal_number(self):
+        assertEqual(self.locale._ordinal_number(-1), None)
+        assertEqual(self.locale._ordinal_number(0), '0তম')
+        assertEqual(self.locale._ordinal_number(1), '1ম')
+        assertEqual(self.locale._ordinal_number(2), '2য়')
+        assertEqual(self.locale._ordinal_number(3), '3য়')
+        assertEqual(self.locale._ordinal_number(4), '4র্থ')
+        assertEqual(self.locale._ordinal_number(5), '5ম')
+        assertEqual(self.locale._ordinal_number(6), '6ষ্ঠ')
+        assertEqual(self.locale._ordinal_number(7), '7ম')
+        assertEqual(self.locale._ordinal_number(8), '8ম')
+        assertEqual(self.locale._ordinal_number(9), '9ম')
+        assertEqual(self.locale._ordinal_number(10), '10ম')
+        assertEqual(self.locale._ordinal_number(11), '11তম')
