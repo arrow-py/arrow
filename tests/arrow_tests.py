@@ -989,9 +989,13 @@ class ArrowHumanizeTests(Chai):
 
     def test_months(self):
 
-        later = self.now.replace(months=2)
+        later = self.now.replace(months=1)
+        later = later.replace(days=15)
 
-        assertEqual(self.now.humanize(later), '2 months ago')
+        earlier = self.now.replace(months=-1)
+        earlier = earlier.replace(days=-15)
+
+        assertEqual(earlier.humanize(self.now), '2 months ago')
         assertEqual(later.humanize(self.now), 'in 2 months')
 
         assertEqual(self.now.humanize(later, only_distance=True), '2 months')
