@@ -379,7 +379,7 @@ class JapaneseLocale(Locale):
 
     timeframes = {
         'now': '現在',
-        'seconds': '秒',
+        'seconds': '数秒',
         'minute': '1分',
         'minutes': '{0}分',
         'hour': '1時間',
