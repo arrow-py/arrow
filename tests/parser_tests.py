@@ -127,6 +127,11 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse('12 pm', 'H A'), expected)
         assertEqual(self.parser.parse('12 pm', 'h A'), expected)
 
+    def test_parse_tz_hours_only(self):
+        expected = datetime(2025, 10, 17, 5, 30, 10, tzinfo=tz.tzoffset(None, 0))
+        parsed = self.parser.parse('2025-10-17 05:30:10+00', 'YYYY-MM-DD HH:mm:ssZ')
+        assertEqual(parsed, expected)
+
     def test_parse_tz_zz(self):
 
         expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))

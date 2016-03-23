@@ -24,7 +24,7 @@ class DateTimeParser(object):
     _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
     _FOUR_DIGIT_RE = re.compile('\d{4}')
     _TWO_DIGIT_RE = re.compile('\d{2}')
-    _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
+    _TZ_RE = re.compile('[+\-]?\d{2}:?(\d{2})?')
     _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
 
 
@@ -290,7 +290,7 @@ class DateTimeParser(object):
 
 class TzinfoParser(object):
 
-    _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)')
+    _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)?')
 
     @classmethod
     def parse(cls, string):
@@ -309,6 +309,8 @@ class TzinfoParser(object):
 
             if iso_match:
                 sign, hours, minutes = iso_match.groups()
+                if minutes is None:
+                    minutes = 0
                 seconds = int(hours) * 3600 + int(minutes) * 60
 
                 if sign == '-':

@@ -42,7 +42,8 @@ Features
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings, including ISO-8601-formatted strings automatically
+- Formats and parses strings automatically
+- Partial support for ISO-8601
 - Timezone conversion
 - Timestamp available as a property
 - Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond
