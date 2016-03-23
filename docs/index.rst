@@ -364,7 +364,7 @@ Then get and use a factory for it:
 
 .. code-block:: python
 
-    >>> factory = arrow.Factory(CustomArrow)
+    >>> factory = arrow.ArrowFactory(CustomArrow)
     >>> custom = factory.utcnow()
     >>> custom
     >>> <CustomArrow [2013-05-27T23:35:35.533160+00:00]>
