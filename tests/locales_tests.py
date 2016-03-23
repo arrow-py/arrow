@@ -274,7 +274,7 @@ class BulgarianLocaleTests(Chai):
 
     def test_plurals2(self):
 
-        locale = locales.RussianLocale()
+        locale = locales.BulgarianLocale()
 
         assertEqual(locale._format_timeframe('hours', 0), '0 часа')
         assertEqual(locale._format_timeframe('hours', 1), '1 час')
@@ -410,10 +410,12 @@ class EsperantoLocaleTests(Chai):
 
     def test_format_timeframe(self):
         assertEqual(self.locale._format_timeframe('hours', 2), '2 horoj')
-        assertEqual(self.locale._format_timeframe('hour', 0), 'antaŭ horo')
-        assertEqual(self.locale._format_timeframe('hours', -2), 'antaŭ 2 horoj')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'un horo')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 horoj')
         assertEqual(self.locale._format_timeframe('now', 0), 'nun')
 
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(1), '1a')
 
 class ThaiLocaleTests(Chai):
 
