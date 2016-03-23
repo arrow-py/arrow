@@ -675,7 +675,7 @@ class DateTimeParserSearchDateTests(Chai):
             self.parser.parse('Today is 25 of September of 2003', 'DD of MMMM of YYYY'),
             datetime(2003, 9, 25))
 
-    def test_parse_seach_with_numbers(self):
+    def test_parse_search_with_numbers(self):
 
         assertEqual(
             self.parser.parse('2000 people met the 2012-01-01 12:05:10', 'YYYY-MM-DD HH:mm:ss'),
@@ -685,13 +685,13 @@ class DateTimeParserSearchDateTests(Chai):
             self.parser.parse('Call 01-02-03 on 79-01-01 12:05:10', 'YY-MM-DD HH:mm:ss'),
             datetime(1979, 1, 1, 12, 5, 10))
 
-    def test_parse_seach_with_names(self):
+    def test_parse_search_with_names(self):
 
         assertEqual(
             self.parser.parse('June was born in May 1980', 'MMMM YYYY'),
             datetime(1980, 5, 1))
 
-    def test_parse_seach_locale_with_names(self):
+    def test_parse_search_locale_with_names(self):
         p = parser.DateTimeParser('sv_se')
 
         assertEqual(
@@ -702,7 +702,34 @@ class DateTimeParserSearchDateTests(Chai):
             p.parse('Jag föddes den 25 Augusti 1975', 'DD MMMM YYYY'),
             datetime(1975, 8, 25))
 
-    def test_parse_seach_fails(self):
+    def test_parse_search_fails(self):
 
         with assertRaises(parser.ParserError):
             self.parser.parse('Jag föddes den 25 Augusti 1975', 'DD MMMM YYYY')
+
+    def test_escape(self):
+
+        format = "MMMM D, YYYY [at] h:mma"
+        assertEqual(
+            self.parser.parse("Thursday, December 10, 2015 at 5:09pm", format),
+            datetime(2015, 12, 10, 17, 9))
+
+        format = "[MMMM] M D, YYYY [at] h:mma"
+        assertEqual(
+            self.parser.parse("MMMM 12 10, 2015 at 5:09pm", format),
+            datetime(2015, 12, 10, 17, 9))
+
+        format = "[It happened on] MMMM Do [in the year] YYYY [a long time ago]"
+        assertEqual(
+            self.parser.parse("It happened on November 25th in the year 1990 a long time ago", format),
+            datetime(1990, 11, 25))
+
+        format = "[It happened on] MMMM Do [in the][ year] YYYY [a long time ago]"
+        assertEqual(
+            self.parser.parse("It happened on November 25th in the year 1990 a long time ago", format),
+            datetime(1990, 11, 25))
+
+        format = "[I'm][ entirely][ escaped,][ weee!]"
+        assertEqual(
+            self.parser.parse("I'm entirely escaped, weee!", format),
+            datetime(1, 1, 1))
