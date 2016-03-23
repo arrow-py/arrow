@@ -1700,4 +1700,46 @@ class BengaliLocale(Locale):
             return '{0}ষ্ঠ'.format(n)
 
 
+class RomanshLocale(locales.Locale):
+
+    names = ['rm', 'rm_ch']
+
+    past = 'avant {0}'
+    future = 'en {0}'
+
+    timeframes = {
+        'now': 'en quest mument',
+        'seconds': 'secundas',
+        'minute': 'ina minuta',
+        'minutes': '{0} minutas',
+        'hour': 'in\'ura',
+        'hours': '{0} ura',
+        'day': 'in di',
+        'days': '{0} dis',
+        'month': 'in mais',
+        'months': '{0} mais',
+        'year': 'in onn',
+        'years': '{0} onns',
+    }
+
+    month_names = [
+        '', 'schaner', 'favrer', 'mars', 'avrigl', 'matg', 'zercladur',
+        'fanadur', 'avust', 'settember', 'october', 'november', 'december'
+    ]
+
+    month_abbreviations = [
+        '', 'schan', 'fav', 'mars', 'avr', 'matg', 'zer', 'fan', 'avu',
+        'set', 'oct', 'nov', 'dec'
+    ]
+
+    day_names = [
+        '', 'glindesdi', 'mardi', 'mesemna', 'gievgia', 'venderdi',
+        'sonda', 'dumengia'
+    ]
+
+    day_abbreviations = [
+        '', 'gli', 'ma', 'me', 'gie', 've', 'so', 'du'
+    ]
+
+
 _locales = _map_locales()
