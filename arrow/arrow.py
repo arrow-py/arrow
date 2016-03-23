@@ -411,7 +411,7 @@ class Arrow(object):
             elif key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
                 relative_kwargs[key] = value
             elif key in ['week', 'quarter']:
-                raise AttributeError('setting absolute {} is not supported'.format(key))
+                raise AttributeError('setting absolute {0} is not supported'.format(key))
             elif key !='tzinfo':
                 raise AttributeError()
 
