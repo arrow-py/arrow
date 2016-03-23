@@ -1744,7 +1744,7 @@ class BengaliLocale(Locale):
             return '{0}ষ্ঠ'.format(n)
 
 
-class RomanshLocale(locales.Locale):
+class RomanshLocale(Locale):
 
     names = ['rm', 'rm_ch']
 
