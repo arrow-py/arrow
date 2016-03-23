@@ -375,6 +375,20 @@ class HungarianLocaleTests(Chai):
         assertEqual(self.locale._format_timeframe('now', 0), 'éppen most')
 
 
+class EsperantoLocaleTests(Chai):
+
+    def setUp(self):
+        super(EsperantoLocaleTests, self).setUp()
+
+        self.locale = locales.EsperantoLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 horoj')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'antaŭ horo')
+        assertEqual(self.locale._format_timeframe('hours', -2), 'antaŭ 2 horoj')
+        assertEqual(self.locale._format_timeframe('now', 0), 'nun')
+
+
 class ThaiLocaleTests(Chai):
 
     def setUp(self):
