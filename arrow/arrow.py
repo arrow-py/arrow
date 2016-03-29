@@ -413,7 +413,7 @@ class Arrow(object):
             elif key in ['week', 'quarter']:
                 raise AttributeError('setting absolute {0} is not supported'.format(key))
             elif key !='tzinfo':
-                raise AttributeError()
+                raise AttributeError('unknown attribute: "{0}"'.format(key))
 
         # core datetime does not support quarters, translate to months.
         if 'quarters' in relative_kwargs.keys():
