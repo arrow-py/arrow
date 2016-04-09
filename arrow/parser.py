@@ -14,7 +14,7 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
     _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
@@ -67,6 +67,10 @@ class DateTimeParser(object):
             'MMM': self._choice_re(self.locale.month_abbreviations[1:],
                                    re.IGNORECASE),
             'Do': re.compile(self.locale.ordinal_day_re),
+            'dddd': self._choice_re(self.locale.day_names[1:], re.IGNORECASE),
+            'ddd': self._choice_re(self.locale.day_abbreviations[1:],
+                                   re.IGNORECASE),
+            'd' : re.compile("[1-7]"),
             'a': self._choice_re(
                 (self.locale.meridians['am'], self.locale.meridians['pm'])
             ),
