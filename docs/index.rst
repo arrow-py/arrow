@@ -213,7 +213,7 @@ Get a new :class:`Arrow <arrow.Arrow>` object, with altered attributes, just as 
     >>> arw
     <Arrow [2013-05-12T03:29:35.334214+00:00]>
 
-    >>> arw.replace(hour=4, minute=40)
+    >>> arw.replace(hours=4, minutes=40)
     <Arrow [2013-05-12T04:40:35.334214+00:00]>
 
 Or, get one with attributes shifted forward or backward:
