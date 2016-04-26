@@ -1205,11 +1205,11 @@ class HindiLocale(Locale):
     future = '{0} बाद'
 
     timeframes = {
-        'now': 'अभि',
+        'now': 'अभी',
         'seconds': 'सेकंड्',
         'minute': 'एक मिनट ',
         'minutes': '{0} मिनट ',
-        'hour': 'एक घंट',
+        'hour': 'एक घंटा',
         'hours': '{0} घंटे',
         'day': 'एक दिन',
         'days': '{0} दिन',
