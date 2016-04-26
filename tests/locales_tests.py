@@ -223,19 +223,19 @@ class HindiLocaleTests(Chai):
 
     def test_format_relative_now(self):
 
-        result = self.locale._format_relative('अभि', 'now', 0)
+        result = self.locale._format_relative('अभी', 'now', 0)
 
-        assertEqual(result, 'अभि')
+        assertEqual(result, 'अभी')
 
     def test_format_relative_past(self):
 
-        result = self.locale._format_relative('एक घंट', 'hour', 1)
-        assertEqual(result, 'एक घंट बाद')
+        result = self.locale._format_relative('एक घंटा', 'hour', 1)
+        assertEqual(result, 'एक घंटा बाद')
 
     def test_format_relative_future(self):
 
-        result = self.locale._format_relative('एक घंट', 'hour', -1)
-        assertEqual(result, 'एक घंट पहले')
+        result = self.locale._format_relative('एक घंटा', 'hour', -1)
+        assertEqual(result, 'एक घंटा पहले')
 
 
 class CzechLocaleTests(Chai):
