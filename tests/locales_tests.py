@@ -219,7 +219,7 @@ class HindiLocaleTests(Chai):
     def test_format_timeframe(self):
 
         assertEqual(self.locale._format_timeframe('hours', 2), '2 घंटे')
-        assertEqual(self.locale._format_timeframe('hour', 0), 'एक घंट')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'एक घंटा')
 
     def test_format_relative_now(self):
 
