@@ -21,7 +21,7 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
         dt = datetime(2013, 2, 5, 12, 32, 51)
 
-        result = formatter.format(dt, 'MM-DD-YYYY hh:mm:ss a')
+        result = formatter.format(dt, 'MM-DD-YYYY hh:mm:ss a', 'en_us')
 
         assertEqual(result, '02-05-2013 12:32:51 pm')
 
