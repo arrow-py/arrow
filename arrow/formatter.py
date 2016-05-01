@@ -7,7 +7,7 @@ from dateutil import tz as dateutil_tz
 from arrow import util, locales
 
 
-def format(dt, str_format, locale):
+def format(dt, str_format, locale='en_us'):
 
     locale = locales.get_locale(locale)
     FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
