@@ -421,7 +421,7 @@ class Arrow(object):
                 relative_kwargs['months'] = 0
             relative_kwargs['months'] += (value * self._MONTHS_PER_QUARTER)
             relative_kwargs.pop('quarters')
-            
+
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs)
 
@@ -588,7 +588,7 @@ class Arrow(object):
 
         '''
 
-        return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
+        return formatter.format(self._datetime, fmt, locale)
 
 
     def humanize(self, other=None, locale='en_us', only_distance=False):
