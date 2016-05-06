@@ -102,7 +102,6 @@ class ItalianLocalesTests(Chai):
         locale = locales.ItalianLocale()
 
         assertEqual(locale.ordinal_number(1), '1º')
-        assertEqual(locale.ordinal_number(2), '2ª')
 
 
 class SpanishLocalesTests(Chai):
@@ -111,7 +110,6 @@ class SpanishLocalesTests(Chai):
         locale = locales.SpanishLocale()
 
         assertEqual(locale.ordinal_number(1), '1º')
-        assertEqual(locale.ordinal_number(2), '2ª')
 
 
 class FrenchLocalesTests(Chai):
