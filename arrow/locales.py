@@ -559,8 +559,8 @@ class KoreanLocale(Locale):
 
     timeframes = {
         'now': '지금',
-        'seconds': '몇초',
-        'minute': '일 분',
+        'seconds': '몇 초',
+        'minute': '1분',
         'minutes': '{0}분',
         'hour': '1시간',
         'hours': '{0}시간',
