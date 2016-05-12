@@ -263,10 +263,10 @@ class ItalianLocale(Locale):
     day_names = ['', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica']
     day_abbreviations = ['', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom']
 
-    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
+    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=[ºª]))[ºª])'
 
     def _ordinal_number(self, n):
-        return '{0}°'.format(n)
+        return '{0}º'.format(n)
 
 
 class SpanishLocale(Locale):
@@ -297,10 +297,10 @@ class SpanishLocale(Locale):
     day_names = ['', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo']
     day_abbreviations = ['', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']
 
-    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=°))°)'
+    ordinal_day_re = r'((?P<value>[1-3]?[0-9](?=[ºª]))[ºª])'
 
     def _ordinal_number(self, n):
-        return '{0}°'.format(n)
+        return '{0}º'.format(n)
 
 
 class FrenchLocale(Locale):

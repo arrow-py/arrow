@@ -646,13 +646,13 @@ class DateTimeParserMonthOrdinalDayTests(Chai):
     def test_italian(self):
         parser_ = parser.DateTimeParser('it_it')
 
-        assertEqual(parser_.parse('Gennaio 1°, 2013', 'MMMM Do, YYYY'),
+        assertEqual(parser_.parse('Gennaio 1º, 2013', 'MMMM Do, YYYY'),
                     datetime(2013, 1, 1))
 
     def test_spanish(self):
         parser_ = parser.DateTimeParser('es_es')
 
-        assertEqual(parser_.parse('Enero 1°, 2013', 'MMMM Do, YYYY'),
+        assertEqual(parser_.parse('Enero 1º, 2013', 'MMMM Do, YYYY'),
                     datetime(2013, 1, 1))
 
     def test_french(self):
