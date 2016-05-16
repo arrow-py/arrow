@@ -326,6 +326,6 @@ class TzinfoParser(object):
                 tzinfo = tz.gettz(string)
 
         if tzinfo is None:
-            raise ParserError('Could not parse timezone expression "{0}"', string)
+            raise ParserError('Could not parse timezone expression "{0}"'.format(string))
 
         return tzinfo
