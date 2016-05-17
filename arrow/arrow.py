@@ -12,6 +12,8 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 import calendar
 import sys
+import warnings
+
 
 from arrow import util, locales, parser, formatter
 
@@ -383,6 +385,12 @@ class Arrow(object):
         >>> arw.replace(tzinfo=tz.tzlocal())
         <Arrow [2013-05-11T22:27:34.787885-07:00]>
 
+       NOTE: Deprecated in next release
+       Use plural property names to shift their current value relatively:
+
+       >>> arw.replace(years=1, months=-1)
+       <Arrow [2014-04-11T22:27:34.787885+00:00]>
+
         Recognized timezone expressions:
 
             - A ``tzinfo`` object.
@@ -393,17 +401,25 @@ class Arrow(object):
         '''
 
         absolute_kwargs = {}
+        relative_kwargs = {}  # TODO: DEPRECATED; remove in next release
 
         for key, value in kwargs.items():
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
+            elif key in self._ATTRS_PLURAL or key == 'weeks':
+                # TODO: DEPRECATED
+                warnings.warn("replace() with plural property to shift value"
+                              "is deprecated, use shift() instead",
+                              DeprecationWarning)
+                relative_kwargs[key] = value
             elif key == 'week':
                 raise AttributeError('setting absolute week is not supported')
             elif key !='tzinfo':
                 raise AttributeError()
 
         current = self._datetime.replace(**absolute_kwargs)
+        current += relativedelta(**relative_kwargs) # TODO: DEPRECATED
 
         tzinfo = kwargs.get('tzinfo')
 

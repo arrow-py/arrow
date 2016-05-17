@@ -7,6 +7,7 @@ from chai import Chai
 from datetime import date, datetime, timedelta
 from dateutil import tz
 import simplejson as json
+import warnings
 import calendar
 import pickle
 import time
@@ -202,6 +203,28 @@ class ArrowComparisonTests(Chai):
         assertFalse(self.arrow != self.arrow)
         assertFalse(self.arrow != self.arrow.datetime)
         assertTrue(self.arrow != 'abc')
+
+    def test_deprecated_replace(self):
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            self.arrow.replace(weeks=1)
+            # Verify some things
+            assert len(w) == 1
+            assert issubclass(w[-1].category, DeprecationWarning)
+            assert "deprecated" in str(w[-1].message)
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            self.arrow.replace(hours=1)
+            # Verify some things
+            assert len(w) == 1
+            assert issubclass(w[-1].category, DeprecationWarning)
+            assert "deprecated" in str(w[-1].message)
 
     def test_gt(self):
 
