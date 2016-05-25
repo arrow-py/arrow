@@ -1034,7 +1034,7 @@ class TurkishLocale(Locale):
         'days': '{0} gün',
         'month': 'bir ay',
         'months': '{0} ay',
-        'year': 'a yıl',
+        'year': 'yıl',
         'years': '{0} yıl',
     }
 
@@ -1045,6 +1045,37 @@ class TurkishLocale(Locale):
 
     day_names = ['', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
     day_abbreviations = ['', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']
+
+
+class AzerbaijaniLocale(Locale):
+
+    names = ['az', 'az_az']
+
+    past = '{0} əvvəl'
+    future = '{0} sonra'
+
+    timeframes = {
+        'now': 'indi',
+        'seconds': 'saniyə',
+        'minute': 'bir dəqiqə',
+        'minutes': '{0} dəqiqə',
+        'hour': 'bir saat',
+        'hours': '{0} saat',
+        'day': 'bir gün',
+        'days': '{0} gün',
+        'month': 'bir ay',
+        'months': '{0} ay',
+        'year': 'il',
+        'years': '{0} il',
+    }
+
+    month_names = ['', 'Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul',
+        'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr']
+    month_abbreviations = ['', 'Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq',
+        'Sen', 'Okt', 'Noy', 'Dek']
+
+    day_names = ['', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar']
+    day_abbreviations = ['', 'Ber', 'Çax', 'Çər', 'Cax', 'Cüm', 'Şnb', 'Bzr']
 
 
 class ArabicLocale(Locale):
