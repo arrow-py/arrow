@@ -13,18 +13,17 @@ from arrow.factory import ArrowFactory
 # internal default factory.
 _factory = ArrowFactory()
 
+# FIXME Put the docs here, not in the factory
 
 def get(*args, **kwargs):
-    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
-    ``get`` method.
+    ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``get`` method.
 
     '''
 
     return _factory.get(*args, **kwargs)
 
 def utcnow():
-    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
-    ``utcnow`` method.
+    ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``utcnow`` method.
 
     '''
 
@@ -32,8 +31,7 @@ def utcnow():
 
 
 def now(tz=None):
-    ''' Implements the default :class:`ArrowFactory <arrow.factory.ArrowFactory>`
-    ``now`` method.
+    ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``now`` method.
 
     '''
 
@@ -51,5 +49,5 @@ def factory(type):
     return ArrowFactory(type)
 
 
+# FIXME iso?
 __all__ = ['get', 'utcnow', 'now', 'factory', 'iso']
-

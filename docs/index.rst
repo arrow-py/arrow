@@ -13,12 +13,12 @@ Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ a
 ----
 Why?
 ----
-Python's standard library and some other low-level modules have near-complete date, time and time zone functionality but don't work very well from a usability perspective:
+Python's standard library and some other low-level modules have near-complete date, time and timezone functionality but don't work very well from a usability perspective:
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz and more
 - Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Time zones and timestamp conversions are verbose and unpleasant
-- Time zone naivety is the norm
+- Timezones and timestamp conversions are verbose and unpleasant
+- Timezone naivety is the norm
 - Gaps in functionality:  ISO-8601 parsing, time spans, humanization
 
 --------
@@ -26,8 +26,8 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime
-- Supports Python 2.6, 2.7 and 3.3
-- Time zone-aware & UTC by default
+- Supports Python 2.6, 2.7 and 3.3+
+- Timezone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
 - Formats and parses strings automatically
@@ -115,19 +115,19 @@ Create from timestamps (ints or floats, or strings that convert to a float):
     >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
-Use a naive or timezone-aware datetime, or flexibly specify a time zone:
+Use a naive or timezone-aware datetime, or flexibly specify a timezone:
 
 .. code-block:: python
 
     >>> arrow.get(datetime.utcnow())
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
-    >>> arrow.get(datetime.now(), 'US/Pacific')
-    <Arrow [2013-05-06T21:24:32.736373-07:00]>
+    >>> arrow.get(datetime(2013, 5, 5), 'US/Pacific')
+    <Arrow [2013-05-05T00:00:00-07:00]>
 
     >>> from dateutil import tz
-    >>> arrow.get(datetime.now(), tz.gettz('US/Pacific'))
-    <Arrow [2013-05-06T21:24:41.129262-07:00]>
+    >>> arrow.get(datetime(2013, 5, 5), tz.gettz('US/Pacific'))
+    <Arrow [2013-05-05T00:00:00-07:00]>
 
     >>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
     <Arrow [2013-05-06T21:24:49.552236-07:00]>
@@ -222,6 +222,13 @@ Or, get one with attributes shifted forward or backward:
 
     >>> arw.replace(weeks=+3)
     <Arrow [2013-06-02T03:29:35.334214+00:00]>
+
+Even replace the timezone without altering other attributes:
+
+.. code-block:: python
+
+    >>> arw.replace(tzinfo='US/Pacific')
+    <Arrow [2013-05-12T03:29:35.334214-07:00]>
 
 
 Format

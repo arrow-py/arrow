@@ -29,9 +29,16 @@ class Arrow(object):
     :param minute: (optional) the minute, Defaults to 0.
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults 0.
-    :param tzinfo: (optional) the ``tzinfo`` object.  Defaults to ``None``.
+    :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
 
-    If tzinfo is None, it is assumed to be UTC on creation.
+    .. _tz-expr:
+
+    Recognized timezone expressions:
+
+        - A ``tzinfo`` object.
+        - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
+        - A ``str`` in ISO-8601 style, as in '+07:00'.
+        - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
     Usage::
 
@@ -40,6 +47,7 @@ class Arrow(object):
         <Arrow [2013-05-05T12:30:45+00:00]>
 
     '''
+    # FIXME Why not accept the same set of timezone expressions everywhere?
 
     resolution = datetime.resolution
 
@@ -62,7 +70,8 @@ class Arrow(object):
 
     @classmethod
     def now(cls, tzinfo=None):
-        '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now".
+        '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
+        timezone.
 
         :param tzinfo: (optional) a ``tzinfo`` object. Defaults to local time.
 
@@ -88,10 +97,16 @@ class Arrow(object):
 
     @classmethod
     def fromtimestamp(cls, timestamp, tzinfo=None):
-        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp.
+        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
+        the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
+
+        Timestamps should always be UTC. If you have a non-UTC timestamp:
+
+            >>> arrow.Arrow.utcfromtimestamp(1367900664) .replace(tzinfo='US/Pacific')
+            <Arrow [2013-05-07T04:24:24-07:00]>
 
         '''
 
@@ -118,11 +133,18 @@ class Arrow(object):
 
     @classmethod
     def fromdatetime(cls, dt, tzinfo=None):
-        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and optional
-        ``tzinfo`` object.
+        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
+        optional replacement ``tzinfo`` object.
 
         :param dt: the ``datetime``
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to UTC.
+        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to dt.tzinfo, or UTC if naive.
+
+        If you only want to replace the timezone of naive datetimes:
+
+            >>> dt
+            datetime.datetime(2013, 5, 5, 0, 0, tzinfo=tzutc())
+            >>> arrow.Arrow.fromdatetime(dt, dt.tzinfo or 'US/Pacific')
+            <Arrow [2013-05-05T00:00:00+00:00]>
 
         '''
 
@@ -134,7 +156,7 @@ class Arrow(object):
     @classmethod
     def fromdate(cls, date, tzinfo=None):
         ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
-        ``tzinfo`` object.  Time values are set to 0.
+        replacement ``tzinfo`` object.  Time values are set to 0.
 
         :param date: the ``date``
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to UTC.
@@ -147,15 +169,19 @@ class Arrow(object):
     @classmethod
     def strptime(cls, date_str, fmt, tzinfo=None):
         ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
-        in the style of ``datetime.strptime``.
+        in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
 
         :param date_str: the date string.
         :param fmt: the format string.
-        :param tzinfo: (optional) an optional ``tzinfo``
+        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to the parsed timezone if found,
+            otherwise UTC.
+
         '''
+        # FIXME What if there's a %Z but it's missing in date_str?
+        # FIXME Document how to replace only if not present
 
         dt = datetime.strptime(date_str, fmt)
-        tzinfo = tzinfo or dt.tzinfo
+        tzinfo = tzinfo or dt.tzinfo or dateutil_tz.tzutc()
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
@@ -165,32 +191,27 @@ class Arrow(object):
 
     @classmethod
     def range(cls, frame, start, end=None, tz=None, limit=None):
-        ''' Returns an array of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
+        ''' Returns a list of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         an iteration of time between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
-        :param tz: (optional) A timezone expression.  Defaults to UTC.
+        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         :param limit: (optional) A maximum number of tuples to return.
 
-        **NOTE**: the **end** or **limit** must be provided.  Call with **end** alone to
-        return the entire range, with **limit** alone to return a maximum # of results from the
-        start, and with both to cap a range at a maximum # of results.
+        **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
+        return the entire range.  Call with ``limit`` alone to return a maximum # of results from
+        the start.  Call with both to cap a range at a maximum # of results.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second
+        **NOTE**: Unlike Python's ``range``, ``end`` **may** be included in the returned list.
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Recognized datetime expressions:
 
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
-
-        Recognized timezone expressions:
-
-            - A ``tzinfo`` object.
-            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-            - A ``str`` in ISO-8601 style, as in '+07:00'.
-            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
         Usage:
 
@@ -206,6 +227,7 @@ class Arrow(object):
             <Arrow [2013-05-05T16:30:00+00:00]>
 
         '''
+        # FIXME Role of tz?
 
         _, frame_relative, relative_steps = cls._get_frames(frame)
 
@@ -229,32 +251,28 @@ class Arrow(object):
 
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None):
-        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        ''' Returns a list of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
-        :param tz: (optional) A timezone expression.  Defaults to UTC.
+        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         :param limit: (optional) A maximum number of tuples to return.
 
-        **NOTE**: the **end** or **limit** must be provided.  Call with **end** alone to
-        return the entire range, with **limit** alone to return a maximum # of results from the
-        start, and with both to cap a range at a maximum # of results.
+        **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
+        return the entire range.  Call with ``limit`` alone to return a maximum # of results from
+        the start.  Call with both to cap a range at a maximum # of results.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second
+        **NOTE**: Unlike Python's ``range``, ``end`` **may** be included in the returned list of
+        tuples.
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Recognized datetime expressions:
 
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
-
-        Recognized timezone expressions:
-
-            - A ``tzinfo`` object.
-            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-            - A ``str`` in ISO-8601 style, as in '+07:00'.
-            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
         Usage:
 
@@ -270,6 +288,7 @@ class Arrow(object):
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
 
         '''
+        # FIXME Role of tz?
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
         start = cls.fromdatetime(start, tzinfo).span(frame)[0]
         _range = cls.range(frame, start, end, tz, limit)
@@ -328,6 +347,7 @@ class Arrow(object):
     def tzinfo(self, tzinfo):
         ''' Sets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
 
+        # FIXME Whoah!  Arrows are mutable?  I don't think I like that...
         self._datetime = self._datetime.replace(tzinfo=tzinfo)
 
     @property
@@ -344,13 +364,15 @@ class Arrow(object):
 
     @property
     def timestamp(self):
-        ''' Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+        ''' Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        UTC time. '''
 
         return calendar.timegm(self._datetime.utctimetuple())
 
     @property
     def float_timestamp(self):
-        ''' Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+        ''' Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        object, in UTC time. '''
 
         return self.timestamp + float(self.microsecond) / 1000000
 
@@ -387,17 +409,11 @@ class Arrow(object):
         >>> arw.replace(years=1, months=-1)
         <Arrow [2014-04-11T22:27:34.787885+00:00]>
 
-        You can also provide a timezone expression can also be replaced:
+        You can also replace the timezone without conversion, using a
+        :ref:`timezone expression <tz-expr>`:
 
         >>> arw.replace(tzinfo=tz.tzlocal())
         <Arrow [2013-05-11T22:27:34.787885-07:00]>
-
-        Recognized timezone expressions:
-
-            - A ``tzinfo`` object.
-            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-            - A ``str`` in ISO-8601 style, as in '+07:00'.
-            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
         '''
 
@@ -421,7 +437,7 @@ class Arrow(object):
                 relative_kwargs['months'] = 0
             relative_kwargs['months'] += (value * self._MONTHS_PER_QUARTER)
             relative_kwargs.pop('quarters')
-            
+
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs)
 
@@ -437,14 +453,7 @@ class Arrow(object):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted to the target
         timezone.
 
-        :param tz: an expression representing a timezone.
-
-        Recognized timezone expressions:
-
-            - A ``tzinfo`` object.
-            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-            - A ``str`` in ISO-8601 style, as in '+07:00'.
-            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
+        :param tz: A :ref:`timezone expression <tz-expr>`.
 
         Usage::
 
@@ -484,7 +493,7 @@ class Arrow(object):
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param count: (optional) the number of frames to span.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second
+        Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Usage::
 
@@ -772,7 +781,7 @@ class Arrow(object):
         return self._datetime.timetz()
 
     def astimezone(self, tz):
-        ''' Returns a ``datetime`` object, adjusted to the specified tzinfo.
+        ''' Returns a ``datetime`` object, converted to the specified timezone.
 
         :param tz: a ``tzinfo`` object.
 
@@ -781,12 +790,14 @@ class Arrow(object):
         return self._datetime.astimezone(tz)
 
     def utcoffset(self):
-        ''' Returns a ``timedelta`` object representing the whole number of minutes difference from UTC time. '''
+        ''' Returns a ``timedelta`` object representing the whole number of minutes difference from
+        UTC time. '''
 
         return self._datetime.utcoffset()
 
     def dst(self):
         ''' Returns the daylight savings time adjustment. '''
+
         return self._datetime.dst()
 
     def timetuple(self):
@@ -840,6 +851,7 @@ class Arrow(object):
 
     def for_json(self):
         '''Serializes for the ``for_json`` protocol of simplejson.'''
+
         return self.isoformat()
 
     # internal tools.
