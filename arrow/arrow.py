@@ -196,12 +196,17 @@ class Arrow(object):
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
-        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
+        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
+            ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
         the start.  Call with both to cap a range at a maximum # of results.
+
+        **NOTE**: ``tz`` internally **replaces** the timezones of both ``start`` and ``end`` before
+        iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
+        same timezone and no ``tz``.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -234,7 +239,6 @@ class Arrow(object):
             <Arrow [2013-05-05T13:30:00+00:00]>
 
         '''
-        # FIXME Role of tz?
 
         _, frame_relative, relative_steps = cls._get_frames(frame)
 
@@ -264,12 +268,17 @@ class Arrow(object):
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
-        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
+        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
+            ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
         the start.  Call with both to cap a range at a maximum # of results.
+
+        **NOTE**: ``tz`` internally **replaces** the timezones of both ``start`` and ``end`` before
+        iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
+        same timezone and no ``tz``.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -296,7 +305,7 @@ class Arrow(object):
             (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:00]>)
 
         '''
-        # FIXME Role of tz?
+
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
         start = cls.fromdatetime(start, tzinfo).span(frame)[0]
         _range = cls.range(frame, start, end, tz, limit)
