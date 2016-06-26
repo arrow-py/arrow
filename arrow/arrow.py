@@ -47,7 +47,6 @@ class Arrow(object):
         <Arrow [2013-05-05T12:30:45+00:00]>
 
     '''
-    # FIXME Why not accept the same set of timezone expressions everywhere?
 
     resolution = datetime.resolution
 
@@ -103,7 +102,7 @@ class Arrow(object):
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
 
-        Timestamps should always be UTC. If you have a non-UTC timestamp:
+        Timestamps should always be UTC. If you have a non-UTC timestamp::
 
             >>> arrow.Arrow.utcfromtimestamp(1367900664) .replace(tzinfo='US/Pacific')
             <Arrow [2013-05-07T04:24:24-07:00]>
@@ -139,7 +138,7 @@ class Arrow(object):
         :param dt: the ``datetime``
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to dt.tzinfo, or UTC if naive.
 
-        If you only want to replace the timezone of naive datetimes:
+        If you only want to replace the timezone of naive datetimes::
 
             >>> dt
             datetime.datetime(2013, 5, 5, 0, 0, tzinfo=tzutc())
@@ -204,8 +203,6 @@ class Arrow(object):
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
         the start.  Call with both to cap a range at a maximum # of results.
 
-        **NOTE**: Unlike Python's ``range``, ``end`` **may** be included in the returned list.
-
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Recognized datetime expressions:
@@ -213,18 +210,28 @@ class Arrow(object):
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
 
-        Usage:
+        Usage::
 
             >>> start = datetime(2013, 5, 5, 12, 30)
             >>> end = datetime(2013, 5, 5, 17, 15)
             >>> for r in arrow.Arrow.range('hour', start, end):
-            ...     print repr(r)
+            ...     print(repr(r))
             ...
             <Arrow [2013-05-05T12:30:00+00:00]>
             <Arrow [2013-05-05T13:30:00+00:00]>
             <Arrow [2013-05-05T14:30:00+00:00]>
             <Arrow [2013-05-05T15:30:00+00:00]>
             <Arrow [2013-05-05T16:30:00+00:00]>
+
+        **NOTE**: Unlike Python's ``range``, ``end`` *may* be included in the returned list::
+
+            >>> start = datetime(2013, 5, 5, 12, 30)
+            >>> end = datetime(2013, 5, 5, 13, 30)
+            >>> for r in arrow.Arrow.range('hour', start, end):
+            ...     print(repr(r))
+            ...
+            <Arrow [2013-05-05T12:30:00+00:00]>
+            <Arrow [2013-05-05T13:30:00+00:00]>
 
         '''
         # FIXME Role of tz?
@@ -264,9 +271,6 @@ class Arrow(object):
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
         the start.  Call with both to cap a range at a maximum # of results.
 
-        **NOTE**: Unlike Python's ``range``, ``end`` **may** be included in the returned list of
-        tuples.
-
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Recognized datetime expressions:
@@ -274,18 +278,22 @@ class Arrow(object):
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
 
+        **NOTE**: Unlike Python's ``range``, ``end`` will *always* be included in the returned list
+        of timespans.
+
         Usage:
 
             >>> start = datetime(2013, 5, 5, 12, 30)
             >>> end = datetime(2013, 5, 5, 17, 15)
             >>> for r in arrow.Arrow.span_range('hour', start, end):
-            ...     print r
+            ...     print(r)
             ...
             (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T14:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T15:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:00]>)
 
         '''
         # FIXME Role of tz?
@@ -347,7 +355,6 @@ class Arrow(object):
     def tzinfo(self, tzinfo):
         ''' Sets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
 
-        # FIXME Whoah!  Arrows are mutable?  I don't think I like that...
         self._datetime = self._datetime.replace(tzinfo=tzinfo)
 
     @property
@@ -395,25 +402,25 @@ class Arrow(object):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Use single property names to set their value absolutely:
+        Use single property names to set their value absolutely::
 
-        >>> import arrow
-        >>> arw = arrow.utcnow()
-        >>> arw
-        <Arrow [2013-05-11T22:27:34.787885+00:00]>
-        >>> arw.replace(year=2014, month=6)
-        <Arrow [2014-06-11T22:27:34.787885+00:00]>
+            >>> import arrow
+            >>> arw = arrow.utcnow()
+            >>> arw
+            <Arrow [2013-05-11T22:27:34.787885+00:00]>
+            >>> arw.replace(year=2014, month=6)
+            <Arrow [2014-06-11T22:27:34.787885+00:00]>
 
-        Use plural property names to shift their current value relatively:
+        Use plural property names to shift their current value relatively::
 
-        >>> arw.replace(years=1, months=-1)
-        <Arrow [2014-04-11T22:27:34.787885+00:00]>
+            >>> arw.replace(years=1, months=-1)
+            <Arrow [2014-04-11T22:27:34.787885+00:00]>
 
         You can also replace the timezone without conversion, using a
-        :ref:`timezone expression <tz-expr>`:
+        :ref:`timezone expression <tz-expr>`::
 
-        >>> arw.replace(tzinfo=tz.tzlocal())
-        <Arrow [2013-05-11T22:27:34.787885-07:00]>
+            >>> arw.replace(tzinfo=tz.tzlocal())
+            <Arrow [2013-05-11T22:27:34.787885-07:00]>
 
         '''
 
@@ -607,6 +614,7 @@ class Arrow(object):
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
+
         Usage::
 
             >>> earlier = arrow.utcnow().replace(hours=-2)

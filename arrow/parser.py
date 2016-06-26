@@ -292,7 +292,6 @@ class DateTimeParser(object):
         return re.compile('({0})'.format('|'.join(choices)), flags=flags)
 
 
-# FIXME Expose as arrow.gettz?
 class TzinfoParser(object):
 
     _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)?')

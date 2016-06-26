@@ -13,7 +13,6 @@ from arrow.factory import ArrowFactory
 # internal default factory.
 _factory = ArrowFactory()
 
-# FIXME Put the docs here, not in the factory
 
 def get(*args, **kwargs):
     ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``get`` method.
@@ -49,5 +48,4 @@ def factory(type):
     return ArrowFactory(type)
 
 
-# FIXME iso?
-__all__ = ['get', 'utcnow', 'now', 'factory', 'iso']
+__all__ = ['get', 'utcnow', 'now', 'factory']

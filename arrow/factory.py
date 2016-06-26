@@ -72,9 +72,7 @@ class ArrowFactory(object):
             >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
 
-        FIXME This is a conversion, not a replacement!  One of these should go away.
-
-        **One** ``tzinfo``, to get the current time in that timezone::
+        **One** ``tzinfo``, to get the current time **converted** to that timezone::
 
             >>> arrow.get(tz.tzlocal())
             <Arrow [2013-05-07T22:57:28.484717-07:00]>
