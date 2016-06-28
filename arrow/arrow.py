@@ -179,7 +179,7 @@ class Arrow(object):
         '''
 
         dt = datetime.strptime(date_str, fmt)
-        tzinfo = tzinfo or dt.tzinfo or dateutil_tz.tzutc()
+        tzinfo = tzinfo or dt.tzinfo
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
