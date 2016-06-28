@@ -104,7 +104,7 @@ class Arrow(object):
 
         Timestamps should always be UTC. If you have a non-UTC timestamp::
 
-            >>> arrow.Arrow.utcfromtimestamp(1367900664) .replace(tzinfo='US/Pacific')
+            >>> arrow.Arrow.utcfromtimestamp(1367900664).replace(tzinfo='US/Pacific')
             <Arrow [2013-05-07T04:24:24-07:00]>
 
         '''
@@ -133,10 +133,11 @@ class Arrow(object):
     @classmethod
     def fromdatetime(cls, dt, tzinfo=None):
         ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
-        optional replacement ``tzinfo`` object.
+        optional replacement timezone.
 
         :param dt: the ``datetime``
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to dt.tzinfo, or UTC if naive.
+        :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to ``dt``'s
+            timezone, or UTC if naive.
 
         If you only want to replace the timezone of naive datetimes::
 
@@ -155,10 +156,10 @@ class Arrow(object):
     @classmethod
     def fromdate(cls, date, tzinfo=None):
         ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
-        replacement ``tzinfo`` object.  Time values are set to 0.
+        replacement timezone.  Time values are set to 0.
 
         :param date: the ``date``
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to UTC.
+        :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         '''
 
         tzinfo = tzinfo or dateutil_tz.tzutc()
@@ -172,12 +173,10 @@ class Arrow(object):
 
         :param date_str: the date string.
         :param fmt: the format string.
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to the parsed timezone if found,
-            otherwise UTC.
+        :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to the parsed
+            timezone if ``fmt`` contains a timezone directive, otherwise UTC.
 
         '''
-        # FIXME What if there's a %Z but it's missing in date_str?
-        # FIXME Document how to replace only if not present
 
         dt = datetime.strptime(date_str, fmt)
         tzinfo = tzinfo or dt.tzinfo or dateutil_tz.tzutc()
@@ -315,11 +314,6 @@ class Arrow(object):
     # representations
 
     def __repr__(self):
-
-        dt = self._datetime
-        attrs = ', '.join([str(i) for i in [dt.year, dt.month, dt.day, dt.hour, dt.minute,
-            dt.second, dt.microsecond]])
-
         return '<{0} [{1}]>'.format(self.__class__.__name__, self.__str__())
 
     def __str__(self):
@@ -374,7 +368,8 @@ class Arrow(object):
 
     @property
     def naive(self):
-        ''' Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+        ''' Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        object. '''
 
         return self._datetime.replace(tzinfo=None)
 
@@ -793,7 +788,8 @@ class Arrow(object):
         return self._datetime.time()
 
     def timetz(self):
-        ''' Returns a ``time`` object with the same hour, minute, second, microsecond and tzinfo. '''
+        ''' Returns a ``time`` object with the same hour, minute, second, microsecond and
+        tzinfo. '''
 
         return self._datetime.timetz()
 
