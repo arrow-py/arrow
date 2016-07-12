@@ -272,7 +272,7 @@ class ArrowMathTests(Chai):
     def test_add_other(self):
 
         with assertRaises(TypeError):
-            self.arrow.__add__(1)
+            self.arrow + 1
 
     def test_radd(self):
 
@@ -301,7 +301,7 @@ class ArrowMathTests(Chai):
     def test_sub_other(self):
 
         with assertRaises(TypeError):
-            self.arrow.__sub__(object())
+            self.arrow - object()
 
     def test_rsub_datetime(self):
 
@@ -312,7 +312,7 @@ class ArrowMathTests(Chai):
     def test_rsub_other(self):
 
         with assertRaises(TypeError):
-            self.arrow.__rsub__(timedelta(days=1))
+            timedelta(days=1) - self.arrow
 
 
 class ArrowDatetimeInterfaceTests(Chai):
