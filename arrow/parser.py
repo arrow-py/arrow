@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from datetime import datetime
 from dateutil import tz
 import re
-
 from arrow import locales
 
 
@@ -15,7 +14,8 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
+    _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
@@ -24,7 +24,9 @@ class DateTimeParser(object):
     _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
     _FOUR_DIGIT_RE = re.compile('\d{4}')
     _TWO_DIGIT_RE = re.compile('\d{2}')
-    _TZ_RE = re.compile('[+\-]?\d{2}:?\d{2}')
+    _TZ_RE = re.compile('[+\-]?\d{2}:?(\d{2})?')
+    _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
+
 
     _BASE_INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
@@ -42,6 +44,7 @@ class DateTimeParser(object):
         'ss': _TWO_DIGIT_RE,
         's': _ONE_OR_TWO_DIGIT_RE,
         'X': re.compile('\d+'),
+        'ZZZ': _TZ_NAME_RE,
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
         'SSSSSS': _ONE_THROUGH_SIX_DIGIT_RE,
@@ -64,6 +67,10 @@ class DateTimeParser(object):
             'MMM': self._choice_re(self.locale.month_abbreviations[1:],
                                    re.IGNORECASE),
             'Do': re.compile(self.locale.ordinal_day_re),
+            'dddd': self._choice_re(self.locale.day_names[1:], re.IGNORECASE),
+            'ddd': self._choice_re(self.locale.day_abbreviations[1:],
+                                   re.IGNORECASE),
+            'd' : re.compile("[1-7]"),
             'a': self._choice_re(
                 (self.locale.meridians['am'], self.locale.meridians['pm'])
             ),
@@ -120,10 +127,16 @@ class DateTimeParser(object):
         # we construct a new string by replacing each
         # token by its pattern:
         # 'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
-        fmt_pattern = fmt
         tokens = []
         offset = 0
-        for m in self._FORMAT_RE.finditer(fmt):
+
+        # Extract the bracketed expressions to be reinserted later.
+        escaped_fmt = re.sub(self._ESCAPE_RE, "#" , fmt)
+        escaped_data = re.findall(self._ESCAPE_RE, fmt)
+
+        fmt_pattern = escaped_fmt
+
+        for m in self._FORMAT_RE.finditer(escaped_fmt):
             token = m.group(0)
             try:
                 input_re = self._input_re_map[token]
@@ -137,9 +150,20 @@ class DateTimeParser(object):
             # are returned in the order found by finditer.
             fmt_pattern = fmt_pattern[:m.start() + offset] + input_pattern + fmt_pattern[m.end() + offset:]
             offset += len(input_pattern) - (m.end() - m.start())
-        match = re.search(fmt_pattern, string, flags=re.IGNORECASE)
+
+        final_fmt_pattern = ""
+        a = fmt_pattern.split("#")
+        b = escaped_data
+
+        # Due to the way Python splits, 'a' will always be longer
+        for i in range(len(a)):
+            final_fmt_pattern += a[i]
+            if i < len(b):
+                final_fmt_pattern += b[i][1:-1]
+
+        match = re.search(final_fmt_pattern, string, flags=re.IGNORECASE)
         if match is None:
-            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''.format(fmt_pattern, string))
+            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''.format(final_fmt_pattern, string))
         parts = {}
         for token in tokens:
             if token == 'Do':
@@ -158,7 +182,7 @@ class DateTimeParser(object):
             parts['year'] = 1900 + value if value > 68 else 2000 + value
 
         elif token in ['MMMM', 'MMM']:
-            parts['month'] = self.locale.month_number(value.capitalize())
+            parts['month'] = self.locale.month_number(value.lower())
 
         elif token in ['MM', 'M']:
             parts['month'] = int(value)
@@ -194,7 +218,7 @@ class DateTimeParser(object):
         elif token == 'X':
             parts['timestamp'] = int(value)
 
-        elif token in ['ZZ', 'Z']:
+        elif token in ['ZZZ', 'ZZ', 'Z']:
             parts['tzinfo'] = TzinfoParser.parse(value)
 
         elif token in ['a', 'A']:
@@ -270,7 +294,7 @@ class DateTimeParser(object):
 
 class TzinfoParser(object):
 
-    _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)')
+    _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)?')
 
     @classmethod
     def parse(cls, string):
@@ -289,6 +313,8 @@ class TzinfoParser(object):
 
             if iso_match:
                 sign, hours, minutes = iso_match.groups()
+                if minutes is None:
+                    minutes = 0
                 seconds = int(hours) * 3600 + int(minutes) * 60
 
                 if sign == '-':

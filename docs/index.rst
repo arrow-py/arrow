@@ -26,11 +26,12 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime
-- Supports Python 2.6, 2.7 and 3.3
+- Supports Python 2.6, 2.7, 3.3, 3.4 and 3.5
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings, including ISO-8601-formatted strings automatically
+- Formats and parses strings automatically
+- Partial ISO-8601 support
 - Timezone conversion
 - Timestamp available as a property
 - Generates time spans, ranges, floors and ceilings in time frames from year to microsecond
@@ -145,7 +146,7 @@ Search a date in a string:
     >>> arrow.get('June was born in May 1980', 'MMMM YYYY')
     <Arrow [1980-05-01T00:00:00+00:00]>
 
-Many ISO-8601 compliant strings are recognized and parsed without a format string:
+Some ISO-8601 compliant strings are recognized and parsed without a format string:
 
     >>> arrow.get('2013-09-30T15:34:00.000-07:00')
     <Arrow [2013-09-30T15:34:00-07:00]>
@@ -364,7 +365,7 @@ Then get and use a factory for it:
 
 .. code-block:: python
 
-    >>> factory = arrow.Factory(CustomArrow)
+    >>> factory = arrow.ArrowFactory(CustomArrow)
     >>> custom = factory.utcnow()
     >>> custom
     >>> <CustomArrow [2013-05-27T23:35:35.533160+00:00]>
@@ -434,7 +435,9 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |S             |0, 1, 2 ... 8, 9                           |
 +--------------------------------+--------------+-------------------------------------------+
-|**Timezone**                    |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
+|**Timezone**                    |ZZZ           |Asia/Baku, Europe/Warsaw, GMT ... [#t3]_   |
++--------------------------------+--------------+-------------------------------------------+
+|                                |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Z             |-0700, -0600 ... +0600, +0700              |
 +--------------------------------+--------------+-------------------------------------------+
@@ -445,6 +448,7 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 
 .. [#t1] localization support for parsing and formatting
 .. [#t2] localization support only for formatting
+.. [#t3] timezone names from `tz database <https://www.iana.org/time-zones>`_  provided via dateutil package
 
 ---------
 API Guide

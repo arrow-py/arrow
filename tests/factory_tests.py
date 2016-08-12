@@ -84,6 +84,12 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(tz.gettz('US/Pacific')), expected)
 
+    def test_kwarg_tzinfo(self):
+
+        expected = datetime.utcnow().replace(tzinfo=tz.tzutc()).astimezone(tz.gettz('US/Pacific'))
+
+        assertDtEqual(self.factory.get(tzinfo=tz.gettz('US/Pacific')), expected)
+
     def test_one_arg_iso_str(self):
 
         dt = datetime.utcnow()
@@ -135,11 +141,20 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
+    def test_two_args_twitter_format(self):
+
+        # format returned by twitter API for created_at:
+        twitter_date = 'Fri Apr 08 21:08:54 +0000 2016'
+        result = self.factory.get(twitter_date, 'ddd MMM DD HH:mm:ss Z YYYY')
+
+        assertEqual(result._datetime, datetime(2016, 4, 8, 21, 8, 54, tzinfo=tz.tzutc()))
+
     def test_two_args_str_list(self):
 
         result = self.factory.get('2013-01-01', ['MM/DD/YYYY', 'YYYY-MM-DD'])
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
+
 
     def test_two_args_unicode_unicode(self):
 

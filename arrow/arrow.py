@@ -47,6 +47,7 @@ class Arrow(object):
 
     _ATTRS = ['year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond']
     _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
+    _MONTHS_PER_QUARTER = 3
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
                  tzinfo=None):
@@ -308,6 +309,9 @@ class Arrow(object):
         if name == 'week':
             return self.isocalendar()[1]
 
+        if name == 'quarter':
+            return int(self.month/self._MONTHS_PER_QUARTER) + 1
+
         if not name.startswith('_'):
             value = getattr(self._datetime, name, None)
 
@@ -407,17 +411,24 @@ class Arrow(object):
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key in self._ATTRS_PLURAL or key == 'weeks':
+            elif key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
                 # TODO: DEPRECATED
                 warnings.warn("replace() with plural property to shift value"
                               "is deprecated, use shift() instead",
                               DeprecationWarning)
                 relative_kwargs[key] = value
-            elif key == 'week':
-                raise AttributeError('setting absolute week is not supported')
+            elif key in ['week', 'quarter']:
+                raise AttributeError('setting absolute {0} is not supported'.format(key))
             elif key !='tzinfo':
-                raise AttributeError()
+                raise AttributeError('unknown attribute: "{0}"'.format(key))
 
+        # core datetime does not support quarters, translate to months.
+        if 'quarters' in relative_kwargs.keys():
+            if relative_kwargs.get('months') is None:
+                relative_kwargs['months'] = 0
+            relative_kwargs['months'] += (value * self._MONTHS_PER_QUARTER)
+            relative_kwargs.pop('quarters')
+            
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs) # TODO: DEPRECATED
 
@@ -686,7 +697,8 @@ class Arrow(object):
         elif diff < 29808000:
             self_months = self._datetime.year * 12 + self._datetime.month
             other_months = dt.year * 12 + dt.month
-            months = sign * abs(other_months - self_months)
+
+            months = sign * int(max(abs(other_months - self_months), 2))
 
             return locale.describe('months', months, only_distance=only_distance)
 
@@ -723,7 +735,11 @@ class Arrow(object):
         raise TypeError()
 
     def __rsub__(self, other):
-        return self.__sub__(other)
+
+        if isinstance(other, datetime):
+            return other - self._datetime
+
+        raise TypeError()
 
 
     # comparisons
@@ -874,7 +890,8 @@ class Arrow(object):
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError('\'{0}\' not recognized as a timezone')
+                raise ValueError('\'{0}\' not recognized as a timezone'.format(
+                    tz_expr))
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -889,7 +906,8 @@ class Arrow(object):
             expr = float(expr)
             return cls.utcfromtimestamp(expr).datetime
         except:
-            raise ValueError('\'{0}\' not recognized as a timestamp or datetime')
+            raise ValueError(
+                '\'{0}\' not recognized as a timestamp or datetime'.format(expr))
 
     @classmethod
     def _get_frames(cls, name):

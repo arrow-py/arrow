@@ -1,13 +1,17 @@
 Arrow - Better dates & times for Python
 =======================================
 
-.. image:: https://travis-ci.org/crsmithdev/arrow.png
+.. image:: https://travis-ci.org/crsmithdev/arrow.svg
    :alt: build status
    :target: https://travis-ci.org/crsmithdev/arrow
 
-.. image:: https://pypip.in/d/arrow/badge.png
+.. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
+   :target: https://codecov.io/github/crsmithdev/arrow
+   :alt: Codecov
+
+.. image:: https://img.shields.io/pypi/v/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
-   :target: https://crate.io/packages/arrow
         
 Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 ---------------------------------------------------------------------------------
@@ -34,11 +38,12 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime 
-- Supports Python 2.6, 2.7 and 3.3
+- Supports Python 2.6, 2.7, 3.3, 3.4 and 3.5
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings, including ISO-8601-formatted strings automatically
+- Formats and parses strings automatically
+- Partial support for ISO-8601
 - Timezone conversion
 - Timestamp available as a property
 - Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond

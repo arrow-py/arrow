@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from datetime import timedelta
 import sys
 
 # python 2.6 / 2.7 definitions for total_seconds function.
