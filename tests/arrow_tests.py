@@ -488,6 +488,38 @@ class ArrowReplaceTests(Chai):
         assertEqual(arw.replace(minute=1), arrow.Arrow(2013, 5, 5, 12, 1, 45))
         assertEqual(arw.replace(second=1), arrow.Arrow(2013, 5, 5, 12, 30, 1))
 
+    def test_replace_shift(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        # This is all scheduled for deprecation
+        assertEqual(arw.replace(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=1), arrow.Arrow(2013, 8, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=1, months=1), arrow.Arrow(2013, 9, 5, 12, 30, 45))
+        assertEqual(arw.replace(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
+        assertEqual(arw.replace(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
+        assertEqual(arw.replace(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.replace(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
+        assertEqual(arw.replace(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
+        assertEqual(arw.replace(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
+        assertEqual(arw.replace(microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1))
+
+    def test_replace_shift_negative(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        # This is all scheduled for deprecation
+        assertEqual(arw.replace(years=-1), arrow.Arrow(2012, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=-1), arrow.Arrow(2013, 2, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=-1, months=-1), arrow.Arrow(2013, 1, 5, 12, 30, 45))
+        assertEqual(arw.replace(months=-1), arrow.Arrow(2013, 4, 5, 12, 30, 45))
+        assertEqual(arw.replace(weeks=-1), arrow.Arrow(2013, 4, 28, 12, 30, 45))
+        assertEqual(arw.replace(days=-1), arrow.Arrow(2013, 5, 4, 12, 30, 45))
+        assertEqual(arw.replace(hours=-1), arrow.Arrow(2013, 5, 5, 11, 30, 45))
+        assertEqual(arw.replace(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
+        assertEqual(arw.replace(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
+        assertEqual(arw.replace(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
+
     def test_replace_tzinfo(self):
 
         arw = arrow.Arrow.utcnow().to('US/Eastern')
@@ -500,6 +532,11 @@ class ArrowReplaceTests(Chai):
 
         with assertRaises(AttributeError):
             arrow.Arrow.utcnow().replace(week=1)
+
+    def test_replace_quarter(self):
+
+        with assertRaises(AttributeError):
+            arrow.Arrow.utcnow().replace(quarter=1)
 
     def test_replace_other_kwargs(self):
 
@@ -518,18 +555,23 @@ class ArrowShiftTests(Chai):
         arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
         assertEqual(arw.shift(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        # assertEqual(arw.shift(quarters=1), arrow.Arrow(2013, 8, 5, 12, 30, 45))
+        # assertEqual(arw.shift(quarters=1, months=1), arrow.Arrow(2013, 9, 5, 12, 30, 45))
         assertEqual(arw.shift(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
         assertEqual(arw.shift(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
         assertEqual(arw.shift(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
         assertEqual(arw.shift(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
         assertEqual(arw.shift(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
         assertEqual(arw.shift(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
+        assertEqual(arw.shift(microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1))
 
     def test_shift_negative(self):
 
         arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
 
         assertEqual(arw.shift(years=-1), arrow.Arrow(2012, 5, 5, 12, 30, 45))
+        # assertEqual(arw.shift(quarters=-1), arrow.Arrow(2013, 2, 5, 12, 30, 45))
+        # assertEqual(arw.shift(quarters=-1, months=-1), arrow.Arrow(2013, 1, 5, 12, 30, 45))
         assertEqual(arw.shift(months=-1), arrow.Arrow(2013, 4, 5, 12, 30, 45))
         assertEqual(arw.shift(weeks=-1), arrow.Arrow(2013, 4, 28, 12, 30, 45))
         assertEqual(arw.shift(days=-1), arrow.Arrow(2013, 5, 4, 12, 30, 45))
@@ -537,7 +579,6 @@ class ArrowShiftTests(Chai):
         assertEqual(arw.shift(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
         assertEqual(arw.shift(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
         assertEqual(arw.shift(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
-
 
 class ArrowRangeTests(Chai):
 
