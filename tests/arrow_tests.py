@@ -511,7 +511,7 @@ class ArrowShiftTests(Chai):
     def test_not_attr(self):
 
         with assertRaises(AttributeError):
-            arrow.Arrow.utcnow().replace(abc=1)
+            arrow.Arrow.utcnow().shift(abc=1)
 
     def test_shift(self):
 
