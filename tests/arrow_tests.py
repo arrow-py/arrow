@@ -520,6 +520,22 @@ class ArrowReplaceTests(Chai):
         assertEqual(arw.replace(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
         assertEqual(arw.replace(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
 
+    def test_replace_quarters_bug(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        # The value of the last-read argument was used instead of the ``quarters`` argument.
+        # Recall that the keyword argument dict, like all dicts, is unordered, so only certain
+        # combinations of arguments would exhibit this.
+        assertEqual(arw.replace(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
+        assertEqual(arw.replace(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
+        assertEqual(arw.replace(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.replace(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
+        assertEqual(arw.replace(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
+        assertEqual(arw.replace(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
+        assertEqual(arw.replace(quarters=0, microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1))
+
     def test_replace_tzinfo(self):
 
         arw = arrow.Arrow.utcnow().to('US/Eastern')
@@ -579,6 +595,22 @@ class ArrowShiftTests(Chai):
         assertEqual(arw.shift(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
         assertEqual(arw.shift(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
         assertEqual(arw.shift(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
+
+    # def test_shift_quarters_bug(self):
+
+    #     arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+    #     # The value of the last-read argument was used instead of the ``quarters`` argument.
+    #     # Recall that the keyword argument dict, like all dicts, is unordered, so only certain
+    #     # combinations of arguments would exhibit this.
+    #     assertEqual(arw.replace(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
+    #     assertEqual(arw.replace(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
+    #     assertEqual(arw.replace(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
+    #     assertEqual(arw.replace(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+    #     assertEqual(arw.replace(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
+    #     assertEqual(arw.replace(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
+    #     assertEqual(arw.replace(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
+    #     assertEqual(arw.replace(quarters=0, microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1))
 
 class ArrowRangeTests(Chai):
 

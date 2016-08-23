@@ -423,12 +423,9 @@ class Arrow(object):
                 raise AttributeError('unknown attribute: "{0}"'.format(key))
 
         # core datetime does not support quarters, translate to months.
-        if 'quarters' in relative_kwargs.keys():
-            if relative_kwargs.get('months') is None:
-                relative_kwargs['months'] = 0
-            relative_kwargs['months'] += (value * self._MONTHS_PER_QUARTER)
-            relative_kwargs.pop('quarters')
-            
+        relative_kwargs.setdefault('months', 0)
+        relative_kwargs['months'] += relative_kwargs.pop('quarters', 0) * self._MONTHS_PER_QUARTER
+
         current = self._datetime.replace(**absolute_kwargs)
         current += relativedelta(**relative_kwargs) # TODO: DEPRECATED
 
