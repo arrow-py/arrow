@@ -389,8 +389,7 @@ class Arrow(object):
         >>> arw.replace(tzinfo=tz.tzlocal())
         <Arrow [2013-05-11T22:27:34.787885-07:00]>
 
-       NOTE: Deprecated in next release
-       Use plural property names to shift their current value relatively:
+       Use plural property names to shift their current value relatively (**deprecated**):
 
        >>> arw.replace(years=1, months=-1)
        <Arrow [2014-04-11T22:27:34.787885+00:00]>
@@ -438,8 +437,8 @@ class Arrow(object):
         return self.fromdatetime(current)
 
     def shift(self, **kwargs):
-        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with
-        attributes updated according to inputs.
+        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        according to inputs.
 
         Use plural property names to shift their current value relatively:
 
@@ -456,10 +455,14 @@ class Arrow(object):
 
         for key, value in kwargs.items():
 
-            if key in self._ATTRS_PLURAL or key == 'weeks':
+            if key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
                 relative_kwargs[key] = value
             else:
                 raise AttributeError()
+
+        # core datetime does not support quarters, translate to months.
+        relative_kwargs.setdefault('months', 0)
+        relative_kwargs['months'] += relative_kwargs.pop('quarters', 0) * self._MONTHS_PER_QUARTER
 
         current = self._datetime + relativedelta(**relative_kwargs)
 
