@@ -904,7 +904,13 @@ class Arrow(object):
     def _get_timestamp_from_input(timestamp):
 
         try:
-            return float(timestamp)
+            timestamp = float(timestamp)
+            if timestamp >= 253402300800000: # nanoseconds
+                return timestamp / 1000000
+            elif timestamp >= 253402300800: # milliseconds
+                return timestamp / 1000
+            else:
+                return timestamp
         except:
             raise ValueError('cannot parse \'{0}\' as a timestamp'.format(timestamp))
 
