@@ -58,6 +58,17 @@ class GetTests(Chai):
         with assertRaises((OverflowError, ValueError,)):
             self.factory.get(timestamp)
 
+        # Issue 357 - Large timestamps that can't be in seconds
+        timestamp = 1000000000000. # this needs to be treated as ms
+        timestamp_dt = datetime.utcfromtimestamp(timestamp / 1000).replace(tzinfo=tz.tzutc())
+        
+        assertEqual(self.factory.get(timestamp), timestamp_dt)
+        
+        timestamp = 1000000000000000. # this needs to be treated as us
+        timestamp_dt = datetime.utcfromtimestamp(timestamp / 1000000).replace(tzinfo=tz.tzutc())
+        
+        assertEqual(self.factory.get(timestamp), timestamp_dt)
+
     def test_one_arg_arrow(self):
 
         arw = self.factory.utcnow()
