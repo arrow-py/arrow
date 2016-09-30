@@ -1786,4 +1786,33 @@ class RomanshLocale(Locale):
     ]
 
 
+class RomanianLocale(Locale):
+    names = ['ro', 'ro_ro']
+
+    past = 'în urmă cu {0}'
+    future = 'în {0}'
+
+    timeframes = {
+        'now': 'acum',
+        'seconds': 'secunde',
+        'minute': 'minut',
+        'minutes': '{0} minute',
+        'hour': 'oră',
+        'hours': '{0} ure',
+        'day': 'zi',
+        'days': '{0} zile',
+        'month': 'lună',
+        'months': '{0} luni',
+        'year': 'an',
+        'years': '{0} ani',
+    }
+
+    month_names = ['', 'ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie', 'iulie',
+        'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie']
+    month_abbreviations = ['', 'ian', 'febr', 'mart', 'apr', 'mai', 'iun', 'iul', 'aug', 'sept', 'oct', 'nov', 'dec']
+
+    day_names = ['', 'luni', 'marți', 'miercuri', 'joi', 'vineri', 'sâmbătă', 'duminică']
+    day_abbreviations = ['', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum']
+
+
 _locales = _map_locales()
