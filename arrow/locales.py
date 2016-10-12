@@ -919,7 +919,7 @@ class NewNorwegianLocale(Locale):
 
 class PortugueseLocale(Locale):
     names = ['pt', 'pt_pt']
-    
+
     past = 'há {0}'
     future = 'em {0}'
 
@@ -946,11 +946,11 @@ class PortugueseLocale(Locale):
     day_names = ['', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira',
         'sábado', 'domingo']
     day_abbreviations = ['', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
-    
-    
+
+
 class BrazilianPortugueseLocale(PortugueseLocale):
     names = ['pt_br']
-    
+
     past = 'fazem {0}'
 
 
@@ -1284,7 +1284,8 @@ class CzechLocale(Locale):
 
 
     def _format_timeframe(self, timeframe, delta):
-        '''Czech aware time frame format function, takes into account the differences between past and future forms.'''
+        '''Czech aware time frame format function, takes into account
+        the differences between past and future forms.'''
         form = self.timeframes[timeframe]
         if isinstance(form, dict):
             if delta == 0:
@@ -1293,7 +1294,7 @@ class CzechLocale(Locale):
                 form = form['future']
             else:
                 form = form['past']
-        delta = abs(delta)  
+        delta = abs(delta)
 
         if isinstance(form, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
@@ -1302,6 +1303,78 @@ class CzechLocale(Locale):
                 form = form[1]
 
         return form.format(delta)
+
+
+class SlovakLocale(Locale):
+    names = ['sk', 'sk_sk']
+
+    timeframes = {
+        'now': 'Teraz',
+        'seconds': {
+            'past': 'pár sekundami',
+            'future': ['{0} sekundy', '{0} sekúnd']
+        },
+        'minute': {'past': 'minútou', 'future': 'minútu', 'zero': '{0} minút'},
+        'minutes': {
+            'past': '{0} minútami',
+            'future': ['{0} minúty', '{0} minút']
+        },
+        'hour': {'past': 'hodinou', 'future': 'hodinu', 'zero': '{0} hodín'},
+        'hours': {
+            'past': '{0} hodinami',
+            'future': ['{0} hodiny', '{0} hodín']
+        },
+        'day': {'past': 'dňom', 'future': 'deň', 'zero': '{0} dní'},
+        'days': {
+            'past': '{0} dňami',
+            'future': ['{0} dni', '{0} dní']
+        },
+        'month': {'past': 'mesiacom', 'future': 'mesiac', 'zero': '{0} mesiacov'},
+        'months': {
+            'past': '{0} mesiacmi',
+            'future': ['{0} mesiace', '{0} mesiacov']
+        },
+        'year': {'past': 'rokom', 'future': 'rok', 'zero': '{0} rokov'},
+        'years': {
+            'past': '{0} rokmi',
+            'future': ['{0} roky', '{0} rokov']
+        }
+    }
+
+    past = 'Pred {0}'
+    future = 'O {0}'
+
+    month_names = ['', 'január', 'február', 'marec', 'apríl', 'máj', 'jún',
+        'júl', 'august', 'september', 'október', 'november', 'december']
+    month_abbreviations = ['', 'jan', 'feb', 'mar', 'apr', 'máj', 'jún', 'júl',
+        'aug', 'sep', 'okt', 'nov', 'dec']
+
+    day_names = ['', 'pondelok', 'utorok', 'streda', 'štvrtok', 'piatok',
+        'sobota', 'nedeľa']
+    day_abbreviations = ['', 'po', 'ut', 'st', 'št', 'pi', 'so', 'ne']
+
+
+    def _format_timeframe(self, timeframe, delta):
+        '''Slovak aware time frame format function, takes into account
+        the differences between past and future forms.'''
+        form = self.timeframes[timeframe]
+        if isinstance(form, dict):
+            if delta == 0:
+                form = form['zero']  # And *never* use 0 in the singular!
+            elif delta > 0:
+                form = form['future']
+            else:
+                form = form['past']
+        delta = abs(delta)
+
+        if isinstance(form, list):
+            if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
+                form = form[0]
+            else:
+                form = form[1]
+
+        return form.format(delta)
+
 
 class FarsiLocale(Locale):
 
@@ -1463,7 +1536,7 @@ class MarathiLocale(Locale):
 
     day_names = ['', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार']
     day_abbreviations = ['', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि']
-    
+
 def _map_locales():
 
     locales = {}
@@ -1471,7 +1544,7 @@ def _map_locales():
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
-                locales[name.lower()] = cls  
+                locales[name.lower()] = cls
 
     return locales
 
