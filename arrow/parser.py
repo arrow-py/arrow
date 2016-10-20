@@ -14,9 +14,12 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|SS?S?S?S?S?S?S?S?|ZZ?Z?|a|A|X)')
     _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
+    _ONE_THROUGH_NINE_DIGIT_RE = re.compile('\d{1,9}')
+    _ONE_THROUGH_EIGHT_DIGIT_RE = re.compile('\d{1,8}')
+    _ONE_THROUGH_SEVEN_DIGIT_RE = re.compile('\d{1,7}')
     _ONE_THROUGH_SIX_DIGIT_RE = re.compile('\d{1,6}')
     _ONE_THROUGH_FIVE_DIGIT_RE = re.compile('\d{1,5}')
     _ONE_THROUGH_FOUR_DIGIT_RE = re.compile('\d{1,4}')
@@ -47,6 +50,9 @@ class DateTimeParser(object):
         'ZZZ': _TZ_NAME_RE,
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
+        'SSSSSSSSS': _ONE_THROUGH_NINE_DIGIT_RE,
+        'SSSSSSSS': _ONE_THROUGH_EIGHT_DIGIT_RE,
+        'SSSSSSS': _ONE_THROUGH_SEVEN_DIGIT_RE,
         'SSSSSS': _ONE_THROUGH_SIX_DIGIT_RE,
         'SSSSS': _ONE_THROUGH_FIVE_DIGIT_RE,
         'SSSS': _ONE_THROUGH_FOUR_DIGIT_RE,
@@ -95,7 +101,7 @@ class DateTimeParser(object):
             has_subseconds = '.' in time_parts[0]
 
             if has_subseconds:
-                subseconds_token = 'S' * min(len(re.split('\D+', time_parts[0].split('.')[1], 1)[0]), 6)
+                subseconds_token = 'S' * min(len(re.split('\D+', time_parts[0].split('.')[1], 1)[0]), 9)
                 formats = ['YYYY-MM-DDTHH:mm:ss.%s' % subseconds_token]
             elif has_seconds:
                 formats = ['YYYY-MM-DDTHH:mm:ss']
@@ -202,6 +208,12 @@ class DateTimeParser(object):
         elif token in ['ss', 's']:
             parts['second'] = int(value)
 
+        elif token == 'SSSSSSSSS':
+            parts['microsecond'] = int(value) // 1000
+        elif token == 'SSSSSSSS':
+            parts['microsecond'] = int(value) // 100
+        elif token == 'SSSSSSS':
+            parts['microsecond'] = int(value) // 10
         elif token == 'SSSSSS':
             parts['microsecond'] = int(value)
         elif token == 'SSSSS':
