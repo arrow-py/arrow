@@ -18,7 +18,7 @@ class UtilTests(Chai):
 
         assertEqual(util._total_seconds_26(td), 30)
 
-    if util.version >= '2.7':
+    if util.version >= '2.7': # pragma: no cover
 
         def test_total_seconds_27(self):
 

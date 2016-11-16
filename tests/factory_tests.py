@@ -180,7 +180,12 @@ class GetTests(Chai):
         assertEqual(self.factory.get(2013, 1, 1), datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
 
-def UtcNowTests(Chai):
+class UtcNowTests(Chai):
+
+    def setUp(self):
+        super(UtcNowTests, self).setUp()
+
+        self.factory = factory.ArrowFactory()
 
     def test_utcnow(self):
 

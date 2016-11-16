@@ -1,3 +1,9 @@
 [run]
 branch = True
-source = arrow
+source =
+    tests
+    arrow
+
+[report]
+show_missing = True
+fail_under = 100
