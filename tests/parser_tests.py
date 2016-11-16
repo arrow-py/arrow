@@ -22,7 +22,7 @@ class DateTimeParserTests(Chai):
 
         mock_datetime = mock()
 
-        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(ParserError)
         expect(self.parser.parse).args('str', 'fmt_b').returns(mock_datetime)
 
         result = self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
@@ -31,10 +31,20 @@ class DateTimeParserTests(Chai):
 
     def test_parse_multiformat_all_fail(self):
 
-        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
-        expect(self.parser.parse).args('str', 'fmt_b').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(ParserError)
+        expect(self.parser.parse).args('str', 'fmt_b').raises(ParserError)
 
-        with assertRaises(Exception):
+        with assertRaises(ParserError):
+            self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
+
+    def test_parse_multiformat_unexpected_fail(self):
+
+        class UnexpectedError(Exception):
+            pass
+
+        expect(self.parser.parse).args('str', 'fmt_a').raises(UnexpectedError)
+
+        with assertRaises(UnexpectedError):
             self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
 
     def test_parse_token_nonsense(self):

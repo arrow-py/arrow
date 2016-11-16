@@ -199,7 +199,7 @@ class DateTimeParser(object):
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
             # FIXME: add nanosecond support somehow?
-            value = value.ljust(7, '0')
+            value = value.ljust(7, str('0'))
             parts['microsecond'] = int(value[:6])
 
         elif token == 'X':
@@ -250,7 +250,7 @@ class DateTimeParser(object):
             try:
                 _datetime = self.parse(string, fmt)
                 break
-            except:
+            except ParserError:
                 pass
 
         if _datetime is None:
