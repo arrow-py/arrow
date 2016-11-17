@@ -101,6 +101,14 @@ class GetTests(Chai):
         with assertRaises(TypeError):
             self.factory.get(object())
 
+    def test_one_arg_bool(self):
+
+        with assertRaises(TypeError):
+            self.factory.get(False)
+
+        with assertRaises(TypeError):
+            self.factory.get(True)
+
     def test_two_args_datetime_tzinfo(self):
 
         result = self.factory.get(datetime(2013, 1, 1), tz.gettz('US/Pacific'))
@@ -205,4 +213,3 @@ class NowTests(Chai):
     def test_tz_str(self):
 
         assertDtEqual(self.factory.now('EST'), datetime.now(tz.gettz('EST')))
-
