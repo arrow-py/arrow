@@ -199,31 +199,27 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654'), expected)
 
     def test_parse_subsecond_rounding(self):
-        """currently, we've decided there's no rounding"""
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         format = 'YYYY-MM-DD HH:mm:ss.S'
 
         # round up
         string = '2013-01-01 12:30:45.9876539'
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987653)
         assertEqual(self.parser.parse(string, format), expected)
         assertEqual(self.parser.parse_iso(string), expected)
 
         # round down
         string = '2013-01-01 12:30:45.98765432'
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         assertEqual(self.parser.parse(string, format), expected)
         #import pudb; pudb.set_trace()
         assertEqual(self.parser.parse_iso(string), expected)
 
         # round half-up
         string = '2013-01-01 12:30:45.987653521'
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987653)
         assertEqual(self.parser.parse(string, format), expected)
         assertEqual(self.parser.parse_iso(string), expected)
 
         # round half-down
         string = '2013-01-01 12:30:45.9876545210'
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         assertEqual(self.parser.parse(string, format), expected)
         assertEqual(self.parser.parse_iso(string), expected)
 
@@ -431,13 +427,13 @@ class DateTimeParserISOTests(Chai):
         # is the preferred sign.
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06,789123678'),
-            datetime(2013, 2, 3, 4, 5, 6, 789123)
+            datetime(2013, 2, 3, 4, 5, 6, 789124)
         )
 
         # there is no limit on the number of decimal places
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.789123678'),
-            datetime(2013, 2, 3, 4, 5, 6, 789123)
+            datetime(2013, 2, 3, 4, 5, 6, 789124)
         )
 
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
@@ -490,7 +486,7 @@ class DateTimeParserISOTests(Chai):
         assertEqual(
             self.parser.parse_iso('2016-11-16 09:51:14.682141526-08:00'),
             datetime(
-                2016, 11, 16, 9, 51, 14, 682141,
+                2016, 11, 16, 9, 51, 14, 682142,
                 tzinfo=tz.tzoffset(None, -3600 * 8),
             )
         )

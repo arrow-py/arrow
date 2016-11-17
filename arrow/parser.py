@@ -200,7 +200,17 @@ class DateTimeParser(object):
             # We want the six most significant digits as an integer, rounded.
             # FIXME: add nanosecond support somehow?
             value = value.ljust(7, str('0'))
-            parts['microsecond'] = int(value[:6])
+
+            # floating-point (IEEE-754) defaults to half-to-even rounding
+            seventh_digit = int(value[6])
+            if seventh_digit == 5:
+                rounding = int(value[5]) % 2
+            elif seventh_digit > 5:
+                rounding = 1
+            else:
+                rounding = 0
+
+            parts['microsecond'] = int(value[:6]) + rounding
 
         elif token == 'X':
             parts['timestamp'] = int(value)
