@@ -200,6 +200,11 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
         assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654321'), expected)
 
+        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSSS'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSSSS'), expected)
+        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSSSSS'), expected)
+
     def test_map_lookup_keyerror(self):
 
         with assertRaises(parser.ParserError):
