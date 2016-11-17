@@ -205,7 +205,7 @@ Call datetime functions that return properties:
 Replace & shift
 ===============
 
-Get a new :class:`Arrow <arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
+Get a new :class:`Arrow <arrow.arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
 
 .. code-block:: python
 
