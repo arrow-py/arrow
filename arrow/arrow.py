@@ -688,7 +688,7 @@ class Arrow(object):
 
     def __sub__(self, other):
 
-        if isinstance(other, timedelta):
+        if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
 
         elif isinstance(other, datetime):
