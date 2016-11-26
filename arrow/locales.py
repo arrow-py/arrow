@@ -919,7 +919,7 @@ class NewNorwegianLocale(Locale):
 
 class PortugueseLocale(Locale):
     names = ['pt', 'pt_pt']
-    
+
     past = 'há {0}'
     future = 'em {0}'
 
@@ -946,11 +946,11 @@ class PortugueseLocale(Locale):
     day_names = ['', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira',
         'sábado', 'domingo']
     day_abbreviations = ['', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
-    
-    
+
+
 class BrazilianPortugueseLocale(PortugueseLocale):
     names = ['pt_br']
-    
+
     past = 'fazem {0}'
 
 
@@ -1293,7 +1293,7 @@ class CzechLocale(Locale):
                 form = form['future']
             else:
                 form = form['past']
-        delta = abs(delta)  
+        delta = abs(delta)
 
         if isinstance(form, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
@@ -1463,7 +1463,7 @@ class MarathiLocale(Locale):
 
     day_names = ['', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार']
     day_abbreviations = ['', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि']
-    
+
 def _map_locales():
 
     locales = {}
@@ -1471,7 +1471,7 @@ def _map_locales():
     for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
-                locales[name.lower()] = cls  
+                locales[name.lower()] = cls
 
     return locales
 
@@ -1784,6 +1784,48 @@ class RomanshLocale(Locale):
     day_abbreviations = [
         '', 'gli', 'ma', 'me', 'gie', 've', 'so', 'du'
     ]
+
+
+class SwissLocale(Locale):
+
+    names = ['de', 'de_ch']
+
+    past = 'vor {0}'
+    future = 'in {0}'
+
+    timeframes = {
+            'now': 'gerade eben',
+            'seconds':  'Sekunden',
+            'minute': 'einer Minute',
+            'minutes': '{0} Minuten',
+            'hour': 'einer Stunde',
+            'hours': '{0} Stunden',
+            'day': 'einem Tag',
+            'days': '{0} Tage',
+            'month': 'einem Monat',
+            'months': '{0} Monaten',
+            'year': 'einem Jahr',
+            'years': '{0} Jahren',
+        }
+
+    month_names = [
+            '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
+            'August', 'September', 'Oktober', 'November', 'Dezember'
+        ]
+
+    month_abbreviations = [
+            '', 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep',
+            'Okt', 'Nov', 'Dez'
+        ]
+
+    day_names = [
+            '', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag',
+            'Samstag', 'Sonntag'
+        ]
+
+    day_abbreviations = [
+            '', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'
+        ]
 
 
 _locales = _map_locales()
