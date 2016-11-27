@@ -205,7 +205,7 @@ Call datetime functions that return properties:
 Replace & shift
 ===============
 
-Get a new :class:`Arrow <arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
+Get a new :class:`Arrow <arrow.arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
 
 .. code-block:: python
 
@@ -429,13 +429,9 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |s             |0, 1, 2 ... 58, 59                         |
 +--------------------------------+--------------+-------------------------------------------+
-|**Sub-second**                  |SSS           |000, 001, 002 ... 998, 999                 |
+|**Sub-second**                  |S...          |0, 02, 003, 000006, 123123123123... [#t3]_ |
 +--------------------------------+--------------+-------------------------------------------+
-|                                |SS            |00, 01, 02 ... 98, 99                      |
-+--------------------------------+--------------+-------------------------------------------+
-|                                |S             |0, 1, 2 ... 8, 9                           |
-+--------------------------------+--------------+-------------------------------------------+
-|**Timezone**                    |ZZZ           |Asia/Baku, Europe/Warsaw, GMT ... [#t3]_   |
+|**Timezone**                    |ZZZ           |Asia/Baku, Europe/Warsaw, GMT ... [#t4]_   |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
 +--------------------------------+--------------+-------------------------------------------+
@@ -448,7 +444,8 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 
 .. [#t1] localization support for parsing and formatting
 .. [#t2] localization support only for formatting
-.. [#t3] timezone names from `tz database <https://www.iana.org/time-zones>`_  provided via dateutil package
+.. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
+.. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_  provided via dateutil package
 
 ---------
 API Guide

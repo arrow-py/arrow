@@ -7,8 +7,8 @@ import sys
 
 
 def get_locale(name):
-    '''Returns an appropriate :class:`Locale <locale.Locale>` corresponding
-    to an inpute locale name.
+    '''Returns an appropriate :class:`Locale <arrow.locales.Locale>`
+    corresponding to an inpute locale name.
 
     :param name: the name of the locale.
 

@@ -51,5 +51,5 @@ def factory(type):
     return ArrowFactory(type)
 
 
-__all__ = ['get', 'utcnow', 'now', 'factory', 'iso']
+__all__ = ['get', 'utcnow', 'now', 'factory']
 

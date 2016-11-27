@@ -1000,7 +1000,7 @@ class ArrowSpanTests(Chai):
         assertEqual(floor, datetime(2013, 2, 15, 3, 41, 22, tzinfo=tz.tzutc()))
         assertEqual(ceil, datetime(2013, 2, 15, 3, 41, 22, 999999, tzinfo=tz.tzutc()))
 
-    def test_span_hour(self):
+    def test_span_microsecond(self):
 
         floor, ceil = self.arrow.span('microsecond')
 
