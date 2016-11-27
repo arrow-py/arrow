@@ -754,8 +754,6 @@ class Arrow(object):
         if not isinstance(other, (Arrow, datetime)):
             return False
 
-        other = self._get_datetime(other)
-
         return self._datetime == self._get_datetime(other)
 
     def __ne__(self, other):
