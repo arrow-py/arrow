@@ -489,3 +489,35 @@ class SwissLocaleTests(Chai):
         assertEqual(self.locale._format_timeframe('minute', 1), 'einer Minute')
         assertEqual(self.locale._format_timeframe('hour', 1), 'einer Stunde')
         assertEqual(self.locale.day_abbreviation(dt.isoweekday()), 'Sa')
+
+
+class RomanianLocaleTests(Chai):
+
+    def setUp(self):
+        super(RomanianLocaleTests, self).setUp()
+
+        self.locale = locales.RomanianLocale()
+
+    def test_timeframes(self):
+
+        self.assertEqual(self.locale._format_timeframe('hours', 2), '2 ore')
+        self.assertEqual(self.locale._format_timeframe('months', 2), '2 luni')
+
+        self.assertEqual(self.locale._format_timeframe('days', 2), '2 zile')
+        self.assertEqual(self.locale._format_timeframe('years', 2), '2 ani')
+
+        self.assertEqual(self.locale._format_timeframe('hours', 3), '3 ore')
+        self.assertEqual(self.locale._format_timeframe('months', 4), '4 luni')
+        self.assertEqual(self.locale._format_timeframe('days', 3), '3 zile')
+        self.assertEqual(self.locale._format_timeframe('years', 5), '5 ani')
+
+    def test_relative_timeframes(self):
+        self.assertEqual(self.locale._format_relative("acum", "now", 0), "acum")
+        self.assertEqual(self.locale._format_relative("o oră", "hour", 1), "peste o oră")
+        self.assertEqual(self.locale._format_relative("o oră", "hour", -1), "o oră în urmă")
+        self.assertEqual(self.locale._format_relative("un minut", "minute", 1), "peste un minut")
+        self.assertEqual(self.locale._format_relative("un minut", "minute", -1), "un minut în urmă")
+        self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", -1), "câteva secunde în urmă")
+        self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", 1), "peste câteva secunde")
+        self.assertEqual(self.locale._format_relative("o zi", "day", -1), "o zi în urmă")
+        self.assertEqual(self.locale._format_relative("o zi", "day", 1), "peste o zi")
