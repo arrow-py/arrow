@@ -270,6 +270,38 @@ class CzechLocaleTests(Chai):
         assertEqual(result, 'Před hodinou')
 
 
+class SlovakLocaleTests(Chai):
+
+    def setUp(self):
+        super(SlovakLocaleTests, self).setUp()
+
+        self.locale = locales.SlovakLocale()
+
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 hodiny')
+        assertEqual(self.locale._format_timeframe('hours', 5), '5 hodín')
+        assertEqual(self.locale._format_timeframe('hour', 0), '0 hodín')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 hodinami')
+        assertEqual(self.locale._format_timeframe('hours', -5), '5 hodinami')
+        assertEqual(self.locale._format_timeframe('now', 0), 'Teraz')
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative('Teraz', 'now', 0)
+        assertEqual(result, 'Teraz')
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative('hodinu', 'hour', 1)
+        assertEqual(result, 'O hodinu')
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative('hodinou', 'hour', -1)
+        assertEqual(result, 'Pred hodinou')
+
+
 class BulgarianLocaleTests(Chai):
 
     def test_plurals2(self):
