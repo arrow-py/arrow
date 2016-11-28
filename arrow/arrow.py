@@ -408,7 +408,7 @@ class Arrow(object):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Use single property names to set their value absolutely::
+        Use property names to set their value absolutely::
 
             >>> import arrow
             >>> arw = arrow.utcnow()
@@ -416,11 +416,6 @@ class Arrow(object):
             <Arrow [2013-05-11T22:27:34.787885+00:00]>
             >>> arw.replace(year=2014, month=6)
             <Arrow [2014-06-11T22:27:34.787885+00:00]>
-
-        Use plural property names to shift their current value relatively::
-
-            >>> arw.replace(years=1, months=-1)
-            <Arrow [2014-04-11T22:27:34.787885+00:00]>
 
         You can also replace the timezone without conversion, using a
         :ref:`timezone expression <tz-expr>`::
@@ -467,7 +462,7 @@ class Arrow(object):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Use plural property names to shift their current value relatively:
+        Use pluralized property names to shift their current value relatively:
 
         >>> import arrow
         >>> arw = arrow.utcnow()
