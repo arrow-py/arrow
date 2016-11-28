@@ -22,7 +22,7 @@ class DateTimeParserTests(Chai):
 
         mock_datetime = mock()
 
-        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(ParserError)
         expect(self.parser.parse).args('str', 'fmt_b').returns(mock_datetime)
 
         result = self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
@@ -31,10 +31,20 @@ class DateTimeParserTests(Chai):
 
     def test_parse_multiformat_all_fail(self):
 
-        expect(self.parser.parse).args('str', 'fmt_a').raises(Exception)
-        expect(self.parser.parse).args('str', 'fmt_b').raises(Exception)
+        expect(self.parser.parse).args('str', 'fmt_a').raises(ParserError)
+        expect(self.parser.parse).args('str', 'fmt_b').raises(ParserError)
 
-        with assertRaises(Exception):
+        with assertRaises(ParserError):
+            self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
+
+    def test_parse_multiformat_unexpected_fail(self):
+
+        class UnexpectedError(Exception):
+            pass
+
+        expect(self.parser.parse).args('str', 'fmt_a').raises(UnexpectedError)
+
+        with assertRaises(UnexpectedError):
             self.parser._parse_multiformat('str', ['fmt_a', 'fmt_b'])
 
     def test_parse_token_nonsense(self):
@@ -188,17 +198,30 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse('2013-01-01 12:30:45.987654', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
         assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654'), expected)
 
+    def test_parse_subsecond_rounding(self):
         expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45.9876543', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
-        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.9876543'), expected)
+        format = 'YYYY-MM-DD HH:mm:ss.S'
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45.98765432', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
-        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.98765432'), expected)
+        # round up
+        string = '2013-01-01 12:30:45.9876539'
+        assertEqual(self.parser.parse(string, format), expected)
+        assertEqual(self.parser.parse_iso(string), expected)
 
-        expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
-        assertEqual(self.parser.parse('2013-01-01 12:30:45.987654321', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
-        assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654321'), expected)
+        # round down
+        string = '2013-01-01 12:30:45.98765432'
+        assertEqual(self.parser.parse(string, format), expected)
+        #import pudb; pudb.set_trace()
+        assertEqual(self.parser.parse_iso(string), expected)
+
+        # round half-up
+        string = '2013-01-01 12:30:45.987653521'
+        assertEqual(self.parser.parse(string, format), expected)
+        assertEqual(self.parser.parse_iso(string), expected)
+
+        # round half-down
+        string = '2013-01-01 12:30:45.9876545210'
+        assertEqual(self.parser.parse(string, format), expected)
+        assertEqual(self.parser.parse_iso(string), expected)
 
     def test_map_lookup_keyerror(self):
 
@@ -398,6 +421,21 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6, 789120)
         )
 
+        # ISO 8601:2004(E), ISO, 2004-12-01, 4.2.2.4 ... the decimal fraction
+        # shall be divided from the integer part by the decimal sign specified
+        # in ISO 31-0, i.e. the comma [,] or full stop [.]. Of these, the comma
+        # is the preferred sign.
+        assertEqual(
+            self.parser.parse_iso('2013-02-03T04:05:06,789123678'),
+            datetime(2013, 2, 3, 4, 5, 6, 789124)
+        )
+
+        # there is no limit on the number of decimal places
+        assertEqual(
+            self.parser.parse_iso('2013-02-03T04:05:06.789123678'),
+            datetime(2013, 2, 3, 4, 5, 6, 789124)
+        )
+
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
 
         assertEqual(
@@ -429,6 +467,28 @@ class DateTimeParserISOTests(Chai):
         assertEqual(
             self.parser.parse_iso('2013-02-03T04:05:06.78912Z'),
             datetime(2013, 2, 3, 4, 5, 6, 789120)
+        )
+
+    def test_gnu_date(self):
+        """
+        regression tests for parsing output from GNU date(1)
+        """
+        # date -Ins
+        assertEqual(
+            self.parser.parse_iso('2016-11-16T09:46:30,895636557-0800'),
+            datetime(
+                2016, 11, 16, 9, 46, 30, 895636,
+                tzinfo=tz.tzoffset(None, -3600 * 8),
+            )
+        )
+
+        # date --rfc-3339=ns
+        assertEqual(
+            self.parser.parse_iso('2016-11-16 09:51:14.682141526-08:00'),
+            datetime(
+                2016, 11, 16, 9, 51, 14, 682142,
+                tzinfo=tz.tzoffset(None, -3600 * 8),
+            )
         )
 
     def test_isoformat(self):

@@ -22,6 +22,8 @@ else: # pragma: no cover
     total_seconds = _total_seconds_27
 
 def is_timestamp(value):
+    if type(value) == bool:
+        return False
     try:
         float(value)
         return True

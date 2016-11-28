@@ -270,6 +270,38 @@ class CzechLocaleTests(Chai):
         assertEqual(result, 'Před hodinou')
 
 
+class SlovakLocaleTests(Chai):
+
+    def setUp(self):
+        super(SlovakLocaleTests, self).setUp()
+
+        self.locale = locales.SlovakLocale()
+
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 hodiny')
+        assertEqual(self.locale._format_timeframe('hours', 5), '5 hodín')
+        assertEqual(self.locale._format_timeframe('hour', 0), '0 hodín')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 hodinami')
+        assertEqual(self.locale._format_timeframe('hours', -5), '5 hodinami')
+        assertEqual(self.locale._format_timeframe('now', 0), 'Teraz')
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative('Teraz', 'now', 0)
+        assertEqual(result, 'Teraz')
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative('hodinu', 'hour', 1)
+        assertEqual(result, 'O hodinu')
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative('hodinou', 'hour', -1)
+        assertEqual(result, 'Pred hodinou')
+
+
 class BulgarianLocaleTests(Chai):
 
     def test_plurals2(self):
@@ -318,14 +350,14 @@ class MarathiLocaleTests(Chai):
         super(MarathiLocaleTests, self).setUp()
 
         self.locale = locales.MarathiLocale()
-        
+
     def test_dateCoreFunctionality(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assertEqual (self.locale.month_name(dt.month),'एप्रिल')
         assertEqual (self.locale.month_abbreviation(dt.month),'एप्रि')
         assertEqual (self.locale.day_name(dt.isoweekday()),'शनिवार')
         assertEqual (self.locale.day_abbreviation(dt.isoweekday()), 'शनि')
-        
+
     def test_format_timeframe(self):
         assertEqual(self.locale._format_timeframe('hours', 2), '2 तास')
         assertEqual(self.locale._format_timeframe('hour', 0), 'एक तास')
@@ -474,3 +506,50 @@ class BengaliLocaleTests(Chai):
         assertEqual(result11, '11তম')
         assertEqual(result42, '42তম')
         assertEqual(self.locale._ordinal_number(-1), None)
+
+
+class SwissLocaleTests(Chai):
+
+    def setUp(self):
+        super(SwissLocaleTests, self).setUp()
+
+        self.locale = locales.SwissLocale()
+
+    def test_ordinal_number(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+
+        assertEqual(self.locale._format_timeframe('minute', 1), 'einer Minute')
+        assertEqual(self.locale._format_timeframe('hour', 1), 'einer Stunde')
+        assertEqual(self.locale.day_abbreviation(dt.isoweekday()), 'Sa')
+
+
+class RomanianLocaleTests(Chai):
+
+    def setUp(self):
+        super(RomanianLocaleTests, self).setUp()
+
+        self.locale = locales.RomanianLocale()
+
+    def test_timeframes(self):
+
+        self.assertEqual(self.locale._format_timeframe('hours', 2), '2 ore')
+        self.assertEqual(self.locale._format_timeframe('months', 2), '2 luni')
+
+        self.assertEqual(self.locale._format_timeframe('days', 2), '2 zile')
+        self.assertEqual(self.locale._format_timeframe('years', 2), '2 ani')
+
+        self.assertEqual(self.locale._format_timeframe('hours', 3), '3 ore')
+        self.assertEqual(self.locale._format_timeframe('months', 4), '4 luni')
+        self.assertEqual(self.locale._format_timeframe('days', 3), '3 zile')
+        self.assertEqual(self.locale._format_timeframe('years', 5), '5 ani')
+
+    def test_relative_timeframes(self):
+        self.assertEqual(self.locale._format_relative("acum", "now", 0), "acum")
+        self.assertEqual(self.locale._format_relative("o oră", "hour", 1), "peste o oră")
+        self.assertEqual(self.locale._format_relative("o oră", "hour", -1), "o oră în urmă")
+        self.assertEqual(self.locale._format_relative("un minut", "minute", 1), "peste un minut")
+        self.assertEqual(self.locale._format_relative("un minut", "minute", -1), "un minut în urmă")
+        self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", -1), "câteva secunde în urmă")
+        self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", 1), "peste câteva secunde")
+        self.assertEqual(self.locale._format_relative("o zi", "day", -1), "o zi în urmă")
+        self.assertEqual(self.locale._format_relative("o zi", "day", 1), "peste o zi")

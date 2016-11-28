@@ -16,3 +16,6 @@ dist/
 docs/_build/
 .idea
 .DS_Store
+
+# tox
+.tox
