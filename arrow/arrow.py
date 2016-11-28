@@ -932,7 +932,9 @@ class Arrow(object):
             return cls.max, limit
 
         else:
-            return end, sys.maxsize
+            if limit is None:
+                return end, sys.maxsize
+            return end, limit
 
     @staticmethod
     def _get_timestamp_from_input(timestamp):
