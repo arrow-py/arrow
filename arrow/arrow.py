@@ -310,7 +310,7 @@ class Arrow(object):
             return self.isocalendar()[1]
 
         if name == 'quarter':
-            return int(self.month/self._MONTHS_PER_QUARTER) + 1
+            return int((self.month-1)/self._MONTHS_PER_QUARTER) + 1
 
         if not name.startswith('_'):
             value = getattr(self._datetime, name, None)
