@@ -128,7 +128,7 @@ class DateTimeParser(object):
         offset = 0
 
         # Extract the bracketed expressions to be reinserted later.
-        escaped_fmt = re.sub(self._ESCAPE_RE, "#" , fmt)
+        escaped_fmt = re.sub(self._ESCAPE_RE, "#", fmt)
         # Any number of S is the same as one.
         escaped_fmt = re.sub('S+', 'S', escaped_fmt)
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
