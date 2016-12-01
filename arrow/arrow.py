@@ -527,7 +527,7 @@ class Arrow(object):
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
 
-    def span(self, frame, count=1):
+    def span(self, frame, count=1, start_index=0):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
