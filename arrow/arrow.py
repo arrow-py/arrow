@@ -649,7 +649,10 @@ class Arrow(object):
             Each b_k represents a string representing the unit of time measurement
             c is the string 'ago' or 'later'
             i.e. dehumanize('13 months 2 days 3 months 1 year ago') would return an arrow object representing
-            2 years, 4 months, and 2 days previous from the current time
+            2 years, 4 months, and 2 days previous from the current time. It is calculated using the differences
+            of the least significant units first, i.e. '12 months 3 years 365 days later' from 2011-01-01 would
+            return an arrow object representing 2016-01-01 but from 2012-01-01 would return 2016-12-31 due to the
+            leap day.
 
         Usage::
 
