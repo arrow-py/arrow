@@ -640,6 +640,28 @@ class Arrow(object):
 
         return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
 
+    def dehumanize(self, tstring):
+    	''' Returns an arrow object given a humanized representation of a relative difference in time.
+    		Currently only supported for locale en_us and in a specific format as described in param tstring below.
+
+        :param tstring: Input time string required to be in this format: 'a_0 b_0 .. a_n b_n c' where:
+    		Each a_k represents an integer nuber >= 0 where 0 <= k <= n
+			Each b_k represents a string representing the unit of time measurement
+			c is the string 'ago' or 'later'
+			i.e. dehumanize('13 months 2 days 3 months 1 year ago') would return an arrow object representing
+			2 years, 4 months, and 2 days previous from the current time
+
+        Usage::
+
+            >>> import arrow
+            >>> t = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+        	<Arrow [2013-05-05T12:30:45+00:00]>
+			>>> t.dehumanize('2 seconds 1 minute ago')
+			<Arrow [2013-05-05T12:29:43+00:00]>
+
+        '''
+        
+
 
     def humanize(self, other=None, locale='en_us', only_distance=False):
         ''' Returns a localized, humanized representation of a relative difference in time.
