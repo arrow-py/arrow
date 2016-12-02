@@ -710,11 +710,11 @@ class Arrow(object):
             else:
                 raise ValueError("Invalid time unit or positioning seen")
         
-        years += months/12
+        years += months//12
         months = months%12
         years = dtobj.year + years
         months = dtobj.month - 1 + months
-        years += months/12
+        years += months//12
         months = months%12 + 1
         
         retobj = datetime(years, months, dtobj.day, dtobj.hour, dtobj.minute, dtobj.second)
