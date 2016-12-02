@@ -60,42 +60,41 @@ class DateTimeParserTests(Chai):
         assertEqual(parts, {})
 
     def test_parser_no_caching(self):
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_a').times(100)
 
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_a').times(100)
         self.parser = parser.DateTimeParser(cache_size=0)
-
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
 
     def test_parser_1_line_caching(self):
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_a').times(1)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_a').times(1)
         self.parser = parser.DateTimeParser(cache_size=1)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_b').times(1)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_b').times(1)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
         self.parser._generate_pattern_re('fmt_b')
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_a').times(1)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_a').times(1)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
 
     def test_parser_multiple_line_caching(self):
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_a').times(1)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_a').times(1)
         self.parser = parser.DateTimeParser(cache_size=2)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_b').times(1)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_b').times(1)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
         self.parser._generate_pattern_re('fmt_b')
 
-        expect(parser.DateTimeParser._generate_pattern_re).args('fmt_a').times(0)
+        expect(parser.DateTimeParser, '_generate_pattern_re').args('fmt_a').times(0)
         for _ in range(100):
             self.parser._generate_pattern_re('fmt_a')
 
