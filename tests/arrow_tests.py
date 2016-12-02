@@ -1270,6 +1270,15 @@ class ArrowDehumanizeTests(Chai):
         result = arw.dehumanize('1 day ago')
         assertEqual(result, arrow.Arrow(2012,12,31,0,0,0))
 
+    def test_weeks(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 week later')
+        assertEqual(result, arrow.Arrow(2013,1,8,0,0,0))
+
+        result = arw.dehumanize('1 week ago')
+        assertEqual(result, arrow.Arrow(2012,12,25,0,0,0))
+
     def test_months(self):
         arw = arrow.Arrow.fromdatetime(self.datetime)
 
@@ -1304,6 +1313,37 @@ class ArrowDehumanizeTests(Chai):
         result = arw2012.dehumanize('3 year 12 months 365 days ago')
         assertEqual(result, arrow.Arrow(2007,1,1,0,0,0))
 
+    def test_errors(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        test = True
+        try:
+            result = arw.dehumanize('nothing')
+        except:
+            test = False
+
+        assertEqual(test, False)
+
+        test = True
+        try:
+            result = arw.dehumanize('3 weeks 1 day blahblah')
+        except:
+            test = False
+        assertEqual(test, False)
+
+        test = True
+        try:
+            result = arw.dehumanize('3 ago')
+        except:
+            test = False
+        assertEqual(test, False)
+
+        test = True
+        try:
+            result = arw.dehumanize('3 blahblah ago')
+        except:
+            test = False
+        assertEqual(test, False)
 
 class ArrowUtilTests(Chai):
 

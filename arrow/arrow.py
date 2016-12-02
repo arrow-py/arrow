@@ -672,12 +672,12 @@ class Arrow(object):
         elif (temp[-1] == 'later'):
             isAgo = 1
         else:
-            return ValueError("Invalid direction of time")
+            raise ValueError("Invalid direction of time")
         
         times = temp[:-1]
         
         if len(times) % 2 != 0:
-            return ValueError("invalid input of time")
+            raise ValueError("invalid input of time")
         
         months = 0
         years = 0
@@ -708,7 +708,7 @@ class Arrow(object):
                 years += isAgo * tval
             
             else:
-                return ValueError("Invalid time unit or positioning seen")
+                raise ValueError("Invalid time unit or positioning seen")
         
         years += months/12
         months = months%12
