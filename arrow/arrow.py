@@ -11,6 +11,7 @@ from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 import calendar
+import copy
 import sys
 import warnings
 
@@ -663,7 +664,6 @@ class Arrow(object):
             <Arrow [2013-05-05T12:29:43+00:00]>
 
         '''
-        import copy #put this on top of arrow.py
         dtobj = copy.deepcopy(self._datetime)
         
         temp = tstring.split(' ')
