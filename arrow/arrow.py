@@ -730,23 +730,25 @@ class Arrow(object):
         else:
             if granularity == 'second':
                 delta = sign * delta
+                if(abs(delta) < 2):
+                    return locale.describe('now', only_distance=only_distance)
             elif granularity == 'minute':
-                delta = trunc(sign * delta / 60)
+                delta = sign * delta / float(60)
             elif granularity == 'hour':
-                delta = trunc(sign * delta / (60*60))
+                delta = sign * delta / float(60*60)
             elif granularity == 'day':
-                delta = trunc(sign * delta / (60*60*24))
+                delta = sign * delta / float(60*60*24)
             elif granularity == 'week':
-                delta = trunc(sign * delta / (60*60*24*7))
+                delta = sign * delta / float(60*60*24*7)
             elif granularity == 'month':
-                delta = trunc(sign * delta / (60*60*24*30.5))
+                delta = sign * delta / float(60*60*24*30.5)
             elif granularity == 'year':
-                delta = trunc(sign * delta / (60*60*24*365.25))
+                delta = sign * delta / float(60*60*24*365.25)
             else:
                 raise TypeError('Error. Could not understand your level of granularity. Please select between \
                 "second", "minute", "hour", "day", "week", "month" or "year"') 
             
-            if(delta > 2):
+            if(trunc(abs(delta)) != 1):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=False)
     # math
@@ -771,7 +773,7 @@ class Arrow(object):
 
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
-
+        # print granularity
         raise TypeError()
 
     def __rsub__(self, other):

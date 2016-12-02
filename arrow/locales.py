@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import inspect
 import sys
+from math import trunc
 
 
 def get_locale(name):
@@ -169,8 +170,7 @@ class Locale(object):
         return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
 
     def _format_timeframe(self, timeframe, delta):
-
-        return self.timeframes[timeframe].format(abs(delta))
+        return self.timeframes[timeframe].format(trunc(abs(delta)))
 
     def _format_relative(self, humanized, timeframe, delta):
 
