@@ -129,7 +129,7 @@ class ArrowRepresentationTests(Chai):
 
         result = self.arrow.format()
 
-        assertEqual(result, '2013-02-03 12:30:45-00:00')
+        assertEqual(result, '2013-02-03 12:30:45+00:00')
 
     def test_format_no_format_string(self):
 
@@ -162,10 +162,21 @@ class ArrowAttributeTests(Chai):
         assertEqual(self.arrow.week, 1)
 
     def test_getattr_quarter(self):
+        # start dates
         q1 = arrow.Arrow(2013, 1, 1)
         q2 = arrow.Arrow(2013, 4, 1)
         q3 = arrow.Arrow(2013, 8, 1)
         q4 = arrow.Arrow(2013, 10, 1)
+        assertEqual(q1.quarter, 1)
+        assertEqual(q2.quarter, 2)
+        assertEqual(q3.quarter, 3)
+        assertEqual(q4.quarter, 4)
+
+        # end dates
+        q1 = arrow.Arrow(2013, 3, 31)
+        q2 = arrow.Arrow(2013, 6, 30)
+        q3 = arrow.Arrow(2013, 9, 30)
+        q4 = arrow.Arrow(2013, 12, 31)
         assertEqual(q1.quarter, 1)
         assertEqual(q2.quarter, 2)
         assertEqual(q3.quarter, 3)
