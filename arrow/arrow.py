@@ -682,7 +682,7 @@ class Arrow(object):
         months = 0
         years = 0
         
-        for i in xrange(0,len(times),2):
+        for i in range(0,len(times),2):
             tval = int(times[i])
             tunit = times[i+1]
             
