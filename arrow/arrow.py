@@ -527,12 +527,34 @@ class Arrow(object):
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
 
-    def span(self, frame, count=1, start_index=0):
+    def span(self, frame, count=1, start_index=1):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param count: (optional) the number of frames to span.
+        :param start_index: the index of the span to start on.  For example, for spanning a
+        year with start index of 6, it will create a span from June of the given year - May
+        of the next year.
+
+            Seconds use milliseconds as a start index in [0-99]
+            Minutes use seconds as a start index in [0-59]
+            Hours use minutes as a start index in [0-59]
+            Days use hours as a start index in [0-23]
+            Weeks use days as a start index: (matches isoweekday() values)
+                start_index-Day 
+                1-Monday
+                2-Tuesday
+                3-Wednesday
+                4-Thursday
+                5-Friday
+                6-Saturday
+                7-Sunday
+            Months use days as a start index in [0-days_in_month-1]
+            Quarters use months as a start index in [0-2]
+            Years use months as a start index in [0-11]
+
+
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -551,7 +573,6 @@ class Arrow(object):
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
 
         '''
-
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
         if frame_absolute == 'week':
@@ -570,10 +591,18 @@ class Arrow(object):
             values.append(1)
 
         floor = self.__class__(*values, tzinfo=self.tzinfo)
+        # print floor
 
         if frame_absolute == 'week':
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+            if start_index < 1 or start_index > 7:
+                print start_index
+                raise ValueError, "start_index out of bounds for a week"
+            print start_index
+
+            print "isoweekday", self.isoweekday()
+            floor = floor + relativedelta(days=-((self.isoweekday() - start_index) % 7))
         elif frame_absolute == 'quarter':
+            print "month", self.month
             floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
         ceil = floor + relativedelta(
