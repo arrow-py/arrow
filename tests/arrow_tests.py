@@ -956,21 +956,13 @@ class ArrowSpanTests(Chai):
         check new tests with start indexes
         '''
         self.test_span_year_with_start_index()
-        
         self.test_span_year_count_with_start_index()
-        
         self.test_span_month_with_start_index()
-        
         self.test_span_week_with_start_index()
-        
         self.test_span_day_with_start_index()
-        
         self.test_span_hour_with_start_index()
-        
         self.test_span_minute_with_start_index()
-        
-        self.test_span_second_with_start_index()
-        
+        self.test_span_second_with_start_index()  
         self.test_span_microsecond_with_start_index()
         
 
