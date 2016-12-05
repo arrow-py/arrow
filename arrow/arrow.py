@@ -618,18 +618,25 @@ class Arrow(object):
         months       = 0
         years        = 0
 
+        if start_index != -1 and frame_absolute == 'quarter':
+            raise ValueError, "Start Index not supported with quarter"
+
+        if ((frame_absolute == 'second' and start_index not in microseconds_range) or
+            (frame_absolute == 'minute' and start_index not in seconds_range) or 
+            (frame_absolute == 'hour'   and start_index not in minutes_range) or 
+            (frame_absolute == 'day'    and start_index not in hours_range) or 
+            (frame_absolute == 'week'   and start_index not in weekdays_range) or 
+            (frame_absolute == 'month'  and start_index not in days_of_month_range) or 
+            (frame_absolute == 'year'   and start_index not in months_range)):
+            raise ValueError, "Start Index out of bounds"
 
         if frame_absolute == 'second' and start_index != -1:
-            if start_index not in microseconds_range:
-                raise ValueError, "start index out of bounds"
 
             microseconds = -(microseconds_in_second - start_index)
             if start_index <= self.microsecond:
                 seconds = 1
 
         elif frame_absolute == 'minute' and start_index != -1:
-            if start_index not in seconds_range:
-                raise ValueError, "start index out of bounds"
 
             seconds = -(seconds_in_minute - start_index)
             
@@ -637,24 +644,18 @@ class Arrow(object):
                 minutes = 1
         
         elif frame_absolute == 'hour' and start_index != -1:
-            if start_index not in minutes_range:
-                raise ValueError, "start index out of bounds"
 
             minutes = -(minutes_in_hour - start_index)
             if start_index <= self.minute:
                 hours = 1
             
         elif frame_absolute == 'day' and start_index != -1:
-            if start_index not in hours_range:
-                raise ValueError, "start index out of bounds"
 
             hours = -(hours_in_day - start_index)
             if start_index <= self.hour:
                 days = 1
 
         elif frame_absolute == 'week':
-            if start_index not in weekdays_range:
-                raise ValueError, "start_index out of bounds"
             
             if start_index == -1:
                 start_index = 0
@@ -663,8 +664,6 @@ class Arrow(object):
             days = -((self.weekday() - start_index) % 7)
 
         elif frame_absolute == 'month' and start_index != -1:
-            if start_index not in days_of_month_range:
-                raise ValueError, "start index out of bounds"
 
             days = -(days_in_month - start_index)
             if start_index <= self.day:
@@ -673,14 +672,10 @@ class Arrow(object):
                 days += days_in_month - calendar.monthrange(self.year, self.month-1)[1]
 
         elif frame_absolute == 'quarter':            
-            if start_index not in months_range and start_index != -1:
-                raise ValueError, "Start Index not supported with quarter"
 
             months = -((self.month - 1) % 3)
 
         elif frame_absolute == 'year' and start_index != -1:
-            if start_index not in months_range:
-                raise ValueError, "start index out of bound"
 
             months = -(months_in_year - start_index)
             if start_index <= self.month - 1:
