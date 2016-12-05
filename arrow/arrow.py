@@ -619,7 +619,7 @@ class Arrow(object):
         years        = 0
 
         if start_index != -1 and frame_absolute == 'quarter':
-            raise ValueError, "Start Index not supported with quarter"
+            raise ValueError("Start Index not supported with quarter")
 
         if ((frame_absolute == 'second' and start_index not in microseconds_range) or
             (frame_absolute == 'minute' and start_index not in seconds_range) or 
@@ -628,7 +628,7 @@ class Arrow(object):
             (frame_absolute == 'week'   and start_index not in weekdays_range) or 
             (frame_absolute == 'month'  and start_index not in days_of_month_range) or 
             (frame_absolute == 'year'   and start_index not in months_range)):
-            raise ValueError, "Start Index out of bounds"
+            raise ValueError("Start Index out of bounds")
 
         if frame_absolute == 'second' and start_index != -1:
 
