@@ -527,7 +527,7 @@ class Arrow(object):
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
 
-    def span(self, frame, count=1, start_index=0):
+    def span(self, frame, count=1, start_index=-1):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
@@ -582,14 +582,14 @@ class Arrow(object):
         months_in_quarter      = 3
         months_in_year         = 12
 
-        microseconds_range   = range(0, microseconds_in_second)
-        seconds_range        = range(0, seconds_in_minute)
-        minutes_range        = range(0, minutes_in_hour)
-        hours_range          = range(0, hours_in_day)
-        weekdays_range       = range(0, days_in_week)
-        days_of_month_range  = range(0, days_in_month)
-        quarter_months_range = range(0, months_in_quarter)
-        months_range         = range(0, months_in_year)
+        microseconds_range   = range(-1, microseconds_in_second)
+        seconds_range        = range(-1, seconds_in_minute)
+        minutes_range        = range(-1, minutes_in_hour)
+        hours_range          = range(-1, hours_in_day)
+        weekdays_range       = range(-1, days_in_week)
+        days_of_month_range  = range(-1, days_in_month)
+        quarter_months_range = range(-1, months_in_quarter)
+        months_range         = range(-1, months_in_year)
  
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
@@ -609,7 +609,7 @@ class Arrow(object):
             values.append(1)
 
         floor = self.__class__(*values, tzinfo=self.tzinfo)
-        # print floor
+
         microseconds = 0
         seconds      = 0
         minutes      = 0
@@ -619,65 +619,71 @@ class Arrow(object):
         years        = 0
 
 
-        if frame_absolute == 'second':
+        if frame_absolute == 'second' and start_index != -1:
             if start_index not in microseconds_range:
                 raise ValueError, "start index out of bounds"
 
             microseconds = -(microseconds_in_second - start_index)
-            if start_index < self.microsecond:
+            if start_index <= self.microsecond:
                 seconds = 1
 
-        elif frame_absolute == 'minute':
+        elif frame_absolute == 'minute' and start_index != -1:
             if start_index not in seconds_range:
                 raise ValueError, "start index out of bounds"
 
             seconds = -(seconds_in_minute - start_index)
             
-            if start_index < self.second:
+            if start_index <= self.second:
                 minutes = 1
         
-        elif frame_absolute == 'hour':
+        elif frame_absolute == 'hour' and start_index != -1:
             if start_index not in minutes_range:
                 raise ValueError, "start index out of bounds"
 
             minutes = -(minutes_in_hour - start_index)
-            if start_index < self.minute:
+            if start_index <= self.minute:
                 hours = 1
             
-        elif frame_absolute == 'day':
+        elif frame_absolute == 'day' and start_index != -1:
             if start_index not in hours_range:
                 raise ValueError, "start index out of bounds"
 
             hours = -(hours_in_day - start_index)
-            print self.hour
-            if start_index < self.hour:
+            if start_index <= self.hour:
                 days = 1
 
         elif frame_absolute == 'week':
             if start_index not in weekdays_range:
                 raise ValueError, "start_index out of bounds"
             
+            if start_index == -1:
+                start_index = 0
+
+                            
             days = -((self.weekday() - start_index) % 7)
 
-        elif frame_absolute == 'month':
+        elif frame_absolute == 'month' and start_index != -1:
             if start_index not in days_of_month_range:
                 raise ValueError, "start index out of bounds"
 
             days = -(days_in_month - start_index)
-            if start_index < self.day:
-                days += days_in_month - 1
+            if start_index <= self.day:
+                months = 1
+            else:
+                days += days_in_month - calendar.monthrange(self.year, self.month-1)[1]
 
         elif frame_absolute == 'quarter':            
-            if start_index not in months_range:
-                raise ValueError, "start index out of bounds"
-            months = -((self.month - 1 - start_index) % 3)
+            if start_index not in months_range and start_index != -1:
+                raise ValueError, "Start Index not supported with quarter"
 
-        elif frame_absolute == 'year':
+            months = -((self.month - 1) % 3)
+
+        elif frame_absolute == 'year' and start_index != -1:
             if start_index not in months_range:
                 raise ValueError, "start index out of bound"
 
             months = -(months_in_year - start_index)
-            if start_index < self.month:
+            if start_index <= self.month - 1:
                 years = 1
         
         floor = floor + relativedelta(microseconds=microseconds,

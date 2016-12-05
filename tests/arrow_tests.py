@@ -932,6 +932,164 @@ class ArrowSpanTests(Chai):
         self.datetime = datetime(2013, 2, 15, 3, 41, 22, 8923)
         self.arrow = arrow.Arrow.fromdatetime(self.datetime)
 
+    def runTest(self):
+        self.test_start_index()
+
+    def test_start_index(self):
+        '''
+        check against implementations w/o test_start_index
+        '''
+        self.test_span_year()
+        self.test_span_year_count()
+        self.test_span_month()
+        self.test_span_quarter()
+        self.test_span_quarter_count()
+        self.test_span_week()
+        self.test_span_day()
+        self.test_span_hour()
+        self.test_span_minute()
+        self.test_span_second()
+        self.test_span_microsecond()
+
+
+        '''
+        check new tests with start indexes
+        '''
+        self.test_span_year_with_start_index()
+        
+        self.test_span_year_count_with_start_index()
+        
+        self.test_span_month_with_start_index()
+        
+        self.test_span_week_with_start_index()
+        
+        self.test_span_day_with_start_index()
+        
+        self.test_span_hour_with_start_index()
+        
+        self.test_span_minute_with_start_index()
+        
+        self.test_span_second_with_start_index()
+        
+        self.test_span_microsecond_with_start_index()
+        
+
+
+    def test_span_year_with_start_index(self):
+
+        floor, ceil = self.arrow.span('year', start_index=1)
+
+        assertEqual(floor, datetime(2013, 2, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2014, 1, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+        floor, ceil = self.arrow.span('year', start_index=2)
+
+        assertEqual(floor, datetime(2012, 3, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 28, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
+    def test_span_year_count_with_start_index(self):
+
+        floor, ceil = self.arrow.span('year', 2, start_index=1)
+
+        assertEqual(floor, datetime(2013, 2, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2015, 1, 31, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+        floor, ceil = self.arrow.span('year', 2, start_index=2)
+
+        assertEqual(floor, datetime(2012, 3, 1, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2014, 2, 28, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
+    def test_span_month_with_start_index(self):
+
+        floor, ceil = self.arrow.span('month', start_index=12)
+
+
+        assertEqual(floor, datetime(2013, 2, 13, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 3, 12, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+        floor, ceil = self.arrow.span('month', start_index=17)
+
+        assertEqual(floor, datetime(2013, 1, 18, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+    def test_span_week_with_start_index(self):
+
+        for i in xrange(5):
+
+            floor, ceil = self.arrow.span('week', start_index=i)
+
+            assertEqual(floor, datetime(2013, 2, 11+i, tzinfo=tz.tzutc()))
+            assertEqual(ceil, datetime(2013, 2, 17+i, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+        for i in xrange(2):
+            k = i + 5
+
+            floor, ceil = self.arrow.span('week', start_index=k)
+
+            assertEqual(floor, datetime(2013, 2, 9+i, tzinfo=tz.tzutc()))
+            assertEqual(ceil, datetime(2013, 2, 15+i, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+    def test_span_day_with_start_index(self):
+
+        floor, ceil = self.arrow.span('day', start_index=3)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 16, 2, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+
+        floor, ceil = self.arrow.span('day', start_index=4)
+
+        assertEqual(floor, datetime(2013, 2, 14, 4, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 59, 59, 999999, tzinfo=tz.tzutc()))
+
+    def test_span_hour_with_start_index(self):
+
+        floor, ceil = self.arrow.span('hour', start_index=40)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 40, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 4, 39, 59, 999999, tzinfo=tz.tzutc()))
+
+        floor, ceil = self.arrow.span('hour', start_index=50)
+
+        assertEqual(floor, datetime(2013, 2, 15, 2, 50, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 49, 59, 999999, tzinfo=tz.tzutc()))
+    
+    def test_span_minute_with_start_index(self):
+
+        floor, ceil = self.arrow.span('minute', start_index=21)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 41, 21, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 42, 20, 999999, tzinfo=tz.tzutc()))
+
+        floor, ceil = self.arrow.span('minute', start_index=23)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 40, 23, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 41, 22, 999999, tzinfo=tz.tzutc()))
+
+    def test_span_second_with_start_index(self):
+
+        floor, ceil = self.arrow.span('second', start_index=8000)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 41, 22, 8000, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 41, 23, 7999, tzinfo=tz.tzutc()))
+
+
+
+        floor, ceil = self.arrow.span('second', start_index=9000)
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 41, 21, 9000, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 41, 22, 8999, tzinfo=tz.tzutc()))
+
+    def test_span_microsecond_with_start_index(self):
+
+        floor, ceil = self.arrow.span('microsecond')
+
+        assertEqual(floor, datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc()))
+        assertEqual(ceil, datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc()))
+
+
     def test_span_attribute(self):
 
         with assertRaises(AttributeError):
@@ -1266,3 +1424,4 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
+
