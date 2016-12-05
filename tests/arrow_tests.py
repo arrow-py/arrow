@@ -932,9 +932,6 @@ class ArrowSpanTests(Chai):
         self.datetime = datetime(2013, 2, 15, 3, 41, 22, 8923)
         self.arrow = arrow.Arrow.fromdatetime(self.datetime)
 
-    def runTest(self):
-        self.test_start_index()
-
     def test_start_index(self):
         '''
         check against implementations w/o test_start_index
