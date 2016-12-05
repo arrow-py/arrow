@@ -1063,14 +1063,14 @@ class ArrowSpanTests(Chai):
 
     def test_span_week_with_start_index(self):
 
-        for i in xrange(5):
+        for i in range(5):
 
             floor, ceil = self.arrow.span('week', start_index=i)
 
             assertEqual(floor, datetime(2013, 2, 11+i, tzinfo=tz.tzutc()))
             assertEqual(ceil, datetime(2013, 2, 17+i, 23, 59, 59, 999999, tzinfo=tz.tzutc()))
 
-        for i in xrange(2):
+        for i in range(2):
             k = i + 5
 
             floor, ceil = self.arrow.span('week', start_index=k)
