@@ -527,7 +527,7 @@ class Arrow(object):
         return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
 
-    def span(self, frame, count=1, start_index=1):
+    def span(self, frame, count=1, start_index=0):
         ''' Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
@@ -541,15 +541,15 @@ class Arrow(object):
             Minutes use seconds as a start index in [0-59]
             Hours use minutes as a start index in [0-59]
             Days use hours as a start index in [0-23]
-            Weeks use days as a start index: (matches isoweekday() values)
+            Weeks use days as a start index: (matches weekday() values)
                 start_index-Day 
-                1-Monday
-                2-Tuesday
-                3-Wednesday
-                4-Thursday
-                5-Friday
-                6-Saturday
-                7-Sunday
+                0-Monday
+                1-Tuesday
+                2-Wednesday
+                3-Thursday
+                4-Friday
+                5-Saturday
+                6-Sunday
             Months use days as a start index in [0-days_in_month-1]
             Quarters use months as a start index in [0-2]
             Years use months as a start index in [0-11]
@@ -573,6 +573,24 @@ class Arrow(object):
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
 
         '''
+        microseconds_in_second = 1000000
+        seconds_in_minute      = 60
+        minutes_in_hour        = 60
+        hours_in_day           = 24
+        days_in_week           = 7
+        days_in_month          = calendar.monthrange(self.year, self.month)[1]
+        months_in_quarter      = 3
+        months_in_year         = 12
+
+        microseconds_range   = range(0, microseconds_in_second)
+        seconds_range        = range(0, seconds_in_minute)
+        minutes_range        = range(0, minutes_in_hour)
+        hours_range          = range(0, hours_in_day)
+        weekdays_range       = range(0, days_in_week)
+        days_of_month_range  = range(0, days_in_month)
+        quarter_months_range = range(0, months_in_quarter)
+        months_range         = range(0, months_in_year)
+ 
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
         if frame_absolute == 'week':
@@ -592,18 +610,83 @@ class Arrow(object):
 
         floor = self.__class__(*values, tzinfo=self.tzinfo)
         # print floor
+        microseconds = 0
+        seconds      = 0
+        minutes      = 0
+        hours        = 0
+        days         = 0
+        months       = 0
+        years        = 0
 
-        if frame_absolute == 'week':
-            if start_index < 1 or start_index > 7:
-                print start_index
-                raise ValueError, "start_index out of bounds for a week"
-            print start_index
 
-            print "isoweekday", self.isoweekday()
-            floor = floor + relativedelta(days=-((self.isoweekday() - start_index) % 7))
-        elif frame_absolute == 'quarter':
-            print "month", self.month
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+        if frame_absolute == 'second':
+            if start_index not in microseconds_range:
+                raise ValueError, "start index out of bounds"
+
+            microseconds = -(microseconds_in_second - start_index)
+            if start_index < self.microsecond:
+                seconds = 1
+
+        elif frame_absolute == 'minute':
+            if start_index not in seconds_range:
+                raise ValueError, "start index out of bounds"
+
+            seconds = -(seconds_in_minute - start_index)
+            
+            if start_index < self.second:
+                minutes = 1
+        
+        elif frame_absolute == 'hour':
+            if start_index not in minutes_range:
+                raise ValueError, "start index out of bounds"
+
+            minutes = -(minutes_in_hour - start_index)
+            if start_index < self.minute:
+                hours = 1
+            
+        elif frame_absolute == 'day':
+            if start_index not in hours_range:
+                raise ValueError, "start index out of bounds"
+
+            hours = -(hours_in_day - start_index)
+            print self.hour
+            if start_index < self.hour:
+                days = 1
+
+        elif frame_absolute == 'week':
+            if start_index not in weekdays_range:
+                raise ValueError, "start_index out of bounds"
+            
+            days = -((self.weekday() - start_index) % 7)
+
+        elif frame_absolute == 'month':
+            if start_index not in days_of_month_range:
+                raise ValueError, "start index out of bounds"
+
+            days = -(days_in_month - start_index)
+            if start_index < self.day:
+                days += days_in_month - 1
+
+        elif frame_absolute == 'quarter':            
+            if start_index not in months_range:
+                raise ValueError, "start index out of bounds"
+            months = -((self.month - 1 - start_index) % 3)
+
+        elif frame_absolute == 'year':
+            if start_index not in months_range:
+                raise ValueError, "start index out of bound"
+
+            months = -(months_in_year - start_index)
+            if start_index < self.month:
+                years = 1
+        
+        floor = floor + relativedelta(microseconds=microseconds,
+                                      seconds=seconds,
+                                      minutes=minutes,
+                                      hours=hours,
+                                      days=days,
+                                      months=months,
+                                      years=years)
 
         ceil = floor + relativedelta(
             **{frame_relative: count * relative_steps}) + relativedelta(microseconds=-1)
