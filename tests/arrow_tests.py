@@ -923,6 +923,24 @@ class ArrowSpanRangeTests(Chai):
             assertEqual(f.tzinfo, tz.gettz('US/Central'))
             assertEqual(c.tzinfo, tz.gettz('US/Central'))
 
+class ArrowIntervalTests(Chai):
+
+    def test_incorrect_input(self):
+        correct = True
+        try:
+            result = arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15),0)
+        except:
+            correct = False
+
+        assertEqual(correct,False)
+
+    def test_correct(self):
+        result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15),2)
+
+        assertEqual(result,[(arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999))])
+
 
 class ArrowSpanTests(Chai):
 
