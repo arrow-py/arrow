@@ -1085,6 +1085,8 @@ class ArrowHumanizeTests(Chai):
         later108 = self.now.shift(seconds=10 ** 8)
         assertEqual(self.now.humanize(later108, granularity = 'year'), '3 years ago')
         assertEqual(later108.humanize(self.now, granularity = 'year'), 'in 3 years')
+        with assertRaises(AttributeError):
+            self.now.humanize(later108, granularity = 'years')
     
     def test_seconds(self):
 

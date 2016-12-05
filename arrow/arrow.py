@@ -745,7 +745,7 @@ class Arrow(object):
             elif granularity == 'year':
                 delta = sign * delta / float(60*60*24*365.25)
             else:
-                raise TypeError('Error. Could not understand your level of granularity. Please select between \
+                raise AttributeError('Error. Could not understand your level of granularity. Please select between \
                 "second", "minute", "hour", "day", "week", "month" or "year"') 
             
             if(trunc(abs(delta)) != 1):
