@@ -964,7 +964,61 @@ class ArrowSpanTests(Chai):
         self.test_span_minute_with_start_index()
         self.test_span_second_with_start_index()  
         self.test_span_microsecond_with_start_index()
+        self.test_span_index_out_of_bounds()
+
+
+    def test_span_index_out_of_bounds(self):
+
+        # Test microsecond indices
+        with assertRaises(ValueError):
+            self.arrow.span('second', start_index=-2)
+        with assertRaises(ValueError):
+            self.arrow.span('second', start_index=1000000)
+
+
+        # Test second indices
+        with assertRaises(ValueError):
+            self.arrow.span('minute', start_index=-2)
+        with assertRaises(ValueError):
+            self.arrow.span('minute', start_index=60)
+
+
+        # Test minute indices
+        with assertRaises(ValueError):
+            self.arrow.span('hour', start_index=-2)
+        with assertRaises(ValueError):
+            self.arrow.span('hour', start_index=60)
         
+
+        # Test hour indices
+        with assertRaises(ValueError):
+            self.arrow.span('day', start_index=-2)
+        with assertRaises(ValueError):
+            self.arrow.span('day', start_index=24)
+
+
+
+        # Test day of week indices
+        with assertRaises(ValueError):
+            self.arrow.span('week', start_index=-2)
+        with assertRaises(ValueError):
+            self.arrow.span('week', start_index=7)
+        
+
+        # Test day of month indices
+        with assertRaises(ValueError):
+            self.arrow.span('month', start_index=-2)
+        with assertRaises(ValueError):
+            # Feb 2013 has 28 days
+            self.arrow.span('month', start_index=28)
+
+
+        # Test months indices
+        with assertRaises(ValueError):
+            self.arrow.span('year', start_index=-2)
+        with assertRaises(ValueError):
+            # Feb 2013 has 28 days
+            self.arrow.span('year', start_index=12)
 
 
     def test_span_year_with_start_index(self):
