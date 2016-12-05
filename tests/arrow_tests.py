@@ -965,7 +965,11 @@ class ArrowSpanTests(Chai):
         self.test_span_second_with_start_index()  
         self.test_span_microsecond_with_start_index()
         self.test_span_index_out_of_bounds()
+        self.test_span_no_start_index_for_quarter()
 
+    def test_span_no_start_index_for_quarter(self):
+        with assertRaises(ValueError):
+            self.arrow.span('quarter', start_index=1)
 
     def test_span_index_out_of_bounds(self):
 
