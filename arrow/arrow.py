@@ -11,6 +11,7 @@ from datetime import datetime, timedelta, tzinfo
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 import calendar
+import copy
 import sys
 import warnings
 
@@ -312,7 +313,50 @@ class Arrow(object):
         _range = cls.range(frame, start, end, tz, limit)
         return [r.span(frame) for r in _range]
 
+    @classmethod
+    def interval(cls, frame, start, end, interval=1, tz=None):
+        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        representing a series of intervals between two inputs.
 
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param start: A datetime expression, the start of the range.
+        :param end: (optional) A datetime expression, the end of the range.
+        :param interval: (optional) Time interval for the given time frame.
+        :param tz: (optional) A timezone expression.  Defaults to UTC.
+        
+        Supported frame values: year, quarter, month, week, day, hour, minute, second
+
+        Recognized datetime expressions:
+
+            - An :class:`Arrow <arrow.arrow.Arrow>` object.
+            - A ``datetime`` object.
+
+        Recognized timezone expressions:
+
+            - A ``tzinfo`` object.
+            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
+            - A ``str`` in ISO-8601 style, as in '+07:00'.
+            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
+
+        Usage:
+
+            >>> start = datetime(2013, 5, 5, 12, 30)
+            >>> end = datetime(2013, 5, 5, 17, 15)
+            >>> for r in arrow.Arrow.interval('hour', start, end, 2):
+            ...     print r
+            ...
+            (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:0]>)
+        '''
+        if interval < 1:
+            raise ValueError("interval has to be a positive integer")
+
+        spanRange = cls.span_range(frame,start,end,tz)
+
+        bound = (len(spanRange) // interval) * interval
+        return [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
+        
     # representations
 
     def __repr__(self):
@@ -639,6 +683,86 @@ class Arrow(object):
         '''
 
         return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
+
+    def dehumanize(self, tstring):
+        ''' Returns an arrow object given a humanized representation of a relative difference in time.
+            Currently only supported for locale en_us and in a specific format as described in param tstring below.
+
+        :param tstring: Input time string required to be in this format: 'a_0 b_0 .. a_n b_n c' where:
+            Each a_k represents an integer nuber >= 0 where 0 <= k <= n
+            Each b_k represents a string representing the unit of time measurement
+            c is the string 'ago' or 'later'
+            i.e. dehumanize('13 months 2 days 3 months 1 year ago') would return an arrow object representing
+            2 years, 4 months, and 2 days previous from the current time. It is calculated using the differences
+            of the least significant units first, i.e. '12 months 3 years 365 days later' from 2011-01-01 would
+            return an arrow object representing 2016-01-01 but from 2012-01-01 would return 2016-12-31 due to the
+            leap day.
+
+        Usage::
+
+            >>> import arrow
+            >>> t = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+            <Arrow [2013-05-05T12:30:45+00:00]>
+            >>> t.dehumanize('2 seconds 1 minute ago')
+            <Arrow [2013-05-05T12:29:43+00:00]>
+
+        '''
+        dtobj = copy.deepcopy(self._datetime)
+        
+        temp = tstring.split(' ')
+        if (temp[-1] == 'ago'):
+            isAgo = -1
+        elif (temp[-1] == 'later'):
+            isAgo = 1
+        else:
+            return ValueError("Invalid direction of time")
+        
+        times = temp[:-1]
+        
+        if len(times) % 2 != 0:
+            return ValueError("invalid input of time")
+        
+        months = 0
+        years = 0
+        
+        for i in xrange(0,len(times),2):
+            tval = int(times[i])
+            tunit = times[i+1]
+            
+            if tunit == 'second' or tunit == 'seconds':
+                dtobj +=  isAgo * timedelta(seconds=tval)
+               
+            elif tunit == 'minute' or tunit == 'minutes':
+                dtobj +=  isAgo * timedelta(minutes=tval)
+                
+            elif tunit == 'hour' or tunit == 'hours':
+                dtobj +=  isAgo * timedelta(hours=tval)
+            
+            elif tunit == 'day' or tunit == 'days':
+                dtobj +=  isAgo * timedelta(days=tval)
+                
+            elif tunit == 'week' or tunit == 'weeks':
+                dtobj +=  isAgo * timedelta(weeks=tval)
+            
+            elif tunit == 'month' or tunit == 'months':
+                months += isAgo * tval
+                
+            elif tunit == 'year' or tunit == 'years':
+                years += isAgo * tval
+            
+            else:
+                return ValueError("Invalid time unit or positioning seen")
+        
+        years += months/12
+        months = months%12
+        years = dtobj.year + years
+        months = dtobj.month - 1 + months
+        years += months/12
+        months = months%12 + 1
+        
+        retobj = datetime(years, months, dtobj.day, dtobj.hour, dtobj.minute, dtobj.second)
+        
+        return self.fromdatetime(retobj)
 
 
     def humanize(self, other=None, locale='en_us', only_distance=False):

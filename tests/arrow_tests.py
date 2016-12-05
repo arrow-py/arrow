@@ -923,6 +923,24 @@ class ArrowSpanRangeTests(Chai):
             assertEqual(f.tzinfo, tz.gettz('US/Central'))
             assertEqual(c.tzinfo, tz.gettz('US/Central'))
 
+class ArrowIntervalTests(Chai):
+
+    def test_incorrect_input(self):
+        correct = True
+        try:
+            result = arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15),0)
+        except:
+            correct = False
+
+        assertEqual(correct,False)
+
+    def test_correct(self):
+        result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15),2)
+
+        assertEqual(result,[(arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999))])
+
 
 class ArrowSpanTests(Chai):
 
@@ -1220,6 +1238,89 @@ class ArrowHumanizeTestsWithLocale(Chai):
         result = arw.humanize(self.datetime, locale='ru')
 
         assertEqual(result, '2 года назад')
+
+class ArrowDehumanizeTests(Chai):
+
+    def setUp(self):
+        super(ArrowDehumanizeTests, self).setup()
+        self.datetime = datetime(2013,1,1)
+        self.datetime2012 = datetime(2012,1,1)
+
+    def test_seconds(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 second later')
+        assertEqual(result, arrow.Arrow(2013,1,1,0,0,1))
+
+        result = arw.dehumanize('1 second ago')
+        assertEqual(result, arrow.Arrow(2012,12,31,23,59,59))
+
+        result = arw.dehumanize('2 seconds later')
+        assertEqual(result, arrow.Arrow(2013,1,1,0,0,2))
+
+        result = arw.dehumanize('2 seconds ago')
+        assertEqual(result, arrow.Arrow(2012,12,31,23,59,58))
+
+    def test_minutes(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 minute later')
+        assertEqual(result, arrow.Arrow(2013,1,1,0,1,0))
+
+        result = arw.dehumanize('1 minute ago')
+        assertEqual(result, arrow.Arrow(2012,12,31,23,59,0))
+
+    def test_hours(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 hour later')
+        assertEqual(result, arrow.Arrow(2013,1,1,1,0,0))
+
+        result = arw.dehumanize('1 hour ago')
+        assertEqual(result, arrow.Arrow(2012,12,31,23,0,0))
+
+    def test_days(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 day later')
+        assertEqual(result, arrow.Arrow(2013,1,2,0,0,0))
+
+        result = arw.dehumanize('1 day ago')
+        assertEqual(result, arrow.Arrow(2012,12,31,0,0,0))
+
+    def test_months(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 month later')
+        assertEqual(result, arrow.Arrow(2013,2,1,0,0,0))
+
+        result = arw.dehumanize('1 month ago')
+        assertEqual(result, arrow.Arrow(2012,12,1,0,0,0))
+
+    def test_years(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+
+        result = arw.dehumanize('1 year later')
+        assertEqual(result, arrow.Arrow(2014,1,1,0,0,0))
+
+        result = arw.dehumanize('1 year ago')
+        assertEqual(result, arrow.Arrow(2012,1,1,0,0,0))
+
+    def test_additional(self):
+        arw = arrow.Arrow.fromdatetime(self.datetime)
+        arw2012 = arrow.Arrow.fromdatetime(self.datetime2012)
+
+        result = arw.dehumanize('3 year 12 months 365 days later')
+        assertEqual(result, arrow.Arrow(2018,1,1,0,0,0))
+
+        result = arw2012.dehumanize('3 year 12 months 365 days later')
+        assertEqual(result, arrow.Arrow(2016,12,31,0,0,0))
+
+        result = arw.dehumanize('3 year 12 months 365 days ago')
+        assertEqual(result, arrow.Arrow(2008,1,2,0,0,0))
+
+        result = arw2012.dehumanize('3 year 12 months 365 days ago')
+        assertEqual(result, arrow.Arrow(2007,1,1,0,0,0))
 
 
 class ArrowUtilTests(Chai):
