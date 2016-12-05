@@ -312,6 +312,49 @@ class Arrow(object):
         _range = cls.range(frame, start, end, tz, limit)
         return [r.span(frame) for r in _range]
 
+    @classmethod
+    def interval(cls, frame, start, end, interval=1, tz=None):
+        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        representing a series of intervals between two inputs.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param start: A datetime expression, the start of the range.
+        :param end: (optional) A datetime expression, the end of the range.
+        :param interval: (optional) Time interval for the given time frame.
+        :param tz: (optional) A timezone expression.  Defaults to UTC.
+        
+        Supported frame values: year, quarter, month, week, day, hour, minute, second
+
+        Recognized datetime expressions:
+
+            - An :class:`Arrow <arrow.arrow.Arrow>` object.
+            - A ``datetime`` object.
+
+        Recognized timezone expressions:
+
+            - A ``tzinfo`` object.
+            - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
+            - A ``str`` in ISO-8601 style, as in '+07:00'.
+            - A ``str``, one of the following:  'local', 'utc', 'UTC'.
+
+        Usage:
+
+            >>> start = datetime(2013, 5, 5, 12, 30)
+            >>> end = datetime(2013, 5, 5, 17, 15)
+            >>> for r in arrow.Arrow.interval('hour', start, end, 2):
+            ...     print r
+            ...
+            (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:0]>)
+        '''
+        if interval < 1:
+            raise ValueError("interval has to be a positive integer")
+
+        spanRange = cls.span_range(frame,start,end,tz)
+
+        bound = (len(spanRange) // interval) * interval
+        return [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
 
     # representations
 
