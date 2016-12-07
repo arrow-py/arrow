@@ -4,6 +4,7 @@ from arrow import formatter
 
 from datetime import datetime
 from dateutil import tz as dateutil_tz
+import pytz
 import time
 
 class DateTimeFormatterFormatTokenTests(Chai):
@@ -117,6 +118,21 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
         result = self.formatter._format_token(dt, 'Z')
         assertTrue(result == '-0700' or result == '-0800')
+
+    def test_timezone_formatter(self):
+
+        tz_map = {
+            'BRST': 'America/Sao_Paulo',
+            'CET': 'Europe/Berlin',
+            'JST': 'Asia/Tokyo',
+            'PST': 'US/Pacific',
+        }
+
+        for abbreviation, full_name in tz_map.items():
+            # This test will fail if we use "now" as date as soon as we change from/to DST
+            dt = datetime(1986, 2, 14, tzinfo=pytz.timezone('UTC')).replace(tzinfo=dateutil_tz.gettz(full_name))
+            result = self.formatter._format_token(dt, 'ZZZ')
+            assertEqual(result, abbreviation)
 
     def test_am_pm(self):
 
