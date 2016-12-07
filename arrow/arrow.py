@@ -471,13 +471,28 @@ class Arrow(object):
         >>> arw.shift(years=1, months=-1)
         <Arrow [2014-04-11T22:27:34.787885+00:00]>
 
+        Day-of-the-week relative shifting can use either Python's weekday numbers
+        (Monday = 0, Tuesday = 1 .. Sunday = 6) or using dateutil.relativedelta's
+        day instances (MO, TU .. SU).  When using weekday numbers, the returned
+        date will always be greater than or equal to the starting date.
+
+        Using the above code (which is a Saturday) and asking it to shift to Saturday:
+
+        >>> arw.shift(weekday=5)
+        <Arrow [2013-05-11T22:27:34.787885+00:00]>
+
+        While asking for a Monday:
+
+        >>> arw.shift(weekday=0)
+        <Arrow [2013-05-13T22:27:34.787885+00:00]>
+
         '''
 
         relative_kwargs = {}
 
         for key, value in kwargs.items():
 
-            if key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
+            if key in self._ATTRS_PLURAL or key in ['weeks', 'quarters', 'weekday']:
                 relative_kwargs[key] = value
             else:
                 raise AttributeError()
