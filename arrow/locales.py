@@ -839,13 +839,10 @@ class GermanLocale(_DeutschLocaleCommonMixin, Locale):
 
     names = ['de', 'de_de']
 
-    timeframes = _DeutschLocaleCommonMixin.timeframes.copy()
-    timeframes['days'] = '{0} Tagen'
-
 
 class AustriaLocale(_DeutschLocaleCommonMixin, Locale):
 
-    names = ['de', 'de_at']
+    names = ['de_at']
 
     timeframes = _DeutschLocaleCommonMixin.timeframes.copy()
     timeframes['days'] = '{0} Tage'
