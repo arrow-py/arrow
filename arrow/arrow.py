@@ -116,7 +116,7 @@ class Arrow(object):
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, tzinfo)
+            dt.microsecond, dt.tzinfo)
 
     @classmethod
     def utcfromtimestamp(cls, timestamp):
