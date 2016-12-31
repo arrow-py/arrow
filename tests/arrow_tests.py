@@ -6,6 +6,7 @@ from chai import Chai
 
 from datetime import date, datetime, timedelta
 from dateutil import tz
+from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 import simplejson as json
 import warnings
 import calendar
@@ -592,6 +593,48 @@ class ArrowShiftTests(Chai):
         assertEqual(arw.shift(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
         assertEqual(arw.shift(microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1))
 
+        # Remember: Python's weekday 0 is Monday
+        assertEqual(arw.shift(weekday=0), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.shift(weekday=1), arrow.Arrow(2013, 5, 7, 12, 30, 45))
+        assertEqual(arw.shift(weekday=2), arrow.Arrow(2013, 5, 8, 12, 30, 45))
+        assertEqual(arw.shift(weekday=3), arrow.Arrow(2013, 5, 9, 12, 30, 45))
+        assertEqual(arw.shift(weekday=4), arrow.Arrow(2013, 5, 10, 12, 30, 45))
+        assertEqual(arw.shift(weekday=5), arrow.Arrow(2013, 5, 11, 12, 30, 45))
+        assertEqual(arw.shift(weekday=6), arw)
+
+        with assertRaises(IndexError):
+            arw.shift(weekday=7)
+
+        # Use dateutil.relativedelta's convenient day instances
+        assertEqual(arw.shift(weekday=MO), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.shift(weekday=MO(0)), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.shift(weekday=MO(1)), arrow.Arrow(2013, 5, 6, 12, 30, 45))
+        assertEqual(arw.shift(weekday=MO(2)), arrow.Arrow(2013, 5, 13, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TU), arrow.Arrow(2013, 5, 7, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TU(0)), arrow.Arrow(2013, 5, 7, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TU(1)), arrow.Arrow(2013, 5, 7, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TU(2)), arrow.Arrow(2013, 5, 14, 12, 30, 45))
+        assertEqual(arw.shift(weekday=WE), arrow.Arrow(2013, 5, 8, 12, 30, 45))
+        assertEqual(arw.shift(weekday=WE(0)), arrow.Arrow(2013, 5, 8, 12, 30, 45))
+        assertEqual(arw.shift(weekday=WE(1)), arrow.Arrow(2013, 5, 8, 12, 30, 45))
+        assertEqual(arw.shift(weekday=WE(2)), arrow.Arrow(2013, 5, 15, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TH), arrow.Arrow(2013, 5, 9, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TH(0)), arrow.Arrow(2013, 5, 9, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TH(1)), arrow.Arrow(2013, 5, 9, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TH(2)), arrow.Arrow(2013, 5, 16, 12, 30, 45))
+        assertEqual(arw.shift(weekday=FR), arrow.Arrow(2013, 5, 10, 12, 30, 45))
+        assertEqual(arw.shift(weekday=FR(0)), arrow.Arrow(2013, 5, 10, 12, 30, 45))
+        assertEqual(arw.shift(weekday=FR(1)), arrow.Arrow(2013, 5, 10, 12, 30, 45))
+        assertEqual(arw.shift(weekday=FR(2)), arrow.Arrow(2013, 5, 17, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SA), arrow.Arrow(2013, 5, 11, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SA(0)), arrow.Arrow(2013, 5, 11, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SA(1)), arrow.Arrow(2013, 5, 11, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SA(2)), arrow.Arrow(2013, 5, 18, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SU), arw)
+        assertEqual(arw.shift(weekday=SU(0)), arw)
+        assertEqual(arw.shift(weekday=SU(1)), arw)
+        assertEqual(arw.shift(weekday=SU(2)), arrow.Arrow(2013, 5, 12, 12, 30, 45))
+
     def test_shift_negative(self):
 
         arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
@@ -606,6 +649,27 @@ class ArrowShiftTests(Chai):
         assertEqual(arw.shift(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
         assertEqual(arw.shift(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
         assertEqual(arw.shift(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999))
+
+        # Not sure how practical these negative weekdays are
+        assertEqual(arw.shift(weekday=-1), arw.shift(weekday=SU))
+        assertEqual(arw.shift(weekday=-2), arw.shift(weekday=SA))
+        assertEqual(arw.shift(weekday=-3), arw.shift(weekday=FR))
+        assertEqual(arw.shift(weekday=-4), arw.shift(weekday=TH))
+        assertEqual(arw.shift(weekday=-5), arw.shift(weekday=WE))
+        assertEqual(arw.shift(weekday=-6), arw.shift(weekday=TU))
+        assertEqual(arw.shift(weekday=-7), arw.shift(weekday=MO))
+
+        with assertRaises(IndexError):
+            arw.shift(weekday=-8)
+
+        assertEqual(arw.shift(weekday=MO(-1)), arrow.Arrow(2013, 4, 29, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TU(-1)), arrow.Arrow(2013, 4, 30, 12, 30, 45))
+        assertEqual(arw.shift(weekday=WE(-1)), arrow.Arrow(2013, 5, 1, 12, 30, 45))
+        assertEqual(arw.shift(weekday=TH(-1)), arrow.Arrow(2013, 5, 2, 12, 30, 45))
+        assertEqual(arw.shift(weekday=FR(-1)), arrow.Arrow(2013, 5, 3, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SA(-1)), arrow.Arrow(2013, 5, 4, 12, 30, 45))
+        assertEqual(arw.shift(weekday=SU(-1)), arw)
+        assertEqual(arw.shift(weekday=SU(-2)), arrow.Arrow(2013, 4, 28, 12, 30, 45))
 
     def test_shift_quarters_bug(self):
 
