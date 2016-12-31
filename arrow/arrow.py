@@ -707,7 +707,7 @@ class Arrow(object):
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
-        :param granularity: (optinal) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'month' or 'year'.
+        :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'month' or 'year'.
         Usage::
 
             >>> earlier = arrow.utcnow().replace(hours=-2)
@@ -829,7 +829,7 @@ class Arrow(object):
 
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
-        # print granularity
+        
         raise TypeError()
 
     def __rsub__(self, other):
