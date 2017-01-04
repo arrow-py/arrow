@@ -53,7 +53,7 @@ Quickstart
     >>> utc
     <Arrow [2013-05-11T21:23:58.970460+00:00]>
 
-    >>> utc = utc.replace(hours=-1)
+    >>> utc = utc.shift(hours=-1)
     >>> utc
     <Arrow [2013-05-11T20:23:58.970460+00:00]>
 
@@ -220,7 +220,7 @@ Or, get one with attributes shifted forward or backward:
 
 .. code-block:: python
 
-    >>> arw.replace(weeks=+3)
+    >>> arw.shift(weeks=+3)
     <Arrow [2013-06-02T03:29:35.334214+00:00]>
 
 Even replace the timezone without altering other attributes:
@@ -274,7 +274,7 @@ Humanize relative to now:
 
 .. code-block:: python
 
-    >>> past = arrow.utcnow().replace(hours=-1)
+    >>> past = arrow.utcnow().shift(hours=-1)
     >>> past.humanize()
     'an hour ago'
 
@@ -283,7 +283,7 @@ Or another Arrow, or datetime:
 .. code-block:: python
 
     >>> present = arrow.utcnow()
-    >>> future = present.replace(hours=2)
+    >>> future = present.shift(hours=2)
     >>> future.humanize(present)
     'in 2 hours'
 
@@ -291,7 +291,7 @@ Support for a growing number of locales (see `locales.py` for supported language
 
 .. code-block:: python
 
-    >>> future = arrow.utcnow().replace(hours=1)
+    >>> future = arrow.utcnow().shift(hours=1)
     >>> future.humanize(a, locale='ru')
     'через 2 час(а,ов)'
 
@@ -363,7 +363,7 @@ Use factories to harness Arrow's module API for a custom Arrow-derived type.  Fi
     ...         xmas = arrow.Arrow(self.year, 12, 25)
     ...
     ...         if self > xmas:
-    ...             xmas = xmas.replace(years=1)
+    ...             xmas = xmas.shift(years=1)
     ...
     ...         return (xmas - self).days
 

@@ -710,11 +710,11 @@ class Arrow(object):
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'month' or 'year'.
         Usage::
 
-            >>> earlier = arrow.utcnow().replace(hours=-2)
+            >>> earlier = arrow.utcnow().shift(hours=-2)
             >>> earlier.humanize()
             '2 hours ago'
 
-            >>> later = later = earlier.replace(hours=4)
+            >>> later = later = earlier.shift(hours=4)
             >>> later.humanize(earlier)
             'in 4 hours'
 
