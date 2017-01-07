@@ -844,9 +844,6 @@ class AustriaLocale(_DeutschLocaleCommonMixin, Locale):
 
     names = ['de_at']
 
-    timeframes = _DeutschLocaleCommonMixin.timeframes.copy()
-    timeframes['days'] = '{0} Tage'
-
 
 class NorwegianLocale(Locale):
 
