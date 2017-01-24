@@ -1899,7 +1899,7 @@ class SwissLocale(Locale):
             'hour': 'einer Stunde',
             'hours': '{0} Stunden',
             'day': 'einem Tag',
-            'days': '{0} Tage',
+            'days': '{0} Tagen',
             'month': 'einem Monat',
             'months': '{0} Monaten',
             'year': 'einem Jahr',
