@@ -1020,7 +1020,8 @@ class Arrow(object):
         elif name in ['quarter', 'quarters']:
             return 'quarter', 'months', 3
 
-        raise AttributeError()
+        supported = ', '.join(cls._ATTRS + ['week', 'weeks'] + ['quarter', 'quarters'])
+        raise AttributeError('range/span over frame {0} not supported. Supported frames: {1}'.format(name, supported))
 
     @classmethod
     def _get_iteration_params(cls, end, limit):
