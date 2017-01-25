@@ -1,12 +1,41 @@
 import codecs
 import os.path
 import re
+import os
 
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
+from Cython.Build import cythonize
+from setuptools.command.build_ext import build_ext
+from distutils.extension import Extension
+
+
+# them to extension names in dotted notation
+def scandir(dir, files=[]):
+    for file in os.listdir(dir):
+        path = os.path.join(dir, file)
+        if os.path.isfile(path) and path.endswith(".pyx"):
+            print path
+            files.append(path.replace(os.path.sep, ".")[:-4])
+        elif os.path.isdir(path):
+            scandir(path, files)
+    return files
+
+
+# generate an Extension object from its dotted name
+def makeExtension(extName):
+    extPath = extName.replace(".", os.path.sep) + ".pyx"
+    return Extension(
+        extName,
+        [extPath],
+        include_dirs=["."],   # adding the '.' to include_dirs is CRUCIAL!!
+        extra_compile_arg=["-O2", "-Wall"],
+        extra_link_args=['-g'],
+        # libraries = ["dv",],
+    )
 
 
 def fpath(name):
@@ -24,6 +53,11 @@ def grep(attrname):
 
 
 file_text = read(fpath('arrow/__init__.py'))
+# get the list of extensions
+extNames = scandir("arrow")
+
+# and build up the set of Extension objects
+extensions = cythonize([makeExtension(name) for name in extNames])
 
 setup(
     name='arrow',
@@ -34,6 +68,8 @@ setup(
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
     license='Apache 2.0',
+    extensions=extensions,
+    cmdclass={'build_ext': build_ext},
     packages=['arrow'],
     zip_safe=False,
     install_requires=[
@@ -52,4 +88,3 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
 )
-

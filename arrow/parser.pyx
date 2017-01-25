@@ -2,7 +2,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-from datetime import datetime
+from cpython.datetime cimport datetime
+
 from dateutil import tz
 import re
 
@@ -20,7 +21,8 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)')
+    _FORMAT_RE = re.compile(
+        '(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)')
     _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
     _ONE_OR_MORE_DIGIT_RE = re.compile('\d+')
@@ -29,7 +31,6 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile('\d{2}')
     _TZ_RE = re.compile('[+\-]?\d{2}:?(\d{2})?')
     _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
-
 
     _BASE_INPUT_RE_MAP = {
         'YYYY': _FOUR_DIGIT_RE,
@@ -56,12 +57,12 @@ class DateTimeParser(object):
     MARKERS = ['YYYY', 'MM', 'DD']
     SEPARATORS = ['-', '/', '.']
 
-    def __init__(self, locale='en_us', cache_size=0):
-
+    def __init__(self, unicode locale='en_us', int cache_size=0):
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
         self._input_re_map.update({
-            'MMMM': self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
+            'MMMM': self._choice_re(self.locale.month_names[1:],
+                                    re.IGNORECASE),
             'MMM': self._choice_re(self.locale.month_abbreviations[1:],
                                    re.IGNORECASE),
             'Do': re.compile(self.locale.ordinal_day_re),
@@ -76,11 +77,12 @@ class DateTimeParser(object):
             # ensure backwards compatibility of this token
             'A': self._choice_re(self.locale.meridians.values())
         })
+        print True
         if cache_size > 0:
             self._generate_pattern_re =\
                 lru_cache(maxsize=cache_size)(self._generate_pattern_re)
 
-    def parse_iso(self, string):
+    def parse_iso(self, unicode string):
 
         has_time = 'T' in string or ' ' in string.strip()
         space_divider = ' ' in string.strip()
@@ -105,9 +107,9 @@ class DateTimeParser(object):
             has_tz = False
             # generate required formats: YYYY-MM-DD, YYYY-MM-DD, YYYY
             # using various separators: -, /, .
-            l = len(self.MARKERS)
-            formats = [separator.join(self.MARKERS[:l-i])
-                       for i in range(l)
+            length = len(self.MARKERS)
+            formats = [separator.join(self.MARKERS[:length - i])
+                       for i in range(length)
                        for separator in self.SEPARATORS]
 
         if has_time and has_tz:
@@ -126,7 +128,6 @@ class DateTimeParser(object):
         # 'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
         tokens = []
         offset = 0
-
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", fmt)
         # Any number of S is the same as one.
@@ -145,9 +146,11 @@ class DateTimeParser(object):
             tokens.append(token)
             # a pattern doesn't have the same length as the token
             # it replaces! We keep the difference in the offset variable.
-            # This works because the string is scanned left-to-right and matches
-            # are returned in the order found by finditer.
-            fmt_pattern = fmt_pattern[:m.start() + offset] + input_pattern + fmt_pattern[m.end() + offset:]
+            # This works because the string is scanned left-to-right and
+            # matches are returned in the order found by finditer.
+            fmt_pattern = fmt_pattern[
+                :m.start() + offset] + input_pattern + fmt_pattern[m.end() +
+                                                                   offset:]
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
@@ -163,12 +166,7 @@ class DateTimeParser(object):
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
 
     def parse(self, string, fmt):
-
-        if isinstance(fmt, list):
-            return self._parse_multiformat(string, fmt)
-
         fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
-
         match = fmt_pattern_re.search(string)
         if match is None:
             raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''
@@ -212,7 +210,8 @@ class DateTimeParser(object):
             parts['second'] = int(value)
 
         elif token == 'S':
-            # We have the *most significant* digits of an arbitrary-precision integer.
+            # We have the *most significant* digits of an arbitrary-precision
+            # integer.
             # We want the six most significant digits as an integer, rounded.
             # FIXME: add nanosecond support somehow?
             value = value.ljust(7, str('0'))
@@ -263,26 +262,14 @@ class DateTimeParser(object):
         elif am_pm == 'am' and hour == 12:
             hour = 0
 
-        return datetime(year=parts.get('year', 1), month=parts.get('month', 1),
-            day=parts.get('day', 1), hour=hour, minute=parts.get('minute', 0),
-            second=parts.get('second', 0), microsecond=parts.get('microsecond', 0),
-            tzinfo=parts.get('tzinfo'))
-
-    def _parse_multiformat(self, string, formats):
-
-        _datetime = None
-
-        for fmt in formats:
-            try:
-                _datetime = self.parse(string, fmt)
-                break
-            except ParserError:
-                pass
-
-        if _datetime is None:
-            raise ParserError('Could not match input to any of {0} on \'{1}\''.format(formats, string))
-
-        return _datetime
+        return datetime(year=parts.get('year', 1),
+                        month=parts.get('month', 1),
+                        day=parts.get('day', 1),
+                        hour=hour,
+                        minute=parts.get('minute', 0),
+                        second=parts.get('second', 0),
+                        microsecond=parts.get('microsecond', 0),
+                        tzinfo=parts.get('tzinfo'))
 
     @staticmethod
     def _map_lookup(input_map, key):
@@ -290,7 +277,8 @@ class DateTimeParser(object):
         try:
             return input_map[key]
         except KeyError:
-            raise ParserError('Could not match "{0}" to {1}'.format(key, input_map))
+            raise ParserError('Could not match "{0}" to {1}'.format(key,
+                                                                    input_map))
 
     @staticmethod
     def _try_timestamp(string):
@@ -339,6 +327,7 @@ class TzinfoParser(object):
                 tzinfo = tz.gettz(string)
 
         if tzinfo is None:
-            raise ParserError('Could not parse timezone expression "{0}"'.format(string))
+            raise ParserError(
+                'Could not parse timezone expression "{0}"'.format(string))
 
         return tzinfo
