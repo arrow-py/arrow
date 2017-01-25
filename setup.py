@@ -27,8 +27,10 @@ def scandir(dir, files=[]):
 
 # generate an Extension object from its dotted name
 def makeExtension(extName):
-    sys_info = sys.version_info
-    version = sys_info[0] if isinstance(sys_info, tuple) else sys_info.major
+    try:
+        version = sys.version_info.major
+    except:
+        version = 2
     extPath = extName.replace(".", os.path.sep) + ".pyx"
     return Extension(
         extName,
