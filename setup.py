@@ -36,7 +36,7 @@ def makeExtension(extName):
         extName,
         [extPath],
         include_dirs=["."],   # adding the '.' to include_dirs is CRUCIAL!!
-        extra_compile_arg=["-O{}".format(version), "-Wall"],
+        extra_compile_arg=["-O" + str(version), "-Wall"],
         extra_link_args=['-g'],
     )
 
