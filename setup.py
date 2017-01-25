@@ -18,7 +18,6 @@ def scandir(dir, files=[]):
     for file in os.listdir(dir):
         path = os.path.join(dir, file)
         if os.path.isfile(path) and path.endswith(".pyx"):
-            print path
             files.append(path.replace(os.path.sep, ".")[:-4])
         elif os.path.isdir(path):
             scandir(path, files)
@@ -68,7 +67,7 @@ setup(
     author='Chris Smith',
     author_email="crsmithdev@gmail.com",
     license='Apache 2.0',
-    extensions=extensions,
+    ext_modules=extensions,
     cmdclass={'build_ext': build_ext},
     packages=['arrow'],
     zip_safe=False,

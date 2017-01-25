@@ -77,7 +77,6 @@ class DateTimeParser(object):
             # ensure backwards compatibility of this token
             'A': self._choice_re(self.locale.meridians.values())
         })
-        print True
         if cache_size > 0:
             self._generate_pattern_re =\
                 lru_cache(maxsize=cache_size)(self._generate_pattern_re)
