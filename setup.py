@@ -2,6 +2,7 @@ import codecs
 import os.path
 import re
 import os
+import sys
 
 try:
     from setuptools import setup
@@ -31,9 +32,8 @@ def makeExtension(extName):
         extName,
         [extPath],
         include_dirs=["."],   # adding the '.' to include_dirs is CRUCIAL!!
-        extra_compile_arg=["-O2", "-Wall"],
+        extra_compile_arg=["-O{}".format(sys.version_info.major), "-Wall"],
         extra_link_args=['-g'],
-        # libraries = ["dv",],
     )
 
 
