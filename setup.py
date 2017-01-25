@@ -27,12 +27,14 @@ def scandir(dir, files=[]):
 
 # generate an Extension object from its dotted name
 def makeExtension(extName):
+    sys_info = sys.version_info
+    version = sys_info[0] if isinstance(sys_info, tuple) else sys_info.major
     extPath = extName.replace(".", os.path.sep) + ".pyx"
     return Extension(
         extName,
         [extPath],
         include_dirs=["."],   # adding the '.' to include_dirs is CRUCIAL!!
-        extra_compile_arg=["-O{}".format(sys.version_info.major), "-Wall"],
+        extra_compile_arg=["-O{}".format(version), "-Wall"],
         extra_link_args=['-g'],
     )
 
