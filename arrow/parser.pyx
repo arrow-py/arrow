@@ -57,7 +57,7 @@ class DateTimeParser(object):
     MARKERS = ['YYYY', 'MM', 'DD']
     SEPARATORS = ['-', '/', '.']
 
-    def __init__(self, unicode locale='en_us', int cache_size=0):
+    def __init__(self, locale='en_us', cache_size=0):
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
         self._input_re_map.update({
