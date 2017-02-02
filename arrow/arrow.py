@@ -839,7 +839,7 @@ class Arrow(object):
             'second': 0,
             'microsecond': 0
         }
-        to_replace = {key: units_to_replace[key] for key in Arrow._ATTRS[Arrow._ATTRS.index(unit) + 1:]}
+        to_replace = dict((key, units_to_replace[key]) for key in Arrow._ATTRS[Arrow._ATTRS.index(unit) + 1:])
 
         return self.replace(**to_replace)
 
