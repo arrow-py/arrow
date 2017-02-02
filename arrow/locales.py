@@ -192,7 +192,7 @@ class EnglishLocale(Locale):
     future = 'in {0}'
 
     timeframes = {
-        'now': 'just now',
+        'now': 'instantly',
         'seconds': 'seconds',
         'minute': 'a minute',
         'minutes': '{0} minutes',
