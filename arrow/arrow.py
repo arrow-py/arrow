@@ -802,11 +802,74 @@ class Arrow(object):
                 delta = sign * delta / float(60*60*24*365.25)
             else:
                 raise AttributeError('Error. Could not understand your level of granularity. Please select between \
-                "second", "minute", "hour", "day", "week", "month" or "year"') 
-            
+                "second", "minute", "hour", "day", "week", "month" or "year"')
+
             if(trunc(abs(delta)) != 1):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=False)
+
+    def start_of(self, unit):
+        ''' Returns the :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        to the beginning of the given target.
+
+        :param unit: A string with the type of unit to convert.
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2017-02-02T19:41:10.500007+00:00]>
+
+            >>> utc.start_of('day')
+            <Arrow [2017-02-02T00:00:00+00:00]>
+
+            >>> utc.start_of('month')
+            <Arrow [2017-02-01T00:00:00+00:00]>
+
+            >>> utc.start_of('year')
+            <Arrow [2017-01-01T00:00:00+00:00]>
+
+        '''
+
+        units_to_replace = {
+            'month': 1,
+            'day': 1,
+            'hour': 0,
+            'minute': 0,
+            'second': 0,
+            'microsecond': 0
+        }
+        to_replace = {key: units_to_replace[key] for key in Arrow._ATTRS[Arrow._ATTRS.index(unit) + 1:]}
+
+        return self.replace(**to_replace)
+
+    def end_of(self, unit):
+        ''' Returns the :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        to the end of the given target.
+
+        :param unit: A string with the type of unit to convert.
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2017-02-02T19:41:10.500007+00:00]>
+
+            >>> utc.end_of('day')
+            <Arrow [2017-02-02T23:59:59.999999+00:00]>
+
+            >>> utc.end_of('month')
+            <Arrow [2017-02-28T23:59:59.999999+00:00]>
+
+            >>> utc.end_of('year')
+            <Arrow [2017-12-31T23:59:59.999999+00:00]>
+
+        '''
+
+        plural_unit = Arrow._ATTRS_PLURAL[Arrow._ATTRS.index(unit)]
+        to_replace = {plural_unit: 1}
+        return self.start_of(unit) + relativedelta(**to_replace) - relativedelta(microseconds=1)
+
     # math
 
     def __add__(self, other):

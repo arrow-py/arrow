@@ -1357,6 +1357,106 @@ class ArrowHumanizeTestsWithLocale(Chai):
         assertEqual(result, '2 года назад')
 
 
+class ArrowStartOf(Chai):
+    def test_start_of_year(self):
+        valid_date = arrow.Arrow(2016, 1, 1, 0, 0, 0)
+        arw = arrow.Arrow(2016, 5, 25, 20, 12, 32, 652040)
+
+        result = arw.start_of('year')
+
+        assertEqual(result, valid_date)
+
+    def test_start_of_month(self):
+        valid_date = arrow.Arrow(2017, 2, 1, 0, 0, 0)
+        arw = arrow.Arrow(2017, 2, 25, 20, 12, 32, 652040)
+
+        result = arw.start_of('month')
+
+        assertEqual(result, valid_date)
+
+    def test_start_of_day(self):
+        valid_date = arrow.Arrow(2017, 1, 14, 0, 0, 0)
+        arw = arrow.Arrow(2017, 1, 14, 20, 12, 32, 652040)
+
+        result = arw.start_of('day')
+
+        assertEqual(result, valid_date)
+
+    def test_start_of_hour(self):
+        valid_date = arrow.Arrow(2016, 5, 25, 20, 0, 0, 0)
+        arw = arrow.Arrow(2016, 5, 25, 20, 12, 32, 652040)
+
+        result = arw.start_of('hour')
+
+        assertEqual(result, valid_date)
+
+    def test_start_of_minute(self):
+        valid_date = arrow.Arrow(2016, 5, 25, 20, 12, 0, 0)
+        arw = arrow.Arrow(2016, 5, 25, 20, 12, 32, 652040)
+
+        result = arw.start_of('minute')
+
+        assertEqual(result, valid_date)
+
+    def test_start_of_second(self):
+        valid_date = arrow.Arrow(2017, 2, 1, 20, 12, 32, 0)
+        arw = arrow.Arrow(2017, 2, 1, 20, 12, 32, 652040)
+
+        result = arw.start_of('second')
+
+        assertEqual(result, valid_date)
+
+
+class ArrowEndOf(Chai):
+    def test_end_of_year(self):
+        valid_date = arrow.Arrow(2017, 12, 31, 23, 59, 59, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441183)
+
+        result = arw.end_of('year')
+
+        assertEqual(result, valid_date)
+
+    def test_end_of_month(self):
+        valid_date = arrow.Arrow(2017, 2, 28, 23, 59, 59, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441183)
+
+        result = arw.end_of('month')
+
+        assertEqual(result, valid_date)
+
+    def test_end_of_day(self):
+        valid_date = arrow.Arrow(2017, 2, 2, 23, 59, 59, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441183)
+
+        result = arw.end_of('day')
+
+        assertEqual(result, valid_date)
+
+    def test_end_of_hour(self):
+        valid_date = arrow.Arrow(2017, 2, 2, 14, 59, 59, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441182)
+
+        result = arw.end_of('hour')
+
+        assertEqual(result, valid_date)
+
+    def test_end_of_minute(self):
+        valid_date = arrow.Arrow(2017, 2, 2, 14, 31, 59, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441182)
+
+        result = arw.end_of('minute')
+
+        assertEqual(result, valid_date)
+
+    def test_end_of_second(self):
+        valid_date = arrow.Arrow(2017, 2, 2, 14, 31, 25, 999999)
+        arw = arrow.Arrow(2017, 2, 2, 14, 31, 25, 441182)
+
+        result = arw.end_of('second')
+
+        assertEqual(result, valid_date)
+
+
 class ArrowUtilTests(Chai):
 
     def test_get_datetime(self):
