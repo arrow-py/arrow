@@ -37,7 +37,11 @@ build36:
 test:
 	rm -f .coverage
 	local/bin/pip install --upgrade pip
-	. local/bin/activate && nosetests
+	pip -V
+	pip3 -V
+	local/bin/pip -V
+	# . local/bin/activate && nosetests
+	nosetests
 
 docs:
 	touch docs/index.rst
