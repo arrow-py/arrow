@@ -24,6 +24,10 @@ build35:
 	virtualenv local --python=python3.5
 	local/bin/pip install --use-mirrors -r requirements.txt
 
+build36:
+	virtualenv local --python=python3.6
+	local/bin/pip install --use-mirrors -r requirements.txt
+
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
@@ -36,4 +40,3 @@ clean:
 	rm -rf local
 	rm -f arrow/*.pyc tests/*.pyc
 	rm -f .coverage
-
