@@ -26,6 +26,7 @@ build35:
 
 build36:
 	virtualenv local --python=python3.6
+	pip install --upgrade pip
 	local/bin/pip install --use-mirrors -r requirements.txt
 
 test:
