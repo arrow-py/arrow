@@ -1,6 +1,7 @@
 import codecs
 import os.path
 import re
+from sys import version_info
 
 try:
     from setuptools import setup
@@ -25,6 +26,15 @@ def grep(attrname):
 
 file_text = read(fpath('arrow/__init__.py'))
 
+install_requires = ['backports.functools_lru_cache',
+                    'python-dateutil',
+                    'simplejson']
+if version_info[0] == 2 and version_info[1] == 6:
+    install_requires.append('chai==0.3.1')
+else:
+    install_requires.append('chai')
+
+
 setup(
     name='arrow',
     version=grep('__version__'),
@@ -36,9 +46,7 @@ setup(
     license='Apache 2.0',
     packages=['arrow'],
     zip_safe=False,
-    install_requires=[
-        'python-dateutil'
-    ],
+    install_requires=install_requires,
     test_suite="tests",
     classifiers=[
         'Development Status :: 4 - Beta',
