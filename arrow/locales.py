@@ -1073,34 +1073,70 @@ class AzerbaijaniLocale(Locale):
 
 
 class ArabicLocale(Locale):
-
-    names = ['ar', 'ar_eg']
+    names = ['ar', 'ar_eg', 'ar_jo']
 
     past = 'منذ {0}'
     future = 'خلال {0}'
 
     timeframes = {
         'now': 'الآن',
-        'seconds': 'ثوان',
+        'seconds': {
+            'double' : 'ثانيتين',
+            'ten' : '{0} ثواني',
+            'higher' : '{0} ثانية'
+        },
         'minute': 'دقيقة',
-        'minutes': '{0} دقائق',
+        'minutes': {
+            'double' : 'دقيقتين',
+            'ten' : '{0} دقائق',
+            'higher' : '{0} دقيقة'
+        },
         'hour': 'ساعة',
-        'hours': '{0} ساعات',
+        'hours': {
+            'double' : 'ساعتين',
+            'ten' : '{0} ساعات',
+            'higher' : '{0} ساعة'
+        },
         'day': 'يوم',
-        'days': '{0} أيام',
+        'days': {
+            'double' : 'يومين',
+            'ten' : '{0} أيام',
+            'higher' : '{0} يوم'
+        },
         'month': 'شهر',
-        'months': '{0} شهور',
+        'months': {
+            'double' : 'شهرين',
+            'ten' : '{0} أشهر',
+            'higher' : '{0} شهر'
+        },
         'year': 'سنة',
-        'years': '{0} سنوات',
+        'years': {
+            'double' : 'سنتين',
+            'ten' : '{0} سنوات',
+            'higher' : '{0} سنة'
+        },
     }
 
-    month_names = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو',
-        'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
-    month_abbreviations = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو',
-        'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    month_names = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
+        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
+    month_abbreviations = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
+        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
 
-    day_names = ['', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
-    day_abbreviations = ['', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
+    day_names = ['', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
+    day_abbreviations = ['', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
+
+    def _format_timeframe(self, timeframe, delta):
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+        if isinstance(form, dict):
+            if delta == 2:
+                form = form['double']
+            elif delta > 2 and delta <= 10:
+                form = form['ten']
+            else:
+                form = form['higher']
+
+        return form.format(delta)
 
 
 class IcelandicLocale(Locale):
