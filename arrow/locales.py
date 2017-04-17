@@ -1071,9 +1071,10 @@ class AzerbaijaniLocale(Locale):
     day_names = ['', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar']
     day_abbreviations = ['', 'Ber', 'Çax', 'Çər', 'Cax', 'Cüm', 'Şnb', 'Bzr']
 
-
-class ArabicLocale(Locale):
-    names = ['ar', 'ar_eg', 'ar_jo']
+class DefaultArabicLocale(Locale):
+    names = ['ar', 'ar_ae', 'ar_bh', 'ar_dj', 'ar_eg', 'ar_eh', 'ar_er',
+    'ar_km', 'ar_kw', 'ar_ly', 'ar_om', 'ar_qa', 'ar_sa', 'ar_sd', 'ar_so',
+    'ar_ss', 'ar_td', 'ar_ye']
 
     past = 'منذ {0}'
     future = 'خلال {0}'
@@ -1117,14 +1118,14 @@ class ArabicLocale(Locale):
         },
     }
 
-    month_names = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
-        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
-    month_abbreviations = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
-        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
+    month_names = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو',
+        'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    month_abbreviations = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو',
+        'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
 
     day_names = ['', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
     day_abbreviations = ['', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
-
+    
     def _format_timeframe(self, timeframe, delta):
         form = self.timeframes[timeframe]
         delta = abs(delta)
@@ -1138,6 +1139,33 @@ class ArabicLocale(Locale):
 
         return form.format(delta)
 
+class LevantArabicLocale(DefaultArabicLocale):
+    names = ['ar_iq', 'ar_jo', 'ar_lb', 'ar_ps', 'ar_sy']
+    month_names = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
+        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
+    month_abbreviations = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
+        'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
+
+class AlgeriaTunisiaArabicLocale(DefaultArabicLocale):
+    names = ['ar_tn', 'ar_dz']
+    month_names = ['', 'جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان',
+        'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+    month_abbreviations = ['', 'جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان',
+        'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+
+class MauritaniaArabicLocale(DefaultArabicLocale):
+    names = ['ar_mr']
+    month_names = ['', 'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+        'يوليو', 'أغشت', 'شتمبر', 'أكتوبر', 'نوفمبر', 'دجمبر']
+    month_abbreviations = ['', 'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
+        'يوليو', 'أغشت', 'شتمبر', 'أكتوبر', 'نوفمبر', 'دجمبر']
+
+class MoroccoArabicLocale(DefaultArabicLocale):
+    names = ['ar_ma']
+    month_names = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
+        'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر']
+    month_abbreviations = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
+        'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر']
 
 class IcelandicLocale(Locale):
 
