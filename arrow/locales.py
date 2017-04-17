@@ -1082,7 +1082,7 @@ class ArabicLocale(Locale):
         'now': 'الآن',
         'seconds': {
             'double' : 'ثانيتين',
-            'ten' : '{0} ثواني',
+            'ten' : '{0} ثوان',
             'higher' : '{0} ثانية'
         },
         'minute': 'دقيقة',
