@@ -691,8 +691,8 @@ class ArrowRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2016, 4, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('year', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2016, 4, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -703,8 +703,8 @@ class ArrowRangeTests(Chai):
 
     def test_quarter(self):
 
-        result = arrow.Arrow.range('quarter', datetime(2013, 2, 3, 4, 5, 6),
-            datetime(2013, 5, 6, 7, 8, 9))
+        result = list(arrow.Arrow.range('quarter', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 2, 3, 4, 5, 6),
@@ -713,8 +713,8 @@ class ArrowRangeTests(Chai):
 
     def test_month(self):
 
-        result = arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
-            datetime(2013, 5, 6, 7, 8, 9))
+        result = list(arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 2, 3, 4, 5, 6),
@@ -725,8 +725,8 @@ class ArrowRangeTests(Chai):
 
     def test_week(self):
 
-        result = arrow.Arrow.range('week', datetime(2013, 9, 1, 2, 3, 4),
-            datetime(2013, 10, 1, 2, 3, 4))
+        result = list(arrow.Arrow.range('week', datetime(2013, 9, 1, 2, 3, 4),
+            datetime(2013, 10, 1, 2, 3, 4)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 9, 1, 2, 3, 4),
@@ -738,8 +738,8 @@ class ArrowRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.range('day', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('day', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -750,8 +750,8 @@ class ArrowRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 6, 7, 8))
+        result = list(arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -760,8 +760,8 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2013, 1, 2, 6, 4, 5),
         ])
 
-        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 4, 5))
+        result = list(arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 5)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -769,8 +769,8 @@ class ArrowRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 7, 8))
+        result = list(arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -781,8 +781,8 @@ class ArrowRangeTests(Chai):
 
     def test_second(self):
 
-        result = arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 4, 8))
+        result = list(arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -793,8 +793,8 @@ class ArrowRangeTests(Chai):
 
     def test_arrow(self):
 
-        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 2, 3, 4, 5),
-            arrow.Arrow(2013, 1, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('day', arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -838,14 +838,14 @@ class ArrowRangeTests(Chai):
     def test_unsupported(self):
 
         with assertRaises(AttributeError):
-            arrow.Arrow.range('abc', datetime.utcnow(), datetime.utcnow())
+            next(arrow.Arrow.range('abc', datetime.utcnow(), datetime.utcnow()))
 
 
 class ArrowSpanRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.span_range('year', datetime(2013, 2, 1), datetime(2016, 3, 31))
+        result = list(arrow.Arrow.span_range('year', datetime(2013, 2, 1), datetime(2016, 3, 31)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999)),
@@ -856,7 +856,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_quarter(self):
 
-        result = arrow.Arrow.span_range('quarter', datetime(2013, 2, 2), datetime(2013, 5, 15))
+        result = list(arrow.Arrow.span_range('quarter', datetime(2013, 2, 2), datetime(2013, 5, 15)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 3, 31, 23, 59, 59, 999999)),
@@ -865,7 +865,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_month(self):
 
-        result = arrow.Arrow.span_range('month', datetime(2013, 1, 2), datetime(2013, 4, 15))
+        result = list(arrow.Arrow.span_range('month', datetime(2013, 1, 2), datetime(2013, 4, 15)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 1, 31, 23, 59, 59, 999999)),
@@ -876,7 +876,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_week(self):
 
-        result = arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28))
+        result = list(arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
@@ -889,8 +889,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
-            datetime(2013, 1, 4, 12))
+        result = list(arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
+            datetime(2013, 1, 4, 12)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999)),
@@ -901,8 +901,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, 30),
-            datetime(2013, 1, 1, 3, 30))
+        result = list(arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, 30),
+            datetime(2013, 1, 1, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
@@ -911,8 +911,8 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
         ])
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 3, 30),
-            datetime(2013, 1, 1, 3, 30))
+        result = list(arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 3, 30),
+            datetime(2013, 1, 1, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
@@ -920,8 +920,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0, 0, 30),
-            datetime(2013, 1, 1, 0, 3, 30))
+        result = list(arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0, 0, 30),
+            datetime(2013, 1, 1, 0, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999)),
@@ -932,8 +932,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_second(self):
 
-        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1),
-            datetime(2013, 1, 1, 0, 0, 3))
+        result = list(arrow.Arrow.span_range('second', datetime(2013, 1, 1),
+            datetime(2013, 1, 1, 0, 0, 3)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 0, 999999)),
@@ -999,7 +999,7 @@ class ArrowIntervalTests(Chai):
         assertEqual(correct,False)
 
     def test_correct(self):
-        result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15),2)
+        result = list(arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15), 2))
 
         assertEqual(result,[(arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
             (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),

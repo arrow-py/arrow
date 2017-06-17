@@ -192,7 +192,7 @@ class Arrow(object):
 
     @classmethod
     def range(cls, frame, start, end=None, tz=None, limit=None):
-        ''' Returns a list of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
+        ''' Returns a generator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         an iteration of time between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -251,15 +251,14 @@ class Arrow(object):
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
 
         current = cls.fromdatetime(start)
-        results = []
+        i = 0
 
-        while current <= end and len(results) < limit:
-            results.append(current)
+        while current <= end and i < limit:
+            i += 1
+            yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo) + relativedelta(**{frame_relative: relative_steps})
-
-        return results
 
 
     @classmethod
@@ -311,7 +310,7 @@ class Arrow(object):
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
         start = cls.fromdatetime(start, tzinfo).span(frame)[0]
         _range = cls.range(frame, start, end, tz, limit)
-        return [r.span(frame) for r in _range]
+        return (r.span(frame) for r in _range)
 
     @classmethod
     def interval(cls, frame, start, end, interval=1, tz=None):
@@ -352,10 +351,10 @@ class Arrow(object):
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
 
-        spanRange = cls.span_range(frame,start,end,tz)
+        spanRange = list(cls.span_range(frame, start, end, tz))
 
         bound = (len(spanRange) // interval) * interval
-        return [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
+        return ((spanRange[i][0], spanRange[i + interval - 1][1]) for i in range(0, bound, interval))
 
     # representations
 
