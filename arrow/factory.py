@@ -8,6 +8,8 @@ construction scenarios.
 
 from __future__ import absolute_import
 
+import warnings
+
 from arrow.arrow import Arrow
 from arrow import parser
 from arrow.util import is_timestamp, isstr
@@ -135,7 +137,7 @@ class ArrowFactory(object):
         arg_count = len(args)
         locale = kwargs.get('locale', 'en_us')
         tz = kwargs.get('tzinfo', None)
-
+        
         # () -> now, @ utc.
         if arg_count == 0:
             if isinstance(tz, tzinfo):
@@ -172,6 +174,9 @@ class ArrowFactory(object):
             # (str) -> parse.
             elif isstr(arg):
                 dt = parser.DateTimeParser(locale).parse_iso(arg)
+                if tz:
+                    warnings.warn("Format arg not assign, tzinfo will be ignored!",
+                                  SyntaxWarning)
                 return self.type.fromdatetime(dt)
 
             # (struct_time) -> from struct_time

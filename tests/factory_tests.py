@@ -109,6 +109,15 @@ class GetTests(Chai):
         with assertRaises(TypeError):
             self.factory.get(True)
 
+    def test_two_args_str_tzinfo(self):
+        import warnings
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            self.factory.get('2017-07-03', tzinfo='Asia/Shanghai')
+            assert len(w) == 1
+            assert issubclass(w[-1].category, SyntaxWarning)
+            assert "Format arg not assign, tzinfo will be ignored!" in str(w[-1].message)
+
     def test_two_args_datetime_tzinfo(self):
 
         result = self.factory.get(datetime(2013, 1, 1), tz.gettz('US/Pacific'))
