@@ -2025,9 +2025,9 @@ class NepaliLocale(Locale):
 
     meridians = {
         'am': 'पूर्वाह्न',
-        'pm': '',
+        'pm': 'अपरान्ह',
         'AM': 'पूर्वाह्न',
-        'PM': ''
+        'PM': 'अपरान्ह'
     }
 
     month_names = [

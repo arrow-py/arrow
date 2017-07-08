@@ -553,3 +553,27 @@ class RomanianLocaleTests(Chai):
         self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", 1), "peste câteva secunde")
         self.assertEqual(self.locale._format_relative("o zi", "day", -1), "o zi în urmă")
         self.assertEqual(self.locale._format_relative("o zi", "day", 1), "peste o zi")
+
+
+class NepaliLocaleTests(Chai):
+
+    def setUp(self):
+        super(NepaliLocaleTests, self).setUp()
+
+        self.locale = locales.NepaliLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 3), '3 घण्टा')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'एक घण्टा')
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative('अहिले', 'now', 0)
+        assertEqual(result, 'अहिले')
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative('एक घण्टा', 'hour', 1)
+        assertEqual(result, 'एक घण्टा पछी')
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative('एक घण्टा', 'hour', -1)
+        assertEqual(result, 'एक घण्टा पहिले')
