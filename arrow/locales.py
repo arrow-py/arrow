@@ -2001,5 +2001,44 @@ class SlovenianLocale(Locale):
         '', 'Pon', 'Tor', 'Sre', 'Čet', 'Pet', 'Sob', 'Ned'
     ]
 
+class IndonesianLocale(Locale):
+
+    names = ['id', 'id_id']
+
+    past = '{0} yang lalu'
+    future = 'dalam {0}'
+
+    timeframes = {
+        'now': 'baru saja',
+        'seconds': 'detik',
+        'minute': '1 menit',
+        'minutes': '{0} menit',
+        'hour': '1 jam',
+        'hours': '{0} jam',
+        'day': '1 hari',
+        'days': '{0} hari',
+        'month': '1 bulan',
+        'months': '{0} bulan',
+        'year': '1 tahun',
+        'years': '{0} tahun'
+    }
+
+    meridians = {
+        'am': '',
+        'pm': '',
+        'AM': '',
+        'PM': ''
+    }
+
+    month_names = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
+        'Agustus', 'September', 'Oktober', 'November', 'Desember']
+
+    month_abbreviations = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul',
+        'Ags', 'Sept', 'Okt', 'Nov', 'Des']
+
+    day_names = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+
+    day_abbreviations = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+
 
 _locales = _map_locales()
