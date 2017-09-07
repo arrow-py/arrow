@@ -945,7 +945,7 @@ class PortugueseLocale(Locale):
 class BrazilianPortugueseLocale(PortugueseLocale):
     names = ['pt_br']
 
-    past = 'fazem {0}'
+    past = 'faz {0}'
 
 
 class TagalogLocale(Locale):
