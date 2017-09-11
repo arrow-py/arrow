@@ -154,7 +154,10 @@ class ArrowFactory(object):
 
             # try (int, float, str(int), str(float)) -> utc, from timestamp.
             if is_timestamp(arg):
-                return self.type.utcfromtimestamp(arg)
+                if tz is not None:
+                    return self.type.fromtimestamp(arg)
+                else:
+                    return self.type.utcfromtimestamp(arg)
 
             # (Arrow) -> from the object's datetime.
             if isinstance(arg, Arrow):
