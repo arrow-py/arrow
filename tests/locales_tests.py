@@ -553,3 +553,32 @@ class RomanianLocaleTests(Chai):
         self.assertEqual(self.locale._format_relative("câteva secunde", "seconds", 1), "peste câteva secunde")
         self.assertEqual(self.locale._format_relative("o zi", "day", -1), "o zi în urmă")
         self.assertEqual(self.locale._format_relative("o zi", "day", 1), "peste o zi")
+
+class IndonesianLocaleTests(Chai):
+
+    def setUp(self):
+        super(IndonesianLocaleTests, self).setUp()
+
+        self.locale = locales.IndonesianLocale()
+
+    def test_timeframes(self):
+        self.assertEqual(self.locale._format_timeframe('hours', 2), '2 jam')
+        self.assertEqual(self.locale._format_timeframe('months', 2), '2 bulan')
+
+        self.assertEqual(self.locale._format_timeframe('days', 2), '2 hari')
+        self.assertEqual(self.locale._format_timeframe('years', 2), '2 tahun')
+
+        self.assertEqual(self.locale._format_timeframe('hours', 3), '3 jam')
+        self.assertEqual(self.locale._format_timeframe('months', 4), '4 bulan')
+        self.assertEqual(self.locale._format_timeframe('days', 3), '3 hari')
+        self.assertEqual(self.locale._format_timeframe('years', 5), '5 tahun')
+
+    def test_format_relative_now(self):
+        self.assertEqual(self.locale._format_relative('baru saja', 'now', 0), 'baru saja')
+
+    def test_format_relative_past(self):
+        self.assertEqual(self.locale._format_relative('1 jam', 'hour', 1), 'dalam 1 jam')
+        self.assertEqual(self.locale._format_relative('1 detik', 'seconds', 1), 'dalam 1 detik')
+
+    def test_format_relative_future(self):
+        self.assertEqual(self.locale._format_relative('1 jam', 'hour', -1), '1 jam yang lalu')
