@@ -10,7 +10,9 @@
 
 .coverage
 nosetests.xml
+tests/.noseids
 
+.venv/
 local/
 dist/
 docs/_build/
@@ -19,3 +21,6 @@ docs/_build/
 
 # tox
 .tox
+
+# VS Code
+.vscode/
