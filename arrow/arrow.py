@@ -314,7 +314,7 @@ class Arrow(object):
 
     @classmethod
     def interval(cls, frame, start, end, interval=1, tz=None):
-        ''' Returns an array of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -322,7 +322,7 @@ class Arrow(object):
         :param end: (optional) A datetime expression, the end of the range.
         :param interval: (optional) Time interval for the given time frame.
         :param tz: (optional) A timezone expression.  Defaults to UTC.
-        
+
         Supported frame values: year, quarter, month, week, day, hour, minute, second
 
         Recognized datetime expressions:
@@ -351,10 +351,12 @@ class Arrow(object):
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
 
-        spanRange = list(cls.span_range(frame, start, end, tz))
-
-        bound = (len(spanRange) // interval) * interval
-        return ((spanRange[i][0], spanRange[i + interval - 1][1]) for i in range(0, bound, interval))
+        spanRange = cls.span_range(frame, start, end, tz)
+        while True:
+            intvlStart, intvlEnd = next(spanRange)  # StopIteration when exhausted
+            for _ in range(interval-1):
+                _, intvlEnd = next(spanRange)  # StopIteration when exhausted
+            yield intvlStart, intvlEnd
 
     # representations
 
@@ -741,43 +743,43 @@ class Arrow(object):
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
-        
+
         if granularity=='auto':
             if diff < 10:
                 return locale.describe('now', only_distance=only_distance)
-    
+
             if diff < 45:
                 seconds = sign * delta
                 return locale.describe('seconds', seconds, only_distance=only_distance)
-    
+
             elif diff < 90:
                 return locale.describe('minute', sign, only_distance=only_distance)
             elif diff < 2700:
                 minutes = sign * int(max(delta / 60, 2))
                 return locale.describe('minutes', minutes, only_distance=only_distance)
-    
+
             elif diff < 5400:
                 return locale.describe('hour', sign, only_distance=only_distance)
             elif diff < 79200:
                 hours = sign * int(max(delta / 3600, 2))
                 return locale.describe('hours', hours, only_distance=only_distance)
-    
+
             elif diff < 129600:
                 return locale.describe('day', sign, only_distance=only_distance)
             elif diff < 2160000:
                 days = sign * int(max(delta / 86400, 2))
                 return locale.describe('days', days, only_distance=only_distance)
-    
+
             elif diff < 3888000:
                 return locale.describe('month', sign, only_distance=only_distance)
             elif diff < 29808000:
                 self_months = self._datetime.year * 12 + self._datetime.month
                 other_months = dt.year * 12 + dt.month
-    
+
                 months = sign * int(max(abs(other_months - self_months), 2))
-    
+
                 return locale.describe('months', months, only_distance=only_distance)
-    
+
             elif diff < 47260800:
                 return locale.describe('year', sign, only_distance=only_distance)
             else:
@@ -801,8 +803,8 @@ class Arrow(object):
                 delta = sign * delta / float(60*60*24*365.25)
             else:
                 raise AttributeError('Error. Could not understand your level of granularity. Please select between \
-                "second", "minute", "hour", "day", "week", "month" or "year"') 
-            
+                "second", "minute", "hour", "day", "week", "month" or "year"')
+
             if(trunc(abs(delta)) != 1):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=False)
@@ -828,7 +830,7 @@ class Arrow(object):
 
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
-        
+
         raise TypeError()
 
     def __rsub__(self, other):

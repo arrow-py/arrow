@@ -992,7 +992,7 @@ class ArrowIntervalTests(Chai):
     def test_incorrect_input(self):
         correct = True
         try:
-            result = arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15),0)
+            result = list(arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15), 0))
         except:
             correct = False
 
@@ -1116,15 +1116,15 @@ class ArrowHumanizeTests(Chai):
         self.now = arrow.Arrow.utcnow()
 
     def test_granularity(self):
-    
+
         assertEqual(self.now.humanize(granularity = 'second'), 'just now')
-        
+
         later1 = self.now.shift(seconds=1)
         assertEqual(self.now.humanize(later1, granularity = 'second'), 'just now')
         assertEqual(later1.humanize(self.now, granularity = 'second'), 'just now')
         assertEqual(self.now.humanize(later1, granularity = 'minute'), '0 minutes ago')
         assertEqual(later1.humanize(self.now, granularity = 'minute'), 'in 0 minutes')
-        
+
         later100 = self.now.shift(seconds=100)
         assertEqual(self.now.humanize(later100, granularity = 'second'), 'seconds ago')
         assertEqual(later100.humanize(self.now, granularity = 'second'), 'in seconds')
@@ -1132,7 +1132,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later100.humanize(self.now, granularity = 'minute'), 'in a minute')
         assertEqual(self.now.humanize(later100, granularity = 'hour'), '0 hours ago')
         assertEqual(later100.humanize(self.now, granularity = 'hour'), 'in 0 hours')
-        
+
         later4000 = self.now.shift(seconds=4000)
         assertEqual(self.now.humanize(later4000, granularity = 'minute'), '66 minutes ago')
         assertEqual(later4000.humanize(self.now, granularity = 'minute'), 'in 66 minutes')
@@ -1140,7 +1140,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later4000.humanize(self.now, granularity = 'hour'), 'in an hour')
         assertEqual(self.now.humanize(later4000, granularity = 'day'), '0 days ago')
         assertEqual(later4000.humanize(self.now, granularity = 'day'), 'in 0 days')
-        
+
         later105 = self.now.shift(seconds=10 ** 5)
         assertEqual(self.now.humanize(later105, granularity = 'hour'), '27 hours ago')
         assertEqual(later105.humanize(self.now, granularity = 'hour'), 'in 27 hours')
@@ -1148,7 +1148,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later105.humanize(self.now, granularity = 'day'), 'in a day')
         assertEqual(self.now.humanize(later105, granularity = 'month'), '0 months ago')
         assertEqual(later105.humanize(self.now, granularity = 'month'), 'in 0 months')
-        
+
         later106 = self.now.shift(seconds=3 * 10 ** 6)
         assertEqual(self.now.humanize(later106, granularity = 'day'), '34 days ago')
         assertEqual(later106.humanize(self.now, granularity = 'day'), 'in 34 days')
@@ -1156,19 +1156,19 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later106.humanize(self.now, granularity = 'month'), 'in a month')
         assertEqual(self.now.humanize(later106, granularity = 'year'), '0 years ago')
         assertEqual(later106.humanize(self.now, granularity = 'year'), 'in 0 years')
-        
+
         later506 = self.now.shift(seconds=50 * 10 ** 6)
         assertEqual(self.now.humanize(later506, granularity = 'month'), '18 months ago')
         assertEqual(later506.humanize(self.now, granularity = 'month'), 'in 18 months')
         assertEqual(self.now.humanize(later506, granularity = 'year'), 'a year ago')
         assertEqual(later506.humanize(self.now, granularity = 'year'), 'in a year')
-        
+
         later108 = self.now.shift(seconds=10 ** 8)
         assertEqual(self.now.humanize(later108, granularity = 'year'), '3 years ago')
         assertEqual(later108.humanize(self.now, granularity = 'year'), 'in 3 years')
         with assertRaises(AttributeError):
             self.now.humanize(later108, granularity = 'years')
-    
+
     def test_seconds(self):
 
         later = self.now.shift(seconds=10)
