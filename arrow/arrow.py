@@ -191,9 +191,10 @@ class Arrow(object):
     # factories: ranges and spans
 
     @classmethod
+    @util.list_to_iter_deprecation
     def range(cls, frame, start, end=None, tz=None, limit=None):
-        ''' Returns a generator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
-        an iteration of time between two inputs.
+        ''' Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
+        points in time between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
@@ -262,8 +263,9 @@ class Arrow(object):
 
 
     @classmethod
+    @util.list_to_iter_deprecation
     def span_range(cls, frame, start, end, tz=None, limit=None):
-        ''' Returns a list of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -313,6 +315,7 @@ class Arrow(object):
         return (r.span(frame) for r in _range)
 
     @classmethod
+    @util.list_to_iter_deprecation
     def interval(cls, frame, start, end, interval=1, tz=None):
         ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
@@ -351,7 +354,7 @@ class Arrow(object):
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
 
-        spanRange = cls.span_range(frame, start, end, tz)
+        spanRange = iter(cls.span_range(frame, start, end, tz))
         while True:
             intvlStart, intvlEnd = next(spanRange)  # StopIteration when exhausted
             for _ in range(interval-1):

@@ -1401,3 +1401,60 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
+
+    def test_list_to_iter_shim(self):
+        def newshim():
+            return util.list_to_iter_shim(range(5), warn_text='testing')
+
+        # Iterating over a shim once should not throw a warning
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            iter(newshim())
+            list(newshim())
+            for _ in newshim(): pass
+
+            assertEqual([], w)
+
+        # Iterating over a shim twice (or more) should throw a warning
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            shim = newshim()
+
+            for _ in shim: pass
+            for _ in shim: pass
+
+            assertEqual(1, len(w))
+            assertEqual(w[0].category, DeprecationWarning)
+            assertEqual("testing", w[0].message.args[0])
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            shim = newshim()
+
+            0 in shim
+            shim + []
+            shim * 1
+            shim[0]
+            len(shim)
+            shim.index(0)
+            shim.count(0)
+
+            shim[0:0] = []
+            del shim[0:0]
+            newshim().append(6)
+            newshim().clear()
+            shim.copy()
+            shim.extend([])
+            shim += []
+            shim *= 1
+            newshim().insert(0, 6)
+            shim.pop(-1)
+            newshim().remove(0)
+            newshim().reverse()
+            newshim().sort()
+
+            assertEqual(19, len(w))
+            for warn in w:
+                assertEqual(warn.category, DeprecationWarning)
+                assertEqual("testing", warn.message.args[0])
