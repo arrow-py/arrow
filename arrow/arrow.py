@@ -196,7 +196,7 @@ class Arrow(object):
         ''' Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         points in time between two inputs.
 
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
@@ -231,7 +231,7 @@ class Arrow(object):
             <Arrow [2013-05-05T15:30:00+00:00]>
             <Arrow [2013-05-05T16:30:00+00:00]>
 
-        **NOTE**: Unlike Python's ``range``, ``end`` *may* be included in the returned list::
+        **NOTE**: Unlike Python's ``range``, ``end`` *may* be included in the returned iterator::
 
             >>> start = datetime(2013, 5, 5, 12, 30)
             >>> end = datetime(2013, 5, 5, 13, 30)
@@ -268,7 +268,7 @@ class Arrow(object):
         ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
@@ -290,8 +290,8 @@ class Arrow(object):
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
 
-        **NOTE**: Unlike Python's ``range``, ``end`` will *always* be included in the returned list
-        of timespans.
+        **NOTE**: Unlike Python's ``range``, ``end`` will *always* be included in the returned
+        iterator of timespans.
 
         Usage:
 
@@ -320,7 +320,7 @@ class Arrow(object):
         ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param start: A datetime expression, the start of the range.
         :param end: (optional) A datetime expression, the end of the range.
         :param interval: (optional) Time interval for the given time frame.
