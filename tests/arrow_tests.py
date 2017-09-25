@@ -1413,6 +1413,7 @@ class ArrowUtilTests(Chai):
             iter(newshim())
             list(newshim())
             for _ in newshim(): pass
+            len(newshim())  # ...because it's called by `list(x)`
 
             assertEqual([], w)
 
@@ -1436,15 +1437,15 @@ class ArrowUtilTests(Chai):
             shim + []
             shim * 1
             shim[0]
-            len(shim)
             shim.index(0)
             shim.count(0)
 
-            shim[0:0] = []
-            del shim[0:0]
+            shim[0:0] = []  # doesn't warn on py2
+            del shim[0:0]  # doesn't warn on py2
             newshim().append(6)
-            newshim().clear()
-            shim.copy()
+            if util.version >= '3.0':  # pragma: no cover
+                newshim().clear()
+                shim.copy()
             shim.extend([])
             shim += []
             shim *= 1
@@ -1454,7 +1455,10 @@ class ArrowUtilTests(Chai):
             newshim().reverse()
             newshim().sort()
 
-            assertEqual(19, len(w))
+            if util.version >= '3.0':  # pragma: no cover
+                assertEqual(19, len(w))
+            else:  # pragma: no cover
+                assertEqual(15, len(w))
             for warn in w:
                 assertEqual(warn.category, DeprecationWarning)
                 assertEqual("testing", warn.message.args[0])

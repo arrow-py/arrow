@@ -51,17 +51,16 @@ class list_to_iter_shim(list):
     deprecation period, return an iteratator.
     '''
 
-    def __init__(self, iterable=(), *, warn_text=None):
+    def __init__(self, iterable=(), **kwargs):
         ''' Equivalent to list(iterable).  warn_text will be emitted on all non-iterator operations.
         '''
-        self._warn_text = warn_text or 'this object will be converted to an iterator in a future release'
+        self._warn_text = kwargs.pop('warn_text', None) or 'this object will be converted to an iterator in a future release'
         self._iter_count = 0
-        list.__init__(self, iterable)
+        list.__init__(self, iterable, **kwargs)
 
     def _warn(self):
         warnings.warn(self._warn_text, DeprecationWarning)
 
-    @functools.wraps(list.__iter__)
     def __iter__(self):
         self._iter_count += 1
         if self._iter_count > 1:
@@ -70,7 +69,6 @@ class list_to_iter_shim(list):
 
     def _wrap_method(name):
         list_func = getattr(list, name)
-        @functools.wraps(list_func)
         def wrapper(self, *args, **kwargs):
             self._warn()
             return list_func(self, *args, **kwargs)
@@ -86,8 +84,9 @@ class list_to_iter_shim(list):
     __setitem__ = _wrap_method('__setitem__')
     __delitem__ = _wrap_method('__delitem__')
     append = _wrap_method('append')
-    clear = _wrap_method('clear')
-    copy = _wrap_method('copy')
+    if version >= '3.0':  # pragma: no cover
+        clear = _wrap_method('clear')
+        copy = _wrap_method('copy')
     extend = _wrap_method('extend')
     __iadd__ = _wrap_method('__iadd__')
     __imul__ = _wrap_method('__imul__')
