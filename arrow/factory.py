@@ -78,6 +78,9 @@ class ArrowFactory(object):
             >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
 
+            >>> arrow.get('2013-09-29T01:26:43.830580', tzinfo='Asia/Shanghai')
+            <Arrow [2013-09-29T01:26:43.830580+08:00]>
+
         **One** ``tzinfo``, to get the current time **converted** to that timezone::
 
             >>> arrow.get(tz.tzlocal())
@@ -151,7 +154,10 @@ class ArrowFactory(object):
 
             # try (int, float, str(int), str(float)) -> utc, from timestamp.
             if is_timestamp(arg):
-                return self.type.utcfromtimestamp(arg)
+                if tz is not None:
+                    return self.type.fromtimestamp(arg)
+                else:
+                    return self.type.utcfromtimestamp(arg)
 
             # (Arrow) -> from the object's datetime.
             if isinstance(arg, Arrow):
@@ -172,7 +178,7 @@ class ArrowFactory(object):
             # (str) -> parse.
             elif isstr(arg):
                 dt = parser.DateTimeParser(locale).parse_iso(arg)
-                return self.type.fromdatetime(dt)
+                return self.type.fromdatetime(dt, tzinfo=tz)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
