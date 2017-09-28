@@ -844,7 +844,10 @@ class AustrianLocale(_DeutschLocaleCommonMixin, Locale):
 
     names = ['de_at']
 
-    month_names[1] = 'Jänner'
+    month_names = [
+        '', 'Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
+        'August', 'September', 'Oktober', 'November', 'Dezember'
+    ]
 
 
 class NorwegianLocale(Locale):
