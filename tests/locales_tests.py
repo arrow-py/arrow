@@ -559,7 +559,7 @@ class ArabicLocalesTest(Chai):
     def setUp(self):
         super(ArabicLocalesTest, self).setUp()
 
-        self.locale = locales.DefaultArabicLocale()
+        self.locale = locales.ArabicLocale()
 
     def test_timeframes(self):
 
