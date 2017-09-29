@@ -1076,7 +1076,7 @@ class AzerbaijaniLocale(Locale):
     day_names = ['', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar']
     day_abbreviations = ['', 'Ber', 'Çax', 'Çər', 'Cax', 'Cüm', 'Şnb', 'Bzr']
 
-class DefaultArabicLocale(Locale):
+class ArabicLocale(Locale):
     names = ['ar', 'ar_ae', 'ar_bh', 'ar_dj', 'ar_eg', 'ar_eh', 'ar_er',
     'ar_km', 'ar_kw', 'ar_ly', 'ar_om', 'ar_qa', 'ar_sa', 'ar_sd', 'ar_so',
     'ar_ss', 'ar_td', 'ar_ye']
@@ -1144,28 +1144,28 @@ class DefaultArabicLocale(Locale):
 
         return form.format(delta)
 
-class LevantArabicLocale(DefaultArabicLocale):
+class LevantArabicLocale(ArabicLocale):
     names = ['ar_iq', 'ar_jo', 'ar_lb', 'ar_ps', 'ar_sy']
     month_names = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
         'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
     month_abbreviations = ['', 'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب',
         'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول']
 
-class AlgeriaTunisiaArabicLocale(DefaultArabicLocale):
+class AlgeriaTunisiaArabicLocale(ArabicLocale):
     names = ['ar_tn', 'ar_dz']
     month_names = ['', 'جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان',
         'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
     month_abbreviations = ['', 'جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان',
         'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
 
-class MauritaniaArabicLocale(DefaultArabicLocale):
+class MauritaniaArabicLocale(ArabicLocale):
     names = ['ar_mr']
     month_names = ['', 'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
         'يوليو', 'أغشت', 'شتمبر', 'أكتوبر', 'نوفمبر', 'دجمبر']
     month_abbreviations = ['', 'يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو',
         'يوليو', 'أغشت', 'شتمبر', 'أكتوبر', 'نوفمبر', 'دجمبر']
 
-class MoroccoArabicLocale(DefaultArabicLocale):
+class MoroccoArabicLocale(ArabicLocale):
     names = ['ar_ma']
     month_names = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
         'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر']
