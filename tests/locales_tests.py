@@ -555,6 +555,43 @@ class RomanianLocaleTests(Chai):
         self.assertEqual(self.locale._format_relative("o zi", "day", 1), "peste o zi")
 
 
+class ArabicLocalesTest(Chai):
+    def setUp(self):
+        super(ArabicLocalesTest, self).setUp()
+
+        self.locale = locales.ArabicLocale()
+
+    def test_timeframes(self):
+
+        # single
+        self.assertEqual(self.locale._format_timeframe('minute', 1), 'دقيقة')
+        self.assertEqual(self.locale._format_timeframe('hour', 1), 'ساعة')
+        self.assertEqual(self.locale._format_timeframe('day', 1), 'يوم')
+        self.assertEqual(self.locale._format_timeframe('month', 1), 'شهر')
+        self.assertEqual(self.locale._format_timeframe('year', 1), 'سنة')
+
+        # double
+        self.assertEqual(self.locale._format_timeframe('minutes', 2), 'دقيقتين')
+        self.assertEqual(self.locale._format_timeframe('hours', 2), 'ساعتين')
+        self.assertEqual(self.locale._format_timeframe('days', 2), 'يومين')
+        self.assertEqual(self.locale._format_timeframe('months', 2), 'شهرين')
+        self.assertEqual(self.locale._format_timeframe('years', 2), 'سنتين')
+
+        # up to ten
+        self.assertEqual(self.locale._format_timeframe('minutes', 3), '3 دقائق')
+        self.assertEqual(self.locale._format_timeframe('hours', 4), '4 ساعات')
+        self.assertEqual(self.locale._format_timeframe('days', 5), '5 أيام')
+        self.assertEqual(self.locale._format_timeframe('months', 6), '6 أشهر')
+        self.assertEqual(self.locale._format_timeframe('years', 10), '10 سنوات')
+
+        # more than ten
+        self.assertEqual(self.locale._format_timeframe('minutes', 11), '11 دقيقة')
+        self.assertEqual(self.locale._format_timeframe('hours', 19), '19 ساعة')
+        self.assertEqual(self.locale._format_timeframe('months', 24), '24 شهر')
+        self.assertEqual(self.locale._format_timeframe('days', 50), '50 يوم')
+        self.assertEqual(self.locale._format_timeframe('years', 115), '115 سنة')
+
+
 class NepaliLocaleTests(Chai):
 
     def setUp(self):
