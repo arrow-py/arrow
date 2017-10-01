@@ -424,7 +424,10 @@ class Arrow(object):
         ''' Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time. '''
 
-        return calendar.timegm(self._datetime.utctimetuple())
+        if hasattr(self._datetime, 'timestamp'):
+            return self._datetime.timestamp()
+        else:
+            return calendar.timegm(self._datetime.utctimetuple())
 
     @property
     def float_timestamp(self):
