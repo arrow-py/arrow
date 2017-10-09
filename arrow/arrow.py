@@ -355,7 +355,11 @@ class Arrow(object):
         spanRange = cls.span_range(frame,start,end,tz)
 
         bound = (len(spanRange) // interval) * interval
-        return [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
+        _range = [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
+        
+        if (bound < len(spanRange)):
+            _range.append((spanRange[bound][0], spanRange[-1][1]))
+        return _range
 
     # representations
 
