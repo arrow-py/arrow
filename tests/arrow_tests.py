@@ -1001,9 +1001,20 @@ class ArrowIntervalTests(Chai):
     def test_correct(self):
         result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15),2)
 
-        assertEqual(result,[(arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
+        assertEqual(result,[
+            (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
             (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),
-            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999))])
+            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999))
+        ])
+        
+    def test_correct2(self):
+        result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 22, 15),4)
+
+        assertEqual(result,[
+            (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 19, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 5, 20), arrow.Arrow(2013, 5, 5, 22, 59, 59, 999999))
+        ])
 
 class ArrowSpanTests(Chai):
 
