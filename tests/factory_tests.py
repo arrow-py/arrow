@@ -34,8 +34,9 @@ class GetTests(Chai):
 
     def test_with_locale_arg_falsy(self):
 
-        with_locale = self.factory.get(locale='')
-        assertEqual(with_locale.locale, 'en_us')
+        with_falsy_locale = self.factory.get()
+        with_falsy_locale.locale = ''
+        assertEqual(with_falsy_locale.locale, 'en_us')
 
     def test_timestamp_one_arg_no_arg(self):
 
