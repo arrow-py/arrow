@@ -32,7 +32,8 @@ class Arrow(object):
     :param minute: (optional) the minute, Defaults to 0.
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults 0.
-    :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
+    :param tzinfo: (optional) A timezone expression. Defaults to UTC.
+    :param locale: (optional) A string specifying a locale. Defaults to 'en_us'.
 
     .. _tz-expr:
 
@@ -58,7 +59,7 @@ class Arrow(object):
     _MONTHS_PER_QUARTER = 3
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
-                 tzinfo=None):
+                 tzinfo=None, locale='en_us'):
 
         if util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
@@ -66,6 +67,7 @@ class Arrow(object):
 
         self._datetime = datetime(year, month, day, hour, minute, second,
             microsecond, tzinfo)
+        self.locale = locale
 
 
     # factories: single object, both original and from datetime.
@@ -675,7 +677,7 @@ class Arrow(object):
 
     # string output and formatting.
 
-    def format(self, fmt='YYYY-MM-DD HH:mm:ssZZ', locale='en_us'):
+    def format(self, fmt='YYYY-MM-DD HH:mm:ssZZ', locale=None):
         ''' Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to a format string.
 
@@ -697,6 +699,11 @@ class Arrow(object):
 
         '''
 
+        if locale is None:
+            if hasattr(self, 'locale') and self.locale:
+                locale = self.locale
+            else:
+                locale = 'en_us'
         return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
 
 
