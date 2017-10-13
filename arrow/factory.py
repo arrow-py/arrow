@@ -29,7 +29,7 @@ class ArrowFactory(object):
     def __init__(self, type=Arrow):
         self.type = type
 
-    def get (self, *args, **kwargs):
+    def get(self, *args, **kwargs):
         ''' Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to
