@@ -698,7 +698,12 @@ class Arrow(object):
             '2013-05-09 03:56:47 -00:00'
 
         '''
-        locale = self.locale if locale is None and hasattr(self, 'locale') else 'en_us'
+
+        if locale is None:
+            if hasattr(self, 'locale') and self.locale:
+                locale = self.locale
+            else:
+                locale = 'en_us'
         return formatter.DateTimeFormatter(locale).format(self._datetime, fmt)
 
 
