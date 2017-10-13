@@ -133,7 +133,7 @@ class ArrowFactory(object):
         '''
 
         arw = self._get(*args, **kwargs)
-        if 'locale' in kwargs:
+        if 'locale' in kwargs and kwargs['locale']:
             arw.locale = kwargs['locale']
         return arw
 
