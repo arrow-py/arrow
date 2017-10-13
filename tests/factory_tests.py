@@ -22,6 +22,16 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc()))
 
+    def test_without_locale(self):
+
+        default_locale = self.factory.get()
+        assertEqual(default_locale.locale, 'en_us')
+
+    def test_with_locale(self):
+
+        with_locale = self.factory.get(locale='it_it')
+        assertEqual(default_locale.locale, 'it_it')
+
     def test_timestamp_one_arg_no_arg(self):
 
         no_arg = self.factory.get('1406430900').timestamp
