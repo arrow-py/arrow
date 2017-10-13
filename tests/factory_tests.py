@@ -30,7 +30,7 @@ class GetTests(Chai):
     def test_with_locale(self):
 
         with_locale = self.factory.get(locale='it_it')
-        assertEqual(default_locale.locale, 'it_it')
+        assertEqual(with_locale.locale, 'it_it')
 
     def test_timestamp_one_arg_no_arg(self):
 
