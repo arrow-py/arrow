@@ -139,6 +139,12 @@ class ArrowRepresentationTests(Chai):
 
         assertEqual(result, str(self.arrow))
 
+    def test_format_with_locale_arg(self):
+
+        format_spy = spy(formatter.DateTimeFormatter).args('it_it')
+        assertNotEqual(self.arrow.locale, 'it_it')
+        self.arrow.format(locale='it_it')
+
     def test_format_with_truthy_instance_locale(self):
 
         arw = self.arrow.clone()
