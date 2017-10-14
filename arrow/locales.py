@@ -186,7 +186,7 @@ class Locale(object):
 
 class EnglishLocale(Locale):
 
-    names = ['en', 'en_us', 'en_gb', 'en_au', 'en_be', 'en_jp', 'en_za', 'en_ca']
+    names = ['en', 'en_us', 'en_gb', 'en_au', 'en_be', 'en_jp', 'en_za', 'en_ca', 'en_ph']
 
     past = '{0} ago'
     future = 'in {0}'
@@ -2155,5 +2155,34 @@ class NepaliLocale(Locale):
         '', 'सोम', 'मंगल', 'बुध', 'बिहि', 'शुक्र', 'शनि', 'आइत'
     ]
 
- 
+
+class TagalogLocale(Locale):
+    names = ['tl', 'tl_ph']
+    past = '{0} nakalipas'
+    future = 'matapos ang {0}'
+
+    timeframes = {
+        'now': 'ngayon lamang',
+        'seconds': 'segundo',
+        'minute': 'isang minuto',
+        'minutes': '{0} na minuto',
+        'hour': 'isang oras',
+        'hours': '{0} na oras',
+        'day': 'isang araw',
+        'days': '{0} na araw',
+        'month': 'isang buwan',
+        'months': '{0} na buwan',
+        'year': 'isang taon',
+        'years': '{0} na taon',
+    }
+
+    month_names = ['', 'Enero', 'Pebrero', 'Marso', 'Abril' 'Mayo', 'Hunyo', 'Hulyo',
+        'Agosto', 'Setyembre', 'Oktubre', 'Nobyembre', 'Disyembre']
+    month_abbreviations = ['', 'Ene', 'Peb', 'Mar', 'Abr' 'May', 'Hun', 'Hul',
+        'Ago', 'Set', 'Okt', 'Nob', 'Dis']
+
+    day_names = ['', 'Lunes', 'Martes', 'Miyerkoles', 'Huwebes', 'Biyernes', 'Sabado', 'Linggo']
+    day_abbreviations = ['', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab', 'Lin']
+
+
 _locales = _map_locales()
