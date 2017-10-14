@@ -132,6 +132,12 @@ class ArrowFactory(object):
 
         '''
 
+        arw = self._get(*args, **kwargs)
+        if 'locale' in kwargs and kwargs['locale']:
+            arw.locale = kwargs['locale']
+        return arw
+
+    def _get(self, *args, **kwargs):
         arg_count = len(args)
         locale = kwargs.get('locale', 'en_us')
         tz = kwargs.get('tzinfo', None)

@@ -15,6 +15,7 @@ import time
 import sys
 
 from arrow import arrow, util
+from arrow.arrow import formatter
 
 
 def assertDtEqual(dt1, dt2, within=10):
@@ -137,6 +138,26 @@ class ArrowRepresentationTests(Chai):
         result = '{0}'.format(self.arrow)
 
         assertEqual(result, str(self.arrow))
+
+    def test_format_with_locale_arg(self):
+
+        format_spy = spy(formatter.DateTimeFormatter).args('it_it')
+        assertNotEqual(self.arrow.locale, 'it_it')
+        self.arrow.format(locale='it_it')
+
+    def test_format_with_truthy_instance_locale(self):
+
+        arw = self.arrow.clone()
+        arw.locale = 'it_it'
+        format_spy = spy(formatter.DateTimeFormatter).args('it_it')
+        arw.format()
+
+    def test_format_with_falsy_instance_locale(self):
+
+        arw = self.arrow.clone()
+        arw.locale = ''
+        format_spy = spy(formatter.DateTimeFormatter).args('en_us')
+        arw.format()
 
     def test_clone(self):
 
