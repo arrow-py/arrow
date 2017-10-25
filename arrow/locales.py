@@ -2155,5 +2155,36 @@ class NepaliLocale(Locale):
         '', 'सोम', 'मंगल', 'बुध', 'बिहि', 'शुक्र', 'शनि', 'आइत'
     ]
 
+
+class AlbanianLocale(Locale):
+
+    names = ['sq', 'sq_AL']
+
+    past = '{0} me pare'
+    future = 'ne {0}'
+
+    timeframes = {
+        'now': 'tani',
+        'seconds': 'sekonda',
+        'minute': 'nje minut',
+        'minutes': '{0} minuta',
+        'hour': 'nje orë',
+        'hours': '{0} ore',
+        'day': 'nje ditë',
+        'days': '{0} ditë',
+        'month': 'një muaj',
+        'months': '{0} muaj',
+        'year': 'një vit',
+        'years': '{0} vite',
+    }
+
+    month_names = ['', 'Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik',
+        'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor']
+    month_abbreviations = ['', 'Jan', 'Shk', 'Mar', 'Pri', 'Maj', 'Qer', 'Kor', 'Gus',
+        'Sht', 'Tet', 'Nën', 'Dhje']
+
+    day_names = ['', 'Hënë', 'Martë', 'Mërkurë', 'Enjte', 'Premte', 'Shtunë', 'Dielë']
+    day_abbreviations = ['', 'Hën', 'Mar', 'Mer', 'Enj', 'Pre', 'Sht', 'Die']
+
  
 _locales = _map_locales()
