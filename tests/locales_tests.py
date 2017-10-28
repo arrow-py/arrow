@@ -644,3 +644,35 @@ class IndonesianLocaleTests(Chai):
 
     def test_format_relative_future(self):
         self.assertEqual(self.locale._format_relative('1 jam', 'hour', -1), '1 jam yang lalu')
+
+
+class AlbanianLocaleTests(Chai):
+
+def setUp(self):
+        super(AlbanianLocaleTests, self).setUp()
+
+        self.locale = locales.AlbanianLocale()
+
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 ore')
+        assertEqual(self.locale._format_timeframe('hour', 0), '1 ore')
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative('kete moment', 'now', 0)
+        assertEqual(result, 'kete moment')
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative('nje ore', 'hour', 1)
+        assertEqual(result, 'per nje ore')
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative('nje ore', 'hour', -1)
+        assertEqual(result, 'nje ore me vone')
+
+
+
+
