@@ -18,7 +18,7 @@ def read(fname):
 
 
 def grep(attrname):
-    pattern = r"{0}\W*=\W*'([^']+)'".format(attrname)
+    pattern = r"{}\W*=\W*'([^']+)'".format(attrname)
     strval, = re.findall(pattern, file_text)
     return strval
 

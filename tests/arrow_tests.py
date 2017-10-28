@@ -106,7 +106,7 @@ class ArrowRepresentationTests(Chai):
 
         result = self.arrow.__repr__()
 
-        assertEqual(result, '<Arrow [{0}]>'.format(self.arrow._datetime.isoformat()))
+        assertEqual(result, '<Arrow [{}]>'.format(self.arrow._datetime.isoformat()))
 
     def test_str(self):
 
@@ -134,7 +134,7 @@ class ArrowRepresentationTests(Chai):
 
     def test_format_no_format_string(self):
 
-        result = '{0}'.format(self.arrow)
+        result = '{}'.format(self.arrow)
 
         assertEqual(result, str(self.arrow))
 
@@ -1377,7 +1377,7 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(ValueError) as raise_ctx:
             get_datetime('abc')
-        assertFalse('{0}' in str(raise_ctx.exception))
+        assertFalse('{}' in str(raise_ctx.exception))
 
     def test_get_tzinfo(self):
 
@@ -1385,7 +1385,7 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(ValueError) as raise_ctx:
             get_tzinfo('abc')
-        assertFalse('{0}' in str(raise_ctx.exception))
+        assertFalse('{}' in str(raise_ctx.exception))
 
     def test_get_timestamp_from_input(self):
 
