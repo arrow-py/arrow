@@ -648,7 +648,7 @@ class IndonesianLocaleTests(Chai):
 
 class AlbanianLocaleTests(Chai):
 
-def setUp(self):
+    def setUp(self):
         super(AlbanianLocaleTests, self).setUp()
 
         self.locale = locales.AlbanianLocale()
