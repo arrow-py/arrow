@@ -836,3 +836,9 @@ class DateTimeParserSearchDateTests(Chai):
         assertEqual(
             self.parser.parse("I'm entirely escaped, weee!", format),
             datetime(1, 1, 1))
+
+    def test_regex_escapes(self):
+
+        assertEqual(
+            self.parser.parse("\\$^.*?+{}|2017(01)", "\\$^.*?+{}|YYYY(MM)"),
+            datetime(2017, 1, 1))

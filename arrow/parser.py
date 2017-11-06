@@ -133,9 +133,9 @@ class DateTimeParser(object):
         escaped_fmt = re.sub('S+', 'S', escaped_fmt)
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
-        fmt_pattern = escaped_fmt
+        fmt_pattern = re.escape(escaped_fmt)
 
-        for m in self._FORMAT_RE.finditer(escaped_fmt):
+        for m in self._FORMAT_RE.finditer(fmt_pattern):
             token = m.group(0)
             try:
                 input_re = self._input_re_map[token]
@@ -151,7 +151,7 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-        a = fmt_pattern.split("#")
+        a = fmt_pattern.split("\#")
         b = escaped_data
 
         # Due to the way Python splits, 'a' will always be longer
