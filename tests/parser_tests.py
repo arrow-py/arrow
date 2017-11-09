@@ -236,6 +236,10 @@ class DateTimeParserParseTests(Chai):
         assertEqual(self.parser.parse('2013-01-01 12:30:45.987654', 'YYYY-MM-DD HH:mm:ss.SSSSSS'), expected)
         assertEqual(self.parser.parse_iso('2013-01-01 12:30:45.987654'), expected)
 
+    def test_parse_unsupported_iso(self):
+        with assertRaises(ParserError):
+            self.parser.parse_iso('03.04.2017')
+
     def test_parse_subsecond_rounding(self):
         expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         format = 'YYYY-MM-DD HH:mm:ss.S'

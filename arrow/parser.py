@@ -180,7 +180,7 @@ class DateTimeParser(object):
             else:
                 value = match.group(token)
             self._parse_token(token, value, parts)
-        return self._build_datetime(parts)
+        return self._build_datetime(parts, fmt_pattern_re.pattern, string)
 
     def _parse_token(self, token, value, parts):
 
@@ -247,7 +247,7 @@ class DateTimeParser(object):
                 parts['am_pm'] = 'pm'
 
     @staticmethod
-    def _build_datetime(parts):
+    def _build_datetime(parts, pattern, string):
 
         timestamp = parts.get('timestamp')
 
@@ -262,6 +262,9 @@ class DateTimeParser(object):
             hour += 12
         elif am_pm == 'am' and hour == 12:
             hour = 0
+
+        if not parts.get('year') or not parts.get('month') or not parts.get('day'):
+            raise ParserError('Could not match input to any of {0} on \'{1}\''.format(pattern, string))
 
         return datetime(year=parts.get('year', 1), month=parts.get('month', 1),
             day=parts.get('day', 1), hour=hour, minute=parts.get('minute', 0),
