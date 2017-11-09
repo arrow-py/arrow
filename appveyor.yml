@@ -1,0 +1,30 @@
+build: false
+environment:
+  matrix:
+    - PYTHON: "C:/Python27"
+    - PYTHON: "C:/Python33"
+    - PYTHON: "C:/Python34"
+    - PYTHON: "C:/Python35"
+    - PYTHON: "C:/Python36"
+
+    # Run on 64-bit version of latest versions
+    - PYTHON: "C:/Python27-x64"
+    - PYTHON: "C:/Python36-x64"
+
+install:
+  # Set up the virtualenv for this Python version
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - "virtualenv local"
+  - "local/Scripts/activate"
+
+  # Show in the logs that we're using the right version
+  - "python --version"
+
+  # Install test requirements
+  - "pip install -r requirements.txt"
+  - "pip install codecov"
+
+test_script:
+  - "nosetests"
+after_test:
+  - "codecov"
