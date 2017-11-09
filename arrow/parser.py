@@ -101,7 +101,6 @@ class DateTimeParser(object):
                 formats = ['YYYY-MM-DDTHH:mm:ss']
             else:
                 formats = ['YYYY-MM-DDTHH:mm']
-
         else:
             has_tz = False
             # generate required formats: YYYY-MM-DD, YYYY-MM-DD, YYYY
@@ -117,7 +116,7 @@ class DateTimeParser(object):
             if len(date_components) == 1:
                 continue
             if date_components[len(date_components) - 1] > date_components[0]:
-                raise ParserError('Could not match input to any of {} on {}'.format(formats, string))
+                raise ParserError('Could not match input to any of {0} on \'{1}\''.format(formats, string))
 
         if has_time and has_tz:
             formats = [f + 'Z' for f in formats]
