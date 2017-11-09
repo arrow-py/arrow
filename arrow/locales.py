@@ -983,6 +983,8 @@ class TagalogLocale(Locale):
     day_names = ['', 'Lunes', 'Martes', 'Miyerkules', 'Huwebes', 'Biyernes', 'Sabado', 'Linggo']
     day_abbreviations = ['', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab', 'Lin']
 
+    def _ordinal_number(self, n):
+        return 'ika-{0}'.format(n)
 
 class VietnameseLocale(Locale):
 

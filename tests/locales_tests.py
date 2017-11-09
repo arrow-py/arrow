@@ -644,3 +644,22 @@ class IndonesianLocaleTests(Chai):
 
     def test_format_relative_future(self):
         self.assertEqual(self.locale._format_relative('1 jam', 'hour', -1), '1 jam yang lalu')
+
+
+class TagalogLocaleTests(Chai):
+
+    def setUp(self):
+        super(TagalogLocaleTests, self).setUp()
+
+        self.locale = locales.TagalogLocale()
+
+    def test_ordinal_number(self):
+        assertEqual(self.locale.ordinal_number(0), 'ika-0')
+        assertEqual(self.locale.ordinal_number(1), 'ika-1')
+        assertEqual(self.locale.ordinal_number(2), 'ika-2')
+        assertEqual(self.locale.ordinal_number(3), 'ika-3')
+        assertEqual(self.locale.ordinal_number(10), 'ika-10')
+        assertEqual(self.locale.ordinal_number(23), 'ika-23')
+        assertEqual(self.locale.ordinal_number(100), 'ika-100')
+        assertEqual(self.locale.ordinal_number(103), 'ika-103')
+        assertEqual(self.locale.ordinal_number(114), 'ika-114')
