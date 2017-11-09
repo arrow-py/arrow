@@ -655,13 +655,12 @@ class TagalogLocaleTests(Chai):
 
     def test_format_timeframe(self):
 
-        assertEqual(self.locale._format_timeframe('second', 1), 'isang segundo')
         assertEqual(self.locale._format_timeframe('minute', 1), 'isang minuto')
         assertEqual(self.locale._format_timeframe('hour', 1), 'isang oras')
         assertEqual(self.locale._format_timeframe('month', 1), 'isang buwan')
         assertEqual(self.locale._format_timeframe('year', 1), 'isang taon')
 
-        assertEqual(self.locale._format_timeframe('seconds', 2), '2 segundo')
+        assertEqual(self.locale._format_timeframe('seconds', 2), 'segundo')
         assertEqual(self.locale._format_timeframe('minutes', 3), '3 minuto')
         assertEqual(self.locale._format_timeframe('hours', 4), '4 oras')
         assertEqual(self.locale._format_timeframe('months', 5), '5 buwan')

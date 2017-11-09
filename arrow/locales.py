@@ -962,8 +962,7 @@ class TagalogLocale(Locale):
 
     timeframes = {
         'now': 'ngayon lang',
-        'second': 'isang segundo',
-        'seconds': '{0} segundo',
+        'seconds': 'segundo',
         'minute': 'isang minuto',
         'minutes': '{0} minuto',
         'hour': 'isang oras',
