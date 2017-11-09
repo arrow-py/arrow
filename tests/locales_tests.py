@@ -653,6 +653,29 @@ class TagalogLocaleTests(Chai):
 
         self.locale = locales.TagalogLocale()
 
+    def test_format_timeframe(self):
+
+        assertEqual(self.locale._format_timeframe('second', 1), 'isang segundo')
+        assertEqual(self.locale._format_timeframe('minute', 1), 'isang minuto')
+        assertEqual(self.locale._format_timeframe('hour', 1), 'isang oras')
+        assertEqual(self.locale._format_timeframe('month', 1), 'isang buwan')
+        assertEqual(self.locale._format_timeframe('year', 1), 'isang taon')
+
+        assertEqual(self.locale._format_timeframe('seconds', 2), '2 segundo')
+        assertEqual(self.locale._format_timeframe('minutes', 3), '3 minuto')
+        assertEqual(self.locale._format_timeframe('hours', 4), '4 oras')
+        assertEqual(self.locale._format_timeframe('months', 5), '5 buwan')
+        assertEqual(self.locale._format_timeframe('years', 6), '6 taon')
+
+    def test_format_relative_now(self):
+        self.assertEqual(self.locale._format_relative('ngayon lang', 'now', 0), 'ngayon lang')
+
+    def test_format_relative_past(self):
+        self.assertEqual(self.locale._format_relative('2 oras', 'hour', 2), '2 oras mula ngayon')
+
+    def test_format_relative_future(self):
+        self.assertEqual(self.locale._format_relative('3 oras', 'hour', -3), 'nakaraang 3 oras')
+
     def test_ordinal_number(self):
         assertEqual(self.locale.ordinal_number(0), 'ika-0')
         assertEqual(self.locale.ordinal_number(1), 'ika-1')
