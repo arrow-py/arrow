@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 from dateutil import tz
+import calendar
 import re
 
 try:
@@ -20,12 +21,13 @@ class ParserError(RuntimeError):
 
 class DateTimeParser(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|j|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)')
     _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
 
     _ONE_OR_MORE_DIGIT_RE = re.compile('\d+')
     _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
     _FOUR_DIGIT_RE = re.compile('\d{4}')
+    _THREE_DIGIT_RE = re.compile('\d{3}')
     _TWO_DIGIT_RE = re.compile('\d{2}')
     _TZ_RE = re.compile('[+\-]?\d{2}:?(\d{2})?')
     _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
@@ -36,8 +38,10 @@ class DateTimeParser(object):
         'YY': _TWO_DIGIT_RE,
         'MM': _TWO_DIGIT_RE,
         'M': _ONE_OR_TWO_DIGIT_RE,
+        'DDD': _THREE_DIGIT_RE,
         'DD': _TWO_DIGIT_RE,
         'D': _ONE_OR_TWO_DIGIT_RE,
+        'j': _THREE_DIGIT_RE,
         'HH': _TWO_DIGIT_RE,
         'H': _ONE_OR_TWO_DIGIT_RE,
         'hh': _TWO_DIGIT_RE,
@@ -168,6 +172,7 @@ class DateTimeParser(object):
             return self._parse_multiformat(string, fmt)
 
         fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
+        print(fmt_tokens, fmt_pattern_re)
 
         match = fmt_pattern_re.search(string)
         if match is None:
@@ -177,9 +182,18 @@ class DateTimeParser(object):
         for token in fmt_tokens:
             if token == 'Do':
                 value = match.group('value')
+            # day_of_year needs to be parsed last because it is dependent on the matched year
+            elif token in ['j', 'DDD']:
+                continue
             else:
                 value = match.group(token)
             self._parse_token(token, value, parts)
+
+        if 'j' in fmt_tokens:
+            self._parse_token('j', match.group('j'), parts)
+        elif 'DDD' in fmt_tokens:
+            self._parse_token('DDD', match.group('DDD'), parts)
+
         return self._build_datetime(parts)
 
     def _parse_token(self, token, value, parts):
@@ -201,6 +215,24 @@ class DateTimeParser(object):
 
         elif token in ['Do']:
             parts['day'] = int(value)
+
+        elif token in ['DDD', 'j']:
+            print(token, value)
+            if 'month' in parts:
+                raise ParserError('Cannot have \'{0}\' token with \'M\''.format(token))
+            if 'year' not in parts:
+                raise ParserError('Cannot have \'{0}\' token without \'Y\''.format(token))
+
+            # Compute day and month from year and day_of_year
+            # based from https://stackoverflow.com/a/30169668/2200517
+            K = 1 if calendar.isleap(parts['year']) else 2
+            N = int(value)
+            M = int((9 * (K + N)) / 275.0 + 0.98)
+            if N < 32:
+                M = 1
+            D = N - int((275 * M) / 9.0) + K * int((M + 9) / 12.0) + 30
+            parts['month'] = M
+            parts['day'] = D
 
         elif token.upper() in ['HH', 'H']:
             parts['hour'] = int(value)

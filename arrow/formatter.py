@@ -9,7 +9,7 @@ from arrow import util, locales
 
 class DateTimeFormatter(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|j|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
 
     def __init__(self, locale='en_us'):
 
@@ -37,7 +37,7 @@ class DateTimeFormatter(object):
 
         if token == 'DDDD':
             return '{0:03d}'.format(dt.timetuple().tm_yday)
-        if token == 'DDD':
+        if token == 'DDD' or token == 'j':
             return str(dt.timetuple().tm_yday)
         if token == 'DD':
             return '{0:02d}'.format(dt.day)

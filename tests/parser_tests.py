@@ -766,6 +766,35 @@ class DateTimeParserMonthOrdinalDayTests(Chai):
                     datetime(2013, 1, 11))
 
 
+class DateTimeParserDayOfYearTests(Chai):
+    
+    def setUp(self):
+        super(DateTimeParserDayOfYearTests, self).setUp()
+        self.parser = parser.DateTimeParser()
+
+    def test_two_args_day_of_year(self):
+
+        assertEqual(
+            self.parser.parse('2016-360', 'YYYY-DDD'),
+            datetime(2016, 12, 25))
+
+        assertEqual(
+            self.parser.parse('2015-360', 'YYYY-j'),
+            datetime(2015, 12, 26))
+
+        assertEqual(
+            self.parser.parse('2015-015', 'YYYY-j'),
+            datetime(2015, 1, 15))
+
+    def test_two_args_day_of_year_invalid(self):
+
+        with assertRaises(ParserError):
+            self.parser.parse('2016-1-360', 'YYYY-M-DDD')
+
+        with assertRaises(ParserError):
+            self.parser.parse('360', 'j')
+
+
 class DateTimeParserSearchDateTests(Chai):
 
     def setUp(self):
