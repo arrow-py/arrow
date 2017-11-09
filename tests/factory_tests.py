@@ -96,6 +96,14 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
+    def test_one_arg_iso_str_with_tzname(self):
+
+        time_string = "2017-11-07T05:15:00.123 America/Chicago"
+
+        assertDtEqual(self.factory.get(time_string),
+                      self.factory.get(time_string, 
+                                       "YYYY-MM-DDTHH:mm:ss.S ZZZ"))
+        
     def test_one_arg_other(self):
 
         with assertRaises(TypeError):
