@@ -79,8 +79,8 @@ class Arrow(object):
 
         '''
 
-        utc = datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
-        dt = utc.astimezone(dateutil_tz.tzlocal() if tzinfo is None else tzinfo)
+        tzinfo = tzinfo or dateutil_tz.tzlocal()
+        dt = datetime.now(tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, dt.tzinfo)
@@ -92,10 +92,10 @@ class Arrow(object):
 
         '''
 
-        dt = datetime.utcnow()
+        dt = datetime.now(dateutil_tz.tzutc())
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, dateutil_tz.tzutc())
+            dt.microsecond, dt.tzinfo)
 
     @classmethod
     def fromtimestamp(cls, timestamp, tzinfo=None):
