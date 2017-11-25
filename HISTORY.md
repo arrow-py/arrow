@@ -1,5 +1,9 @@
 ## History
 
+### 0.12.0
+
+- [FIX] Compatibility fix for Python 2.x
+
 ### 0.11.0
 
 - [FIX] Fix grammar of ArabicLocale
