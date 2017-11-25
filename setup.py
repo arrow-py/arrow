@@ -1,6 +1,7 @@
 import codecs
 import os.path
 import re
+import sys
 
 try:
     from setuptools import setup
@@ -25,6 +26,10 @@ def grep(attrname):
 
 file_text = read(fpath('arrow/__init__.py'))
 
+install_requires = ['python-dateutil']
+if sys.version_info[0] < 3:
+    install_requires.append('backports.functools_lru_cache==1.2.1')
+
 setup(
     name='arrow',
     version=grep('__version__'),
@@ -36,9 +41,7 @@ setup(
     license='Apache 2.0',
     packages=['arrow'],
     zip_safe=False,
-    install_requires=[
-        'python-dateutil'
-    ],
+    install_requires=install_requires,
     test_suite="tests",
     classifiers=[
         'Development Status :: 4 - Beta',
