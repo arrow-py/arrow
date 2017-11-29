@@ -351,14 +351,11 @@ class Arrow(object):
         '''
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
-
-        spanRange = cls.span_range(frame,start,end,tz)
-
-        bound = (len(spanRange) // interval) * interval
-        _range = [ (spanRange[i][0],spanRange[i+ interval - 1][1]) for i in range(0,bound, interval) ]
-        
-        if (bound < len(spanRange)):
-            _range.append((spanRange[bound][0], spanRange[-1][1]))
+        range_span = cls.span_range(frame, start, end, tz)
+        bound = (len(range_span) // interval) * interval
+        _range = [(range_span[i][0], range_span[i + interval - 1][1]) for i in range(0,bound, interval) ]        
+        if bound < len(range_span):
+            _range.append((range_span[bound][0], range_span[-1][1]))
         return _range
 
     # representations
