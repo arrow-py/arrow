@@ -28,7 +28,7 @@ file_text = read(fpath('arrow/__init__.py'))
 
 install_requires = ['python-dateutil']
 if sys.version_info[0] < 3:
-    install_requires.append('backports.functools_lru_cache==1.2.1')
+    install_requires.append('backports.functools_lru_cache>=1.2.1')
 
 setup(
     name='arrow',
