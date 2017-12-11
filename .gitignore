@@ -12,6 +12,7 @@
 nosetests.xml
 
 local/
+build/
 dist/
 docs/_build/
 .idea
