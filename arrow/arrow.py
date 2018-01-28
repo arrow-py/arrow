@@ -806,7 +806,7 @@ class Arrow(object):
             
             if(trunc(abs(delta)) != 1):
                 granularity += 's'
-            return locale.describe(granularity, delta, only_distance=False)
+            return locale.describe(granularity, delta, only_distance=only_distance)
     # math
 
     def __add__(self, other):
