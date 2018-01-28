@@ -186,7 +186,7 @@ class Locale(object):
 
 class EnglishLocale(Locale):
 
-    names = ['en', 'en_us', 'en_gb', 'en_au', 'en_be', 'en_jp', 'en_za', 'en_ca']
+    names = ['en', 'en_us', 'en_gb', 'en_au', 'en_be', 'en_jp', 'en_za', 'en_ca', 'en_ph']
 
     past = '{0} ago'
     future = 'in {0}'
@@ -955,7 +955,7 @@ class BrazilianPortugueseLocale(PortugueseLocale):
 
 class TagalogLocale(Locale):
 
-    names = ['tl']
+    names = ['tl', 'tl_ph']
 
     past = 'nakaraang {0}'
     future = '{0} mula ngayon'
@@ -983,6 +983,8 @@ class TagalogLocale(Locale):
     day_names = ['', 'Lunes', 'Martes', 'Miyerkules', 'Huwebes', 'Biyernes', 'Sabado', 'Linggo']
     day_abbreviations = ['', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab', 'Lin']
 
+    def _ordinal_number(self, n):
+        return 'ika-{0}'.format(n)
 
 class VietnameseLocale(Locale):
 
