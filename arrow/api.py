@@ -8,14 +8,12 @@ methods for use as a module API.
 from __future__ import absolute_import
 
 from arrow.factory import ArrowFactory
-from functools import wraps
 
 
 # internal default factory.
 _factory = ArrowFactory()
 
 
-@wraps(_factory.get)
 def get(*args, **kwargs):
     ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``get`` method.
 
@@ -23,8 +21,9 @@ def get(*args, **kwargs):
 
     return _factory.get(*args, **kwargs)
 
+get.__doc__ = _factory.get.__doc__
 
-@wraps(_factory.utcnow)
+
 def utcnow():
     ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``utcnow`` method.
 
@@ -32,14 +31,17 @@ def utcnow():
 
     return _factory.utcnow()
 
+utcnow.__doc__ = _factory.utcnow.__doc__
 
-@wraps(_factory.now)
+
 def now(tz=None):
     ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``now`` method.
 
     '''
 
     return _factory.now(tz)
+
+now.__doc__ = _factory.now.__doc__
 
 
 def factory(type):
@@ -52,6 +54,4 @@ def factory(type):
 
     return ArrowFactory(type)
 
-
 __all__ = ['get', 'utcnow', 'now', 'factory']
-
