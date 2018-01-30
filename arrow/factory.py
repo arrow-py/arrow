@@ -172,7 +172,7 @@ class ArrowFactory(object):
             # (str) -> parse.
             elif isstr(arg):
                 dt = parser.DateTimeParser(locale).parse_iso(arg)
-                return self.type.fromdatetime(dt)
+                return self.type.fromdatetime(dt, tz)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):

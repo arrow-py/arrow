@@ -149,6 +149,12 @@ class GetTests(Chai):
 
         assertEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
+    def test_two_args_str_tzinfo(self):
+
+        result = self.factory.get('2013-01-01', tzinfo=tz.gettz('US/Pacific'))
+
+        assertDtEqual(result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz('US/Pacific')))
+
     def test_two_args_twitter_format(self):
 
         # format returned by twitter API for created_at:
