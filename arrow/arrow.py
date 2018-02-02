@@ -62,7 +62,7 @@ class Arrow(object):
 
         if util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
-        tzinfo = tzinfo or dateutil_tz.tzutc()
+        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
 
         self._datetime = datetime(year, month, day, hour, minute, second,
             microsecond, tzinfo)
@@ -79,7 +79,7 @@ class Arrow(object):
 
         '''
 
-        tzinfo = tzinfo or dateutil_tz.tzlocal()
+        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
@@ -112,7 +112,7 @@ class Arrow(object):
 
         '''
 
-        tzinfo = tzinfo or dateutil_tz.tzlocal()
+        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
         timestamp = cls._get_timestamp_from_input(timestamp)
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
@@ -151,7 +151,11 @@ class Arrow(object):
 
         '''
 
-        tzinfo = tzinfo or dt.tzinfo or dateutil_tz.tzutc()
+        if tzinfo is None:
+            if dt.tzinfo is None:
+                tzinfo = dateutil_tz.tzutc()
+            else:
+                tzinfo = dt.tzinfo
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
             dt.microsecond, tzinfo)
@@ -165,7 +169,7 @@ class Arrow(object):
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         '''
 
-        tzinfo = tzinfo or dateutil_tz.tzutc()
+        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
 
         return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
@@ -182,10 +186,10 @@ class Arrow(object):
         '''
 
         dt = datetime.strptime(date_str, fmt)
-        tzinfo = tzinfo or dt.tzinfo
+        tzinfo = tzinfo if tzinfo is not None else dt.tzinfo
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
-            dt.microsecond, tzinfo)
+                   dt.microsecond, tzinfo)
 
 
     # factories: ranges and spans
