@@ -21,12 +21,17 @@ def get(*args, **kwargs):
 
     return _factory.get(*args, **kwargs)
 
+get.__doc__ = _factory.get.__doc__
+
+
 def utcnow():
     ''' Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``utcnow`` method.
 
     '''
 
     return _factory.utcnow()
+
+utcnow.__doc__ = _factory.utcnow.__doc__
 
 
 def now(tz=None):
@@ -35,6 +40,8 @@ def now(tz=None):
     '''
 
     return _factory.now(tz)
+
+now.__doc__ = _factory.now.__doc__
 
 
 def factory(type):
@@ -47,6 +54,4 @@ def factory(type):
 
     return ArrowFactory(type)
 
-
 __all__ = ['get', 'utcnow', 'now', 'factory']
-
