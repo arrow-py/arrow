@@ -2157,7 +2157,7 @@ class NepaliLocale(Locale):
         '', 'सोम', 'मंगल', 'बुध', 'बिहि', 'शुक्र', 'शनि', 'आइत'
     ]
 
- class EstonianLocale(Locale):
+class EstonianLocale(Locale):
     names = ['ee', 'et']
 
     past = '{0} tagasi'
