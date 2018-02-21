@@ -685,3 +685,17 @@ class TagalogLocaleTests(Chai):
         assertEqual(self.locale.ordinal_number(100), 'ika-100')
         assertEqual(self.locale.ordinal_number(103), 'ika-103')
         assertEqual(self.locale.ordinal_number(114), 'ika-114')
+
+        
+class EstonianLocaleTests(Chai):
+
+    def setUp(self):
+        super(EstonianLocaleTests, self).setUp()
+
+        self.locale = locales.EstonianLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('hours', 2), '2 tunni')
+        assertEqual(self.locale._format_timeframe('hour', 0), 'tund aega')
+        assertEqual(self.locale._format_timeframe('hours', -2), '2 tundi')
+        assertEqual(self.locale._format_timeframe('now', 0), 'just nüüd')
