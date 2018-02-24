@@ -717,8 +717,8 @@ class EstonianLocaleTests(Chai):
         
         assertEqual(self.locale._format_timeframe('now', 0), 'just nüüd')
         assertEqual(self.locale._format_timeframe('second', -1), 'üks sekund')
-        assertEqual(self.locale._format_timeframe('seconds', -9), '9  sekundit')
-        assertEqual(self.locale._format_timeframe('seconds', -12), '12  sekundit')
+        assertEqual(self.locale._format_timeframe('seconds', -9), '9 sekundit')
+        assertEqual(self.locale._format_timeframe('seconds', -12), '12 sekundit')
         assertEqual(self.locale._format_timeframe('minute', -1), 'ühe minuti')
         assertEqual(self.locale._format_timeframe('minutes', -2), '2 minutit')
         assertEqual(self.locale._format_timeframe('minutes', -10), '10 minutit')
