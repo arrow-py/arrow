@@ -2189,12 +2189,10 @@ class EstonianLocale(Locale):
 
     def _format_timeframe(self, timeframe, delta):
         form = self.timeframes[timeframe]
-
-        if isinstance(form,dict):
-            if delta > 0:
-                form = form['future']
-            else:
-                form = form['past']
+        if delta > 0:
+            form = form['future']
+        else:
+            form = form['past']
         return form.format(abs(delta))
     
     
