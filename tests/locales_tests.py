@@ -685,3 +685,52 @@ class TagalogLocaleTests(Chai):
         assertEqual(self.locale.ordinal_number(100), 'ika-100')
         assertEqual(self.locale.ordinal_number(103), 'ika-103')
         assertEqual(self.locale.ordinal_number(114), 'ika-114')
+
+        
+class EstonianLocaleTests(Chai):
+
+    def setUp(self):
+        super(EstonianLocaleTests, self).setUp()
+
+        self.locale = locales.EstonianLocale()
+
+    def test_format_timeframe(self):
+        assertEqual(self.locale._format_timeframe('now', 0), 'just nüüd')
+        assertEqual(self.locale._format_timeframe('second', 1), 'ühe sekundi')
+        assertEqual(self.locale._format_timeframe('seconds', 3), '3 sekundi')
+        assertEqual(self.locale._format_timeframe('seconds', 30), '30 sekundi')
+        assertEqual(self.locale._format_timeframe('minute', 1), 'ühe minuti')
+        assertEqual(self.locale._format_timeframe('minutes', 4), '4 minuti')
+        assertEqual(self.locale._format_timeframe('minutes', 40), '40 minuti')
+        assertEqual(self.locale._format_timeframe('hour', 1), 'tunni aja')
+        assertEqual(self.locale._format_timeframe('hours', 5), '5 tunni')
+        assertEqual(self.locale._format_timeframe('hours', 23), '23 tunni')
+        assertEqual(self.locale._format_timeframe('day', 1), 'ühe päeva')
+        assertEqual(self.locale._format_timeframe('days', 6), '6 päeva')
+        assertEqual(self.locale._format_timeframe('days', 12), '12 päeva')
+        assertEqual(self.locale._format_timeframe('month', 1), 'ühe kuu')
+        assertEqual(self.locale._format_timeframe('months', 7), '7 kuu')
+        assertEqual(self.locale._format_timeframe('months', 11), '11 kuu')
+        assertEqual(self.locale._format_timeframe('year', 1), 'ühe aasta')
+        assertEqual(self.locale._format_timeframe('years', 8), '8 aasta')
+        assertEqual(self.locale._format_timeframe('years', 12), '12 aasta')
+        
+        assertEqual(self.locale._format_timeframe('now', 0), 'just nüüd')
+        assertEqual(self.locale._format_timeframe('second', -1), 'üks sekund')
+        assertEqual(self.locale._format_timeframe('seconds', -9), '9 sekundit')
+        assertEqual(self.locale._format_timeframe('seconds', -12), '12 sekundit')
+        assertEqual(self.locale._format_timeframe('minute', -1), 'üks minut')
+        assertEqual(self.locale._format_timeframe('minutes', -2), '2 minutit')
+        assertEqual(self.locale._format_timeframe('minutes', -10), '10 minutit')
+        assertEqual(self.locale._format_timeframe('hour', -1), 'tund aega')
+        assertEqual(self.locale._format_timeframe('hours', -3), '3 tundi')
+        assertEqual(self.locale._format_timeframe('hours', -11), '11 tundi')
+        assertEqual(self.locale._format_timeframe('day', -1), 'üks päev')
+        assertEqual(self.locale._format_timeframe('days', -2), '2 päeva')
+        assertEqual(self.locale._format_timeframe('days', -12), '12 päeva')
+        assertEqual(self.locale._format_timeframe('month', -1), 'üks kuu')
+        assertEqual(self.locale._format_timeframe('months', -3), '3 kuud')
+        assertEqual(self.locale._format_timeframe('months', -13), '13 kuud')
+        assertEqual(self.locale._format_timeframe('year', -1), 'üks aasta')
+        assertEqual(self.locale._format_timeframe('years', -4), '4 aastat')
+        assertEqual(self.locale._format_timeframe('years', -14), '14 aastat')
