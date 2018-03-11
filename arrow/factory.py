@@ -78,6 +78,11 @@ class ArrowFactory(object):
             >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
 
+        **One** ISO-8601-formatted ``str`` with tz name, to parse it::
+
+            >>> arrow.get('2013-11-29T01:26:43.830580 America/Chicago')
+            <Arrow [2013-11-29T01:26:43.830580-06:00]>
+
         **One** ``tzinfo``, to get the current time **converted** to that timezone::
 
             >>> arrow.get(tz.tzlocal())
@@ -112,8 +117,8 @@ class ArrowFactory(object):
 
         **Two** arguments, both ``str``, to parse the first according to the format of the second::
 
-            >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
-            <Arrow [2013-05-05T12:30:45+00:00]>
+            >>> arrow.get('2013-05-05 12:30:45 America/Chicago', 'YYYY-MM-DD HH:mm:ss ZZZ')
+            <Arrow [2013-05-05T12:30:45-05:00]>
 
         **Two** arguments, first a ``str`` to parse and second a ``list`` of formats to try::
 

@@ -83,13 +83,21 @@ class DateTimeParser(object):
     def parse_iso(self, string):
 
         has_time = 'T' in string or ' ' in string.strip()
-        space_divider = ' ' in string.strip()
+        space_divider = 'T' not in string and ' ' in string.strip()
+        has_tzname = ('T' in string and string.count(' ') == 1 or
+                      string.count(' ') == 2)
 
         if has_time:
             if space_divider:
-                date_string, time_string = string.split(' ', 1)
+                if has_tzname:
+                    date_string, time_string, _ = string.split(' ', 2)
+                else:
+                    date_string, time_string = string.split(' ', 1)
             else:
                 date_string, time_string = string.split('T', 1)
+                if has_tzname:
+                    time_string, _ = time_string.split(' ', 1)
+
             time_parts = re.split('[+-]', time_string, 1)
             has_tz = len(time_parts) > 1
             has_seconds = time_parts[0].count(':') > 1
@@ -112,6 +120,9 @@ class DateTimeParser(object):
 
         if has_time and has_tz:
             formats = [f + 'Z' for f in formats]
+
+        if has_tzname:
+            formats = [f + ' ZZZ' for f in formats]
 
         if space_divider:
             formats = [item.replace('T', ' ', 1) for item in formats]
