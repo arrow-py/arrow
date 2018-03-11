@@ -822,7 +822,7 @@ class Arrow(object):
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
-        raise TypeError()
+        return NotImplemented
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -838,21 +838,17 @@ class Arrow(object):
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
 
-        raise TypeError()
+        return NotImplemented
 
     def __rsub__(self, other):
 
         if isinstance(other, datetime):
             return other - self._datetime
 
-        raise TypeError()
+        return NotImplemented
 
 
     # comparisons
-
-    def _cmperror(self, other):
-        raise TypeError('can\'t compare \'{0}\' to \'{1}\''.format(
-            type(self), type(other)))
 
     def __eq__(self, other):
 
@@ -862,35 +858,46 @@ class Arrow(object):
         return self._datetime == self._get_datetime(other)
 
     def __ne__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return True
+
         return not self.__eq__(other)
 
     def __gt__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            self._cmperror(other)
+            return NotImplemented
 
         return self._datetime > self._get_datetime(other)
 
     def __ge__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            self._cmperror(other)
+            return NotImplemented
 
         return self._datetime >= self._get_datetime(other)
 
     def __lt__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            self._cmperror(other)
+            return NotImplemented
 
         return self._datetime < self._get_datetime(other)
 
     def __le__(self, other):
 
         if not isinstance(other, (Arrow, datetime)):
-            self._cmperror(other)
+            return NotImplemented
 
         return self._datetime <= self._get_datetime(other)
+
+    def __cmp__(self, other):
+        if sys.version_info[0] < 3: # pragma: no cover
+            if not isinstance(other, (Arrow, datetime)):
+                raise TypeError('can\'t compare \'{0}\' to \'{1}\''.format(
+                    type(self), type(other)))
+
 
 
     # datetime methods
