@@ -1,6 +1,7 @@
 import codecs
 import os.path
 import re
+import sys
 
 try:
     from setuptools import setup
@@ -37,8 +38,11 @@ setup(
     packages=['arrow'],
     zip_safe=False,
     install_requires=[
-        'python-dateutil'
+        'python-dateutil',
     ],
+    extras_require={
+        ":python_version=='2.7'": ['backports.functools_lru_cache>=1.2.1'],
+    },
     test_suite="tests",
     classifiers=[
         'Development Status :: 4 - Beta',

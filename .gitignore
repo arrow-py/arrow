@@ -14,6 +14,7 @@ tests/.noseids
 
 .venv/
 local/
+build/
 dist/
 docs/_build/
 .idea
