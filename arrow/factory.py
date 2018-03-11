@@ -112,8 +112,8 @@ class ArrowFactory(object):
 
         **Two** arguments, both ``str``, to parse the first according to the format of the second::
 
-            >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
-            <Arrow [2013-05-05T12:30:45+00:00]>
+            >>> arrow.get('2013-05-05 12:30:45 America/Chicago', 'YYYY-MM-DD HH:mm:ss ZZZ')
+            <Arrow [2013-05-05T12:30:45-05:00]>
 
         **Two** arguments, first a ``str`` to parse and second a ``list`` of formats to try::
 
