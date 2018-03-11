@@ -94,7 +94,7 @@ class DateTimeFormatter(object):
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
             total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)
 
-            sign = '+' if total_minutes > 0 else '-'
+            sign = '+' if total_minutes >= 0 else '-'
             total_minutes = abs(total_minutes)
             hour, minute = divmod(total_minutes, 60)
 
