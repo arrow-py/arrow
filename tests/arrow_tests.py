@@ -691,8 +691,8 @@ class ArrowRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.range('year', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2016, 4, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('year', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2016, 4, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -703,8 +703,8 @@ class ArrowRangeTests(Chai):
 
     def test_quarter(self):
 
-        result = arrow.Arrow.range('quarter', datetime(2013, 2, 3, 4, 5, 6),
-            datetime(2013, 5, 6, 7, 8, 9))
+        result = list(arrow.Arrow.range('quarter', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 2, 3, 4, 5, 6),
@@ -713,8 +713,8 @@ class ArrowRangeTests(Chai):
 
     def test_month(self):
 
-        result = arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
-            datetime(2013, 5, 6, 7, 8, 9))
+        result = list(arrow.Arrow.range('month', datetime(2013, 2, 3, 4, 5, 6),
+            datetime(2013, 5, 6, 7, 8, 9)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 2, 3, 4, 5, 6),
@@ -725,8 +725,8 @@ class ArrowRangeTests(Chai):
 
     def test_week(self):
 
-        result = arrow.Arrow.range('week', datetime(2013, 9, 1, 2, 3, 4),
-            datetime(2013, 10, 1, 2, 3, 4))
+        result = list(arrow.Arrow.range('week', datetime(2013, 9, 1, 2, 3, 4),
+            datetime(2013, 10, 1, 2, 3, 4)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 9, 1, 2, 3, 4),
@@ -738,8 +738,8 @@ class ArrowRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.range('day', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('day', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -750,8 +750,8 @@ class ArrowRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 6, 7, 8))
+        result = list(arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -760,8 +760,8 @@ class ArrowRangeTests(Chai):
             arrow.Arrow(2013, 1, 2, 6, 4, 5),
         ])
 
-        result = arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 4, 5))
+        result = list(arrow.Arrow.range('hour', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 5)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -769,8 +769,8 @@ class ArrowRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 7, 8))
+        result = list(arrow.Arrow.range('minute', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -781,8 +781,8 @@ class ArrowRangeTests(Chai):
 
     def test_second(self):
 
-        result = arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
-            datetime(2013, 1, 2, 3, 4, 8))
+        result = list(arrow.Arrow.range('second', datetime(2013, 1, 2, 3, 4, 5),
+            datetime(2013, 1, 2, 3, 4, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -793,8 +793,8 @@ class ArrowRangeTests(Chai):
 
     def test_arrow(self):
 
-        result = arrow.Arrow.range('day', arrow.Arrow(2013, 1, 2, 3, 4, 5),
-            arrow.Arrow(2013, 1, 5, 6, 7, 8))
+        result = list(arrow.Arrow.range('day', arrow.Arrow(2013, 1, 2, 3, 4, 5),
+            arrow.Arrow(2013, 1, 5, 6, 7, 8)))
 
         assertEqual(result, [
             arrow.Arrow(2013, 1, 2, 3, 4, 5),
@@ -838,14 +838,14 @@ class ArrowRangeTests(Chai):
     def test_unsupported(self):
 
         with assertRaises(AttributeError):
-            arrow.Arrow.range('abc', datetime.utcnow(), datetime.utcnow())
+            next(arrow.Arrow.range('abc', datetime.utcnow(), datetime.utcnow()))
 
 
 class ArrowSpanRangeTests(Chai):
 
     def test_year(self):
 
-        result = arrow.Arrow.span_range('year', datetime(2013, 2, 1), datetime(2016, 3, 31))
+        result = list(arrow.Arrow.span_range('year', datetime(2013, 2, 1), datetime(2016, 3, 31)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999)),
@@ -856,7 +856,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_quarter(self):
 
-        result = arrow.Arrow.span_range('quarter', datetime(2013, 2, 2), datetime(2013, 5, 15))
+        result = list(arrow.Arrow.span_range('quarter', datetime(2013, 2, 2), datetime(2013, 5, 15)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 3, 31, 23, 59, 59, 999999)),
@@ -865,7 +865,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_month(self):
 
-        result = arrow.Arrow.span_range('month', datetime(2013, 1, 2), datetime(2013, 4, 15))
+        result = list(arrow.Arrow.span_range('month', datetime(2013, 1, 2), datetime(2013, 4, 15)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 1, 31, 23, 59, 59, 999999)),
@@ -876,7 +876,7 @@ class ArrowSpanRangeTests(Chai):
 
     def test_week(self):
 
-        result = arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28))
+        result = list(arrow.Arrow.span_range('week', datetime(2013, 2, 2), datetime(2013, 2, 28)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
@@ -889,8 +889,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_day(self):
 
-        result = arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
-            datetime(2013, 1, 4, 12))
+        result = list(arrow.Arrow.span_range('day', datetime(2013, 1, 1, 12),
+            datetime(2013, 1, 4, 12)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999)),
@@ -901,8 +901,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_hour(self):
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, 30),
-            datetime(2013, 1, 1, 3, 30))
+        result = list(arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 0, 30),
+            datetime(2013, 1, 1, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999)),
@@ -911,8 +911,8 @@ class ArrowSpanRangeTests(Chai):
             (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
         ])
 
-        result = arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 3, 30),
-            datetime(2013, 1, 1, 3, 30))
+        result = list(arrow.Arrow.span_range('hour', datetime(2013, 1, 1, 3, 30),
+            datetime(2013, 1, 1, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999)),
@@ -920,8 +920,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_minute(self):
 
-        result = arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0, 0, 30),
-            datetime(2013, 1, 1, 0, 3, 30))
+        result = list(arrow.Arrow.span_range('minute', datetime(2013, 1, 1, 0, 0, 30),
+            datetime(2013, 1, 1, 0, 3, 30)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999)),
@@ -932,8 +932,8 @@ class ArrowSpanRangeTests(Chai):
 
     def test_second(self):
 
-        result = arrow.Arrow.span_range('second', datetime(2013, 1, 1),
-            datetime(2013, 1, 1, 0, 0, 3))
+        result = list(arrow.Arrow.span_range('second', datetime(2013, 1, 1),
+            datetime(2013, 1, 1, 0, 0, 3)))
 
         assertEqual(result, [
             (arrow.Arrow(2013, 1, 1, 0, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 0, 999999)),
@@ -992,14 +992,14 @@ class ArrowIntervalTests(Chai):
     def test_incorrect_input(self):
         correct = True
         try:
-            result = arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15),0)
+            result = list(arrow.Arrow.interval('month', datetime(2013, 1, 2), datetime(2013, 4, 15), 0))
         except:
             correct = False
 
         assertEqual(correct,False)
 
     def test_correct(self):
-        result = arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15),2)
+        result = list(arrow.Arrow.interval('hour', datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15), 2))
 
         assertEqual(result,[(arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999)),
             (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999)),
@@ -1116,15 +1116,15 @@ class ArrowHumanizeTests(Chai):
         self.now = arrow.Arrow.utcnow()
 
     def test_granularity(self):
-    
+
         assertEqual(self.now.humanize(granularity = 'second'), 'just now')
-        
+
         later1 = self.now.shift(seconds=1)
         assertEqual(self.now.humanize(later1, granularity = 'second'), 'just now')
         assertEqual(later1.humanize(self.now, granularity = 'second'), 'just now')
         assertEqual(self.now.humanize(later1, granularity = 'minute'), '0 minutes ago')
         assertEqual(later1.humanize(self.now, granularity = 'minute'), 'in 0 minutes')
-        
+
         later100 = self.now.shift(seconds=100)
         assertEqual(self.now.humanize(later100, granularity = 'second'), 'seconds ago')
         assertEqual(later100.humanize(self.now, granularity = 'second'), 'in seconds')
@@ -1132,7 +1132,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later100.humanize(self.now, granularity = 'minute'), 'in a minute')
         assertEqual(self.now.humanize(later100, granularity = 'hour'), '0 hours ago')
         assertEqual(later100.humanize(self.now, granularity = 'hour'), 'in 0 hours')
-        
+
         later4000 = self.now.shift(seconds=4000)
         assertEqual(self.now.humanize(later4000, granularity = 'minute'), '66 minutes ago')
         assertEqual(later4000.humanize(self.now, granularity = 'minute'), 'in 66 minutes')
@@ -1140,7 +1140,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later4000.humanize(self.now, granularity = 'hour'), 'in an hour')
         assertEqual(self.now.humanize(later4000, granularity = 'day'), '0 days ago')
         assertEqual(later4000.humanize(self.now, granularity = 'day'), 'in 0 days')
-        
+
         later105 = self.now.shift(seconds=10 ** 5)
         assertEqual(self.now.humanize(later105, granularity = 'hour'), '27 hours ago')
         assertEqual(later105.humanize(self.now, granularity = 'hour'), 'in 27 hours')
@@ -1148,7 +1148,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later105.humanize(self.now, granularity = 'day'), 'in a day')
         assertEqual(self.now.humanize(later105, granularity = 'month'), '0 months ago')
         assertEqual(later105.humanize(self.now, granularity = 'month'), 'in 0 months')
-        
+
         later106 = self.now.shift(seconds=3 * 10 ** 6)
         assertEqual(self.now.humanize(later106, granularity = 'day'), '34 days ago')
         assertEqual(later106.humanize(self.now, granularity = 'day'), 'in 34 days')
@@ -1156,13 +1156,13 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later106.humanize(self.now, granularity = 'month'), 'in a month')
         assertEqual(self.now.humanize(later106, granularity = 'year'), '0 years ago')
         assertEqual(later106.humanize(self.now, granularity = 'year'), 'in 0 years')
-        
+
         later506 = self.now.shift(seconds=50 * 10 ** 6)
         assertEqual(self.now.humanize(later506, granularity = 'month'), '18 months ago')
         assertEqual(later506.humanize(self.now, granularity = 'month'), 'in 18 months')
         assertEqual(self.now.humanize(later506, granularity = 'year'), 'a year ago')
         assertEqual(later506.humanize(self.now, granularity = 'year'), 'in a year')
-        
+
         later108 = self.now.shift(seconds=10 ** 8)
         assertEqual(self.now.humanize(later108, granularity = 'year'), '3 years ago')
         assertEqual(later108.humanize(self.now, granularity = 'year'), 'in 3 years')
@@ -1172,7 +1172,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(later108onlydistance .humanize(self.now, only_distance=True, granularity = 'year'), '3 years')
         with assertRaises(AttributeError):
             self.now.humanize(later108, granularity = 'years')
-    
+
     def test_seconds(self):
 
         later = self.now.shift(seconds=10)
@@ -1405,3 +1405,64 @@ class ArrowUtilTests(Chai):
 
         with assertRaises(Exception):
             arrow.Arrow._get_iteration_params(None, None)
+
+    def test_list_to_iter_shim(self):
+        def newshim():
+            return util.list_to_iter_shim(range(5), warn_text='testing')
+
+        # Iterating over a shim once should not throw a warning
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+
+            iter(newshim())
+            list(newshim())
+            for _ in newshim(): pass
+            len(newshim())  # ...because it's called by `list(x)`
+
+            assertEqual([], w)
+
+        # Iterating over a shim twice (or more) should throw a warning
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            shim = newshim()
+
+            for _ in shim: pass
+            for _ in shim: pass
+
+            assertEqual(1, len(w))
+            assertEqual(w[0].category, DeprecationWarning)
+            assertEqual("testing", w[0].message.args[0])
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            shim = newshim()
+
+            0 in shim
+            shim + []
+            shim * 1
+            shim[0]
+            shim.index(0)
+            shim.count(0)
+
+            shim[0:0] = []  # doesn't warn on py2
+            del shim[0:0]  # doesn't warn on py2
+            newshim().append(6)
+            if util.version >= '3.0':  # pragma: no cover
+                newshim().clear()
+                shim.copy()
+            shim.extend([])
+            shim += []
+            shim *= 1
+            newshim().insert(0, 6)
+            shim.pop(-1)
+            newshim().remove(0)
+            newshim().reverse()
+            newshim().sort()
+
+            if util.version >= '3.0':  # pragma: no cover
+                assertEqual(19, len(w))
+            else:  # pragma: no cover
+                assertEqual(15, len(w))
+            for warn in w:
+                assertEqual(warn.category, DeprecationWarning)
+                assertEqual("testing", warn.message.args[0])
