@@ -836,3 +836,9 @@ class DateTimeParserSearchDateTests(Chai):
         assertEqual(
             self.parser.parse("I'm entirely escaped, weee!", format),
             datetime(1, 1, 1))
+
+        # Special RegEx characters
+        format = 'MMM DD, YYYY |^${}().*+?<>-& h:mm A'
+        assertEqual(
+            self.parser.parse("Dec 31, 2017 |^${}().*+?<>-& 2:00 AM", format),
+            datetime(2017, 12, 31, 2, 0))
