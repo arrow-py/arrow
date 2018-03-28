@@ -486,7 +486,7 @@ class Arrow(object):
                 absolute_kwargs[key] = value
             elif key in self._ATTRS_PLURAL or key in ['weeks', 'quarters']:
                 # TODO: DEPRECATED
-                warnings.warn("replace() with plural property to shift value"
+                warnings.warn("replace() with plural property to shift value "
                               "is deprecated, use shift() instead",
                               DeprecationWarning)
                 relative_kwargs[key] = value
