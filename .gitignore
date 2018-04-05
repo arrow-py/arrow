@@ -25,3 +25,5 @@ docs/_build/
 
 # VS Code
 .vscode/
+
+test.py
