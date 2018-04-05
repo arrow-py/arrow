@@ -304,12 +304,12 @@ class Arrow(object):
             >>> for r in arrow.Arrow.span_range('hour', start, end):
             ...     print(r)
             ...
-            (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T12:30:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T14:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T15:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
-            (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:14:59.999999+00:00]>)
 
         '''
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
@@ -317,10 +317,7 @@ class Arrow(object):
         _range = cls.range(frame, _start, end, tz, limit)
         x = []
         for r in _range:
-            a = r.span(frame)[0]
-            b = r.span(frame)[1]
-            print(a)
-            print(b)
+            a,b = r.span(frame)
             if a == b or a == cls.fromdatetime(end):
                 continue
             if a < cls.fromdatetime(start):
