@@ -375,6 +375,25 @@ class DateTimeParserISOTests(Chai):
                 self.parser.parse_iso(separator.join(('2013', '02', '03'))),
                 datetime(2013, 2, 3)
             )
+    
+    def test_incorrect_year_placement(self):
+        """
+        Tests when year is in the wrong slot.
+        """
+
+        with assertRaises(ParserError):
+            self.parser.parse_iso('02-2018-03')
+	
+	    with assertRaises(ParserError):
+	    	self.parser.parse_iso('02-03-2018')
+        
+        with assertRaises(ParserError):
+            self.parser.parse_iso('02/2018/03')
+
+        with assertRaises(ParserError):
+            self.parser.parse_iso('02/03/2018')
+
+
 
     def test_YYYY_MM_DDTHH_mmZ(self):
 
