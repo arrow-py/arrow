@@ -393,6 +393,13 @@ class DateTimeParserISOTests(Chai):
         with assertRaises(ParserError):
             self.parser.parse_iso('02/03/2018')
 
+        with assertRaises(ParserError):
+            self.parser.parse_iso('02.2018.03')
+
+        with assertRaises(ParserError):
+            self.parser.parse_iso('02.03.2018')
+
+
 
 
     def test_YYYY_MM_DDTHH_mmZ(self):
