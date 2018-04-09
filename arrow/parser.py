@@ -297,7 +297,6 @@ class DateTimeParser(object):
                     # For an invalid string, set datetime to 'None' to fire an exception
                     _datetime = None
                     break
-                pass
 
         if _datetime is None:
             raise ParserError('Could not match input to any of {0} on \'{1}\''.format(formats, string))
