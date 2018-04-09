@@ -165,6 +165,19 @@ class DateTimeParser(object):
 
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
 
+    def check_incorrect_year_placement(self, string, fmt):
+        """
+        Determines wheather a year (YYYY) is incorrectly formatted.
+        """
+        if fmt == 'YYYY-MM-DD' or fmt == 'YYYY/MM/DD' or fmt == 'YYYY.MM.DD':
+            # Ensuring that the 3rd and 4th number of a date is a number
+            # instead of a '-', '/', or '.'
+            if not string[2].isdigit() or not string[3].isdigit():
+                return True
+            return False
+        else:
+            return False
+
     def parse(self, string, fmt):
 
         if isinstance(fmt, list):
@@ -280,6 +293,10 @@ class DateTimeParser(object):
                 _datetime = self.parse(string, fmt)
                 break
             except ParserError:
+                if self.check_incorrect_year_placement(string, fmt):
+                    # For an invalid string, set datetime to 'None' to fire an exception
+                    _datetime = None
+                    break
                 pass
 
         if _datetime is None:
