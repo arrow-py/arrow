@@ -813,6 +813,8 @@ class Arrow(object):
                 delta = sign * delta / float(60*60)
             elif granularity == 'day':
                 delta = sign * delta / float(60*60*24)
+            elif granularity == 'week':
+                delta = sign * delta / float(60*60*24*7)
             elif granularity == 'month':
                 delta = sign * delta / float(60*60*24*30.5)
             elif granularity == 'year':
