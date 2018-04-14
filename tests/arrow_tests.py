@@ -1244,6 +1244,26 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later, only_distance=True), '2 days')
         assertEqual(later.humanize(self.now, only_distance=True), '2 days')
 
+    def test_week(self):
+
+        later = self.now.shift(weeks=1)
+
+        assertEqual(self.now.humanize(later), 'a week ago')
+        assertEqual(later.humanize(self.now), 'in a week')
+
+        assertEqual(self.now.humanize(later, only_distance=True), 'a week')
+        assertEqual(later.humanize(self.now, only_distance=True), 'a week')
+
+    def test_weeks(self):
+
+        later = self.now.shift(weeks=2)
+
+        assertEqual(self.now.humanize(later), '2 weeks ago')
+        assertEqual(later.humanize(self.now), 'in 2 weeks')
+
+        assertEqual(self.now.humanize(later, only_distance=True), '2 weeks')
+        assertEqual(later.humanize(self.now, only_distance=True), '2 weeks')
+
     def test_month(self):
 
         later = self.now.shift(months=1)
