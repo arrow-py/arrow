@@ -193,6 +193,36 @@ class GetTests(Chai):
 
         assertEqual(self.factory.get(2013, 1, 1), datetime(2013, 1, 1, tzinfo=tz.tzutc()))
 
+    def test_three_args_kw_style1(self):
+
+        result = self.factory.get(year=2015, month=6, day=7)
+        assertEqual(result, self.factory.get(datetime(2015, 6, 7)))
+
+    def test_three_args_kw_style2(self):
+
+        result = self.factory.get(year=2016, month=5, day=4)
+        assertEqual(result, self.factory.get(datetime(2016, 5, 4)))
+
+    def test_three_args_kw_style3(self):
+
+        result = self.factory.get(year=2016)
+        assertEqual(result, self.factory.get(datetime(2016, 5, 5)))
+
+    def test_three_args_kw_style4(self):
+
+        result = self.factory.get(month=8)
+        assertEqual(result, self.factory.get(datetime(2013, 8, 5)))
+
+    def test_three_args_kw_style5(self):
+
+        result = self.factory.get(day=22)
+        assertEqual(result, self.factory.get(datetime(2013, 5, 22)))
+
+    def test_three_args_kw_style6(self):
+
+        result = self.factory.get(year=2016, month=7)
+        assertEqual(result, self.factory.get(datetime(2016, 7, 5)))
+
 
 class UtcNowTests(Chai):
 

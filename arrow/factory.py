@@ -125,6 +125,9 @@ class ArrowFactory(object):
             >>> arrow.get(2013, 5, 5, 12, 30, 45)
             <Arrow [2013-05-05T12:30:45+00:00]>
 
+            >>> arrow.get(year=2013, month=5, day=5)
+            <Arrow [2013-05-05T12:00:00+00:00]>
+
         **One** time.struct time::
 
             >>> arrow.get(gmtime(0))
@@ -138,13 +141,31 @@ class ArrowFactory(object):
 
         # () -> now, @ utc.
         if arg_count == 0:
+            '''
+                Set up structure for kwargs construction
+                - Default date is 2013, 5, 5
+                - User can construct by passing any of or all of year month and day
+            '''
+            flag = False
+            year, month, day = 2013, 5, 5
+            if 'year' in kwargs:
+                flag = True
+                year = kwargs['year']
+            if 'month' in kwargs:
+                flag = True
+                month = kwargs['month']
+            if 'day' in kwargs:
+                flag = True
+                day = kwargs['day']
+            if flag:
+                return self.type.fromkwargs(year=year, month=month,day=day)
+
             if isinstance(tz, tzinfo):
                 return self.type.now(tz)
             return self.type.utcnow()
 
         if arg_count == 1:
             arg = args[0]
-
             # (None) -> now, @ utc.
             if arg is None:
                 return self.type.utcnow()
@@ -182,7 +203,6 @@ class ArrowFactory(object):
                 raise TypeError('Can\'t parse single argument type of \'{0}\''.format(type(arg)))
 
         elif arg_count == 2:
-
             arg_1, arg_2 = args[0], args[1]
 
             if isinstance(arg_1, datetime):

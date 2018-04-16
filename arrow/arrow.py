@@ -7,7 +7,7 @@ replacement.
 
 from __future__ import absolute_import
 
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime, timedelta, tzinfo, date
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 from math import trunc
@@ -191,6 +191,19 @@ class Arrow(object):
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
                    dt.microsecond, tzinfo)
 
+
+    @classmethod
+    def fromkwargs(cls, year=2013, month=5, day=5):
+        ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a year string, month string,
+            and day string similar to the datetime constructor
+
+                :param year: the year.
+                :param month: the month.
+                :param day: the day.
+                '''
+
+        dt = date(year=year, month=month, day=day)
+        return cls(dt.year, dt.month, dt.day)
 
     # factories: ranges and spans
 
