@@ -14,7 +14,6 @@ import pickle
 import time
 import sys
 
-import pytz
 from tzwhere import tzwhere
 
 from arrow import arrow, util

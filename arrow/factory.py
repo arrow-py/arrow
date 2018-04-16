@@ -17,7 +17,6 @@ from dateutil import tz as dateutil_tz
 from time import struct_time
 import calendar
 
-import pytz
 from tzwhere import tzwhere
 
 

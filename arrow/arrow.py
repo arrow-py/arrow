@@ -15,7 +15,6 @@ import calendar
 import sys
 import warnings
 
-import pytz
 from tzwhere import tzwhere
 
 from arrow import util, locales, parser, formatter
