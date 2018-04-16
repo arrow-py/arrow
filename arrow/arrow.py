@@ -330,6 +330,8 @@ class Arrow(object):
                 a = cls.fromdatetime(start)
             if b > cls.fromdatetime(end):
                 b = cls.fromdatetime(end - timedelta(milliseconds=.001))
+            if a > b:
+                continue
             x.append((a,b))
         return (r for r in x)
 
