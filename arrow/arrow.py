@@ -321,14 +321,12 @@ class Arrow(object):
 
         for r in _range:
             a,b = r.span(frame)
-            print("A initial: "+str(a))
             if exact:
                 a += timedelta(seconds=util.total_seconds(cls.fromdatetime(start)-_start))
                 b += timedelta(seconds=util.total_seconds(cls.fromdatetime(start)-_start))
                 if frame == "year" and calendar.isleap(start.year):
                     a-= timedelta(days=1)
                     b-= timedelta(days=1)
-            print("A exact  : "+str(a))
             if a == b or a == cls.fromdatetime(end):
                 continue
             if a < cls.fromdatetime(start):
@@ -337,7 +335,6 @@ class Arrow(object):
                 b = cls.fromdatetime(end - timedelta(milliseconds=.001))
             if a > b:
                 continue
-            print("A end    : "+str(a))
             x.append((a,b))
         return (r for r in x)
 
