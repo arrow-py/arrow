@@ -41,7 +41,7 @@ setup(
         'python-dateutil',
     ],
     extras_require={
-        ":python_version=='2.7'": ['backports.functools_lru_cache>=1.2.1,<1.4'],
+        ":python_version<='2.7'": ['backports.functools_lru_cache>=1.2.1,<1.4'],
     },
     test_suite="tests",
     classifiers=[
