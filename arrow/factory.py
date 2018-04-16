@@ -17,6 +17,9 @@ from dateutil import tz as dateutil_tz
 from time import struct_time
 import calendar
 
+import pytz
+from tzwhere import tzwhere
+
 
 class ArrowFactory(object):
     ''' A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
@@ -254,5 +257,17 @@ class ArrowFactory(object):
             tz = dateutil_tz.tzlocal()
         elif not isinstance(tz, tzinfo):
             tz = parser.TzinfoParser.parse(tz)
+
+        return self.type.now(tz)
+
+    def now_geo(self, latitude, longitude):
+        '''Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
+        latitude/longitude.
+
+        '''
+
+        tz_where = tzwhere.tzwhere()
+        tz = tz_where.tzNameAt(latitude, longitude)
+        tz = parser.TzinfoParser.parse(tz)
 
         return self.type.now(tz)

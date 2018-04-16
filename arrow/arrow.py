@@ -15,6 +15,8 @@ import calendar
 import sys
 import warnings
 
+import pytz
+from tzwhere import tzwhere
 
 from arrow import util, locales, parser, formatter
 
@@ -80,6 +82,25 @@ class Arrow(object):
         '''
 
         tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
+        dt = datetime.now(tzinfo)
+
+        return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+            dt.microsecond, dt.tzinfo)
+
+    @classmethod
+    def now_geo(cls, latitude, longitude):
+        '''Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
+        latitude/longitude pairing.
+
+        :param latitude: float representing latitude
+        :param longitude: float representing longitude
+
+        '''
+
+        tz_where = tzwhere.tzwhere()
+        tz = tz_where.tzNameAt(latitude, longitude)
+
+        tzinfo = parser.TzinfoParser.parse(tz)
         dt = datetime.now(tzinfo)
 
         return cls(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
@@ -588,6 +609,33 @@ class Arrow(object):
 
         if not isinstance(tz, tzinfo):
             tz = parser.TzinfoParser.parse(tz)
+
+        dt = self._datetime.astimezone(tz)
+
+        return self.__class__(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second,
+            dt.microsecond, dt.tzinfo)
+
+    def to_geo(self, latitude, longitude):
+        ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        to the timezone represented by a latitude/longitude pairing.
+
+        :param latitude: float representing latitude coordinate
+        :param longitude: float representing longitude coordinate
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+            >>> utc
+            <Arrow [2013-05-09T03:49:12.311072+00:00]>
+
+            >>> utc.to_geo('34.42, -119.69')
+            <Arrow [2013-05-08T20:49:12.311072-07:00]>
+
+        '''
+        tz_where = tzwhere.tzwhere()
+        tz = tz_where.tzNameAt(latitude, longitude)
+
+        tz = parser.TzinfoParser.parse(tz)
 
         dt = self._datetime.astimezone(tz)
 

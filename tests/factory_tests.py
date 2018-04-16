@@ -224,3 +224,7 @@ class NowTests(Chai):
     def test_tz_str(self):
 
         assertDtEqual(self.factory.now('EST'), datetime.now(tz.gettz('EST')))
+
+    def test_now_geo(self):
+
+        assertDtEqual(self.factory.now('US/Pacific'), self.factory.now_geo(34.42, -119.69))

@@ -14,6 +14,9 @@ import pickle
 import time
 import sys
 
+import pytz
+from tzwhere import tzwhere
+
 from arrow import arrow, util
 
 
@@ -39,6 +42,13 @@ class ArrowFactoryTests(Chai):
         result = arrow.Arrow.now()
 
         assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+
+    def test_now_geo(self):
+
+        result = arrow.Arrow.now_geo(34.42, -119.69)
+        result_cmp = arrow.Arrow.now().to('US/Pacific')
+
+        assertDtEqual(result._datetime, result_cmp._datetime)
 
     def test_utcnow(self):
 
@@ -468,6 +478,15 @@ class ArrowConversionTests(Chai):
         assertEqual(arrow_from.to('UTC').datetime, expected)
         assertEqual(arrow_from.to(tz.tzutc()).datetime, expected)
 
+    def test_to_geo(self):
+
+        arw = arrow.Arrow.utcnow()
+        arw_cmp = arw
+
+        local = arw.to('US/Pacific')
+        local_cmp = arw_cmp.to_geo(34.42, -119.69)
+
+        assertEqual(arw.datetime, arw_cmp.datetime)
 
 class ArrowPicklingTests(Chai):
 

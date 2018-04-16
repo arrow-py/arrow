@@ -5,3 +5,5 @@ chai==1.1.1
 sphinx==1.3.5
 simplejson==3.6.5
 backports.functools_lru_cache==1.2.1
+pytz
+tzwhere
