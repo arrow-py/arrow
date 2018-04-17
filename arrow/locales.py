@@ -39,8 +39,6 @@ class Locale(object):
         'hours': '',
         'day': '',
         'days': '',
-        'week': '',
-        'weeks': '',
         'month': '',
         'months': '',
         'year': '',
@@ -202,8 +200,6 @@ class EnglishLocale(Locale):
         'hours': '{0} hours',
         'day': 'a day',
         'days': '{0} days',
-        'week': 'a week',
-        'weeks': '{0} weeks',
         'month': 'a month',
         'months': '{0} months',
         'year': 'a year',
@@ -240,9 +236,7 @@ class EnglishLocale(Locale):
 
 
 class ItalianLocale(Locale):
-
     names = ['it', 'it_it']
-
     past = '{0} fa'
     future = 'tra {0}'
 
@@ -255,8 +249,6 @@ class ItalianLocale(Locale):
         'hours': '{0} ore',
         'day': 'un giorno',
         'days': '{0} giorni',
-        'week': 'una settimana',
-        'weeks': '{0} settimane',
         'month': 'un mese',
         'months': '{0} mesi',
         'year': 'un anno',
@@ -278,9 +270,7 @@ class ItalianLocale(Locale):
 
 
 class SpanishLocale(Locale):
-
     names = ['es', 'es_es']
-
     past = 'hace {0}'
     future = 'en {0}'
 
@@ -293,8 +283,6 @@ class SpanishLocale(Locale):
         'hours': '{0} horas',
         'day': 'un día',
         'days': '{0} días',
-        'week': 'una semana',
-        'weeks': '{0} semanas',
         'month': 'un mes',
         'months': '{0} meses',
         'year': 'un año',
@@ -316,9 +304,7 @@ class SpanishLocale(Locale):
 
 
 class FrenchLocale(Locale):
-
     names = ['fr', 'fr_fr']
-
     past = 'il y a {0}'
     future = 'dans {0}'
 
@@ -331,8 +317,6 @@ class FrenchLocale(Locale):
         'hours': '{0} heures',
         'day': 'un jour',
         'days': '{0} jours',
-        'week': 'une semaine',
-        'weeks': '{0} semaines',
         'month': 'un mois',
         'months': '{0} mois',
         'year': 'un an',
@@ -371,8 +355,6 @@ class GreekLocale(Locale):
         'hours': '{0} ώρες',
         'day': 'μια μέρα',
         'days': '{0} μέρες',
-        'week': 'μια εβδομάδα',
-        'weeks': '{0} εβδομάδες',
         'month': 'ένα μήνα',
         'months': '{0} μήνες',
         'year': 'ένα χρόνο',
@@ -404,8 +386,6 @@ class JapaneseLocale(Locale):
         'hours': '{0}時間',
         'day': '1日',
         'days': '{0}日',
-        'week': '1週',
-        'weeks': '{0}週',
         'month': '1ヶ月',
         'months': '{0}ヶ月',
         'year': '1年',
@@ -437,8 +417,6 @@ class SwedishLocale(Locale):
         'hours': '{0} timmar',
         'day': 'en dag',
         'days': '{0} dagar',
-        'week': 'en vecka',
-        'weeks': '{0} veckor',
         'month': 'en månad',
         'months': '{0} månader',
         'year': 'ett år',
@@ -473,8 +451,6 @@ class FinnishLocale(Locale):
         'hours': ['{0} tuntia', '{0} tunnin'],
         'day': ['päivä', 'päivä'],
         'days': ['{0} päivää', '{0} päivän'],
-        'week': ['viikko', 'viikko'],
-        'weeks': ['{0} viikkoa', '{0} viikkoa'],
         'month': ['kuukausi', 'kuukauden'],
         'months': ['{0} kuukautta', '{0} kuukauden'],
         'year': ['vuosi', 'vuoden'],
@@ -528,8 +504,6 @@ class ChineseCNLocale(Locale):
         'hours': '{0}小时',
         'day': '1天',
         'days': '{0}天',
-        'week': '1周',
-        'weeks': '{0}周',
         'month': '1个月',
         'months': '{0}个月',
         'year': '1年',
@@ -561,8 +535,6 @@ class ChineseTWLocale(Locale):
         'hours': '{0}小時',
         'day': '1天',
         'days': '{0}天',
-        'week': '1周',
-        'weeks': '{0}周',
         'month': '1個月',
         'months': '{0}個月',
         'year': '1年',
@@ -594,8 +566,6 @@ class KoreanLocale(Locale):
         'hours': '{0}시간',
         'day': '1일',
         'days': '{0}일',
-        'week': '1주',
-        'weeks': '{0}주',
         'month': '1개월',
         'months': '{0}개월',
         'year': '1년',
@@ -628,8 +598,6 @@ class DutchLocale(Locale):
         'hours': '{0} uur',
         'day': 'een dag',
         'days': '{0} dagen',
-        'week': 'een week',
-        'weeks': '{0} weken',
         'month': 'een maand',
         'months': '{0} maanden',
         'year': 'een jaar',

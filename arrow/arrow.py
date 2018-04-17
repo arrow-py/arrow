@@ -268,7 +268,7 @@ class Arrow(object):
 
     @classmethod
     @util.list_to_iter_deprecation
-    def span_range(cls, frame, start, end, tz=None, limit=None, exact=False):
+    def span_range(cls, frame, start, end, tz=None, limit=None):
         ''' Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
@@ -278,8 +278,6 @@ class Arrow(object):
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
             ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
-        :param exact: (optional) Will make the ranges outputted start and end with the offset
-            of the start and end times.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
@@ -824,8 +822,6 @@ class Arrow(object):
                 delta = sign * delta / float(60*60)
             elif granularity == 'day':
                 delta = sign * delta / float(60*60*24)
-            elif granularity == 'week':
-                delta = sign * delta / float(60*60*24*7)
             elif granularity == 'month':
                 delta = sign * delta / float(60*60*24*30.5)
             elif granularity == 'year':
