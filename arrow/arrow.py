@@ -304,19 +304,31 @@ class Arrow(object):
             >>> for r in arrow.Arrow.span_range('hour', start, end):
             ...     print(r)
             ...
-            (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T12:30:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T14:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T15:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T16:59:59.999999+00:00]>)
-            (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:00]>)
+            (<Arrow [2013-05-05T17:00:00+00:00]>, <Arrow [2013-05-05T17:14:59.999999+00:00]>)
 
         '''
-
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdatetime(start, tzinfo).span(frame)[0]
-        _range = cls.range(frame, start, end, tz, limit)
-        return (r.span(frame) for r in _range)
+        _start = cls.fromdatetime(start, tzinfo).span(frame)[0]
+        _range = cls.range(frame, _start, end, tz, limit)
+        x = []
+
+        for r in _range:
+            a,b = r.span(frame)
+            if a == b or a == cls.fromdatetime(end):
+                continue
+            if a < cls.fromdatetime(start):
+                a = cls.fromdatetime(start)
+            if b > cls.fromdatetime(end):
+                b = cls.fromdatetime(end - timedelta(milliseconds=.001))
+            if a > b:
+                continue
+            x.append((a,b))
+        return (r for r in x)
 
     @classmethod
     @util.list_to_iter_deprecation
