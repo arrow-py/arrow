@@ -2,13 +2,11 @@ sudo: false
 language: python
 python:
   - 2.7
-  - 3.3
   - 3.4
   - 3.5
   - 3.6
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then make build33; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then make build35; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then make build36; fi

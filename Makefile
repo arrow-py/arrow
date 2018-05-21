@@ -6,10 +6,6 @@ build27:
 	virtualenv local --python=python2.7
 	local/bin/pip install -r requirements.txt
 
-build33:
-	virtualenv local --python=python3.3
-	local/bin/pip install -r requirements.txt
-
 build34:
 	virtualenv local --python=python3.4
 	local/bin/pip install -r requirements.txt
