@@ -38,7 +38,7 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime 
-- Supports Python 2.6, 2.7, 3.3, 3.4 and 3.5
+- Supports Python 2.7, 3.3, 3.4, 3.5 and 3.6
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
