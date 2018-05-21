@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import functools
+import sys
 import warnings
 
 def total_seconds(td):  # pragma: no cover
@@ -70,7 +71,7 @@ class list_to_iter_shim(list):
     __setitem__ = _wrap_method('__setitem__')
     __delitem__ = _wrap_method('__delitem__')
     append = _wrap_method('append')
-    if version >= '3.0':  # pragma: no cover
+    if sys.version_info.major >= 3:  # pragma: no cover
         clear = _wrap_method('clear')
         copy = _wrap_method('copy')
     extend = _wrap_method('extend')

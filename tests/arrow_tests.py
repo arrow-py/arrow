@@ -1447,7 +1447,7 @@ class ArrowUtilTests(Chai):
             shim[0:0] = []  # doesn't warn on py2
             del shim[0:0]  # doesn't warn on py2
             newshim().append(6)
-            if util.version >= '3.0':  # pragma: no cover
+            if sys.version_info.major >= 3:  # pragma: no cover
                 newshim().clear()
                 shim.copy()
             shim.extend([])
@@ -1459,7 +1459,7 @@ class ArrowUtilTests(Chai):
             newshim().reverse()
             newshim().sort()
 
-            if util.version >= '3.0':  # pragma: no cover
+            if sys.version_info.major >= 3:  # pragma: no cover
                 assertEqual(19, len(w))
             else:  # pragma: no cover
                 assertEqual(15, len(w))
