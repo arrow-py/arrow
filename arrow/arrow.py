@@ -722,7 +722,7 @@ class Arrow(object):
             >>> earlier.humanize()
             '2 hours ago'
 
-            >>> later = later = earlier.shift(hours=4)
+            >>> later = earlier.shift(hours=4)
             >>> later.humanize(earlier)
             'in 4 hours'
 
