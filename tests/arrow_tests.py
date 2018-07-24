@@ -122,7 +122,7 @@ class ArrowRepresentationTests(Chai):
 
     def test_format(self):
 
-        result = '{0:YYYY-MM-DD}'.format(self.arrow)
+        result = '{:YYYY-MM-DD}'.format(self.arrow)
 
         assertEqual(result, '2013-02-03')
 

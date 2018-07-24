@@ -895,7 +895,7 @@ class Arrow(object):
     def __cmp__(self, other):
         if sys.version_info[0] < 3: # pragma: no cover
             if not isinstance(other, (Arrow, datetime)):
-                raise TypeError('can\'t compare \'{0}\' to \'{1}\''.format(
+                raise TypeError('can\'t compare \'{}\' to \'{}\''.format(
                     type(self), type(other)))
 
 
