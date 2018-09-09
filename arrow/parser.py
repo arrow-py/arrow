@@ -294,8 +294,6 @@ class DateTimeParser(object):
                 break
             except ParserError:
                 if self.check_incorrect_year_placement(string, fmt):
-                    # For an invalid string, set datetime to 'None' to fire an exception
-                    _datetime = None
                     break
 
         if _datetime is None:
