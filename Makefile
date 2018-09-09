@@ -24,6 +24,10 @@ build35:
 	virtualenv local --python=python3.5
 	local/bin/pip install -r requirements.txt
 
+build37:
+	virtualenv local --python=python3.7
+	local/bin/pip install -r requirements.txt
+
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
