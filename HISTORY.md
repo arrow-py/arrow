@@ -1,5 +1,10 @@
 ## History
 
+### 0.12.1
+
+- [FIX] Allow universal wheels to be generated and reliably installed.
+- [FIX] Make humanize respect only_distance when granularity argument is also given.
+
 ### 0.12.0
 
 - [FIX] Compatibility fix for Python 2.x
@@ -242,4 +247,3 @@
 - **Started tracking changes**
 - [NEW] Parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
 - [NEW] Resolved some issues with timestamps and delta / Olson time zones
-
