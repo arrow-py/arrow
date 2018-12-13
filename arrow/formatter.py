@@ -9,7 +9,7 @@ from arrow import util, locales
 
 class DateTimeFormatter(object):
 
-    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?|a|A|X)')
+    _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)')
 
     def __init__(self, locale='en_us'):
 
@@ -88,6 +88,9 @@ class DateTimeFormatter(object):
 
         if token == 'X':
             return str(calendar.timegm(dt.utctimetuple()))
+
+        if token == 'ZZZ':
+            return dt.tzname()
 
         if token in ['ZZ', 'Z']:
             separator = ':' if token == 'ZZ' else ''
