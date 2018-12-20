@@ -54,7 +54,7 @@ class Arrow(object):
     resolution = datetime.resolution
 
     _ATTRS = ['year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond']
-    _ATTRS_PLURAL = ['{0}s'.format(a) for a in _ATTRS]
+    _ATTRS_PLURAL = ['{}s'.format(a) for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
 
     def __init__(self, year, month, day, hour=0, minute=0, second=0, microsecond=0,
@@ -368,7 +368,7 @@ class Arrow(object):
     # representations
 
     def __repr__(self):
-        return '<{0} [{1}]>'.format(self.__class__.__name__, self.__str__())
+        return '<{} [{}]>'.format(self.__class__.__name__, self.__str__())
 
     def __str__(self):
         return self._datetime.isoformat()
@@ -491,9 +491,9 @@ class Arrow(object):
                               DeprecationWarning)
                 relative_kwargs[key] = value
             elif key in ['week', 'quarter']:
-                raise AttributeError('setting absolute {0} is not supported'.format(key))
+                raise AttributeError('setting absolute {} is not supported'.format(key))
             elif key !='tzinfo':
-                raise AttributeError('unknown attribute: "{0}"'.format(key))
+                raise AttributeError('unknown attribute: "{}"'.format(key))
 
         # core datetime does not support quarters, translate to months.
         relative_kwargs.setdefault('months', 0)
@@ -895,7 +895,7 @@ class Arrow(object):
     def __cmp__(self, other):
         if sys.version_info[0] < 3: # pragma: no cover
             if not isinstance(other, (Arrow, datetime)):
-                raise TypeError('can\'t compare \'{0}\' to \'{1}\''.format(
+                raise TypeError('can\'t compare \'{}\' to \'{}\''.format(
                     type(self), type(other)))
 
 
@@ -1005,7 +1005,7 @@ class Arrow(object):
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError('\'{0}\' not recognized as a timezone'.format(
+                raise ValueError('\'{}\' not recognized as a timezone'.format(
                     tz_expr))
 
     @classmethod
@@ -1022,13 +1022,13 @@ class Arrow(object):
             return cls.utcfromtimestamp(expr).datetime
         except:
             raise ValueError(
-                '\'{0}\' not recognized as a timestamp or datetime'.format(expr))
+                '\'{}\' not recognized as a timestamp or datetime'.format(expr))
 
     @classmethod
     def _get_frames(cls, name):
 
         if name in cls._ATTRS:
-            return name, '{0}s'.format(name), 1
+            return name, '{}s'.format(name), 1
 
         elif name in ['week', 'weeks']:
             return 'week', 'weeks', 1
@@ -1036,7 +1036,7 @@ class Arrow(object):
             return 'quarter', 'months', 3
 
         supported = ', '.join(cls._ATTRS + ['week', 'weeks'] + ['quarter', 'quarters'])
-        raise AttributeError('range/span over frame {0} not supported. Supported frames: {1}'.format(name, supported))
+        raise AttributeError('range/span over frame {} not supported. Supported frames: {}'.format(name, supported))
 
     @classmethod
     def _get_iteration_params(cls, end, limit):
@@ -1059,7 +1059,7 @@ class Arrow(object):
         try:
             return float(timestamp)
         except:
-            raise ValueError('cannot parse \'{0}\' as a timestamp'.format(timestamp))
+            raise ValueError('cannot parse \'{}\' as a timestamp'.format(timestamp))
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
 Arrow.max = Arrow.fromdatetime(datetime.max)

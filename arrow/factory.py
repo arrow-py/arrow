@@ -179,7 +179,7 @@ class ArrowFactory(object):
                 return self.type.utcfromtimestamp(calendar.timegm(arg))
 
             else:
-                raise TypeError('Can\'t parse single argument type of \'{0}\''.format(type(arg)))
+                raise TypeError('Can\'t parse single argument type of \'{}\''.format(type(arg)))
 
         elif arg_count == 2:
 
@@ -191,7 +191,7 @@ class ArrowFactory(object):
                 if isinstance(arg_2, tzinfo) or isstr(arg_2):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
-                    raise TypeError('Can\'t parse two arguments of types \'datetime\', \'{0}\''.format(
+                    raise TypeError('Can\'t parse two arguments of types \'datetime\', \'{}\''.format(
                         type(arg_2)))
 
             elif isinstance(arg_1, date):
@@ -200,7 +200,7 @@ class ArrowFactory(object):
                 if isinstance(arg_2, tzinfo) or isstr(arg_2):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
                 else:
-                    raise TypeError('Can\'t parse two arguments of types \'date\', \'{0}\''.format(
+                    raise TypeError('Can\'t parse two arguments of types \'date\', \'{}\''.format(
                         type(arg_2)))
 
             # (str, format) -> parse.
@@ -209,7 +209,7 @@ class ArrowFactory(object):
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
-                raise TypeError('Can\'t parse two arguments of types \'{0}\', \'{1}\''.format(
+                raise TypeError('Can\'t parse two arguments of types \'{}\', \'{}\''.format(
                     type(arg_1), type(arg_2)))
 
         # 3+ args -> datetime-like via constructor.
