@@ -1,5 +1,22 @@
 ## History
 
+### 0.13.0
+
+- [NEW] Added support for Python 3.6.
+- [CHANGE] Drop support for Python 2.6/3.3.
+- [CHANGE] Return generator instead of list for Arrow.range(), Arrow.span_range() and Arrow.interval().
+- [FIX] Make arrow.get() work with str & tzinfo combo.
+- [FIX] Make sure special RegEx characters are escaped in format string.
+- [NEW] Added support for ZZZ when formatting.
+- [FIX] Stop using datetime.utcnow() in internals, use datetime.now(UTC) instead.
+- [FIX] Return NotImplemented instead of TypeError in arrow math internals.
+- [NEW] Added Estonian Locale.
+- [FIX] Small fixes to Greek locale.
+- [FIX] TagalogLocale improvements.
+- [FIX] Added test requirements to setup.
+- [FIX] Improve docs for get, now and utcnow methods.
+- [FIX] Correct typo in depreciation warning.
+
 ### 0.12.1
 
 - [FIX] Allow universal wheels to be generated and reliably installed.
