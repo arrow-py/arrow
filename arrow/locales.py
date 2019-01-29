@@ -1132,7 +1132,7 @@ class ArabicLocale(Locale):
 
     day_names = ['', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
     day_abbreviations = ['', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد']
-    
+
     def _format_timeframe(self, timeframe, delta):
         form = self.timeframes[timeframe]
         delta = abs(delta)
@@ -2194,6 +2194,5 @@ class EstonianLocale(Locale):
         else:
             form = form['past']
         return form.format(abs(delta))
-    
-    
+
 _locales = _map_locales()
