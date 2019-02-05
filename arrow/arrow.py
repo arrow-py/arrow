@@ -77,6 +77,11 @@ class Arrow(object):
 
         :param tzinfo: (optional) a ``tzinfo`` object. Defaults to local time.
 
+        Usage::
+
+            >>> arrow.now('Asia/Baku')
+            <Arrow [2019-01-24T20:26:31.146412+04:00]>
+
         '''
 
         tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
@@ -89,6 +94,11 @@ class Arrow(object):
     def utcnow(cls):
         ''' Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
         time.
+
+        Usage::
+
+            >>> arrow.utcnow()
+            <Arrow [2019-01-24T16:31:40.651108+00:00]>
 
         '''
 
@@ -182,6 +192,11 @@ class Arrow(object):
         :param fmt: the format string.
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to the parsed
             timezone if ``fmt`` contains a timezone directive, otherwise UTC.
+
+        Usage::
+
+            >>> arrow.Arrow.strptime('20-01-2019 15:49:10', '%d-%m-%Y %H:%M:%S')
+            <Arrow [2019-01-20T15:49:10+00:00]>
 
         '''
 
@@ -404,7 +419,15 @@ class Arrow(object):
 
     @property
     def tzinfo(self):
-        ''' Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+        ''' Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
+
+        Usage::
+
+            >>> arw=arrow.utcnow()
+            >>> arw.tzinfo
+            tzutc()
+
+        '''
 
         return self._datetime.tzinfo
 
@@ -416,28 +439,60 @@ class Arrow(object):
 
     @property
     def datetime(self):
-        ''' Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object. '''
+        ''' Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
+
+        Usage::
+
+            >>> arw=arrow.utcnow()
+            >>> arw.datetime
+            datetime.datetime(2019, 1, 24, 16, 35, 27, 276649, tzinfo=tzutc())
+
+        '''
 
         return self._datetime
 
     @property
     def naive(self):
         ''' Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
-        object. '''
+        object.
+
+        Usage::
+
+            >>> nairobi = arrow.now('Africa/Nairobi')
+            >>> nairobi
+            <Arrow [2019-01-23T19:27:12.297999+03:00]>
+            >>> nairobi.naive
+            datetime.datetime(2019, 1, 23, 19, 27, 12, 297999)
+
+        '''
 
         return self._datetime.replace(tzinfo=None)
 
     @property
     def timestamp(self):
         ''' Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
-        UTC time. '''
+        UTC time.
+
+        Usage::
+
+            >>> arrow.utcnow().timestamp
+            1548260567
+
+        '''
 
         return calendar.timegm(self._datetime.utctimetuple())
 
     @property
     def float_timestamp(self):
         ''' Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
-        object, in UTC time. '''
+        object, in UTC time.
+
+        Usage::
+
+            >>> arrow.utcnow().float_timestamp
+            1548260516.830896
+
+        '''
 
         return self.timestamp + float(self.microsecond) / 1000000
 
@@ -716,6 +771,7 @@ class Arrow(object):
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'month' or 'year'.
+
         Usage::
 
             >>> earlier = arrow.utcnow().shift(hours=-2)
@@ -903,18 +959,39 @@ class Arrow(object):
     # datetime methods
 
     def date(self):
-        ''' Returns a ``date`` object with the same year, month and day. '''
+        ''' Returns a ``date`` object with the same year, month and day.
+
+        Usage::
+
+            >>> arrow.utcnow().date()
+            datetime.date(2019, 1, 23)
+
+        '''
 
         return self._datetime.date()
 
     def time(self):
-        ''' Returns a ``time`` object with the same hour, minute, second, microsecond. '''
+        ''' Returns a ``time`` object with the same hour, minute, second, microsecond.
+
+        Usage::
+
+            >>> arrow.utcnow().time()
+            datetime.time(12, 15, 34, 68352)
+
+        '''
 
         return self._datetime.time()
 
     def timetz(self):
         ''' Returns a ``time`` object with the same hour, minute, second, microsecond and
-        tzinfo. '''
+        tzinfo.
+
+        Usage::
+
+            >>> arrow.utcnow().timetz()
+            datetime.time(12, 5, 18, 298893, tzinfo=tzutc())
+
+        '''
 
         return self._datetime.timetz()
 
@@ -923,72 +1000,161 @@ class Arrow(object):
 
         :param tz: a ``tzinfo`` object.
 
+        Usage::
+
+            >>> pacific=arrow.now('US/Pacific')
+            >>> nyc=arrow.now('America/New_York').tzinfo
+            >>> pacific.astimezone(nyc)
+            datetime.datetime(2019, 1, 20, 10, 24, 22, 328172, tzinfo=tzfile('/usr/share/zoneinfo/America/New_York'))
+
         '''
 
         return self._datetime.astimezone(tz)
 
     def utcoffset(self):
         ''' Returns a ``timedelta`` object representing the whole number of minutes difference from
-        UTC time. '''
+        UTC time.
+
+        Usage::
+
+            >>> arrow.now('US/Pacific').utcoffset()
+            datetime.timedelta(-1, 57600)
+
+        '''
 
         return self._datetime.utcoffset()
 
     def dst(self):
-        ''' Returns the daylight savings time adjustment. '''
+        ''' Returns the daylight savings time adjustment.
+
+        Usage::
+
+            >>> arrow.utcnow().dst()
+            datetime.timedelta(0)
+
+        '''
 
         return self._datetime.dst()
 
     def timetuple(self):
-        ''' Returns a ``time.struct_time``, in the current timezone. '''
+        ''' Returns a ``time.struct_time``, in the current timezone.
+
+        Usage::
+
+            >>> arrow.utcnow().timetuple()
+            time.struct_time(tm_year=2019, tm_mon=1, tm_mday=20, tm_hour=15, tm_min=17, tm_sec=8, tm_wday=6, tm_yday=20, tm_isdst=0)
+
+        '''
 
         return self._datetime.timetuple()
 
     def utctimetuple(self):
-        ''' Returns a ``time.struct_time``, in UTC time. '''
+        ''' Returns a ``time.struct_time``, in UTC time.
+
+        Usage::
+
+            >>> arrow.utcnow().utctimetuple()
+            time.struct_time(tm_year=2019, tm_mon=1, tm_mday=19, tm_hour=21, tm_min=41, tm_sec=7, tm_wday=5, tm_yday=19, tm_isdst=0)
+
+        '''
 
         return self._datetime.utctimetuple()
 
     def toordinal(self):
-        ''' Returns the proleptic Gregorian ordinal of the date. '''
+        ''' Returns the proleptic Gregorian ordinal of the date.
+
+        Usage::
+
+            >>> arrow.utcnow().toordinal()
+            737078
+
+        '''
 
         return self._datetime.toordinal()
 
     def weekday(self):
-        ''' Returns the day of the week as an integer (0-6). '''
+        ''' Returns the day of the week as an integer (0-6).
+
+        Usage::
+
+            >>> arrow.utcnow().weekday()
+            5
+
+        '''
 
         return self._datetime.weekday()
 
     def isoweekday(self):
-        ''' Returns the ISO day of the week as an integer (1-7). '''
+        ''' Returns the ISO day of the week as an integer (1-7).
+
+        Usage::
+
+            >>> arrow.utcnow().isoweekday()
+            6
+
+        '''
 
         return self._datetime.isoweekday()
 
     def isocalendar(self):
-        ''' Returns a 3-tuple, (ISO year, ISO week number, ISO weekday). '''
+        ''' Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
+
+        Usage::
+
+            >>> arrow.utcnow().isocalendar()
+            (2019, 3, 6)
+
+        '''
 
         return self._datetime.isocalendar()
 
     def isoformat(self, sep='T'):
-        '''Returns an ISO 8601 formatted representation of the date and time. '''
+        '''Returns an ISO 8601 formatted representation of the date and time.
+
+        Usage::
+
+            >>> arrow.utcnow().isoformat()
+            '2019-01-19T18:30:52.442118+00:00'
+
+        '''
 
         return self._datetime.isoformat(sep)
 
     def ctime(self):
-        ''' Returns a ctime formatted representation of the date and time. '''
+        ''' Returns a ctime formatted representation of the date and time.
+
+        Usage::
+
+            >>> arrow.utcnow().ctime()
+            'Sat Jan 19 18:26:50 2019'
+
+        '''
 
         return self._datetime.ctime()
 
     def strftime(self, format):
-        ''' Formats in the style of ``datetime.strptime``.
+        ''' Formats in the style of ``datetime.strftime``.
 
         :param format: the format string.
+
+        Usage::
+
+            >>> arrow.utcnow().strftime('%d-%m-%Y %H:%M:%S')
+            '23-01-2019 12:28:17'
 
         '''
 
         return self._datetime.strftime(format)
 
     def for_json(self):
-        '''Serializes for the ``for_json`` protocol of simplejson.'''
+        '''Serializes for the ``for_json`` protocol of simplejson.
+
+        Usage::
+
+            >>> arrow.utcnow().for_json()
+            '2019-01-19T18:25:36.760079+00:00'
+
+        '''
 
         return self.isoformat()
 
