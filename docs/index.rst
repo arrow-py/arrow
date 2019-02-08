@@ -26,7 +26,7 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime
-- Supports Python 2.6, 2.7, 3.3, 3.4 and 3.5
+- Supports Python 2.7, 3.4, 3.5 and 3.6
 - Timezone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
@@ -34,7 +34,7 @@ Features
 - Partial ISO-8601 support
 - Timezone conversion
 - Timestamp available as a property
-- Generates time spans, ranges, floors and ceilings in time frames from year to microsecond
+- Generates time spans, ranges, floors and ceilings in time frames from year to microsecond precision
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
@@ -454,6 +454,14 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_  provided via dateutil package
 
+Any token can be escaped when parsing by enclosing it within square brackets:
+
+.. code-block:: python
+
+    >>> arrow.get("2018-03-09 8 h 40", "YYYY-MM-DD h [h] m")
+    <Arrow [2018-03-09T08:40:00+00:00]>
+
+
 ---------
 API Guide
 ---------
@@ -481,3 +489,4 @@ arrow.locale
 
 .. automodule:: arrow.locales
     :members:
+    :undoc-members:

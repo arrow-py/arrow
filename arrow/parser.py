@@ -143,8 +143,8 @@ class DateTimeParser(object):
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
-                raise ParserError('Unrecognized token \'{0}\''.format(token))
-            input_pattern = '(?P<{0}>{1})'.format(token, input_re.pattern)
+                raise ParserError('Unrecognized token \'{}\''.format(token))
+            input_pattern = '(?P<{}>{})'.format(token, input_re.pattern)
             tokens.append(token)
             # a pattern doesn't have the same length as the token
             # it replaces! We keep the difference in the offset variable.
@@ -174,7 +174,7 @@ class DateTimeParser(object):
 
         match = fmt_pattern_re.search(string)
         if match is None:
-            raise ParserError('Failed to match \'{0}\' when parsing \'{1}\''
+            raise ParserError('Failed to match \'{}\' when parsing \'{}\''
                               .format(fmt_pattern_re.pattern, string))
         parts = {}
         for token in fmt_tokens:
@@ -283,7 +283,7 @@ class DateTimeParser(object):
                 pass
 
         if _datetime is None:
-            raise ParserError('Could not match input to any of {0} on \'{1}\''.format(formats, string))
+            raise ParserError('Could not match input to any of {} on \'{}\''.format(formats, string))
 
         return _datetime
 
@@ -293,7 +293,7 @@ class DateTimeParser(object):
         try:
             return input_map[key]
         except KeyError:
-            raise ParserError('Could not match "{0}" to {1}'.format(key, input_map))
+            raise ParserError('Could not match "{}" to {}'.format(key, input_map))
 
     @staticmethod
     def _try_timestamp(string):
@@ -305,7 +305,7 @@ class DateTimeParser(object):
 
     @staticmethod
     def _choice_re(choices, flags=0):
-        return re.compile('({0})'.format('|'.join(choices)), flags=flags)
+        return re.compile('({})'.format('|'.join(choices)), flags=flags)
 
 
 class TzinfoParser(object):
@@ -342,6 +342,6 @@ class TzinfoParser(object):
                 tzinfo = tz.gettz(string)
 
         if tzinfo is None:
-            raise ParserError('Could not parse timezone expression "{0}"'.format(string))
+            raise ParserError('Could not parse timezone expression "{}"'.format(string))
 
         return tzinfo

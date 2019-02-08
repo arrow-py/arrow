@@ -5,23 +5,9 @@ import functools
 import sys
 import warnings
 
-# python 2.6 / 2.7 definitions for total_seconds function.
-
-def _total_seconds_27(td): # pragma: no cover
+def total_seconds(td):  # pragma: no cover
     return td.total_seconds()
 
-def _total_seconds_26(td):
-    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1e6) / 1e6
-
-
-# get version info and assign correct total_seconds function.
-
-version = '{0}.{1}.{2}'.format(*sys.version_info[:3])
-
-if version < '2.7': # pragma: no cover
-    total_seconds = _total_seconds_26
-else: # pragma: no cover
-    total_seconds = _total_seconds_27
 
 def is_timestamp(value):
     if type(value) == bool:
@@ -32,15 +18,16 @@ def is_timestamp(value):
     except:
         return False
 
-# python 2.7 / 3.0+ definitions for isstr function.
 
-try: # pragma: no cover
+# Python 2.7 / 3.0+ definitions for isstr function.
+
+try:  # pragma: no cover
     basestring
 
     def isstr(s):
         return isinstance(s, basestring)
 
-except NameError: #pragma: no cover
+except NameError:  # pragma: no cover
 
     def isstr(s):
         return isinstance(s, str)
@@ -84,7 +71,7 @@ class list_to_iter_shim(list):
     __setitem__ = _wrap_method('__setitem__')
     __delitem__ = _wrap_method('__delitem__')
     append = _wrap_method('append')
-    if version >= '3.0':  # pragma: no cover
+    if sys.version_info.major >= 3:  # pragma: no cover
         clear = _wrap_method('clear')
         copy = _wrap_method('copy')
     extend = _wrap_method('extend')
