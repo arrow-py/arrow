@@ -16,11 +16,11 @@ build35:
 
 build36:
 	virtualenv local --python=python3.6
-  local/bin/pip install -r requirements.txt
+	local/bin/pip install -r requirements.txt
 
 build37:
 	virtualenv local --python=python3.7
-  local/bin/pip install -r requirements.txt
+	local/bin/pip install -r requirements.txt
 
 test:
 	rm -f .coverage
