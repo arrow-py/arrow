@@ -86,12 +86,4 @@ class list_to_iter_shim(list):
     del _wrap_method
 
 
-def list_to_iter_deprecation(f):
-    warn_text = '{0}() will return an iterator in a future release, convert to list({0}())'.format(f.__name__)
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        return list_to_iter_shim(f(*args, **kwargs), warn_text=warn_text)
-    return wrapper
-
-
 __all__ = ['total_seconds', 'is_timestamp', 'isstr', 'list_to_iter_shim', 'list_to_iter_deprecation']
