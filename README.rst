@@ -12,7 +12,7 @@ Arrow - Better dates & times for Python
 .. image:: https://img.shields.io/pypi/v/arrow.svg
    :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
-        
+
 Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 ---------------------------------------------------------------------------------
 
@@ -30,15 +30,15 @@ Python's standard library and some other low-level modules have near-complete da
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz and more
 - Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Time zones and timestamp conversions are verbose and unpleasant 
+- Time zones and timestamp conversions are verbose and unpleasant
 - Time zone naievety is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
-Features 
+Features
 --------
 
-- Fully implemented, drop-in replacement for datetime 
-- Supports Python 2.7, 3.4, 3.5 and 3.6
+- Fully implemented, drop-in replacement for datetime
+- Supports Python 2.7, 3.4, 3.5, 3.6 and 3.7
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
@@ -93,7 +93,7 @@ And then:
 
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
-    
+
 Further documentation can be found at `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
 
 Contributing
