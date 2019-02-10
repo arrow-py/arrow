@@ -328,6 +328,43 @@ class BulgarianLocaleTests(Chai):
         assertEqual(locale._format_timeframe('minutes', 25), '25 минути')
 
 
+class MacedonianLocaleTests(Chai):
+
+    def test_plurals_mk(self):
+
+        locale = locales.MacedonianLocale()
+
+        assertEqual(locale._format_relative('сега', 'now', 0), 'сега')
+
+        assertEqual(locale._format_timeframe('hours', 0), '0 саати')
+        assertEqual(locale._format_timeframe('hours', 1), '1 саат')
+        assertEqual(locale._format_timeframe('hours', 2), '2 саати')
+        assertEqual(locale._format_timeframe('hours', 4), '4 саати')
+        assertEqual(locale._format_timeframe('hours', 5), '5 саати')
+        assertEqual(locale._format_timeframe('hours', 21), '21 саат')
+        assertEqual(locale._format_timeframe('hours', 22), '22 саати')
+        assertEqual(locale._format_timeframe('hours', 25), '25 саати')
+
+        # feminine grammatical gender should be tested separately
+        assertEqual(locale._format_timeframe('minutes', 0), '0 минути')
+        assertEqual(locale._format_timeframe('minutes', 1), '1 минута')
+        assertEqual(locale._format_timeframe('minutes', 2), '2 минути')
+        assertEqual(locale._format_timeframe('minutes', 4), '4 минути')
+        assertEqual(locale._format_timeframe('minutes', 5), '5 минути')
+        assertEqual(locale._format_timeframe('minutes', 21), '21 минута')
+        assertEqual(locale._format_timeframe('minutes', 22), '22 минути')
+        assertEqual(locale._format_timeframe('minutes', 25), '25 минути')
+
+
+        # assertEqual(locale._format_timeframe('hours', 2), '2 hodiny')
+        # assertEqual(locale._format_timeframe('hours', 5), '5 hodín')
+        # assertEqual(locale._format_timeframe('hour', 0), '0 hodín')
+        # assertEqual(locale._format_timeframe('hours', -2), '2 hodinami')
+        # assertEqual(locale._format_timeframe('hours', -5), '5 hodinami')
+        # assertEqual(locale._format_timeframe('now', 0), 'Teraz')
+
+
+
 class HebrewLocaleTests(Chai):
 
     def test_couple_of_timeframe(self):
