@@ -334,8 +334,10 @@ class MacedonianLocaleTests(Chai):
 
         locale = locales.MacedonianLocale()
 
+        # time
         assertEqual(locale._format_relative('сега', 'now', 0), 'сега')
 
+        # Hours
         assertEqual(locale._format_timeframe('hours', 0), '0 саати')
         assertEqual(locale._format_timeframe('hours', 1), '1 саат')
         assertEqual(locale._format_timeframe('hours', 2), '2 саати')
@@ -345,7 +347,7 @@ class MacedonianLocaleTests(Chai):
         assertEqual(locale._format_timeframe('hours', 22), '22 саати')
         assertEqual(locale._format_timeframe('hours', 25), '25 саати')
 
-        # feminine grammatical gender should be tested separately
+        # Minutes
         assertEqual(locale._format_timeframe('minutes', 0), '0 минути')
         assertEqual(locale._format_timeframe('minutes', 1), '1 минута')
         assertEqual(locale._format_timeframe('minutes', 2), '2 минути')
@@ -354,15 +356,6 @@ class MacedonianLocaleTests(Chai):
         assertEqual(locale._format_timeframe('minutes', 21), '21 минута')
         assertEqual(locale._format_timeframe('minutes', 22), '22 минути')
         assertEqual(locale._format_timeframe('minutes', 25), '25 минути')
-
-
-        # assertEqual(locale._format_timeframe('hours', 2), '2 hodiny')
-        # assertEqual(locale._format_timeframe('hours', 5), '5 hodín')
-        # assertEqual(locale._format_timeframe('hour', 0), '0 hodín')
-        # assertEqual(locale._format_timeframe('hours', -2), '2 hodinami')
-        # assertEqual(locale._format_timeframe('hours', -5), '5 hodinami')
-        # assertEqual(locale._format_timeframe('now', 0), 'Teraz')
-
 
 
 class HebrewLocaleTests(Chai):
