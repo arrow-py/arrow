@@ -417,6 +417,18 @@ class GermanLocaleTests(Chai):
 
     def test_ordinal_number(self):
         assertEqual(self.locale.ordinal_number(1), '1.')
+    
+    def test_define(self):
+        assertEqual(self.locale.describe("minute", only_distance=True), 'eine Minute')
+        assertEqual(self.locale.describe("minute", only_distance=False), 'in einer Minute')
+        assertEqual(self.locale.describe("hour", only_distance=True), 'eine Stunde')
+        assertEqual(self.locale.describe("hour", only_distance=False), 'in einer Stunde')
+        assertEqual(self.locale.describe("day", only_distance=True), 'ein Tag')
+        assertEqual(self.locale.describe("day", only_distance=False), 'in einem Tag')
+        assertEqual(self.locale.describe("month", only_distance=True), 'ein Monat')
+        assertEqual(self.locale.describe("month", only_distance=False), 'in einem Monat')
+        assertEqual(self.locale.describe("year", only_distance=True), 'ein Jahr')
+        assertEqual(self.locale.describe("year", only_distance=False), 'in einem Jahr')
 
 
 class HungarianLocaleTests(Chai):
