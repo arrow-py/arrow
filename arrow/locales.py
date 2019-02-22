@@ -812,6 +812,13 @@ class _DeutschLocaleCommonMixin(object):
         'years': '{0} Jahren',
     }
 
+    timeframes_only_distance = timeframes.copy()
+    timeframes_only_distance['minute'] = 'eine Minute'
+    timeframes_only_distance['hour'] = 'eine Stunde'
+    timeframes_only_distance['day'] = 'ein Tag'
+    timeframes_only_distance['month'] = 'ein Monat'
+    timeframes_only_distance['year'] = 'ein Jahr'
+
     month_names = [
         '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli',
         'August', 'September', 'Oktober', 'November', 'Dezember'
@@ -833,6 +840,21 @@ class _DeutschLocaleCommonMixin(object):
 
     def _ordinal_number(self, n):
         return '{}.'.format(n)
+
+    def describe(self, timeframe, delta=0, only_distance=False):
+        ''' Describes a delta within a timeframe in plain language.
+        :param timeframe: a string representing a timeframe.
+        :param delta: a quantity representing a delta in a timeframe.
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        '''
+
+        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+
+        if not only_distance:
+            humanized = self._format_timeframe(timeframe, delta)
+            humanized = self._format_relative(humanized, timeframe, delta)
+
+        return humanized
 
 
 class GermanLocale(_DeutschLocaleCommonMixin, Locale):
