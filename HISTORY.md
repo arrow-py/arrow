@@ -1,5 +1,10 @@
 ## History
 
+### 0.13.1
+
+- [NEW] Add support for Python 3.7.
+- [CHANGE] Remove deprecation decorators for Arrow.range(), Arrow.span_range() and Arrow.interval(), all now return generators, wrap with list() to get old behavior.
+
 ### 0.13.0
 
 - [NEW] Added support for Python 3.6.
