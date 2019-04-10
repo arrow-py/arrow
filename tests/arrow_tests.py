@@ -1360,6 +1360,121 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         assertEqual(result, '2 года назад')
 
+class ArrowIsBetweenTests(Chai):
+
+    def test_start_before_end(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+        result = target.isbetween(start, end)
+        assertFalse(result)
+
+    def test_exclusive_exclusive_bounds(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+        result = target.isbetween(start, end, '()')
+        assertTrue(result)
+        result = target.isbetween(start, end)
+        assertTrue(result)
+
+    def test_exclusive_exclusive_bounds_same_date(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        result = target.isbetween(start, end, '()')
+        assertFalse(result)
+
+    def test_inclusive_exclusive_bounds(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 6))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 4))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 6))
+        result = target.isbetween(start, end, '[)')
+        assertFalse(result)
+
+    def test_exclusive_inclusive_bounds(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        result = target.isbetween(start, end, '(]')
+        assertTrue(result)
+
+    def test_inclusive_inclusive_bounds_same_date(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        result = target.isbetween(start, end, '[]')
+        assertTrue(result)
+
+    def test_type_error_exception(self):
+        with assertRaises(TypeError):
+            target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+            start = datetime(2013, 5, 5)
+            end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+            result = target.isbetween(start, end)
+
+        with assertRaises(TypeError):
+            target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+            start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+            end = datetime(2013, 5, 8)
+            result = target.isbetween(start, end)
+
+    def test_attribute_error_exception(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+        with assertRaises(AttributeError):
+            result = target.isbetween(start, end, "][")
+        with assertRaises(AttributeError):
+            result = target.isbetween(start, end, "")
+        with assertRaises(AttributeError):
+            result = target.isbetween(start, end, "]")
+        with assertRaises(AttributeError):
+            result = target.isbetween(start, end, "[")
+        with assertRaises(AttributeError):
+            result = target.isbetween(start, end, "hello")
+
+    def test_granularity_milliseconds(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 10))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 9))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 11))
+        result = target.isbetween(start, end, "()", "millisecond")
+        assertTrue(result)
+
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 11))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 9))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 10))
+        result = target.isbetween(start, end, "[]")
+        assertFalse(result)
+
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 10))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 10))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 10))
+        result = target.isbetween(start, end, "[]")
+        assertTrue(result)
+
+    def test_granularity_seconds(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 4, 9))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 6, 11))
+        result = target.isbetween(start, end, "()", "second")
+        assertTrue(result)
+
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 9))
+        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7, 12, 30, 5, 11))
+        result = target.isbetween(start, end, "[]", "second")
+        assertTrue(result)
+
+    def test_granularity_minutes(self):
+        pass
+    def test_granularity_hours(self):
+        pass
+    def test_granularity_months(self):
+        pass
+    def test_granularity_years(self):
+        pass
+
 
 class ArrowUtilTests(Chai):
 

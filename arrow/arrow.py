@@ -871,6 +871,61 @@ class Arrow(object):
             if(trunc(abs(delta)) != 1):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=only_distance)
+
+    # comparison functions
+
+    def isbetween(self, start, end, bounds='()', granularity='millisecond'):
+        if bounds != '()' and bounds != '(]' and bounds != '[)' and bounds != '[]':
+            raise AttributeError('Error. Could not understand the specified bounds. Please select between \
+                "()", "(]", "[)", or "[]"')
+
+        if not isinstance(start, Arrow):
+            raise TypeError('Can\'t parse start date argument type of \'{}\''.format(type(start)))
+
+        if not isinstance(end, Arrow):
+            raise TypeError('Can\'t parse end date argument type of \'{}\''.format(type(end)))
+
+        include_start = (bounds[0] == '[')
+        include_end = (bounds[1] == ']')
+
+        print("target:", self.float_timestamp)
+        print("start:", start.float_timestamp)
+        print("end:", end.float_timestamp)
+        print("bounds:", bounds)
+        print("granularity:", granularity)
+
+        dividers = {
+            'millisecond': 0,
+            'second': float(1),
+            'minute': float(60),
+            'hour': float(60*60),
+            'day': float(60*60*24),
+            'month': float(60*60*24*30.5),
+            'year': float(60*60*24*365.25),
+        }
+
+        if granularity not in dividers.keys():
+            raise AttributeError('Error. Could not understand your level of granularity. Please select between \
+            "millisecond", "second", "minute", "hour", "day", "month" or "year"')
+
+        target_timestamp = self.float_timestamp
+        start_timestamp = start.float_timestamp
+        end_timestamp = end.float_timestamp
+
+        if granularity != 'millisecond':
+            target_timestamp =  int(target_timestamp / dividers[granularity])
+            start_timestamp = int(start_timestamp / dividers[granularity])
+            end_timestamp = int(end_timestamp / dividers[granularity])
+
+        if include_start and include_end:
+            return target_timestamp >= start_timestamp and target_timestamp <= end_timestamp
+        elif include_start and not include_end:
+            return target_timestamp >= start_timestamp and target_timestamp < end_timestamp
+        elif not include_start and include_end:
+            return target_timestamp > start_timestamp and target_timestamp <= end_timestamp
+        else:
+            return target_timestamp > start_timestamp and target_timestamp < end_timestamp
+
     # math
 
     def __add__(self, other):
