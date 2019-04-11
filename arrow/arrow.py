@@ -872,9 +872,37 @@ class Arrow(object):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=only_distance)
 
-    # comparison functions
+    # query functions
 
-    def isbetween(self, start, end, bounds='()', granularity='millisecond'):
+    def isbetween(self, start, end, bounds='()'):
+        ''' Returns a boolean denoting whether the specified date and time is between
+        the start and end dates and times.
+
+        :param start: an :class:`Arrow <arrow.arrow.Arrow>`.
+        :param end: an :class:`Arrow <arrow.arrow.Arrow>`.
+        :param bounds: (optional) a string - "()", "(]", "[)", or "[]" to specify
+            whether to include or exclude start and/or end.
+
+
+        Usage::
+
+            >>> start = arrow.get(datetime(2013, 5, 5, 12, 30, 10))
+            >>> end = arrow.get(datetime(2013, 5, 5, 12, 30, 36))
+            >>> arrow.get(datetime(2013, 5, 5, 12, 30, 27)).isbetween(start, end)
+            True
+
+            >>> start = arrow.get(datetime(2013, 5, 5))
+            >>> end = arrow.get(datetime(2013, 5, 8))
+            >>> arrow.get(datetime(2013, 5, 8)).isbetween(start, end, '[]')
+            True
+
+            >>> start = arrow.get(datetime(2013, 5, 5))
+            >>> end = arrow.get(datetime(2013, 5, 8))
+            >>> arrow.get(datetime(2013, 5, 8)).isbetween(start, end, '[)')
+            False
+
+        '''
+
         if bounds != '()' and bounds != '(]' and bounds != '[)' and bounds != '[]':
             raise AttributeError('Error. Could not understand the specified bounds. Please select between \
                 "()", "(]", "[)", or "[]"')
@@ -888,34 +916,9 @@ class Arrow(object):
         include_start = (bounds[0] == '[')
         include_end = (bounds[1] == ']')
 
-        print("target:", self.float_timestamp)
-        print("start:", start.float_timestamp)
-        print("end:", end.float_timestamp)
-        print("bounds:", bounds)
-        print("granularity:", granularity)
-
-        dividers = {
-            'millisecond': 0,
-            'second': float(1),
-            'minute': float(60),
-            'hour': float(60*60),
-            'day': float(60*60*24),
-            'month': float(60*60*24*30.5),
-            'year': float(60*60*24*365.25),
-        }
-
-        if granularity not in dividers.keys():
-            raise AttributeError('Error. Could not understand your level of granularity. Please select between \
-            "millisecond", "second", "minute", "hour", "day", "month" or "year"')
-
         target_timestamp = self.float_timestamp
         start_timestamp = start.float_timestamp
         end_timestamp = end.float_timestamp
-
-        if granularity != 'millisecond':
-            target_timestamp =  int(target_timestamp / dividers[granularity])
-            start_timestamp = int(start_timestamp / dividers[granularity])
-            end_timestamp = int(end_timestamp / dividers[granularity])
 
         if include_start and include_end:
             return target_timestamp >= start_timestamp and target_timestamp <= end_timestamp
