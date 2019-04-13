@@ -104,8 +104,8 @@ class EnglishLocaleTests(Chai):
         self.locale = locales.EnglishLocale()
 
     def test_describe(self):
-        assertEqual(self.locale.describe("now", only_distance=True), 'instantly')
-        assertEqual(self.locale.describe("now", only_distance=False), 'just now')
+        assertEqual(self.locale.describe('now', only_distance=True), 'instantly')
+        assertEqual(self.locale.describe('now', only_distance=False), 'just now')
 
 
 class ItalianLocalesTests(Chai):
