@@ -96,6 +96,18 @@ class LocaleTests(Chai):
         assertEqual(self.locale.meridian(7, 'NONSENSE'), None)
 
 
+class EnglishLocaleTests(Chai):
+
+    def setUp(self):
+        super(EnglishLocaleTests, self).setUp()
+
+        self.locale = locales.EnglishLocale()
+
+    def test_describe(self):
+        assertEqual(self.locale.describe("now", only_distance=True), 'instantly')
+        assertEqual(self.locale.describe("now", only_distance=False), 'just now')
+
+
 class ItalianLocalesTests(Chai):
 
     def test_ordinal_number(self):
