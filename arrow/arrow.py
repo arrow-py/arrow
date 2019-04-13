@@ -802,7 +802,7 @@ class Arrow(object):
         else:
             raise TypeError()
 
-        delta = int(util.total_seconds(self._datetime - dt))
+        delta = int(round(util.total_seconds(self._datetime - dt)))
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
