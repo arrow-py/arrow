@@ -242,7 +242,7 @@ class EnglishLocale(Locale):
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         '''
 
-        humanized = super().describe(timeframe, delta, only_distance)
+        humanized = super(EnglishLocale, self).describe(timeframe, delta, only_distance)
         if only_distance and timeframe == 'now':
             humanized = 'instantly'
 
