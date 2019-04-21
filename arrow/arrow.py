@@ -954,6 +954,102 @@ class Arrow(object):
                 raise TypeError('can\'t compare \'{}\' to \'{}\''.format(
                     type(self), type(other)))
 
+    # busines day methods
+
+    def BDay(self, delta, op):
+        '''Add or subtract business days.
+
+        :param delta: int - number of business days to add
+        :param op: a string - "add" or "sub"
+        
+        usage::
+
+            >>>  date = arrow.get(2019, 4, 1)
+            >>> date.ctime()
+            'Mon Apr  1 00:00:00 2019'
+            >>> date = date.BDay(15,'add')
+            >>> date.ctime()
+            'Mon Apr 22 00:00:00 2019'
+
+            >>> date = arrow.get(2019, 4, 22)
+            >>> date.ctime()
+            'Mon Apr 22 00:00:00 2019'
+            >>> date = date.BDay(15,'sub')
+            >>> date.ctime()
+            'Mon Apr  1 00:00:00 2019'
+
+        '''
+
+
+        if op != 'add' and op!= 'sub':
+            raise AttributeError('Error: Bday does not support operation: {}'.format(op))
+
+        if not isinstance(delta, int):
+            raise TypeError('Number of business days must be an integer')
+
+        day_name = self.ctime().split(' ')
+        day_name = day_name[0]
+        day_index = 0
+
+        days = {
+            "Mon": 1,
+            "Tue": 2,
+            "Wed": 3,
+            "Thu": 4,
+            "Fri": 5,
+            "Sat": 6,
+            "Sun": 7
+        }
+        
+        day_index = days[day_name]
+        business_days = delta
+        
+        i = 0
+
+        if op == 'add':
+            
+            if day_index == 7:
+                day_index = 1
+            else:
+                day_index += 1
+            
+            while i  < business_days:
+                if day_index == 7:
+                    delta += 1
+                    day_index = 1
+                elif day_index == 6:
+                    delta += 1
+                    day_index +=1
+                else:
+                    i += 1
+                    day_index +=1
+
+            return self.shift(days=+delta)
+
+        else:
+          
+            if day_index == 1:
+                day_index = 7
+            else:
+                day_index -= 1
+            
+            while i  < business_days:
+                if day_index == 7:
+                    delta += 1
+                    day_index -=1
+
+                elif day_index == 6:
+                    delta += 1
+                    day_index -=1
+
+                elif day_index == 1:
+                    i += 1
+                    day_index = 7
+                else:
+                    i += 1
+                    day_index -=1
+            
+            return self.shift(days=-delta)
 
 
     # datetime methods
