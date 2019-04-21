@@ -1466,3 +1466,52 @@ class ArrowUtilTests(Chai):
             for warn in w:
                 assertEqual(warn.category, DeprecationWarning)
                 assertEqual("testing", warn.message.args[0])
+
+    def test_shiftBDay_attribute_error(self):
+        date = arrow.Arrow(2019, 4, 17)
+        with assertRaises(AttributeError):
+            result = date.shiftBDay(10, 'abc')
+
+    def test_shiftBDay_type_error(self):
+        date = arrow.Arrow(2019, 4, 17)
+        with assertRaises(TypeError):
+            result = date.shiftBDay('abc', 'add')
+
+    def test_shiftBDay_add_weekday(self):
+        date = arrow.Arrow(2019, 4, 17)
+        correct = arrow.Arrow(2019, 4, 18)
+        assertTrue(date.shiftBDay(1, 'add') == correct)
+
+    def test_shiftBDay_add_weekend(self):
+        date = arrow.Arrow(2019, 4, 17)
+        correct = arrow.Arrow(2019, 4, 23)
+        assertTrue(date.shiftBDay(4, 'add') == correct)
+
+    def test_shiftBDay_add_across_weeks(self):
+        date = arrow.Arrow(2019, 4, 1)
+        correct = arrow.Arrow(2019, 4, 22)
+        assertTrue(date.shiftBDay(15, 'add') == correct)
+
+    def test_shiftBDay_sub_weekday(self):
+        date = arrow.Arrow(2019, 4, 17)
+        correct = arrow.Arrow(2019, 4, 16)
+        assertTrue(date.shiftBDay(1, 'sub') == correct)
+
+    def test_shiftBDay_sub_weekend(self):
+        date = arrow.Arrow(2019, 4, 15)
+        correct = arrow.Arrow(2019, 4, 12)
+        assertTrue(date.shiftBday(1, 'sub') == correct)
+
+    def test_shiftBDay_sub_across_weeks(self):
+        date = Arrow.Arrow(2019, 4, 22)
+        correct = arrow.Arrow(2019, 4, 1)
+        assertTrue(date.shiftBDay(15, 'sub') == correct)
+
+    def test_BHours_true(self):
+        date = arrow.Arrow(2019, 4, 17)
+        date.replace(hour=10, minute=30)
+        assertTrue(date.BHours() == True)
+
+    def test_BHours_false(self):
+         date = arrow.Arrow(2019, 4, 17)
+        assertTrue(date.BHours() == False)

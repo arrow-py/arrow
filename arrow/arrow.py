@@ -612,6 +612,111 @@ class Arrow(object):
 
         return self.fromdatetime(current)
 
+    def shiftBDay(self, num_days, op):
+        ''' Shifts a specfiied number of business days forward or backwards
+            
+            :param num_days: An int specifying the number of business days
+            :param op: A string specifying the operation, either "add" or "sub"
+
+            
+            Usage:: 
+                >>> today = arrow.get(2019, 4, 17)
+                >>> today.ctime()
+                'Wed Apr 17 00:00:00 2019'
+                >>> today = today.shiftBDay(4, add)
+                >>> today.ctime()
+                'Tue Apr 23 00:00:00 2019'
+                >>> today = today.shiftBDay(4, sub)
+                >>> today.ctime()
+                'Wed Apr 17 00:00:00 2019'
+
+
+        '''
+
+        #Check Usage
+        if op != 'add' and op != 'sub':
+            raise AttributeError('Error - shiftBDay does not support invalid operation {}'.format(op))
+
+        if not isinstance(num_days, int):
+            raise TypeError('Error - Number of Business Days must be an integer')
+
+
+        #Get the current day of the week
+        today = self.weekday() 
+        
+        #Variables to Assign
+        delta = 0 
+        i = 0
+
+        #Gather the total number of days to shift
+        if op == 'add':
+            
+            while i < num_days:
+                if today == 5:
+                    today += 1
+                    delta += 1
+                elif today == 6:
+                    today = 0
+                    delta += 1
+                else:
+                    i += 1
+                    today += 1
+                    delta += 1
+
+            #Can never end on a Saturday/Sunday
+            if today == 5:
+                delta += 2
+            elif today == 6:
+                delta += 1
+            
+            return self.shift(days=delta)        
+
+        else:
+            while i < num_days:
+                if today == 6:
+                    today -= 1 
+                    delta += 1
+                elif today == 0:
+                    today = 6
+                    delta += 1
+                else:
+                    i += 1
+                    today -= 1
+                    delta += 1
+
+            if today == 6:
+                delta += 2
+            elif today == 5:
+                delta += 1
+
+            return self.shift(days=-delta)    
+
+    def BHours(self):
+        '''Returns a bool specifying if it is within Business Hours (9 to 5)
+
+            Usage::
+            >>> time = arrow.get(2019, 4, 17)
+            >>> time.ctime()
+            'Wed Apr 17 00:00:00 2019'
+            >>> time.BHours()
+            False
+            >>> time = arrow.now()
+            >>> time.ctime()
+            'Wed Apr 17 12:33:16 2019'
+            >>> time.BHours()
+            True
+        '''
+        current_day = self.ctime().split(' ')
+        current_time = current_day[3]
+        current_hour = current_time.split(':')
+
+        if 9 <= int(current_hour[0]) <= 17:
+            return True
+        else:
+            return False
+
+
+
     def to(self, tz):
         ''' Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
