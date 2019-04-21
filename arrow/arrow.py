@@ -956,17 +956,6 @@ class Arrow(object):
 
     # busines day methods
 
-    def bdaydelta(self, other):
-        '''Returns how many business days between dates.
-
-        usage::
-
-            >>>> arrow.
-
-
-        '''
-        code = 0
-
     def BDay(self, delta, op):
         '''Add or subtract business days.
 
