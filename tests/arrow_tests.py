@@ -1503,13 +1503,13 @@ class ArrowUtilTests(Chai):
         assertTrue(date.shiftBDay(1, 'sub') == correct)
 
     def test_shiftBDay_sub_across_weeks(self):
-        date = Arrow.Arrow(2019, 4, 22)
+        date = arrow.Arrow(2019, 4, 22)
         correct = arrow.Arrow(2019, 4, 1)
         assertTrue(date.shiftBDay(15, 'sub') == correct)
 
     def test_BHours_true(self):
         date = arrow.Arrow(2019, 4, 17)
-        date.replace(hour=10, minute=30)
+        date = date.replace(hour=10, minute=30)
         assertTrue(date.BHours() == True)
 
     def test_BHours_false(self):
