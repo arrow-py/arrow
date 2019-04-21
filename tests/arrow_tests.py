@@ -1485,6 +1485,6 @@ class ArrowUtilTests(Chai):
     def test_BDay_sub_weekend(self):
         date = arrow.Arrow(2019, 6, 22)
         test_date = arrow.Arrow(2019, 5, 6)
-        assertTrue(date.BDay(35), 'sub') == test_date)
+        assertTrue(date.BDay(35, 'sub') == test_date)
 
     
