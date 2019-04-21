@@ -1500,7 +1500,7 @@ class ArrowUtilTests(Chai):
     def test_shiftBDay_sub_weekend(self):
         date = arrow.Arrow(2019, 4, 15)
         correct = arrow.Arrow(2019, 4, 12)
-        assertTrue(date.shiftBday(1, 'sub') == correct)
+        assertTrue(date.shiftBDay(1, 'sub') == correct)
 
     def test_shiftBDay_sub_across_weeks(self):
         date = Arrow.Arrow(2019, 4, 22)
