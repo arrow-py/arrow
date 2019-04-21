@@ -666,9 +666,7 @@ class Arrow(object):
             #Can never end on a Saturday/Sunday
             if today == 5:
                 delta += 2
-            elif today == 6:
-                delta += 1
-            
+                        
             return self.shift(days=delta)        
 
         else:
@@ -683,11 +681,6 @@ class Arrow(object):
                     i += 1
                     today -= 1
                     delta += 1
-
-            if today == 6:
-                delta += 2
-            elif today == 5:
-                delta += 1
 
             return self.shift(days=-delta)    
 
