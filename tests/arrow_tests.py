@@ -1491,6 +1491,14 @@ class ArrowUtilTests(Chai):
         date = arrow.Arrow(2019, 4, 1)
         correct = arrow.Arrow(2019, 4, 22)
         assertTrue(date.shiftBDay(15, 'add') == correct)
+    
+    def test_shiftBDay_add_end_weekend(self):
+        date = arrow.Arrow(2019,4,19)
+        date2 = arrow.Arrow(2019,4,19)
+        correctSat = arrow.Arrow(2019, 4, 22)
+        correctSun = arrow.Arrow(2019,4,22)
+        assertTrue(date.shiftBDay(1, 'add') == correctSat)
+        assertTrue(date.shiftBDay(2, 'add') == correctSun)
 
     def test_shiftBDay_sub_weekday(self):
         date = arrow.Arrow(2019, 4, 17)
@@ -1506,6 +1514,14 @@ class ArrowUtilTests(Chai):
         date = arrow.Arrow(2019, 4, 22)
         correct = arrow.Arrow(2019, 4, 1)
         assertTrue(date.shiftBDay(15, 'sub') == correct)
+
+    def test_shiftBDay_sub_end_weekend(self):
+        date = arrow.Arrow(2019,4,22)
+        date2 = arrow.Arrow(2019,4,22)
+        correctSat = arrow.Arrow(2019, 4, 19)
+        correctSun = arrow.Arrow(2019, 4, 19)
+        assertTrue(date.shiftBDay(2, 'sub') == correctSat)
+        assertTrue(date.shiftBDay(1, 'sub') == correctSun)
 
     def test_BHours_true(self):
         date = arrow.Arrow(2019, 4, 17)
