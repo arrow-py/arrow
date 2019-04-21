@@ -1467,6 +1467,16 @@ class ArrowUtilTests(Chai):
                 assertEqual(warn.category, DeprecationWarning)
                 assertEqual("testing", warn.message.args[0])
 
+    def test_BDay_attribute_exception(self):
+        date = arrow.Arrow(2019, 4, 1)
+        with assertRaises(AttributeError):
+            result = date.BDay(35, 'mult')
+
+    def test_BDay_type_exception(self):
+        date = arrow.Arrow(2019, 4, 1)
+        with assertRaises(TypeError):
+            result = date.BDay('hello', 'add')
+
     def test_BDay_add_weekday(self):
         date = arrow.Arrow(2019, 4, 1)
         test_date = arrow.Arrow(2019, 4, 22)
