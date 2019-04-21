@@ -1026,7 +1026,7 @@ class Arrow(object):
 
             return self.shift(days=+delta)
 
-        if op == 'sub':
+        else:
           
             if day_index == 1:
                 day_index = 7
