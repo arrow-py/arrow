@@ -1513,5 +1513,5 @@ class ArrowUtilTests(Chai):
         assertTrue(date.BHours() == True)
 
     def test_BHours_false(self):
-         date = arrow.Arrow(2019, 4, 17)
+        date = arrow.Arrow(2019, 4, 17)
         assertTrue(date.BHours() == False)
