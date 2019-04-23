@@ -272,6 +272,16 @@ class DateTimeParserParseTests(Chai):
         assertEqual(parser.DateTimeParser._try_timestamp('1'), 1)
         assertEqual(parser.DateTimeParser._try_timestamp('abc'), None)
 
+    def test_too_many_year_digits_YYYY(self):
+        with assertRaises(parser.ParserError):
+            self.parser.parse('01 June 123456789101112', 'DD MMMM YYYY')
+
+    def test_too_many_year_digits_YY(self):
+        with assertRaises(parser.ParserError):
+            self.parser.parse('01 June 2018', 'DD MMMM YY')
+
+        
+
 
 class DateTimeParserRegexTests(Chai):
 
