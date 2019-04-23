@@ -176,6 +176,10 @@ class DateTimeParser(object):
         if match is None:
             raise ParserError('Failed to match \'{}\' when parsing \'{}\''
                               .format(fmt_pattern_re.pattern, string))
+        
+        if match.end() != len(string):
+            raise ParserError('Failed to match \'{}\' when parsing \'{}\''
+                              .format(fmt_pattern_re.pattern, string))
         parts = {}
         for token in fmt_tokens:
             if token == 'Do':
