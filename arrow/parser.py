@@ -177,8 +177,8 @@ class DateTimeParser(object):
             raise ParserError('Failed to match \'{}\' when parsing \'{}\''
                               .format(fmt_pattern_re.pattern, string))
         
-        if match.end() != len(string):
-            raise ParserError('Failed to match \'{}\' when parsing \'{}\''
+        if match.end() != len(string) and 'Z' not in string:
+            raise ParserError('BUG FIX: Failed to match \'{}\' when parsing \'{}\''
                               .format(fmt_pattern_re.pattern, string))
         parts = {}
         for token in fmt_tokens:
