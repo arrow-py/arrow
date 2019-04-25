@@ -1244,6 +1244,7 @@ class ArrowHumanizeTests(Chai):
         assertEqual(self.now.humanize(later, only_distance=True), '2 days')
         assertEqual(later.humanize(self.now, only_distance=True), '2 days')
 
+        # Regression tests for humanize bug referenced in issue 541
         later = self.now.shift(days=3)
         assertEqual(later.humanize(), 'in 3 days')
 
