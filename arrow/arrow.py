@@ -874,31 +874,32 @@ class Arrow(object):
 
     # query functions
 
-    def isbetween(self, start, end, bounds='()'):
+    def is_between(self, start, end, bounds='()'):
         ''' Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.
 
         :param start: an :class:`Arrow <arrow.arrow.Arrow>`.
         :param end: an :class:`Arrow <arrow.arrow.Arrow>`.
-        :param bounds: (optional) a string - "()", "(]", "[)", or "[]" to specify
-            whether to include or exclude start and/or end.
-
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the range. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '()' is used.
 
         Usage::
 
             >>> start = arrow.get(datetime(2013, 5, 5, 12, 30, 10))
             >>> end = arrow.get(datetime(2013, 5, 5, 12, 30, 36))
-            >>> arrow.get(datetime(2013, 5, 5, 12, 30, 27)).isbetween(start, end)
+            >>> arrow.get(datetime(2013, 5, 5, 12, 30, 27)).is_between(start, end)
             True
 
             >>> start = arrow.get(datetime(2013, 5, 5))
             >>> end = arrow.get(datetime(2013, 5, 8))
-            >>> arrow.get(datetime(2013, 5, 8)).isbetween(start, end, '[]')
+            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[]')
             True
 
             >>> start = arrow.get(datetime(2013, 5, 5))
             >>> end = arrow.get(datetime(2013, 5, 8))
-            >>> arrow.get(datetime(2013, 5, 8)).isbetween(start, end, '[)')
+            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[)')
             False
 
         '''
