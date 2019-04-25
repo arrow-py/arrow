@@ -871,6 +871,65 @@ class Arrow(object):
             if(trunc(abs(delta)) != 1):
                 granularity += 's'
             return locale.describe(granularity, delta, only_distance=only_distance)
+
+    # query functions
+
+    def is_between(self, start, end, bounds='()'):
+        ''' Returns a boolean denoting whether the specified date and time is between
+        the start and end dates and times.
+
+        :param start: an :class:`Arrow <arrow.arrow.Arrow>`.
+        :param end: an :class:`Arrow <arrow.arrow.Arrow>`.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the range. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '()' is used.
+
+        Usage::
+
+            >>> start = arrow.get(datetime(2013, 5, 5, 12, 30, 10))
+            >>> end = arrow.get(datetime(2013, 5, 5, 12, 30, 36))
+            >>> arrow.get(datetime(2013, 5, 5, 12, 30, 27)).is_between(start, end)
+            True
+
+            >>> start = arrow.get(datetime(2013, 5, 5))
+            >>> end = arrow.get(datetime(2013, 5, 8))
+            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[]')
+            True
+
+            >>> start = arrow.get(datetime(2013, 5, 5))
+            >>> end = arrow.get(datetime(2013, 5, 8))
+            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[)')
+            False
+
+        '''
+
+        if bounds != '()' and bounds != '(]' and bounds != '[)' and bounds != '[]':
+            raise AttributeError('Error. Could not understand the specified bounds. Please select between \
+                "()", "(]", "[)", or "[]"')
+
+        if not isinstance(start, Arrow):
+            raise TypeError('Can\'t parse start date argument type of \'{}\''.format(type(start)))
+
+        if not isinstance(end, Arrow):
+            raise TypeError('Can\'t parse end date argument type of \'{}\''.format(type(end)))
+
+        include_start = (bounds[0] == '[')
+        include_end = (bounds[1] == ']')
+
+        target_timestamp = self.float_timestamp
+        start_timestamp = start.float_timestamp
+        end_timestamp = end.float_timestamp
+
+        if include_start and include_end:
+            return target_timestamp >= start_timestamp and target_timestamp <= end_timestamp
+        elif include_start and not include_end:
+            return target_timestamp >= start_timestamp and target_timestamp < end_timestamp
+        elif not include_start and include_end:
+            return target_timestamp > start_timestamp and target_timestamp <= end_timestamp
+        else:
+            return target_timestamp > start_timestamp and target_timestamp < end_timestamp
+
     # math
 
     def __add__(self, other):
