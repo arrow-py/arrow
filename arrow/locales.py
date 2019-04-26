@@ -234,6 +234,19 @@ class EnglishLocale(Locale):
                 return '{}rd'.format(n)
         return '{}th'.format(n)
 
+    def describe(self, timeframe, delta=0, only_distance=False):
+        ''' Describes a delta within a timeframe in plain language.
+
+        :param timeframe: a string representing a timeframe.
+        :param delta: a quantity representing a delta in a timeframe.
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        '''
+
+        humanized = super(EnglishLocale, self).describe(timeframe, delta, only_distance)
+        if only_distance and timeframe == 'now':
+            humanized = 'instantly'
+
+        return humanized
 
 class ItalianLocale(Locale):
     names = ['it', 'it_it']
@@ -843,6 +856,7 @@ class _DeutschLocaleCommonMixin(object):
 
     def describe(self, timeframe, delta=0, only_distance=False):
         ''' Describes a delta within a timeframe in plain language.
+
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
