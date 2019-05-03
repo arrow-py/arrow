@@ -13,7 +13,7 @@ Arrow - Better dates & times for Python
    :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
 
-Documentation: `arrow.readthedocs.org <https://arrow.readthedocs.io/en/latest/>`_
+Documentation: `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_
 ---------------------------------------------------------------------------------
 
 What?
@@ -94,7 +94,7 @@ And then:
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
 
-Further documentation can be found at `arrow.readthedocs.org <https://arrow.readthedocs.io/en/latest/>`_.
+Further documentation can be found at `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_.
 
 Contributing
 ------------
