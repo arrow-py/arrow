@@ -13,7 +13,7 @@ Arrow - Better dates & times for Python
    :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
 
-Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
+Documentation: `arrow.readthedocs.org <https://arrow.readthedocs.io/en/latest/>`_
 ---------------------------------------------------------------------------------
 
 What?
@@ -21,7 +21,7 @@ What?
 
 Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.
 
-Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_
+Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
 
 Why?
 ----
@@ -94,9 +94,9 @@ And then:
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
 
-Further documentation can be found at `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
+Further documentation can be found at `arrow.readthedocs.org <https://arrow.readthedocs.io/en/latest/>`_.
 
 Contributing
 ------------
 
-Contributions are welcome, especially with localization.  See `locales.py <https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py>`_ for what's currently supported.
+Contributions are welcome for both code and localization. To get started, find an issue or feature to tackle on `the issue tracker https://github.com/crsmithdev/arrow/issues`_ and then fork `the repository https://github.com/crsmithdev/arrow` on GitHub to begin making changes. If you would like to help with localization, please see `locales.py <https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py>`_ for what locales are currently supported. If you are helping with code, make sure to add tests to ensure that a bug was fixed and/or the feature works as intended.
