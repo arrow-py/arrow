@@ -882,9 +882,9 @@ class Arrow(object):
 
         Usage::
 
-            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
-            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
-            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original = arrow.get(2013, 5, 7, 12, 30, 36)
+            >>> earlier = arrow.get(2013, 5, 7, 12, 30, 30)
+            >>> later = arrow.get(2013, 5, 7, 12, 30, 42)
             >>> original.is_before(earlier)
             False
 
@@ -909,8 +909,8 @@ class Arrow(object):
 
         Usage::
 
-            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
-            >>> another_time = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> original = arrow.get(2013, 5, 7, 12, 30, 36)
+            >>> another_time = arrow.get(2013, 5, 7, 12, 30, 30)
             >>> original.is_same(another_time)
             False
 
@@ -932,9 +932,9 @@ class Arrow(object):
 
         Usage::
 
-            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
-            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
-            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original = arrow.get(2013, 5, 7, 12, 30, 36)
+            >>> earlier = arrow.get(2013, 5, 7, 12, 30, 30)
+            >>> later = arrow.get(2013, 5, 7, 12, 30, 42)
             >>> original.is_after(earlier)
             True
 
@@ -959,9 +959,9 @@ class Arrow(object):
 
         Usage::
 
-            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
-            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
-            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original = arrow.get(2013, 5, 7, 12, 30, 36)
+            >>> earlier = arrow.get(2013, 5, 7, 12, 30, 30)
+            >>> later = arrow.get(2013, 5, 7, 12, 30, 42)
             >>> original.is_same_or_before(earlier)
             False
 
@@ -983,9 +983,9 @@ class Arrow(object):
 
         Usage::
 
-            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
-            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
-            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original = arrow.get(2013, 5, 7, 12, 30, 36)
+            >>> earlier = arrow.get(2013, 5, 7, 12, 30, 30)
+            >>> later = arrow.get(2013, 5, 7, 12, 30, 42)
             >>> original.is_same_or_after(earlier)
             True
 
@@ -1012,19 +1012,19 @@ class Arrow(object):
 
         Usage::
 
-            >>> start = arrow.get(datetime(2013, 5, 5, 12, 30, 10))
-            >>> end = arrow.get(datetime(2013, 5, 5, 12, 30, 36))
-            >>> arrow.get(datetime(2013, 5, 5, 12, 30, 27)).is_between(start, end)
+            >>> start = arrow.get(2013, 5, 5, 12, 30, 10)
+            >>> end = arrow.get(2013, 5, 5, 12, 30, 36)
+            >>> arrow.get(2013, 5, 5, 12, 30, 27).is_between(start, end)
             True
 
-            >>> start = arrow.get(datetime(2013, 5, 5))
-            >>> end = arrow.get(datetime(2013, 5, 8))
-            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[]')
+            >>> start = arrow.get(2013, 5, 5)
+            >>> end = arrow.get(2013, 5, 8)
+            >>> arrow.get(2013, 5, 8).is_between(start, end, '[]')
             True
 
-            >>> start = arrow.get(datetime(2013, 5, 5))
-            >>> end = arrow.get(datetime(2013, 5, 8))
-            >>> arrow.get(datetime(2013, 5, 8)).is_between(start, end, '[)')
+            >>> start = arrow.get(2013, 5, 5)
+            >>> end = arrow.get(2013, 5, 8)
+            >>> arrow.get(2013, 5, 8).is_between(start, end, '[)')
             False
 
         '''
