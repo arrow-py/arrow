@@ -874,6 +874,131 @@ class Arrow(object):
 
     # query functions
 
+    def is_before(self, target):
+        ''' Returns a boolean denoting whether the specified date and time is before
+        the target date and time.
+
+        :param target: an :class:`Arrow <arrow.arrow.Arrow>`.
+
+        Usage::
+
+            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
+            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original.is_before(earlier)
+            False
+
+            >>> original.is_before(original)
+            False
+
+            >>> original.is_before(later)
+            True
+
+        '''
+
+        if not isinstance(target, Arrow):
+            raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
+
+        return self.float_timestamp < target.timestamp
+
+    def is_same(self, target):
+        ''' Returns a boolean denoting whether the specified date and time is the same
+        as the target date and time.
+
+        :param target: an :class:`Arrow <arrow.arrow.Arrow>`.
+
+        Usage::
+
+            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
+            >>> another_time = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> original.is_same(another_time)
+            False
+
+            >>> original.is_same(original)
+            True
+
+        '''
+
+        if not isinstance(target, Arrow):
+            raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
+
+        return self.float_timestamp == target.timestamp
+
+    def is_after(self, target):
+        ''' Returns a boolean denoting whether the specified date and time is after
+        the target date and time.
+
+        :param target: an :class:`Arrow <arrow.arrow.Arrow>`.
+
+        Usage::
+
+            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
+            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original.is_after(earlier)
+            True
+
+            >>> original.is_after(original)
+            False
+
+            >>> original.is_after(later)
+            False
+
+        '''
+
+        if not isinstance(target, Arrow):
+            raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
+
+        return self.float_timestamp > target.timestamp
+
+    def is_same_or_before(self, target):
+        ''' Returns a boolean denoting whether the specified date and time is the same or
+        before the target date and time.
+
+        :param target: an :class:`Arrow <arrow.arrow.Arrow>`.
+
+        Usage::
+
+            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
+            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original.is_same_or_before(earlier)
+            False
+
+            >>> original.is_same_or_before(original)
+            True
+
+            >>> original.is_same_or_before(later)
+            True
+
+        '''
+
+        return self.is_same(target) or self.is_before(target)
+
+    def is_same_or_after(self, target):
+        ''' Returns a boolean denoting whether the specified date and time is the same or
+        after the target date and time.
+
+        :param target: an :class:`Arrow <arrow.arrow.Arrow>`.
+
+        Usage::
+
+            >>> original = arrow.get(datetime(2013, 5, 7, 12, 30, 36))
+            >>> earlier = arrow.get(datetime(2013, 5, 7, 12, 30, 30))
+            >>> later = arrow.get(datetime(2013, 5, 7, 12, 30, 42))
+            >>> original.is_same_or_after(earlier)
+            True
+
+            >>> original.is_same_or_after(original)
+            True
+
+            >>> original.is_same_or_after(later)
+            False
+
+        '''
+
+        return self.is_same(target) or self.is_after(target)
+
     def is_between(self, start, end, bounds='()'):
         ''' Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.

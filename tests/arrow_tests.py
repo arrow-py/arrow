@@ -1370,62 +1370,154 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         assertEqual(result, '2 года назад')
 
-class ArrowIsBetweenTests(Chai):
 
-    def test_start_before_end(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+class ArrowQueryMinusIsBetweenTests(Chai):
+    '''
+    Tests every query function except is_between, which is tested
+    in a separate class below
+    '''
+
+    def setUp(self):
+        super(ArrowQueryMinusIsBetweenTests, self).setUp()
+
+        self.original = arrow.Arrow(2013, 5, 7, 12, 30, 36)
+        self.earlier = arrow.Arrow(2013, 5, 7, 12, 30, 30)
+        self.later = arrow.Arrow(2013, 5, 7, 12, 30, 42)
+
+    def test_is_before(self):
+
+        result = self.original.is_before(self.original)
+        assertFalse(result)
+
+        result = self.original.is_before(self.earlier)
+        assertFalse(result)
+
+        result = self.original.is_before(self.later)
+        assertTrue(result)
+
+    def test_is_same(self):
+
+        result = self.original.is_same(self.original)
+        assertTrue(result)
+
+        result = self.original.is_same(self.earlier)
+        assertFalse(result)
+
+        result = self.original.is_same(self.later)
+        assertFalse(result)
+
+        original_less_granular = arrow.Arrow(2013, 5, 7)
+        result = self.original.is_same(original_less_granular)
+        assertFalse(result)
+
+    def test_is_after(self):
+
+        result = self.original.is_after(self.original)
+        assertFalse(result)
+
+        result = self.original.is_after(self.earlier)
+        assertTrue(result)
+
+        result = self.original.is_after(self.later)
+        assertFalse(result)
+
+    def test_is_same_or_before(self):
+
+        result = self.original.is_same_or_before(self.original)
+        assertTrue(result)
+
+        result = self.original.is_same_or_before(self.earlier)
+        assertFalse(result)
+
+        result = self.original.is_same_or_before(self.later)
+        assertTrue(result)
+
+    def test_is_same_or_after(self):
+        result = self.original.is_same_or_after(self.original)
+        assertTrue(result)
+
+        result = self.original.is_same_or_after(self.earlier)
+        assertTrue(result)
+
+        result = self.original.is_same_or_after(self.later)
+        assertFalse(result)
+
+    def test_type_error_exception(self):
+        target = arrow.Arrow(2013, 5, 7)
+        dt = datetime(2013, 5, 8)
+
+        with assertRaises(TypeError):
+            result = target.is_before(dt)
+
+        with assertRaises(TypeError):
+            result = target.is_same(dt)
+
+        with assertRaises(TypeError):
+            result = target.is_after(dt)
+
+        with assertRaises(TypeError):
+            result = target.is_same_or_before(dt)
+
+        with assertRaises(TypeError):
+            result = target.is_same_or_after(dt)
+
+
+class ArrowQueryIsBetweenTests(Chai):
+
+    def test_end_before_start(self):
+        target = arrow.Arrow(2013, 5, 7)
+        start = arrow.Arrow(2013, 5, 8)
+        end = arrow.Arrow(2013, 5, 5)
         result = target.is_between(start, end)
         assertFalse(result)
 
     def test_exclusive_exclusive_bounds(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 5, 12, 30, 27))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5, 12, 30, 10))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 5, 12, 30, 36))
+        target = arrow.Arrow(2013, 5, 5, 12, 30, 27)
+        start = arrow.Arrow(2013, 5, 5, 12, 30, 10)
+        end = arrow.Arrow(2013, 5, 5, 12, 30, 36)
         result = target.is_between(start, end, '()')
         assertTrue(result)
         result = target.is_between(start, end)
         assertTrue(result)
 
     def test_exclusive_exclusive_bounds_same_date(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        target = arrow.Arrow(2013, 5, 7)
+        start = arrow.Arrow(2013, 5, 7)
+        end = arrow.Arrow(2013, 5, 7)
         result = target.is_between(start, end, '()')
         assertFalse(result)
 
     def test_inclusive_exclusive_bounds(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 6))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 4))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 6))
+        target = arrow.Arrow(2013, 5, 6)
+        start = arrow.Arrow(2013, 5, 4)
+        end = arrow.Arrow(2013, 5, 6)
         result = target.is_between(start, end, '[)')
         assertFalse(result)
 
     def test_exclusive_inclusive_bounds(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        target = arrow.Arrow(2013, 5, 7)
+        start = arrow.Arrow(2013, 5, 5)
+        end = arrow.Arrow(2013, 5, 7)
         result = target.is_between(start, end, '(]')
         assertTrue(result)
 
     def test_inclusive_inclusive_bounds_same_date(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        target = arrow.Arrow(2013, 5, 7)
+        start = arrow.Arrow(2013, 5, 7)
+        end = arrow.Arrow(2013, 5, 7)
         result = target.is_between(start, end, '[]')
         assertTrue(result)
 
     def test_type_error_exception(self):
         with assertRaises(TypeError):
-            target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+            target = arrow.Arrow(2013, 5, 7)
             start = datetime(2013, 5, 5)
-            end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+            end = arrow.Arrow(2013, 5, 8)
             result = target.is_between(start, end)
 
         with assertRaises(TypeError):
-            target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-            start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+            target = arrow.Arrow(2013, 5, 7)
+            start = arrow.Arrow(2013, 5, 5)
             end = datetime(2013, 5, 8)
             result = target.is_between(start, end)
 
@@ -1433,9 +1525,9 @@ class ArrowIsBetweenTests(Chai):
             result = target.is_between(None, None)
 
     def test_attribute_error_exception(self):
-        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
-        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
-        end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
+        target = arrow.Arrow(2013, 5, 7)
+        start = arrow.Arrow(2013, 5, 5)
+        end = arrow.Arrow(2013, 5, 8)
         with assertRaises(AttributeError):
             result = target.is_between(start, end, "][")
         with assertRaises(AttributeError):
@@ -1446,6 +1538,7 @@ class ArrowIsBetweenTests(Chai):
             result = target.is_between(start, end, "[")
         with assertRaises(AttributeError):
             result = target.is_between(start, end, "hello")
+
 
 class ArrowUtilTests(Chai):
 
