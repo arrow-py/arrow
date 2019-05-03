@@ -899,7 +899,7 @@ class Arrow(object):
         if not isinstance(target, Arrow):
             raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
 
-        return self.float_timestamp < target.timestamp
+        return self.float_timestamp < target.float_timestamp
 
     def is_same(self, target):
         ''' Returns a boolean denoting whether the specified date and time is the same
@@ -922,7 +922,7 @@ class Arrow(object):
         if not isinstance(target, Arrow):
             raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
 
-        return self.float_timestamp == target.timestamp
+        return self.float_timestamp == target.float_timestamp
 
     def is_after(self, target):
         ''' Returns a boolean denoting whether the specified date and time is after
@@ -949,7 +949,7 @@ class Arrow(object):
         if not isinstance(target, Arrow):
             raise TypeError('Can\'t parse target date argument type of \'{}\''.format(type(target)))
 
-        return self.float_timestamp > target.timestamp
+        return self.float_timestamp > target.float_timestamp
 
     def is_same_or_before(self, target):
         ''' Returns a boolean denoting whether the specified date and time is the same or
@@ -1042,18 +1042,14 @@ class Arrow(object):
         include_start = (bounds[0] == '[')
         include_end = (bounds[1] == ']')
 
-        target_timestamp = self.float_timestamp
-        start_timestamp = start.float_timestamp
-        end_timestamp = end.float_timestamp
-
         if include_start and include_end:
-            return target_timestamp >= start_timestamp and target_timestamp <= end_timestamp
+            return self.is_same_or_after(start) and self.is_same_or_before(end)
         elif include_start and not include_end:
-            return target_timestamp >= start_timestamp and target_timestamp < end_timestamp
+            return self.is_same_or_after(start) and self.is_before(end)
         elif not include_start and include_end:
-            return target_timestamp > start_timestamp and target_timestamp <= end_timestamp
+            return self.is_after(start) and self.is_same_or_before(end)
         else:
-            return target_timestamp > start_timestamp and target_timestamp < end_timestamp
+            return self.is_after(start) and self.is_before(end)
 
     # math
 

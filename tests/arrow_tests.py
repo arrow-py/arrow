@@ -1410,6 +1410,10 @@ class ArrowQueryMinusIsBetweenTests(Chai):
         result = self.original.is_same(original_less_granular)
         assertFalse(result)
 
+        other_day = arrow.Arrow(2017, 2, 20)
+        result = self.original.is_same(other_day)
+        assertFalse(result)
+
     def test_is_after(self):
 
         result = self.original.is_after(self.original)
