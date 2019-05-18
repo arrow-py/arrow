@@ -878,8 +878,8 @@ class Arrow(object):
         ''' Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.
 
-        :param start: an :class:`Arrow <arrow.arrow.Arrow>`.
-        :param end: an :class:`Arrow <arrow.arrow.Arrow>`.
+        :param start: an :class:`Arrow <arrow.arrow.Arrow>` object.
+        :param end: an :class:`Arrow <arrow.arrow.Arrow>` object.
         :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
             whether to include or exclude the start and end values in the range. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.

@@ -1,5 +1,13 @@
 ## History
 
+### 0.13.2
+
+- [NEW] Add is_between method.
+- [FIX] Improved humanize behaviour for near zero durations (#416).
+- [FIX] Correct humanize behaviour with future days (#541).
+- [FIX] Documentation updates.
+- [FIX] Improvements to German Locale.
+
 ### 0.13.1
 
 - [NEW] Add support for Python 3.7.
