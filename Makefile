@@ -1,4 +1,4 @@
-.PHONY: auto build test docs clean
+.PHONY: auto build27 build34 build35 build36 build37 flake8 test docs clean
 
 auto: build27
 
@@ -22,6 +22,9 @@ build37:
 	virtualenv local --python=python3.7
 	local/bin/pip install -r requirements.txt
 
+lint:
+	local/bin/flake8 arrow tests setup.py
+
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
@@ -31,7 +34,6 @@ docs:
 	cd docs; make html
 
 clean:
-	rm -rf local
-	rm -f arrow/*.pyc tests/*.pyc
-	rm -f .coverage
+	rm -rf local ./**/__pycache__
+	rm -f ./**/*.pyc .coverage
 

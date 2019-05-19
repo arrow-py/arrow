@@ -1,12 +1,13 @@
 sudo: false
 language: python
+cache: pip
 dist: xenial
 python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
-  - 3.7
+    - 2.7
+    - 3.4
+    - 3.5
+    - 3.6
+    - 3.7
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
@@ -14,5 +15,7 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then make build36; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make build37; fi
     - pip install codecov
-script: make test
+script:
+    - make lint
+    - make test
 after_success: codecov

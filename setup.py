@@ -1,7 +1,6 @@
 import codecs
 import os.path
 import re
-import sys
 
 try:
     from setuptools import setup
