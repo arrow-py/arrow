@@ -16,6 +16,6 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make build37; fi
     - pip install codecov
 script:
-    - make lint
+    - make flake8
     - make test
 after_success: codecov

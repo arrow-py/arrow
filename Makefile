@@ -22,7 +22,7 @@ build37:
 	virtualenv local --python=python3.7
 	local/bin/pip install -r requirements.txt
 
-lint:
+flake8:
 	local/bin/flake8 arrow tests setup.py
 
 test:
