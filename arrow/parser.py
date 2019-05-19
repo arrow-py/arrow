@@ -161,7 +161,7 @@ class DateTimeParser(object):
             fmt_pattern = (
                 fmt_pattern[: m.start() + offset]
                 + input_pattern
-                + fmt_pattern[m.end() + offset:]
+                + fmt_pattern[m.end() + offset :]
             )
             offset += len(input_pattern) - (m.end() - m.start())
 
