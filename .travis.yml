@@ -10,7 +10,7 @@ python:
   - 3.8-dev
 matrix:
   allow_failures:
-  - python: nightly
+  - python: 3.8-dev
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
