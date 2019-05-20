@@ -7,7 +7,7 @@ python:
   - 3.5
   - 3.6
   - 3.7
-  - nightly
+  - 3.8-dev
 matrix:
   allow_failures:
   - python: nightly
@@ -17,7 +17,7 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then make build35; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then make build36; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make build37; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then make build38; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.8-dev' ]]; then make build38; fi
     - pip install codecov
 script: make test
 after_success: codecov
