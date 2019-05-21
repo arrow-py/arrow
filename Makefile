@@ -1,4 +1,4 @@
-.PHONY: auto build27 build34 build35 build36 build37 build38 flake8 test docs clean
+.PHONY: auto docs clean
 
 auto: build27
 
@@ -26,12 +26,18 @@ build38:
 	virtualenv local --python=python3.8
 	local/bin/pip install -r requirements.txt
 
-flake8:
-	local/bin/flake8 arrow tests setup.py
-
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
+
+check-formatting:
+	local/bin/flake8 arrow tests setup.py
+	local/bin/black arrow tests setup.py --check --diff --target-version py27
+	local/bin/isort -rc arrow tests setup.py --check-only --diff --virtual-env local
+
+fix-formatting:
+	local/bin/black arrow tests setup.py --target-version py27
+	local/bin/isort -rc arrow tests setup.py --virtual-env local
 
 docs:
 	touch docs/index.rst
