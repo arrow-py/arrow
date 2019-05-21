@@ -1,4 +1,4 @@
-.PHONY: auto docs clean
+.PHONY: auto test docs clean
 
 auto: build27
 
@@ -30,8 +30,10 @@ test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
 
-check-formatting:
+flake8:
 	local/bin/flake8 arrow tests setup.py
+
+check-formatting: flake8
 	local/bin/black arrow tests setup.py --check --diff --target-version py27
 	local/bin/isort -rc arrow tests setup.py --check-only --diff --virtual-env local
 

@@ -21,6 +21,6 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.8-dev' ]]; then make build38; fi
     - pip install codecov
 script:
-    - make check-formatting
+    - make flake8
     - make test
 after_success: codecov
