@@ -21,14 +21,14 @@ class ParserError(RuntimeError):
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile('(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)')
-    _ESCAPE_RE = re.compile('\[[^\[\]]*\]')
+    _ESCAPE_RE = re.compile(r'\[[^\[\]]*\]')
 
-    _ONE_OR_MORE_DIGIT_RE = re.compile('\d+')
-    _ONE_OR_TWO_DIGIT_RE = re.compile('\d{1,2}')
-    _FOUR_DIGIT_RE = re.compile('\d{4}')
-    _TWO_DIGIT_RE = re.compile('\d{2}')
-    _TZ_RE = re.compile('[+\-]?\d{2}:?(\d{2})?')
-    _TZ_NAME_RE = re.compile('\w[\w+\-/]+')
+    _ONE_OR_MORE_DIGIT_RE = re.compile(r'\d+')
+    _ONE_OR_TWO_DIGIT_RE = re.compile(r'\d{1,2}')
+    _FOUR_DIGIT_RE = re.compile(r'\d{4}')
+    _TWO_DIGIT_RE = re.compile(r'\d{2}')
+    _TZ_RE = re.compile(r'[+\-]?\d{2}:?(\d{2})?')
+    _TZ_NAME_RE = re.compile(r'\w[\w+\-/]+')
 
 
     _BASE_INPUT_RE_MAP = {
@@ -46,7 +46,7 @@ class DateTimeParser(object):
         'm': _ONE_OR_TWO_DIGIT_RE,
         'ss': _TWO_DIGIT_RE,
         's': _ONE_OR_TWO_DIGIT_RE,
-        'X': re.compile('\d+'),
+        'X': re.compile(r'\d+'),
         'ZZZ': _TZ_NAME_RE,
         'ZZ': _TZ_RE,
         'Z': _TZ_RE,
@@ -154,7 +154,7 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-        a = fmt_pattern.split("\#")
+        a = fmt_pattern.split(r"\#")
         b = escaped_data
 
         # Due to the way Python splits, 'a' will always be longer
@@ -310,7 +310,7 @@ class DateTimeParser(object):
 
 class TzinfoParser(object):
 
-    _TZINFO_RE = re.compile('([+\-])?(\d\d):?(\d\d)?')
+    _TZINFO_RE = re.compile(r'([+\-])?(\d\d):?(\d\d)?')
 
     @classmethod
     def parse(cls, string):
