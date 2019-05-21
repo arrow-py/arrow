@@ -1,4 +1,4 @@
-.PHONY: auto build27 build34 build35 build36 build37 flake8 test docs clean
+.PHONY: auto build27 build34 build35 build36 build37 build38 flake8 test docs clean
 
 auto: build27
 
@@ -20,6 +20,10 @@ build36:
 
 build37:
 	virtualenv local --python=python3.7
+	local/bin/pip install -r requirements.txt
+
+build38:
+	virtualenv local --python=python3.8
 	local/bin/pip install -r requirements.txt
 
 flake8:
