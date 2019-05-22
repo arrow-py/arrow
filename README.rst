@@ -64,7 +64,7 @@ Quick Start
 Installation
 ^^^^^^^^^^^^
 
-Install Arrow with `pip <https://pip.pypa.io/en/stable/quickstart/>`_:
+To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pipenv <https://docs.pipenv.org/en/latest/>`_:
 
 .. code-block:: console
 
