@@ -4,7 +4,6 @@ cache: pip
 dist: xenial
 python:
     - 2.7
-    - 3.4
     - 3.5
     - 3.6
     - 3.7
@@ -14,7 +13,6 @@ matrix:
         - python: 3.8-dev
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then make build34; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then make build35; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then make build36; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make build37; fi
