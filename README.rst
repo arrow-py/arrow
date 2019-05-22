@@ -58,7 +58,7 @@ Features
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
-Quickstart
+Quick Start
 -----------
 
 Installation
