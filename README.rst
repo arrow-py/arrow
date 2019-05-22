@@ -68,7 +68,7 @@ Install Arrow with [pip](https://pip.pypa.io/en/stable/quickstart/):
 
 .. code-block:: console
 
-    $ pip install arrow
+    $ pip install -U arrow
 
 Example Usage
 ^^^^^^^^^^^^^
