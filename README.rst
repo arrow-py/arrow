@@ -13,6 +13,10 @@ Arrow - Better dates & times for Python
    :target: https://pypi.python.org/pypi/arrow
    :alt: downloads
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/python/black
+   :alt: code style
+
 Documentation: `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_
 ---------------------------------------------------------------------------------
 
