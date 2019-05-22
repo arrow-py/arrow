@@ -11,7 +11,15 @@ Arrow - Better dates & times for Python
 
 .. image:: https://img.shields.io/pypi/v/arrow.svg
    :target: https://pypi.python.org/pypi/arrow
-   :alt: downloads
+   :alt: arrow PyPI download
+
+.. image:: https://img.shields.io/pypi/pyversions/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
+   :alt: python versions
+
+.. image:: https://img.shields.io/pypi/l/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
+   :alt: license
 
 Documentation: `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_
 ---------------------------------------------------------------------------------
@@ -50,16 +58,20 @@ Features
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
-Quick start
+Quickstart
 -----------
 
-First:
+Installation
+^^^^^^^^^^^^
+
+Install Arrow with [pip](https://pip.pypa.io/en/stable/quickstart/):
 
 .. code-block:: console
 
     $ pip install arrow
 
-And then:
+Example Usage
+^^^^^^^^^^^^^
 
 .. code-block:: pycon
 
