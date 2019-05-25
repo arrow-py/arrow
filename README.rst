@@ -11,7 +11,15 @@ Arrow - Better dates & times for Python
 
 .. image:: https://img.shields.io/pypi/v/arrow.svg
    :target: https://pypi.python.org/pypi/arrow
-   :alt: downloads
+   :alt: arrow PyPI download
+
+.. image:: https://img.shields.io/pypi/pyversions/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
+   :alt: python versions
+
+.. image:: https://img.shields.io/pypi/l/arrow.svg
+   :target: https://pypi.python.org/pypi/arrow
+   :alt: license
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/python/black
@@ -42,7 +50,7 @@ Features
 --------
 
 - Fully implemented, drop-in replacement for datetime
-- Supports Python 2.7, 3.5, 3.6 and 3.7
+- Supports Python 2.7, 3.5, 3.6, 3.7, and 3.8
 - Time zone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
 - Updated .replace method with support for relative offsets, including weeks
@@ -54,16 +62,20 @@ Features
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
-Quick start
+Quick Start
 -----------
 
-First:
+Installation
+^^^^^^^^^^^^
+
+To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pipenv <https://docs.pipenv.org/en/latest/>`_:
 
 .. code-block:: console
 
-    $ pip install arrow
+    $ pip install -U arrow
 
-And then:
+Example Usage
+^^^^^^^^^^^^^
 
 .. code-block:: pycon
 
