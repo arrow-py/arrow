@@ -32,7 +32,7 @@ repos:
       rev: 19.3b0
       hooks:
           - id: black
-            args: [--safe, --quiet]
+            args: [--safe, --quiet, --target-version=py27]
             language_version: python3
     - repo: https://gitlab.com/pycqa/flake8
       rev: 3.7.7
