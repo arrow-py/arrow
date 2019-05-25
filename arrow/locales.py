@@ -2939,7 +2939,7 @@ def _map_locales():
 
     locales = {}
 
-    for cls_name, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
+    for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
         if issubclass(cls, Locale):
             for name in cls.names:
                 locales[name.lower()] = cls

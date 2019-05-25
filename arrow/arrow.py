@@ -749,7 +749,7 @@ class Arrow(object):
 
         values = [getattr(self, f) for f in frames]
 
-        for i in range(3 - len(values)):
+        for _ in range(3 - len(values)):
             values.append(1)
 
         floor = self.__class__(*values, tzinfo=self.tzinfo)
