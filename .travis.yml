@@ -19,6 +19,6 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.8-dev' ]]; then make build38; fi
     - pip install -U codecov
 script:
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make lint; fi
+    - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make lint-ci; fi
     - make test
 after_success: codecov

@@ -5,40 +5,37 @@ auto: build27
 build27:
 	virtualenv local --python=python2.7
 	local/bin/pip install -r requirements.txt
+	local/bin/pre-commit install
 
 build35:
 	virtualenv local --python=python3.5
 	local/bin/pip install -r requirements.txt
+	local/bin/pre-commit install
 
 build36:
 	virtualenv local --python=python3.6
 	local/bin/pip install -r requirements.txt
+	local/bin/pre-commit install
 
 build37:
 	virtualenv local --python=python3.7
 	local/bin/pip install -r requirements.txt
+	local/bin/pre-commit install
 
 build38:
 	virtualenv local --python=python3.8
 	local/bin/pip install -r requirements.txt
+	local/bin/pre-commit install
 
 test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
 
 lint:
-	local/bin/pre-commit install && local/bin/pre-commit run --all-files --show-diff-on-failure
+	local/bin/pre-commit run --all-files
 
-# flake8:
-# 	local/bin/flake8 arrow tests setup.py
-
-# check-formatting: flake8
-# 	local/bin/black arrow tests setup.py --check --diff --target-version py27
-# 	local/bin/isort -rc arrow tests setup.py --check-only --diff --virtual-env local
-
-# fix-formatting:
-# 	local/bin/black arrow tests setup.py --target-version py27
-# 	local/bin/isort -rc arrow tests setup.py --virtual-env local
+lint-ci:
+	local/bin/pre-commit run --all-files --show-diff-on-failure
 
 docs:
 	touch docs/index.rst
