@@ -287,7 +287,7 @@ Or another Arrow, or datetime:
     >>> future.humanize(present)
     'in 2 hours'
 
-Support for a growing number of locales (see `locales.py` for supported languages):
+Support for a growing number of locales (see ``locales.py`` for supported languages):
 
 .. code-block:: python
 
