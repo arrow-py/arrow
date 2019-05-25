@@ -27,6 +27,7 @@ test:
 	. local/bin/activate && nosetests
 
 lint:
+	local/bin/pip install -U pre-commit
 	pre-commit install && pre-commit run --all-files --show-diff-on-failure
 
 # flake8:
