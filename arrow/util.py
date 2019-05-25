@@ -15,7 +15,7 @@ def is_timestamp(value):
     try:
         float(value)
         return True
-    except:  # noqa: E722
+    except Exception:
         return False
 
 

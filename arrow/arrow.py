@@ -1323,7 +1323,7 @@ class Arrow(object):
         try:
             expr = float(expr)
             return cls.utcfromtimestamp(expr).datetime
-        except:  # noqa: E722
+        except Exception:
             raise ValueError(
                 "'{}' not recognized as a timestamp or datetime".format(expr)
             )
@@ -1366,7 +1366,7 @@ class Arrow(object):
 
         try:
             return float(timestamp)
-        except:  # noqa: E722
+        except Exception:
             raise ValueError("cannot parse '{}' as a timestamp".format(timestamp))
 
 

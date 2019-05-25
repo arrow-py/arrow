@@ -317,7 +317,7 @@ class DateTimeParser(object):
 
         try:
             return float(string)
-        except:  # noqa: E722
+        except Exception:
             return None
 
     @staticmethod
