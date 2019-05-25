@@ -11,6 +11,8 @@ python:
 matrix:
     allow_failures:
         - python: 3.8-dev
+before_install:
+    - pyenv global system 3.7
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then make build35; fi
