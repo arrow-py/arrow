@@ -27,8 +27,7 @@ test:
 	. local/bin/activate && nosetests
 
 lint:
-	pip install -U pre-commit
-	pre-commit install && pre-commit run --all-files --show-diff-on-failure
+	local/bin/pre-commit install && local/bin/pre-commit run --all-files --show-diff-on-failure
 
 # flake8:
 # 	local/bin/flake8 arrow tests setup.py
