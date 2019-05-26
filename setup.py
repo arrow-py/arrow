@@ -27,9 +27,6 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Operating System :: POSIX",
-        "Operating System :: Microsoft :: Windows",
-        "Operating System :: MacOS :: MacOS X",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
@@ -40,7 +37,7 @@ setup(
     ],
     keywords="arrow time date datetime locale moment",
     project_urls={
-        "Bug Reports": "https://github.com/crsmithdev/arrow/issues",
-        "Source": "https://github.com/crsmithdev/arrow",
+        "GitHub": "https://github.com/crsmithdev/arrow",
+        "Bug Reports": "https://github.com/crsmithdev/arrow/issues"
     },
 )
