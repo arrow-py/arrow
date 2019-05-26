@@ -1,13 +1,17 @@
 language: python
 dist: xenial
+stages:
+    - linting
+    - testing
 matrix:
+    fast_finish: true
     include:
         - python: 2.7
         - python: 3.5
         - python: 3.6
         - python: 3.7
         - python: 3.8-dev
-        - name: "Linting"
+        - stage: linting
           python: 3.7
           env: TARGET=lint-ci
           cache:
@@ -15,12 +19,12 @@ matrix:
                   - $HOME/.cache/pre-commit
     allow_failures:
         - python: 3.8-dev
+before_install: pip install -U codecov
 install:
     - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make build27; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then make build35; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then make build36; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make build37; fi
     - if [[ $TRAVIS_PYTHON_VERSION == '3.8-dev' ]]; then make build38; fi
-    - pip install -U codecov
 script: make "${TARGET:-test}"
 after_success: codecov
