@@ -2,12 +2,18 @@ language: python
 dist: xenial
 matrix:
     include:
-        - python: 2.7
+        - name: "Unit Testing"
+          python: 2.7
         - python: 3.5
         - python: 3.6
         - python: 3.7
-        - python: 3.7
+        - python: 3.8-dev
+        - name: "Linting"
+          python: 3.7
           env: TARGET=lint-ci
+          cache:
+              directories:
+                  - $HOME/.cache/pre-commit
     allow_failures:
         - python: 3.8-dev
 install:
@@ -20,7 +26,3 @@ install:
 script:
     - make "${TARGET:-test}"
 after_success: codecov
-cache:
-    directories:
-        - $HOME/.cache/pip
-        - $HOME/.cache/pre-commit
