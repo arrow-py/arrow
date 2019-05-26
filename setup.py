@@ -35,9 +35,9 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords="arrow time date datetime locale moment",
+    keywords="arrow date time datetime",
     project_urls={
-        "GitHub": "https://github.com/crsmithdev/arrow",
+        "Repository": "https://github.com/crsmithdev/arrow",
         "Bug Reports": "https://github.com/crsmithdev/arrow/issues"
     },
 )
