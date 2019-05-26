@@ -1,35 +1,16 @@
 # -*- coding: utf-8 -*-
-import codecs
-import os.path
-import re
+from setuptools import setup
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from arrow import __version__
 
-
-def fpath(name):
-    return os.path.join(os.path.dirname(__file__), name)
-
-
-def read(fname):
-    return codecs.open(fpath(fname), encoding="utf-8").read()
-
-
-def grep(attrname):
-    pattern = r'{}\W*=\W*"([^"]+)"'.format(attrname)
-    strval, = re.findall(pattern, file_text)
-    return strval
-
-
-file_text = read(fpath("arrow/__init__.py"))
+with open("README.rst", "r") as f:
+    readme = f.read()
 
 setup(
     name="arrow",
-    version=grep("__version__"),
+    version=__version__,
     description="Better dates and times for Python",
-    long_description=read(fpath("README.rst")),
+    long_description=readme,
     url="https://github.com/crsmithdev/arrow/",
     author="Chris Smith",
     author_email="crsmithdev@gmail.com",

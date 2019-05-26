@@ -5,4 +5,3 @@ from .arrow import Arrow
 from .factory import ArrowFactory
 
 __version__ = "0.13.2"
-VERSION = __version__
