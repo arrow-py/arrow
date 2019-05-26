@@ -1,5 +1,5 @@
 default_language_version:
-    python: python3.7
+    python: python3
 repos:
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v2.2.3
@@ -10,8 +10,6 @@ repos:
           - id: check-yaml
           - id: debug-statements
           - id: requirements-txt-fixer
-            entry: python --version
-            verbose: true
     - repo: https://github.com/asottile/seed-isort-config
       rev: v1.9.0
       hooks:

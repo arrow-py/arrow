@@ -1,14 +1,13 @@
-sudo: false
 language: python
-cache: pip
 dist: xenial
-python:
-    - 2.7
-    - 3.5
-    - 3.6
-    - 3.7
-    - 3.8-dev
 matrix:
+    include:
+        - python: 2.7
+        - python: 3.5
+        - python: 3.6
+        - python: 3.7
+        - python: 3.7
+          env: TARGET=lint-ci
     allow_failures:
         - python: 3.8-dev
 install:
@@ -19,7 +18,9 @@ install:
     - if [[ $TRAVIS_PYTHON_VERSION == '3.8-dev' ]]; then make build38; fi
     - pip install -U codecov
 script:
-    # - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make lint-ci; fi
-    - make lint-ci
-    - make test
+    - make "${TARGET:-test}"
 after_success: codecov
+cache:
+    directories:
+        - $HOME/.cache/pip
+        - $HOME/.cache/pre-commit
