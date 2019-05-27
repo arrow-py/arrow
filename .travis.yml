@@ -1,17 +1,13 @@
 language: python
 dist: xenial
-stages:
-    - linting
-    - test
 matrix:
-    fast_finish: true
     include:
         - python: 2.7
         - python: 3.5
         - python: 3.6
         - python: 3.7
         - python: 3.8-dev
-        - stage: linting
+        - name: "Linting"
           python: 3.7
           env: TARGET=lint-ci
           cache:
