@@ -2,7 +2,7 @@ language: python
 dist: xenial
 stages:
     - linting
-    - testing
+    - test
 matrix:
     fast_finish: true
     include:
