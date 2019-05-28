@@ -28,7 +28,7 @@ test:
 
 docs:
 	touch docs/index.rst
-	cd docs; make html
+	. local/bin/activate && cd docs; make html
 
 clean:
 	rm -rf local
