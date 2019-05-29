@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from setuptools import setup
 
 from arrow import __version__
@@ -38,6 +39,6 @@ setup(
     keywords="arrow date time datetime",
     project_urls={
         "Repository": "https://github.com/crsmithdev/arrow",
-        "Bug Reports": "https://github.com/crsmithdev/arrow/issues"
+        "Bug Reports": "https://github.com/crsmithdev/arrow/issues",
     },
 )
