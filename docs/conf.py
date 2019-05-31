@@ -23,7 +23,7 @@ copyright = "2019, Chris Smith"
 author = "Chris Smith"
 
 # The full version, including alpha/beta/rc tags
-release = "0.13.2"
+release = "0.14.0"
 
 # -- General configuration ---------------------------------------------------
 
