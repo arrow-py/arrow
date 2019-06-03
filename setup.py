@@ -9,7 +9,7 @@ with open("README.rst", "r") as f:
 
 def grep(attrname):
     pattern = r'{}\W*=\W*"([^"]+)"'.format(attrname)
-    strval, = re.findall(pattern, readme)
+    strval = re.findall(pattern, readme)
     return strval
 
 
