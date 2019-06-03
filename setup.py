@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+import re
 
-from arrow import __version__
+from setuptools import setup
 
 with open("README.rst", "r") as f:
     readme = f.read()
 
+with open("arrow/__init__.py", "r") as f:
+    init = f.read()
+
+
+def get_version():
+    pattern = r'{}\W*=\W*"([^"]+)"'.format("__version__")
+    strval = re.findall(pattern, init)[0]
+    return strval
+
+
 setup(
     name="arrow",
-    version=__version__,
+    version=get_version(),
     description="Better dates and times for Python",
     long_description=readme,
     long_description_content_type="text/x-rst",

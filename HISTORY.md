@@ -1,5 +1,9 @@
 ## History
 
+### 0.14.1
+
+- [FIX] Fixed "ImportError: No module named 'dateutil'" (#598).
+
 ### 0.14.0
 
 - [NEW] Added provisional support for Python 3.8.
