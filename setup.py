@@ -12,8 +12,7 @@ with open("arrow/__init__.py", "r") as f:
 
 def get_version():
     pattern = r'{}\W*=\W*"([^"]+)"'.format("__version__")
-    strval = re.findall(pattern, init)[0]
-    return strval
+    return re.findall(pattern, init)[0]
 
 
 setup(
