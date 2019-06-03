@@ -1,5 +1,14 @@
 ## History
 
+### 0.14.0
+
+- [NEW] Added provisional support for Python 3.8.
+- [CHANGE] Removed support for EOL Python 3.4.
+- [FIX] Updated setup.py with modern Python standards.
+- [FIX] Upgraded dependencies to latest versions.
+- [FIX] Enabled flake8 and black on travis builds.
+- [FIX] Formatted code using black and isort.
+
 ### 0.13.2
 
 - [NEW] Add is_between method.
