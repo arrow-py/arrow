@@ -2,28 +2,14 @@
 
 auto: build27
 
-build27:
-	virtualenv local --python=python2.7
-	local/bin/pip install -r requirements.txt
-	local/bin/pre-commit install
+build27: PYTHON_VER = python2.7
+build35: PYTHON_VER = python3.5
+build36: PYTHON_VER = python3.6
+build37: PYTHON_VER = python3.7
+build38: PYTHON_VER = python3.8
 
-build35:
-	virtualenv local --python=python3.5
-	local/bin/pip install -r requirements.txt
-	local/bin/pre-commit install
-
-build36:
-	virtualenv local --python=python3.6
-	local/bin/pip install -r requirements.txt
-	local/bin/pre-commit install
-
-build37:
-	virtualenv local --python=python3.7
-	local/bin/pip install -r requirements.txt
-	local/bin/pre-commit install
-
-build38:
-	virtualenv local --python=python3.8
+build27 build35 build36 build37 build38:
+	virtualenv local --python=$(PYTHON_VER)
 	local/bin/pip install -r requirements.txt
 	local/bin/pre-commit install
 
@@ -32,9 +18,6 @@ test:
 	. local/bin/activate && nosetests
 
 lint:
-	local/bin/pre-commit run --all-files
-
-lint-ci:
 	local/bin/pre-commit run --all-files --show-diff-on-failure
 
 docs:
@@ -42,5 +25,5 @@ docs:
 	. local/bin/activate && cd docs; make html
 
 clean:
-	rm -rf local ./**/__pycache__
+	rm -rf local .tox ./**/__pycache__
 	rm -f ./**/*.pyc .coverage
