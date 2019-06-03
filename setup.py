@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+import re
 
-from arrow import __version__
+from setuptools import setup
 
 with open("README.rst", "r") as f:
     readme = f.read()
 
+
+def grep(attrname):
+    pattern = r'{}\W*=\W*"([^"]+)"'.format(attrname)
+    strval, = re.findall(pattern, readme)
+    return strval
+
+
 setup(
     name="arrow",
-    version=__version__,
+    version=grep("__version__"),
     description="Better dates and times for Python",
     long_description=readme,
     long_description_content_type="text/x-rst",
