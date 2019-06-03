@@ -20,6 +20,7 @@ matrix:
                   - $HOME/.cache/pre-commit
     allow_failures:
         - python: 3.8-dev
+          env: TOXENV=py38
 install: pip install -U codecov tox
-script: tox
+script: tox --recreate
 after_success: codecov
