@@ -1,5 +1,10 @@
 ## History
 
+### 0.14.2
+
+- [CHANGE] Travis CI builds now use tox to lint and run tests.
+- [FIX] Fixed UnicodeDecodeError on certain locales (#600).
+
 ### 0.14.1
 
 - [FIX] Fixed "ImportError: No module named 'dateutil'" (#598).
