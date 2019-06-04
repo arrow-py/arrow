@@ -7,7 +7,7 @@ from setuptools import setup
 with codecs.open("README.rst", encoding="utf-8") as f:
     readme = f.read()
 
-with open("arrow/__init__.py", "r") as f:
+with codecs.open("arrow/__init__.py", encoding="utf-8") as f:
     init = f.read()
 
 
