@@ -22,5 +22,5 @@ matrix:
         - python: 3.8-dev
           env: TOXENV=py38
 install: pip install -U codecov tox
-script: tox --recreate
+script: tox
 after_success: codecov

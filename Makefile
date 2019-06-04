@@ -17,6 +17,10 @@ test:
 	rm -f .coverage
 	. local/bin/activate && nosetests
 
+test-dev:
+	rm -f .coverage
+	. local/bin/activate && python -Wd -m nose
+
 lint:
 	local/bin/pre-commit run --all-files --show-diff-on-failure
 
@@ -26,4 +30,5 @@ docs:
 
 clean:
 	rm -rf local .tox ./**/__pycache__
+	rm -rf dist build .egg arrow.egg-info
 	rm -f ./**/*.pyc .coverage
