@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import codecs
 import re
 
 from setuptools import setup
 
-with open("README.rst", "r") as f:
+with codecs.open("README.rst", encoding="utf-8") as f:
     readme = f.read()
 
 with open("arrow/__init__.py", "r") as f:
