@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import codecs
+import io
 import re
 
 from setuptools import setup
 
-with codecs.open("README.rst", encoding="utf-8") as f:
+with io.open("README.rst", "r", encoding="utf-8") as f:
     readme = f.read()
 
-with codecs.open("arrow/__init__.py", encoding="utf-8") as f:
+with io.open("arrow/__init__.py", "r", encoding="utf-8") as f:
     init = f.read()
 
 
