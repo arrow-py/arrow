@@ -22,8 +22,10 @@ class DateTimeParserTests(Chai):
 
         mock_datetime = self.mock()
 
-        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
-        self.expect(self.parser.parse).args("str", "fmt_b").returns(mock_datetime)
+        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_b", False).returns(
+            mock_datetime
+        )
 
         result = self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
 
@@ -31,8 +33,8 @@ class DateTimeParserTests(Chai):
 
     def test_parse_multiformat_all_fail(self):
 
-        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
-        self.expect(self.parser.parse).args("str", "fmt_b").raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_b", False).raises(ParserError)
 
         with self.assertRaises(ParserError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
@@ -41,7 +43,9 @@ class DateTimeParserTests(Chai):
         class UnselfExpectedError(Exception):
             pass
 
-        self.expect(self.parser.parse).args("str", "fmt_a").raises(UnselfExpectedError)
+        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(
+            UnselfExpectedError
+        )
 
         with self.assertRaises(UnselfExpectedError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])

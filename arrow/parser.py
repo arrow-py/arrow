@@ -99,8 +99,11 @@ class DateTimeParser(object):
             else:
                 date_string, time_string = string.split("T", 1)
 
+            # ! TODO: look for Z in time string?
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
+
+            # is_basic_format = colon_count > 0
 
             has_tz = len(time_parts) > 1
             has_hours = colon_count == 0
@@ -108,6 +111,7 @@ class DateTimeParser(object):
             has_seconds = colon_count == 2
             has_subseconds = re.search("[.,]", time_parts[0])
 
+            # TODO: Add support for basic timestamps
             if has_subseconds:
                 time_string = "HH:mm:ss{}S".format(has_subseconds.group())
             elif has_seconds:
@@ -117,26 +121,25 @@ class DateTimeParser(object):
             elif has_hours:
                 time_string = "HH"
             else:
-                # TODO: improve error message
                 # ! TODO: add tests for new conditional cases
-                raise ValueError("ISO 8601 time string expected.")
+                raise ValueError("No valid time component provided.")
 
-        # required ISO 8601 formats
+        # required date formats to test against
         formats = [
             "YYYY-MM-DD",
             "YYYY/MM/DD",
             "YYYY.MM.DD",
+            "YYYYMMDD",
             "YYYY-MM",
             "YYYY/MM",
             "YYYY.MM",
             "YYYY",
         ]
 
-        # !? NOTE: ASK CHRIS ABOUT . SEPARATOR => I am not sure if it is part of ISO 8601?
-
         if has_time:
             formats = ["{}T{}".format(f, time_string) for f in formats]
 
+        # TODO: what if someone adds a Z already?
         if has_time and has_tz:
             formats = ["{}Z".format(f) for f in formats]
 
@@ -145,7 +148,7 @@ class DateTimeParser(object):
 
         # ! IDEA: pass in a flag to denote that we are coming from a get()
         # request with no formatting string was passed in
-        return self._parse_multiformat(string, formats)
+        return self._parse_multiformat(string, formats, True)
 
     def _generate_pattern_re(self, fmt):
 
@@ -198,7 +201,7 @@ class DateTimeParser(object):
 
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
 
-    def parse(self, string, fmt):
+    def parse(self, string, fmt, from_parse_iso=False):
 
         if isinstance(fmt, list):
             return self._parse_multiformat(string, fmt)
@@ -212,6 +215,17 @@ class DateTimeParser(object):
                     fmt_pattern_re.pattern, string
                 )
             )
+
+        if from_parse_iso:
+            if match.start() != 0:
+                raise ParserError
+
+            if string[-1] == "Z" and match.end() != len(string):
+                raise ParserError
+
+            if string[-1] != "Z" and match.end() != len(string):
+                raise ParserError
+
         parts = {}
         for token in fmt_tokens:
             if token == "Do":
@@ -307,13 +321,13 @@ class DateTimeParser(object):
             tzinfo=parts.get("tzinfo"),
         )
 
-    def _parse_multiformat(self, string, formats):
+    def _parse_multiformat(self, string, formats, from_parse_iso=False):
 
         _datetime = None
 
         for fmt in formats:
             try:
-                _datetime = self.parse(string, fmt)
+                _datetime = self.parse(string, fmt, from_parse_iso)
                 break
             except ParserError:
                 pass

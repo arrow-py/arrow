@@ -25,7 +25,7 @@ class GetTests(Chai):
 
     def test_timestamp_one_arg_no_arg(self):
 
-        no_arg = self.factory.get("1406430900").timestamp
+        no_arg = self.factory.get(1406430900).timestamp
         one_arg = self.factory.get("1406430900", "X").timestamp
 
         self.assertEqual(no_arg, one_arg)
@@ -49,16 +49,14 @@ class GetTests(Chai):
         timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
 
         self.assertEqual(self.factory.get(timestamp), timestamp_dt)
-        self.assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
 
         timestamp = 123.45
         timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
 
         self.assertEqual(self.factory.get(timestamp), timestamp_dt)
-        self.assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
 
         # Issue 216
-        timestamp = "99999999999999999999999999"
+        timestamp = 99999999999999999999999999
         # Python 3 raises `OverflowError`, Python 2 raises `ValueError`
         with self.assertRaises((OverflowError, ValueError)):
             self.factory.get(timestamp)

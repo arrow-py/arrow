@@ -150,7 +150,7 @@ class ArrowFactory(object):
             if arg is None:
                 return self.type.utcnow()
 
-            # try (int, float, str(int), str(float)) -> utc, from timestamp.
+            # try (int, float) -> utc, from timestamp.
             if is_timestamp(arg):
                 return self.type.utcfromtimestamp(arg)
 
