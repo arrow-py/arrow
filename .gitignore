@@ -1,3 +1,6 @@
+# Small entry point file for debugging tasks
+test.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -135,8 +138,8 @@ tags
 # Persistent undo
 [._]*.un~
 
-.idea
-.vscode
+.idea/
+.vscode/
 
 # General
 .DS_Store
