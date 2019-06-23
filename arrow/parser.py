@@ -91,39 +91,60 @@ class DateTimeParser(object):
         has_time = "T" in string or " " in string.strip()
         space_divider = " " in string.strip()
 
+        has_tz = False
+
         if has_time:
             if space_divider:
                 date_string, time_string = string.split(" ", 1)
             else:
                 date_string, time_string = string.split("T", 1)
+
             time_parts = re.split("[+-]", time_string, 1)
+            colon_count = time_parts[0].count(":")
+
             has_tz = len(time_parts) > 1
-            has_seconds = time_parts[0].count(":") > 1
+            has_hours = colon_count == 0
+            has_minutes = colon_count == 1
+            has_seconds = colon_count == 2
             has_subseconds = re.search("[.,]", time_parts[0])
 
             if has_subseconds:
-                formats = ["YYYY-MM-DDTHH:mm:ss%sS" % has_subseconds.group()]
+                time_string = "HH:mm:ss{}S".format(has_subseconds.group())
             elif has_seconds:
-                formats = ["YYYY-MM-DDTHH:mm:ss"]
+                time_string = "HH:mm:ss"
+            elif has_minutes:
+                time_string = "HH:mm"
+            elif has_hours:
+                time_string = "HH"
             else:
-                formats = ["YYYY-MM-DDTHH:mm"]
-        else:
-            has_tz = False
-            # generate required formats: YYYY-MM-DD, YYYY-MM-DD, YYYY
-            # using various separators: -, /, .
-            len_markers = len(self.MARKERS)
-            formats = [
-                separator.join(self.MARKERS[: len_markers - i])
-                for i in range(len_markers)
-                for separator in self.SEPARATORS
-            ]
+                # TODO: improve error message
+                # ! TODO: add tests for new conditional cases
+                raise ValueError("ISO 8601 time string expected.")
+
+        # required ISO 8601 formats
+        formats = [
+            "YYYY-MM-DD",
+            "YYYY/MM/DD",
+            "YYYY.MM.DD",
+            "YYYY-MM",
+            "YYYY/MM",
+            "YYYY.MM",
+            "YYYY",
+        ]
+
+        # !? NOTE: ASK CHRIS ABOUT . SEPARATOR => I am not sure if it is part of ISO 8601?
+
+        if has_time:
+            formats = ["{}T{}".format(f, time_string) for f in formats]
 
         if has_time and has_tz:
-            formats = [f + "Z" for f in formats]
+            formats = ["{}Z".format(f) for f in formats]
 
         if space_divider:
             formats = [item.replace("T", " ", 1) for item in formats]
 
+        # ! IDEA: pass in a flag to denote that we are coming from a get()
+        # request with no formatting string was passed in
         return self._parse_multiformat(string, formats)
 
     def _generate_pattern_re(self, fmt):
