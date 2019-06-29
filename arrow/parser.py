@@ -112,13 +112,13 @@ class DateTimeParser(object):
             else:
                 date_string, time_string = string.split("T", 1)
 
-            # ! TODO: look for Z in time string?
+            # TODO: understand why we are not accounting for Z directly
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
             # is_basic_format = colon_count > 0
 
-            has_tz = len(time_parts) > 1 or string[-1] == "Z"
+            has_tz = len(time_parts) > 1
             has_hours = colon_count == 0
             has_minutes = colon_count == 1
             has_seconds = colon_count == 2
@@ -134,7 +134,7 @@ class DateTimeParser(object):
             elif has_hours:
                 time_string = "HH"
             else:
-                # ! TODO: add tests for new conditional cases
+                # TODO: add tests for new conditional cases
                 raise ValueError("No valid time component provided.")
 
         # required date formats to test against
@@ -152,15 +152,12 @@ class DateTimeParser(object):
         if has_time:
             formats = ["{}T{}".format(f, time_string) for f in formats]
 
-        # TODO: what if someone adds a Z already?
         if has_time and has_tz:
             formats = ["{}Z".format(f) for f in formats]
 
         if space_divider:
             formats = [item.replace("T", " ", 1) for item in formats]
 
-        # ! IDEA: pass in a flag to denote that we are coming from a get()
-        # request with no formatting string was passed in
         return self._parse_multiformat(string, formats, True)
 
     def _generate_pattern_re(self, fmt):
