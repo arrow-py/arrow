@@ -116,17 +116,16 @@ class DateTimeParser(object):
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
-            # is_basic_format = colon_count > 0
+            is_basic_time_format = colon_count == 0
 
             has_tz = len(time_parts) > 1
-            has_hours = colon_count == 0
-            has_minutes = colon_count == 1
-            has_seconds = colon_count == 2
-            has_subseconds = re.search("[.,]", time_parts[0])
+            has_hours = colon_count == 0 or len(time_string) == 2
+            has_minutes = colon_count == 1 or len(time_string) == 4
+            has_seconds = colon_count == 2 or len(time_string) == 6
+            has_sub_seconds = re.search("[.,]", time_parts[0])
 
-            # TODO: Add support for basic timestamps
-            if has_subseconds:
-                time_string = "HH:mm:ss{}S".format(has_subseconds.group())
+            if has_sub_seconds:
+                time_string = "HH:mm:ss{}S".format(has_sub_seconds.group())
             elif has_seconds:
                 time_string = "HH:mm:ss"
             elif has_minutes:
@@ -137,16 +136,26 @@ class DateTimeParser(object):
                 # TODO: add tests for new conditional cases
                 raise ValueError("No valid time component provided.")
 
+            if is_basic_time_format:
+                time_string = time_string.replace(":", "")
+
         # required date formats to test against
         formats = [
             "YYYY-MM-DD",
+            "YYYY-M-DD",
+            "YYYY-M-D",
             "YYYY/MM/DD",
+            "YYYY/M/DD",
+            "YYYY/M/D",
             "YYYY.MM.DD",
+            "YYYY.M.DD",
+            "YYYY.M.D",
             "YYYYMMDD",
             "YYYY-MM",
             "YYYY/MM",
             "YYYY.MM",
             "YYYY",
+            "YY",
         ]
 
         if has_time:
