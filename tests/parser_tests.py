@@ -562,11 +562,11 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600)),
         )
 
+        parsed = self.parser.parse_iso("2013-02-03 04:05:06.78912Z")
+
+        expected = datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 0))
         # Properly parse string with Z timezone
-        self.assertEqual(
-            self.parser.parse_iso("2013-02-03T04:05:06.78912Z"),
-            datetime(2013, 2, 3, 4, 5, 6, 789120),
-        )
+        self.assertEqual(parsed, expected)
 
     def test_gnu_date(self):
         """

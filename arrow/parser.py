@@ -105,7 +105,7 @@ class DateTimeParser(object):
 
             # is_basic_format = colon_count > 0
 
-            has_tz = len(time_parts) > 1
+            has_tz = len(time_parts) > 1 or string[-1] == "Z"
             has_hours = colon_count == 0
             has_minutes = colon_count == 1
             has_seconds = colon_count == 2
@@ -217,12 +217,15 @@ class DateTimeParser(object):
             )
 
         if from_parse_iso:
+            # Accounts for cases such as "blahblah2016"
             if match.start() != 0:
                 raise ParserError
 
-            if string[-1] == "Z" and match.end() != len(string):
+            # Accounts for cases such as "2016-05T04:05:06.78912blahZ"
+            if string[-1] == "Z" and match.end() != len(string) - 1:
                 raise ParserError
 
+            # Accounts for cases such as "2016-05T04:05:06.78912Zblah"
             if string[-1] != "Z" and match.end() != len(string):
                 raise ParserError
 
@@ -239,6 +242,7 @@ class DateTimeParser(object):
 
         if token == "YYYY":
             parts["year"] = int(value)
+
         elif token == "YY":
             value = int(value)
             parts["year"] = 1900 + value if value > 68 else 2000 + value
