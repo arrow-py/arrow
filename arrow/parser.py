@@ -139,6 +139,7 @@ class DateTimeParser(object):
             if is_basic_time_format:
                 time_string = time_string.replace(":", "")
 
+        # TODO: add tests for all the new formats
         # required date formats to test against
         formats = [
             "YYYY-MM-DD",
@@ -209,14 +210,13 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-        a = fmt_pattern.split(r"\#")
-        b = escaped_data
+        split_fmt = fmt_pattern.split(r"\#")
 
         # Due to the way Python splits, 'a' will always be longer
-        for i in range(len(a)):
-            final_fmt_pattern += a[i]
-            if i < len(b):
-                final_fmt_pattern += b[i][1:-1]
+        for i in range(len(split_fmt)):
+            final_fmt_pattern += split_fmt[i]
+            if i < len(escaped_data):
+                final_fmt_pattern += escaped_data[i][1:-1]
 
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
 
@@ -277,6 +277,7 @@ class DateTimeParser(object):
             else:
                 value = match.group(token)
             self._parse_token(token, value, parts)
+
         return self._build_datetime(parts)
 
     def _parse_token(self, token, value, parts):
@@ -379,26 +380,12 @@ class DateTimeParser(object):
 
         if _datetime is None:
             raise ParserError(
-                "Could not match input to any of {} on '{}'".format(formats, string)
+                "Could not match input '{}' to any of the supported formats: {}".format(
+                    string, ", ".join(formats)
+                )
             )
 
         return _datetime
-
-    @staticmethod
-    def _map_lookup(input_map, key):
-
-        try:
-            return input_map[key]
-        except KeyError:
-            raise ParserError('Could not match "{}" to {}'.format(key, input_map))
-
-    @staticmethod
-    def _try_timestamp(string):
-
-        try:
-            return float(string)
-        except Exception:
-            return None
 
     @staticmethod
     def _choice_re(choices, flags=0):

@@ -15,11 +15,11 @@ repos:
       hooks:
           - id: seed-isort-config
     - repo: https://github.com/pre-commit/mirrors-isort
-      rev: v4.3.20
+      rev: v4.3.21
       hooks:
           - id: isort
     - repo: https://github.com/asottile/pyupgrade
-      rev: v1.18.0
+      rev: v1.19.0
       hooks:
           - id: pyupgrade
     - repo: https://github.com/pre-commit/pygrep-hooks

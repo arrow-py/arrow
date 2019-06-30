@@ -319,17 +319,6 @@ class DateTimeParserParseTests(Chai):
         self.assertEqual(self.parser.parse(string, format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
-    def test_map_lookup_keyerror(self):
-
-        with self.assertRaises(parser.ParserError):
-            parser.DateTimeParser._map_lookup({"a": "1"}, "b")
-
-    def test_try_timestamp(self):
-
-        self.assertEqual(parser.DateTimeParser._try_timestamp("1.1"), 1.1)
-        self.assertEqual(parser.DateTimeParser._try_timestamp("1"), 1)
-        self.assertEqual(parser.DateTimeParser._try_timestamp("abc"), None)
-
 
 class DateTimeParserRegexTests(Chai):
     def setUp(self):
