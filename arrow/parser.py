@@ -42,7 +42,7 @@ class DateTimeParser(object):
     _ONE_OR_TWO_DIGIT_RE = re.compile(r"\d{1,2}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
-    _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?")
+    _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
 
     _BASE_INPUT_RE_MAP = {
@@ -163,6 +163,8 @@ class DateTimeParser(object):
             formats = ["{}T{}".format(f, time_string) for f in formats]
 
         if has_time and has_tz:
+            # Add "Z" to format strings to indicate to _parse_tokens
+            # that a timezone needs to be parsed
             formats = ["{}Z".format(f) for f in formats]
 
         if space_divider:
@@ -212,7 +214,7 @@ class DateTimeParser(object):
         final_fmt_pattern = ""
         split_fmt = fmt_pattern.split(r"\#")
 
-        # Due to the way Python splits, 'a' will always be longer
+        # Due to the way Python splits, 'split_fmt' will always be longer
         for i in range(len(split_fmt)):
             final_fmt_pattern += split_fmt[i]
             if i < len(escaped_data):
@@ -269,6 +271,9 @@ class DateTimeParser(object):
                     category=GetParseWarning,
                 )
                 raise ParserError
+
+        if "YY" in fmt_tokens and match.end() != len(string):
+            raise ParserError
 
         parts = {}
         for token in fmt_tokens:
@@ -404,7 +409,7 @@ class TzinfoParser(object):
         if string == "local":
             tzinfo = tz.tzlocal()
 
-        elif string in ["utc", "UTC"]:
+        elif string in ["utc", "UTC", "Z"]:
             tzinfo = tz.tzutc()
 
         else:
