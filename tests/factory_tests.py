@@ -221,6 +221,18 @@ class GetTests(Chai):
             self.factory.get(2013, 1, 1), datetime(2013, 1, 1, tzinfo=tz.tzutc())
         )
 
+    def test_three_kwargs(self):
+
+        self.assertEqual(
+            self.factory.get(year=2016, month=7, day=14),
+            datetime(2016, 7, 14, 0, 0, tzinfo=tz.tzutc()),
+        )
+
+    def test_insufficient_kwargs(self):
+
+        with self.assertRaises(TypeError):
+            self.factory.get(year=2016)
+
 
 class UtcNowTests(Chai):
     def setUp(self):
