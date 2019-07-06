@@ -59,7 +59,7 @@ class ArrowFactory(object):
             >>> arrow.get(arw)
             <Arrow [2013-10-23T15:21:54.354846+00:00]>
 
-        **One** ``str``, ``float``, or ``int``, convertible to a floating-point timestamp, to get
+        **One** ``float`` or ``int``, convertible to a floating-point timestamp, to get
         that timestamp in UTC::
 
             >>> arrow.get(1367992474.293378)
@@ -68,16 +68,15 @@ class ArrowFactory(object):
             >>> arrow.get(1367992474)
             <Arrow [2013-05-08T05:54:34+00:00]>
 
-            >>> arrow.get('1367992474.293378')
-            <Arrow [2013-05-08T05:54:34.293378+00:00]>
-
-            >>> arrow.get('1367992474')
-            <Arrow [2013-05-08T05:54:34+00:00]>
-
         **One** ISO-8601-formatted ``str``, to parse it::
 
             >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
+
+        **One** ISO-8601-formatted ``str``, in basic format, to parse it::
+
+            >>> arrow.get('20160413T133656.456289')
+            <Arrow [2016-04-13T13:36:56.456289+00:00]>
 
         **One** ``tzinfo``, to get the current time **converted** to that timezone::
 

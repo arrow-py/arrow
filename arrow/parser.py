@@ -67,7 +67,6 @@ class DateTimeParser(object):
         "S": _ONE_OR_MORE_DIGIT_RE,
     }
 
-    MARKERS = ["YYYY", "MM", "DD"]
     SEPARATORS = ["-", "/", "."]
 
     def __init__(self, locale="en_us", cache_size=0):
@@ -122,10 +121,10 @@ class DateTimeParser(object):
             has_hours = colon_count == 0 or len(time_string) == 2
             has_minutes = colon_count == 1 or len(time_string) == 4
             has_seconds = colon_count == 2 or len(time_string) == 6
-            has_sub_seconds = re.search("[.,]", time_parts[0])
+            has_subseconds = re.search("[.,]", time_parts[0])
 
-            if has_sub_seconds:
-                time_string = "HH:mm:ss{}S".format(has_sub_seconds.group())
+            if has_subseconds:
+                time_string = "HH:mm:ss{}S".format(has_subseconds.group())
             elif has_seconds:
                 time_string = "HH:mm:ss"
             elif has_minutes:
@@ -272,8 +271,27 @@ class DateTimeParser(object):
                 )
                 raise ParserError
 
+        # Fixes bug where "15/01/2019" matches to "D/M/YY"
+        # arrow.get("15/01/2019", ["D/M/YY", "D/M/YYYY"])
         if "YY" in fmt_tokens and match.end() != len(string):
             raise ParserError
+
+        # TODO: talk to Chris about these conditionals
+        # if string[-1] == "Z" and match.end() != len(string) - 1:
+        #     # TODO: add an exception message
+        #     raise ParserError
+        #
+        # if string[-1] != "Z" and match.end() != len(string):
+        #     # TODO: add an exception message
+        #     raise ParserError
+        #
+        # if match.start() != 0:
+        #     # TODO: add an exception message
+        #     raise ParserError
+
+        # if ("YY" in fmt_tokens or "YYYY" in fmt_tokens) and (match.end() != len(string) or match.start() != 0):
+        #     # TODO: add an exception message
+        #     raise ParserError
 
         parts = {}
         for token in fmt_tokens:

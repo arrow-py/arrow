@@ -115,6 +115,43 @@ class DateTimeParserTests(Chai):
         for _ in range(100):
             self.parser._generate_pattern_re("fmt_a")
 
+    def test_YY_and_YYYY_format_list(self):
+
+        self.assertEqual(
+            self.parser.parse("15/01/19", ["D/M/YY", "D/M/YYYY"]), datetime(2019, 1, 15)
+        )
+
+        # Regression test for issue #580
+        self.assertEqual(
+            self.parser.parse("15/01/2019", ["D/M/YY", "D/M/YYYY"]),
+            datetime(2019, 1, 15),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "15/01/2019T04:05:06.789120Z",
+                ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
+            ),
+            datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc()),
+        )
+
+    def test_long_year_input(self):
+
+        # TODO: ask Chris if this should throw a ParserError
+        # Pendulum does not throw an error
+        self.assertEqual(
+            self.parser.parse("09 January 123456789101112", "DD MMMM YYYY"),
+            datetime(1234, 1, 9),
+        )
+
+        # Pendulum throws an error
+        with self.assertRaises(ParserError):
+            self.parser.parse("123456789101112 09 January", "YYYY DD MMMM")
+
+        # Pendulum throws an error
+        with self.assertRaises(ParserError):
+            self.parser.parse("68096653015/01/19", "YY/M/DD")
+
 
 class DateTimeParserParseTests(Chai):
     def setUp(self):
@@ -583,6 +620,32 @@ class DateTimeParserISOTests(Chai):
         dt = datetime.utcnow()
 
         self.assertEqual(self.parser.parse_iso(dt.isoformat()), dt)
+
+    def test_iso8601_string_with_extra_words_at_start_and_end(self):
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016-05blah")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016-05-16blah")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016-05T04:05:06.78912ZblahZ")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016-05T04:05:06.78912Zblah")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016-05T04:05:06.78912blahZ")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("blah2016")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2016blah")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("blah2016blah")
 
 
 class TzinfoParserTests(Chai):
