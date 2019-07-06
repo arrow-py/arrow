@@ -20,15 +20,18 @@ class ParserError(RuntimeError):
 
 
 class GetParseWarning(DeprecationWarning):
-    """Raised when .get() is passed a string with no formats and matches incorrectly
+    """Raised when arrow.get() is passed a string with no formats and matches incorrectly
     on one of the default formats.
 
     e.g.
     arrow.get('blabla2016') -> <Arrow [2016-01-01T00:00:00+00:00]>
     arrow.get('13/4/2045') -> <Arrow [2045-01-01T00:00:00+00:00]>
 
-    In version 0.15.0 this will become a ParserError.
+    In version 0.15.0 this warning will become a ParserError.
     """
+
+
+warnings.simplefilter("default", GetParseWarning)
 
 
 class DateTimeParser(object):
@@ -112,9 +115,12 @@ class DateTimeParser(object):
                 date_string, time_string = string.split("T", 1)
 
             # TODO: understand why we are not accounting for Z directly
+            # currently Z is ignored entirely but fromdatetime defaults to UTC, see arrow.py L196
+            # '2013-02-03T04:05:06.78912Z'
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
+            # TODO "20160504T010203Z" parses incorectly, time part is HH only, due to Z changing len
             is_basic_time_format = colon_count == 0
 
             has_tz = len(time_parts) > 1
@@ -138,6 +144,8 @@ class DateTimeParser(object):
             if is_basic_time_format:
                 time_string = time_string.replace(":", "")
 
+        # IDEA reduced set of date formats for basic
+
         # TODO: add tests for all the new formats
         # required date formats to test against
         formats = [
@@ -155,7 +163,7 @@ class DateTimeParser(object):
             "YYYY/MM",
             "YYYY.MM",
             "YYYY",
-            "YY",
+            # "YY", this is not a good format to try by default?
         ]
 
         if has_time:
@@ -240,41 +248,67 @@ class DateTimeParser(object):
             # Accounts for cases such as "blahblah2016"
             if match.start() != 0:
                 warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in the "
-                    "future this will raise a ParserError.".format(
+                    "Parser loosely matched {fmt} on '{string}', in version "
+                    "0.15.0 this will raise a ParserError.".format(
                         fmt=fmt, string=string
                     ),
                     category=GetParseWarning,
                 )
-                raise ParserError
+                # raise ParserError
 
+            # TODO arrow.get('2013-02-03 04:05:06.78912Z') is warning incorrectly due to this
             # Accounts for cases such as "2016-05T04:05:06.78912blahZ"
             if string[-1] == "Z" and match.end() != len(string) - 1:
-                # TODO what about 2019-06-24T10:45:31Z
                 warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in the "
-                    "future this will raise a ParserError.".format(
+                    "Parser loosely matched {fmt} on '{string}', in version "
+                    "0.15.0 this will raise a ParserError.".format(
                         fmt=fmt, string=string
                     ),
                     category=GetParseWarning,
                 )
-                raise ParserError
+                # raise ParserError
 
             # Accounts for cases such as "2016-05T04:05:06.78912Zblah"
             if string[-1] != "Z" and match.end() != len(string):
                 warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in the "
-                    "future this will raise a ParserError.".format(
+                    "Parser loosely matched {fmt} on '{string}', in version "
+                    "0.15.0 this will raise a ParserError.".format(
                         fmt=fmt, string=string
                     ),
                     category=GetParseWarning,
                 )
-                raise ParserError
+                # raise ParserError
 
         # Fixes bug where "15/01/2019" matches to "D/M/YY"
         # arrow.get("15/01/2019", ["D/M/YY", "D/M/YYYY"])
         if "YY" in fmt_tokens and match.end() != len(string):
             raise ParserError
+        else:
+            # fixes arrow.get("15/01/2019", ["D/M/YY","D/M/YYYY"]) => <Arrow [2020-01-15T00:00:00+00:00]>
+            # FIXME arrow.get("Call 01-02-03 on 79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") warns incorrectly
+            # FIXME arrow.get("79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") warns incorrectly
+            # IDEA test for whitespace on either side of match?
+            if "YY" in fmt_tokens and match.start != 0 or match.end() != len(string):
+                warnings.warn(
+                    "Parser loosely matched {fmt} on '{string}', in version "
+                    "0.15.0 this will raise a ParserError.".format(
+                        fmt=fmt, string=string
+                    ),
+                    category=GetParseWarning,
+                )
+            #     #raise ParserError
+
+            if fmt == "YYYY":
+                # accounts for arrow.get('05/02/2017', ['YYYY', 'MM/DD/YYYY'])
+                if match.start() != 0 or match.end() != len(string):
+                    warnings.warn(
+                        "Parser loosely matched {fmt} on '{string}', in version "
+                        "0.15.0 this will raise a ParserError.".format(
+                            fmt=fmt, string=string
+                        ),
+                        category=GetParseWarning,
+                    )
+                    #     #raise ParserError
 
         # TODO: talk to Chris about these conditionals
         # if string[-1] == "Z" and match.end() != len(string) - 1:
