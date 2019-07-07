@@ -9,7 +9,7 @@ from chai import Chai
 from dateutil import tz
 
 from arrow import parser
-from arrow.parser import DateTimeParser, GetParseWarning, ParserError
+from arrow.parser import DateTimeParser, ParserError
 
 
 class DateTimeParserTests(Chai):
@@ -118,12 +118,13 @@ class DateTimeParserTests(Chai):
     def test_YY_and_YYYY_format_list(self):
 
         self.assertEqual(
-            self.parser.parse("15/01/19", ["D/M/YY", "D/M/YYYY"]), datetime(2019, 1, 15)
+            self.parser.parse("15/01/19", ["DD/MM/YY", "DD/MM/YYYY"]),
+            datetime(2019, 1, 15),
         )
 
         # Regression test for issue #580
         self.assertEqual(
-            self.parser.parse("15/01/2019", ["D/M/YY", "D/M/YYYY"]),
+            self.parser.parse("15/01/2019", ["DD/MM/YY", "DD/MM/YYYY"]),
             datetime(2019, 1, 15),
         )
 
@@ -588,43 +589,43 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600)),
         )
 
-        # TODO: Shouldn't the datetime object being compared to have a tz offset of 0?
-        # Test fails if this offset is added.
-        # fromdatetime adds UTC timezone on afterwards! parse_iso returns naive datetime in this case
+        # parse_iso sets tzinfo to None if Z is passed, so a default datetime
+        # object is sufficient to compare against.
+        # Arrow adds +00:00 when get() is called directly and tzinfo is None
         self.assertEqual(
             self.parser.parse_iso("2013-02-03 04:05:06.78912Z"),
             datetime(2013, 2, 3, 4, 5, 6, 789120),
         )
 
-    def test_bad_get_parsing(self):
-        # fixes for loose get parsing
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse_iso("blabla2016")
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse_iso("2016blabla")
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse_iso("10/4/2045")
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse_iso("2016-05T04:05:06.78912blahZ")
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse_iso("2016-05T04:05:06.78912Zblah")
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse("15/01/2019", ["D/M/YY", "D/M/YYYY"])
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse("05/02/2017", ["YYYY", "MM/DD/YYYY"])
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse("1919/05/23", ["YY/M/D", "YYYY/M/D"])
-
-        with self.assertWarns(GetParseWarning):
-            self.parser.parse("2017/05/22", ["YYYY", "YYYY/MM/DD"])
+    # def test_bad_get_parsing(self):
+    #     # fixes for loose get parsing
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse_iso("blabla2016")
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse_iso("2016blabla")
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse_iso("10/4/2045")
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse_iso("2016-05T04:05:06.78912blahZ")
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse_iso("2016-05T04:05:06.78912Zblah")
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse("15/01/2019", ["D/M/YY", "D/M/YYYY"])
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse("05/02/2017", ["YYYY", "MM/DD/YYYY"])
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse("1919/05/23", ["YY/M/D", "YYYY/M/D"])
+    #
+    #     with self.assertWarns(GetParseWarning):
+    #         self.parser.parse("2017/05/22", ["YYYY", "YYYY/MM/DD"])
 
     def test_gnu_date(self):
         """

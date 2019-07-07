@@ -31,4 +31,4 @@ docs:
 clean:
 	rm -rf venv .tox ./**/__pycache__
 	rm -rf dist build .egg arrow.egg-info
-	rm -f ./**/*.pyc .coverage
+	rm -f ./**/*.pyc ./**/.coverage

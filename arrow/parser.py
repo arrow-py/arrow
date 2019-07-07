@@ -254,7 +254,7 @@ class DateTimeParser(object):
                     ),
                     category=GetParseWarning,
                 )
-                # raise ParserError
+                raise ParserError
 
             # TODO arrow.get('2013-02-03 04:05:06.78912Z') is warning incorrectly due to this
             # Accounts for cases such as "2016-05T04:05:06.78912blahZ"
@@ -266,7 +266,7 @@ class DateTimeParser(object):
                     ),
                     category=GetParseWarning,
                 )
-                # raise ParserError
+                raise ParserError
 
             # Accounts for cases such as "2016-05T04:05:06.78912Zblah"
             if string[-1] != "Z" and match.end() != len(string):
@@ -277,12 +277,7 @@ class DateTimeParser(object):
                     ),
                     category=GetParseWarning,
                 )
-                # raise ParserError
-
-        # Fixes bug where "15/01/2019" matches to "D/M/YY"
-        # arrow.get("15/01/2019", ["D/M/YY", "D/M/YYYY"])
-        if "YY" in fmt_tokens and match.end() != len(string):
-            raise ParserError
+                raise ParserError
         else:
             # fixes arrow.get("15/01/2019", ["D/M/YY","D/M/YYYY"]) => <Arrow [2020-01-15T00:00:00+00:00]>
             # FIXME arrow.get("Call 01-02-03 on 79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") warns incorrectly
@@ -296,7 +291,7 @@ class DateTimeParser(object):
                     ),
                     category=GetParseWarning,
                 )
-            #     #raise ParserError
+                raise ParserError
 
             if fmt == "YYYY":
                 # accounts for arrow.get('05/02/2017', ['YYYY', 'MM/DD/YYYY'])
@@ -308,7 +303,12 @@ class DateTimeParser(object):
                         ),
                         category=GetParseWarning,
                     )
-                    #     #raise ParserError
+                    raise ParserError
+
+        # Fixes bug where "15/01/2019" matches to "D/M/YY"
+        # arrow.get("15/01/2019", ["D/M/YY", "D/M/YYYY"])
+        if "YY" in fmt_tokens and match.end() != len(string):
+            raise ParserError
 
         # TODO: talk to Chris about these conditionals
         # if string[-1] == "Z" and match.end() != len(string) - 1:
