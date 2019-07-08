@@ -103,22 +103,51 @@ class DateTimeParser(object):
             )
 
     # TODO: since we support more than ISO-8601, we should rename this function
-    def parse_iso(self, string):
-        # TODO: account for more than 1 space like arrow.get("     2016")
-        # string = string.strip()
+    def parse_iso(self, datetime_string):
+        # TODO: talk to Chris about this => the below space divider checks
+        # are not really necessary thanks to the new regex changes, but I think
+        # it is good to include them to provide better error messages.
 
-        has_space_divider = " " in string and len(string.strip().split(" ")) == 2
+        # strip leading and trailing whitespace
+        datetime_string = datetime_string.strip()
 
-        has_time = "T" in string or has_space_divider
-        space_divider = " " in string.strip()
+        has_space_divider = " " in datetime_string
 
+        num_space_dividers = len(datetime_string.split(" "))
+        if has_space_divider and num_space_dividers != 2:
+            raise ParserError(
+                "Expected 1 space divider, but was given {}. Try passing in a format string to resolve this.".format(
+                    num_space_dividers
+                )
+            )
+
+        has_time = has_space_divider or "T" in datetime_string
         has_tz = False
 
+        # TODO: add tests for all the new formats, especially basic format
+        # required date formats to test against
+        formats = [
+            "YYYY-MM-DD",
+            "YYYY-M-DD",
+            "YYYY-M-D",
+            "YYYY/MM/DD",
+            "YYYY/M/DD",
+            "YYYY/M/D",
+            "YYYY.MM.DD",
+            "YYYY.M.DD",
+            "YYYY.M.D",
+            "YYYYMMDD",
+            "YYYY-MM",
+            "YYYY/MM",
+            "YYYY.MM",
+            "YYYY",
+        ]
+
         if has_time:
-            if space_divider:
-                date_string, time_string = string.split(" ", 1)
+            if has_space_divider:
+                date_string, time_string = datetime_string.split(" ", 1)
             else:
-                date_string, time_string = string.split("T", 1)
+                date_string, time_string = datetime_string.split("T", 1)
 
             # TODO: understand why we are not accounting for Z directly
             # currently Z is ignored entirely but fromdatetime defaults to UTC, see arrow.py L196
@@ -150,40 +179,45 @@ class DateTimeParser(object):
             if is_basic_time_format:
                 time_string = time_string.replace(":", "")
 
-        # IDEA reduced set of date formats for basic
+            if has_space_divider:
+                formats = ["{} {}".format(f, time_string) for f in formats]
+            else:
+                formats = ["{}T{}".format(f, time_string) for f in formats]
 
-        # TODO: add tests for all the new formats, especially basic format
-        # required date formats to test against
-        formats = [
-            "YYYY-MM-DD",
-            "YYYY-M-DD",
-            "YYYY-M-D",
-            "YYYY/MM/DD",
-            "YYYY/M/DD",
-            "YYYY/M/D",
-            "YYYY.MM.DD",
-            "YYYY.M.DD",
-            "YYYY.M.D",
-            "YYYYMMDD",
-            "YYYY-MM",
-            "YYYY/MM",
-            "YYYY.MM",
-            "YYYY",
-            # "YY", this is not a good format to try by default?
-        ]
-
-        if has_time:
-            formats = ["{}T{}".format(f, time_string) for f in formats]
+        # TODO: reduce set of date formats for basic?
 
         if has_time and has_tz:
             # Add "Z" to format strings to indicate to _parse_tokens
             # that a timezone needs to be parsed
             formats = ["{}Z".format(f) for f in formats]
 
-        if space_divider:
-            formats = [item.replace("T", " ", 1) for item in formats]
+        # TODO: make thrown error messages less cryptic and more informative
+        return self._parse_multiformat(datetime_string, formats, True)
 
-        return self._parse_multiformat(string, formats, True)
+    def parse(self, datetime_string, fmt, from_parse_iso=False):
+
+        if isinstance(fmt, list):
+            return self._parse_multiformat(datetime_string, fmt)
+
+        fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
+
+        match = fmt_pattern_re.search(datetime_string)
+        if match is None:
+            raise ParserError(
+                "Failed to match '{}' when parsing '{}'".format(
+                    fmt_pattern_re.pattern, datetime_string
+                )
+            )
+
+        parts = {}
+        for token in fmt_tokens:
+            if token == "Do":
+                value = match.group("value")
+            else:
+                value = match.group(token)
+            self._parse_token(token, value, parts)
+
+        return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt):
 
@@ -249,31 +283,6 @@ class DateTimeParser(object):
         )
 
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
-
-    def parse(self, string, fmt, from_parse_iso=False):
-
-        if isinstance(fmt, list):
-            return self._parse_multiformat(string, fmt)
-
-        fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
-
-        match = fmt_pattern_re.search(string)
-        if match is None:
-            raise ParserError(
-                "Failed to match '{}' when parsing '{}'".format(
-                    fmt_pattern_re.pattern, string
-                )
-            )
-
-        parts = {}
-        for token in fmt_tokens:
-            if token == "Do":
-                value = match.group("value")
-            else:
-                value = match.group(token)
-            self._parse_token(token, value, parts)
-
-        return self._build_datetime(parts)
 
     def _parse_token(self, token, value, parts):
 

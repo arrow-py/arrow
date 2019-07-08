@@ -647,31 +647,89 @@ class DateTimeParserISOTests(Chai):
 
         self.assertEqual(self.parser.parse_iso(dt.isoformat()), dt)
 
-    def test_parse_with_extra_words_at_start_and_end(self):
+    def test_parse_with_extra_words_at_start_and_end_invalid(self):
+        # The tuple's second entry is None if the datetime string
+        # is valid when a format string is passed in
         input_format_pairs = [
             ("blah2016", "YYYY"),
             ("blah2016blah", "YYYY"),
+            ("blah 2016 blah", None),
             ("2016blah", "YYYY"),
             ("2016-05blah", "YYYY-MM"),
             ("2016-05-16blah", "YYYY-MM-DD"),
-            ("2016-05T04:05:06.789120blah", "YYYY-MM-DDThh:mm:ss.S"),
-            ("2016-05T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("2016-05T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("2016-05T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120blah", "YYYY-MM-DDThh:mm:ss.S"),
+            ("2016-05-16T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("Meet me at 2016-05-16T04:05:06.789120 on Tuesday", None),
+            ("Meet me at 2016-05-16 04:05:06.789120 on Tuesday", None),
         ]
 
         for pair in input_format_pairs:
             with self.assertRaises(ParserError):
                 self.parser.parse_iso(pair[0])
 
-            with self.assertRaises(ParserError):
-                self.parser.parse(pair[0], pair[1])
+            if pair[1] is not None:
+                with self.assertRaises(ParserError):
+                    self.parser.parse(pair[0], pair[1])
 
+    def test_parse_with_extra_words_at_start_and_end_valid(self):
         # Spaces surrounding the parsable date are ok because we
         # allow the parsing of natural language input
-        self.assertEqual(self.parser.parse_iso("blah 2016 blah"), datetime(2016, 1, 1))
         self.assertEqual(
             self.parser.parse("blah 2016 blah", "YYYY"), datetime(2016, 1, 1)
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
+                "YYYY-MM-DDThh:mm:ss.S",
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
+                "YYYY-MM-DD hh:mm:ss.S",
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+    def test_parse_with_leading_and_trailing_whitespace(self):
+        self.assertEqual(self.parser.parse_iso("      2016"), datetime(2016, 1, 1))
+        self.assertEqual(self.parser.parse("      2016", "YYYY"), datetime(2016, 1, 1))
+
+        self.assertEqual(self.parser.parse_iso("2016      "), datetime(2016, 1, 1))
+        self.assertEqual(self.parser.parse("2016      ", "YYYY"), datetime(2016, 1, 1))
+
+        self.assertEqual(
+            self.parser.parse_iso("      2016      "), datetime(2016, 1, 1)
+        )
+        self.assertEqual(
+            self.parser.parse("      2016      ", "YYYY"), datetime(2016, 1, 1)
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("      2016-05-16 04:05:06.789120      "),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+        self.assertEqual(
+            self.parser.parse(
+                "      2016-05-16 04:05:06.789120      ", "YYYY-MM-DD hh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("      2016-05-16T04:05:06.789120      "),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+        self.assertEqual(
+            self.parser.parse(
+                "      2016-05-16T04:05:06.789120      ", "YYYY-MM-DDThh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
 
 
