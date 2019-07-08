@@ -47,6 +47,7 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
+    _TIMESTAMP_RE = re.compile(r"\d+")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
@@ -63,7 +64,7 @@ class DateTimeParser(object):
         "m": _ONE_OR_TWO_DIGIT_RE,
         "ss": _TWO_DIGIT_RE,
         "s": _ONE_OR_TWO_DIGIT_RE,
-        "X": re.compile(r"\d+"),
+        "X": _TIMESTAMP_RE,
         "ZZZ": _TZ_NAME_RE,
         "ZZ": _TZ_RE,
         "Z": _TZ_RE,
@@ -101,9 +102,14 @@ class DateTimeParser(object):
                 self._generate_pattern_re
             )
 
+    # TODO: since we support more than ISO-8601, we should rename this function
     def parse_iso(self, string):
+        # TODO: account for more than 1 space like arrow.get("     2016")
+        # string = string.strip()
 
-        has_time = "T" in string or " " in string.strip()
+        has_space_divider = " " in string and len(string.strip().split(" ")) == 2
+
+        has_time = "T" in string or has_space_divider
         space_divider = " " in string.strip()
 
         has_tz = False
@@ -120,11 +126,11 @@ class DateTimeParser(object):
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
-            # TODO "20160504T010203Z" parses incorectly, time part is HH only, due to Z changing len
+            # TODO "20160504T010203Z" parses incorrectly, time part is HH only, due to Z changing len
             is_basic_time_format = colon_count == 0
 
             has_tz = len(time_parts) > 1
-            has_hours = colon_count == 0 or len(time_string) == 2
+            has_hours = len(time_string) == 2
             has_minutes = colon_count == 1 or len(time_string) == 4
             has_seconds = colon_count == 2 or len(time_string) == 6
             has_subseconds = re.search("[.,]", time_parts[0])
@@ -146,7 +152,7 @@ class DateTimeParser(object):
 
         # IDEA reduced set of date formats for basic
 
-        # TODO: add tests for all the new formats
+        # TODO: add tests for all the new formats, especially basic format
         # required date formats to test against
         formats = [
             "YYYY-MM-DD",
@@ -227,6 +233,21 @@ class DateTimeParser(object):
             if i < len(escaped_data):
                 final_fmt_pattern += escaped_data[i][1:-1]
 
+        # Wrap final_fmt_pattern in a custom word boundary to strictly
+        # match the formatting pattern and filter out date and time formats
+        # that include junk such as: blah1998-09-12 blah, blah 1998-09-12blah,
+        # blah1998-09-12blah. The custom word boundary matches every character
+        # that is not a whitespace character to allow for searching for a date
+        # and time string in a natural language sentence. Therefore, searching
+        # for a string of the form YYYY-MM-DD in "blah 1998-09-12 blah" will
+        # work properly.
+        # Reference: https://stackoverflow.com/q/14232931/3820660
+        starting_word_boundary = r"(?<![\S])"
+        ending_word_boundary = r"(?![\S])"
+        final_fmt_pattern = r"{}{}Z?{}".format(
+            starting_word_boundary, final_fmt_pattern, ending_word_boundary
+        )
+
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
 
     def parse(self, string, fmt, from_parse_iso=False):
@@ -243,89 +264,6 @@ class DateTimeParser(object):
                     fmt_pattern_re.pattern, string
                 )
             )
-
-        if from_parse_iso:
-            # Accounts for cases such as "blahblah2016"
-            if match.start() != 0:
-                warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in version "
-                    "0.15.0 this will raise a ParserError.".format(
-                        fmt=fmt, string=string
-                    ),
-                    category=GetParseWarning,
-                )
-                raise ParserError
-
-            # TODO arrow.get('2013-02-03 04:05:06.78912Z') is warning incorrectly due to this
-            # Accounts for cases such as "2016-05T04:05:06.78912blahZ"
-            if string[-1] == "Z" and match.end() != len(string) - 1:
-                warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in version "
-                    "0.15.0 this will raise a ParserError.".format(
-                        fmt=fmt, string=string
-                    ),
-                    category=GetParseWarning,
-                )
-                raise ParserError
-
-            # Accounts for cases such as "2016-05T04:05:06.78912Zblah"
-            if string[-1] != "Z" and match.end() != len(string):
-                warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in version "
-                    "0.15.0 this will raise a ParserError.".format(
-                        fmt=fmt, string=string
-                    ),
-                    category=GetParseWarning,
-                )
-                raise ParserError
-        else:
-            # fixes arrow.get("15/01/2019", ["D/M/YY","D/M/YYYY"]) => <Arrow [2020-01-15T00:00:00+00:00]>
-            # FIXME arrow.get("Call 01-02-03 on 79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") warns incorrectly
-            # FIXME arrow.get("79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") warns incorrectly
-            # IDEA test for whitespace on either side of match?
-            if "YY" in fmt_tokens and match.start != 0 or match.end() != len(string):
-                warnings.warn(
-                    "Parser loosely matched {fmt} on '{string}', in version "
-                    "0.15.0 this will raise a ParserError.".format(
-                        fmt=fmt, string=string
-                    ),
-                    category=GetParseWarning,
-                )
-                raise ParserError
-
-            if fmt == "YYYY":
-                # accounts for arrow.get('05/02/2017', ['YYYY', 'MM/DD/YYYY'])
-                if match.start() != 0 or match.end() != len(string):
-                    warnings.warn(
-                        "Parser loosely matched {fmt} on '{string}', in version "
-                        "0.15.0 this will raise a ParserError.".format(
-                            fmt=fmt, string=string
-                        ),
-                        category=GetParseWarning,
-                    )
-                    raise ParserError
-
-        # Fixes bug where "15/01/2019" matches to "D/M/YY"
-        # arrow.get("15/01/2019", ["D/M/YY", "D/M/YYYY"])
-        if "YY" in fmt_tokens and match.end() != len(string):
-            raise ParserError
-
-        # TODO: talk to Chris about these conditionals
-        # if string[-1] == "Z" and match.end() != len(string) - 1:
-        #     # TODO: add an exception message
-        #     raise ParserError
-        #
-        # if string[-1] != "Z" and match.end() != len(string):
-        #     # TODO: add an exception message
-        #     raise ParserError
-        #
-        # if match.start() != 0:
-        #     # TODO: add an exception message
-        #     raise ParserError
-
-        # if ("YY" in fmt_tokens or "YYYY" in fmt_tokens) and (match.end() != len(string) or match.start() != 0):
-        #     # TODO: add an exception message
-        #     raise ParserError
 
         parts = {}
         for token in fmt_tokens:
