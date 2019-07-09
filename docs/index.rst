@@ -2,6 +2,30 @@
 Arrow:  better dates and times for Python
 =========================================
 
+.. image:: https://travis-ci.org/crsmithdev/arrow.svg?branch=master
+   :alt: Build Status
+   :target: https://travis-ci.org/crsmithdev/arrow
+
+.. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
+   :alt: Codecov
+   :target: https://codecov.io/github/crsmithdev/arrow
+
+.. image:: https://img.shields.io/pypi/v/arrow.svg
+   :alt: PyPI Version
+   :target: https://pypi.python.org/pypi/arrow
+
+.. image:: https://img.shields.io/pypi/pyversions/arrow.svg
+   :alt: Supported Python Versions
+   :target: https://pypi.python.org/pypi/arrow
+
+.. image:: https://img.shields.io/pypi/l/arrow.svg
+   :alt: License
+   :target: https://pypi.python.org/pypi/arrow
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :alt: Code Style: Black
+   :target: https://github.com/python/black
+
 -----
 What?
 -----
