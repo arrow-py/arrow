@@ -197,9 +197,9 @@ class DateTimeParser(object):
             formats = ["{}Z".format(f) for f in formats]
 
         # TODO: make thrown error messages less cryptic and more informative
-        return self._parse_multiformat(datetime_string, formats, True)
+        return self._parse_multiformat(datetime_string, formats)
 
-    def parse(self, datetime_string, fmt, from_parse_iso=False):
+    def parse(self, datetime_string, fmt):
 
         if isinstance(fmt, list):
             return self._parse_multiformat(datetime_string, fmt)
@@ -376,13 +376,13 @@ class DateTimeParser(object):
             tzinfo=parts.get("tzinfo"),
         )
 
-    def _parse_multiformat(self, string, formats, from_parse_iso=False):
+    def _parse_multiformat(self, string, formats):
 
         _datetime = None
 
         for fmt in formats:
             try:
-                _datetime = self.parse(string, fmt, from_parse_iso)
+                _datetime = self.parse(string, fmt)
                 break
             except ParserError:
                 pass

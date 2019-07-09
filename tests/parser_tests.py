@@ -22,10 +22,8 @@ class DateTimeParserTests(Chai):
 
         mock_datetime = self.mock()
 
-        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(ParserError)
-        self.expect(self.parser.parse).args("str", "fmt_b", False).returns(
-            mock_datetime
-        )
+        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_b").returns(mock_datetime)
 
         result = self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
 
@@ -33,8 +31,8 @@ class DateTimeParserTests(Chai):
 
     def test_parse_multiformat_all_fail(self):
 
-        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(ParserError)
-        self.expect(self.parser.parse).args("str", "fmt_b", False).raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_b").raises(ParserError)
 
         with self.assertRaises(ParserError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
@@ -43,9 +41,7 @@ class DateTimeParserTests(Chai):
         class UnselfExpectedError(Exception):
             pass
 
-        self.expect(self.parser.parse).args("str", "fmt_a", False).raises(
-            UnselfExpectedError
-        )
+        self.expect(self.parser.parse).args("str", "fmt_a").raises(UnselfExpectedError)
 
         with self.assertRaises(UnselfExpectedError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
@@ -351,6 +347,103 @@ class DateTimeParserParseTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse("68096653015/01/19", "YY/M/DD")
 
+    def test_parse_with_extra_words_at_start_and_end_invalid(self):
+        input_format_pairs = [
+            ("blah2016", "YYYY"),
+            ("blah2016blah", "YYYY"),
+            ("2016blah", "YYYY"),
+            ("2016-05blah", "YYYY-MM"),
+            ("2016-05-16blah", "YYYY-MM-DD"),
+            ("2016-05-16T04:05:06.789120blah", "YYYY-MM-DDThh:mm:ss.S"),
+            ("2016-05-16T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+        ]
+
+        for pair in input_format_pairs:
+            with self.assertRaises(ParserError):
+                self.parser.parse(pair[0], pair[1])
+
+    def test_parse_with_extra_words_at_start_and_end_valid(self):
+        # Spaces surrounding the parsable date are ok because we
+        # allow the parsing of natural language input
+        self.assertEqual(
+            self.parser.parse("blah 2016 blah", "YYYY"), datetime(2016, 1, 1)
+        )
+
+        self.assertEqual(self.parser.parse("blah 2016", "YYYY"), datetime(2016, 1, 1))
+
+        self.assertEqual(self.parser.parse("2016 blah", "YYYY"), datetime(2016, 1, 1))
+
+        # test one additional space along with space divider
+        self.assertEqual(
+            self.parser.parse(
+                "blah 2016-05-16 04:05:06.789120", "YYYY-MM-DD hh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "2016-05-16 04:05:06.789120 blah", "YYYY-MM-DD hh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        # test one additional space along with T divider
+        self.assertEqual(
+            self.parser.parse(
+                "blah 2016-05-16T04:05:06.789120", "YYYY-MM-DDThh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "2016-05-16T04:05:06.789120 blah", "YYYY-MM-DDThh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
+                "YYYY-MM-DDThh:mm:ss.S",
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
+                "YYYY-MM-DD hh:mm:ss.S",
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+    def test_parse_with_leading_and_trailing_whitespace(self):
+        self.assertEqual(self.parser.parse("      2016", "YYYY"), datetime(2016, 1, 1))
+
+        self.assertEqual(self.parser.parse("2016      ", "YYYY"), datetime(2016, 1, 1))
+
+        self.assertEqual(
+            self.parser.parse("      2016      ", "YYYY"), datetime(2016, 1, 1)
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "      2016-05-16 04:05:06.789120      ", "YYYY-MM-DD hh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "      2016-05-16T04:05:06.789120      ", "YYYY-MM-DDThh:mm:ss.S"
+            ),
+            datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
 
 class DateTimeParserRegexTests(Chai):
     def setUp(self):
@@ -647,94 +740,48 @@ class DateTimeParserISOTests(Chai):
 
         self.assertEqual(self.parser.parse_iso(dt.isoformat()), dt)
 
-    def test_parse_with_extra_words_at_start_and_end_invalid(self):
-        # The tuple's second entry is None if the datetime string
-        # is valid when a format string is passed in
-        input_format_pairs = [
-            ("blah2016", "YYYY"),
-            ("blah2016blah", "YYYY"),
-            ("blah 2016 blah", None),
-            ("blah 2016", None),
-            ("2016 blah", None),
-            ("blah 2016-05-16 04:05:06.789120", None),
-            ("2016-05-16 04:05:06.789120 blah", None),
-            ("blah 2016-05-16T04:05:06.789120", None),
-            ("2016-05-16T04:05:06.789120 blah", None),
-            ("2016blah", "YYYY"),
-            ("2016-05blah", "YYYY-MM"),
-            ("2016-05-16blah", "YYYY-MM-DD"),
-            ("2016-05-16T04:05:06.789120blah", "YYYY-MM-DDThh:mm:ss.S"),
-            ("2016-05-16T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("2016-05-16T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("2016-05-16T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("Meet me at 2016-05-16T04:05:06.789120 on Tuesday", None),
-            ("Meet me at 2016-05-16 04:05:06.789120 on Tuesday", None),
+    def test_parse_iso_with_extra_words_at_start_and_end_invalid(self):
+        test_inputs = [
+            "blah2016",
+            "blah2016blah",
+            "blah 2016 blah",
+            "blah 2016",
+            "2016 blah",
+            "blah 2016-05-16 04:05:06.789120",
+            "2016-05-16 04:05:06.789120 blah",
+            "blah 2016-05-16T04:05:06.789120",
+            "2016-05-16T04:05:06.789120 blah",
+            "2016blah",
+            "2016-05blah",
+            "2016-05-16blah",
+            "2016-05-16T04:05:06.789120blah",
+            "2016-05-16T04:05:06.789120ZblahZ",
+            "2016-05-16T04:05:06.789120Zblah",
+            "2016-05-16T04:05:06.789120blahZ",
+            "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
+            "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
         ]
 
-        for pair in input_format_pairs:
+        for ti in test_inputs:
             with self.assertRaises(ParserError):
-                self.parser.parse_iso(pair[0])
+                self.parser.parse_iso(ti)
 
-            if pair[1] is not None:
-                with self.assertRaises(ParserError):
-                    self.parser.parse(pair[0], pair[1])
-
-    def test_parse_with_extra_words_at_start_and_end_valid(self):
-        # Spaces surrounding the parsable date are ok because we
-        # allow the parsing of natural language input
-        self.assertEqual(
-            self.parser.parse("blah 2016 blah", "YYYY"), datetime(2016, 1, 1)
-        )
-
-        self.assertEqual(
-            self.parser.parse(
-                "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
-                "YYYY-MM-DDThh:mm:ss.S",
-            ),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
-
-        self.assertEqual(
-            self.parser.parse(
-                "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
-                "YYYY-MM-DD hh:mm:ss.S",
-            ),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
-
-    def test_parse_with_leading_and_trailing_whitespace(self):
+    def test_parse_iso_with_leading_and_trailing_whitespace(self):
         self.assertEqual(self.parser.parse_iso("      2016"), datetime(2016, 1, 1))
-        self.assertEqual(self.parser.parse("      2016", "YYYY"), datetime(2016, 1, 1))
 
         self.assertEqual(self.parser.parse_iso("2016      "), datetime(2016, 1, 1))
-        self.assertEqual(self.parser.parse("2016      ", "YYYY"), datetime(2016, 1, 1))
 
         self.assertEqual(
             self.parser.parse_iso("      2016      "), datetime(2016, 1, 1)
-        )
-        self.assertEqual(
-            self.parser.parse("      2016      ", "YYYY"), datetime(2016, 1, 1)
         )
 
         self.assertEqual(
             self.parser.parse_iso("      2016-05-16 04:05:06.789120      "),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
-        self.assertEqual(
-            self.parser.parse(
-                "      2016-05-16 04:05:06.789120      ", "YYYY-MM-DD hh:mm:ss.S"
-            ),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
 
         self.assertEqual(
             self.parser.parse_iso("      2016-05-16T04:05:06.789120      "),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
-        self.assertEqual(
-            self.parser.parse(
-                "      2016-05-16T04:05:06.789120      ", "YYYY-MM-DDThh:mm:ss.S"
-            ),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
 
