@@ -2,10 +2,15 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import io
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
+
+about = {}
+with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
+    exec(f.read(), about)
 
 # -- Project information -----------------------------------------------------
 
@@ -13,7 +18,7 @@ project = "arrow"
 copyright = "2019, Chris Smith"
 author = "Chris Smith"
 
-release = "0.14.0"
+release = about["__version__"]
 
 # -- General configuration ---------------------------------------------------
 

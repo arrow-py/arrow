@@ -1,114 +1,17 @@
-=========================================
-Arrow:  better dates and times for Python
-=========================================
+Arrow: Better dates & times for Python
+======================================
 
-.. image:: https://travis-ci.org/crsmithdev/arrow.svg?branch=master
-   :alt: Build Status
-   :target: https://travis-ci.org/crsmithdev/arrow
+Release v\ |release|. (`Installation`_)
 
-.. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
-   :alt: Codecov
-   :target: https://codecov.io/github/crsmithdev/arrow
+.. include:: ../README.rst
+  :start-after: start-inclusion-marker-do-not-remove
+  :end-before: end-inclusion-marker-do-not-remove
 
-.. image:: https://img.shields.io/pypi/v/arrow.svg
-   :alt: PyPI Version
-   :target: https://pypi.python.org/pypi/arrow
-
-.. image:: https://img.shields.io/pypi/pyversions/arrow.svg
-   :alt: Supported Python Versions
-   :target: https://pypi.python.org/pypi/arrow
-
-.. image:: https://img.shields.io/pypi/l/arrow.svg
-   :alt: License
-   :target: https://pypi.python.org/pypi/arrow
-
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :alt: Code Style: Black
-   :target: https://github.com/python/black
-
------
-What?
------
-
-Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.
-
-Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
-
-----
-Why?
-----
-Python's standard library and some other low-level modules have near-complete date, time and timezone functionality but don't work very well from a usability perspective:
-
-- Too many modules:  datetime, time, calendar, dateutil, pytz and more
-- Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Timezones and timestamp conversions are verbose and unpleasant
-- Timezone naivety is the norm
-- Gaps in functionality:  ISO-8601 parsing, time spans, humanization
-
---------
-Features
---------
-
-- Fully implemented, drop-in replacement for datetime
-- Supports Python 2.7, 3.5, 3.6, 3.7 and 3.8
-- Timezone-aware & UTC by default
-- Provides super-simple creation options for many common input scenarios
-- Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings automatically
-- Partial ISO-8601 support
-- Timezone conversion
-- Timestamp available as a property
-- Generates time spans, ranges, floors and ceilings in time frames from year to microsecond precision
-- Humanizes and supports a growing list of contributed locales
-- Extensible for your own Arrow-derived types
-
-----------
-Quickstart
-----------
-
-.. code-block:: bash
-
-    $ pip install arrow
-
-.. code-block:: python
-
-    >>> import arrow
-    >>> utc = arrow.utcnow()
-    >>> utc
-    <Arrow [2013-05-11T21:23:58.970460+00:00]>
-
-    >>> utc = utc.shift(hours=-1)
-    >>> utc
-    <Arrow [2013-05-11T20:23:58.970460+00:00]>
-
-    >>> local = utc.to('US/Pacific')
-    >>> local
-    <Arrow [2013-05-11T13:23:58.970460-07:00]>
-
-    >>> arrow.get('2013-05-11T21:23:58.970460+00:00')
-    <Arrow [2013-05-11T21:23:58.970460+00:00]>
-
-    >>> local.timestamp
-    1368303838
-
-    >>> local.format()
-    '2013-05-11 13:23:58 -07:00'
-
-    >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
-    '2013-05-11 13:23:58 -07:00'
-
-    >>> local.humanize()
-    'an hour ago'
-
-    >>> local.humanize(locale='ko_kr')
-    '1시간 전'
-
-------------
 User's Guide
 ------------
 
 Creation
-========
+~~~~~~~~
 
 Get 'now' easily:
 
@@ -186,7 +89,7 @@ Arrow objects can be instantiated directly too, with the same arguments as a dat
     <Arrow [2013-05-05T00:00:00+00:00]>
 
 Properties
-==========
+~~~~~~~~~~
 
 Get a datetime or timestamp representation:
 
@@ -226,8 +129,8 @@ Call datetime functions that return properties:
     >>> a.time()
     datetime.time(4, 38, 15, 447644)
 
-Replace & shift
-===============
+Replace & Shift
+~~~~~~~~~~~~~~~
 
 Get a new :class:`Arrow <arrow.arrow.Arrow>` object, with altered attributes, just as you would with a datetime:
 
@@ -256,7 +159,7 @@ Even replace the timezone without altering other attributes:
 
 
 Format
-======
+~~~~~~
 
 .. code-block:: python
 
@@ -264,7 +167,7 @@ Format
     '2013-05-07 05:23:16 -00:00'
 
 Convert
-=======
+~~~~~~~
 
 Convert to timezones by name or tzinfo:
 
@@ -292,7 +195,7 @@ Or using shorthand:
 
 
 Humanize
-========
+~~~~~~~~
 
 Humanize relative to now:
 
@@ -320,8 +223,8 @@ Support for a growing number of locales (see ``locales.py`` for supported langua
     'через 2 час(а,ов)'
 
 
-Ranges & spans
-==============
+Ranges & Spans
+~~~~~~~~~~~~~~
 
 Get the time span of any unit:
 
@@ -374,7 +277,7 @@ Or just iterate over a range of time:
    :maxdepth: 2
 
 Factories
-=========
+~~~~~~~~~
 
 Use factories to harness Arrow's module API for a custom Arrow-derived type.  First, derive your type:
 
@@ -405,7 +308,7 @@ Then get and use a factory for it:
     >>> 211
 
 Tokens
-======
+~~~~~~
 
 Use the following tokens in parsing and formatting.  Note that they're not the same as the tokens for `strptime(3) <https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html#index-strptime>`_:
 
@@ -486,30 +389,29 @@ Any token can be escaped when parsing by enclosing it within square brackets:
     <Arrow [2018-03-09T08:40:00+00:00]>
 
 
----------
 API Guide
 ---------
 
 arrow.arrow
-===========
+~~~~~~~~~~~
 
 .. automodule:: arrow.arrow
     :members:
 
 arrow.factory
-=============
+~~~~~~~~~~~~~
 
 .. automodule:: arrow.factory
     :members:
 
 arrow.api
-=========
+~~~~~~~~~
 
 .. automodule:: arrow.api
     :members:
 
 arrow.locale
-============
+~~~~~~~~~~~~
 
 .. automodule:: arrow.locales
     :members:

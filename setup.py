@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 import io
-import re
 
 from setuptools import setup
 
 with io.open("README.rst", "r", encoding="utf-8") as f:
     readme = f.read()
 
-with io.open("arrow/__init__.py", "r", encoding="utf-8") as f:
-    init = f.read()
-
-
-def get_version():
-    pattern = r'{}\W*=\W*"([^"]+)"'.format("__version__")
-    return re.findall(pattern, init)[0]
-
+about = {}
+with io.open("arrow/_version.py", "r", encoding="utf-8") as f:
+    exec(f.read(), about)
 
 setup(
     name="arrow",
-    version=get_version(),
+    version=about["__version__"],
     description="Better dates and times for Python",
     long_description=readme,
     long_description_content_type="text/x-rst",
@@ -50,5 +44,6 @@ setup(
     project_urls={
         "Repository": "https://github.com/crsmithdev/arrow",
         "Bug Reports": "https://github.com/crsmithdev/arrow/issues",
+        "Documentation": "https://arrow.readthedocs.io",
     },
 )
