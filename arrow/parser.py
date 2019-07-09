@@ -107,21 +107,26 @@ class DateTimeParser(object):
         # TODO: talk to Chris about this => the below space divider checks
         # are not really necessary thanks to the new regex changes, but I think
         # it is good to include them to provide better error messages.
+        # my rationale is that it is better to fail early
 
         # strip leading and trailing whitespace
         datetime_string = datetime_string.strip()
 
         has_space_divider = " " in datetime_string
+        has_t_divider = "T" in datetime_string
 
-        num_space_dividers = len(datetime_string.split(" "))
-        if has_space_divider and num_space_dividers != 2:
+        num_spaces = datetime_string.count(" ")
+        if (has_space_divider and num_spaces != 1) or (
+            has_t_divider and num_spaces > 0
+        ):
+            # TODO: update this message since "ISO 8601-like" may not be clear
             raise ParserError(
-                "Expected 1 space divider, but was given {}. Try passing in a format string to resolve this.".format(
-                    num_space_dividers
+                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
+                    datetime_string
                 )
             )
 
-        has_time = has_space_divider or "T" in datetime_string
+        has_time = has_space_divider or has_t_divider
         has_tz = False
 
         # TODO: add tests for all the new formats, especially basic format
@@ -174,7 +179,7 @@ class DateTimeParser(object):
                 time_string = "HH"
             else:
                 # TODO: add tests for new conditional cases
-                raise ValueError("No valid time component provided.")
+                raise ParserError("No valid time component provided.")
 
             if is_basic_time_format:
                 time_string = time_string.replace(":", "")
