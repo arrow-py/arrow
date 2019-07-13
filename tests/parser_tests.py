@@ -881,7 +881,7 @@ class DateTimeParserMeridiansTests(Chai):
             parser_.parse("2013-01-01 5 DU", "YYYY-MM-DD h A"), datetime(2013, 1, 1, 17)
         )
 
-    # regression check for https://github.com/crsmithdev/arrow/issues/607
+    # regression test for issue #607
     def test_es_meridians(self):
         parser_ = parser.DateTimeParser("es")
 
@@ -889,6 +889,18 @@ class DateTimeParserMeridiansTests(Chai):
             parser_.parse("Junio 30, 2019 - 08:00 pm", "MMMM DD, YYYY - hh:mm a"),
             datetime(2019, 6, 30, 20, 0),
         )
+
+        with self.assertRaises(ParserError):
+            parser_.parse(
+                "Junio 30, 2019 - 08:00 pasdfasdfm", "MMMM DD, YYYY - hh:mm a"
+            )
+
+    def test_fr_meridians(self):
+        parser_ = parser.DateTimeParser("fr")
+
+        # the French locale always uses a 24 hour clock, so it does not support meridians
+        with self.assertRaises(ParserError):
+            parser_.parse("Janvier 30, 2019 - 08:00 pm", "MMMM DD, YYYY - hh:mm a")
 
 
 class DateTimeParserMonthOrdinalDayTests(Chai):
