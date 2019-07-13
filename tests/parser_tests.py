@@ -132,6 +132,20 @@ class DateTimeParserTests(Chai):
             datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc()),
         )
 
+    # regression test for issue #447
+    def test_parse_timestamp_token(self):
+        # should not match on the "X" token
+        self.assertEqual(
+            self.parser.parse(
+                "15 Jul 2000",
+                ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
+            ),
+            datetime(2000, 7, 15),
+        )
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("15 Jul", "X")
+
 
 class DateTimeParserParseTests(Chai):
     def setUp(self):

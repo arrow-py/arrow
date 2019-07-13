@@ -47,7 +47,7 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
-    _TIMESTAMP_RE = re.compile(r"\d+")
+    _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
@@ -124,6 +124,7 @@ class DateTimeParser(object):
         has_tz = False
 
         # TODO: add tests for all the new formats, especially basic format
+
         # required date formats to test against
         formats = [
             "YYYY-MM-DD",
