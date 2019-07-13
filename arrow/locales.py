@@ -376,6 +376,8 @@ class SpanishLocale(Locale):
         "years": "{0} años",
     }
 
+    meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
+
     month_names = [
         "",
         "enero",
