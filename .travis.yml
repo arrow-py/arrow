@@ -15,9 +15,6 @@ matrix:
         - name: "Linting"
           python: 3.7
           env: TOXENV=lint
-          cache:
-              directories:
-                  - $HOME/.cache/pre-commit
 install: pip install -U codecov tox
 script: tox
 after_success: codecov
