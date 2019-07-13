@@ -1,5 +1,7 @@
-Arrow - Better dates & times for Python
-=======================================
+Arrow: Better dates & times for Python
+======================================
+
+.. start-inclusion-marker-do-not-remove
 
 .. image:: https://travis-ci.org/crsmithdev/arrow.svg?branch=master
    :alt: Build Status
@@ -25,9 +27,6 @@ Arrow - Better dates & times for Python
    :alt: Code Style: Black
    :target: https://github.com/python/black
 
-Documentation: `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_
----------------------------------------------------------------------------------
-
 What?
 -----
 
@@ -38,22 +37,22 @@ Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ a
 Why?
 ----
 
-Python's standard library and some other low-level modules have near-complete date, time and time zone functionality but don't work very well from a usability perspective:
+Python's standard library and some other low-level modules have near-complete date, time and timezone functionality but don't work very well from a usability perspective:
 
 - Too many modules:  datetime, time, calendar, dateutil, pytz and more
 - Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Time zones and timestamp conversions are verbose and unpleasant
-- Time zone naievety is the norm
+- Timezones and timestamp conversions are verbose and unpleasant
+- Timezone naivety is the norm
 - Gaps in functionality:  ISO-8601 parsing, timespans, humanization
 
 Features
 --------
 
 - Fully implemented, drop-in replacement for datetime
-- Supports Python 2.7, 3.5, 3.6, 3.7, and 3.8
-- Time zone-aware & UTC by default
+- Supports Python 2.7, 3.5, 3.6, 3.7 and 3.8
+- Timezone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
-- Updated .replace method with support for relative offsets, including weeks
+- Updated :code:`replace` method with support for relative offsets, including weeks
 - Formats and parses strings automatically
 - Partial support for ISO-8601
 - Timezone conversion
@@ -66,7 +65,7 @@ Quick Start
 -----------
 
 Installation
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pipenv <https://docs.pipenv.org/en/latest/>`_:
 
@@ -75,9 +74,9 @@ To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pip
     $ pip install -U arrow
 
 Example Usage
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> import arrow
     >>> utc = arrow.utcnow()
@@ -110,7 +109,12 @@ Example Usage
     >>> local.humanize(locale='ko_kr')
     '1시간 전'
 
-Further documentation can be found at `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_.
+.. end-inclusion-marker-do-not-remove
+
+Documentation
+-------------
+
+For full documentation, please visit `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_.
 
 Contributing
 ------------
