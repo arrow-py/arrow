@@ -259,52 +259,9 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_subsecond(self):
 
-        self.expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
-        self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.9", "YYYY-MM-DD HH:mm:ss.S"),
-            self.expected,
-        )
-        self.assertEqual(self.parser.parse_iso("2013-01-01 12:30:45.9"), self.expected)
-
-        self.expected = datetime(2013, 1, 1, 12, 30, 45, 980000)
-        self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.98", "YYYY-MM-DD HH:mm:ss.SS"),
-            self.expected,
-        )
-        self.assertEqual(self.parser.parse_iso("2013-01-01 12:30:45.98"), self.expected)
-
-        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987000)
-        self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.987", "YYYY-MM-DD HH:mm:ss.SSS"),
-            self.expected,
-        )
-        self.assertEqual(
-            self.parser.parse_iso("2013-01-01 12:30:45.987"), self.expected
-        )
-
-        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987600)
-        self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.9876", "YYYY-MM-DD HH:mm:ss.SSSS"),
-            self.expected,
-        )
-        self.assertEqual(
-            self.parser.parse_iso("2013-01-01 12:30:45.9876"), self.expected
-        )
-
-        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987650)
-        self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.98765", "YYYY-MM-DD HH:mm:ss.SSSSS"),
-            self.expected,
-        )
-        self.assertEqual(
-            self.parser.parse_iso("2013-01-01 12:30:45.98765"), self.expected
-        )
-
         self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         self.assertEqual(
-            self.parser.parse(
-                "2013-01-01 12:30:45.987654", "YYYY-MM-DD HH:mm:ss.SSSSSS"
-            ),
+            self.parser.parse("2013-01-01 12:30:45.987654", "YYYY-MM-DD HH:mm:ss.S"),
             self.expected,
         )
         self.assertEqual(
@@ -358,6 +315,8 @@ class DateTimeParserParseTests(Chai):
             ("2016-05-16T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
             ("2016-05-16T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
             ("2016-05-16T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
+            ("2016-05-16T04:05:06.789120Z", "YYYY-MM-DDThh:mm:ss.SSZ"),
+            ("2016-05-16T04:05:06.789120Z", "YYYY-MM-DDThh:mm:ss.SSSSSSZ"),
         ]
 
         for pair in input_format_pairs:

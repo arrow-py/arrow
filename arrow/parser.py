@@ -104,11 +104,6 @@ class DateTimeParser(object):
 
     # TODO: since we support more than ISO-8601, we should rename this function
     def parse_iso(self, datetime_string):
-        # TODO: talk to Chris about this => the below space divider checks
-        # are not really necessary thanks to the new regex changes, but I think
-        # it is good to include them to provide better error messages.
-        # my rationale is that it is better to fail early
-
         # strip leading and trailing whitespace
         datetime_string = datetime_string.strip()
 
@@ -119,7 +114,6 @@ class DateTimeParser(object):
         if (has_space_divider and num_spaces != 1) or (
             has_t_divider and num_spaces > 0
         ):
-            # TODO: update this message since "ISO 8601-like" may not be clear
             raise ParserError(
                 "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
                     datetime_string
@@ -149,18 +143,19 @@ class DateTimeParser(object):
         ]
 
         if has_time:
+            # Z is ignored entirely because fromdatetime defaults to UTC in arrow.py
+            if datetime_string[-1] == "Z":
+                datetime_string = datetime_string[:-1]
+
             if has_space_divider:
                 date_string, time_string = datetime_string.split(" ", 1)
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            # TODO: understand why we are not accounting for Z directly
-            # currently Z is ignored entirely but fromdatetime defaults to UTC, see arrow.py L196
-            # '2013-02-03T04:05:06.78912Z'
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
-            # TODO "20160504T010203Z" parses incorrectly, time part is HH only, due to Z changing len
+            # TODO: add test for basic format with Z "20160504T010203Z"
             is_basic_time_format = colon_count == 0
 
             has_tz = len(time_parts) > 1
@@ -238,8 +233,7 @@ class DateTimeParser(object):
 
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", escaped_fmt)
-        # Any number of S is the same as one.
-        escaped_fmt = re.sub("S+", "S", escaped_fmt)
+
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
         fmt_pattern = escaped_fmt
@@ -283,8 +277,10 @@ class DateTimeParser(object):
         # Reference: https://stackoverflow.com/q/14232931/3820660
         starting_word_boundary = r"(?<![\S])"
         ending_word_boundary = r"(?![\S])"
-        final_fmt_pattern = r"{}{}Z?{}".format(
-            starting_word_boundary, final_fmt_pattern, ending_word_boundary
+        final_fmt_pattern = r"{starting_word_boundary}{final_fmt_pattern}Z?{ending_word_boundary}".format(
+            starting_word_boundary=starting_word_boundary,
+            final_fmt_pattern=final_fmt_pattern,
+            ending_word_boundary=ending_word_boundary,
         )
 
         return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)

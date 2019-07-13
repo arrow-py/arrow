@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
-
 from chai import Chai
 
 from arrow import util
@@ -8,7 +6,7 @@ from arrow import util
 
 class UtilTests(Chai):
     def test_is_timestamp(self):
-        timestamp_float = datetime.now().timestamp()
+        timestamp_float = 1563047716.958061
         timestamp_int = int(timestamp_float)
 
         self.assertTrue(util.is_timestamp(timestamp_int))
