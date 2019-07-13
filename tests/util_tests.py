@@ -19,3 +19,11 @@ class UtilTests(Chai):
 
         full_datetime = "2019-06-23T13:12:42"
         self.assertFalse(util.is_timestamp(full_datetime))
+
+        overflow_timestamp_float = 99999999999999999999999999.99999999999999999999999999
+        with self.assertRaises((OverflowError, ValueError)):
+            util.is_timestamp(overflow_timestamp_float)
+
+        overflow_timestamp_int = int(overflow_timestamp_float)
+        with self.assertRaises((OverflowError, ValueError)):
+            util.is_timestamp(overflow_timestamp_int)
