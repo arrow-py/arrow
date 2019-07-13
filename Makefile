@@ -25,7 +25,6 @@ lint:
 	venv/bin/pre-commit run --all-files --show-diff-on-failure
 
 docs:
-	touch docs/index.rst
 	. venv/bin/activate && cd docs; make html
 
 clean:
