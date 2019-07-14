@@ -327,9 +327,9 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |M             |1, 2, 3 ... 11, 12                         |
 +--------------------------------+--------------+-------------------------------------------+
-|**Day of Year**                 |DDDD [#t5]_   |001, 002, 003 ... 364, 365                 |
+|**Day of Year**                 |DDDD          |001, 002, 003 ... 364, 365                 |
 +--------------------------------+--------------+-------------------------------------------+
-|                                |DDD [#t5]_    |1, 2, 3 ... 4, 5                           |
+|                                |DDD           |1, 2, 3 ... 364, 365                       |
 +--------------------------------+--------------+-------------------------------------------+
 |**Day of Month**                |DD            |01, 02, 03 ... 30, 31                      |
 +--------------------------------+--------------+-------------------------------------------+
@@ -387,7 +387,6 @@ Any token can be escaped when parsing by enclosing it within square brackets:
 .. [#t2] localization support only for formatting
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
-.. [#t5] support for the DDD and DDDD tokens will be added in a future release
 
 API Guide
 ---------

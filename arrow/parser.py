@@ -2,7 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import re
-import warnings
 from datetime import datetime
 
 from dateutil import tz
@@ -19,21 +18,6 @@ class ParserError(RuntimeError):
     pass
 
 
-class GetParseWarning(DeprecationWarning):
-    """Raised when arrow.get() is passed a string with no formats and matches incorrectly
-    on one of the default formats.
-
-    e.g.
-    arrow.get('blabla2016') -> <Arrow [2016-01-01T00:00:00+00:00]>
-    arrow.get('13/4/2045') -> <Arrow [2045-01-01T00:00:00+00:00]>
-
-    In version 0.15.0 this warning will become a ParserError.
-    """
-
-
-warnings.simplefilter("default", GetParseWarning)
-
-
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile(
@@ -43,6 +27,8 @@ class DateTimeParser(object):
 
     _ONE_OR_MORE_DIGIT_RE = re.compile(r"\d+")
     _ONE_OR_TWO_DIGIT_RE = re.compile(r"\d{1,2}")
+    _ONE_OR_TWO_OR_THREE_DIGIT_RE = re.compile(r"\d{1,3}")
+    _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
@@ -54,6 +40,8 @@ class DateTimeParser(object):
         "YY": _TWO_DIGIT_RE,
         "MM": _TWO_DIGIT_RE,
         "M": _ONE_OR_TWO_DIGIT_RE,
+        "DDDD": _THREE_DIGIT_RE,
+        "DDD": _ONE_OR_TWO_OR_THREE_DIGIT_RE,
         "DD": _TWO_DIGIT_RE,
         "D": _ONE_OR_TWO_DIGIT_RE,
         "HH": _TWO_DIGIT_RE,
@@ -125,7 +113,7 @@ class DateTimeParser(object):
 
         # TODO: add tests for all the new formats, especially basic format
 
-        # required date formats to test against
+        # date formats (ISO-8601 and others) to test against
         formats = [
             "YYYY-MM-DD",
             "YYYY-M-DD",
@@ -137,6 +125,8 @@ class DateTimeParser(object):
             "YYYY.M.DD",
             "YYYY.M.D",
             "YYYYMMDD",
+            "YYYY-DDDD",
+            "YYYYDDDD",
             "YYYY-MM",
             "YYYY/MM",
             "YYYY.MM",
@@ -301,6 +291,9 @@ class DateTimeParser(object):
         elif token in ["MM", "M"]:
             parts["month"] = int(value)
 
+        elif token in ["DDDD", "DDD"]:
+            parts["day_of_year"] = int(value)
+
         elif token in ["DD", "D"]:
             parts["day"] = int(value)
 
@@ -353,6 +346,39 @@ class DateTimeParser(object):
         if timestamp:
             tz_utc = tz.tzutc()
             return datetime.fromtimestamp(timestamp, tz=tz_utc)
+
+        # TODO: add tests for this!
+        day_of_year = parts.get("day_of_year")
+
+        if day_of_year:
+            year = parts.get("year")
+            month = parts.get("month")
+            if year is None:
+                raise ParserError(
+                    "Year component is required with the DDD and DDDD tokens"
+                )
+
+            if month is not None:
+                raise ParserError(
+                    "Month component is not allowed with the DDD and DDDD tokens"
+                )
+
+            date_string = "{}-{}".format(year, day_of_year)
+            try:
+                dt = datetime.strptime(date_string, "%Y-%j")
+            except ValueError:
+                raise ParserError(
+                    "Expected a valid day of year, but received '{}'".format(
+                        day_of_year
+                    )
+                )
+
+            # TODO: write test for 2015-366
+            # datetime.strptime("2015-366", "%Y-%j")
+            # Changes year: datetime.datetime(2016, 1, 1, 0, 0)
+            parts["year"] = dt.year
+            parts["month"] = dt.month
+            parts["day"] = dt.day
 
         am_pm = parts.get("am_pm")
         hour = parts.get("hour", 0)
