@@ -307,8 +307,8 @@ Then get and use a factory for it:
     >>> custom.days_till_xmas()
     >>> 211
 
-Tokens
-~~~~~~
+Supported Tokens
+~~~~~~~~~~~~~~~~
 
 Use the following tokens in parsing and formatting.  Note that they're not the same as the tokens for `strptime(3) <https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html#index-strptime>`_:
 
@@ -374,13 +374,6 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 |**Timestamp**                   |X             |1381685817                                 |
 +--------------------------------+--------------+-------------------------------------------+
 
-Any token can be escaped when parsing by enclosing it within square brackets:
-
-.. code-block:: python
-
-    >>> arrow.get("2018-03-09 8 h 40", "YYYY-MM-DD h [h] m")
-    <Arrow [2018-03-09T08:40:00+00:00]>
-
 .. rubric:: Footnotes
 
 .. [#t1] localization support for parsing and formatting
@@ -388,6 +381,49 @@ Any token can be escaped when parsing by enclosing it within square brackets:
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
 .. [#t5] support for the DDD and DDDD tokens will be added in a future release
+
+Escaping Formats
+~~~~~~~~~~~~~~~~
+
+Tokens, phrases, and regular expressions in a format string can be escaped when parsing by enclosing them within square brackets.
+
+Tokens & Phrases
+++++++++++++++++
+
+Any `token <Supported Tokens_>`_ or phrase can be escaped as follows:
+
+.. code-block:: python
+
+    >>> fmt = "YYYY-MM-DD h [h] m"
+    >>> arrow.get("2018-03-09 8 h 40", fmt)
+    <Arrow [2018-03-09T08:40:00+00:00]>
+
+    >>> fmt = "YYYY-MM-DD h [hello] m"
+    >>> arrow.get("2018-03-09 8 hello 40", fmt)
+    <Arrow [2018-03-09T08:40:00+00:00]>
+
+    >>> fmt = "YYYY-MM-DD h [hello world] m"
+    >>> arrow.get("2018-03-09 8 hello world 40", fmt)
+    <Arrow [2018-03-09T08:40:00+00:00]>
+
+This can be useful for parsing dates in different locales such as French, in which it is common to format time strings as "8 h 40" rather than "8:40".
+
+Regular Expressions
++++++++++++++++++++
+
+You can also escape regular expressions by enclosing them within square brackets. In the following example, we are using the regular expression :code:`\s+` to match any number of whitespace characters that separate the tokens. This is useful if you do not know the number of spaces between tokens ahead of time (e.g. in log files).
+
+.. code-block:: python
+
+    >>> fmt = r"ddd[\s+]MMM[\s+]DD[\s+]HH:mm:ss[\s+]YYYY"
+    >>> arrow.get("Mon Sep 08 16:41:45 2014", fmt)
+    <Arrow [2014-09-08T16:41:45+00:00]>
+
+    >>> arrow.get("Mon \tSep 08   16:41:45     2014", fmt)
+    <Arrow [2014-09-08T16:41:45+00:00]>
+
+    >>> arrow.get("Mon Sep 08   16:41:45   2014", fmt)
+    <Arrow [2014-09-08T16:41:45+00:00]>
 
 API Guide
 ---------
