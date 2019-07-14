@@ -26,20 +26,14 @@ Get 'now' easily:
     >>> arrow.now('US/Pacific')
     <Arrow [2013-05-06T21:20:44.761511-07:00]>
 
-Create from timestamps (ints or floats, or strings that convert to a float):
+Create from timestamps (:code:`int` or :code:`float`):
 
 .. code-block:: python
 
     >>> arrow.get(1367900664)
     <Arrow [2013-05-07T04:24:24+00:00]>
 
-    >>> arrow.get('1367900664')
-    <Arrow [2013-05-07T04:24:24+00:00]>
-
     >>> arrow.get(1367900664.152325)
-    <Arrow [2013-05-07T04:24:24.152325+00:00]>
-
-    >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
 Use a naive or timezone-aware datetime, or flexibly specify a timezone:
