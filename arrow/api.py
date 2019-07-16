@@ -7,6 +7,8 @@ methods for use as a module API.
 
 from __future__ import absolute_import
 
+from functools import update_wrapper
+
 from arrow.factory import ArrowFactory
 
 # internal default factory.
@@ -21,7 +23,7 @@ def get(*args, **kwargs):
     return _factory.get(*args, **kwargs)
 
 
-get.__doc__ = _factory.get.__doc__
+update_wrapper(get, _factory.get)
 
 
 def utcnow():
@@ -32,7 +34,7 @@ def utcnow():
     return _factory.utcnow()
 
 
-utcnow.__doc__ = _factory.utcnow.__doc__
+update_wrapper(utcnow, _factory.utcnow)
 
 
 def now(tz=None):
@@ -43,7 +45,7 @@ def now(tz=None):
     return _factory.now(tz)
 
 
-now.__doc__ = _factory.now.__doc__
+update_wrapper(now, _factory.now)
 
 
 def factory(type):
