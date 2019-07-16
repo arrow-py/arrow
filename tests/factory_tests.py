@@ -66,9 +66,12 @@ class GetTests(Chai):
         timestamp = 1563286714.0
         timestamp_ms = timestamp * 1000.0
         timestamp_us = timestamp * 1000000.0
+        timestamp_ps = timestamp * 1000000000.0
         timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
         self.assertEqual(self.factory.get(timestamp_ms), timestamp_dt)
         self.assertEqual(self.factory.get(timestamp_us), timestamp_dt)
+        with self.assertRaises(ValueError):
+            self.factory.get(timestamp_ps)
 
     def test_one_arg_arrow(self):
 

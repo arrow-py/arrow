@@ -1367,7 +1367,7 @@ class Arrow(object):
 
         try:
             timestamp = float(timestamp)
-        except ValueError:
+        except Exception:
             raise ValueError("cannot parse '{}' as a timestamp".format(timestamp))
 
         if timestamp < Constants.MAX_TIMESTAMP:
