@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import sys
+import time
 import warnings
 from datetime import datetime
 
@@ -94,7 +95,7 @@ class list_to_iter_shim(list):
 
 
 class Constants:
-    YEAR_9999_TS = datetime(9999, 1, 1).timestamp()
+    BIGGEST_TS = time.mktime(datetime.max.timetuple())
 
 
 __all__ = ["total_seconds", "is_timestamp", "isstr", "list_to_iter_shim", "Constants"]

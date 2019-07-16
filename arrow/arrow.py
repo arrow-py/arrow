@@ -1367,9 +1367,9 @@ class Arrow(object):
 
         try:
             timestamp = float(timestamp)
-            if timestamp < Constants.YEAR_9999_TS:
+            if timestamp < Constants.BIGGEST_TS:
                 return timestamp
-            if timestamp < Constants.YEAR_9999_TS * 1000.0:
+            if timestamp < Constants.BIGGEST_TS * 1000.0:
                 return timestamp / 1000.0
             return timestamp / 1000000.0
         except Exception:
