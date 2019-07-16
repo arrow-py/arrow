@@ -63,7 +63,7 @@ class GetTests(Chai):
         with self.assertRaises((OverflowError, ValueError)):
             self.factory.get(timestamp)
 
-        timestamp = time.time()
+        timestamp = 1563286714.0
         timestamp_ms = timestamp * 1000.0
         timestamp_us = timestamp * 1000000.0
         timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
