@@ -42,6 +42,22 @@ Create from timestamps (ints or floats, or strings that convert to a float):
     >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
+Also supported microsecond (ms) and nanosecond (μs) timestamps:
+
+.. code-block:: python
+
+    >>> arrow.get(1367900664000)
+    <Arrow [2013-05-07T04:24:24+00:00]>
+
+    >>> arrow.get('1367900664000')
+    <Arrow [2013-05-07T04:24:24+00:00]>
+
+    >>> arrow.get(1367900664000000)
+    <Arrow [2013-05-07T04:24:24+00:00]>
+
+    >>> arrow.get('1367900664000000')
+    <Arrow [2013-05-07T04:24:24+00:00]>
+
 Use a naive or timezone-aware datetime, or flexibly specify a timezone:
 
 .. code-block:: python
