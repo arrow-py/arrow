@@ -57,10 +57,8 @@ class GetTests(Chai):
         self.assertEqual(self.factory.get(timestamp), timestamp_dt)
         self.assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
 
-        # Issue 216
         timestamp = "99999999999999999999999999"
-        # Python 3 raises `OverflowError`, Python 2 raises `ValueError`
-        with self.assertRaises((OverflowError, ValueError)):
+        with self.assertRaises(ValueError):
             self.factory.get(timestamp)
 
         timestamp = 1563286714.0
