@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import sys
 import warnings
+from datetime import datetime
 
 
 def total_seconds(td):  # pragma: no cover
@@ -92,4 +93,8 @@ class list_to_iter_shim(list):
     del _wrap_method
 
 
-__all__ = ["total_seconds", "is_timestamp", "isstr", "list_to_iter_shim"]
+class Constants:
+    YEAR_9999_TS = datetime(9999, 1, 1).timestamp()
+
+
+__all__ = ["total_seconds", "is_timestamp", "isstr", "list_to_iter_shim", "Constants"]

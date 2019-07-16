@@ -17,6 +17,7 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
+from arrow.util import Constants
 
 
 class Arrow(object):
@@ -1365,7 +1366,12 @@ class Arrow(object):
     def _get_timestamp_from_input(timestamp):
 
         try:
-            return float(timestamp)
+            timestamp = float(timestamp)
+            if timestamp < Constants.YEAR_9999_TS:
+                return timestamp
+            if timestamp < Constants.YEAR_9999_TS * 1000.0:
+                return timestamp / 1000.0
+            return timestamp / 1000000.0
         except Exception:
             raise ValueError("cannot parse '{}' as a timestamp".format(timestamp))
 
