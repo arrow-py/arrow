@@ -42,7 +42,7 @@ Create from timestamps (ints or floats, or strings that convert to a float):
     >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
-Also supported microsecond (ms) and nanosecond (μs) timestamps:
+Also supported millisecond (ms, 10^-3 s) and microsecond (μs, 10^-6 s) timestamps:
 
 .. code-block:: python
 

@@ -1374,7 +1374,7 @@ class Arrow(object):
             return timestamp
         if timestamp < Constants.MAX_TIMESTAMP_MS:
             return timestamp / 1000.0
-        if timestamp < Constants.MAX_TIMESTAMP_NS:
+        if timestamp < Constants.MAX_TIMESTAMP_US:
             return timestamp / 1000000.0
 
         raise ValueError(

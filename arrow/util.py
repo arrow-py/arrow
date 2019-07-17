@@ -97,7 +97,7 @@ class list_to_iter_shim(list):
 class Constants:
     MAX_TIMESTAMP = time.mktime(datetime.max.timetuple())
     MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1000.0
-    MAX_TIMESTAMP_NS = MAX_TIMESTAMP * 1000000.0
+    MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1000000.0
 
 
 __all__ = ["total_seconds", "is_timestamp", "isstr", "list_to_iter_shim", "Constants"]
