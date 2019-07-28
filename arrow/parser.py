@@ -34,6 +34,7 @@ class DateTimeParser(object):
     _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
+    # TODO: test timestamp thoroughly
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
@@ -164,8 +165,9 @@ class DateTimeParser(object):
             elif has_hours:
                 time_string = "HH"
             else:
-                # TODO: add tests for new conditional cases
-                raise ParserError("No valid time component provided.")
+                raise ParserError(
+                    "Invalid time component provided. Please specify a format or provide a time in the form 'HH:mm:ss.S', 'HH:mm:ss', 'HH:mm', or 'HH'."
+                )
 
             if is_basic_time_format:
                 time_string = time_string.replace(":", "")

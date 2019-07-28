@@ -294,7 +294,6 @@ class DateTimeParserParseTests(Chai):
         # round down
         string = "2013-01-01 12:30:45.98765432"
         self.assertEqual(self.parser.parse(string, format), self.expected)
-        # import pudb; pudb.set_trace()
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
         # round half-up
@@ -567,6 +566,23 @@ class DateTimeParserISOTests(Chai):
             self.parser.parse_iso("2013-02-03 04:05"), datetime(2013, 2, 3, 4, 5)
         )
 
+    def test_YYYY_MM_DD_HH(self):
+
+        self.assertEqual(
+            self.parser.parse_iso("2013-02-03 04"), datetime(2013, 2, 3, 4)
+        )
+
+    def test_invalid_time(self):
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03 044")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03 04:05:06.")
+
     def test_YYYY_MM_DD_HH_mm_ssZ(self):
 
         self.assertEqual(
@@ -656,36 +672,6 @@ class DateTimeParserISOTests(Chai):
             self.parser.parse_iso("2013-02-03 04:05:06.78912Z"),
             datetime(2013, 2, 3, 4, 5, 6, 789120),
         )
-
-    # def test_bad_get_parsing(self):
-    #     # fixes for loose get parsing
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse_iso("blabla2016")
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse_iso("2016blabla")
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse_iso("10/4/2045")
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse_iso("2016-05T04:05:06.78912blahZ")
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse_iso("2016-05T04:05:06.78912Zblah")
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse("15/01/2019", ["D/M/YY", "D/M/YYYY"])
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse("05/02/2017", ["YYYY", "MM/DD/YYYY"])
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse("1919/05/23", ["YY/M/D", "YYYY/M/D"])
-    #
-    #     with self.assertWarns(GetParseWarning):
-    #         self.parser.parse("2017/05/22", ["YYYY", "YYYY/MM/DD"])
 
     def test_gnu_date(self):
         """
