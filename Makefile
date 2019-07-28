@@ -33,7 +33,7 @@ clean:
 	rm -f ./**/*.pyc .coverage
 
 publish:
-    rm -rf dist build .egg .eggs arrow.egg-info
+	rm -rf dist build .egg .eggs arrow.egg-info
 	pip3 install -U setuptools twine wheel
 	python3 setup.py sdist bdist_wheel
 	twine upload dist/*
