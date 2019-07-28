@@ -1,5 +1,13 @@
 ## History
 
+### 0.14.3
+
+- [NEW] Added full support for Python 3.8.
+- [CHANGE] Added warnings for upcoming factory.get() parsing changes in 0.15.0. Please see https://github.com/crsmithdev/arrow/issues/612 for full details.
+- [FIX] Extensive refactor and update of documentation.
+- [FIX] factory.get() can now construct from kwargs.
+- [FIX] Added meridians to Spanish Locale.
+
 ### 0.14.2
 
 - [CHANGE] Travis CI builds now use tox to lint and run tests.
