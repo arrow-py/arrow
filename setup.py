@@ -42,7 +42,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords="arrow date time datetime",
+    keywords="arrow date time datetime timestamp timezone",
     project_urls={
         "Repository": "https://github.com/crsmithdev/arrow",
         "Bug Reports": "https://github.com/crsmithdev/arrow/issues",
