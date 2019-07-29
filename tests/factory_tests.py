@@ -243,6 +243,12 @@ class GetTests(Chai):
             datetime(2016, 7, 14, 0, 0, tzinfo=tz.tzutc()),
         )
 
+    def test_tzinfo_string_kwargs(self):
+        result = self.factory.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")
+        self.assertEqual(
+            result._datetime, datetime(2019, 7, 28, 7, 0, 0, 0, tzinfo=tz.tzutc())
+        )
+
     def test_insufficient_kwargs(self):
 
         with self.assertRaises(TypeError):
