@@ -157,7 +157,7 @@ class ArrowFactory(object):
         if len(kwargs) > 1:
             arg_count = 3
         if len(kwargs) == 1:
-            if not isinstance(tz, tzinfo):
+            if not tz:
                 arg_count = 3
 
         # () -> now, @ utc.
