@@ -153,12 +153,13 @@ class ArrowFactory(object):
         locale = kwargs.get("locale", "en_us")
         tz = kwargs.get("tzinfo", None)
 
-        # if kwargs given, send to constructor unless only tzinfo provided.
+        # if kwargs given, send to constructor unless only tzinfo provided
         if len(kwargs) > 1:
             arg_count = 3
-        if len(kwargs) == 1:
-            if not tz:
-                arg_count = 3
+
+        # tzinfo kwarg is not provided
+        if len(kwargs) == 1 and tz is None:
+            arg_count = 3
 
         # () -> now, @ utc.
         if arg_count == 0:
