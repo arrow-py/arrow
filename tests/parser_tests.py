@@ -416,6 +416,28 @@ class DateTimeParserParseTests(Chai):
             datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
 
+    def test_parse_YYYY_DDDD(self):
+        self.assertEqual(
+            self.parser.parse("1998-136", "YYYY-DDDD"), datetime(1998, 5, 16)
+        )
+
+        self.assertEqual(
+            self.parser.parse("1998-006", "YYYY-DDDD"), datetime(1998, 1, 6)
+        )
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("1998-456", "YYYY-DDDD")
+
+    def test_parse_YYYY_DDD(self):
+        self.assertEqual(self.parser.parse("1998-6", "YYYY-DDD"), datetime(1998, 1, 6))
+
+        self.assertEqual(
+            self.parser.parse("1998-136", "YYYY-DDD"), datetime(1998, 5, 16)
+        )
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("1998-756", "YYYY-DDD")
+
 
 class DateTimeParserRegexTests(Chai):
     def setUp(self):
@@ -510,6 +532,14 @@ class DateTimeParserISOTests(Chai):
     def test_YYYY(self):
 
         self.assertEqual(self.parser.parse_iso("2013"), datetime(2013, 1, 1))
+
+    def test_parse_YYYY_DDDD(self):
+        self.assertEqual(self.parser.parse_iso("1998-136"), datetime(1998, 5, 16))
+
+        self.assertEqual(self.parser.parse_iso("1998-006"), datetime(1998, 1, 6))
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("1998-456")
 
     def test_YYYY_MM(self):
 
