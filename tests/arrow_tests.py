@@ -614,6 +614,39 @@ class ArrowShiftTests(Chai):
             arw.shift(weekday=SU(-2)), arrow.Arrow(2013, 4, 28, 12, 30, 45)
         )
 
+    def test_shift_quarters_bug(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        # The value of the last-read argument was used instead of the ``quarters`` argument.
+        # Recall that the keyword argument dict, like all dicts, is unordered, so only certain
+        # combinations of arguments would exhibit this.
+        self.assertEqual(
+            arw.shift(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46)
+        )
+        self.assertEqual(
+            arw.shift(quarters=0, microseconds=1),
+            arrow.Arrow(2013, 5, 5, 12, 30, 45, 1),
+        )
+
 
 class ArrowRangeTests(Chai):
     def test_year(self):
