@@ -29,5 +29,12 @@ docs:
 
 clean:
 	rm -rf venv .tox ./**/__pycache__
-	rm -rf dist build .egg arrow.egg-info
-	rm -f ./**/*.pyc ./**/.coverage
+	rm -rf dist build .egg .eggs arrow.egg-info
+	rm -f ./**/*.pyc .coverage
+
+publish:
+	rm -rf dist build .egg .eggs arrow.egg-info
+	pip3 install -U setuptools twine wheel
+	python3 setup.py sdist bdist_wheel
+	twine upload dist/*
+	rm -rf dist build .egg .eggs arrow.egg-info

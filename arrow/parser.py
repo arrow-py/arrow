@@ -36,6 +36,7 @@ class DateTimeParser(object):
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
     # TODO: test timestamp thoroughly
 
+    # TODO: test new regular expressions
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
         "YY": _TWO_DIGIT_RE,

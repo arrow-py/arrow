@@ -1,5 +1,18 @@
 ## History
 
+### 0.14.4
+
+- [FIX] Fixed a regression in 0.14.3 that prevented a tzinfo argument of type string to be passed to the `get()` function. Functionality such as `arrow.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")` should work as normal again.
+- [CHANGE] Moved `backports.functools_lru_cache` dependency from `extra_requires` to `install_requires` for `Python 2.7` installs to fix [#495](https://github.com/crsmithdev/arrow/issues/495).
+
+### 0.14.3
+
+- [NEW] Added full support for Python 3.8.
+- [CHANGE] Added warnings for upcoming factory.get() parsing changes in 0.15.0. Please see https://github.com/crsmithdev/arrow/issues/612 for full details.
+- [FIX] Extensive refactor and update of documentation.
+- [FIX] factory.get() can now construct from kwargs.
+- [FIX] Added meridians to Spanish Locale.
+
 ### 0.14.2
 
 - [CHANGE] Travis CI builds now use tox to lint and run tests.
