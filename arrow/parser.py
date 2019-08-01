@@ -377,6 +377,7 @@ class DateTimeParser(object):
                 )
 
             # TODO: write test for 2015-366
+            # TODO: should we throw an error or mimic datetime?
             # datetime.strptime("2015-366", "%Y-%j")
             # Changes year: datetime.datetime(2016, 1, 1, 0, 0)
             parts["year"] = dt.year

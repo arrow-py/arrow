@@ -438,6 +438,19 @@ class DateTimeParserParseTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse("1998-756", "YYYY-DDD")
 
+    # month cannot be passed with DDD and DDDD tokens
+    def test_parse_YYYY_MM_DDDD(self):
+        with self.assertRaises(ParserError):
+            self.parser.parse("2015-01-009", "YYYY-MM-DDDD")
+
+    def test_parse_DDD_only(self):
+        with self.assertRaises(ParserError):
+            self.parser.parse("5", "DDD")
+
+    def test_parse_DDDD_only(self):
+        with self.assertRaises(ParserError):
+            self.parser.parse("145", "DDDD")
+
 
 class DateTimeParserRegexTests(Chai):
     def setUp(self):
@@ -533,13 +546,24 @@ class DateTimeParserISOTests(Chai):
 
         self.assertEqual(self.parser.parse_iso("2013"), datetime(2013, 1, 1))
 
-    def test_parse_YYYY_DDDD(self):
+    def test_YYYY_DDDD(self):
         self.assertEqual(self.parser.parse_iso("1998-136"), datetime(1998, 5, 16))
 
         self.assertEqual(self.parser.parse_iso("1998-006"), datetime(1998, 1, 6))
 
         with self.assertRaises(ParserError):
             self.parser.parse_iso("1998-456")
+
+    def test_YYYY_DDDD_HH_mm_ssZ(self):
+
+        self.assertEqual(
+            self.parser.parse_iso("2013-036 04:05:06+01:00"),
+            datetime(2013, 2, 5, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)),
+        )
+
+    def test_YYYY_MM_DDDD(self):
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2014-05-125")
 
     def test_YYYY_MM(self):
 
