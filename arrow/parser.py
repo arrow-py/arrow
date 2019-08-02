@@ -93,6 +93,7 @@ class DateTimeParser(object):
             )
 
     # TODO: since we support more than ISO-8601, we should rename this function
+    # IDEA: break into multiple functions
     def parse_iso(self, datetime_string):
         # strip leading and trailing whitespace
         datetime_string = datetime_string.strip()
@@ -114,7 +115,7 @@ class DateTimeParser(object):
         has_tz = False
 
         # TODO: add tests for all the new formats, especially basic format
-
+        # IDEA: should YYYY MM DD style be accepted here?
         # date formats (ISO-8601 and others) to test against
         formats = [
             "YYYY-MM-DD",
@@ -148,13 +149,12 @@ class DateTimeParser(object):
             time_parts = re.split("[+-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
-            # TODO: add test for basic format with Z "20160504T010203Z"
             is_basic_time_format = colon_count == 0
 
             has_tz = len(time_parts) > 1
-            has_hours = len(time_string) == 2
-            has_minutes = colon_count == 1 or len(time_string) == 4
-            has_seconds = colon_count == 2 or len(time_string) == 6
+            has_hours = len(time_parts[0]) == 2
+            has_minutes = colon_count == 1 or len(time_parts[0]) == 4
+            has_seconds = colon_count == 2 or len(time_parts[0]) == 6
             has_subseconds = re.search("[.,]", time_parts[0])
 
             if has_subseconds:
@@ -178,7 +178,7 @@ class DateTimeParser(object):
             else:
                 formats = ["{}T{}".format(f, time_string) for f in formats]
 
-        # TODO: reduce set of date formats for basic?
+        # TODO: reduce set of date formats for basic? test earlier?
 
         if has_time and has_tz:
             # Add "Z" to format strings to indicate to _parse_tokens

@@ -246,9 +246,9 @@ class DateTimeParserParseTests(Chai):
     def test_parse_tz_name_zzz(self):
         for tz_name in (
             # best solution would be to test on every available tz name from
-            # the tz database but it is actualy tricky to retrieve them from
+            # the tz database but it is actually tricky to retrieve them from
             # dateutil so here is short list that should match all
-            # naming patterns/conventions in used tz databaze
+            # naming patterns/conventions in used tz database
             "Africa/Tripoli",
             "America/Port_of_Spain",
             "Australia/LHI",
@@ -797,6 +797,35 @@ class DateTimeParserISOTests(Chai):
             self.parser.parse_iso("      2016-05-16T04:05:06.789120      "),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
+
+    def test_iso8601_basic_format(self):
+        self.assertEqual(self.parser.parse_iso("20180517"), datetime(2018, 5, 17))
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T10"), datetime(2018, 5, 17, 10)
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T105513.84"),
+            datetime(2018, 5, 17, 10, 55, 13, 840000),
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T105513Z"), datetime(2018, 5, 17, 10, 55, 13)
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T105513-0700"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        # too many digits in date
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("201860517T105513Z")
+
+        # too many digits in time
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("20180517T1055213Z")
 
 
 class TzinfoParserTests(Chai):
