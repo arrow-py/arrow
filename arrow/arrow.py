@@ -9,7 +9,6 @@ from __future__ import absolute_import
 
 import calendar
 import sys
-import warnings
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
@@ -596,33 +595,17 @@ class Arrow(object):
         """
 
         absolute_kwargs = {}
-        relative_kwargs = {}  # TODO: DEPRECATED; remove in next release
 
         for key, value in kwargs.items():
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key in self._ATTRS_PLURAL or key in ["weeks", "quarters"]:
-                # TODO: DEPRECATED
-                warnings.warn(
-                    "replace() with plural property to shift value "
-                    "is deprecated, use shift() instead",
-                    DeprecationWarning,
-                )
-                relative_kwargs[key] = value
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
             elif key != "tzinfo":
                 raise AttributeError('unknown attribute: "{}"'.format(key))
 
-        # core datetime does not support quarters, translate to months.
-        relative_kwargs.setdefault("months", 0)
-        relative_kwargs["months"] += (
-            relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
-        )
-
         current = self._datetime.replace(**absolute_kwargs)
-        current += relativedelta(**relative_kwargs)  # TODO: DEPRECATED
 
         tzinfo = kwargs.get("tzinfo")
 

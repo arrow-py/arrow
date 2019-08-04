@@ -275,28 +275,6 @@ class ArrowComparisonTests(Chai):
         self.assertFalse(self.arrow != self.arrow.datetime)
         self.assertTrue(self.arrow != "abc")
 
-    def test_deprecated_replace(self):
-
-        with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
-            # Trigger a warning.
-            self.arrow.replace(weeks=1)
-            # Verify some things
-            assert len(w) == 1
-            assert issubclass(w[-1].category, DeprecationWarning)
-            assert "deprecated" in str(w[-1].message)
-
-        with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
-            # Trigger a warning.
-            self.arrow.replace(hours=1)
-            # Verify some things
-            assert len(w) == 1
-            assert issubclass(w[-1].category, DeprecationWarning)
-            assert "deprecated" in str(w[-1].message)
-
     def test_gt(self):
 
         arrow_cmp = self.arrow.shift(minutes=1)
@@ -546,79 +524,6 @@ class ArrowReplaceTests(Chai):
         self.assertEqual(arw.replace(minute=1), arrow.Arrow(2013, 5, 5, 12, 1, 45))
         self.assertEqual(arw.replace(second=1), arrow.Arrow(2013, 5, 5, 12, 30, 1))
 
-    def test_replace_shift(self):
-
-        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-
-        # This is all scheduled for deprecation
-        self.assertEqual(arw.replace(years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45))
-        self.assertEqual(arw.replace(quarters=1), arrow.Arrow(2013, 8, 5, 12, 30, 45))
-        self.assertEqual(
-            arw.replace(quarters=1, months=1), arrow.Arrow(2013, 9, 5, 12, 30, 45)
-        )
-        self.assertEqual(arw.replace(months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45))
-        self.assertEqual(arw.replace(weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45))
-        self.assertEqual(arw.replace(days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45))
-        self.assertEqual(arw.replace(hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45))
-        self.assertEqual(arw.replace(minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45))
-        self.assertEqual(arw.replace(seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46))
-        self.assertEqual(
-            arw.replace(microseconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 45, 1)
-        )
-
-    def test_replace_shift_negative(self):
-
-        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-
-        # This is all scheduled for deprecation
-        self.assertEqual(arw.replace(years=-1), arrow.Arrow(2012, 5, 5, 12, 30, 45))
-        self.assertEqual(arw.replace(quarters=-1), arrow.Arrow(2013, 2, 5, 12, 30, 45))
-        self.assertEqual(
-            arw.replace(quarters=-1, months=-1), arrow.Arrow(2013, 1, 5, 12, 30, 45)
-        )
-        self.assertEqual(arw.replace(months=-1), arrow.Arrow(2013, 4, 5, 12, 30, 45))
-        self.assertEqual(arw.replace(weeks=-1), arrow.Arrow(2013, 4, 28, 12, 30, 45))
-        self.assertEqual(arw.replace(days=-1), arrow.Arrow(2013, 5, 4, 12, 30, 45))
-        self.assertEqual(arw.replace(hours=-1), arrow.Arrow(2013, 5, 5, 11, 30, 45))
-        self.assertEqual(arw.replace(minutes=-1), arrow.Arrow(2013, 5, 5, 12, 29, 45))
-        self.assertEqual(arw.replace(seconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44))
-        self.assertEqual(
-            arw.replace(microseconds=-1), arrow.Arrow(2013, 5, 5, 12, 30, 44, 999999)
-        )
-
-    def test_replace_quarters_bug(self):
-
-        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
-
-        # The value of the last-read argument was used instead of the ``quarters`` argument.
-        # Recall that the keyword argument dict, like all dicts, is unordered, so only certain
-        # combinations of arguments would exhibit this.
-        self.assertEqual(
-            arw.replace(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46)
-        )
-        self.assertEqual(
-            arw.replace(quarters=0, microseconds=1),
-            arrow.Arrow(2013, 5, 5, 12, 30, 45, 1),
-        )
-
     def test_replace_tzinfo(self):
 
         arw = arrow.Arrow.utcnow().to("US/Eastern")
@@ -764,28 +669,28 @@ class ArrowShiftTests(Chai):
         # Recall that the keyword argument dict, like all dicts, is unordered, so only certain
         # combinations of arguments would exhibit this.
         self.assertEqual(
-            arw.replace(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45)
+            arw.shift(quarters=0, years=1), arrow.Arrow(2014, 5, 5, 12, 30, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45)
+            arw.shift(quarters=0, months=1), arrow.Arrow(2013, 6, 5, 12, 30, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45)
+            arw.shift(quarters=0, weeks=1), arrow.Arrow(2013, 5, 12, 12, 30, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45)
+            arw.shift(quarters=0, days=1), arrow.Arrow(2013, 5, 6, 12, 30, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45)
+            arw.shift(quarters=0, hours=1), arrow.Arrow(2013, 5, 5, 13, 30, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45)
+            arw.shift(quarters=0, minutes=1), arrow.Arrow(2013, 5, 5, 12, 31, 45)
         )
         self.assertEqual(
-            arw.replace(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46)
+            arw.shift(quarters=0, seconds=1), arrow.Arrow(2013, 5, 5, 12, 30, 46)
         )
         self.assertEqual(
-            arw.replace(quarters=0, microseconds=1),
+            arw.shift(quarters=0, microseconds=1),
             arrow.Arrow(2013, 5, 5, 12, 30, 45, 1),
         )
 
