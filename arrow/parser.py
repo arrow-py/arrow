@@ -228,6 +228,10 @@ class DateTimeParser(object):
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", escaped_fmt)
 
+        # Any number of S is the same as one.
+        # TODO: allow users to specify the number of digits to parse
+        escaped_fmt = re.sub("S+", "S", escaped_fmt)
+
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
         fmt_pattern = escaped_fmt
@@ -315,7 +319,7 @@ class DateTimeParser(object):
         elif token == "S":
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
-            # FIXME: add nanosecond support somehow?
+            # IDEA: add nanosecond support somehow? Need datetime support for it first.
             value = value.ljust(7, str("0"))
 
             # floating-point (IEEE-754) defaults to half-to-even rounding

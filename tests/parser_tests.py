@@ -272,14 +272,44 @@ class DateTimeParserParseTests(Chai):
             self.parser.parse("2013-01-01 +1000", "YYYY-MM-DD ZZZ")
 
     def test_parse_subsecond(self):
+        # TODO: make both test_parse_subsecond functions in Parse and ParseISO
+        # tests use the same expected objects (use pytest fixtures)
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
+        self.assertEqual(
+            self.parser.parse("2013-01-01 12:30:45.9", "YYYY-MM-DD HH:mm:ss.S"),
+            self.expected,
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 980000)
+        self.assertEqual(
+            self.parser.parse("2013-01-01 12:30:45.98", "YYYY-MM-DD HH:mm:ss.SS"),
+            self.expected,
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987000)
+        self.assertEqual(
+            self.parser.parse("2013-01-01 12:30:45.987", "YYYY-MM-DD HH:mm:ss.SSS"),
+            self.expected,
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987600)
+        self.assertEqual(
+            self.parser.parse("2013-01-01 12:30:45.9876", "YYYY-MM-DD HH:mm:ss.SSSS"),
+            self.expected,
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987650)
+        self.assertEqual(
+            self.parser.parse("2013-01-01 12:30:45.98765", "YYYY-MM-DD HH:mm:ss.SSSSS"),
+            self.expected,
+        )
 
         self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         self.assertEqual(
-            self.parser.parse("2013-01-01 12:30:45.987654", "YYYY-MM-DD HH:mm:ss.S"),
+            self.parser.parse(
+                "2013-01-01 12:30:45.987654", "YYYY-MM-DD HH:mm:ss.SSSSSS"
+            ),
             self.expected,
-        )
-        self.assertEqual(
-            self.parser.parse_iso("2013-01-01 12:30:45.987654"), self.expected
         )
 
     def test_parse_subsecond_rounding(self):
@@ -328,8 +358,6 @@ class DateTimeParserParseTests(Chai):
             ("2016-05-16T04:05:06.789120ZblahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
             ("2016-05-16T04:05:06.789120Zblah", "YYYY-MM-DDThh:mm:ss.SZ"),
             ("2016-05-16T04:05:06.789120blahZ", "YYYY-MM-DDThh:mm:ss.SZ"),
-            ("2016-05-16T04:05:06.789120Z", "YYYY-MM-DDThh:mm:ss.SSZ"),
-            ("2016-05-16T04:05:06.789120Z", "YYYY-MM-DDThh:mm:ss.SSSSSSZ"),
         ]
 
         for pair in input_format_pairs:
@@ -495,7 +523,7 @@ class DateTimeParserRegexTests(Chai):
 
     def test_format_tz(self):
 
-        self.assertEqual(self.format_regex.findall("ZZ-Z"), ["ZZ", "Z"])
+        self.assertEqual(self.format_regex.findall("ZZZ-ZZ-Z"), ["ZZZ", "ZZ", "Z"])
 
     def test_format_am_pm(self):
 
@@ -725,6 +753,35 @@ class DateTimeParserISOTests(Chai):
         self.assertEqual(
             self.parser.parse_iso("2013-02-03 04:05:06.78912Z"),
             datetime(2013, 2, 3, 4, 5, 6, 789120),
+        )
+
+    def test_parse_subsecond(self):
+        # TODO: make both test_parse_subsecond functions in Parse and ParseISO
+        # tests use the same expected objects (use pytest fixtures)
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
+        self.assertEqual(self.parser.parse_iso("2013-01-01 12:30:45.9"), self.expected)
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 980000)
+        self.assertEqual(self.parser.parse_iso("2013-01-01 12:30:45.98"), self.expected)
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987000)
+        self.assertEqual(
+            self.parser.parse_iso("2013-01-01 12:30:45.987"), self.expected
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987600)
+        self.assertEqual(
+            self.parser.parse_iso("2013-01-01 12:30:45.9876"), self.expected
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987650)
+        self.assertEqual(
+            self.parser.parse_iso("2013-01-01 12:30:45.98765"), self.expected
+        )
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        self.assertEqual(
+            self.parser.parse_iso("2013-01-01 12:30:45.987654"), self.expected
         )
 
     def test_gnu_date(self):
