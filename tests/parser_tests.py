@@ -533,6 +533,14 @@ class DateTimeParserRegexTests(Chai):
 
         self.assertEqual(self.format_regex.findall("X"), ["X"])
 
+    def test_escape(self):
+
+        escape_regex = parser.DateTimeParser._ESCAPE_RE
+
+        self.assertEqual(
+            escape_regex.findall("2018-03-09 8 [h] 40 [hello]"), ["[h]", "[hello]"]
+        )
+
     def test_month_names(self):
         p = parser.DateTimeParser("en_us")
 
@@ -554,14 +562,50 @@ class DateTimeParserRegexTests(Chai):
     def test_digits(self):
 
         self.assertEqual(
+            parser.DateTimeParser._ONE_OR_TWO_DIGIT_RE.findall("4-56"), ["4", "56"]
+        )
+        self.assertEqual(
+            parser.DateTimeParser._ONE_OR_TWO_OR_THREE_DIGIT_RE.findall("4-56-789"),
+            ["4", "56", "789"],
+        )
+        self.assertEqual(
+            parser.DateTimeParser._ONE_OR_MORE_DIGIT_RE.findall("4-56-789-1234-12345"),
+            ["4", "56", "789", "1234", "12345"],
+        )
+        self.assertEqual(
             parser.DateTimeParser._TWO_DIGIT_RE.findall("12-3-45"), ["12", "45"]
+        )
+        self.assertEqual(
+            parser.DateTimeParser._THREE_DIGIT_RE.findall("123-4-56"), ["123"]
         )
         self.assertEqual(
             parser.DateTimeParser._FOUR_DIGIT_RE.findall("1234-56"), ["1234"]
         )
-        self.assertEqual(
-            parser.DateTimeParser._ONE_OR_TWO_DIGIT_RE.findall("4-56"), ["4", "56"]
-        )
+
+    # def test_tz(self):
+    #     tz_re = parser.DateTimeParser._TZ_RE
+    #
+    #     self.assertEqual(
+    #         tz_re.findall("-07:00"), ["-07", "00"]
+    #     )
+
+    # self.assertEqual(
+    #     tz_re.findall("+07:00"), ["+07:00"]
+    # )
+    #
+    # self.assertEqual(
+    #     tz_re.findall("-0700"), ["-0700"]
+    # )
+    #
+    # self.assertEqual(
+    #     tz_re.findall("+0700"), ["+0700"]
+    # )
+    #
+    # self.assertEqual(
+    #     tz_re.findall("Z"), ["Z"]
+    # )
+
+    # what about +Z?
 
 
 class DateTimeParserISOTests(Chai):

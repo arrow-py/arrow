@@ -23,15 +23,23 @@ class DateTimeParser(object):
     _FORMAT_RE = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)"
     )
+    # TODO: add support for inner brackets like "2018-03-09 8 [[h]] 40"
     _ESCAPE_RE = re.compile(r"\[[^\[\]]*\]")
 
-    _ONE_OR_MORE_DIGIT_RE = re.compile(r"\d+")
     _ONE_OR_TWO_DIGIT_RE = re.compile(r"\d{1,2}")
     _ONE_OR_TWO_OR_THREE_DIGIT_RE = re.compile(r"\d{1,3}")
+    _ONE_OR_MORE_DIGIT_RE = re.compile(r"\d+")
+    _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
-    _TWO_DIGIT_RE = re.compile(r"\d{2}")
+    # _TZ_RE_ZZ = re.compile(r"^[+\-]\d{2}:(\d{2})?$|^ZZ?Z?$")
+    # _TZ_RE_Z = re.compile(r"^[+\-]\d{2}(\d{2})?$|^ZZ?Z?$")
+
+    # _TZ_RE_ZZ = re.compile(r"^[+\-]\d{2}:(\d{2})?$|Z")
+    # _TZ_RE_Z = re.compile(r"^[+\-]\d{2}(\d{2})?$|Z")
+
     _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
+    # _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
     # TODO: test timestamp thoroughly
@@ -56,6 +64,8 @@ class DateTimeParser(object):
         "s": _ONE_OR_TWO_DIGIT_RE,
         "X": _TIMESTAMP_RE,
         "ZZZ": _TZ_NAME_RE,
+        # "ZZ": _TZ_RE_ZZ,
+        # "Z": _TZ_RE_Z,
         "ZZ": _TZ_RE,
         "Z": _TZ_RE,
         "S": _ONE_OR_MORE_DIGIT_RE,
@@ -114,6 +124,8 @@ class DateTimeParser(object):
         has_time = has_space_divider or has_t_divider
         has_tz = False
 
+        # TODO: test basic format with timezone string without "+"
+
         # TODO: add tests for all the new formats, especially basic format
         # IDEA: should YYYY MM DD style be accepted here?
         # date formats (ISO-8601 and others) to test against
@@ -146,10 +158,22 @@ class DateTimeParser(object):
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            time_parts = re.split("[+-]", time_string, 1)
+            time_parts = re.split(r"[+\-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
             is_basic_time_format = colon_count == 0
+            tz_format = "Z"
+
+            # tz offset is present
+            if len(time_parts) == 2:
+                tz_offset = time_parts[1]
+
+                if ":" in tz_offset:
+                    # TODO: add error message
+                    if is_basic_time_format:
+                        raise ParserError
+
+                    tz_format = "ZZ"
 
             has_tz = len(time_parts) > 1
             has_hours = len(time_parts[0]) == 2
@@ -183,7 +207,7 @@ class DateTimeParser(object):
         if has_time and has_tz:
             # Add "Z" to format strings to indicate to _parse_tokens
             # that a timezone needs to be parsed
-            formats = ["{}Z".format(f) for f in formats]
+            formats = ["{}{}".format(f, tz_format) for f in formats]
 
         # TODO: make thrown error messages less cryptic and more informative
         return self._parse_multiformat(datetime_string, formats)
