@@ -1770,7 +1770,6 @@ class BrazilianPortugueseLocale(PortugueseLocale):
         "years": "{0} anos",
     }
 
-
     month_names = [
         "",
         "Janeiro",
