@@ -32,14 +32,9 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
-    # _TZ_RE_ZZ = re.compile(r"^[+\-]\d{2}:(\d{2})?$|^ZZ?Z?$")
-    # _TZ_RE_Z = re.compile(r"^[+\-]\d{2}(\d{2})?$|^ZZ?Z?$")
-
-    # _TZ_RE_ZZ = re.compile(r"^[+\-]\d{2}:(\d{2})?$|Z")
-    # _TZ_RE_Z = re.compile(r"^[+\-]\d{2}(\d{2})?$|Z")
-
-    _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?|Z")
-    # _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?")
+    # TODO: +07 is not possible with colon, fix regex
+    _TZ_RE_ZZ = re.compile(r"[+\-]\d{2}:(\d{2})?|Z")
+    _TZ_RE_Z = re.compile(r"[+\-]\d{2}(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
     # TODO: test timestamp thoroughly
@@ -64,10 +59,8 @@ class DateTimeParser(object):
         "s": _ONE_OR_TWO_DIGIT_RE,
         "X": _TIMESTAMP_RE,
         "ZZZ": _TZ_NAME_RE,
-        # "ZZ": _TZ_RE_ZZ,
-        # "Z": _TZ_RE_Z,
-        "ZZ": _TZ_RE,
-        "Z": _TZ_RE,
+        "ZZ": _TZ_RE_ZZ,
+        "Z": _TZ_RE_Z,
         "S": _ONE_OR_MORE_DIGIT_RE,
     }
 
@@ -148,7 +141,15 @@ class DateTimeParser(object):
             "YYYY",
         ]
 
+        # TODO: add test that accounts for someone adding +Z or -Z to the datetime string vs just Z
         if has_time:
+            # TODO: write a test for this (more than one Z in datetime string)
+            if "Z" in datetime_string and datetime_string.count("Z") > 1:
+                # TODO: improve error message
+                raise ParserError(
+                    "More than one 'Z' provided in the datetime string. Please pass in a single Z to denote the UTC timezone."
+                )
+
             # Z is ignored entirely because fromdatetime defaults to UTC in arrow.py
             if datetime_string[-1] == "Z":
                 datetime_string = datetime_string[:-1]
@@ -205,7 +206,7 @@ class DateTimeParser(object):
         # TODO: reduce set of date formats for basic? test earlier?
 
         if has_time and has_tz:
-            # Add "Z" to format strings to indicate to _parse_tokens
+            # Add "Z" to format strings to indicate to _parse_token
             # that a timezone needs to be parsed
             formats = ["{}{}".format(f, tz_format) for f in formats]
 
@@ -299,13 +300,11 @@ class DateTimeParser(object):
         # Reference: https://stackoverflow.com/q/14232931/3820660
         starting_word_boundary = r"(?<![\S])"
         ending_word_boundary = r"(?![\S])"
-        final_fmt_pattern = r"{starting_word_boundary}{final_fmt_pattern}Z?{ending_word_boundary}".format(
-            starting_word_boundary=starting_word_boundary,
-            final_fmt_pattern=final_fmt_pattern,
-            ending_word_boundary=ending_word_boundary,
+        bounded_fmt_pattern = r"{}{}{}".format(
+            starting_word_boundary, final_fmt_pattern, ending_word_boundary
         )
 
-        return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
+        return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
 
     def _parse_token(self, token, value, parts):
 
@@ -457,23 +456,23 @@ class DateTimeParser(object):
 
 
 class TzinfoParser(object):
-
-    _TZINFO_RE = re.compile(r"([+\-])?(\d\d):?(\d\d)?")
+    # TODO: test this REGEX
+    _TZINFO_RE = re.compile(r"^([+\-])?(\d{2}):?(\d{2})?$")
 
     @classmethod
-    def parse(cls, string):
+    def parse(cls, tzinfo_string):
 
         tzinfo = None
 
-        if string == "local":
+        if tzinfo_string == "local":
             tzinfo = tz.tzlocal()
 
-        elif string in ["utc", "UTC", "Z"]:
+        elif tzinfo_string in ["utc", "UTC", "Z"]:
             tzinfo = tz.tzutc()
 
         else:
 
-            iso_match = cls._TZINFO_RE.match(string)
+            iso_match = cls._TZINFO_RE.match(tzinfo_string)
 
             if iso_match:
                 sign, hours, minutes = iso_match.groups()
@@ -487,9 +486,11 @@ class TzinfoParser(object):
                 tzinfo = tz.tzoffset(None, seconds)
 
             else:
-                tzinfo = tz.gettz(string)
+                tzinfo = tz.gettz(tzinfo_string)
 
         if tzinfo is None:
-            raise ParserError('Could not parse timezone expression "{}"'.format(string))
+            raise ParserError(
+                'Could not parse timezone expression "{}"'.format(tzinfo_string)
+            )
 
         return tzinfo
