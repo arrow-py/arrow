@@ -456,6 +456,7 @@ class DateTimeParser(object):
 
 
 class TzinfoParser(object):
+    # TODO: align this with the TZ_RE_Z and TZ_RE_ZZ above
     # TODO: test this REGEX
     _TZINFO_RE = re.compile(r"^([+\-])?(\d{2}):?(\d{2})?$")
 
