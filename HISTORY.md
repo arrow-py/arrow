@@ -3,8 +3,8 @@
 ### 0.14.5
 
 - [NEW] Added Afrikaans locale.
-- [CHANGE] Removed deprecated replace shift functionality.
-- [FIX] Fixed bug that occurred when factory.get() was passed a locale kwarg.
+- [CHANGE] Removed deprecated `replace` shift functionality. Users looking to pass plural properties to the `replace` function to shift values should use `shift` instead.
+- [FIX] Fixed bug that occurred when `factory.get()` was passed a locale kwarg.
 
 ### 0.14.4
 
