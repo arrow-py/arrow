@@ -1378,7 +1378,9 @@ class Arrow(object):
             return timestamp / 1000000.0
 
         raise ValueError(
-            "specified timestamp '{}' too big, use seconds, ms or ns".format(timestamp)
+            "specified timestamp '{}' too big, use seconds, milliseconds (ms) or microseconds (us)".format(
+                timestamp
+            )
         )
 
 
