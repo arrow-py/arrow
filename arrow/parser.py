@@ -32,9 +32,12 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
-    # TODO: +07 is not possible with colon, fix regex
-    _TZ_RE_ZZ = re.compile(r"[+\-]\d{2}:(\d{2})?|Z")
-    _TZ_RE_Z = re.compile(r"[+\-]\d{2}(\d{2})?|Z")
+    # https://regex101.com/r/ifOZxu/4
+    _TZ_RE_Z = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
+    # https://regex101.com/r/ifOZxu/5
+    _TZ_RE_ZZ = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
+    # _TZ_RE_ZZ = re.compile(r"[\+\-]\d{2}:(\d{2})?|Z")
+    # _TZ_RE_Z = re.compile(r"[\+\-]\d{2}(\d{2})?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
     # TODO: test timestamp thoroughly
@@ -159,7 +162,7 @@ class DateTimeParser(object):
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            time_parts = re.split(r"[+\-]", time_string, 1)
+            time_parts = re.split(r"[\+\-]", time_string, 1)
             colon_count = time_parts[0].count(":")
 
             is_basic_time_format = colon_count == 0
@@ -176,11 +179,12 @@ class DateTimeParser(object):
 
                     tz_format = "ZZ"
 
+            # TODO: use regex to determine if something is basic format
             has_tz = len(time_parts) > 1
             has_hours = len(time_parts[0]) == 2
             has_minutes = colon_count == 1 or len(time_parts[0]) == 4
             has_seconds = colon_count == 2 or len(time_parts[0]) == 6
-            has_subseconds = re.search("[.,]", time_parts[0])
+            has_subseconds = re.search(r"[\.,]", time_parts[0])
 
             if has_subseconds:
                 time_string = "HH:mm:ss{}S".format(has_subseconds.group())
@@ -255,7 +259,7 @@ class DateTimeParser(object):
 
         # Any number of S is the same as one.
         # TODO: allow users to specify the number of digits to parse
-        escaped_fmt = re.sub("S+", "S", escaped_fmt)
+        escaped_fmt = re.sub(r"S+", "S", escaped_fmt)
 
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
@@ -458,7 +462,8 @@ class DateTimeParser(object):
 class TzinfoParser(object):
     # TODO: align this with the TZ_RE_Z and TZ_RE_ZZ above
     # TODO: test this REGEX
-    _TZINFO_RE = re.compile(r"^([+\-])?(\d{2}):?(\d{2})?$")
+    # https://regex101.com/r/ifOZxu/3
+    _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
     def parse(cls, tzinfo_string):
