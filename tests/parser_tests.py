@@ -582,30 +582,31 @@ class DateTimeParserRegexTests(Chai):
             parser.DateTimeParser._FOUR_DIGIT_RE.findall("1234-56"), ["1234"]
         )
 
-    # def test_tz(self):
-    #     tz_re = parser.DateTimeParser._TZ_RE
-    #
-    #     self.assertEqual(
-    #         tz_re.findall("-07:00"), ["-07", "00"]
-    #     )
-    #
-    # self.assertEqual(
-    #     tz_re.findall("+07:00"), ["+07:00"]
-    # )
-    #
-    # self.assertEqual(
-    #     tz_re.findall("-0700"), ["-0700"]
-    # )
-    #
-    # self.assertEqual(
-    #     tz_re.findall("+0700"), ["+0700"]
-    # )
-    #
-    # self.assertEqual(
-    #     tz_re.findall("Z"), ["Z"]
-    # )
+    def test_tz(self):
+        tz_z_re = parser.DateTimeParser._TZ_Z_RE
+        self.assertEqual(tz_z_re.findall("-0700"), [("-", "07", "00")])
+        self.assertEqual(tz_z_re.findall("+07"), [("+", "07", "")])
+        self.assertTrue(tz_z_re.search("15/01/2019T04:05:06.789120Z") is not None)
+        self.assertTrue(tz_z_re.search("15/01/2019T04:05:06.789120") is None)
 
-    # what about +Z?
+        tz_zz_re = parser.DateTimeParser._TZ_ZZ_RE
+        self.assertEqual(tz_zz_re.findall("-07:00"), [("-", "07", "00")])
+        self.assertEqual(tz_zz_re.findall("+07"), [("+", "07", "")])
+        self.assertTrue(tz_zz_re.search("15/01/2019T04:05:06.789120Z") is not None)
+        self.assertTrue(tz_zz_re.search("15/01/2019T04:05:06.789120") is None)
+
+        tz_name_re = parser.DateTimeParser._TZ_NAME_RE
+        self.assertEqual(tz_name_re.findall("Europe/Warsaw"), ["Europe/Warsaw"])
+        self.assertEqual(tz_name_re.findall("GMT"), ["GMT"])
+
+    def test_timestamp(self):
+        timestamp_re = parser.DateTimeParser._TIMESTAMP_RE
+        self.assertEqual(
+            timestamp_re.findall("1565707550.452729"), ["1565707550.452729"]
+        )
+        self.assertEqual(timestamp_re.findall("1565707550"), ["1565707550"])
+        self.assertEqual(timestamp_re.findall("1565707550."), [])
+        self.assertEqual(timestamp_re.findall(".1565707550"), [])
 
 
 class DateTimeParserISOTests(Chai):

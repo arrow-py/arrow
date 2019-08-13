@@ -32,12 +32,11 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
+    # TODO: test someone passing +Z or -Z
     # https://regex101.com/r/ifOZxu/4
-    _TZ_RE_Z = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
+    _TZ_Z_RE = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
     # https://regex101.com/r/ifOZxu/5
-    _TZ_RE_ZZ = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
-    # _TZ_RE_ZZ = re.compile(r"[\+\-]\d{2}:(\d{2})?|Z")
-    # _TZ_RE_Z = re.compile(r"[\+\-]\d{2}(\d{2})?|Z")
+    _TZ_ZZ_RE = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
     # TODO: test timestamp thoroughly
@@ -62,8 +61,8 @@ class DateTimeParser(object):
         "s": _ONE_OR_TWO_DIGIT_RE,
         "X": _TIMESTAMP_RE,
         "ZZZ": _TZ_NAME_RE,
-        "ZZ": _TZ_RE_ZZ,
-        "Z": _TZ_RE_Z,
+        "ZZ": _TZ_ZZ_RE,
+        "Z": _TZ_Z_RE,
         "S": _ONE_OR_MORE_DIGIT_RE,
     }
 
