@@ -23,7 +23,6 @@ class DateTimeParser(object):
     _FORMAT_RE = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)"
     )
-    # TODO: add support for inner brackets like "2018-03-09 8 [[h]] 40"
     _ESCAPE_RE = re.compile(r"\[[^\[\]]*\]")
 
     _ONE_OR_TWO_DIGIT_RE = re.compile(r"\d{1,2}")
@@ -32,7 +31,6 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
-    # TODO: test someone passing +Z or -Z
     # https://regex101.com/r/ifOZxu/4
     _TZ_Z_RE = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
     # https://regex101.com/r/ifOZxu/5
@@ -184,6 +182,8 @@ class DateTimeParser(object):
             has_minutes = colon_count == 1 or len(time_parts[0]) == 4
             has_seconds = colon_count == 2 or len(time_parts[0]) == 6
             has_subseconds = re.search(r"[\.,]", time_parts[0])
+
+            # Add tests for someone mixing basic format with colon-separated
 
             if has_subseconds:
                 time_string = "HH:mm:ss{}S".format(has_subseconds.group())
