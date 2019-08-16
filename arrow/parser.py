@@ -102,11 +102,16 @@ class DateTimeParser(object):
         has_t_divider = "T" in datetime_string
 
         num_spaces = datetime_string.count(" ")
-        if (has_space_divider and num_spaces != 1) or (
-            has_t_divider and num_spaces > 0
-        ):
+        if has_space_divider and num_spaces != 1:
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
+                "Expected an ISO 8601-like string, but was given '{}' which contains multiple spaces. Try passing in a format string to resolve this.".format(
+                    datetime_string
+                )
+            )
+
+        if has_t_divider and num_spaces > 0:
+            raise ParserError(
+                "Expected an ISO 8601-like string, but was given '{}' which contains \"T\" separator and spaces. Try passing in a format string to resolve this.".format(
                     datetime_string
                 )
             )
@@ -115,7 +120,6 @@ class DateTimeParser(object):
         has_tz = False
 
         # TODO: add tests for all the new formats, especially basic format
-        # IDEA: should YYYY MM DD style be accepted here?
         # date formats (ISO-8601 and others) to test against
         formats = [
             "YYYY-MM-DD",
@@ -185,7 +189,6 @@ class DateTimeParser(object):
             # that a timezone needs to be parsed
             formats = ["{}Z".format(f) for f in formats]
 
-        # TODO: make thrown error messages less cryptic and more informative
         return self._parse_multiformat(datetime_string, formats)
 
     def parse(self, datetime_string, fmt):
@@ -198,9 +201,7 @@ class DateTimeParser(object):
         match = fmt_pattern_re.search(datetime_string)
         if match is None:
             raise ParserError(
-                "Failed to match '{}' when parsing '{}'".format(
-                    fmt_pattern_re.pattern, datetime_string
-                )
+                "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
             )
 
         parts = {}
@@ -354,7 +355,6 @@ class DateTimeParser(object):
             tz_utc = tz.tzutc()
             return datetime.fromtimestamp(timestamp, tz=tz_utc)
 
-        # TODO: add tests for this!
         day_of_year = parts.get("day_of_year")
 
         if day_of_year:
@@ -380,10 +380,6 @@ class DateTimeParser(object):
                     )
                 )
 
-            # TODO: write test for 2015-366
-            # TODO: should we throw an error or mimic datetime?
-            # datetime.strptime("2015-366", "%Y-%j")
-            # Changes year: datetime.datetime(2016, 1, 1, 0, 0)
             parts["year"] = dt.year
             parts["month"] = dt.month
             parts["day"] = dt.day
@@ -420,7 +416,7 @@ class DateTimeParser(object):
 
         if _datetime is None:
             raise ParserError(
-                "Could not match input '{}' to any of the supported formats: {}".format(
+                "Could not match input '{}' to any of the formats provided: {}".format(
                     string, ", ".join(formats)
                 )
             )
