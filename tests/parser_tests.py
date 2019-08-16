@@ -677,6 +677,10 @@ class DateTimeParserISOTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse_iso("1998-456")
 
+        # datetime.strptime("2015-366", "%Y-%j")
+        # Changes year: datetime.datetime(2016, 1, 1, 0, 0)
+        self.assertEqual(self.parser.parse_iso("2015-366"), datetime(2016, 1, 1))
+
     def test_YYYY_DDDD_HH_mm_ssZ(self):
 
         self.assertEqual(
