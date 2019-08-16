@@ -6,6 +6,7 @@ from chai import Chai
 from dateutil import tz
 
 from arrow import factory, util
+from arrow.parser import ParserError
 
 
 def assertDtEqual(dt1, dt2, within=10):
@@ -45,17 +46,27 @@ class GetTests(Chai):
 
     def test_one_arg_timestamp(self):
 
-        timestamp = 12345
-        timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+        int_timestamp = int(time.time())
+        timestamp_dt = datetime.utcfromtimestamp(int_timestamp).replace(
+            tzinfo=tz.tzutc()
+        )
 
-        self.assertEqual(self.factory.get(timestamp), timestamp_dt)
+        self.assertEqual(self.factory.get(int_timestamp), timestamp_dt)
 
-        timestamp = 123.45
-        timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+        with self.assertRaises(ParserError):
+            self.factory.get(str(int_timestamp))
 
-        self.assertEqual(self.factory.get(timestamp), timestamp_dt)
+        float_timestamp = time.time()
+        timestamp_dt = datetime.utcfromtimestamp(float_timestamp).replace(
+            tzinfo=tz.tzutc()
+        )
 
-        # Issue 216
+        self.assertEqual(self.factory.get(float_timestamp), timestamp_dt)
+
+        with self.assertRaises(ParserError):
+            self.factory.get(str(float_timestamp))
+
+        # Regression test for issue #216
         timestamp = 99999999999999999999999999
         # Python 3 raises `OverflowError`, Python 2 raises `ValueError`
         with self.assertRaises((OverflowError, ValueError)):

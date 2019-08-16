@@ -31,18 +31,14 @@ class DateTimeParser(object):
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
     _THREE_DIGIT_RE = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE = re.compile(r"\d{4}")
-    # https://regex101.com/r/ifOZxu/4
     _TZ_Z_RE = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
-    # https://regex101.com/r/ifOZxu/5
     _TZ_ZZ_RE = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
-    # TODO: test timestamp with natural language processing. I think we may have to remove the ^...$
+    # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
+    # break cases like "15 Jul 2000" and a format list (see issue #447)
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
-    # https://regex101.com/r/LDMBVi/2
     _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
-    # TODO: test timestamp thoroughly
 
-    # TODO: test new regular expressions
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
         "YY": _TWO_DIGIT_RE,
@@ -101,8 +97,7 @@ class DateTimeParser(object):
     # TODO: since we support more than ISO-8601, we should rename this function
     # IDEA: break into multiple functions
     def parse_iso(self, datetime_string):
-        # strip leading and trailing whitespace
-        datetime_string = datetime_string.strip()
+        # TODO: add a flag to normalize whitespace (useful in logs, ref issue #421)
 
         has_space_divider = " " in datetime_string
         has_t_divider = "T" in datetime_string
@@ -170,7 +165,7 @@ class DateTimeParser(object):
 
             if time_components is None:
                 raise ParserError(
-                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format.".format()
+                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
                 )
 
             hours, minutes, seconds, subseconds_sep, subseconds = (
@@ -457,7 +452,6 @@ class DateTimeParser(object):
 
 class TzinfoParser(object):
     # TODO: test against full timezone DB
-    # https://regex101.com/r/ifOZxu/3
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod

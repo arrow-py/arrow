@@ -208,6 +208,20 @@ class DateTimeParserParseTests(Chai):
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
         self.assertEqual(self.parser.parse(str(float_timestamp), "X"), self.expected)
 
+        # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
+        # break cases like "15 Jul 2000" and a format list (see issue #447)
+        with self.assertRaises(ParserError):
+            natural_lang_string = "Meet me at {} at the restaurant.".format(
+                float_timestamp
+            )
+            self.parser.parse(natural_lang_string, "X")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("1565982019.", "X")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse(".1565982019", "X")
+
     def test_parse_names(self):
 
         self.expected = datetime(2012, 1, 1)
@@ -618,6 +632,32 @@ class DateTimeParserRegexTests(Chai):
         self.assertEqual(timestamp_re.findall("1565707550."), [])
         self.assertEqual(timestamp_re.findall(".1565707550"), [])
 
+    def test_time(self):
+        time_re = parser.DateTimeParser._TIME_RE
+        time_seperators = [":", ""]
+
+        for sep in time_seperators:
+            self.assertEqual(time_re.findall("12"), [("12", "", "", "", "")])
+            self.assertEqual(
+                time_re.findall("12{sep}35".format(sep=sep)), [("12", "35", "", "", "")]
+            )
+            self.assertEqual(
+                time_re.findall("12{sep}35{sep}46".format(sep=sep)),
+                [("12", "35", "46", "", "")],
+            )
+            self.assertEqual(
+                time_re.findall("12{sep}35{sep}46.952313".format(sep=sep)),
+                [("12", "35", "46", ".", "952313")],
+            )
+            self.assertEqual(
+                time_re.findall("12{sep}35{sep}46,952313".format(sep=sep)),
+                [("12", "35", "46", ",", "952313")],
+            )
+
+        self.assertEqual(time_re.findall("12:"), [])
+        self.assertEqual(time_re.findall("12:35:46."), [])
+        self.assertEqual(time_re.findall("12:35:46,"), [])
+
 
 class DateTimeParserISOTests(Chai):
     def setUp(self):
@@ -915,25 +955,6 @@ class DateTimeParserISOTests(Chai):
         for ti in test_inputs:
             with self.assertRaises(ParserError):
                 self.parser.parse_iso(ti)
-
-    def test_parse_iso_with_leading_and_trailing_whitespace(self):
-        self.assertEqual(self.parser.parse_iso("      2016"), datetime(2016, 1, 1))
-
-        self.assertEqual(self.parser.parse_iso("2016      "), datetime(2016, 1, 1))
-
-        self.assertEqual(
-            self.parser.parse_iso("      2016      "), datetime(2016, 1, 1)
-        )
-
-        self.assertEqual(
-            self.parser.parse_iso("      2016-05-16 04:05:06.789120      "),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
-
-        self.assertEqual(
-            self.parser.parse_iso("      2016-05-16T04:05:06.789120      "),
-            datetime(2016, 5, 16, 4, 5, 6, 789120),
-        )
 
     def test_iso8601_basic_format(self):
         self.assertEqual(self.parser.parse_iso("20180517"), datetime(2018, 5, 17))

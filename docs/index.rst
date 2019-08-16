@@ -365,7 +365,7 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Z             |-0700, -0600 ... +0600, +0700, +08, Z      |
 +--------------------------------+--------------+-------------------------------------------+
-|**Timestamp**                   |X             |1381685817, 1381685817.915482 ...          |
+|**Timestamp**                   |X             |1381685817, 1381685817.915482 ... [#t5]_   |
 +--------------------------------+--------------+-------------------------------------------+
 
 .. rubric:: Footnotes
@@ -374,6 +374,7 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 .. [#t2] localization support only for formatting
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
+.. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
 
 Escaping Formats
 ~~~~~~~~~~~~~~~~
