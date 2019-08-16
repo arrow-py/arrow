@@ -1,5 +1,11 @@
 ## History
 
+### 0.14.5
+
+- [NEW] Added Afrikaans locale.
+- [CHANGE] Removed deprecated replace shift functionality.
+- [FIX] Fixed bug that occurred when factory.get() was passed a locale kwarg.
+
 ### 0.14.4
 
 - [FIX] Fixed a regression in 0.14.3 that prevented a tzinfo argument of type string to be passed to the `get()` function. Functionality such as `arrow.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")` should work as normal again.

@@ -255,15 +255,19 @@ class GetTests(Chai):
         with self.assertRaises(TypeError):
             self.factory.get(year=2016, month=7)
 
-    def test_locale_kwarg_only(self):
+    def test_locale(self):
+        result = self.factory.get("2010", "YYYY", locale="ja")
+        self.assertEqual(
+            result._datetime, datetime(2010, 1, 1, 0, 0, 0, 0, tzinfo=tz.tzutc())
+        )
 
-        with self.assertRaises(TypeError):
-            self.factory.get(locale="ja")
+    def test_locale_kwarg_only(self):
+        res = self.factory.get(locale="ja")
+        self.assertEqual(res.tzinfo, tz.tzutc())
 
     def test_locale_with_tzinfo(self):
-
-        with self.assertRaises(TypeError):
-            self.factory.get(locale="ja", tzinfo=tz.gettz("Asia/Tokyo"))
+        res = self.factory.get(locale="ja", tzinfo=tz.gettz("Asia/Tokyo"))
+        self.assertEqual(res.tzinfo, tz.gettz("Asia/Tokyo"))
 
 
 class UtcNowTests(Chai):

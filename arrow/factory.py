@@ -149,7 +149,7 @@ class ArrowFactory(object):
         """
 
         arg_count = len(args)
-        locale = kwargs.get("locale", "en_us")
+        locale = kwargs.pop("locale", "en_us")
         tz = kwargs.get("tzinfo", None)
 
         # if kwargs given, send to constructor unless only tzinfo provided
