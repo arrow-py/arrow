@@ -36,7 +36,10 @@ class DateTimeParser(object):
     # https://regex101.com/r/ifOZxu/5
     _TZ_ZZ_RE = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
+    # TODO: test timestamp with natural language processing. I think we may have to remove the ^...$
     _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
+    # https://regex101.com/r/LDMBVi/2
+    _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
     # TODO: test timestamp thoroughly
 
     # TODO: test new regular expressions
@@ -121,6 +124,7 @@ class DateTimeParser(object):
 
         # TODO: add tests for all the new formats, especially basic format
         # IDEA: should YYYY MM DD style be accepted here?
+        # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
         # date formats (ISO-8601 and others) to test against
         formats = [
             "YYYY-MM-DD",
@@ -141,72 +145,65 @@ class DateTimeParser(object):
             "YYYY",
         ]
 
-        # TODO: add test that accounts for someone adding +Z or -Z to the datetime string vs just Z
         if has_time:
-            # TODO: write a test for this (more than one Z in datetime string)
-            if "Z" in datetime_string and datetime_string.count("Z") > 1:
-                # TODO: improve error message
-                raise ParserError(
-                    "More than one 'Z' provided in the datetime string. Please pass in a single Z to denote the UTC timezone."
-                )
-
-            # Z is ignored entirely because fromdatetime defaults to UTC in arrow.py
-            if datetime_string[-1] == "Z":
-                datetime_string = datetime_string[:-1]
 
             if has_space_divider:
                 date_string, time_string = datetime_string.split(" ", 1)
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            time_parts = re.split(r"[\+\-]", time_string, 1)
-            colon_count = time_parts[0].count(":")
+            time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
+            # TODO: is it a bug that we are just checking the timeparts for colons? this allows users to mix basic and extended like: 20130203 04:05:06.78912Z
+            time_colon_count = time_parts[0].count(":")
 
-            is_basic_time_format = colon_count == 0
+            is_basic_time_format = time_colon_count == 0
             tz_format = "Z"
 
-            # tz offset is present
-            if len(time_parts) == 2:
-                tz_offset = time_parts[1]
+            # use 'ZZ' token instead since tz offset is present in non-basic format
+            if len(time_parts) == 2 and ":" in time_parts[1]:
+                # TODO: should we throw an error if someone mixes non-basic tz (e.g. 07:00) with a basic datetime string?
+                # I thought so at first, but then I thought it was too much error checking.
 
-                if ":" in tz_offset:
-                    # TODO: add error message
-                    if is_basic_time_format:
-                        raise ParserError
+                tz_format = "ZZ"
 
-                    tz_format = "ZZ"
+            time_components = self._TIME_RE.match(time_parts[0])
 
-            # TODO: use regex to determine if something is basic format
-            has_tz = len(time_parts) > 1
-            has_hours = len(time_parts[0]) == 2
-            has_minutes = colon_count == 1 or len(time_parts[0]) == 4
-            has_seconds = colon_count == 2 or len(time_parts[0]) == 6
-            has_subseconds = re.search(r"[\.,]", time_parts[0])
+            if time_components is None:
+                raise ParserError(
+                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format.".format()
+                )
 
-            # Add tests for someone mixing basic format with colon-separated
+            hours, minutes, seconds, subseconds_sep, subseconds = (
+                time_components.groups()
+            )
+
+            has_tz = len(time_parts) == 2
+            has_hours = hours is not None
+            has_minutes = minutes is not None
+            has_seconds = seconds is not None
+            has_subseconds = subseconds is not None
+
+            time_sep = "" if is_basic_time_format else ":"
 
             if has_subseconds:
-                time_string = "HH:mm:ss{}S".format(has_subseconds.group())
+                time_string = "HH{time_sep}mm{time_sep}ss{subseconds_sep}S".format(
+                    time_sep=time_sep, subseconds_sep=subseconds_sep
+                )
             elif has_seconds:
-                time_string = "HH:mm:ss"
+                time_string = "HH{time_sep}mm{time_sep}ss".format(time_sep=time_sep)
             elif has_minutes:
-                time_string = "HH:mm"
+                time_string = "HH{time_sep}mm".format(time_sep=time_sep)
             elif has_hours:
                 time_string = "HH"
             else:
                 raise ParserError(
-                    "Invalid time component provided. Please specify a format or provide a time in the form 'HH:mm:ss.S', 'HH:mm:ss', 'HH:mm', or 'HH'."
+                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
                 )
-
-            if is_basic_time_format:
-                time_string = time_string.replace(":", "")
 
             if has_space_divider:
                 formats = ["{} {}".format(f, time_string) for f in formats]
             else:
                 formats = ["{}T{}".format(f, time_string) for f in formats]
-
-        # TODO: reduce set of date formats for basic? test earlier?
 
         if has_time and has_tz:
             # Add "Z" to format strings to indicate to _parse_token
@@ -360,7 +357,7 @@ class DateTimeParser(object):
             parts["microsecond"] = int(value[:6]) + rounding
 
         elif token == "X":
-            parts["timestamp"] = int(value)
+            parts["timestamp"] = float(value)
 
         elif token in ["ZZZ", "ZZ", "Z"]:
             parts["tzinfo"] = TzinfoParser.parse(value)
@@ -459,8 +456,7 @@ class DateTimeParser(object):
 
 
 class TzinfoParser(object):
-    # TODO: align this with the TZ_RE_Z and TZ_RE_ZZ above
-    # TODO: test this REGEX
+    # TODO: test against full timezone DB
     # https://regex101.com/r/ifOZxu/3
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 

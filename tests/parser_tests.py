@@ -133,7 +133,7 @@ class DateTimeParserTests(Chai):
         )
 
     # regression test for issue #447
-    def test_parse_timestamp_token(self):
+    def test_timestamp_format_list(self):
         # should not match on the "X" token
         self.assertEqual(
             self.parser.parse(
@@ -200,9 +200,13 @@ class DateTimeParserParseTests(Chai):
     def test_parse_timestamp(self):
 
         tz_utc = tz.tzutc()
-        timestamp = int(time.time())
-        self.expected = datetime.fromtimestamp(timestamp, tz=tz_utc)
-        self.assertEqual(self.parser.parse(str(timestamp), "X"), self.expected)
+        int_timestamp = int(time.time())
+        self.expected = datetime.fromtimestamp(int_timestamp, tz=tz_utc)
+        self.assertEqual(self.parser.parse(str(int_timestamp), "X"), self.expected)
+
+        float_timestamp = time.time()
+        self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
+        self.assertEqual(self.parser.parse(str(float_timestamp), "X"), self.expected)
 
     def test_parse_names(self):
 
@@ -269,7 +273,13 @@ class DateTimeParserParseTests(Chai):
 
         # note that offsets are not timezones
         with self.assertRaises(ParserError):
-            self.parser.parse("2013-01-01 +1000", "YYYY-MM-DD ZZZ")
+            self.parser.parse("2013-01-01 12:30:45.9+1000", "YYYY-MM-DDZZZ")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2013-01-01 12:30:45.9+10:00", "YYYY-MM-DDZZZ")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2013-01-01 12:30:45.9-10", "YYYY-MM-DDZZZ")
 
     def test_parse_subsecond(self):
         # TODO: make both test_parse_subsecond functions in Parse and ParseISO
@@ -407,7 +417,7 @@ class DateTimeParserParseTests(Chai):
 
         self.assertEqual(
             self.parser.parse(
-                "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
+                "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
                 "YYYY-MM-DDThh:mm:ss.S",
             ),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
@@ -415,7 +425,7 @@ class DateTimeParserParseTests(Chai):
 
         self.assertEqual(
             self.parser.parse(
-                "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
+                "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
                 "YYYY-MM-DD hh:mm:ss.S",
             ),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
@@ -634,6 +644,11 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 5, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)),
         )
 
+        self.assertEqual(
+            self.parser.parse_iso("2013-036 04:05:06Z"),
+            datetime(2013, 2, 5, 4, 5, 6, tzinfo=tz.tzutc()),
+        )
+
     def test_YYYY_MM_DDDD(self):
         with self.assertRaises(ParserError):
             self.parser.parse_iso("2014-05-125")
@@ -792,13 +807,33 @@ class DateTimeParserISOTests(Chai):
             datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600)),
         )
 
-        # parse_iso sets tzinfo to None if Z is passed, so a default datetime
-        # object is sufficient to compare against.
-        # Arrow adds +00:00 when get() is called directly and tzinfo is None
         self.assertEqual(
             self.parser.parse_iso("2013-02-03 04:05:06.78912Z"),
-            datetime(2013, 2, 3, 4, 5, 6, 789120),
+            datetime(2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzutc()),
         )
+
+    def test_invalid_Z(self):
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912z")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912zz")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912Zz")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912ZZ")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912+Z")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912-Z")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2013-02-03T04:05:06.78912 Z")
 
     def test_parse_subsecond(self):
         # TODO: make both test_parse_subsecond functions in Parse and ParseISO
@@ -873,8 +908,8 @@ class DateTimeParserISOTests(Chai):
             "2016-05-16T04:05:06.789120ZblahZ",
             "2016-05-16T04:05:06.789120Zblah",
             "2016-05-16T04:05:06.789120blahZ",
-            "Meet me at 2016-05-16T04:05:06.789120 on Tuesday",
-            "Meet me at 2016-05-16 04:05:06.789120 on Tuesday",
+            "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
+            "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
         ]
 
         for ti in test_inputs:
@@ -913,13 +948,17 @@ class DateTimeParserISOTests(Chai):
         )
 
         self.assertEqual(
-            self.parser.parse_iso("20180517T105513Z"), datetime(2018, 5, 17, 10, 55, 13)
+            self.parser.parse_iso("20180517T105513Z"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzutc()),
         )
 
         self.assertEqual(
             self.parser.parse_iso("20180517T105513-0700"),
             datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
         )
+
+        # ordinal in basic format: YYYYDDDD
+        self.assertEqual(self.parser.parse_iso("1998136"), datetime(1998, 5, 16))
 
         # too many digits in date
         with self.assertRaises(ParserError):
@@ -947,10 +986,20 @@ class TzinfoParserTests(Chai):
 
     def test_parse_iso(self):
 
-        # TODO: add tests!
         self.assertEqual(self.parser.parse("01:00"), tz.tzoffset(None, 3600))
+        self.assertEqual(
+            self.parser.parse("11:35"), tz.tzoffset(None, 11 * 3600 + 2100)
+        )
         self.assertEqual(self.parser.parse("+01:00"), tz.tzoffset(None, 3600))
         self.assertEqual(self.parser.parse("-01:00"), tz.tzoffset(None, -3600))
+
+        self.assertEqual(self.parser.parse("0100"), tz.tzoffset(None, 3600))
+        self.assertEqual(self.parser.parse("+0100"), tz.tzoffset(None, 3600))
+        self.assertEqual(self.parser.parse("-0100"), tz.tzoffset(None, -3600))
+
+        self.assertEqual(self.parser.parse("01"), tz.tzoffset(None, 3600))
+        self.assertEqual(self.parser.parse("+01"), tz.tzoffset(None, 3600))
+        self.assertEqual(self.parser.parse("-01"), tz.tzoffset(None, -3600))
 
     def test_parse_str(self):
 
