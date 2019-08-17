@@ -31,6 +31,7 @@ repos:
       rev: v1.4.1
       hooks:
           - id: python-no-eval
+          - id: python-check-blanket-noqa
           - id: rst-backticks
     - repo: https://github.com/python/black
       rev: 19.3b0
