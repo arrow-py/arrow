@@ -30,7 +30,7 @@ class GetTests(Chai):
 
         self.assertEqual(no_arg, one_arg)
 
-    def test_one_arg_non(self):
+    def test_one_arg_none(self):
 
         assertDtEqual(
             self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc())
@@ -102,6 +102,16 @@ class GetTests(Chai):
         )
 
         assertDtEqual(self.factory.get(tzinfo=tz.gettz("US/Pacific")), self.expected)
+
+    def test_kwarg_tzinfo_string(self):
+
+        self.expected = (
+            datetime.utcnow()
+            .replace(tzinfo=tz.tzutc())
+            .astimezone(tz.gettz("US/Pacific"))
+        )
+
+        assertDtEqual(self.factory.get(tzinfo="US/Pacific"), self.expected)
 
     def test_one_arg_iso_str(self):
 

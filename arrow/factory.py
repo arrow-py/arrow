@@ -164,8 +164,13 @@ class ArrowFactory(object):
 
         # () -> now, @ utc.
         if arg_count == 0:
+            if isstr(tz):
+                tz = parser.TzinfoParser.parse(tz)
+                return self.type.now(tz)
+
             if isinstance(tz, dt_tzinfo):
                 return self.type.now(tz)
+
             return self.type.utcnow()
 
         if arg_count == 1:
