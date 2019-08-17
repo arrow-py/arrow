@@ -1350,6 +1350,8 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(later105.humanize(self.now, granularity="hour"), "in 27 hours")
         self.assertEqual(self.now.humanize(later105, granularity="day"), "a day ago")
         self.assertEqual(later105.humanize(self.now, granularity="day"), "in a day")
+        self.assertEqual(self.now.humanize(later105, granularity="week"), "0 weeks ago")
+        self.assertEqual(later105.humanize(self.now, granularity="week"), "in 0 weeks")
         self.assertEqual(
             self.now.humanize(later105, granularity="month"), "0 months ago"
         )
@@ -1360,6 +1362,8 @@ class ArrowHumanizeTests(Chai):
         later106 = self.now.shift(seconds=3 * 10 ** 6)
         self.assertEqual(self.now.humanize(later106, granularity="day"), "34 days ago")
         self.assertEqual(later106.humanize(self.now, granularity="day"), "in 34 days")
+        self.assertEqual(self.now.humanize(later106, granularity="week"), "4 weeks ago")
+        self.assertEqual(later106.humanize(self.now, granularity="week"), "in 4 weeks")
         self.assertEqual(
             self.now.humanize(later106, granularity="month"), "a month ago"
         )
@@ -1368,6 +1372,10 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(later106.humanize(self.now, granularity="year"), "in 0 years")
 
         later506 = self.now.shift(seconds=50 * 10 ** 6)
+        self.assertEqual(
+            self.now.humanize(later506, granularity="week"), "82 weeks ago"
+        )
+        self.assertEqual(later506.humanize(self.now, granularity="week"), "in 82 weeks")
         self.assertEqual(
             self.now.humanize(later506, granularity="month"), "18 months ago"
         )
@@ -1476,6 +1484,26 @@ class ArrowHumanizeTests(Chai):
 
         later = self.now.shift(days=4)
         self.assertEqual(later.humanize(), "in 4 days")
+
+    def test_week(self):
+
+        later = self.now.shift(weeks=1)
+
+        self.assertEqual(self.now.humanize(later), "a week ago")
+        self.assertEqual(later.humanize(self.now), "in a week")
+
+        self.assertEqual(self.now.humanize(later, only_distance=True), "a week")
+        self.assertEqual(later.humanize(self.now, only_distance=True), "a week")
+
+    def test_weeks(self):
+
+        later = self.now.shift(weeks=2)
+
+        self.assertEqual(self.now.humanize(later), "2 weeks ago")
+        self.assertEqual(later.humanize(self.now), "in 2 weeks")
+
+        self.assertEqual(self.now.humanize(later, only_distance=True), "2 weeks")
+        self.assertEqual(later.humanize(self.now, only_distance=True), "2 weeks")
 
     def test_month(self):
 

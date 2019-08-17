@@ -876,9 +876,15 @@ class Arrow(object):
 
             elif diff < 129600:
                 return locale.describe("day", sign, only_distance=only_distance)
-            elif diff < 2160000:
+            elif diff < 554400:
                 days = sign * int(max(delta / 86400, 2))
                 return locale.describe("days", days, only_distance=only_distance)
+
+            elif diff < 907200:
+                return locale.describe("week", sign, only_distance=only_distance)
+            elif diff < 2419200:
+                weeks = sign * int(max(delta / 604800, 2))
+                return locale.describe("weeks", weeks, only_distance=only_distance)
 
             elif diff < 3888000:
                 return locale.describe("month", sign, only_distance=only_distance)
@@ -907,6 +913,8 @@ class Arrow(object):
                 delta = sign * delta / float(60 * 60)
             elif granularity == "day":
                 delta = sign * delta / float(60 * 60 * 24)
+            elif granularity == "week":
+                delta = sign * delta / float(60 * 60 * 24 * 7)
             elif granularity == "month":
                 delta = sign * delta / float(60 * 60 * 24 * 30.5)
             elif granularity == "year":
