@@ -202,11 +202,15 @@ class DateTimeParserParseTests(Chai):
         tz_utc = tz.tzutc()
         int_timestamp = int(time.time())
         self.expected = datetime.fromtimestamp(int_timestamp, tz=tz_utc)
-        self.assertEqual(self.parser.parse(str(int_timestamp), "X"), self.expected)
+        self.assertEqual(
+            self.parser.parse("{:d}".format(int_timestamp), "X"), self.expected
+        )
 
         float_timestamp = time.time()
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
-        self.assertEqual(self.parser.parse(str(float_timestamp), "X"), self.expected)
+        self.assertEqual(
+            self.parser.parse("{:f}".format(float_timestamp), "X"), self.expected
+        )
 
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
         # break cases like "15 Jul 2000" and a format list (see issue #447)

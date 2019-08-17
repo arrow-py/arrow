@@ -14,7 +14,7 @@ except ImportError:  # pragma: no cover
     from backports.functools_lru_cache import lru_cache  # pragma: no cover
 
 
-class ParserError(RuntimeError):
+class ParserError(ValueError):
     pass
 
 
@@ -98,7 +98,6 @@ class DateTimeParser(object):
     # IDEA: break into multiple functions
     def parse_iso(self, datetime_string):
         # TODO: add a flag to normalize whitespace (useful in logs, ref issue #421)
-
         has_space_divider = " " in datetime_string
         has_t_divider = "T" in datetime_string
 
