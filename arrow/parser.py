@@ -111,16 +111,11 @@ class DateTimeParser(object):
         has_t_divider = "T" in datetime_string
 
         num_spaces = datetime_string.count(" ")
-        if has_space_divider and num_spaces != 1:
+        if (has_space_divider and num_spaces != 1) or (
+            has_t_divider and num_spaces > 0
+        ):
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}', which contains multiple spaces. Try passing in a format string to resolve this.".format(
-                    datetime_string
-                )
-            )
-
-        if has_t_divider and num_spaces > 0:
-            raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}', which contains a 'T' separator and spaces. Try passing in a format string to resolve this.".format(
+                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
                     datetime_string
                 )
             )
