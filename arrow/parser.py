@@ -201,8 +201,8 @@ class DateTimeParser(object):
                 formats = ["{}T{}".format(f, time_string) for f in formats]
 
         if has_time and has_tz:
-            # Add "Z" to format strings to indicate to _parse_token
-            # that a timezone needs to be parsed
+            # Add "Z" or "ZZ" to the format strings to indicate to
+            # _parse_token() that a timezone needs to be parsed
             formats = ["{}{}".format(f, tz_format) for f in formats]
 
         return self._parse_multiformat(datetime_string, formats)
