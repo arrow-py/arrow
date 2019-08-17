@@ -18,6 +18,15 @@ class ParserError(ValueError):
     pass
 
 
+# Allows for ParserErrors to be propagated from _build_datetime()
+# when day_of_year errors occur.
+# Before this, the ParserErrors were caught by the try/except in
+# _parse_multiformat() and the appropriate error message was not
+# transmitted to the user.
+class ParserMatchError(ParserError):
+    pass
+
+
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile(
@@ -104,14 +113,14 @@ class DateTimeParser(object):
         num_spaces = datetime_string.count(" ")
         if has_space_divider and num_spaces != 1:
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}' which contains multiple spaces. Try passing in a format string to resolve this.".format(
+                "Expected an ISO 8601-like string, but was given '{}', which contains multiple spaces. Try passing in a format string to resolve this.".format(
                     datetime_string
                 )
             )
 
         if has_t_divider and num_spaces > 0:
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}' which contains \"T\" separator and spaces. Try passing in a format string to resolve this.".format(
+                "Expected an ISO 8601-like string, but was given '{}', which contains a 'T' separator and spaces. Try passing in a format string to resolve this.".format(
                     datetime_string
                 )
             )
@@ -214,7 +223,7 @@ class DateTimeParser(object):
 
         match = fmt_pattern_re.search(datetime_string)
         if match is None:
-            raise ParserError(
+            raise ParserMatchError(
                 "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
             )
 
@@ -363,23 +372,23 @@ class DateTimeParser(object):
 
         timestamp = parts.get("timestamp")
 
-        if timestamp:
+        if timestamp is not None:
             tz_utc = tz.tzutc()
             return datetime.fromtimestamp(timestamp, tz=tz_utc)
 
         day_of_year = parts.get("day_of_year")
 
-        if day_of_year:
+        if day_of_year is not None:
             year = parts.get("year")
             month = parts.get("month")
             if year is None:
                 raise ParserError(
-                    "Year component is required with the DDD and DDDD tokens"
+                    "Year component is required with the DDD and DDDD tokens."
                 )
 
             if month is not None:
                 raise ParserError(
-                    "Month component is not allowed with the DDD and DDDD tokens"
+                    "Month component is not allowed with the DDD and DDDD tokens."
                 )
 
             date_string = "{}-{}".format(year, day_of_year)
@@ -387,9 +396,7 @@ class DateTimeParser(object):
                 dt = datetime.strptime(date_string, "%Y-%j")
             except ValueError:
                 raise ParserError(
-                    "Expected a valid day of year, but received '{}'".format(
-                        day_of_year
-                    )
+                    "The provided day of year '{}' is invalid.".format(day_of_year)
                 )
 
             parts["year"] = dt.year
@@ -423,12 +430,12 @@ class DateTimeParser(object):
             try:
                 _datetime = self.parse(string, fmt)
                 break
-            except ParserError:
+            except ParserMatchError:
                 pass
 
         if _datetime is None:
             raise ParserError(
-                "Could not match input '{}' to any of the formats provided: {}".format(
+                "Could not match input '{}' to any of the following formats: {}".format(
                     string, ", ".join(formats)
                 )
             )

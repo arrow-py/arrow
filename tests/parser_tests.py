@@ -9,7 +9,7 @@ from chai import Chai
 from dateutil import tz
 
 from arrow import parser
-from arrow.parser import DateTimeParser, ParserError
+from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 
 
 class DateTimeParserTests(Chai):
@@ -22,7 +22,7 @@ class DateTimeParserTests(Chai):
 
         mock_datetime = self.mock()
 
-        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserMatchError)
         self.expect(self.parser.parse).args("str", "fmt_b").returns(mock_datetime)
 
         result = self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
@@ -31,8 +31,8 @@ class DateTimeParserTests(Chai):
 
     def test_parse_multiformat_all_fail(self):
 
-        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserError)
-        self.expect(self.parser.parse).args("str", "fmt_b").raises(ParserError)
+        self.expect(self.parser.parse).args("str", "fmt_a").raises(ParserMatchError)
+        self.expect(self.parser.parse).args("str", "fmt_b").raises(ParserMatchError)
 
         with self.assertRaises(ParserError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
@@ -174,12 +174,12 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_parse_no_match(self):
 
-        with self.assertRaises(parser.ParserError):
+        with self.assertRaises(ParserError):
             self.parser.parse("01-01", "YYYY-MM-DD")
 
     def test_parse_separators(self):
 
-        with self.assertRaises(parser.ParserError):
+        with self.assertRaises(ParserError):
             self.parser.parse("1403549231", "YYYY-MM-DD")
 
     def test_parse_numbers(self):
@@ -499,6 +499,7 @@ class DateTimeParserParseTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse("2015-01-009", "YYYY-MM-DDDD")
 
+    # year is required with the DDD and DDDD tokens
     def test_parse_DDD_only(self):
         with self.assertRaises(ParserError):
             self.parser.parse("5", "DDD")
@@ -681,9 +682,21 @@ class DateTimeParserISOTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse_iso("1998-456")
 
-        # datetime.strptime("2015-366", "%Y-%j")
-        # Changes year: datetime.datetime(2016, 1, 1, 0, 0)
-        self.assertEqual(self.parser.parse_iso("2015-366"), datetime(2016, 1, 1))
+        # 2016 is a leap year, so Feb 29 exists (leap day)
+        self.assertEqual(self.parser.parse_iso("2016-059"), datetime(2016, 2, 28))
+        self.assertEqual(self.parser.parse_iso("2016-060"), datetime(2016, 2, 29))
+        self.assertEqual(self.parser.parse_iso("2016-061"), datetime(2016, 3, 1))
+
+        # 2017 is not a leap year, so Feb 29 does not exist
+        self.assertEqual(self.parser.parse_iso("2017-059"), datetime(2017, 2, 28))
+        self.assertEqual(self.parser.parse_iso("2017-060"), datetime(2017, 3, 1))
+        self.assertEqual(self.parser.parse_iso("2017-061"), datetime(2017, 3, 2))
+
+        # Since 2016 is a leap year, the 366th day falls in the same year
+        self.assertEqual(self.parser.parse_iso("2016-366"), datetime(2016, 12, 31))
+
+        # Since 2017 is not a leap year, the 366th day falls in the next year
+        self.assertEqual(self.parser.parse_iso("2017-366"), datetime(2018, 1, 1))
 
     def test_YYYY_DDDD_HH_mm_ssZ(self):
 
