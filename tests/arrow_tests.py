@@ -95,8 +95,13 @@ class ArrowFactoryTests(Chai):
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-
         assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
+        assertDtEqual(
+            result._datetime,
+            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+        )
 
     def test_fromdatetime(self):
 
@@ -137,9 +142,16 @@ class ArrowFactoryTests(Chai):
         formatted = datetime(2013, 2, 3, 12, 30, 45).strftime("%Y-%m-%d %H:%M:%S")
 
         result = arrow.Arrow.strptime(formatted, "%Y-%m-%d %H:%M:%S")
-
         self.assertEqual(
             result._datetime, datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.tzutc())
+        )
+
+        result = arrow.Arrow.strptime(
+            formatted, "%Y-%m-%d %H:%M:%S", tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(
+            result._datetime,
+            datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")),
         )
 
 

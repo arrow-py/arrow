@@ -60,21 +60,17 @@ class Arrow(object):
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
     ):
-
-        # detect that tzinfo is a pytz object
-        # fixes the bug in issue #626
-        if (
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzutc()
+        # detect that tzinfo is a pytz object (issue #626)
+        elif (
             isinstance(tzinfo, dt_tzinfo)
             and hasattr(tzinfo, "localize")
             and tzinfo.zone
         ):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
-
-        if util.isstr(tzinfo):
+        elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
-
-        if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
 
         self._datetime = datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo
