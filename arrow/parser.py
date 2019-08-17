@@ -119,8 +119,6 @@ class DateTimeParser(object):
         has_time = has_space_divider or has_t_divider
         has_tz = False
 
-        # TODO: test basic format with timezone string without "+"
-
         # TODO: add tests for all the new formats, especially basic format
         # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
         # date formats (ISO-8601 and others) to test against
@@ -151,7 +149,7 @@ class DateTimeParser(object):
                 date_string, time_string = datetime_string.split("T", 1)
 
             time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
-            # TODO: is it a bug that we are just checking the timeparts for colons? this allows users to mix basic and extended like: 20130203 04:05:06.78912Z
+            # TODO: should we prevent mixing basic and extended formats? would need to ensure that dates, times, and timezones are in same format
             time_colon_count = time_parts[0].count(":")
 
             is_basic_time_format = time_colon_count == 0
@@ -159,9 +157,6 @@ class DateTimeParser(object):
 
             # use 'ZZ' token instead since tz offset is present in non-basic format
             if len(time_parts) == 2 and ":" in time_parts[1]:
-                # TODO: should we throw an error if someone mixes non-basic tz (e.g. 07:00) with a basic datetime string?
-                # I thought so at first, but then I thought it was too much error checking.
-
                 tz_format = "ZZ"
 
             time_components = self._TIME_RE.match(time_parts[0])

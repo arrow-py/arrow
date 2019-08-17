@@ -972,8 +972,8 @@ class DateTimeParserISOTests(Chai):
         )
 
         self.assertEqual(
-            self.parser.parse_iso("20180517T105513.84"),
-            datetime(2018, 5, 17, 10, 55, 13, 840000),
+            self.parser.parse_iso("20180517T105513.843456"),
+            datetime(2018, 5, 17, 10, 55, 13, 843456),
         )
 
         self.assertEqual(
@@ -982,12 +982,45 @@ class DateTimeParserISOTests(Chai):
         )
 
         self.assertEqual(
+            self.parser.parse_iso("20180517T105513.843456-0700"),
+            datetime(2018, 5, 17, 10, 55, 13, 843456, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        self.assertEqual(
             self.parser.parse_iso("20180517T105513-0700"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T105513-07"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        # mixing formats--this may raise a ParserError in the future
+        self.assertEqual(
+            self.parser.parse_iso("2018-05-17T105513-0700"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T10:55:13-07:00"),
+            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
+        )
+
+        self.assertEqual(
+            self.parser.parse_iso("20180517T105513-07:00"),
             datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
         )
 
         # ordinal in basic format: YYYYDDDD
         self.assertEqual(self.parser.parse_iso("1998136"), datetime(1998, 5, 16))
+
+        # timezone requires +- seperator
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("20180517T1055130700")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("20180517T10551307")
 
         # too many digits in date
         with self.assertRaises(ParserError):
