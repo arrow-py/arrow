@@ -9,7 +9,8 @@ from __future__ import absolute_import
 
 import calendar
 import sys
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime, timedelta
+from datetime import tzinfo as dt_tzinfo
 from math import trunc
 
 from dateutil import tz as dateutil_tz
@@ -59,10 +60,17 @@ class Arrow(object):
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
     ):
-
-        if util.isstr(tzinfo):
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzutc()
+        # detect that tzinfo is a pytz object (issue #626)
+        elif (
+            isinstance(tzinfo, dt_tzinfo)
+            and hasattr(tzinfo, "localize")
+            and tzinfo.zone
+        ):
+            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
+        elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
 
         self._datetime = datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo
@@ -84,7 +92,8 @@ class Arrow(object):
 
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
 
         return cls(
@@ -138,7 +147,8 @@ class Arrow(object):
 
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzlocal()
         timestamp = cls._get_timestamp_from_input(timestamp)
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
@@ -219,7 +229,8 @@ class Arrow(object):
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzutc()
 
         return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
@@ -241,7 +252,8 @@ class Arrow(object):
         """
 
         dt = datetime.strptime(date_str, fmt)
-        tzinfo = tzinfo if tzinfo is not None else dt.tzinfo
+        if tzinfo is None:
+            tzinfo = dt.tzinfo
 
         return cls(
             dt.year,
@@ -677,7 +689,7 @@ class Arrow(object):
 
         """
 
-        if not isinstance(tz, tzinfo):
+        if not isinstance(tz, dt_tzinfo):
             tz = parser.TzinfoParser.parse(tz)
 
         dt = self._datetime.astimezone(tz)
@@ -1286,7 +1298,7 @@ class Arrow(object):
 
         if tz_expr is None:
             return dateutil_tz.tzutc()
-        if isinstance(tz_expr, tzinfo):
+        if isinstance(tz_expr, dt_tzinfo):
             return tz_expr
         else:
             try:
