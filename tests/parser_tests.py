@@ -315,6 +315,12 @@ class DateTimeParserParseTests(Chai):
         self.assertEqual(self.parser.parse(string, format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
+        # overflow (zero out the subseconds and increment the seconds)
+        self.expected = datetime(2013, 1, 1, 12, 30, 46, 000000)
+        string = "2013-01-01 12:30:45.9999995"
+        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
     def test_map_lookup_keyerror(self):
 
         with self.assertRaises(parser.ParserError):
