@@ -173,7 +173,6 @@ class DateTimeParser(object):
             )
 
             has_tz = len(time_parts) == 2
-            has_hours = hours is not None
             has_minutes = minutes is not None
             has_seconds = seconds is not None
             has_subseconds = subseconds is not None
@@ -188,12 +187,8 @@ class DateTimeParser(object):
                 time_string = "HH{time_sep}mm{time_sep}ss".format(time_sep=time_sep)
             elif has_minutes:
                 time_string = "HH{time_sep}mm".format(time_sep=time_sep)
-            elif has_hours:
-                time_string = "HH"
             else:
-                raise ParserError(
-                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
-                )
+                time_string = "HH"
 
             if has_space_divider:
                 formats = ["{} {}".format(f, time_string) for f in formats]
@@ -366,8 +361,7 @@ class DateTimeParser(object):
         timestamp = parts.get("timestamp")
 
         if timestamp is not None:
-            tz_utc = tz.tzutc()
-            return datetime.fromtimestamp(timestamp, tz=tz_utc)
+            return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
 
         day_of_year = parts.get("day_of_year")
 

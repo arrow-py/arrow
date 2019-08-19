@@ -212,6 +212,18 @@ class DateTimeParserParseTests(Chai):
             self.parser.parse("{:f}".format(float_timestamp), "X"), self.expected
         )
 
+        # test handling of ns timestamp (arrow will round to 6 digits regardless)
+        self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
+        self.assertEqual(
+            self.parser.parse("{:f}123".format(float_timestamp), "X"), self.expected
+        )
+
+        # test ps timestamp (arrow will round to 6 digits regardless)
+        self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
+        self.assertEqual(
+            self.parser.parse("{:f}123456".format(float_timestamp), "X"), self.expected
+        )
+
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
         # break cases like "15 Jul 2000" and a format list (see issue #447)
         with self.assertRaises(ParserError):
@@ -741,6 +753,19 @@ class DateTimeParserISOTests(Chai):
 
         self.assertEqual(
             self.parser.parse_iso("2013-02-03T04:05"), datetime(2013, 2, 3, 4, 5)
+        )
+
+    def test_YYYY_MM_DDTHH(self):
+
+        self.assertEqual(
+            self.parser.parse_iso("2013-02-03T04"), datetime(2013, 2, 3, 4)
+        )
+
+    def test_YYYY_MM_DDTHHZ(self):
+
+        self.assertEqual(
+            self.parser.parse_iso("2013-02-03T04+01:00"),
+            datetime(2013, 2, 3, 4, tzinfo=tz.tzoffset(None, 3600)),
         )
 
     def test_YYYY_MM_DDTHH_mm_ssZ(self):
