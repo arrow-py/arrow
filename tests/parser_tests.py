@@ -1034,22 +1034,6 @@ class DateTimeParserISOTests(Chai):
             datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
         )
 
-        # mixing formats--this may raise a ParserError in the future
-        self.assertEqual(
-            self.parser.parse_iso("2018-05-17T105513-0700"),
-            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
-        )
-
-        self.assertEqual(
-            self.parser.parse_iso("20180517T10:55:13-07:00"),
-            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
-        )
-
-        self.assertEqual(
-            self.parser.parse_iso("20180517T105513-07:00"),
-            datetime(2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)),
-        )
-
         # ordinal in basic format: YYYYDDDD
         self.assertEqual(self.parser.parse_iso("1998136"), datetime(1998, 5, 16))
 
