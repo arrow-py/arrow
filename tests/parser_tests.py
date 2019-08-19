@@ -316,8 +316,25 @@ class DateTimeParserParseTests(Chai):
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
         # overflow (zero out the subseconds and increment the seconds)
-        self.expected = datetime(2013, 1, 1, 12, 30, 46, 000000)
+        # regression tests for issue #636
+        self.expected = datetime(2013, 1, 1, 12, 30, 46)
         string = "2013-01-01 12:30:45.9999995"
+        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        self.expected = datetime(2013, 1, 1, 12, 31, 0)
+        string = "2013-01-01 12:30:59.9999999"
+        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        self.expected = datetime(2013, 1, 2, 0, 0, 0)
+        string = "2013-01-01 23:59:59.9999999"
+        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        # 6 digits should remain unrounded
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 999999)
+        string = "2013-01-01 12:30:45.999999"
         self.assertEqual(self.parser.parse(string, format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 

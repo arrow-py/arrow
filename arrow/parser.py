@@ -275,6 +275,7 @@ class DateTimeParser(object):
         elif am_pm == "am" and hour == 12:
             hour = 0
 
+        # account for rounding up to 1000000
         microsecond = parts.get("microsecond", 0)
         if microsecond == 1000000:
             microsecond = 0
