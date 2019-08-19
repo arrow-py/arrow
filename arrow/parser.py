@@ -2,7 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dateutil import tz
 
@@ -275,15 +275,28 @@ class DateTimeParser(object):
         elif am_pm == "am" and hour == 12:
             hour = 0
 
-        return datetime(
-            year=parts.get("year", 1),
-            month=parts.get("month", 1),
-            day=parts.get("day", 1),
-            hour=hour,
-            minute=parts.get("minute", 0),
-            second=parts.get("second", 0),
-            microsecond=parts.get("microsecond", 0),
-            tzinfo=parts.get("tzinfo"),
+        # account for rounding up to 1000000
+        microsecond = parts.get("microsecond", 0)
+        if microsecond == 1000000:
+            microsecond = 0
+            second_increment = 1
+        else:
+            second_increment = 0
+
+        increment = timedelta(seconds=second_increment)
+
+        return (
+            datetime(
+                year=parts.get("year", 1),
+                month=parts.get("month", 1),
+                day=parts.get("day", 1),
+                hour=hour,
+                minute=parts.get("minute", 0),
+                second=parts.get("second", 0),
+                microsecond=microsecond,
+                tzinfo=parts.get("tzinfo"),
+            )
+            + increment
         )
 
     def _parse_multiformat(self, string, formats):
