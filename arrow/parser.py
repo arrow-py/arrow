@@ -284,16 +284,19 @@ class DateTimeParser(object):
 
         increment = timedelta(seconds=second_increment)
 
-        return datetime(
-            year=parts.get("year", 1),
-            month=parts.get("month", 1),
-            day=parts.get("day", 1),
-            hour=hour,
-            minute=parts.get("minute", 0),
-            second=parts.get("second", 0),
-            microsecond=microsecond,
-            tzinfo=parts.get("tzinfo"),
-        ) + increment
+        return (
+            datetime(
+                year=parts.get("year", 1),
+                month=parts.get("month", 1),
+                day=parts.get("day", 1),
+                hour=hour,
+                minute=parts.get("minute", 0),
+                second=parts.get("second", 0),
+                microsecond=microsecond,
+                tzinfo=parts.get("tzinfo"),
+            )
+            + increment
+        )
 
     def _parse_multiformat(self, string, formats):
 
