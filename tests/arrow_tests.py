@@ -12,6 +12,7 @@ import simplejson as json
 from chai import Chai
 from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
+from mock import patch
 
 from arrow import arrow, util
 
@@ -1589,6 +1590,22 @@ class ArrowHumanizeTests(Chai):
         result = arw.humanize()
 
         self.assertEqual(result, "just now")
+
+        result = arw.humanize(None)
+
+        self.assertEqual(result, "just now")
+
+    def test_untranslated_granularity(self):
+
+        arw = arrow.Arrow.utcnow()
+        later = arw.shift(weeks=1)
+
+        # simulate an untranslated timeframe key
+        with patch.dict("arrow.locales.EnglishLocale.timeframes"):
+            del arrow.locales.EnglishLocale.timeframes["week"]
+
+            with self.assertRaises(ValueError):
+                arw.humanize(later, granularity="week")
 
 
 class ArrowHumanizeTestsWithLocale(Chai):

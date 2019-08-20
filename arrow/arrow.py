@@ -976,8 +976,7 @@ class Arrow(object):
 
         if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
             raise AttributeError(
-                'Error. Could not understand the specified bounds. Please select between \
-                "()", "(]", "[)", or "[]"'
+                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
             )
 
         if not isinstance(start, Arrow):
