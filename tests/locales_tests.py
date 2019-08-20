@@ -6,6 +6,34 @@ from chai import Chai
 from arrow import arrow, locales
 
 
+class LocaleValidationTests(Chai):
+    def setUp(self):
+        super(LocaleValidationTests, self).setUp()
+
+        self.locales = locales._locales
+
+    def test_locale_validation(self):
+
+        for _, locale_cls in self.locales.items():
+            # 7 days + 1 spacer to allow for 1-indexing of months
+            self.assertEqual(len(locale_cls.day_names), 8)
+            self.assertTrue(locale_cls.day_names[0] == "")
+
+            self.assertEqual(len(locale_cls.day_abbreviations), 8)
+            self.assertTrue(locale_cls.day_abbreviations[0] == "")
+
+            # 12 months + 1 spacer to allow for 1-indexing of months
+            self.assertEqual(len(locale_cls.month_names), 13)
+            self.assertTrue(locale_cls.month_names[0] == "")
+
+            self.assertEqual(len(locale_cls.month_abbreviations), 13)
+            self.assertTrue(locale_cls.month_abbreviations[0] == "")
+
+            self.assertTrue(len(locale_cls.names) > 0)
+            self.assertTrue(locale_cls.past is not None)
+            self.assertTrue(locale_cls.future is not None)
+
+
 class ModuleTests(Chai):
     def test_get_locale(self):
 
