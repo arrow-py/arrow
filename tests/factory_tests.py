@@ -6,6 +6,7 @@ from chai import Chai
 from dateutil import tz
 
 from arrow import factory, util
+from arrow.parser import ParserError
 
 
 def assertDtEqual(dt1, dt2, within=10):
@@ -112,6 +113,9 @@ class GetTests(Chai):
         )
 
         assertDtEqual(self.factory.get(tzinfo="US/Pacific"), self.expected)
+
+        with self.assertRaises(ParserError):
+            self.factory.get(tzinfo="US/PacificInvalidTzinfo")
 
     def test_one_arg_iso_str(self):
 

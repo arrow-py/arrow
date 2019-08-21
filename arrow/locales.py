@@ -3072,7 +3072,7 @@ def _map_locales():
     locales = {}
 
     for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):  # pragma: no cover
+        if issubclass(cls, Locale):  # pragma: no branch
             for name in cls.names:
                 locales[name.lower()] = cls
 
