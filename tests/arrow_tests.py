@@ -8,6 +8,7 @@ import time
 import warnings
 from datetime import date, datetime, timedelta
 
+import pytz
 import simplejson as json
 from chai import Chai
 from dateutil import tz
@@ -23,12 +24,58 @@ def assertDtEqual(dt1, dt2, within=10):
 
 
 class ArrowInitTests(Chai):
+    def test_init_bad_input(self):
+
+        with self.assertRaises(TypeError):
+            arrow.Arrow(2013)
+
+        with self.assertRaises(TypeError):
+            arrow.Arrow(2013, 2)
+
+        with self.assertRaises(ValueError):
+            arrow.Arrow(2013, 2, 2, 12, 30, 45, 9999999)
+
     def test_init(self):
+
+        result = arrow.Arrow(2013, 2, 2)
+        self.expected = datetime(2013, 2, 2, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12)
+        self.expected = datetime(2013, 2, 2, 12, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30)
+        self.expected = datetime(2013, 2, 2, 12, 30, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45)
+        self.expected = datetime(2013, 2, 2, 12, 30, 45, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
 
         result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999)
         self.expected = datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc())
-
         self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(result._datetime, self.expected)
+
+    # regression tests for issue #626
+    def test_init_pytz_timezone(self):
+
+        result = arrow.Arrow(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=pytz.timezone("Europe/Paris")
+        )
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(result._datetime, self.expected)
+        assertDtEqual(result._datetime, self.expected, 1)
 
 
 class ArrowFactoryTests(Chai):
@@ -49,8 +96,13 @@ class ArrowFactoryTests(Chai):
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-
         assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
+        assertDtEqual(
+            result._datetime,
+            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+        )
 
     def test_fromdatetime(self):
 
@@ -91,9 +143,16 @@ class ArrowFactoryTests(Chai):
         formatted = datetime(2013, 2, 3, 12, 30, 45).strftime("%Y-%m-%d %H:%M:%S")
 
         result = arrow.Arrow.strptime(formatted, "%Y-%m-%d %H:%M:%S")
-
         self.assertEqual(
             result._datetime, datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.tzutc())
+        )
+
+        result = arrow.Arrow.strptime(
+            formatted, "%Y-%m-%d %H:%M:%S", tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(
+            result._datetime,
+            datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")),
         )
 
 

@@ -32,7 +32,7 @@ What?
 
 Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.
 
-Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_.
+Arrow is heavily inspired by `moment.js <https://github.com/moment/moment>`_ and `requests <https://github.com/psf/requests>`_.
 
 Why?
 ----
@@ -52,7 +52,7 @@ Features
 - Supports Python 2.7, 3.5, 3.6, 3.7 and 3.8
 - Timezone-aware & UTC by default
 - Provides super-simple creation options for many common input scenarios
-- Updated :code:`replace` method with support for relative offsets, including weeks
+- :code:`shift` method with support for relative offsets, including weeks
 - Formats and parses strings automatically
 - Partial support for ISO-8601
 - Timezone conversion
@@ -119,4 +119,4 @@ For full documentation, please visit `arrow.readthedocs.io <https://arrow.readth
 Contributing
 ------------
 
-Contributions are welcome for both code and localization. To get started, find an issue or feature to tackle on `the issue tracker <https://github.com/crsmithdev/arrow/issues>`_ and then fork `the repository <https://github.com/crsmithdev/arrow>`_ on GitHub to begin making changes. If you would like to help with localization, please see `locales.py <https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py>`_ for what locales are currently supported. If you are helping with code, make sure to add tests to ensure that a bug was fixed or the feature works as intended.
+Contributions are welcome for both code and localizations. To get started, find an issue or feature to tackle on `the issue tracker <https://github.com/crsmithdev/arrow/issues>`_ and then fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub to begin making changes. If you would like to help with localizations, please see `locales.py <https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py>`_ to see what locales are currently supported. If you are helping with code, make sure to add a few tests to ensure that the bug was fixed or the feature works as intended.

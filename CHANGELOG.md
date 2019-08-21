@@ -1,34 +1,34 @@
-## History
+# Changelog
 
-### 0.14.5
+## 0.14.5
 
 - [NEW] Added Afrikaans locale.
 - [CHANGE] Removed deprecated `replace` shift functionality. Users looking to pass plural properties to the `replace` function to shift values should use `shift` instead.
 - [FIX] Fixed bug that occurred when `factory.get()` was passed a locale kwarg.
 
-### 0.14.4
+## 0.14.4
 
 - [FIX] Fixed a regression in 0.14.3 that prevented a tzinfo argument of type string to be passed to the `get()` function. Functionality such as `arrow.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")` should work as normal again.
 - [CHANGE] Moved `backports.functools_lru_cache` dependency from `extra_requires` to `install_requires` for `Python 2.7` installs to fix [#495](https://github.com/crsmithdev/arrow/issues/495).
 
-### 0.14.3
+## 0.14.3
 
 - [NEW] Added full support for Python 3.8.
-- [CHANGE] Added warnings for upcoming factory.get() parsing changes in 0.15.0. Please see https://github.com/crsmithdev/arrow/issues/612 for full details.
+- [CHANGE] Added warnings for upcoming factory.get() parsing changes in 0.15.0. Please see [issue #612](https://github.com/crsmithdev/arrow/issues/612) for full details.
 - [FIX] Extensive refactor and update of documentation.
 - [FIX] factory.get() can now construct from kwargs.
 - [FIX] Added meridians to Spanish Locale.
 
-### 0.14.2
+## 0.14.2
 
 - [CHANGE] Travis CI builds now use tox to lint and run tests.
 - [FIX] Fixed UnicodeDecodeError on certain locales (#600).
 
-### 0.14.1
+## 0.14.1
 
 - [FIX] Fixed "ImportError: No module named 'dateutil'" (#598).
 
-### 0.14.0
+## 0.14.0
 
 - [NEW] Added provisional support for Python 3.8.
 - [CHANGE] Removed support for EOL Python 3.4.
@@ -37,7 +37,7 @@
 - [FIX] Enabled flake8 and black on travis builds.
 - [FIX] Formatted code using black and isort.
 
-### 0.13.2
+## 0.13.2
 
 - [NEW] Add is_between method.
 - [FIX] Improved humanize behaviour for near zero durations (#416).
@@ -45,13 +45,13 @@
 - [FIX] Documentation updates.
 - [FIX] Improvements to German Locale.
 
-### 0.13.1
+## 0.13.1
 
 - [NEW] Add support for Python 3.7.
 - [CHANGE] Remove deprecation decorators for Arrow.range(), Arrow.span_range() and Arrow.interval(), all now return generators, wrap with list() to get old behavior.
 - [FIX] Documentation and docstring updates.
 
-### 0.13.0
+## 0.13.0
 
 - [NEW] Added support for Python 3.6.
 - [CHANGE] Drop support for Python 2.6/3.3.
@@ -68,16 +68,16 @@
 - [FIX] Improve docs for get, now and utcnow methods.
 - [FIX] Correct typo in depreciation warning.
 
-### 0.12.1
+## 0.12.1
 
 - [FIX] Allow universal wheels to be generated and reliably installed.
 - [FIX] Make humanize respect only_distance when granularity argument is also given.
 
-### 0.12.0
+## 0.12.0
 
 - [FIX] Compatibility fix for Python 2.x
 
-### 0.11.0
+## 0.11.0
 
 - [FIX] Fix grammar of ArabicLocale
 - [NEW] Add Nepali Locale
@@ -87,13 +87,13 @@
 - [FIX] Remove pip --user-mirrors flag
 - [NEW] Add Indonesian Locale
 
-### 0.10.0
+## 0.10.0
 
 - [FIX] Fix getattr off by one for quarter
 - [FIX] Fix negative offset for UTC
 - [FIX] Update arrow.py
 
-### 0.9.0
+## 0.9.0
 
 - [NEW] Remove duplicate code
 - [NEW] Support gnu date iso 8601
@@ -108,16 +108,16 @@
 - [NEW] Azerbaijani locale added, locale issue fixed in Turkish.
 - [FIX] Format ParserError's raise message
 
-### 0.8.0
+## 0.8.0
 
 - []
 
-### 0.7.1
+## 0.7.1
 
 - [NEW] Esperanto locale (batisteo)
 
+## 0.7.0
 
-### 0.7.0
 - [FIX] Parse localized strings #228 (swistakm)
 - [FIX] Modify tzinfo parameter in `get` api #221 (bottleimp)
 - [FIX] Fix Czech locale (PrehistoricTeam)
@@ -130,7 +130,7 @@
 - [NEW] Search date in strings (beenje)
 - [NEW] Note that arrow's tokens differ from strptime's. (offby1)
 
-### 0.6.0
+## 0.6.0
 
 - [FIX] Added support for Python 3
 - [FIX] Avoid truncating oversized epoch timestamps. Fixes #216.
@@ -147,8 +147,7 @@
 - [NEW] Add count argument to span method
 - [NEW] Improved docs
 
-
-### 0.5.1 - 0.5.4
+## 0.5.1 - 0.5.4
 
 - [FIX] test the behavior of simplejson instead of calling for_json directly (tonyseek)
 - [FIX] Add Hebrew Locale (doodyparizada)
@@ -156,7 +155,7 @@
 - [FIX] Update setup.py Development Status level (andrewelkins)
 - [FIX] Case insensitive month match (cshowe)
 
-### 0.5.0
+## 0.5.0
 
 - [NEW] struct_time addition. (mhworth)
 - [NEW] Version grep (eirnym)
@@ -170,7 +169,7 @@
 - [FIX] Parse lower-cased 'h' (tamentis)
 - [FIX] Slight modifications to Dutch locale (nvie)
 
-### 0.4.4
+## 0.4.4
 
 - [NEW] Include the docs in the released tarball
 - [NEW] Czech localization Czech localization for Arrow
@@ -188,8 +187,7 @@
 - [FIX] In Norwegian and new Norwegian months and weekdays should not be capitalized
 - [FIX] Fixed discrepancy between specifying 'X' to arrow.get and specifying no template
 
-
-### 0.4.3
+## 0.4.3
 
 - [NEW] Turkish locale (Emre)
 - [NEW] Arabic locale (Mosab Ahmad)
@@ -210,8 +208,7 @@
 - [FIX] Error messages for parse errors are now more descriptive (Maciej Albin)
 - [FIX] The parser now correctly checks for separators in strings (Mschwager)
 
-
-### 0.4.2
+## 0.4.2
 
 - [NEW] Factory ``get`` method now accepts a single ``Arrow`` argument.
 - [NEW] Tokens SSSS, SSSSS and SSSSSS are supported in parsing.
@@ -225,7 +222,7 @@
 - [FIX] ``humanize`` now correctly returns unicode (Shvechikov)
 - [FIX] ``Arrow`` objects now pickle / unpickle correctly (Yoloseem)
 
-### 0.4.1
+## 0.4.1
 
 - [NEW] Table / explanation of formatting & parsing tokens in docs
 - [NEW] Brazilian locale (Augusto2112)
@@ -237,7 +234,7 @@
 - [FIX] Factory ``get`` method should now handle unicode strings correctly (Bwells)
 - [FIX] Midnight and noon should now parse and format correctly (Bwells)
 
-### 0.4.0
+## 0.4.0
 
 - [NEW] Format-free ISO-8601 parsing in factory ``get`` method
 - [NEW] Support for 'week' / 'weeks' in ``span``, ``range``, ``span_range``, ``floor`` and ``ceil``
@@ -252,18 +249,18 @@
 - [CHANGE] Dropped timestamp support in ``range`` and ``span_range`` (never worked correctly)
 - [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO-8601)
 
-### 0.3.5
+## 0.3.5
 
 - [NEW] French locale (Cynddl)
 - [NEW] Spanish locale (Slapresta)
 - [FIX] Ranges handle multiple timezones correctly (Ftobia)
 
-### 0.3.4
+## 0.3.4
 
 - [FIX] Humanize no longer sometimes returns the wrong month delta
 - [FIX] ``__format__`` works correctly with no format string
 
-### 0.3.3
+## 0.3.3
 
 - [NEW] Python 2.6 support
 - [NEW] Initial support for locale-based parsing and formatting
@@ -271,15 +268,15 @@
 - [NEW] ``factory`` api method to obtain a factory for a custom type
 - [FIX] Python 3 support and tests completely ironed out
 
-### 0.3.2
+## 0.3.2
 
 - [NEW] Python 3+ support
 
-### 0.3.1
+## 0.3.1
 
 - [FIX] The old ``arrow`` module function handles timestamps correctly as it used to
 
-### 0.3.0
+## 0.3.0
 
 - [NEW] ``Arrow.replace`` method
 - [NEW] Accept timestamps, datetimes and Arrows for datetime inputs, where reasonable
@@ -288,12 +285,12 @@
 - [CHANGE] Plural attribute name semantics altered: single -> absolute, plural -> relative
 - [CHANGE] Plural names no longer supported as properties (e.g. ``arrow.utcnow().years``)
 
-### 0.2.1
+## 0.2.1
 
 - [NEW] Support for localized humanization
 - [NEW] English, Russian, Greek, Korean, Chinese locales
 
-### 0.2.0
+## 0.2.0
 
 - **REWRITE**
 - [NEW] Date parsing
@@ -303,14 +300,14 @@
 - [NEW] ``clone`` method
 - [NEW] ``get``, ``now`` and ``utcnow`` API methods
 
-### 0.1.6
+## 0.1.6
 
 - [NEW] Humanized time deltas
 - [NEW] ``__eq__`` implemented
 - [FIX] Issues with conversions related to daylight savings time resolved
 - [CHANGE] ``__str__`` uses ISO formatting
 
-### 0.1.5
+## 0.1.5
 
 - **Started tracking changes**
 - [NEW] Parsing of ISO-formatted time zone offsets (e.g. '+02:30', '-05:00')
