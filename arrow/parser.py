@@ -78,7 +78,7 @@ class DateTimeParser(object):
                 ),
                 "d": re.compile(r"[1-7]"),
                 "a": self._generate_choice_re(
-                    [self.locale.meridians["am"], self.locale.meridians["pm"]]
+                    (self.locale.meridians["am"], self.locale.meridians["pm"])
                 ),
                 # note: 'A' token accepts both 'am/pm' and 'AM/PM' formats to
                 # ensure backwards compatibility of this token
