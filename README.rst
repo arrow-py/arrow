@@ -1,5 +1,5 @@
-Arrow: Better dates & times for Python
-======================================
+Arrow: Better dates & times for Python 🏹🕰️🐍
+=============================================
 
 .. start-inclusion-marker-do-not-remove
 

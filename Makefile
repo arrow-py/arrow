@@ -1,4 +1,4 @@
-.PHONY: auto test docs clean clean-docs
+.PHONY: auto test docs clean
 
 auto: build27
 
