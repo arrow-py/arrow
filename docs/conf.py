@@ -14,7 +14,7 @@ with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
 
 # -- Project information -----------------------------------------------------
 
-project = "arrow"
+project = "arrow 🏹"
 copyright = "2019, Chris Smith"
 author = "Chris Smith"
 
@@ -45,7 +45,7 @@ html_show_sphinx = False
 html_show_copyright = True
 
 html_theme_options = {
-    "description": "Arrow is a sensible and human-friendly approach to dates, times, and timestamps.",
+    "description": "Arrow is a sensible and human-friendly approach to dates, times and timestamps.",
     "github_user": "crsmithdev",
     "github_repo": "arrow",
     "github_banner": True,
