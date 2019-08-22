@@ -55,7 +55,7 @@ Features
 - Wide support for ISO-8601
 - Timezone conversion
 - Timestamp available as a property
-- Generates time spans, ranges, floors and ceilings for time frames ranging from a microsecond to a year
+- Generates time spans, ranges, floors and ceilings for time frames ranging from microsecond to year
 - Humanizes and supports a growing list of contributed locales
 - Extensible for your own Arrow-derived types
 
