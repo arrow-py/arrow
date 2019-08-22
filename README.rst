@@ -1,5 +1,5 @@
-Arrow: Better dates & times for Python 🏹🕰️🐍
-=============================================
+Arrow: Better dates & times for Python
+======================================
 
 .. start-inclusion-marker-do-not-remove
 
@@ -30,7 +30,7 @@ Arrow: Better dates & times for Python 🏹🕰️🐍
 
 **Arrow** is a Python library that offers a sensible and human-friendly approach to creating, manipulating, formatting and converting dates, times and timestamps. It implements and updates the datetime type, plugging gaps in functionality and providing an intelligent module API that supports many common creation scenarios. Simply put, it helps you work with dates and times with fewer imports and a lot less code.
 
-Arrow is named after the `arrow of time <https://en.wikipedia.org/wiki/Arrow_of_time>`_ and is heavily inspired by `moment.js <https://github.com/moment/moment>`_ and `requests <https://github.com/psf/requests>`_.
+Arrow is named after the `arrow of time <https://en.wikipedia.org/wiki/Arrow_of_time>`_ 🏹🕰️ and is heavily inspired by `moment.js <https://github.com/moment/moment>`_ and `requests <https://github.com/psf/requests>`_.
 
 Why use Arrow over built-in modules?
 ------------------------------------
