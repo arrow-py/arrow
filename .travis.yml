@@ -6,6 +6,7 @@ matrix:
           python: "2.7"
           env: TOXENV=py27
         - name: "Python 3.5"
+          dist: xenial
           python: "3.5"
           env: TOXENV=py35
         - name: "Python 3.6"
