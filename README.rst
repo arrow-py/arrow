@@ -122,6 +122,6 @@ Contributions are welcome for both code and localizations (adding and updating l
 1. Find an issue or feature to tackle on the `issue tracker <https://github.com/crsmithdev/arrow/issues>`_. Issues marked with the `"good first issue" label <https://github.com/crsmithdev/arrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ may be a great place to start!
 2. Fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub and begin making changes in a branch.
 3. Add a few tests to ensure that the bug was fixed or the feature works as expected.
-4. Submit a pull request and await feedback :).
+4. Submit a pull request and await feedback 😃.
 
 If you have any questions along the way, feel free to ask them `here <https://github.com/crsmithdev/arrow/issues/new?labels=question>`_.
