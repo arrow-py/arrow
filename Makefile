@@ -1,4 +1,4 @@
-.PHONY: auto test docs clean
+.PHONY: auto test docs clean clean-docs
 
 auto: build27
 
@@ -16,10 +16,6 @@ build27 build35 build36 build37 build38:
 test:
 	rm -f .coverage
 	. venv/bin/activate && nosetests
-
-test-dev:
-	rm -f .coverage
-	. venv/bin/activate && python -Wd -m nose
 
 lint:
 	venv/bin/pre-commit run --all-files --show-diff-on-failure
