@@ -14,7 +14,7 @@ with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
 
 # -- Project information -----------------------------------------------------
 
-project = "Arrow 🏹"
+project = u"Arrow 🏹"
 copyright = "2019, Chris Smith"
 author = "Chris Smith"
 
