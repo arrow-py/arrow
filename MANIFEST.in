@@ -1,3 +1,2 @@
-include LICENSE HISTORY.md README.rst
-recursive-include tests *
-recursive-include docs *
+include LICENSE CHANGELOG.md README.rst
+recursive-include tests *.py

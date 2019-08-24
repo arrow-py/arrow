@@ -16,7 +16,7 @@ setup(
     description="Better dates & times for Python",
     long_description=readme,
     long_description_content_type="text/x-rst",
-    url="https://arrow.readthedocs.io/en/latest/",
+    url="https://arrow.readthedocs.io",
     author="Chris Smith",
     author_email="crsmithdev@gmail.com",
     license="Apache 2.0",

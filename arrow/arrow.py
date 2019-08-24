@@ -615,7 +615,7 @@ class Arrow(object):
         """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Use pluralized property names to shift their current value relatively:
+        Use pluralized property names to relatively shift their current value:
 
         >>> import arrow
         >>> arw = arrow.utcnow()
@@ -642,13 +642,18 @@ class Arrow(object):
         """
 
         relative_kwargs = {}
+        additional_attrs = ["weeks", "quarters", "weekday"]
 
         for key, value in kwargs.items():
 
-            if key in self._ATTRS_PLURAL or key in ["weeks", "quarters", "weekday"]:
+            if key in self._ATTRS_PLURAL or key in additional_attrs:
                 relative_kwargs[key] = value
             else:
-                raise AttributeError()
+                raise AttributeError(
+                    "Invalid shift time frame. Please select one of the following: {}.".format(
+                        ", ".join(self._ATTRS_PLURAL + additional_attrs)
+                    )
+                )
 
         # core datetime does not support quarters, translate to months.
         relative_kwargs.setdefault("months", 0)
