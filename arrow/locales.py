@@ -1513,7 +1513,7 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
 
 
-class _DeutschLocaleCommonMixin(object):
+class DeutschBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
@@ -1605,12 +1605,12 @@ class _DeutschLocaleCommonMixin(object):
         return humanized
 
 
-class GermanLocale(_DeutschLocaleCommonMixin, Locale):
+class GermanLocale(DeutschBaseLocale, Locale):
 
     names = ["de", "de_de"]
 
 
-class AustrianLocale(_DeutschLocaleCommonMixin, Locale):
+class AustrianLocale(DeutschBaseLocale, Locale):
 
     names = ["de_at"]
 
@@ -3072,7 +3072,7 @@ def _map_locales():
     locales = {}
 
     for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):
+        if issubclass(cls, Locale):  # pragma: no branch
             for name in cls.names:
                 locales[name.lower()] = cls
 
