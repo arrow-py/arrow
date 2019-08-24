@@ -7,4 +7,4 @@ python-dateutil==2.8.*
 pytz==2019.*
 simplejson==3.16.*
 sphinx==1.8.*; python_version == '2.7'
-sphinx==2.1.*; python_version >= '3.5'
+sphinx==2.2.*; python_version >= '3.5'

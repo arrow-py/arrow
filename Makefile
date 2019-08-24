@@ -17,14 +17,11 @@ test:
 	rm -f .coverage
 	. venv/bin/activate && nosetests
 
-test-dev:
-	rm -f .coverage
-	. venv/bin/activate && python -Wd -m nose
-
 lint:
 	venv/bin/pre-commit run --all-files --show-diff-on-failure
 
 docs:
+	rm -rf docs/_build
 	. venv/bin/activate && cd docs; make html
 
 clean:
