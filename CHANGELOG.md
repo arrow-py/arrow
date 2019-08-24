@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.14.6
+
+- [NEW] Added support for `week` granularity in `Arrow.humanize()`. For example, `arrow.utcnow().shift(weeks=-1).humanize(granularity="week")` outputs "a week ago". This change introduced two new untranslated words, `week` and `weeks`, to all locale dictionaries, so locale contributions are welcome!
+- [NEW] Fully translated the Brazilian Portugese locale.
+- [CHANGE] Updated the Macedonian locale to inherit from a Slavic base.
+- [FIX] Fixed a bug that caused `arrow.get()` to ignore tzinfo arguments of type string (e.g. `arrow.get(tzinfo="Europe/Paris")`).
+- [FIX] Fixed a bug that occurred when `arrow.Arrow()` was instantiated with a `pytz` tzinfo object.
+- [FIX] Fixed a bug that caused Arrow to fail when passed a sub-second token, that when rounded, had a value greater than 999999 (e.g. `arrow.get("2015-01-12T01:13:15.9999995")`). Arrow should now accurately propagate the rounding for large sub-second tokens.
+
 ## 0.14.5
 
 - [NEW] Added Afrikaans locale.
