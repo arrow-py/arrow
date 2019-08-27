@@ -28,7 +28,7 @@ setup(
         "backports.functools_lru_cache>=1.2.1;python_version=='2.7'",
     ],
     test_suite="tests",
-    tests_require=["chai"],
+    tests_require=["chai", "mock"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
