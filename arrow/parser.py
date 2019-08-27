@@ -63,22 +63,26 @@ class DateTimeParser(object):
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
         self._input_re_map.update(
             {
-                "MMMM": self._choice_re(self.locale.month_names[1:], re.IGNORECASE),
-                "MMM": self._choice_re(
+                "MMMM": self._generate_choice_re(
+                    self.locale.month_names[1:], re.IGNORECASE
+                ),
+                "MMM": self._generate_choice_re(
                     self.locale.month_abbreviations[1:], re.IGNORECASE
                 ),
                 "Do": re.compile(self.locale.ordinal_day_re),
-                "dddd": self._choice_re(self.locale.day_names[1:], re.IGNORECASE),
-                "ddd": self._choice_re(
+                "dddd": self._generate_choice_re(
+                    self.locale.day_names[1:], re.IGNORECASE
+                ),
+                "ddd": self._generate_choice_re(
                     self.locale.day_abbreviations[1:], re.IGNORECASE
                 ),
                 "d": re.compile(r"[1-7]"),
-                "a": self._choice_re(
+                "a": self._generate_choice_re(
                     (self.locale.meridians["am"], self.locale.meridians["pm"])
                 ),
                 # note: 'A' token accepts both 'am/pm' and 'AM/PM' formats to
                 # ensure backwards compatibility of this token
-                "A": self._choice_re(self.locale.meridians.values()),
+                "A": self._generate_choice_re(self.locale.meridians.values()),
             }
         )
         if cache_size > 0:
@@ -333,8 +337,9 @@ class DateTimeParser(object):
         except Exception:
             return None
 
+    # generates a capture group of choices separated by an OR operator
     @staticmethod
-    def _choice_re(choices, flags=0):
+    def _generate_choice_re(choices, flags=0):
         return re.compile(r"({})".format("|".join(choices)), flags=flags)
 
 
