@@ -1,2 +1,3 @@
 include LICENSE CHANGELOG.md README.rst
 recursive-include tests *.py
+recursive-include docs *.py *.rst *.bat Makefile
