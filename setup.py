@@ -16,7 +16,7 @@ setup(
     description="Better dates & times for Python",
     long_description=readme,
     long_description_content_type="text/x-rst",
-    url="https://arrow.readthedocs.io/en/latest/",
+    url="https://arrow.readthedocs.io",
     author="Chris Smith",
     author_email="crsmithdev@gmail.com",
     license="Apache 2.0",
@@ -28,7 +28,7 @@ setup(
         "backports.functools_lru_cache>=1.2.1;python_version=='2.7'",
     ],
     test_suite="tests",
-    tests_require=["chai"],
+    tests_require=["chai", "mock"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
