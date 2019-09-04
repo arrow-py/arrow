@@ -33,9 +33,6 @@ class ArrowParseWarning(DeprecationWarning):
     """
 
 
-warnings.simplefilter("always", ArrowParseWarning)
-
-
 class ArrowFactory(object):
     """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
