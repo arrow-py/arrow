@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.7
+
+- [CHANGE] `ArrowParseWarning` will no longer be printed on every call to `arrow.get()` with a datetime string. The purpose of the warning was to start a conversation about the upcoming 0.15.0 changes and we appreciate all the feedback that the community has given us!
+
 ## 0.14.6
 
 - [NEW] Added support for `week` granularity in `Arrow.humanize()`. For example, `arrow.utcnow().shift(weeks=-1).humanize(granularity="week")` outputs "a week ago". This change introduced two new untranslated words, `week` and `weeks`, to all locale dictionaries, so locale contributions are welcome!
