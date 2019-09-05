@@ -3610,6 +3610,8 @@ class SwissLocale(Locale):
         "hours": "{0} Stunden",
         "day": "einem Tag",
         "days": "{0} Tagen",
+        "week": "einer Woche",
+        "weeks": "{0} Wochen",
         "month": "einem Monat",
         "months": "{0} Monaten",
         "year": "einem Jahr",
