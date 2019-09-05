@@ -445,6 +445,8 @@ class FrenchLocale(Locale):
         "hours": "{0} heures",
         "day": "un jour",
         "days": "{0} jours",
+        "week": "une semaine",
+        "weeks": "{0} semaines",
         "month": "un mois",
         "months": "{0} mois",
         "year": "un an",
