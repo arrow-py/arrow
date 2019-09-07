@@ -17,7 +17,7 @@ from dateutil import tz as dateutil_tz
 
 from arrow import parser
 from arrow.arrow import Arrow
-from arrow.util import is_timestamp, isstr
+from arrow.util import is_timestamp, iso_to_gregorian, isstr
 
 
 class ArrowFactory(object):
@@ -178,6 +178,10 @@ class ArrowFactory(object):
             # (date) -> from date.
             if isinstance(arg, date):
                 return self.type.fromdate(arg)
+
+            if isinstance(arg, tuple):
+                dt = iso_to_gregorian(*arg)
+                return self.type.fromdate(dt)
 
             # (tzinfo) -> now, @ tzinfo.
             elif isinstance(arg, dt_tzinfo):
