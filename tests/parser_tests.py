@@ -354,32 +354,58 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_subsecond_rounding(self):
         self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
-        format = "YYYY-MM-DD HH:mm:ss.S"
+        datetime_format = "YYYY-MM-DD HH:mm:ss.S"
 
         # round up
         string = "2013-01-01 12:30:45.9876539"
-        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
         # round down
         string = "2013-01-01 12:30:45.98765432"
-        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
         # round half-up
         string = "2013-01-01 12:30:45.987653521"
-        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
         # round half-down
         string = "2013-01-01 12:30:45.9876545210"
-        self.assertEqual(self.parser.parse(string, format), self.expected)
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+    # overflow (zero out the subseconds and increment the seconds)
+    # regression tests for issue #636
+    def test_parse_subsecond_rounding_overflow(self):
+        datetime_format = "YYYY-MM-DD HH:mm:ss.S"
+
+        self.expected = datetime(2013, 1, 1, 12, 30, 46)
+        string = "2013-01-01 12:30:45.9999995"
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        self.expected = datetime(2013, 1, 1, 12, 31, 0)
+        string = "2013-01-01 12:30:59.9999999"
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        self.expected = datetime(2013, 1, 2, 0, 0, 0)
+        string = "2013-01-01 23:59:59.9999999"
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
+        self.assertEqual(self.parser.parse_iso(string), self.expected)
+
+        # 6 digits should remain unrounded
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 999999)
+        string = "2013-01-01 12:30:45.999999"
+        self.assertEqual(self.parser.parse(string, datetime_format), self.expected)
         self.assertEqual(self.parser.parse_iso(string), self.expected)
 
     # Regression tests for issue #560
     def test_parse_long_year(self):
         with self.assertRaises(ParserError):
-            self.parser.parse("09 January 123456789101112", "DD MMMM YYYY"),
+            self.parser.parse("09 January 123456789101112", "DD MMMM YYYY")
 
         with self.assertRaises(ParserError):
             self.parser.parse("123456789101112 09 January", "YYYY DD MMMM")

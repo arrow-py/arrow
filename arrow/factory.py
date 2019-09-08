@@ -9,7 +9,8 @@ construction scenarios.
 from __future__ import absolute_import
 
 import calendar
-from datetime import date, datetime, tzinfo
+from datetime import date, datetime
+from datetime import tzinfo as dt_tzinfo
 from time import struct_time
 
 from dateutil import tz as dateutil_tz
@@ -146,8 +147,13 @@ class ArrowFactory(object):
 
         # () -> now, @ utc.
         if arg_count == 0:
-            if isinstance(tz, tzinfo):
+            if isstr(tz):
+                tz = parser.TzinfoParser.parse(tz)
                 return self.type.now(tz)
+
+            if isinstance(tz, dt_tzinfo):
+                return self.type.now(tz)
+
             return self.type.utcnow()
 
         if arg_count == 1:
@@ -174,7 +180,7 @@ class ArrowFactory(object):
                 return self.type.fromdate(arg)
 
             # (tzinfo) -> now, @ tzinfo.
-            elif isinstance(arg, tzinfo):
+            elif isinstance(arg, dt_tzinfo):
                 return self.type.now(arg)
 
             # (str) -> parse.
@@ -198,7 +204,7 @@ class ArrowFactory(object):
             if isinstance(arg_1, datetime):
 
                 # (datetime, tzinfo/str) -> fromdatetime replace tzinfo.
-                if isinstance(arg_2, tzinfo) or isstr(arg_2):
+                if isinstance(arg_2, dt_tzinfo) or isstr(arg_2):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
                     raise TypeError(
@@ -210,7 +216,7 @@ class ArrowFactory(object):
             elif isinstance(arg_1, date):
 
                 # (date, tzinfo/str) -> fromdate replace tzinfo.
-                if isinstance(arg_2, tzinfo) or isstr(arg_2):
+                if isinstance(arg_2, dt_tzinfo) or isstr(arg_2):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
                 else:
                     raise TypeError(
@@ -271,7 +277,7 @@ class ArrowFactory(object):
 
         if tz is None:
             tz = dateutil_tz.tzlocal()
-        elif not isinstance(tz, tzinfo):
+        elif not isinstance(tz, dt_tzinfo):
             tz = parser.TzinfoParser.parse(tz)
 
         return self.type.now(tz)

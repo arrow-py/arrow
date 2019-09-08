@@ -39,6 +39,8 @@ class Locale(object):
         "hours": "",
         "day": "",
         "days": "",
+        "week": "",
+        "weeks": "",
         "month": "",
         "months": "",
         "year": "",
@@ -208,6 +210,8 @@ class EnglishLocale(Locale):
         "hours": "{0} hours",
         "day": "a day",
         "days": "{0} days",
+        "week": "a week",
+        "weeks": "{0} weeks",
         "month": "a month",
         "months": "{0} months",
         "year": "a year",
@@ -441,6 +445,8 @@ class FrenchLocale(Locale):
         "hours": "{0} heures",
         "day": "un jour",
         "days": "{0} jours",
+        "week": "une semaine",
+        "weeks": "{0} semaines",
         "month": "un mois",
         "months": "{0} mois",
         "year": "un an",
@@ -1185,6 +1191,8 @@ class RussianLocale(SlavicBaseLocale):
         "hours": ["{0} час", "{0} часа", "{0} часов"],
         "day": "день",
         "days": ["{0} день", "{0} дня", "{0} дней"],
+        "week": "неделю",
+        "weeks": ["{0} неделю", "{0} недели", "{0} недель"],
         "month": "месяц",
         "months": ["{0} месяц", "{0} месяца", "{0} месяцев"],
         "year": "год",
@@ -1433,7 +1441,83 @@ class UkrainianLocale(SlavicBaseLocale):
     day_abbreviations = ["", "пн", "вт", "ср", "чт", "пт", "сб", "нд"]
 
 
-class _DeutschLocaleCommonMixin(object):
+class MacedonianLocale(SlavicBaseLocale):
+    names = ["mk", "mk_mk"]
+
+    past = "пред {0}"
+    future = "за {0}"
+
+    timeframes = {
+        "now": "сега",
+        "seconds": "секунди",
+        "minute": "една минута",
+        "minutes": ["{0} минута", "{0} минути", "{0} минути"],
+        "hour": "еден саат",
+        "hours": ["{0} саат", "{0} саати", "{0} саати"],
+        "day": "еден ден",
+        "days": ["{0} ден", "{0} дена", "{0} дена"],
+        "month": "еден месец",
+        "months": ["{0} месец", "{0} месеци", "{0} месеци"],
+        "year": "една година",
+        "years": ["{0} година", "{0} години", "{0} години"],
+    }
+
+    meridians = {"am": "дп", "pm": "пп", "AM": "претпладне", "PM": "попладне"}
+
+    month_names = [
+        "",
+        "Јануари",
+        "Февруари",
+        "Март",
+        "Април",
+        "Мај",
+        "Јуни",
+        "Јули",
+        "Август",
+        "Септември",
+        "Октомври",
+        "Ноември",
+        "Декември",
+    ]
+    month_abbreviations = [
+        "",
+        "Јан.",
+        " Фев.",
+        " Мар.",
+        " Апр.",
+        " Мај",
+        " Јун.",
+        " Јул.",
+        " Авг.",
+        " Септ.",
+        " Окт.",
+        " Ноем.",
+        " Декем.",
+    ]
+
+    day_names = [
+        "",
+        "Понеделник",
+        " Вторник",
+        " Среда",
+        " Четврток",
+        " Петок",
+        " Сабота",
+        " Недела",
+    ]
+    day_abbreviations = [
+        "",
+        "Пон.",
+        " Вт.",
+        " Сре.",
+        " Чет.",
+        " Пет.",
+        " Саб.",
+        " Нед.",
+    ]
+
+
+class DeutschBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
@@ -1525,12 +1609,12 @@ class _DeutschLocaleCommonMixin(object):
         return humanized
 
 
-class GermanLocale(_DeutschLocaleCommonMixin, Locale):
+class GermanLocale(DeutschBaseLocale, Locale):
 
     names = ["de", "de_de"]
 
 
-class AustrianLocale(_DeutschLocaleCommonMixin, Locale):
+class AustrianLocale(DeutschBaseLocale, Locale):
 
     names = ["de_at"]
 
@@ -2843,82 +2927,6 @@ class FarsiLocale(Locale):
     day_abbreviations = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 
-class MacedonianLocale(Locale):
-    names = ["mk", "mk_mk"]
-
-    past = "пред {0}"
-    future = "за {0}"
-
-    timeframes = {
-        "now": "сега",
-        "seconds": "секунди",
-        "minute": "една минута",
-        "minutes": "{0} минути",
-        "hour": "еден саат",
-        "hours": "{0} саати",
-        "day": "еден ден",
-        "days": "{0} дена",
-        "month": "еден месец",
-        "months": "{0} месеци",
-        "year": "една година",
-        "years": "{0} години",
-    }
-
-    meridians = {"am": "дп", "pm": "пп", "AM": "претпладне", "PM": "попладне"}
-
-    month_names = [
-        "",
-        "Јануари",
-        "Февруари",
-        "Март",
-        "Април",
-        "Мај",
-        "Јуни",
-        "Јули",
-        "Август",
-        "Септември",
-        "Октомври",
-        "Ноември",
-        "Декември",
-    ]
-    month_abbreviations = [
-        "",
-        "Јан.",
-        " Фев.",
-        " Мар.",
-        " Апр.",
-        " Мај",
-        " Јун.",
-        " Јул.",
-        " Авг.",
-        " Септ.",
-        " Окт.",
-        " Ноем.",
-        " Декем.",
-    ]
-
-    day_names = [
-        "",
-        "Понеделник",
-        " Вторник",
-        " Среда",
-        " Четврток",
-        " Петок",
-        " Сабота",
-        " Недела",
-    ]
-    day_abbreviations = [
-        "",
-        "Пон.",
-        " Вт.",
-        " Сре.",
-        " Чет.",
-        " Пет.",
-        " Саб.",
-        " Нед.",
-    ]
-
-
 class HebrewLocale(Locale):
 
     names = ["he", "he_IL"]
@@ -3068,7 +3076,7 @@ def _map_locales():
     locales = {}
 
     for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):
+        if issubclass(cls, Locale):  # pragma: no branch
             for name in cls.names:
                 locales[name.lower()] = cls
 
@@ -3604,6 +3612,8 @@ class SwissLocale(Locale):
         "hours": "{0} Stunden",
         "day": "einem Tag",
         "days": "{0} Tagen",
+        "week": "einer Woche",
+        "weeks": "{0} Wochen",
         "month": "einem Monat",
         "months": "{0} Monaten",
         "year": "einem Jahr",

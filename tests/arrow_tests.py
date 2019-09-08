@@ -7,10 +7,12 @@ import sys
 import time
 from datetime import date, datetime, timedelta
 
+import pytz
 import simplejson as json
 from chai import Chai
 from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
+from mock import patch
 
 from arrow import arrow, util
 
@@ -21,12 +23,58 @@ def assertDtEqual(dt1, dt2, within=10):
 
 
 class ArrowInitTests(Chai):
+    def test_init_bad_input(self):
+
+        with self.assertRaises(TypeError):
+            arrow.Arrow(2013)
+
+        with self.assertRaises(TypeError):
+            arrow.Arrow(2013, 2)
+
+        with self.assertRaises(ValueError):
+            arrow.Arrow(2013, 2, 2, 12, 30, 45, 9999999)
+
     def test_init(self):
+
+        result = arrow.Arrow(2013, 2, 2)
+        self.expected = datetime(2013, 2, 2, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12)
+        self.expected = datetime(2013, 2, 2, 12, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30)
+        self.expected = datetime(2013, 2, 2, 12, 30, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45)
+        self.expected = datetime(2013, 2, 2, 12, 30, 45, tzinfo=tz.tzutc())
+        self.assertEqual(result._datetime, self.expected)
 
         result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999)
         self.expected = datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc())
-
         self.assertEqual(result._datetime, self.expected)
+
+        result = arrow.Arrow(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(result._datetime, self.expected)
+
+    # regression tests for issue #626
+    def test_init_pytz_timezone(self):
+
+        result = arrow.Arrow(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=pytz.timezone("Europe/Paris")
+        )
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(result._datetime, self.expected)
+        assertDtEqual(result._datetime, self.expected, 1)
 
 
 class ArrowFactoryTests(Chai):
@@ -47,8 +95,13 @@ class ArrowFactoryTests(Chai):
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-
         assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
+        assertDtEqual(
+            result._datetime,
+            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+        )
 
     def test_fromdatetime(self):
 
@@ -89,9 +142,16 @@ class ArrowFactoryTests(Chai):
         formatted = datetime(2013, 2, 3, 12, 30, 45).strftime("%Y-%m-%d %H:%M:%S")
 
         result = arrow.Arrow.strptime(formatted, "%Y-%m-%d %H:%M:%S")
-
         self.assertEqual(
             result._datetime, datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.tzutc())
+        )
+
+        result = arrow.Arrow.strptime(
+            formatted, "%Y-%m-%d %H:%M:%S", tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.assertEqual(
+            result._datetime,
+            datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")),
         )
 
 
@@ -503,8 +563,13 @@ class ArrowReplaceTests(Chai):
 class ArrowShiftTests(Chai):
     def test_not_attr(self):
 
+        now = arrow.Arrow.utcnow()
+
         with self.assertRaises(AttributeError):
-            arrow.Arrow.utcnow().shift(abc=1)
+            now.shift(abc=1)
+
+        with self.assertRaises(AttributeError):
+            now.shift(week=1)
 
     def test_shift(self):
 
@@ -1349,6 +1414,8 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(later105.humanize(self.now, granularity="hour"), "in 27 hours")
         self.assertEqual(self.now.humanize(later105, granularity="day"), "a day ago")
         self.assertEqual(later105.humanize(self.now, granularity="day"), "in a day")
+        self.assertEqual(self.now.humanize(later105, granularity="week"), "0 weeks ago")
+        self.assertEqual(later105.humanize(self.now, granularity="week"), "in 0 weeks")
         self.assertEqual(
             self.now.humanize(later105, granularity="month"), "0 months ago"
         )
@@ -1359,6 +1426,8 @@ class ArrowHumanizeTests(Chai):
         later106 = self.now.shift(seconds=3 * 10 ** 6)
         self.assertEqual(self.now.humanize(later106, granularity="day"), "34 days ago")
         self.assertEqual(later106.humanize(self.now, granularity="day"), "in 34 days")
+        self.assertEqual(self.now.humanize(later106, granularity="week"), "4 weeks ago")
+        self.assertEqual(later106.humanize(self.now, granularity="week"), "in 4 weeks")
         self.assertEqual(
             self.now.humanize(later106, granularity="month"), "a month ago"
         )
@@ -1367,6 +1436,10 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(later106.humanize(self.now, granularity="year"), "in 0 years")
 
         later506 = self.now.shift(seconds=50 * 10 ** 6)
+        self.assertEqual(
+            self.now.humanize(later506, granularity="week"), "82 weeks ago"
+        )
+        self.assertEqual(later506.humanize(self.now, granularity="week"), "in 82 weeks")
         self.assertEqual(
             self.now.humanize(later506, granularity="month"), "18 months ago"
         )
@@ -1476,6 +1549,26 @@ class ArrowHumanizeTests(Chai):
         later = self.now.shift(days=4)
         self.assertEqual(later.humanize(), "in 4 days")
 
+    def test_week(self):
+
+        later = self.now.shift(weeks=1)
+
+        self.assertEqual(self.now.humanize(later), "a week ago")
+        self.assertEqual(later.humanize(self.now), "in a week")
+
+        self.assertEqual(self.now.humanize(later, only_distance=True), "a week")
+        self.assertEqual(later.humanize(self.now, only_distance=True), "a week")
+
+    def test_weeks(self):
+
+        later = self.now.shift(weeks=2)
+
+        self.assertEqual(self.now.humanize(later), "2 weeks ago")
+        self.assertEqual(later.humanize(self.now), "in 2 weeks")
+
+        self.assertEqual(self.now.humanize(later, only_distance=True), "2 weeks")
+        self.assertEqual(later.humanize(self.now, only_distance=True), "2 weeks")
+
     def test_month(self):
 
         later = self.now.shift(months=1)
@@ -1560,6 +1653,22 @@ class ArrowHumanizeTests(Chai):
         result = arw.humanize()
 
         self.assertEqual(result, "just now")
+
+        result = arw.humanize(None)
+
+        self.assertEqual(result, "just now")
+
+    def test_untranslated_granularity(self):
+
+        arw = arrow.Arrow.utcnow()
+        later = arw.shift(weeks=1)
+
+        # simulate an untranslated timeframe key
+        with patch.dict("arrow.locales.EnglishLocale.timeframes"):
+            del arrow.locales.EnglishLocale.timeframes["week"]
+
+            with self.assertRaises(ValueError):
+                arw.humanize(later, granularity="week")
 
 
 class ArrowHumanizeTestsWithLocale(Chai):

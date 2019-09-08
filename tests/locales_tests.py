@@ -6,6 +6,41 @@ from chai import Chai
 from arrow import arrow, locales
 
 
+class LocaleValidationTests(Chai):
+    """Validate locales to ensure that translations are valid and complete"""
+
+    def setUp(self):
+        super(LocaleValidationTests, self).setUp()
+
+        self.locales = locales._locales
+
+    def test_locale_validation(self):
+
+        for _, locale_cls in self.locales.items():
+            # 7 days + 1 spacer to allow for 1-indexing of months
+            self.assertEqual(len(locale_cls.day_names), 8)
+            self.assertTrue(locale_cls.day_names[0] == "")
+            # ensure that all string from index 1 onward are valid (not blank or None)
+            self.assertTrue(all(locale_cls.day_names[1:]))
+
+            self.assertEqual(len(locale_cls.day_abbreviations), 8)
+            self.assertTrue(locale_cls.day_abbreviations[0] == "")
+            self.assertTrue(all(locale_cls.day_abbreviations[1:]))
+
+            # 12 months + 1 spacer to allow for 1-indexing of months
+            self.assertEqual(len(locale_cls.month_names), 13)
+            self.assertTrue(locale_cls.month_names[0] == "")
+            self.assertTrue(all(locale_cls.month_names[1:]))
+
+            self.assertEqual(len(locale_cls.month_abbreviations), 13)
+            self.assertTrue(locale_cls.month_abbreviations[0] == "")
+            self.assertTrue(all(locale_cls.month_abbreviations[1:]))
+
+            self.assertTrue(len(locale_cls.names) > 0)
+            self.assertTrue(locale_cls.past is not None)
+            self.assertTrue(locale_cls.future is not None)
+
+
 class ModuleTests(Chai):
     def test_get_locale(self):
 
@@ -313,6 +348,35 @@ class BulgarianLocaleTests(Chai):
         self.assertEqual(locale._format_timeframe("hours", 25), "25 часа")
 
         # feminine grammatical gender should be tested separately
+        self.assertEqual(locale._format_timeframe("minutes", 0), "0 минути")
+        self.assertEqual(locale._format_timeframe("minutes", 1), "1 минута")
+        self.assertEqual(locale._format_timeframe("minutes", 2), "2 минути")
+        self.assertEqual(locale._format_timeframe("minutes", 4), "4 минути")
+        self.assertEqual(locale._format_timeframe("minutes", 5), "5 минути")
+        self.assertEqual(locale._format_timeframe("minutes", 21), "21 минута")
+        self.assertEqual(locale._format_timeframe("minutes", 22), "22 минути")
+        self.assertEqual(locale._format_timeframe("minutes", 25), "25 минути")
+
+
+class MacedonianLocaleTests(Chai):
+    def test_plurals_mk(self):
+
+        locale = locales.MacedonianLocale()
+
+        # time
+        self.assertEqual(locale._format_relative("сега", "now", 0), "сега")
+
+        # Hours
+        self.assertEqual(locale._format_timeframe("hours", 0), "0 саати")
+        self.assertEqual(locale._format_timeframe("hours", 1), "1 саат")
+        self.assertEqual(locale._format_timeframe("hours", 2), "2 саати")
+        self.assertEqual(locale._format_timeframe("hours", 4), "4 саати")
+        self.assertEqual(locale._format_timeframe("hours", 5), "5 саати")
+        self.assertEqual(locale._format_timeframe("hours", 21), "21 саат")
+        self.assertEqual(locale._format_timeframe("hours", 22), "22 саати")
+        self.assertEqual(locale._format_timeframe("hours", 25), "25 саати")
+
+        # Minutes
         self.assertEqual(locale._format_timeframe("minutes", 0), "0 минути")
         self.assertEqual(locale._format_timeframe("minutes", 1), "1 минута")
         self.assertEqual(locale._format_timeframe("minutes", 2), "2 минути")

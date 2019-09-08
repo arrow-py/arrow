@@ -9,7 +9,8 @@ from __future__ import absolute_import
 
 import calendar
 import sys
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime, timedelta
+from datetime import tzinfo as dt_tzinfo
 from math import trunc
 
 from dateutil import tz as dateutil_tz
@@ -59,10 +60,17 @@ class Arrow(object):
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
     ):
-
-        if util.isstr(tzinfo):
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzutc()
+        # detect that tzinfo is a pytz object (issue #626)
+        elif (
+            isinstance(tzinfo, dt_tzinfo)
+            and hasattr(tzinfo, "localize")
+            and tzinfo.zone
+        ):
+            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
+        elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
 
         self._datetime = datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo
@@ -84,7 +92,8 @@ class Arrow(object):
 
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
 
         return cls(
@@ -138,7 +147,8 @@ class Arrow(object):
 
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzlocal()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzlocal()
         timestamp = cls._get_timestamp_from_input(timestamp)
         dt = datetime.fromtimestamp(timestamp, tzinfo)
 
@@ -219,7 +229,8 @@ class Arrow(object):
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
         """
 
-        tzinfo = tzinfo if tzinfo is not None else dateutil_tz.tzutc()
+        if tzinfo is None:
+            tzinfo = dateutil_tz.tzutc()
 
         return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
@@ -241,7 +252,8 @@ class Arrow(object):
         """
 
         dt = datetime.strptime(date_str, fmt)
-        tzinfo = tzinfo if tzinfo is not None else dt.tzinfo
+        if tzinfo is None:
+            tzinfo = dt.tzinfo
 
         return cls(
             dt.year,
@@ -603,7 +615,7 @@ class Arrow(object):
         """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Use pluralized property names to shift their current value relatively:
+        Use pluralized property names to relatively shift their current value:
 
         >>> import arrow
         >>> arw = arrow.utcnow()
@@ -630,13 +642,18 @@ class Arrow(object):
         """
 
         relative_kwargs = {}
+        additional_attrs = ["weeks", "quarters", "weekday"]
 
         for key, value in kwargs.items():
 
-            if key in self._ATTRS_PLURAL or key in ["weeks", "quarters", "weekday"]:
+            if key in self._ATTRS_PLURAL or key in additional_attrs:
                 relative_kwargs[key] = value
             else:
-                raise AttributeError()
+                raise AttributeError(
+                    "Invalid shift time frame. Please select one of the following: {}.".format(
+                        ", ".join(self._ATTRS_PLURAL + additional_attrs)
+                    )
+                )
 
         # core datetime does not support quarters, translate to months.
         relative_kwargs.setdefault("months", 0)
@@ -677,7 +694,7 @@ class Arrow(object):
 
         """
 
-        if not isinstance(tz, tzinfo):
+        if not isinstance(tz, dt_tzinfo):
             tz = parser.TzinfoParser.parse(tz)
 
         dt = self._datetime.astimezone(tz)
@@ -817,7 +834,7 @@ class Arrow(object):
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
-        :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'month' or 'year'.
+        :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'.
 
         Usage::
 
@@ -831,6 +848,7 @@ class Arrow(object):
 
         """
 
+        locale_name = locale
         locale = locales.get_locale(locale)
 
         if other is None:
@@ -854,72 +872,92 @@ class Arrow(object):
         diff = abs(delta)
         delta = diff
 
-        if granularity == "auto":
-            if diff < 10:
-                return locale.describe("now", only_distance=only_distance)
-
-            if diff < 45:
-                seconds = sign * delta
-                return locale.describe("seconds", seconds, only_distance=only_distance)
-
-            elif diff < 90:
-                return locale.describe("minute", sign, only_distance=only_distance)
-            elif diff < 2700:
-                minutes = sign * int(max(delta / 60, 2))
-                return locale.describe("minutes", minutes, only_distance=only_distance)
-
-            elif diff < 5400:
-                return locale.describe("hour", sign, only_distance=only_distance)
-            elif diff < 79200:
-                hours = sign * int(max(delta / 3600, 2))
-                return locale.describe("hours", hours, only_distance=only_distance)
-
-            elif diff < 129600:
-                return locale.describe("day", sign, only_distance=only_distance)
-            elif diff < 2160000:
-                days = sign * int(max(delta / 86400, 2))
-                return locale.describe("days", days, only_distance=only_distance)
-
-            elif diff < 3888000:
-                return locale.describe("month", sign, only_distance=only_distance)
-            elif diff < 29808000:
-                self_months = self._datetime.year * 12 + self._datetime.month
-                other_months = dt.year * 12 + dt.month
-
-                months = sign * int(max(abs(other_months - self_months), 2))
-
-                return locale.describe("months", months, only_distance=only_distance)
-
-            elif diff < 47260800:
-                return locale.describe("year", sign, only_distance=only_distance)
-            else:
-                years = sign * int(max(delta / 31536000, 2))
-                return locale.describe("years", years, only_distance=only_distance)
-
-        else:
-            if granularity == "second":
-                delta = sign * delta
-                if abs(delta) < 2:
+        try:
+            if granularity == "auto":
+                if diff < 10:
                     return locale.describe("now", only_distance=only_distance)
-            elif granularity == "minute":
-                delta = sign * delta / float(60)
-            elif granularity == "hour":
-                delta = sign * delta / float(60 * 60)
-            elif granularity == "day":
-                delta = sign * delta / float(60 * 60 * 24)
-            elif granularity == "month":
-                delta = sign * delta / float(60 * 60 * 24 * 30.5)
-            elif granularity == "year":
-                delta = sign * delta / float(60 * 60 * 24 * 365.25)
-            else:
-                raise AttributeError(
-                    'Error. Could not understand your level of granularity. Please select between \
-                "second", "minute", "hour", "day", "week", "month" or "year"'
-                )
 
-            if trunc(abs(delta)) != 1:
-                granularity += "s"
-            return locale.describe(granularity, delta, only_distance=only_distance)
+                if diff < 45:
+                    seconds = sign * delta
+                    return locale.describe(
+                        "seconds", seconds, only_distance=only_distance
+                    )
+
+                elif diff < 90:
+                    return locale.describe("minute", sign, only_distance=only_distance)
+                elif diff < 2700:
+                    minutes = sign * int(max(delta / 60, 2))
+                    return locale.describe(
+                        "minutes", minutes, only_distance=only_distance
+                    )
+
+                elif diff < 5400:
+                    return locale.describe("hour", sign, only_distance=only_distance)
+                elif diff < 79200:
+                    hours = sign * int(max(delta / 3600, 2))
+                    return locale.describe("hours", hours, only_distance=only_distance)
+
+                elif diff < 129600:
+                    return locale.describe("day", sign, only_distance=only_distance)
+                elif diff < 554400:
+                    days = sign * int(max(delta / 86400, 2))
+                    return locale.describe("days", days, only_distance=only_distance)
+
+                elif diff < 907200:
+                    return locale.describe("week", sign, only_distance=only_distance)
+                elif diff < 2419200:
+                    weeks = sign * int(max(delta / 604800, 2))
+                    return locale.describe("weeks", weeks, only_distance=only_distance)
+
+                elif diff < 3888000:
+                    return locale.describe("month", sign, only_distance=only_distance)
+                elif diff < 29808000:
+                    self_months = self._datetime.year * 12 + self._datetime.month
+                    other_months = dt.year * 12 + dt.month
+
+                    months = sign * int(max(abs(other_months - self_months), 2))
+
+                    return locale.describe(
+                        "months", months, only_distance=only_distance
+                    )
+
+                elif diff < 47260800:
+                    return locale.describe("year", sign, only_distance=only_distance)
+                else:
+                    years = sign * int(max(delta / 31536000, 2))
+                    return locale.describe("years", years, only_distance=only_distance)
+
+            else:
+                if granularity == "second":
+                    delta = sign * delta
+                    if abs(delta) < 2:
+                        return locale.describe("now", only_distance=only_distance)
+                elif granularity == "minute":
+                    delta = sign * delta / float(60)
+                elif granularity == "hour":
+                    delta = sign * delta / float(60 * 60)
+                elif granularity == "day":
+                    delta = sign * delta / float(60 * 60 * 24)
+                elif granularity == "week":
+                    delta = sign * delta / float(60 * 60 * 24 * 7)
+                elif granularity == "month":
+                    delta = sign * delta / float(60 * 60 * 24 * 30.5)
+                elif granularity == "year":
+                    delta = sign * delta / float(60 * 60 * 24 * 365.25)
+                else:
+                    raise AttributeError(
+                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                    )
+
+                if trunc(abs(delta)) != 1:
+                    granularity += "s"
+                return locale.describe(granularity, delta, only_distance=only_distance)
+        except KeyError as e:
+            raise ValueError(
+                "Humanization of the {} granularity is not currently translated in the '{}' locale. Please consider making a contribution to this locale.".format(
+                    e, locale_name
+                )
+            )
 
     # query functions
 
@@ -955,8 +993,7 @@ class Arrow(object):
 
         if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
             raise AttributeError(
-                'Error. Could not understand the specified bounds. Please select between \
-                "()", "(]", "[)", or "[]"'
+                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
             )
 
         if not isinstance(start, Arrow):
@@ -1286,7 +1323,7 @@ class Arrow(object):
 
         if tz_expr is None:
             return dateutil_tz.tzutc()
-        if isinstance(tz_expr, tzinfo):
+        if isinstance(tz_expr, dt_tzinfo):
             return tz_expr
         else:
             try:
