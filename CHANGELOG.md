@@ -7,46 +7,22 @@
 - [CHANGE] Timestamps of type `str` are no longer supported **without a format string** in the arrow.get() method. This change was made to support the ISO 8601 basic format and to address bugs such as [#447](https://github.com/crsmithdev/arrow/issues/447).
 
 ```python
-
 # will NOT work in v0.15.0
-
 arrow.get("1565358758")
-
 arrow.get("1565358758.123413")
 
 # will work in v0.15.0
-
 arrow.get("1565358758", "X")
-
 arrow.get("1565358758.123413", "X")
-
 arrow.get(1565358758)
-
 arrow.get(1565358758.123413)
-
 ```
 
 - [CHANGE] When a meridian token (a|A) is passed and no meridians are available for the specified locale (e.g. unsupported or untranslated) a `ParserError` is raised.
-- [CHANGE] The timestamp token (`X`) will now match float timestamps of type `str`: `arrow.get(“1565358758.123415”, “X”).
+- [CHANGE] The timestamp token (`X`) will now match float timestamps of type `str`: `arrow.get(“1565358758.123415”, “X”)`.
 - [CHANGE] Strings with leading or trailing whitespace will no longer be parsed without a format string, please see [the docs](https://arrow.readthedocs.io/en/latest/#regular-expressions) for more info.
-- [FIX] The timestamp token (`X`) will now only match on strings that strictly contain integers and floats, preventing incorrect matches.
-- [FIX] Most instances of `arrow.get()` returning an incorrect arrow object from a partial parsing match have been eliminated, see examples below.
-
-```python
-
-arrow.get(“garbage2017everywhere”)
-
-<Arrow [2017-01-01T00:00:00+00:00]>
-
-```
-
-```python
-
-arrow.get(‘Jun-2019’, [‘MMM-YY’, ‘MMM-YYYY’])
-
-<Arrow [2020-06-01T00:00:00+00:00]>
-
-```
+- [FIX] The timestamp token (`X`) will now only match on strings that **strictly contain integers and floats**, preventing incorrect matches.
+- [FIX] Most instances of `arrow.get()` returning an incorrect arrow object from a partial parsing match have been eliminated, the following issue have been addressed: https://github.com/crsmithdev/arrow/issues/91, https://github.com/crsmithdev/arrow/issues/196, https://github.com/crsmithdev/arrow/issues/396, https://github.com/crsmithdev/arrow/issues/434, https://github.com/crsmithdev/arrow/issues/447, https://github.com/crsmithdev/arrow/issues/456, https://github.com/crsmithdev/arrow/issues/519, https://github.com/crsmithdev/arrow/issues/538, https://github.com/crsmithdev/arrow/issues/560.
 
 ## 0.14.7
 
