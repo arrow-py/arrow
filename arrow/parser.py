@@ -125,9 +125,8 @@ class DateTimeParser(object):
         has_time = has_space_divider or has_t_divider
         has_tz = False
 
-        # TODO: add tests for all the new formats, especially basic format
-        # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
         # date formats (ISO-8601 and others) to test against
+        # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
         formats = [
             "YYYY-MM-DD",
             "YYYY-M-DD",

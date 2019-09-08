@@ -1002,6 +1002,42 @@ class DateTimeParserISOTests(Chai):
 
         self.assertEqual(self.parser.parse_iso(dt.isoformat()), dt)
 
+    def test_parse_iso_with_leading_and_trailing_whitespace(self):
+        datetime_string = "    2016-11-15T06:37:19.123456"
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        datetime_string = "    2016-11-15T06:37:19.123456     "
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        datetime_string = "2016-11-15T06:37:19.123456 "
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        datetime_string = "2016-11-15T 06:37:19.123456"
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        # leading whitespace
+        datetime_string = "    2016-11-15 06:37:19.123456"
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        # trailing whitespace
+        datetime_string = "2016-11-15 06:37:19.123456    "
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        datetime_string = "    2016-11-15 06:37:19.123456    "
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
+        # two dividing spaces
+        datetime_string = "2016-11-15  06:37:19.123456"
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso(datetime_string)
+
     def test_parse_iso_with_extra_words_at_start_and_end_invalid(self):
         test_inputs = [
             "blah2016",
