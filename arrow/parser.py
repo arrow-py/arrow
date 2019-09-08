@@ -151,10 +151,8 @@ class DateTimeParser(object):
                 date_string, time_string = datetime_string.split("T", 1)
 
             time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
-            # TODO: should we prevent mixing basic and extended formats? would need to ensure that dates, times, and timezones are in same format
-            time_colon_count = time_parts[0].count(":")
 
-            is_basic_time_format = time_colon_count == 0
+            is_basic_time_format = ":" not in time_parts[0]
             tz_format = "Z"
 
             # use 'ZZ' token instead since tz offset is present in non-basic format
