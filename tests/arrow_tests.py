@@ -5,7 +5,6 @@ import calendar
 import pickle
 import sys
 import time
-import warnings
 from datetime import date, datetime, timedelta
 
 import simplejson as json
@@ -1717,5 +1716,5 @@ class ArrowUtilTests(Chai):
         )
         self.assertEqual(arrow.Arrow._get_iteration_params(100, 120), (100, 120))
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
