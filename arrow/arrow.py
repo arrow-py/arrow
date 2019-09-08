@@ -1372,7 +1372,7 @@ class Arrow(object):
         if end is None:
 
             if limit is None:
-                raise Exception("one of 'end' or 'limit' is required")
+                raise ValueError("one of 'end' or 'limit' is required")
 
             return cls.max, limit
 

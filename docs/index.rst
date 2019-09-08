@@ -26,20 +26,14 @@ Get 'now' easily:
     >>> arrow.now('US/Pacific')
     <Arrow [2013-05-06T21:20:44.761511-07:00]>
 
-Create from timestamps (ints or floats, or strings that convert to a float):
+Create from timestamps (:code:`int` or :code:`float`):
 
 .. code-block:: python
 
     >>> arrow.get(1367900664)
     <Arrow [2013-05-07T04:24:24+00:00]>
 
-    >>> arrow.get('1367900664')
-    <Arrow [2013-05-07T04:24:24+00:00]>
-
     >>> arrow.get(1367900664.152325)
-    <Arrow [2013-05-07T04:24:24.152325+00:00]>
-
-    >>> arrow.get('1367900664.152325')
     <Arrow [2013-05-07T04:24:24.152325+00:00]>
 
 Use a naive or timezone-aware datetime, or flexibly specify a timezone:
@@ -327,9 +321,9 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |                                |M             |1, 2, 3 ... 11, 12                         |
 +--------------------------------+--------------+-------------------------------------------+
-|**Day of Year**                 |DDDD [#t5]_   |001, 002, 003 ... 364, 365                 |
+|**Day of Year**                 |DDDD          |001, 002, 003 ... 364, 365                 |
 +--------------------------------+--------------+-------------------------------------------+
-|                                |DDD [#t5]_    |1, 2, 3 ... 4, 5                           |
+|                                |DDD           |1, 2, 3 ... 364, 365                       |
 +--------------------------------+--------------+-------------------------------------------+
 |**Day of Month**                |DD            |01, 02, 03 ... 30, 31                      |
 +--------------------------------+--------------+-------------------------------------------+
@@ -367,11 +361,11 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 +--------------------------------+--------------+-------------------------------------------+
 |**Timezone**                    |ZZZ           |Asia/Baku, Europe/Warsaw, GMT ... [#t4]_   |
 +--------------------------------+--------------+-------------------------------------------+
-|                                |ZZ            |-07:00, -06:00 ... +06:00, +07:00          |
+|                                |ZZ            |-07:00, -06:00 ... +06:00, +07:00, +08, Z  |
 +--------------------------------+--------------+-------------------------------------------+
-|                                |Z             |-0700, -0600 ... +0600, +0700              |
+|                                |Z             |-0700, -0600 ... +0600, +0700, +08, Z      |
 +--------------------------------+--------------+-------------------------------------------+
-|**Timestamp**                   |X             |1381685817                                 |
+|**Timestamp**                   |X             |1381685817, 1381685817.915482 ... [#t5]_   |
 +--------------------------------+--------------+-------------------------------------------+
 
 .. rubric:: Footnotes
@@ -380,7 +374,7 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 .. [#t2] localization support only for formatting
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
-.. [#t5] support for the DDD and DDDD tokens will be added in a future release
+.. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
 
 Escaping Formats
 ~~~~~~~~~~~~~~~~

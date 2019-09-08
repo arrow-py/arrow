@@ -24,7 +24,7 @@ repos:
       hooks:
           - id: isort
     - repo: https://github.com/asottile/pyupgrade
-      rev: v1.22.1
+      rev: v1.23.0
       hooks:
           - id: pyupgrade
     - repo: https://github.com/pre-commit/pygrep-hooks
@@ -33,7 +33,7 @@ repos:
           - id: python-no-eval
           - id: python-check-blanket-noqa
           - id: rst-backticks
-    - repo: https://github.com/python/black
+    - repo: https://github.com/psf/black
       rev: 19.3b0
       hooks:
           - id: black

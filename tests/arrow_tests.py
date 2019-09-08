@@ -5,7 +5,6 @@ import calendar
 import pickle
 import sys
 import time
-import warnings
 from datetime import date, datetime, timedelta
 
 import pytz
@@ -1826,69 +1825,5 @@ class ArrowUtilTests(Chai):
         )
         self.assertEqual(arrow.Arrow._get_iteration_params(100, 120), (100, 120))
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
-
-    def test_list_to_iter_shim(self):
-        def newshim():
-            return util.list_to_iter_shim(range(5), warn_text="testing")
-
-        # Iterating over a shim once should not throw a warning
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-
-            iter(newshim())
-            list(newshim())
-            for _ in newshim():
-                pass
-            len(newshim())  # ...because it's called by `list(x)`
-
-            self.assertEqual([], w)
-
-        # Iterating over a shim twice (or more) should throw a warning
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            shim = newshim()
-
-            for _ in shim:
-                pass
-            for _ in shim:
-                pass
-
-            self.assertEqual(1, len(w))
-            self.assertEqual(w[0].category, DeprecationWarning)
-            self.assertEqual("testing", w[0].message.args[0])
-
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter("always")
-            shim = newshim()
-
-            0 in shim
-            shim + []
-            shim * 1
-            shim[0]
-            shim.index(0)
-            shim.count(0)
-
-            shim[0:0] = []  # doesn't warn on py2
-            del shim[0:0]  # doesn't warn on py2
-            newshim().append(6)
-            if sys.version_info.major >= 3:  # pragma: no cover
-                newshim().clear()
-                shim.copy()
-            shim.extend([])
-            shim += []
-            shim *= 1
-            newshim().insert(0, 6)
-            shim.pop(-1)
-            newshim().remove(0)
-            newshim().reverse()
-            newshim().sort()
-
-            if sys.version_info.major >= 3:  # pragma: no cover
-                self.assertEqual(19, len(w))
-            else:  # pragma: no cover
-                self.assertEqual(15, len(w))
-            for warn in w:
-                self.assertEqual(warn.category, DeprecationWarning)
-                self.assertEqual("testing", warn.message.args[0])

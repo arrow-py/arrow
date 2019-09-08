@@ -14,7 +14,16 @@ except ImportError:  # pragma: no cover
     from backports.functools_lru_cache import lru_cache  # pragma: no cover
 
 
-class ParserError(RuntimeError):
+class ParserError(ValueError):
+    pass
+
+
+# Allows for ParserErrors to be propagated from _build_datetime()
+# when day_of_year errors occur.
+# Before this, the ParserErrors were caught by the try/except in
+# _parse_multiformat() and the appropriate error message was not
+# transmitted to the user.
+class ParserMatchError(ParserError):
     pass
 
 
@@ -25,18 +34,27 @@ class DateTimeParser(object):
     )
     _ESCAPE_RE = re.compile(r"\[[^\[\]]*\]")
 
-    _ONE_OR_MORE_DIGIT_RE = re.compile(r"\d+")
     _ONE_OR_TWO_DIGIT_RE = re.compile(r"\d{1,2}")
-    _FOUR_DIGIT_RE = re.compile(r"\d{4}")
+    _ONE_OR_TWO_OR_THREE_DIGIT_RE = re.compile(r"\d{1,3}")
+    _ONE_OR_MORE_DIGIT_RE = re.compile(r"\d+")
     _TWO_DIGIT_RE = re.compile(r"\d{2}")
-    _TZ_RE = re.compile(r"[+\-]?\d{2}:?(\d{2})?")
+    _THREE_DIGIT_RE = re.compile(r"\d{3}")
+    _FOUR_DIGIT_RE = re.compile(r"\d{4}")
+    _TZ_Z_RE = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
+    _TZ_ZZ_RE = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
+    # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
+    # break cases like "15 Jul 2000" and a format list (see issue #447)
+    _TIMESTAMP_RE = re.compile(r"^\d+\.?\d+$")
+    _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
         "YY": _TWO_DIGIT_RE,
         "MM": _TWO_DIGIT_RE,
         "M": _ONE_OR_TWO_DIGIT_RE,
+        "DDDD": _THREE_DIGIT_RE,
+        "DDD": _ONE_OR_TWO_OR_THREE_DIGIT_RE,
         "DD": _TWO_DIGIT_RE,
         "D": _ONE_OR_TWO_DIGIT_RE,
         "HH": _TWO_DIGIT_RE,
@@ -47,14 +65,13 @@ class DateTimeParser(object):
         "m": _ONE_OR_TWO_DIGIT_RE,
         "ss": _TWO_DIGIT_RE,
         "s": _ONE_OR_TWO_DIGIT_RE,
-        "X": re.compile(r"\d+"),
+        "X": _TIMESTAMP_RE,
         "ZZZ": _TZ_NAME_RE,
-        "ZZ": _TZ_RE,
-        "Z": _TZ_RE,
+        "ZZ": _TZ_ZZ_RE,
+        "Z": _TZ_Z_RE,
         "S": _ONE_OR_MORE_DIGIT_RE,
     }
 
-    MARKERS = ["YYYY", "MM", "DD"]
     SEPARATORS = ["-", "/", "."]
 
     def __init__(self, locale="en_us", cache_size=0):
@@ -90,45 +107,124 @@ class DateTimeParser(object):
                 self._generate_pattern_re
             )
 
-    def parse_iso(self, string):
+    # TODO: since we support more than ISO-8601, we should rename this function
+    # IDEA: break into multiple functions
+    def parse_iso(self, datetime_string):
+        # TODO: add a flag to normalize whitespace (useful in logs, ref issue #421)
+        has_space_divider = " " in datetime_string
+        has_t_divider = "T" in datetime_string
 
-        has_time = "T" in string or " " in string.strip()
-        space_divider = " " in string.strip()
+        num_spaces = datetime_string.count(" ")
+        if has_space_divider and num_spaces != 1 or has_t_divider and num_spaces > 0:
+            raise ParserError(
+                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
+                    datetime_string
+                )
+            )
+
+        has_time = has_space_divider or has_t_divider
+        has_tz = False
+
+        # date formats (ISO-8601 and others) to test against
+        # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
+        formats = [
+            "YYYY-MM-DD",
+            "YYYY-M-DD",
+            "YYYY-M-D",
+            "YYYY/MM/DD",
+            "YYYY/M/DD",
+            "YYYY/M/D",
+            "YYYY.MM.DD",
+            "YYYY.M.DD",
+            "YYYY.M.D",
+            "YYYYMMDD",
+            "YYYY-DDDD",
+            "YYYYDDDD",
+            "YYYY-MM",
+            "YYYY/MM",
+            "YYYY.MM",
+            "YYYY",
+        ]
 
         if has_time:
-            if space_divider:
-                date_string, time_string = string.split(" ", 1)
+
+            if has_space_divider:
+                date_string, time_string = datetime_string.split(" ", 1)
             else:
-                date_string, time_string = string.split("T", 1)
-            time_parts = re.split("[+-]", time_string, 1)
-            has_tz = len(time_parts) > 1
-            has_seconds = time_parts[0].count(":") > 1
-            has_subseconds = re.search("[.,]", time_parts[0])
+                date_string, time_string = datetime_string.split("T", 1)
+
+            time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
+
+            time_components = self._TIME_RE.match(time_parts[0])
+
+            if time_components is None:
+                raise ParserError(
+                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
+                )
+
+            hours, minutes, seconds, subseconds_sep, subseconds = (
+                time_components.groups()
+            )
+
+            has_tz = len(time_parts) == 2
+            has_minutes = minutes is not None
+            has_seconds = seconds is not None
+            has_subseconds = subseconds is not None
+
+            is_basic_time_format = ":" not in time_parts[0]
+            tz_format = "Z"
+
+            # use 'ZZ' token instead since tz offset is present in non-basic format
+            if has_tz and ":" in time_parts[1]:
+                tz_format = "ZZ"
+
+            time_sep = "" if is_basic_time_format else ":"
 
             if has_subseconds:
-                formats = ["YYYY-MM-DDTHH:mm:ss%sS" % has_subseconds.group()]
+                time_string = "HH{time_sep}mm{time_sep}ss{subseconds_sep}S".format(
+                    time_sep=time_sep, subseconds_sep=subseconds_sep
+                )
             elif has_seconds:
-                formats = ["YYYY-MM-DDTHH:mm:ss"]
+                time_string = "HH{time_sep}mm{time_sep}ss".format(time_sep=time_sep)
+            elif has_minutes:
+                time_string = "HH{time_sep}mm".format(time_sep=time_sep)
             else:
-                formats = ["YYYY-MM-DDTHH:mm"]
-        else:
-            has_tz = False
-            # generate required formats: YYYY-MM-DD, YYYY-MM-DD, YYYY
-            # using various separators: -, /, .
-            len_markers = len(self.MARKERS)
-            formats = [
-                separator.join(self.MARKERS[: len_markers - i])
-                for i in range(len_markers)
-                for separator in self.SEPARATORS
-            ]
+                time_string = "HH"
+
+            if has_space_divider:
+                formats = ["{} {}".format(f, time_string) for f in formats]
+            else:
+                formats = ["{}T{}".format(f, time_string) for f in formats]
 
         if has_time and has_tz:
-            formats = [f + "Z" for f in formats]
+            # Add "Z" or "ZZ" to the format strings to indicate to
+            # _parse_token() that a timezone needs to be parsed
+            formats = ["{}{}".format(f, tz_format) for f in formats]
 
-        if space_divider:
-            formats = [item.replace("T", " ", 1) for item in formats]
+        return self._parse_multiformat(datetime_string, formats)
 
-        return self._parse_multiformat(string, formats)
+    def parse(self, datetime_string, fmt):
+
+        if isinstance(fmt, list):
+            return self._parse_multiformat(datetime_string, fmt)
+
+        fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
+
+        match = fmt_pattern_re.search(datetime_string)
+        if match is None:
+            raise ParserMatchError(
+                "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
+            )
+
+        parts = {}
+        for token in fmt_tokens:
+            if token == "Do":
+                value = match.group("value")
+            else:
+                value = match.group(token)
+            self._parse_token(token, value, parts)
+
+        return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt):
 
@@ -144,8 +240,11 @@ class DateTimeParser(object):
 
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", escaped_fmt)
+
         # Any number of S is the same as one.
-        escaped_fmt = re.sub("S+", "S", escaped_fmt)
+        # TODO: allow users to specify the number of digits to parse
+        escaped_fmt = re.sub(r"S+", "S", escaped_fmt)
+
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
         fmt_pattern = escaped_fmt
@@ -170,44 +269,36 @@ class DateTimeParser(object):
             offset += len(input_pattern) - (m.end() - m.start())
 
         final_fmt_pattern = ""
-        a = fmt_pattern.split(r"\#")
-        b = escaped_data
+        split_fmt = fmt_pattern.split(r"\#")
 
-        # Due to the way Python splits, 'a' will always be longer
-        for i in range(len(a)):
-            final_fmt_pattern += a[i]
-            if i < len(b):
-                final_fmt_pattern += b[i][1:-1]
+        # Due to the way Python splits, 'split_fmt' will always be longer
+        for i in range(len(split_fmt)):
+            final_fmt_pattern += split_fmt[i]
+            if i < len(escaped_data):
+                final_fmt_pattern += escaped_data[i][1:-1]
 
-        return tokens, re.compile(final_fmt_pattern, flags=re.IGNORECASE)
+        # Wrap final_fmt_pattern in a custom word boundary to strictly
+        # match the formatting pattern and filter out date and time formats
+        # that include junk such as: blah1998-09-12 blah, blah 1998-09-12blah,
+        # blah1998-09-12blah. The custom word boundary matches every character
+        # that is not a whitespace character to allow for searching for a date
+        # and time string in a natural language sentence. Therefore, searching
+        # for a string of the form YYYY-MM-DD in "blah 1998-09-12 blah" will
+        # work properly.
+        # Reference: https://stackoverflow.com/q/14232931/3820660
+        starting_word_boundary = r"(?<![\S])"
+        ending_word_boundary = r"(?![\S])"
+        bounded_fmt_pattern = r"{}{}{}".format(
+            starting_word_boundary, final_fmt_pattern, ending_word_boundary
+        )
 
-    def parse(self, string, fmt):
-
-        if isinstance(fmt, list):
-            return self._parse_multiformat(string, fmt)
-
-        fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
-
-        match = fmt_pattern_re.search(string)
-        if match is None:
-            raise ParserError(
-                "Failed to match '{}' when parsing '{}'".format(
-                    fmt_pattern_re.pattern, string
-                )
-            )
-        parts = {}
-        for token in fmt_tokens:
-            if token == "Do":
-                value = match.group("value")
-            else:
-                value = match.group(token)
-            self._parse_token(token, value, parts)
-        return self._build_datetime(parts)
+        return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
 
     def _parse_token(self, token, value, parts):
 
         if token == "YYYY":
             parts["year"] = int(value)
+
         elif token == "YY":
             value = int(value)
             parts["year"] = 1900 + value if value > 68 else 2000 + value
@@ -217,6 +308,9 @@ class DateTimeParser(object):
 
         elif token in ["MM", "M"]:
             parts["month"] = int(value)
+
+        elif token in ["DDDD", "DDD"]:
+            parts["day_of_year"] = int(value)
 
         elif token in ["DD", "D"]:
             parts["day"] = int(value)
@@ -236,7 +330,7 @@ class DateTimeParser(object):
         elif token == "S":
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
-            # FIXME: add nanosecond support somehow?
+            # IDEA: add nanosecond support somehow? Need datetime support for it first.
             value = value.ljust(7, str("0"))
 
             # floating-point (IEEE-754) defaults to half-to-even rounding
@@ -251,7 +345,7 @@ class DateTimeParser(object):
             parts["microsecond"] = int(value[:6]) + rounding
 
         elif token == "X":
-            parts["timestamp"] = int(value)
+            parts["timestamp"] = float(value)
 
         elif token in ["ZZZ", "ZZ", "Z"]:
             parts["tzinfo"] = TzinfoParser.parse(value)
@@ -267,9 +361,35 @@ class DateTimeParser(object):
 
         timestamp = parts.get("timestamp")
 
-        if timestamp:
-            tz_utc = tz.tzutc()
-            return datetime.fromtimestamp(timestamp, tz=tz_utc)
+        if timestamp is not None:
+            return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+
+        day_of_year = parts.get("day_of_year")
+
+        if day_of_year is not None:
+            year = parts.get("year")
+            month = parts.get("month")
+            if year is None:
+                raise ParserError(
+                    "Year component is required with the DDD and DDDD tokens."
+                )
+
+            if month is not None:
+                raise ParserError(
+                    "Month component is not allowed with the DDD and DDDD tokens."
+                )
+
+            date_string = "{}-{}".format(year, day_of_year)
+            try:
+                dt = datetime.strptime(date_string, "%Y-%j")
+            except ValueError:
+                raise ParserError(
+                    "The provided day of year '{}' is invalid.".format(day_of_year)
+                )
+
+            parts["year"] = dt.year
+            parts["month"] = dt.month
+            parts["day"] = dt.day
 
         am_pm = parts.get("am_pm")
         hour = parts.get("hour", 0)
@@ -311,31 +431,17 @@ class DateTimeParser(object):
             try:
                 _datetime = self.parse(string, fmt)
                 break
-            except ParserError:
+            except ParserMatchError:
                 pass
 
         if _datetime is None:
             raise ParserError(
-                "Could not match input to any of {} on '{}'".format(formats, string)
+                "Could not match input '{}' to any of the following formats: {}".format(
+                    string, ", ".join(formats)
+                )
             )
 
         return _datetime
-
-    @staticmethod
-    def _map_lookup(input_map, key):
-
-        try:
-            return input_map[key]
-        except KeyError:
-            raise ParserError('Could not match "{}" to {}'.format(key, input_map))
-
-    @staticmethod
-    def _try_timestamp(string):
-
-        try:
-            return float(string)
-        except Exception:
-            return None
 
     # generates a capture group of choices separated by an OR operator
     @staticmethod
@@ -344,23 +450,23 @@ class DateTimeParser(object):
 
 
 class TzinfoParser(object):
-
-    _TZINFO_RE = re.compile(r"([+\-])?(\d\d):?(\d\d)?")
+    # TODO: test against full timezone DB
+    _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
-    def parse(cls, string):
+    def parse(cls, tzinfo_string):
 
         tzinfo = None
 
-        if string == "local":
+        if tzinfo_string == "local":
             tzinfo = tz.tzlocal()
 
-        elif string in ["utc", "UTC"]:
+        elif tzinfo_string in ["utc", "UTC", "Z"]:
             tzinfo = tz.tzutc()
 
         else:
 
-            iso_match = cls._TZINFO_RE.match(string)
+            iso_match = cls._TZINFO_RE.match(tzinfo_string)
 
             if iso_match:
                 sign, hours, minutes = iso_match.groups()
@@ -374,9 +480,11 @@ class TzinfoParser(object):
                 tzinfo = tz.tzoffset(None, seconds)
 
             else:
-                tzinfo = tz.gettz(string)
+                tzinfo = tz.gettz(tzinfo_string)
 
         if tzinfo is None:
-            raise ParserError('Could not parse timezone expression "{}"'.format(string))
+            raise ParserError(
+                'Could not parse timezone expression "{}"'.format(tzinfo_string)
+            )
 
         return tzinfo

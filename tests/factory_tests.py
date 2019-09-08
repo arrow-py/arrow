@@ -26,7 +26,7 @@ class GetTests(Chai):
 
     def test_timestamp_one_arg_no_arg(self):
 
-        no_arg = self.factory.get("1406430900").timestamp
+        no_arg = self.factory.get(1406430900).timestamp
         one_arg = self.factory.get("1406430900", "X").timestamp
 
         self.assertEqual(no_arg, one_arg)
@@ -46,20 +46,28 @@ class GetTests(Chai):
 
     def test_one_arg_timestamp(self):
 
-        timestamp = 12345
-        timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+        int_timestamp = int(time.time())
+        timestamp_dt = datetime.utcfromtimestamp(int_timestamp).replace(
+            tzinfo=tz.tzutc()
+        )
 
-        self.assertEqual(self.factory.get(timestamp), timestamp_dt)
-        self.assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
+        self.assertEqual(self.factory.get(int_timestamp), timestamp_dt)
 
-        timestamp = 123.45
-        timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+        with self.assertRaises(ParserError):
+            self.factory.get(str(int_timestamp))
 
-        self.assertEqual(self.factory.get(timestamp), timestamp_dt)
-        self.assertEqual(self.factory.get(str(timestamp)), timestamp_dt)
+        float_timestamp = time.time()
+        timestamp_dt = datetime.utcfromtimestamp(float_timestamp).replace(
+            tzinfo=tz.tzutc()
+        )
 
-        # Issue 216
-        timestamp = "99999999999999999999999999"
+        self.assertEqual(self.factory.get(float_timestamp), timestamp_dt)
+
+        with self.assertRaises(ParserError):
+            self.factory.get(str(float_timestamp))
+
+        # Regression test for issue #216
+        timestamp = 99999999999999999999999999
         # Python 3 raises `OverflowError`, Python 2 raises `ValueError`
         with self.assertRaises((OverflowError, ValueError)):
             self.factory.get(timestamp)
