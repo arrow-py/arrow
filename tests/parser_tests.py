@@ -976,6 +976,12 @@ class DateTimeParserISOTests(Chai):
             self.parser.parse_iso("2013-01-01 12:30:45.987654"), self.expected
         )
 
+        # use comma as subsecond separator
+        self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        self.assertEqual(
+            self.parser.parse_iso("2013-01-01 12:30:45,987654"), self.expected
+        )
+
     def test_gnu_date(self):
         """
         regression tests for parsing output from GNU date(1)

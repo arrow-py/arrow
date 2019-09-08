@@ -155,13 +155,6 @@ class DateTimeParser(object):
 
             time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
 
-            is_basic_time_format = ":" not in time_parts[0]
-            tz_format = "Z"
-
-            # use 'ZZ' token instead since tz offset is present in non-basic format
-            if len(time_parts) == 2 and ":" in time_parts[1]:
-                tz_format = "ZZ"
-
             time_components = self._TIME_RE.match(time_parts[0])
 
             if time_components is None:
@@ -177,6 +170,13 @@ class DateTimeParser(object):
             has_minutes = minutes is not None
             has_seconds = seconds is not None
             has_subseconds = subseconds is not None
+
+            is_basic_time_format = ":" not in time_parts[0]
+            tz_format = "Z"
+
+            # use 'ZZ' token instead since tz offset is present in non-basic format
+            if has_tz and ":" in time_parts[1]:
+                tz_format = "ZZ"
 
             time_sep = "" if is_basic_time_format else ":"
 
