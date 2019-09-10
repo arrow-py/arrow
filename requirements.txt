@@ -1,5 +1,6 @@
 backports.functools_lru_cache==1.5.0; python_version == "2.7"
 chai==1.1.2
+dateparser==0.7.*
 mock==3.0.*
 nose==1.3.7
 nose-cov==1.6

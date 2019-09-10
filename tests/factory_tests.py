@@ -2,6 +2,7 @@
 import time
 from datetime import date, datetime
 
+import dateparser
 from chai import Chai
 from dateutil import tz
 
@@ -101,6 +102,14 @@ class GetTests(Chai):
         )
 
         assertDtEqual(self.factory.get(tz.gettz("US/Pacific")), self.expected)
+
+    # regression test for issue #658
+    def test_one_arg_dateparser_datetime(self):
+        expected = datetime(1990, 1, 1).replace(tzinfo=tz.tzutc())
+        # dateparser outputs: datetime.datetime(1990, 1, 1, 0, 0, tzinfo=<StaticTzInfo 'UTC\+00:00'>)
+        parsed_date = dateparser.parse("1990-01-01T00:00:00+00:00")
+        arrow_obj = self.factory.get(parsed_date)._datetime.replace(tzinfo=tz.tzutc())
+        self.assertEqual(arrow_obj, expected)
 
     def test_kwarg_tzinfo(self):
 
