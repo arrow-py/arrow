@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.1
+
+- [FIX] Fixed a bug that caused Arrow to fail when passed a negative timestamp string.
+- [FIX] Fixed a bug that caused Arrow to fail when passed a datetime object with `tzinfo` of type `StaticTzInfo`.
+
 ## 0.15.0
 - [NEW] Added support for DDD and DDDD ordinal date tokens. The following functionality is now possible: `arrow.get("1998-045")`, `arrow.get("1998-45", "YYYY-DDD")`, `arrow.get("1998-045", "YYYY-DDDD")`.
 - [NEW] ISO 8601 basic format for dates and times is now supported (e.g. `YYYYMMDDTHHmmssZ`).
