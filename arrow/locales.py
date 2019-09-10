@@ -588,6 +588,8 @@ class JapaneseLocale(Locale):
         "hours": "{0}時間",
         "day": "1日",
         "days": "{0}日",
+        "week": "1週間",
+        "weeks": "{0}週間",
         "month": "1ヶ月",
         "months": "{0}ヶ月",
         "year": "1年",
