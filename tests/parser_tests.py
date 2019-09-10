@@ -224,10 +224,18 @@ class DateTimeParserParseTests(Chai):
             self.parser.parse("{:f}123456".format(float_timestamp), "X"), self.expected
         )
 
-        negative_timestamp = -1565358758
-        self.expected = datetime.fromtimestamp(negative_timestamp, tz=tz_utc)
+        # regression test for issue #662
+        negative_int_timestamp = -int_timestamp
+        self.expected = datetime.fromtimestamp(negative_int_timestamp, tz=tz_utc)
         self.assertEqual(
-            self.parser.parse("{:d}".format(negative_timestamp), "X"), self.expected
+            self.parser.parse("{:d}".format(negative_int_timestamp), "X"), self.expected
+        )
+
+        negative_float_timestamp = -float_timestamp
+        self.expected = datetime.fromtimestamp(negative_float_timestamp, tz=tz_utc)
+        self.assertEqual(
+            self.parser.parse("{:f}".format(negative_float_timestamp), "X"),
+            self.expected,
         )
 
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will

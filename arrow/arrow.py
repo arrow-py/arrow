@@ -66,6 +66,7 @@ class Arrow(object):
         elif (
             isinstance(tzinfo, dt_tzinfo)
             and hasattr(tzinfo, "localize")
+            and hasattr(tzinfo, "zone")
             and tzinfo.zone
         ):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
