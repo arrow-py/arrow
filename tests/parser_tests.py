@@ -224,6 +224,12 @@ class DateTimeParserParseTests(Chai):
             self.parser.parse("{:f}123456".format(float_timestamp), "X"), self.expected
         )
 
+        negative_timestamp = -1565358758
+        self.expected = datetime.fromtimestamp(negative_timestamp, tz=tz_utc)
+        self.assertEqual(
+            self.parser.parse("{:d}".format(negative_timestamp), "X"), self.expected
+        )        
+
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
         # break cases like "15 Jul 2000" and a format list (see issue #447)
         with self.assertRaises(ParserError):
