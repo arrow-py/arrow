@@ -108,8 +108,8 @@ class GetTests(Chai):
         expected = datetime(1990, 1, 1).replace(tzinfo=tz.tzutc())
         # dateparser outputs: datetime.datetime(1990, 1, 1, 0, 0, tzinfo=<StaticTzInfo 'UTC\+00:00'>)
         parsed_date = dateparser.parse("1990-01-01T00:00:00+00:00")
-        arrow_obj = self.factory.get(parsed_date)._datetime.replace(tzinfo=tz.tzutc())
-        self.assertEqual(arrow_obj, expected)
+        dt_output = self.factory.get(parsed_date)._datetime.replace(tzinfo=tz.tzutc())
+        self.assertEqual(dt_output, expected)
 
     def test_kwarg_tzinfo(self):
 
