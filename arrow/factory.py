@@ -179,9 +179,10 @@ class ArrowFactory(object):
             if isinstance(arg, date):
                 return self.type.fromdate(arg)
 
-            if isinstance(arg, tuple):
-                dt = iso_to_gregorian(*arg)
-                return self.type.fromdate(dt)
+            # # (iso calendar) -> convert then from date
+            # if isinstance(arg, tuple):
+            #     dt = iso_to_gregorian(*arg)
+            #     return self.type.fromdate(dt)
 
             # (tzinfo) -> now, @ tzinfo.
             elif isinstance(arg, dt_tzinfo):
@@ -195,6 +196,12 @@ class ArrowFactory(object):
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
                 return self.type.utcfromtimestamp(calendar.timegm(arg))
+
+            # (iso calendar) -> convert then from date
+            elif isinstance(arg, tuple):
+                # TODO check len is 3 exactly
+                dt = iso_to_gregorian(*arg)
+                return self.type.fromdate(dt)
 
             else:
                 raise TypeError(

@@ -140,6 +140,15 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
+    def test_one_arg_iso_calendar(self):
+
+        dt = datetime(2004, 1, 4)
+
+        self.expected = self.factory.get(dt)
+
+        assertEqual(self.factory.get(dt.isocalendar()), self.expected)
+        # TODO  way more tests 2,4 element tuples, other dates, week 55 etc etc
+
     def test_one_arg_other(self):
 
         with self.assertRaises(TypeError):
