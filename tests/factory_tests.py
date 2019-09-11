@@ -142,12 +142,20 @@ class GetTests(Chai):
 
     def test_one_arg_iso_calendar(self):
 
-        dt = datetime(2004, 1, 4)
+        pairs = [(datetime(2004, 1, 4), (2004, 1, 7)),
+                 (datetime(2008, 12, 30), (2009, 1, 2)),
+                 (datetime(2010, 1, 2), (2009, 53, 6)),
+                 (datetime(2000, 2, 29), (2000, 9, 2))]
 
-        self.expected = self.factory.get(dt)
+        for pair in pairs:
+            dt, iso = pair
+            assertEqual(self.factory.get(iso), self.factory.get(dt))
 
-        assertEqual(self.factory.get(dt.isocalendar()), self.expected)
-        # TODO  way more tests 2,4 element tuples, other dates, week 55 etc etc
+        with self.assertRaises(TypeError):
+            self.factory.get((2014, 7, 1, 4))
+
+        with self.assertRaises(TypeError):
+            self.factory.get((2014, 7))
 
     def test_one_arg_other(self):
 

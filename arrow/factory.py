@@ -179,11 +179,6 @@ class ArrowFactory(object):
             if isinstance(arg, date):
                 return self.type.fromdate(arg)
 
-            # # (iso calendar) -> convert then from date
-            # if isinstance(arg, tuple):
-            #     dt = iso_to_gregorian(*arg)
-            #     return self.type.fromdate(dt)
-
             # (tzinfo) -> now, @ tzinfo.
             elif isinstance(arg, dt_tzinfo):
                 return self.type.now(arg)
@@ -199,7 +194,7 @@ class ArrowFactory(object):
 
             # (iso calendar) -> convert then from date
             elif isinstance(arg, tuple):
-                # TODO check len is 3 exactly
+                # TODO check len is 3 exactly or let function handle it?
                 dt = iso_to_gregorian(*arg)
                 return self.type.fromdate(dt)
 
