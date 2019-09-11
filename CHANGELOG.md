@@ -2,6 +2,7 @@
 
 ## 0.15.1
 
+- [NEW] Added `humanize` week granularity translations for Japanese.
 - [FIX] Fixed a bug that caused Arrow to fail when passed a negative timestamp string.
 - [FIX] Fixed a bug that caused Arrow to fail when passed a datetime object with `tzinfo` of type `StaticTzInfo`.
 
