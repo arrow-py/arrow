@@ -15,13 +15,15 @@ matrix:
         - name: "Python 3.7"
           python: "3.7"
           env: TOXENV=py37
-        - name: "Python 3.7.4 on Windows"
-          os: windows           # Windows 10.0.17134 N/A Build 17134
-          language: shell       # 'language: python' is an error on Travis CI Windows
+        - name: "Python 3.7 on Windows"
+          os: windows
+          language: shell # 'language: python' is an error on Travis CI Windows
           before_install:
-            - choco install python
+            - choco install python --version 3.7
             - python -m pip install --upgrade pip
-          env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+          env:
+            - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+            - TOXENV=py37
         - name: "Python 3.8"
           python: "3.8-dev"
           env: TOXENV=py38
