@@ -1777,7 +1777,8 @@ class PortugueseLocale(Locale):
 
     timeframes = {
         "now": "agora",
-        "seconds": "segundos",
+        "second": "um segundo",
+        "seconds": "{0} segundos",
         "minute": "um minuto",
         "minutes": "{0} minutos",
         "hour": "uma hora",
@@ -1845,7 +1846,8 @@ class BrazilianPortugueseLocale(PortugueseLocale):
 
     timeframes = {
         "now": "agora",
-        "seconds": "segundos",
+        "second": "um segundo",
+        "seconds": "{0} segundos",
         "minute": "um minuto",
         "minutes": "{0} minutos",
         "hour": "uma hora",

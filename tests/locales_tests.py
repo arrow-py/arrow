@@ -836,3 +836,47 @@ class EstonianLocaleTests(Chai):
         self.assertEqual(self.locale._format_timeframe("year", -1), "üks aasta")
         self.assertEqual(self.locale._format_timeframe("years", -4), "4 aastat")
         self.assertEqual(self.locale._format_timeframe("years", -14), "14 aastat")
+
+
+class PortugueseLocaleTests(Chai):
+    def setUp(self):
+        super(PortugueseLocaleTests, self).setUp()
+
+        self.locale = locales.PortugueseLocale()
+
+    def test_format_timeframe(self):
+        self.assertEqual(self.locale._format_timeframe("now", 0), "agora")
+        self.assertEqual(self.locale._format_timeframe("second", 1), "um segundo")
+        self.assertEqual(self.locale._format_timeframe("seconds", 30), "30 segundos")
+        self.assertEqual(self.locale._format_timeframe("minute", 1), "um minuto")
+        self.assertEqual(self.locale._format_timeframe("minutes", 40), "40 minutos")
+        self.assertEqual(self.locale._format_timeframe("hour", 1), "uma hora")
+        self.assertEqual(self.locale._format_timeframe("hours", 23), "23 horas")
+        self.assertEqual(self.locale._format_timeframe("day", 1), "um dia")
+        self.assertEqual(self.locale._format_timeframe("days", 12), "12 dias")
+        self.assertEqual(self.locale._format_timeframe("month", 1), "um mês")
+        self.assertEqual(self.locale._format_timeframe("months", 11), "11 meses")
+        self.assertEqual(self.locale._format_timeframe("year", 1), "um ano")
+        self.assertEqual(self.locale._format_timeframe("years", 12), "12 anos")
+
+
+class BrazilianLocaleTests(Chai):
+    def setUp(self):
+        super(BrazilianLocaleTests, self).setUp()
+
+        self.locale = locales.BrazilianPortugueseLocale()
+
+    def test_format_timeframe(self):
+        self.assertEqual(self.locale._format_timeframe("now", 0), "agora")
+        self.assertEqual(self.locale._format_timeframe("second", 1), "um segundo")
+        self.assertEqual(self.locale._format_timeframe("seconds", 30), "30 segundos")
+        self.assertEqual(self.locale._format_timeframe("minute", 1), "um minuto")
+        self.assertEqual(self.locale._format_timeframe("minutes", 40), "40 minutos")
+        self.assertEqual(self.locale._format_timeframe("hour", 1), "uma hora")
+        self.assertEqual(self.locale._format_timeframe("hours", 23), "23 horas")
+        self.assertEqual(self.locale._format_timeframe("day", 1), "um dia")
+        self.assertEqual(self.locale._format_timeframe("days", 12), "12 dias")
+        self.assertEqual(self.locale._format_timeframe("month", 1), "um mês")
+        self.assertEqual(self.locale._format_timeframe("months", 11), "11 meses")
+        self.assertEqual(self.locale._format_timeframe("year", 1), "um ano")
+        self.assertEqual(self.locale._format_timeframe("years", 12), "12 anos")
