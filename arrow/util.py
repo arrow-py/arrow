@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-# from datetime import datetime
 import datetime
 
 
@@ -23,6 +22,7 @@ def is_timestamp(value):
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     """Converts an iso weekday tuple into a datetime object."""
 
+    # The first week of the year always contains 4 Jan.
     fourth_jan = datetime.date(iso_year, 1, 4)
     delta = datetime.timedelta(fourth_jan.isoweekday() - 1)
     year_start = fourth_jan - delta

@@ -99,6 +99,16 @@ class ArrowFactory(object):
             >>> arrow.get(date(2013, 5, 5))
             <Arrow [2013-05-05T00:00:00+00:00]>
 
+        **One** time.struct time::
+
+            >>> arrow.get(gmtime(0))
+            <Arrow [1970-01-01T00:00:00+00:00]>
+
+        **One** iso calendar ``tuple``, to get that week date in UTC::
+
+            >>> arrow.get((2013, 18, 7))
+            <Arrow [2013-05-05T00:00:00+00:00]>
+
         **Two** arguments, a naive or aware ``datetime``, and a replacement
         :ref:`timezone expression <tz-expr>`::
 
@@ -125,11 +135,6 @@ class ArrowFactory(object):
 
             >>> arrow.get(2013, 5, 5, 12, 30, 45)
             <Arrow [2013-05-05T12:30:45+00:00]>
-
-        **One** time.struct time::
-
-            >>> arrow.get(gmtime(0))
-            <Arrow [1970-01-01T00:00:00+00:00]>
 
         """
 
