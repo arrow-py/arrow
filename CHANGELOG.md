@@ -1,11 +1,11 @@
 # Changelog
 
-## 0.15.1
+## 0.15.1 (2019-09-10)
 
 - [FIX] Fixed a bug that caused Arrow to fail when passed a negative timestamp string.
 - [FIX] Fixed a bug that caused Arrow to fail when passed a datetime object with `tzinfo` of type `StaticTzInfo`.
 
-## 0.15.0
+## 0.15.0 (2019-09-08)
 - [NEW] Added support for DDD and DDDD ordinal date tokens. The following functionality is now possible: `arrow.get("1998-045")`, `arrow.get("1998-45", "YYYY-DDD")`, `arrow.get("1998-045", "YYYY-DDDD")`.
 - [NEW] ISO 8601 basic format for dates and times is now supported (e.g. `YYYYMMDDTHHmmssZ`).
 - [NEW] Added `humanize` week granularity translations for French, Russian and Swiss German locales.
@@ -29,11 +29,11 @@ arrow.get(1565358758.123413)
 - [FIX] The timestamp token (`X`) will now only match on strings that **strictly contain integers and floats**, preventing incorrect matches.
 - [FIX] Most instances of `arrow.get()` returning an incorrect `Arrow` object from a partial parsing match have been eliminated. The following issue have been addressed: [#91](https://github.com/crsmithdev/arrow/issues/91), [#196](https://github.com/crsmithdev/arrow/issues/196), [#396](https://github.com/crsmithdev/arrow/issues/396), [#434](https://github.com/crsmithdev/arrow/issues/434), [#447](https://github.com/crsmithdev/arrow/issues/447), [#456](https://github.com/crsmithdev/arrow/issues/456), [#519](https://github.com/crsmithdev/arrow/issues/519), [#538](https://github.com/crsmithdev/arrow/issues/538), [#560](https://github.com/crsmithdev/arrow/issues/560).
 
-## 0.14.7
+## 0.14.7 (2019-09-04)
 
 - [CHANGE] `ArrowParseWarning` will no longer be printed on every call to `arrow.get()` with a datetime string. The purpose of the warning was to start a conversation about the upcoming 0.15.0 changes and we appreciate all the feedback that the community has given us!
 
-## 0.14.6
+## 0.14.6 (2019-08-28)
 
 - [NEW] Added support for `week` granularity in `Arrow.humanize()`. For example, `arrow.utcnow().shift(weeks=-1).humanize(granularity="week")` outputs "a week ago". This change introduced two new untranslated words, `week` and `weeks`, to all locale dictionaries, so locale contributions are welcome!
 - [NEW] Fully translated the Brazilian Portugese locale.
@@ -42,18 +42,18 @@ arrow.get(1565358758.123413)
 - [FIX] Fixed a bug that occurred when `arrow.Arrow()` was instantiated with a `pytz` tzinfo object.
 - [FIX] Fixed a bug that caused Arrow to fail when passed a sub-second token, that when rounded, had a value greater than 999999 (e.g. `arrow.get("2015-01-12T01:13:15.9999995")`). Arrow should now accurately propagate the rounding for large sub-second tokens.
 
-## 0.14.5
+## 0.14.5 (2019-08-09)
 
 - [NEW] Added Afrikaans locale.
 - [CHANGE] Removed deprecated `replace` shift functionality. Users looking to pass plural properties to the `replace` function to shift values should use `shift` instead.
 - [FIX] Fixed bug that occurred when `factory.get()` was passed a locale kwarg.
 
-## 0.14.4
+## 0.14.4 (2019-07-30)
 
 - [FIX] Fixed a regression in 0.14.3 that prevented a tzinfo argument of type string to be passed to the `get()` function. Functionality such as `arrow.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")` should work as normal again.
 - [CHANGE] Moved `backports.functools_lru_cache` dependency from `extra_requires` to `install_requires` for `Python 2.7` installs to fix [#495](https://github.com/crsmithdev/arrow/issues/495).
 
-## 0.14.3
+## 0.14.3 (2019-07-28)
 
 - [NEW] Added full support for Python 3.8.
 - [CHANGE] Added warnings for upcoming factory.get() parsing changes in 0.15.0. Please see [issue #612](https://github.com/crsmithdev/arrow/issues/612) for full details.
@@ -61,16 +61,16 @@ arrow.get(1565358758.123413)
 - [FIX] factory.get() can now construct from kwargs.
 - [FIX] Added meridians to Spanish Locale.
 
-## 0.14.2
+## 0.14.2 (2019-06-06)
 
 - [CHANGE] Travis CI builds now use tox to lint and run tests.
 - [FIX] Fixed UnicodeDecodeError on certain locales (#600).
 
-## 0.14.1
+## 0.14.1 (2019-06-06)
 
 - [FIX] Fixed "ImportError: No module named 'dateutil'" (#598).
 
-## 0.14.0
+## 0.14.0 (2019-06-06)
 
 - [NEW] Added provisional support for Python 3.8.
 - [CHANGE] Removed support for EOL Python 3.4.
@@ -79,7 +79,7 @@ arrow.get(1565358758.123413)
 - [FIX] Enabled flake8 and black on travis builds.
 - [FIX] Formatted code using black and isort.
 
-## 0.13.2
+## 0.13.2 (2019-05-30)
 
 - [NEW] Add is_between method.
 - [FIX] Improved humanize behaviour for near zero durations (#416).
@@ -87,13 +87,13 @@ arrow.get(1565358758.123413)
 - [FIX] Documentation updates.
 - [FIX] Improvements to German Locale.
 
-## 0.13.1
+## 0.13.1 (2019-02-17)
 
 - [NEW] Add support for Python 3.7.
 - [CHANGE] Remove deprecation decorators for Arrow.range(), Arrow.span_range() and Arrow.interval(), all now return generators, wrap with list() to get old behavior.
 - [FIX] Documentation and docstring updates.
 
-## 0.13.0
+## 0.13.0 (2019-01-09)
 
 - [NEW] Added support for Python 3.6.
 - [CHANGE] Drop support for Python 2.6/3.3.
