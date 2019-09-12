@@ -142,10 +142,12 @@ class GetTests(Chai):
 
     def test_one_arg_iso_calendar(self):
 
-        pairs = [(datetime(2004, 1, 4), (2004, 1, 7)),
-                 (datetime(2008, 12, 30), (2009, 1, 2)),
-                 (datetime(2010, 1, 2), (2009, 53, 6)),
-                 (datetime(2000, 2, 29), (2000, 9, 2))]
+        pairs = [
+            (datetime(2004, 1, 4), (2004, 1, 7)),
+            (datetime(2008, 12, 30), (2009, 1, 2)),
+            (datetime(2010, 1, 2), (2009, 53, 6)),
+            (datetime(2000, 2, 29), (2000, 9, 2)),
+        ]
 
         for pair in pairs:
             dt, iso = pair
