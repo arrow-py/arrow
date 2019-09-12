@@ -151,7 +151,7 @@ class GetTests(Chai):
 
         for pair in pairs:
             dt, iso = pair
-            assertEqual(self.factory.get(iso), self.factory.get(dt))
+            self.assertEqual(self.factory.get(iso), self.factory.get(dt))
 
         with self.assertRaises(TypeError):
             self.factory.get((2014, 7, 1, 4))
