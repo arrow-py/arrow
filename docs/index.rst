@@ -1,7 +1,7 @@
 Arrow: Better dates & times for Python
 ======================================
 
-Release v\ |release|. (`Installation`_) (`Changelog <https://github.com/crsmithdev/arrow/blob/master/CHANGELOG.md>`_)
+Release v\ |release|. (`Installation`_) (`Changelog <releases.html>`_)
 
 .. include:: ../README.rst
   :start-after: start-inclusion-marker-do-not-remove
@@ -446,3 +446,11 @@ arrow.locale
 .. automodule:: arrow.locales
     :members:
     :undoc-members:
+
+Release History
+---------------
+
+.. toctree::
+   :maxdepth: 2
+
+   releases
