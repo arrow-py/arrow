@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.15.2 (2019-09-14)
+-------------------
+
+- [NEW] Added ``humanize`` week granularity translations for Portuguese and Brazilian Portuguese.
+- [NEW] Embedded changelog within docs and added release dates to versions.
+- [FIX] Fixed a bug that caused test failures on Windows only, see `#668 <https://github.com/crsmithdev/arrow/issues/668>`_ for details.
+
 0.15.1 (2019-09-10)
 -------------------
 
