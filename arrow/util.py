@@ -22,6 +22,11 @@ def is_timestamp(value):
 def iso_to_gregorian(iso_year, iso_week, iso_day):
     """Converts an iso weekday tuple into a datetime object."""
 
+    if iso_week == 0 or iso_day == 0:
+        raise ValueError(
+            "Iso Calendar week and day values must be 1-53 and 1-7 respectively."
+        )
+
     # The first week of the year always contains 4 Jan.
     fourth_jan = datetime.date(iso_year, 1, 4)
     delta = datetime.timedelta(fourth_jan.isoweekday() - 1)
