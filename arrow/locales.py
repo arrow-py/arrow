@@ -805,6 +805,8 @@ class ChineseCNLocale(Locale):
         "hours": "{0}小时",
         "day": "1天",
         "days": "{0}天",
+        "week": "一周",
+        "weeks": "{0}周",
         "month": "1个月",
         "months": "{0}个月",
         "year": "1年",
