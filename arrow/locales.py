@@ -374,6 +374,8 @@ class SpanishLocale(Locale):
         "hours": "{0} horas",
         "day": "un día",
         "days": "{0} días",
+        "week": "una semana",
+        "weeks": "{0} semanas",
         "month": "un mes",
         "months": "{0} meses",
         "year": "un año",
