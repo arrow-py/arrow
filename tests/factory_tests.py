@@ -147,6 +147,9 @@ class GetTests(Chai):
             (datetime(2008, 12, 30), (2009, 1, 2)),
             (datetime(2010, 1, 2), (2009, 53, 6)),
             (datetime(2000, 2, 29), (2000, 9, 2)),
+            (datetime(2005, 1, 1), (2004, 53, 6)),
+            (datetime(2010, 1, 4), (2010, 1, 1)),
+            (datetime(2010, 1, 3), (2009, 53, 7)),
         ]
 
         for pair in pairs:
@@ -158,6 +161,12 @@ class GetTests(Chai):
 
         with self.assertRaises(TypeError):
             self.factory.get((2014, 7))
+
+        with self.assertRaises(ValueError):
+            self.factory.get((2014, 70, 1))
+
+        with self.assertRaises(ValueError):
+            self.factory.get((2014, 7, 10))
 
     def test_one_arg_other(self):
 
