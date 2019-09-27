@@ -150,6 +150,7 @@ class GetTests(Chai):
             (datetime(2005, 1, 1), (2004, 53, 6)),
             (datetime(2010, 1, 4), (2010, 1, 1)),
             (datetime(2010, 1, 3), (2009, 53, 7)),
+            (datetime(2003, 12, 29), (2004, 1, 1)),
         ]
 
         for pair in pairs:

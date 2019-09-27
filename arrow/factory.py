@@ -198,7 +198,7 @@ class ArrowFactory(object):
                 return self.type.utcfromtimestamp(calendar.timegm(arg))
 
             # (iso calendar) -> convert then from date
-            elif isinstance(arg, tuple):
+            elif isinstance(arg, tuple) and len(arg) == 3:
                 dt = iso_to_gregorian(*arg)
                 return self.type.fromdate(dt)
 
