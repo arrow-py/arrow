@@ -29,3 +29,10 @@ class UtilTests(Chai):
         overflow_timestamp_int = int(overflow_timestamp_float)
         with self.assertRaises((OverflowError, ValueError)):
             util.is_timestamp(overflow_timestamp_int)
+
+    def test_iso_gregorian(self):
+        with self.assertRaises(ValueError):
+            util.iso_to_gregorian(2013, 0, 5)
+
+        with self.assertRaises(ValueError):
+            util.iso_to_gregorian(2013, 8, 0)

@@ -17,7 +17,7 @@ from dateutil import tz as dateutil_tz
 
 from arrow import parser
 from arrow.arrow import Arrow
-from arrow.util import is_timestamp, isstr
+from arrow.util import is_timestamp, iso_to_gregorian, isstr
 
 
 class ArrowFactory(object):
@@ -99,6 +99,16 @@ class ArrowFactory(object):
             >>> arrow.get(date(2013, 5, 5))
             <Arrow [2013-05-05T00:00:00+00:00]>
 
+        **One** time.struct time::
+
+            >>> arrow.get(gmtime(0))
+            <Arrow [1970-01-01T00:00:00+00:00]>
+
+        **One** iso calendar ``tuple``, to get that week date in UTC::
+
+            >>> arrow.get((2013, 18, 7))
+            <Arrow [2013-05-05T00:00:00+00:00]>
+
         **Two** arguments, a naive or aware ``datetime``, and a replacement
         :ref:`timezone expression <tz-expr>`::
 
@@ -125,11 +135,6 @@ class ArrowFactory(object):
 
             >>> arrow.get(2013, 5, 5, 12, 30, 45)
             <Arrow [2013-05-05T12:30:45+00:00]>
-
-        **One** time.struct time::
-
-            >>> arrow.get(gmtime(0))
-            <Arrow [1970-01-01T00:00:00+00:00]>
 
         """
 
@@ -191,6 +196,11 @@ class ArrowFactory(object):
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
                 return self.type.utcfromtimestamp(calendar.timegm(arg))
+
+            # (iso calendar) -> convert then from date
+            elif isinstance(arg, tuple) and len(arg) == 3:
+                dt = iso_to_gregorian(*arg)
+                return self.type.fromdate(dt)
 
             else:
                 raise TypeError(

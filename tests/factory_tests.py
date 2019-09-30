@@ -140,6 +140,35 @@ class GetTests(Chai):
 
         assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
 
+    def test_one_arg_iso_calendar(self):
+
+        pairs = [
+            (datetime(2004, 1, 4), (2004, 1, 7)),
+            (datetime(2008, 12, 30), (2009, 1, 2)),
+            (datetime(2010, 1, 2), (2009, 53, 6)),
+            (datetime(2000, 2, 29), (2000, 9, 2)),
+            (datetime(2005, 1, 1), (2004, 53, 6)),
+            (datetime(2010, 1, 4), (2010, 1, 1)),
+            (datetime(2010, 1, 3), (2009, 53, 7)),
+            (datetime(2003, 12, 29), (2004, 1, 1)),
+        ]
+
+        for pair in pairs:
+            dt, iso = pair
+            self.assertEqual(self.factory.get(iso), self.factory.get(dt))
+
+        with self.assertRaises(TypeError):
+            self.factory.get((2014, 7, 1, 4))
+
+        with self.assertRaises(TypeError):
+            self.factory.get((2014, 7))
+
+        with self.assertRaises(ValueError):
+            self.factory.get((2014, 70, 1))
+
+        with self.assertRaises(ValueError):
+            self.factory.get((2014, 7, 10))
+
     def test_one_arg_other(self):
 
         with self.assertRaises(TypeError):
