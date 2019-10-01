@@ -150,8 +150,13 @@ class Arrow(object):
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
-        timestamp = cls._get_timestamp_from_input(timestamp)
-        dt = datetime.fromtimestamp(timestamp, tzinfo)
+
+        if not util.is_timestamp(timestamp):
+            raise ValueError(
+                "The provided timestamp '{}' is invalid.".format(timestamp)
+            )
+
+        dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
         return cls(
             dt.year,
@@ -172,8 +177,12 @@ class Arrow(object):
 
         """
 
-        timestamp = cls._get_timestamp_from_input(timestamp)
-        dt = datetime.utcfromtimestamp(timestamp)
+        if not util.is_timestamp(timestamp):
+            raise ValueError(
+                "The provided timestamp '{}' is invalid.".format(timestamp)
+            )
+
+        dt = datetime.utcfromtimestamp(float(timestamp))
 
         return cls(
             dt.year,
@@ -1381,14 +1390,6 @@ class Arrow(object):
             if limit is None:
                 return end, sys.maxsize
             return end, limit
-
-    @staticmethod
-    def _get_timestamp_from_input(timestamp):
-
-        try:
-            return float(timestamp)
-        except Exception:
-            raise ValueError("cannot parse '{}' as a timestamp".format(timestamp))
 
 
 Arrow.min = Arrow.fromdatetime(datetime.min)

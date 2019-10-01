@@ -169,19 +169,19 @@ class ArrowFactory(object):
                 return self.type.utcnow()
 
             # try (int, float) -> utc, from timestamp.
-            if is_timestamp(arg):
+            elif not isstr(arg) and is_timestamp(arg):
                 return self.type.utcfromtimestamp(arg)
 
             # (Arrow) -> from the object's datetime.
-            if isinstance(arg, Arrow):
+            elif isinstance(arg, Arrow):
                 return self.type.fromdatetime(arg.datetime)
 
             # (datetime) -> from datetime.
-            if isinstance(arg, datetime):
+            elif isinstance(arg, datetime):
                 return self.type.fromdatetime(arg)
 
             # (date) -> from date.
-            if isinstance(arg, date):
+            elif isinstance(arg, date):
                 return self.type.fromdate(arg)
 
             # (tzinfo) -> now, @ tzinfo.
@@ -204,7 +204,7 @@ class ArrowFactory(object):
 
             else:
                 raise TypeError(
-                    "Can't parse single argument type of '{}'".format(type(arg))
+                    "Can't parse single argument of type '{}'".format(type(arg))
                 )
 
         elif arg_count == 2:
@@ -242,7 +242,7 @@ class ArrowFactory(object):
 
             else:
                 raise TypeError(
-                    "Can't parse two arguments of types '{}', '{}'".format(
+                    "Can't parse two arguments of types '{}' and '{}'".format(
                         type(arg_1), type(arg_2)
                     )
                 )

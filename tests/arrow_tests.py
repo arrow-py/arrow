@@ -103,6 +103,19 @@ class ArrowFactoryTests(Chai):
             datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
         )
 
+        with self.assertRaises(ValueError):
+            arrow.Arrow.fromtimestamp("invalid timestamp")
+
+    def test_utcfromtimestamp(self):
+
+        timestamp = time.time()
+
+        result = arrow.Arrow.utcfromtimestamp(timestamp)
+        assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
+
+        with self.assertRaises(ValueError):
+            arrow.Arrow.utcfromtimestamp("invalid timestamp")
+
     def test_fromdatetime(self):
 
         dt = datetime(2013, 2, 3, 12, 30, 45, 1)
@@ -1804,16 +1817,6 @@ class ArrowUtilTests(Chai):
         with self.assertRaises(ValueError) as raise_ctx:
             get_tzinfo("abc")
         self.assertFalse("{}" in str(raise_ctx.exception))
-
-    def test_get_timestamp_from_input(self):
-
-        self.assertEqual(arrow.Arrow._get_timestamp_from_input(123), 123)
-        self.assertEqual(arrow.Arrow._get_timestamp_from_input(123.4), 123.4)
-        self.assertEqual(arrow.Arrow._get_timestamp_from_input("123"), 123.0)
-        self.assertEqual(arrow.Arrow._get_timestamp_from_input("123.4"), 123.4)
-
-        with self.assertRaises(ValueError):
-            arrow.Arrow._get_timestamp_from_input("abc")
 
     def test_get_iteration_params(self):
 

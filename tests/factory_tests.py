@@ -68,8 +68,8 @@ class GetTests(Chai):
             self.factory.get(str(float_timestamp))
 
         # Regression test for issue #216
-        timestamp = 99999999999999999999999999
-        # Python 3 raises `OverflowError`, Python 2 raises `ValueError`
+        # Python 3 raises OverflowError, Python 2 raises ValueError
+        timestamp = 99999999999999999999999999.99999999999999999999999999
         with self.assertRaises((OverflowError, ValueError)):
             self.factory.get(timestamp)
 
