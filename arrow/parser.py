@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 
 from arrow import locales
+from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 try:
     from functools import lru_cache
@@ -30,7 +31,7 @@ class ParserMatchError(ParserError):
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile(
-        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|X)"
+        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X)"
     )
     _ESCAPE_RE = re.compile(r"\[[^\[\]]*\]")
 
@@ -45,7 +46,8 @@ class DateTimeParser(object):
     _TZ_NAME_RE = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
-    _TIMESTAMP_RE = re.compile(r"^-?\d+\.?\d+$")
+    _TIMESTAMP_RE = re.compile(r"^\-?\d+\.?\d+$")
+    _TIMESTAMP_EXPANDED_RE = re.compile(r"^\-?\d+$")
     _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
 
     _BASE_INPUT_RE_MAP = {
@@ -66,6 +68,7 @@ class DateTimeParser(object):
         "ss": _TWO_DIGIT_RE,
         "s": _ONE_OR_TWO_DIGIT_RE,
         "X": _TIMESTAMP_RE,
+        "x": _TIMESTAMP_EXPANDED_RE,
         "ZZZ": _TZ_NAME_RE,
         "ZZ": _TZ_ZZ_RE,
         "Z": _TZ_Z_RE,
@@ -347,6 +350,9 @@ class DateTimeParser(object):
         elif token == "X":
             parts["timestamp"] = float(value)
 
+        elif token == "x":
+            parts["expanded_timestamp"] = int(value)
+
         elif token in ["ZZZ", "ZZ", "Z"]:
             parts["tzinfo"] = TzinfoParser.parse(value)
 
@@ -363,6 +369,24 @@ class DateTimeParser(object):
 
         if timestamp is not None:
             return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+
+        expanded_timestamp = parts.get("expanded_timestamp")
+
+        if expanded_timestamp is not None:
+
+            if expanded_timestamp > MAX_TIMESTAMP:
+                if expanded_timestamp < MAX_TIMESTAMP_MS:
+                    expanded_timestamp /= 1000
+                elif expanded_timestamp < MAX_TIMESTAMP_US:
+                    expanded_timestamp /= 1000000
+                else:
+                    raise ValueError(
+                        "The specified timestamp '{}' is too large.".format(
+                            expanded_timestamp
+                        )
+                    )
+
+            return datetime.fromtimestamp(expanded_timestamp, tz=tz.tzutc())
 
         day_of_year = parts.get("day_of_year")
 
