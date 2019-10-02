@@ -241,10 +241,6 @@ class DateTimeParser(object):
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", escaped_fmt)
 
-        # Any number of S is the same as one.
-        # TODO: allow users to specify the number of digits to parse
-        escaped_fmt = re.sub(r"S+", "S", escaped_fmt)
-
         escaped_data = re.findall(self._ESCAPE_RE, fmt)
 
         fmt_pattern = escaped_fmt
@@ -252,7 +248,10 @@ class DateTimeParser(object):
         for m in self._FORMAT_RE.finditer(escaped_fmt):
             token = m.group(0)
             try:
-                input_re = self._input_re_map[token]
+                if re.match(r"S+", "S"):
+                    input_re = self._input_re_map['S']
+                else:
+                    input_re = self._input_re_map[token]
             except KeyError:
                 raise ParserError("Unrecognized token '{}'".format(token))
             input_pattern = "(?P<{}>{})".format(token, input_re.pattern)
@@ -327,10 +326,11 @@ class DateTimeParser(object):
         elif token in ["ss", "s"]:
             parts["second"] = int(value)
 
-        elif token == "S":
+        elif re.match(r"S+", token):
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
             # IDEA: add nanosecond support somehow? Need datetime support for it first.
+            value = value[:len(token)]
             value = value.ljust(7, str("0"))
 
             # floating-point (IEEE-754) defaults to half-to-even rounding
