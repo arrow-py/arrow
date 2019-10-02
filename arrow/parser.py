@@ -376,9 +376,9 @@ class DateTimeParser(object):
 
             if expanded_timestamp > MAX_TIMESTAMP:
                 if expanded_timestamp < MAX_TIMESTAMP_MS:
-                    expanded_timestamp /= 1000
+                    expanded_timestamp /= 1000.0
                 elif expanded_timestamp < MAX_TIMESTAMP_US:
-                    expanded_timestamp /= 1000000
+                    expanded_timestamp /= 1000000.0
                 else:
                     raise ValueError(
                         "The specified timestamp '{}' is too large.".format(

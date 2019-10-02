@@ -260,13 +260,13 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_expanded_timestamp(self):
         # test expanded timestamps that include milliseconds
-        # and nanoseconds as multiples rather than decimals
+        # and microseconds as multiples rather than decimals
         # requested in issue #357
 
         tz_utc = tz.tzutc()
         timestamp = time.time()
         timestamp_milli = int(round(timestamp * 1000))
-        timestamp_nano = int(round(timestamp * 1000000))
+        timestamp_micro = int(round(timestamp * 1000000))
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)
@@ -281,7 +281,7 @@ class DateTimeParserParseTests(Chai):
 
         self.expected = datetime.fromtimestamp(timestamp, tz=tz_utc)
         self.assertEqual(
-            self.parser.parse("{:d}".format(timestamp_nano), "x"), self.expected
+            self.parser.parse("{:d}".format(timestamp_micro), "x"), self.expected
         )
 
         # anything above max ns timestamp should fail
@@ -734,12 +734,12 @@ class DateTimeParserRegexTests(Chai):
         self.assertEqual(timestamp_re.findall(".1565707550"), [])
 
     def test_timestamp_milli(self):
-        timestamp_milli_re = parser.DateTimeParser._TIMESTAMP_MILLI_RE
-        self.assertEqual(timestamp_milli_re.findall("-1565707550"), ["-1565707550"])
-        self.assertEqual(timestamp_milli_re.findall("1565707550"), ["1565707550"])
-        self.assertEqual(timestamp_milli_re.findall("1565707550.452729"), [])
-        self.assertEqual(timestamp_milli_re.findall("1565707550."), [])
-        self.assertEqual(timestamp_milli_re.findall(".1565707550"), [])
+        timestamp_expanded_re = parser.DateTimeParser._TIMESTAMP_EXPANDED_RE
+        self.assertEqual(timestamp_expanded_re.findall("-1565707550"), ["-1565707550"])
+        self.assertEqual(timestamp_expanded_re.findall("1565707550"), ["1565707550"])
+        self.assertEqual(timestamp_expanded_re.findall("1565707550.452729"), [])
+        self.assertEqual(timestamp_expanded_re.findall("1565707550."), [])
+        self.assertEqual(timestamp_expanded_re.findall(".1565707550"), [])
 
     def test_time(self):
         time_re = parser.DateTimeParser._TIME_RE
