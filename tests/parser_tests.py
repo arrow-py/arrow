@@ -284,7 +284,7 @@ class DateTimeParserParseTests(Chai):
             self.parser.parse("{:d}".format(timestamp_micro), "x"), self.expected
         )
 
-        # anything above max ns timestamp should fail
+        # anything above max µs timestamp should fail
         with self.assertRaises(ValueError):
             self.parser.parse("{:d}".format(int(MAX_TIMESTAMP_US) + 1), "x")
 
