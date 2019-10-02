@@ -264,7 +264,7 @@ class DateTimeParserParseTests(Chai):
         # requested in issue #357
 
         tz_utc = tz.tzutc()
-        timestamp = time.time()
+        timestamp = 1569982581.413132
         timestamp_milli = int(round(timestamp * 1000))
         timestamp_micro = int(round(timestamp * 1000000))
 
