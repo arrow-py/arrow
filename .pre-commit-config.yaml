@@ -24,7 +24,7 @@ repos:
       hooks:
           - id: isort
     - repo: https://github.com/asottile/pyupgrade
-      rev: v1.23.0
+      rev: v1.24.0
       hooks:
           - id: pyupgrade
     - repo: https://github.com/pre-commit/pygrep-hooks
