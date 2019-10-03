@@ -9,12 +9,17 @@ def total_seconds(td):  # pragma: no cover
 
 
 def is_timestamp(value):
+    """Check if value is a valid timestamp."""
     if isinstance(value, bool):
         return False
+    if not (
+        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
+    ):
+        return False
     try:
-        datetime.datetime.fromtimestamp(value)
+        float(value)
         return True
-    except TypeError:
+    except ValueError:
         return False
 
 
