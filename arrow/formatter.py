@@ -12,8 +12,9 @@ from arrow import locales, util
 class DateTimeFormatter(object):
     # TODO: test against full timezone DB
     _FORMAT_RE = re.compile(
-        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>\\\\\[|\\\\\]|[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
     )
+    _ESCAPED_BRACKET_RE = re.compile(r"\\\\(\[|\])")
 
     def __init__(self, locale="en_us"):
 
@@ -24,6 +25,11 @@ class DateTimeFormatter(object):
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
     def _format_token(self, dt, token):
+
+        if token and token.startswith("[") and token.endswith("]"):
+            return self._ESCAPED_BRACKET_RE.sub(
+                lambda m: m.group(1), token[1:-1]
+            )  # pragma: no cover
 
         if token == "YYYY":
             return self.locale.year_full(dt.year)
