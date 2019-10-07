@@ -288,6 +288,10 @@ class DateTimeParserParseTests(Chai):
         with self.assertRaises(ValueError):
             self.parser.parse("{:d}".format(int(MAX_TIMESTAMP_US) + 1), "x")
 
+        # floats are not allowed with the "x" token
+        with self.assertRaises(ParserMatchError):
+            self.parser.parse("{:f}".format(timestamp), "x")
+
     def test_parse_names(self):
 
         self.expected = datetime(2012, 1, 1)
