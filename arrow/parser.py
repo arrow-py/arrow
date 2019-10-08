@@ -110,7 +110,7 @@ class DateTimeParser(object):
                 self._generate_pattern_re
             )
 
-    # TODO: since we support more than ISO-8601, we should rename this function
+    # TODO: since we support more than ISO 8601, we should rename this function
     # IDEA: break into multiple functions
     def parse_iso(self, datetime_string):
         # TODO: add a flag to normalize whitespace (useful in logs, ref issue #421)
@@ -128,7 +128,7 @@ class DateTimeParser(object):
         has_time = has_space_divider or has_t_divider
         has_tz = False
 
-        # date formats (ISO-8601 and others) to test against
+        # date formats (ISO 8601 and others) to test against
         # NOTE: YYYYMM is omitted to avoid confusion with YYMMDD (no longer part of ISO 8601, but is still often used)
         formats = [
             "YYYY-MM-DD",

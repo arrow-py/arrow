@@ -239,7 +239,7 @@ The following will work in v0.15.0:
 
 - [NEW] struct_time addition. (mhworth)
 - [NEW] Version grep (eirnym)
-- [NEW] Default to ISO-8601 format (emonty)
+- [NEW] Default to ISO 8601 format (emonty)
 - [NEW] Raise TypeError on comparison (sniekamp)
 - [NEW] Adding Macedonian(mk) locale (krisfremen)
 - [FIX] Fix for ISO seconds and fractional seconds (sdispater) (andrewelkins)
@@ -321,7 +321,7 @@ The following will work in v0.15.0:
 0.4.0
 -----
 
-- [NEW] Format-free ISO-8601 parsing in factory ``get`` method
+- [NEW] Format-free ISO 8601 parsing in factory ``get`` method
 - [NEW] Support for 'week' / 'weeks' in ``span``, ``range``, ``span_range``, ``floor`` and ``ceil``
 - [NEW] Support for 'weeks' in ``replace``
 - [NEW] Norwegian locale (Martinp)
@@ -332,7 +332,7 @@ The following will work in v0.15.0:
 - [FIX] Corrected plurals of Ukrainian and Russian nouns (Catchagain)
 - [CHANGE] Old 0.1 ``arrow`` module method removed
 - [CHANGE] Dropped timestamp support in ``range`` and ``span_range`` (never worked correctly)
-- [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO-8601)
+- [CHANGE] Dropped parsing of single string as tz string in factory ``get`` method (replaced by ISO 8601)
 
 0.3.5
 -----

@@ -41,7 +41,7 @@ Python's standard library and some other low-level modules have near-complete da
 - Too many types: date, time, datetime, tzinfo, timedelta, relativedelta, etc.
 - Timezones and timestamp conversions are verbose and unpleasant
 - Timezone naivety is the norm
-- Gaps in functionality: ISO-8601 parsing, timespans, humanization
+- Gaps in functionality: ISO 8601 parsing, timespans, humanization
 
 Features
 --------
@@ -52,7 +52,7 @@ Features
 - Provides super-simple creation options for many common input scenarios
 - :code:`shift` method with support for relative offsets, including weeks
 - Formats and parses strings automatically
-- Wide support for ISO-8601
+- Wide support for ISO 8601
 - Timezone conversion
 - Timestamp available as a property
 - Generates time spans, ranges, floors and ceilings for time frames ranging from microsecond to year

@@ -67,7 +67,7 @@ Search a date in a string:
     >>> arrow.get('June was born in May 1980', 'MMMM YYYY')
     <Arrow [1980-05-01T00:00:00+00:00]>
 
-Some ISO-8601 compliant strings are recognized and parsed without a format string:
+Some ISO 8601 compliant strings are recognized and parsed without a format string:
 
     >>> arrow.get('2013-09-30T15:34:00.000-07:00')
     <Arrow [2013-09-30T15:34:00-07:00]>

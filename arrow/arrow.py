@@ -40,7 +40,7 @@ class Arrow(object):
 
         - A ``tzinfo`` object.
         - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-        - A ``str`` in ISO-8601 style, as in '+07:00'.
+        - A ``str`` in ISO 8601 style, as in '+07:00'.
         - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
     Usage::
@@ -423,7 +423,7 @@ class Arrow(object):
 
             - A ``tzinfo`` object.
             - A ``str`` describing a timezone, similar to 'US/Pacific', or 'Europe/Berlin'.
-            - A ``str`` in ISO-8601 style, as in '+07:00'.
+            - A ``str`` in ISO 8601 style, as in '+07:00'.
             - A ``str``, one of the following:  'local', 'utc', 'UTC'.
 
         Usage:
