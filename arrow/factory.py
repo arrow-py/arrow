@@ -69,12 +69,12 @@ class ArrowFactory(object):
             >>> arrow.get(1367992474)
             <Arrow [2013-05-08T05:54:34+00:00]>
 
-        **One** ISO-8601-formatted ``str``, to parse it::
+        **One** ISO 8601-formatted ``str``, to parse it::
 
             >>> arrow.get('2013-09-29T01:26:43.830580')
             <Arrow [2013-09-29T01:26:43.830580+00:00]>
 
-        **One** ISO-8601-formatted ``str``, in basic format, to parse it::
+        **One** ISO 8601-formatted ``str``, in basic format, to parse it::
 
             >>> arrow.get('20160413T133656.456289')
             <Arrow [2016-04-13T13:36:56.456289+00:00]>
