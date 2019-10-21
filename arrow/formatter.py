@@ -10,7 +10,7 @@ from arrow import locales, util
 
 
 class DateTimeFormatter(object):
-
+    # TODO: test against full timezone DB
     _FORMAT_RE = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
     )
