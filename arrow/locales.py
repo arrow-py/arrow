@@ -1995,6 +1995,8 @@ class VietnameseLocale(Locale):
         "hours": "{0} giờ",
         "day": "một ngày",
         "days": "{0} ngày",
+        "week": "một tuần",
+        "weeks": "{0} tuần",
         "month": "một tháng",
         "months": "{0} tháng",
         "year": "một năm",
