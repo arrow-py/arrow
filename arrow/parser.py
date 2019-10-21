@@ -474,7 +474,6 @@ class DateTimeParser(object):
 
 
 class TzinfoParser(object):
-    # TODO: test against full timezone DB
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
