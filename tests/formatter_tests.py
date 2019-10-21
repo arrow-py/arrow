@@ -122,7 +122,7 @@ class DateTimeFormatterFormatTokenTests(Chai):
     def test_timezone_formatter(self):
 
         tz_map = {
-            # 'BRST': 'America/Sao_Paulo', TODO investigate why this fails
+            "CST": "Asia/Shanghai",
             "CET": "Europe/Berlin",
             "JST": "Asia/Tokyo",
             "PST": "US/Pacific",
