@@ -351,7 +351,7 @@ class Arrow(object):
             )
 
     @classmethod
-    def span_range(cls, frame, start, end, tz=None, limit=None):
+    def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):
         """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
@@ -361,6 +361,10 @@ class Arrow(object):
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
             ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the span. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '[)' is used.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
@@ -399,10 +403,10 @@ class Arrow(object):
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
         start = cls.fromdatetime(start, tzinfo).span(frame)[0]
         _range = cls.range(frame, start, end, tz, limit)
-        return (r.span(frame) for r in _range)
+        return (r.span(frame, bounds=bounds) for r in _range)
 
     @classmethod
-    def interval(cls, frame, start, end, interval=1, tz=None):
+    def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)"):
         """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
@@ -411,6 +415,10 @@ class Arrow(object):
         :param end: (optional) A datetime expression, the end of the range.
         :param interval: (optional) Time interval for the given time frame.
         :param tz: (optional) A timezone expression.  Defaults to UTC.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the span. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '[)' is used.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second
 
@@ -440,7 +448,7 @@ class Arrow(object):
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
 
-        spanRange = iter(cls.span_range(frame, start, end, tz))
+        spanRange = iter(cls.span_range(frame, start, end, tz, bounds=bounds))
         while True:
             try:
                 intvlStart, intvlEnd = next(spanRange)
@@ -720,12 +728,23 @@ class Arrow(object):
             dt.tzinfo,
         )
 
-    def span(self, frame, count=1):
+    @classmethod
+    def _validate_bounds(cls, bounds):
+        if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
+            raise AttributeError(
+                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
+            )
+
+    def span(self, frame, count=1, bounds="[)"):
         """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
         :param count: (optional) the number of frames to span.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the span. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '[)' is used.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -743,7 +762,12 @@ class Arrow(object):
             >>> arrow.utcnow().span('day', count=2)
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
 
+            >>> arrow.utcnow().span('day', bounds='[]')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
+
         """
+
+        self._validate_bounds(bounds)
 
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
@@ -769,11 +793,13 @@ class Arrow(object):
         elif frame_absolute == "quarter":
             floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
-        ceil = (
-            floor
-            + relativedelta(**{frame_relative: count * relative_steps})
-            + relativedelta(microseconds=-1)
-        )
+        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+
+        if bounds[0] == "(":
+            floor += relativedelta(microseconds=1)
+
+        if bounds[1] == ")":
+            ceil += relativedelta(microseconds=-1)
 
         return floor, ceil
 
@@ -1001,10 +1027,7 @@ class Arrow(object):
 
         """
 
-        if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
-            raise AttributeError(
-                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
-            )
+        self._validate_bounds(bounds)
 
         if not isinstance(start, Arrow):
             raise TypeError(
