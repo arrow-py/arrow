@@ -5,8 +5,15 @@ from datetime import datetime
 import pytz
 from chai import Chai
 from dateutil import tz as dateutil_tz
+from dateutil.zoneinfo import get_zonefile_instance
 
 from arrow import formatter
+
+
+def make_full_tz_list():
+    dateutil_zones = set(get_zonefile_instance().zones)
+    pytz_zones = set(pytz.all_timezones)
+    return dateutil_zones.union(pytz_zones)
 
 
 class DateTimeFormatterFormatTokenTests(Chai):
@@ -121,18 +128,13 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
     def test_timezone_formatter(self):
 
-        tz_map = {
-            "CST": "Asia/Shanghai",
-            "CET": "Europe/Berlin",
-            "JST": "Asia/Tokyo",
-            "PST": "US/Pacific",
-        }
-
-        for abbreviation, full_name in tz_map.items():
+        for full_name in make_full_tz_list():
             # This test will fail if we use "now" as date as soon as we change from/to DST
             dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
                 tzinfo=dateutil_tz.gettz(full_name)
             )
+            abbreviation = dt.tzname()
+
             result = self.formatter._format_token(dt, "ZZZ")
             self.assertEqual(result, abbreviation)
 
