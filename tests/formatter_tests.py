@@ -197,3 +197,6 @@ class DateTimeFormatterFormatTokenTests(Chai):
             ),
             "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM",
         )
+
+        # Escaping is atomic: brackets inside brackets are treated litterally
+        self.assertEqual(self.formatter.format(datetime(1, 1, 1), "[[[ ]]"), "[[ ]")
