@@ -6,20 +6,13 @@ import os
 import time
 from datetime import datetime
 
-import pytz
 from chai import Chai
 from dateutil import tz
-from dateutil.zoneinfo import get_zonefile_instance
 
 from arrow import parser
 from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
-
-
-def make_full_tz_list():
-    dateutil_zones = set(get_zonefile_instance().zones)
-    pytz_zones = set(pytz.all_timezones)
-    return dateutil_zones.union(pytz_zones)
+from tests.utils import make_full_tz_list
 
 
 class DateTimeParserTests(Chai):

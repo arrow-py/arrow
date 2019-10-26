@@ -5,15 +5,9 @@ from datetime import datetime
 import pytz
 from chai import Chai
 from dateutil import tz as dateutil_tz
-from dateutil.zoneinfo import get_zonefile_instance
 
 from arrow import formatter
-
-
-def make_full_tz_list():
-    dateutil_zones = set(get_zonefile_instance().zones)
-    pytz_zones = set(pytz.all_timezones)
-    return dateutil_zones.union(pytz_zones)
+from tests.utils import make_full_tz_list
 
 
 class DateTimeFormatterFormatTokenTests(Chai):
