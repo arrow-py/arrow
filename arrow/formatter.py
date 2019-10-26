@@ -14,7 +14,6 @@ class DateTimeFormatter(object):
     _FORMAT_RE = re.compile(
         r"(\[(?:(?=(?P<literal>\\\\\[|\\\\\]|[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
     )
-    _ESCAPED_BRACKET_RE = re.compile(r"\\\\(\[|\])")
 
     def __init__(self, locale="en_us"):
 
@@ -27,9 +26,7 @@ class DateTimeFormatter(object):
     def _format_token(self, dt, token):
 
         if token and token.startswith("[") and token.endswith("]"):
-            return self._ESCAPED_BRACKET_RE.sub(
-                lambda m: m.group(1), token[1:-1]
-            )  # pragma: no cover
+            return token[1:-1]
 
         if token == "YYYY":
             return self.locale.year_full(dt.year)
