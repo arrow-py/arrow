@@ -10,7 +10,6 @@ from arrow import locales, util
 
 
 class DateTimeFormatter(object):
-    
 
     # This pattern matches characters enclosed in square brackes are matched as
     # an atomic group. For more info on atomic groups and how to they are
