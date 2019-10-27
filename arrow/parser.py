@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 from dateutil import tz
 
-from arrow import locales
+from arrow import locales, util
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 try:
@@ -368,7 +368,7 @@ class DateTimeParser(object):
         timestamp = parts.get("timestamp")
 
         if timestamp is not None:
-            return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+            return util.safe_fromtimestamp(timestamp, tz=tz.tzutc())
 
         expanded_timestamp = parts.get("expanded_timestamp")
 
@@ -386,7 +386,7 @@ class DateTimeParser(object):
                         )
                     )
 
-            return datetime.fromtimestamp(expanded_timestamp, tz=tz.tzutc())
+            return util.safe_fromtimestamp(expanded_timestamp, tz=tz.tzutc())
 
         day_of_year = parts.get("day_of_year")
 
