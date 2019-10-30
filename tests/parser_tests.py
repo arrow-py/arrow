@@ -12,7 +12,8 @@ from dateutil import tz
 from arrow import parser
 from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
-from tests.utils import make_full_tz_list
+
+from .utils import make_full_tz_list
 
 
 class DateTimeParserTests(Chai):

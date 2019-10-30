@@ -7,7 +7,8 @@ from chai import Chai
 from dateutil import tz as dateutil_tz
 
 from arrow import formatter
-from tests.utils import make_full_tz_list
+
+from .utils import make_full_tz_list
 
 
 class DateTimeFormatterFormatTokenTests(Chai):
