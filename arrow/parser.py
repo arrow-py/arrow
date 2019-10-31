@@ -427,6 +427,21 @@ class DateTimeParser(object):
         elif am_pm == "am" and hour == 12:
             hour = 0
 
+        # Support for midnight at the end of day
+        if hour == 24:
+            if parts.get("minute", 0) != 0:
+                raise ParserError("Midnight at the end of day must not contain minutes")
+            if parts.get("second", 0) != 0:
+                raise ParserError("Midnight at the end of day must not contain seconds")
+            if parts.get("microsecond", 0) != 0:
+                raise ParserError(
+                    "Midnight at the end of day must not contain microseconds"
+                )
+            hour = 0
+            day_increment = 1
+        else:
+            day_increment = 0
+
         # account for rounding up to 1000000
         microsecond = parts.get("microsecond", 0)
         if microsecond == 1000000:
@@ -435,7 +450,7 @@ class DateTimeParser(object):
         else:
             second_increment = 0
 
-        increment = timedelta(seconds=second_increment)
+        increment = timedelta(days=day_increment, seconds=second_increment)
 
         return (
             datetime(
