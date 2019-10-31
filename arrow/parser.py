@@ -165,9 +165,13 @@ class DateTimeParser(object):
                     "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
                 )
 
-            hours, minutes, seconds, subseconds_sep, subseconds = (
-                time_components.groups()
-            )
+            (
+                hours,
+                minutes,
+                seconds,
+                subseconds_sep,
+                subseconds,
+            ) = time_components.groups()
 
             has_tz = len(time_parts) == 2
             has_minutes = minutes is not None
