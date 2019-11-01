@@ -586,6 +586,48 @@ class DateTimeParserParseTests(Chai):
         with self.assertRaises(ParserError):
             self.parser.parse("145", "DDDD")
 
+    def test_parse_HH_24(self):
+        self.assertEqual(
+            self.parser.parse("2019-10-30T24:00:00", "YYYY-MM-DDTHH:mm:ss"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-10-30T24:00", "YYYY-MM-DDTHH:mm"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-10-30T24", "YYYY-MM-DDTHH"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-10-30T24:00:00.0", "YYYY-MM-DDTHH:mm:ss.S"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-10-31T24:00:00", "YYYY-MM-DDTHH:mm:ss"),
+            datetime(2019, 11, 1, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-12-31T24:00:00", "YYYY-MM-DDTHH:mm:ss"),
+            datetime(2020, 1, 1, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse("2019-12-31T23:59:59.9999999", "YYYY-MM-DDTHH:mm:ss.S"),
+            datetime(2020, 1, 1, 0, 0, 0, 0),
+        )
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2019-12-31T24:01:00", "YYYY-MM-DDTHH:mm:ss")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2019-12-31T24:00:01", "YYYY-MM-DDTHH:mm:ss")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2019-12-31T24:00:00.1", "YYYY-MM-DDTHH:mm:ss.S")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse("2019-12-31T24:00:00.999999", "YYYY-MM-DDTHH:mm:ss.S")
+
 
 class DateTimeParserRegexTests(Chai):
     def setUp(self):
@@ -1175,6 +1217,44 @@ class DateTimeParserISOTests(Chai):
         # too many digits in time
         with self.assertRaises(ParserError):
             self.parser.parse_iso("20180517T1055213Z")
+
+    def test_midnight_end_day(self):
+        self.assertEqual(
+            self.parser.parse_iso("2019-10-30T24:00:00"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse_iso("2019-10-30T24:00"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse_iso("2019-10-30T24:00:00.0"),
+            datetime(2019, 10, 31, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse_iso("2019-10-31T24:00:00"),
+            datetime(2019, 11, 1, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse_iso("2019-12-31T24:00:00"),
+            datetime(2020, 1, 1, 0, 0, 0, 0),
+        )
+        self.assertEqual(
+            self.parser.parse_iso("2019-12-31T23:59:59.9999999"),
+            datetime(2020, 1, 1, 0, 0, 0, 0),
+        )
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2019-12-31T24:01:00")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2019-12-31T24:00:01")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2019-12-31T24:00:00.1")
+
+        with self.assertRaises(ParserError):
+            self.parser.parse_iso("2019-12-31T24:00:00.999999")
 
 
 class TzinfoParserTests(Chai):
