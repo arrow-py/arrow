@@ -147,3 +147,53 @@ class DateTimeFormatterFormatTokenTests(Chai):
         dt = datetime(2012, 1, 1, 11)
         self.assertEqual(self.formatter._format_token(dt, None), None)
         self.assertEqual(self.formatter._format_token(dt, "NONSENSE"), None)
+
+    def test_escape(self):
+
+        self.assertEqual(
+            self.formatter.format(
+                datetime(2015, 12, 10, 17, 9), "MMMM D, YYYY [at] h:mma"
+            ),
+            "December 10, 2015 at 5:09pm",
+        )
+
+        self.assertEqual(
+            self.formatter.format(
+                datetime(2015, 12, 10, 17, 9), "[MMMM] M D, YYYY [at] h:mma"
+            ),
+            "MMMM 12 10, 2015 at 5:09pm",
+        )
+
+        self.assertEqual(
+            self.formatter.format(
+                datetime(1990, 11, 25),
+                "[It happened on] MMMM Do [in the year] YYYY [a long time ago]",
+            ),
+            "It happened on November 25th in the year 1990 a long time ago",
+        )
+
+        self.assertEqual(
+            self.formatter.format(
+                datetime(1990, 11, 25),
+                "[It happened on] MMMM Do [in the][ year] YYYY [a long time ago]",
+            ),
+            "It happened on November 25th in the year 1990 a long time ago",
+        )
+
+        self.assertEqual(
+            self.formatter.format(
+                datetime(1, 1, 1), "[I'm][ entirely][ escaped,][ weee!]"
+            ),
+            "I'm entirely escaped, weee!",
+        )
+
+        # Special RegEx characters
+        self.assertEqual(
+            self.formatter.format(
+                datetime(2017, 12, 31, 2, 0), "MMM DD, YYYY |^${}().*+?<>-& h:mm A"
+            ),
+            "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM",
+        )
+
+        # Escaping is atomic: brackets inside brackets are treated litterally
+        self.assertEqual(self.formatter.format(datetime(1, 1, 1), "[[[ ]]"), "[[ ]")
