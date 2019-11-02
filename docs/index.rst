@@ -390,27 +390,23 @@ Any `token <Supported Tokens_>`_ or phrase can be escaped as follows:
 
 .. code-block:: python
 
-    >>> formatter = arrow.formatter.DateTimeFormatter()
-    >>> dt = datetime(2018, 3, 9, 8, 40)
-
-
     >>> fmt = "YYYY-MM-DD h [h] m"
-    >>> arrow.get("2018-03-09 8 h 40", fmt)
+    >>> arw = arrow.get("2018-03-09 8 h 40", fmt)
     <Arrow [2018-03-09T08:40:00+00:00]>
-    >>> formatter.format(dt, fmt)
-    u'2018-03-09 8 h 40'
+    >>> arw.format(fmt)
+    '2018-03-09 8 h 40'
 
     >>> fmt = "YYYY-MM-DD h [hello] m"
-    >>> arrow.get("2018-03-09 8 hello 40", fmt)
+    >>> arw = arrow.get("2018-03-09 8 hello 40", fmt)
     <Arrow [2018-03-09T08:40:00+00:00]>
-    >>> formatter.format(dt, fmt)
-    u'2018-03-09 8 hello 40'
+    >>> arw.format(fmt)
+    '2018-03-09 8 hello 40'
 
     >>> fmt = "YYYY-MM-DD h [hello world] m"
-    >>> arrow.get("2018-03-09 8 hello world 40", fmt)
+    >>> arw = arrow.get("2018-03-09 8 hello world 40", fmt)
     <Arrow [2018-03-09T08:40:00+00:00]>
-    >>> formatter.format(dt, fmt)
-    u'2018-03-09 8 hello world 40'
+    >>> arw.format(fmt)
+    '2018-03-09 8 hello world 40'
 
 This can be useful for parsing dates in different locales such as French, in which it is common to format time strings as "8 h 40" rather than "8:40".
 
