@@ -4,29 +4,28 @@ Changelog
 0.15.3 (2019-11-02)
 -------------------
 
-- [NEW] ``factory.get()`` can now create from a ISO calendar tuple, for example:
+- [NEW] ``factory.get()`` can now create arrow objects from a ISO calendar tuple, for example:
 
 .. code-block:: python
 
     >>> arrow.get((2013, 18, 7))
     <Arrow [2013-05-05T00:00:00+00:00]>
 
-- [NEW] Added a new token ``x`` to allow parsing of timestamps in milliseconds and microseconds.
+- [NEW] Added a new token ``x`` to allow parsing of integer timestamps with milliseconds and microseconds.
 - [NEW] Formatting now supports escaping of characters using the same syntax as parsing, for example:
 
 .. code-block:: python
 
-    >>> formatter = arrow.formatter.DateTimeFormatter()
-    >>> dt = datetime(2018, 3, 9, 8, 40)
+    >>> arw = arrow.now()
     >>> fmt = "YYYY-MM-DD h [h] m"
-    >>> formatter.format(dt, fmt)
-    '2018-03-09 8 h 40'
+    >>> arw.format(fmt)
+    '2019-11-02 3 h 32'
 
 - [NEW] Added ``humanize`` week granularity translations for Chinese, Spanish and Vietnamese.
-- [CHANGE] Added ParserError to module exports.
-- [FIX] Added support for midnight at end of day, see `#703 <https://github.com/crsmithdev/arrow/issues/703>`_ for details.
-- [FIX] Create Travis build for macOS.
-- [FIX] Test parsing and formatting against full tz database.
+- [CHANGE] Added ``ParserError`` to module exports.
+- [FIX] Added support for midnight at end of day. See `#703 <https://github.com/crsmithdev/arrow/issues/703>`_ for details.
+- [INTERNAL] Created Travis build for macOS.
+- [INTERNAL] Test parsing and formatting against full timezone database.
 
 0.15.2 (2019-09-14)
 -------------------
