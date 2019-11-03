@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.15.4 (2019-11-02)
+-------------------
+
+- [FIX] Fixed an issue that caused package installs to fail on Conda Forge.
+
 0.15.3 (2019-11-02)
 -------------------
 
