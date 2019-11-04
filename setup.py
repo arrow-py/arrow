@@ -28,7 +28,7 @@ file_text = read(fpath('arrow/__init__.py'))
 setup(
     name='arrow',
     version=grep('__version__'),
-    description='Better dates and times for Python',
+    description="Better dates & times for Python",
     long_description=read(fpath('README.rst')),
     url='https://github.com/crsmithdev/arrow/',
     author='Chris Smith',
@@ -38,11 +38,9 @@ setup(
     zip_safe=False,
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*',
     install_requires=[
-        'python-dateutil',
+        "python-dateutil",
+        "backports.functools_lru_cache>=1.2.1;python_version=='2.7'",
     ],
-    extras_require={
-        ":python_version=='2.7'": ['backports.functools_lru_cache>=1.2.1'],
-    },
     test_suite="tests",
     tests_require=['chai'],
     classifiers=[
