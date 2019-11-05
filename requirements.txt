@@ -1,4 +1,4 @@
-backports.functools_lru_cache==1.5.0; python_version == "2.7"
+backports.functools_lru_cache==1.6.1; python_version == "2.7"
 chai==1.1.2
 dateparser==0.7.*
 mock==3.0.*
