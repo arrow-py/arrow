@@ -3,8 +3,8 @@ from __future__ import absolute_import
 
 import datetime
 import math
-import os
 import time
+from os import name as os_name
 
 import dateutil
 
@@ -32,36 +32,35 @@ def windows_datetime_from_timestamp(timestamp, tz=None):
     """Computes datetime from timestamp. Supports negative timestamps on Windows platform."""
     sec_frac, sec = math.modf(timestamp)
     dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc()) + datetime.timedelta(
-        seconds=sec, microseconds=sec_frac * 1e6
+        seconds=sec, microseconds=sec_frac * 1000000
     )
-    if tz is not None:
-        if tz == dateutil.tz.tzlocal():
-            # because datetime.astimezone does not work on Windows for tzlocal() and dates before the 1970-01-01
-            # take timestamp from appropriate time of the year, because of daylight saving time changes
-            ts = time.mktime(dt.replace(year=1970).timetuple())
-            dt += datetime.datetime.fromtimestamp(
-                ts
-            ) - datetime.datetime.utcfromtimestamp(ts)
-            dt = dt.replace(tzinfo=dateutil.tz.tzlocal())
-        else:
-            dt = dt.astimezone(tz)
+    if tz is None:
+        tz = dateutil.tz.tzlocal()
+
+    if tz == dateutil.tz.tzlocal():
+        # because datetime.astimezone does not work on Windows for tzlocal() and dates before the 1970-01-01
+        # take timestamp from appropriate time of the year, because of daylight saving time changes
+        ts = time.mktime(dt.replace(year=1970).timetuple())
+        dt += datetime.datetime.fromtimestamp(ts) - datetime.datetime.utcfromtimestamp(
+            ts
+        )
+        dt = dt.replace(tzinfo=dateutil.tz.tzlocal())
+    else:
+        dt = dt.astimezone(tz)
     return dt
 
 
-def safe_utcfromtimestamp(timestamp, os_name=os.name):
-    """ datetime.utcfromtimestamp alternative which supports negatvie timestamps on Windows platform."""
+def safe_utcfromtimestamp(timestamp):
+    """ datetime.utcfromtimestamp alternative which supports negative timestamps on Windows platform."""
     if os_name == "nt" and timestamp < 0:
         return windows_datetime_from_timestamp(timestamp, dateutil.tz.tzutc())
     else:
         return datetime.datetime.utcfromtimestamp(timestamp)
 
 
-def safe_fromtimestamp(timestamp, tz=None, os_name=os.name):
-    """ datetime.fromtimestamp alternative which supports negatvie timestamps on Windows platform."""
+def safe_fromtimestamp(timestamp, tz=None):
+    """ datetime.fromtimestamp alternative which supports negative timestamps on Windows platform."""
     if os_name == "nt" and timestamp < 0:
-        if tz is None:
-            # because datetime.fromtimestamp default is local time
-            tz = dateutil.tz.tzlocal()
         return windows_datetime_from_timestamp(timestamp, tz)
     else:
         return datetime.datetime.fromtimestamp(timestamp, tz)

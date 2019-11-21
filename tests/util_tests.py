@@ -4,6 +4,7 @@ from datetime import datetime
 
 from chai import Chai
 from dateutil import tz
+from mock import patch
 
 from arrow import util
 
@@ -80,26 +81,18 @@ class UtilTests(Chai):
         )
         self.assertEqual(result, expected)
 
+    @patch.object(util, "os_name", "nt")
     def test_safe_utcfromtimestamp_negative_nt(self):
         timestamp = -1572204340.6460679
-        result = util.safe_utcfromtimestamp(timestamp, os_name="nt").replace(
-            tzinfo=tz.tzutc()
-        )
+        result = util.safe_utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
         expected = datetime(1920, 3, 7, 4, 34, 19, 353932, tzinfo=tz.tzutc())
         self.assertEqual(result, expected)
 
+    @patch.object(util, "os_name", "nt")
     def test_safe_fromtimestamp_negative_nt(self):
         timestamp = -1572204340.6460679
-        result = util.safe_fromtimestamp(
-            timestamp, tz.gettz("Europe/Paris"), os_name="nt"
-        )
+        result = util.safe_fromtimestamp(timestamp, tz.gettz("Europe/Paris"))
         expected = datetime(
             1920, 3, 7, 5, 34, 19, 353932, tzinfo=tz.gettz("Europe/Paris")
         )
-        self.assertEqual(result, expected)
-
-    def test_safe_fromtimestamp_negative_nt_no_tz(self):
-        timestamp = -1572204340.6460679
-        result = util.safe_fromtimestamp(timestamp, os_name="nt")
-        expected = util.windows_datetime_from_timestamp(timestamp, tz.tzlocal())
         self.assertEqual(result, expected)
