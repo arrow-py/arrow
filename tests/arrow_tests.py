@@ -1207,6 +1207,22 @@ class ArrowSpanRangeTests(Chai):
             self.assertEqual(f.tzinfo, tz.gettz("US/Central"))
             self.assertEqual(c.tzinfo, tz.gettz("US/Central"))
 
+    def test_bounds_param_is_passed(self):
+
+        result = list(
+            arrow.Arrow.span_range(
+                "quarter", datetime(2013, 2, 2), datetime(2013, 5, 15), bounds="[]"
+            )
+        )
+
+        self.assertEqual(
+            result,
+            [
+                (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 4, 1)),
+                (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 7, 1)),
+            ],
+        )
+
 
 class ArrowIntervalTests(Chai):
     def test_incorrect_input(self):
@@ -1244,6 +1260,26 @@ class ArrowIntervalTests(Chai):
                     arrow.Arrow(2013, 5, 5, 16),
                     arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),
                 ),
+            ],
+        )
+
+    def test_bounds_param_is_passed(self):
+        result = list(
+            arrow.Arrow.interval(
+                "hour",
+                datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 17, 15),
+                2,
+                bounds="[]",
+            )
+        )
+
+        self.assertEqual(
+            result,
+            [
+                (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 14)),
+                (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 16)),
+                (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 18)),
             ],
         )
 
@@ -1367,6 +1403,34 @@ class ArrowSpanTests(Chai):
 
         self.assertEqual(floor, self.arrow.floor("month"))
         self.assertEqual(ceil, self.arrow.ceil("month"))
+
+    def test_span_inclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("hour", bounds="[]")
+
+        self.assertEqual(floor, datetime(2013, 2, 15, 3, tzinfo=tz.tzutc()))
+        self.assertEqual(ceil, datetime(2013, 2, 15, 4, tzinfo=tz.tzutc()))
+
+    def test_span_exclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("hour", bounds="(]")
+
+        self.assertEqual(floor, datetime(2013, 2, 15, 3, 0, 0, 1, tzinfo=tz.tzutc()))
+        self.assertEqual(ceil, datetime(2013, 2, 15, 4, tzinfo=tz.tzutc()))
+
+    def test_span_exclusive_exclusive(self):
+
+        floor, ceil = self.arrow.span("hour", bounds="()")
+
+        self.assertEqual(floor, datetime(2013, 2, 15, 3, 0, 0, 1, tzinfo=tz.tzutc()))
+        self.assertEqual(
+            ceil, datetime(2013, 2, 15, 3, 59, 59, 999999, tzinfo=tz.tzutc())
+        )
+
+    def test_bounds_are_validated(self):
+
+        with self.assertRaises(AttributeError):
+            floor, ceil = self.arrow.span("hour", bounds="][")
 
 
 class ArrowHumanizeTests(Chai):
