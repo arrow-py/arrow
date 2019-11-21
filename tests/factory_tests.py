@@ -76,7 +76,7 @@ class GetTests(Chai):
     def test_one_arg_timestamp_with_tzinfo(self):
 
         int_timestamp = int(time.time())
-        timestamp_dt = datetime.utcfromtimestamp(int_timestamp).astimezone(
+        timestamp_dt = datetime.fromtimestamp(int_timestamp, tz=tz.tzutc()).astimezone(
             tz.gettz("US/Pacific")
         )
         timezone = tz.gettz("US/Pacific")
