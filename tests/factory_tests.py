@@ -73,6 +73,16 @@ class GetTests(Chai):
         with self.assertRaises((OverflowError, ValueError)):
             self.factory.get(timestamp)
 
+    def test_one_arg_timestamp_with_tzinfo(self):
+
+        int_timestamp = int(time.time())
+        timestamp_dt = datetime.utcfromtimestamp(int_timestamp).astimezone(
+            tz.gettz("US/Pacific")
+        )
+        timezone = tz.gettz("US/Pacific")
+
+        assertDtEqual(self.factory.get(int_timestamp, tzinfo=timezone), timestamp_dt)
+
     def test_one_arg_arrow(self):
 
         arw = self.factory.utcnow()
