@@ -362,7 +362,7 @@ class Arrow(object):
             ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
         :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
-            whether to include or exclude the start and end values in the span. '(' excludes
+            whether to include or exclude the start and end values in each span in the range. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
 
@@ -416,7 +416,7 @@ class Arrow(object):
         :param interval: (optional) Time interval for the given time frame.
         :param tz: (optional) A timezone expression.  Defaults to UTC.
         :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
-            whether to include or exclude the start and end values in the span. '(' excludes
+            whether to include or exclude the start and end values in the intervals. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
 
