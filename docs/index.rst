@@ -212,6 +212,7 @@ Support for a growing number of locales (see ``locales.py`` for supported langua
 
 .. code-block:: python
 
+
     >>> future = arrow.utcnow().shift(hours=1)
     >>> future.humanize(a, locale='ru')
     'через 2 час(а,ов)'
@@ -426,6 +427,17 @@ You can also escape regular expressions by enclosing them within square brackets
 
     >>> arrow.get("Mon Sep 08   16:41:45   2014", fmt)
     <Arrow [2014-09-08T16:41:45+00:00]>
+
+Punctuation
+~~~~~~~~~~~
+
+You're date formats can be precede and/or be preceded by one character of
+punctuation from the list: :code:`, . ; : ? ! " ' ` [ ] { } ( ) < >`
+
+.. code-block:: python
+
+    >>> arrow.get("Tomorrow (2019-10-31) is Halloween!", "YYYY-MM-DD")
+    <Arrow [2019-10-31T00:00:00+00:00]>
 
 API Guide
 ---------

@@ -472,7 +472,10 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_with_extra_words_at_start_and_end_valid(self):
         # Spaces surrounding the parsable date are ok because we
-        # allow the parsing of natural language input
+        # allow the parsing of natural language input. Additionally, a single
+        # character of specific punctuation before or after the date is okay.
+        # See docs for full list of valid punctuation.
+
         self.assertEqual(
             self.parser.parse("blah 2016 blah", "YYYY"), datetime(2016, 1, 1)
         )
@@ -525,6 +528,30 @@ class DateTimeParserParseTests(Chai):
                 "YYYY-MM-DD hh:mm:ss.S",
             ),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at my house on the my birthday (2019-24-11)",
+                "YYYY-DD-MM"
+            ),
+            datetime(2019, 11, 24)
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Monday, 9. September 2019, 16:15-20:00",
+                "dddd, D. MMMM YYYY"
+            ),
+            datetime(2019, 9, 9)
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "A date is 11.11.2011.",
+                "DD.MM.YYYY"
+            ),
+            datetime(2011, 11, 11)
         )
 
     def test_parse_with_leading_and_trailing_whitespace(self):

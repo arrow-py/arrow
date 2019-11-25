@@ -218,6 +218,7 @@ class DateTimeParser(object):
         fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
 
         match = fmt_pattern_re.search(datetime_string)
+
         if match is None:
             raise ParserMatchError(
                 "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
@@ -292,12 +293,16 @@ class DateTimeParser(object):
         # and time string in a natural language sentence. Therefore, searching
         # for a string of the form YYYY-MM-DD in "blah 1998-09-12 blah" will
         # work properly.
-        # Reference: https://stackoverflow.com/q/14232931/3820660
-        starting_word_boundary = r"(?<![\S])"
-        ending_word_boundary = r"(?![\S])"
-        bounded_fmt_pattern = r"{}{}{}".format(
-            starting_word_boundary, final_fmt_pattern, ending_word_boundary
-        )
+        # Certain punctuation before or after the target pattern such as
+        # "1998-09-12," is permitted. For the full list of valid punctuation,
+        # see the documentation.
+
+        starting_punctuation_bound = r"(?<!\S\S)(?<!\s[^,.;:?!\"'`\[\]{}(" \
+                                     r")<>\s])(\b|^)"
+        ending_punctuation_bound = r"(?=[,.;:?!\"'`\[\]{}()<>]?(?!\S))"
+        bounded_fmt_pattern = r"{}{}{}".format(starting_punctuation_bound,
+                                               final_fmt_pattern,
+                                               ending_punctuation_bound)
 
         return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
 
