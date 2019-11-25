@@ -297,7 +297,7 @@ class DateTimeParser(object):
         # "1998-09-12," is permitted. For the full list of valid punctuation,
         # see the documentation.
 
-        starting_punctuation_bound = r"(?<!\S\S)(?<!\s[^,.;:?!\"'`\[\]{}(" \
+        starting_punctuation_bound = r"(?<!\S\S)(?<![^,.;:?!\"'`\[\]{}(" \
                                      r")<>\s])(\b|^)"
         ending_punctuation_bound = r"(?=[,.;:?!\"'`\[\]{}()<>]?(?!\S))"
         bounded_fmt_pattern = r"{}{}{}".format(starting_punctuation_bound,
