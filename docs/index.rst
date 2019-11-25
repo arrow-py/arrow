@@ -432,7 +432,7 @@ Punctuation
 ~~~~~~~~~~~
 
 You're date formats can be precede and/or be preceded by one character of
-punctuation from the list: :code:`, . ; : ? ! " ' ` [ ] { } ( ) < >`
+punctuation from the list: :code:``, . ; : ? ! " ' \` [ ] { } ( ) < >``
 
 .. code-block:: python
 

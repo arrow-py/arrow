@@ -532,26 +532,21 @@ class DateTimeParserParseTests(Chai):
 
         self.assertEqual(
             self.parser.parse(
-                "Meet me at my house on the my birthday (2019-24-11)",
-                "YYYY-DD-MM"
+                "Meet me at my house on the my birthday (2019-24-11)", "YYYY-DD-MM"
             ),
-            datetime(2019, 11, 24)
+            datetime(2019, 11, 24),
         )
 
         self.assertEqual(
             self.parser.parse(
-                "Monday, 9. September 2019, 16:15-20:00",
-                "dddd, D. MMMM YYYY"
+                "Monday, 9. September 2019, 16:15-20:00", "dddd, D. MMMM YYYY"
             ),
-            datetime(2019, 9, 9)
+            datetime(2019, 9, 9),
         )
 
         self.assertEqual(
-            self.parser.parse(
-                "A date is 11.11.2011.",
-                "DD.MM.YYYY"
-            ),
-            datetime(2011, 11, 11)
+            self.parser.parse("A date is 11.11.2011.", "DD.MM.YYYY"),
+            datetime(2011, 11, 11),
         )
 
     def test_parse_with_leading_and_trailing_whitespace(self):
