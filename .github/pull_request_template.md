@@ -3,10 +3,10 @@
 Thank you for taking the time to improve Arrow! Before submitting your pull request, please check all *appropriate* boxes:
 
 <!-- Check boxes by placing an x in the brackets: [x] -->
-- [ ] 🧪Added **tests** for changed code.
-- [ ] 🛠️All tests **pass** when run locally (run `tox` or `make test` to find out!).
-- [ ] 📚Updated **documentation** for changed code.
-- [ ] ⏩Code is **up-to-date** with the `master` branch.
+- [ ] 🧪 Added **tests** for changed code.
+- [ ] 🛠️ All tests **pass** when run locally (run `tox` or `make test` to find out!).
+- [ ] 📚 Updated **documentation** for changed code.
+- [ ] ⏩ Code is **up-to-date** with the `master` branch.
 
 If you have *any* questions about your code changes or any of the points above, please submit your questions along with the pull request and we will try our best to help!
 

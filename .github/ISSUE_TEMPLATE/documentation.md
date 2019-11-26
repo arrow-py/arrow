@@ -1,5 +1,5 @@
 ---
-name: "📚Documentation"
+name: "📚 Documentation"
 about: Find errors or problems in the docs (https://arrow.readthedocs.io)?
 title: ''
 labels: 'documentation'

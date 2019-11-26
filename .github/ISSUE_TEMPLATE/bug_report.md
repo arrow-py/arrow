@@ -1,5 +1,5 @@
 ---
-name: "🐞Bug Report"
+name: "🐞 Bug Report"
 about: Find a bug? Create a report to help us improve.
 title: ''
 labels: 'bug'
