@@ -978,27 +978,27 @@ class Arrow(object):
                 timeframes = []
                 if "year" in granularity:
                     years = sign * delta / self._SECS_PER_YEAR
-                    delta -= sign * trunc(years) * self._SECS_PER_YEAR
+                    delta = delta % self._SECS_PER_YEAR
                     timeframes.append(["year", years])
                 if "month" in granularity:
                     months = sign * delta / self._SECS_PER_MONTH
-                    delta -= sign * trunc(months) * self._SECS_PER_MONTH
+                    delta = delta % self._SECS_PER_MONTH
                     timeframes.append(["month", months])
                 if "week" in granularity:
                     weeks = sign * delta / self._SECS_PER_WEEK
-                    delta -= sign * trunc(weeks) * self._SECS_PER_WEEK
+                    delta = delta % self._SECS_PER_WEEK
                     timeframes.append(["week", weeks])
                 if "day" in granularity:
                     days = sign * delta / self._SECS_PER_DAY
-                    delta -= sign * trunc(days) * self._SECS_PER_DAY
+                    delta = delta % self._SECS_PER_DAY
                     timeframes.append(["day", days])
                 if "hour" in granularity:
                     hours = sign * delta / self._SECS_PER_HOUR
-                    delta -= sign * trunc(hours) * self._SECS_PER_HOUR
+                    delta = delta % self._SECS_PER_HOUR
                     timeframes.append(["hour", hours])
                 if "minute" in granularity:
                     minutes = sign * delta / self._SECS_PER_MINUTE
-                    delta -= sign * trunc(minutes) * self._SECS_PER_MINUTE
+                    delta = delta % self._SECS_PER_MINUTE
                     timeframes.append(["minute", minutes])
                 if "second" in granularity:
                     seconds = sign * delta
