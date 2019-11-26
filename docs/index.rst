@@ -208,6 +208,17 @@ Or another Arrow, or datetime:
     >>> future.humanize(present)
     'in 2 hours'
 
+Indicate a specific time granularity (or multiple):
+
+.. code-block:: python
+
+    >>> present = arrow.utcnow()
+    >>> future = present.shift(minutes=66)
+    >>> future.humanize(present, granularity="minute")
+    'in 66 minutes'
+    >>> future.humanize(present, granularity=["hour", "minute"])
+    'in an hour and 6 minutes'
+
 Support for a growing number of locales (see ``locales.py`` for supported languages):
 
 .. code-block:: python

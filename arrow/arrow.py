@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 
-import six
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
@@ -58,11 +57,11 @@ class Arrow(object):
     _ATTRS_PLURAL = ["{}s".format(a) for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
     _SECS_PER_MINUTE = float(60)
-    _SECS_PER_HOUR = float(3600)  # 60 * 60
-    _SECS_PER_DAY = float(86400)  # 60 * 60 * 24
-    _SECS_PER_WEEK = float(604800)  # 60 * 60 * 24 * 7
-    _SECS_PER_MONTH = float(2635200)  # 60 * 60 * 24 * 30.5
-    _SECS_PER_YEAR = float(31557600)  # 60 * 60 * 24 * 365.25
+    _SECS_PER_HOUR = float(60 * 60)
+    _SECS_PER_DAY = float(60 * 60 * 24)
+    _SECS_PER_WEEK = float(60 * 60 * 24 * 7)
+    _SECS_PER_MONTH = float(60 * 60 * 24 * 30.5)
+    _SECS_PER_YEAR = float(60 * 60 * 24 * 365.25)
 
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
@@ -948,7 +947,7 @@ class Arrow(object):
                     years = sign * int(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
-            elif isinstance(granularity, six.string_types):
+            elif util.isstr(granularity):
                 if granularity == "second":
                     delta = sign * delta
                     if abs(delta) < 2:
@@ -978,27 +977,27 @@ class Arrow(object):
                 timeframes = []
                 if "year" in granularity:
                     years = sign * delta / self._SECS_PER_YEAR
-                    delta -= sign * trunc(years) * self._SECS_PER_YEAR
+                    delta = delta % self._SECS_PER_YEAR
                     timeframes.append(["year", years])
                 if "month" in granularity:
                     months = sign * delta / self._SECS_PER_MONTH
-                    delta -= sign * trunc(months) * self._SECS_PER_MONTH
+                    delta = delta % self._SECS_PER_MONTH
                     timeframes.append(["month", months])
                 if "week" in granularity:
                     weeks = sign * delta / self._SECS_PER_WEEK
-                    delta -= sign * trunc(weeks) * self._SECS_PER_WEEK
+                    delta = delta % self._SECS_PER_WEEK
                     timeframes.append(["week", weeks])
                 if "day" in granularity:
                     days = sign * delta / self._SECS_PER_DAY
-                    delta -= sign * trunc(days) * self._SECS_PER_DAY
+                    delta = delta % self._SECS_PER_DAY
                     timeframes.append(["day", days])
                 if "hour" in granularity:
                     hours = sign * delta / self._SECS_PER_HOUR
-                    delta -= sign * trunc(hours) * self._SECS_PER_HOUR
+                    delta = delta % self._SECS_PER_HOUR
                     timeframes.append(["hour", hours])
                 if "minute" in granularity:
                     minutes = sign * delta / self._SECS_PER_MINUTE
-                    delta -= sign * trunc(minutes) * self._SECS_PER_MINUTE
+                    delta = delta % self._SECS_PER_MINUTE
                     timeframes.append(["minute", minutes])
                 if "second" in granularity:
                     seconds = sign * delta
