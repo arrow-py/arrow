@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 
+import six
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
@@ -56,6 +57,12 @@ class Arrow(object):
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
     _ATTRS_PLURAL = ["{}s".format(a) for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
+    _SECS_PER_MINUTE = float(60)
+    _SECS_PER_HOUR = float(3600)  # 60 * 60
+    _SECS_PER_DAY = float(86400)  # 60 * 60 * 24
+    _SECS_PER_WEEK = float(604800)  # 60 * 60 * 24 * 7
+    _SECS_PER_MONTH = float(2635200)  # 60 * 60 * 24 * 30.5
+    _SECS_PER_YEAR = float(31557600)  # 60 * 60 * 24 * 365.25
 
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
@@ -844,7 +851,8 @@ class Arrow(object):
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
-        :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'.
+        :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute',
+                           'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings
 
         Usage::
 
@@ -876,6 +884,9 @@ class Arrow(object):
 
         else:
             raise TypeError()
+
+        if isinstance(granularity, list) and len(granularity) == 1:
+            granularity = granularity[0]
 
         delta = int(round(util.total_seconds(self._datetime - dt)))
         sign = -1 if delta < 0 else 1
@@ -937,23 +948,23 @@ class Arrow(object):
                     years = sign * int(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
-            else:
+            elif isinstance(granularity, six.string_types):
                 if granularity == "second":
                     delta = sign * delta
                     if abs(delta) < 2:
                         return locale.describe("now", only_distance=only_distance)
                 elif granularity == "minute":
-                    delta = sign * delta / float(60)
+                    delta = sign * delta / self._SECS_PER_MINUTE
                 elif granularity == "hour":
-                    delta = sign * delta / float(60 * 60)
+                    delta = sign * delta / self._SECS_PER_HOUR
                 elif granularity == "day":
-                    delta = sign * delta / float(60 * 60 * 24)
+                    delta = sign * delta / self._SECS_PER_DAY
                 elif granularity == "week":
-                    delta = sign * delta / float(60 * 60 * 24 * 7)
+                    delta = sign * delta / self._SECS_PER_WEEK
                 elif granularity == "month":
-                    delta = sign * delta / float(60 * 60 * 24 * 30.5)
+                    delta = sign * delta / self._SECS_PER_MONTH
                 elif granularity == "year":
-                    delta = sign * delta / float(60 * 60 * 24 * 365.25)
+                    delta = sign * delta / self._SECS_PER_YEAR
                 else:
                     raise AttributeError(
                         "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
@@ -962,6 +973,46 @@ class Arrow(object):
                 if trunc(abs(delta)) != 1:
                     granularity += "s"
                 return locale.describe(granularity, delta, only_distance=only_distance)
+
+            else:
+                timeframes = []
+                if "year" in granularity:
+                    years = sign * delta / self._SECS_PER_YEAR
+                    delta -= sign * trunc(years) * self._SECS_PER_YEAR
+                    timeframes.append(["year", years])
+                if "month" in granularity:
+                    months = sign * delta / self._SECS_PER_MONTH
+                    delta -= sign * trunc(months) * self._SECS_PER_MONTH
+                    timeframes.append(["month", months])
+                if "week" in granularity:
+                    weeks = sign * delta / self._SECS_PER_WEEK
+                    delta -= sign * trunc(weeks) * self._SECS_PER_WEEK
+                    timeframes.append(["week", weeks])
+                if "day" in granularity:
+                    days = sign * delta / self._SECS_PER_DAY
+                    delta -= sign * trunc(days) * self._SECS_PER_DAY
+                    timeframes.append(["day", days])
+                if "hour" in granularity:
+                    hours = sign * delta / self._SECS_PER_HOUR
+                    delta -= sign * trunc(hours) * self._SECS_PER_HOUR
+                    timeframes.append(["hour", hours])
+                if "minute" in granularity:
+                    minutes = sign * delta / self._SECS_PER_MINUTE
+                    delta -= sign * trunc(minutes) * self._SECS_PER_MINUTE
+                    timeframes.append(["minute", minutes])
+                if "second" in granularity:
+                    seconds = sign * delta
+                    timeframes.append(["second", seconds])
+                if len(timeframes) < len(granularity):
+                    raise AttributeError(
+                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                    )
+                for index in range(len(timeframes)):
+                    gran, delta = timeframes[index]
+                    if trunc(abs(delta)) != 1:
+                        timeframes[index][0] += "s"
+                return locale.describe_multi(timeframes, only_distance=only_distance)
+
         except KeyError as e:
             raise ValueError(
                 "Humanization of the {} granularity is not currently translated in the '{}' locale. Please consider making a contribution to this locale.".format(
