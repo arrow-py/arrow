@@ -1084,10 +1084,10 @@ class Arrow(object):
         times = timestring.split(" ")
 
         if times[-1] == "ago":
-            shiftVal = -1
+            sign = -1
             times = times[:-1]
         elif times[0] == "in":
-            shiftVal = 1
+            sign = 1
             times = times[1:]
         else:
             raise ValueError("Invalid prefix or suffix")
@@ -1095,6 +1095,11 @@ class Arrow(object):
         if len(times) % 2 != 0:
             raise ValueError("Invalid time input")
 
+        second = 0
+        minute = 0
+        hour = 0
+        day = 0
+        week = 0
         month = 0
         year = 0
 
@@ -1103,32 +1108,31 @@ class Arrow(object):
             unit = times[i + 1]
 
             if unit in ["second", "seconds"]:
-                current += shiftVal * timedelta(seconds=val)
+                second = sign * val
             elif unit in ["minute", "minutes"]:
-                current += shiftVal * timedelta(minutes=val)
+                minute = sign * val
             elif unit in ["hour", "hours"]:
-                current += shiftVal * timedelta(hours=val)
+                hour = sign * val
             elif unit in ["day", "days"]:
-                current += shiftVal * timedelta(days=val)
+                day = sign * val
             elif unit in ["week", "weeks"]:
-                current += shiftVal * timedelta(weeks=val)
+                week = sign * val
             elif unit in ["month", "months"]:
-                month += shiftVal * val
+                month = sign * val
             elif unit in ["year", "years"]:
-                year += shiftVal * val
+                year = sign * val
             else:
                 raise ValueError("Error parsing time string")
 
-        month = current.month + month
-        year += month // 12
-        year = current.year + year
-        month = month % 12
-
-        dateobj = datetime(
-            year, month, current.day, current.hour, current.minute, current.second
+        return current.shift(
+            seconds=second,
+            minutes=minute,
+            hours=hour,
+            days=day,
+            weeks=week,
+            months=month,
+            years=year,
         )
-
-        return self.fromdatetime(dateobj)
 
     # query functions
 
