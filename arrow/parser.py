@@ -299,8 +299,7 @@ class DateTimeParser(object):
 
         starting_word_boundary = (
             r"(?<!\S\S)"  # Don't have two consecutive non-whitespace characters. This ensures that we allow cases like .11.25.2019 but not 1.11.25.2019 (for pattern MM.DD.YYYY)
-            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}("
-            r")<>\s])"  # This is the list of punctuation that is ok before the pattern (i.e. "It can't not be these characters before the pattern")
+            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)<>\s])"  # This is the list of punctuation that is ok before the pattern (i.e. "It can't not be these characters before the pattern")
             r"(\b|^)"  # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a negative number through i.e. before epoch numbers
         )
         ending_word_boundary = (
