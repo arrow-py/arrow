@@ -297,12 +297,18 @@ class DateTimeParser(object):
         # "1998-09-12," is permitted. For the full list of valid punctuation,
         # see the documentation.
 
-        starting_punctuation_bound = (
-            r"(?<!\S\S)(?<![^,.;:?!\"'`\[\]{}(" r")<>\s])(\b|^)"
+        starting_word_boundary = (
+            r"(?<!\S\S)"  # Don't have two consecutive non-whitespace characters. This ensures that we allow cases like .11.25.2019 but not 1.11.25.2019 (for pattern MM.DD.YYYY)
+            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}("
+            r")<>\s])"  # This is the list of punctuation that is ok before the pattern (i.e. "It can't not be these characters before the pattern")
+            r"(\b|^)"  # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a negative number through i.e. before epoch numbers
         )
-        ending_punctuation_bound = r"(?=[,.;:?!\"'`\[\]{}()<>]?(?!\S))"
+        ending_word_boundary = (
+            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
+            r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
+        )
         bounded_fmt_pattern = r"{}{}{}".format(
-            starting_punctuation_bound, final_fmt_pattern, ending_punctuation_bound
+            starting_word_boundary, final_fmt_pattern, ending_word_boundary
         )
 
         return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)

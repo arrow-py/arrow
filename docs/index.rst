@@ -431,13 +431,18 @@ You can also escape regular expressions by enclosing them within square brackets
 Punctuation
 ~~~~~~~~~~~
 
-You're date formats can be precede and/or be preceded by one character of
-punctuation from the list: :code:``, . ; : ? ! " ' \` [ ] { } ( ) < >``
+Date formats may be fenced on either side by one punctuation character from the following list: :literal:`, . ; : ? ! " \` ' [ ] { } ( ) < >`
 
 .. code-block:: python
 
     >>> arrow.get("Tomorrow (2019-10-31) is Halloween!", "YYYY-MM-DD")
     <Arrow [2019-10-31T00:00:00+00:00]>
+
+    >>> arrow.get("Halloween is on 2019.10.31.", "YYYY.MM.DD")
+    <Arrow [2019-10-31T00:00:00+00:00]>
+
+    >>> arrow.get("It's Halloween tomorrow (2019-10-31)!", "YYYY-MM-DD")
+    # Raises exception because there are multiple punctuation marks following the date
 
 API Guide
 ---------
