@@ -969,8 +969,44 @@ class Arrow(object):
                 )
             )
 
-    # query functions
 
+    def dehumanize(self, humanized_str="now", locale="en_us"):
+        """reads a localized, humanized representation of a relative difference in time,
+        returns a metadata of time.
+
+        :param humanized_str: (optional), a hunmanized string like "now" "in 11 seconds" "11 seconds ago"
+            Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone. Defaults to 'now'.
+        :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
+
+        Usage::
+
+            >>> utc = arrow.utcnow()
+
+            >>> utc.dehumanize()
+            <Arrow [2013-05-09T03:49:12.311072+00:00]>
+
+            >>> utc.dehumanize('2 hours ago')
+            <Arrow [2013-05-09T01:49:12.311072+00:00]>
+        """
+        given_arrow = Arrow(self._datetime.year, self._datetime.month, self._datetime.day, self._datetime.hour, self._datetime.minute, self._datetime.second)
+        #locale_name = locale
+        locale = locales.get_locale(locale)
+        # get locale object
+        k, v = locale.delocale(humanized_str)
+        relative_kwargs = {}
+        relative_kwargs[k] = v
+        # core datetime does not support quarters, translate to months.
+        relative_kwargs.setdefault("months", 0)
+        relative_kwargs["months"] += (
+            relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
+        )
+        if k == 'now':
+            return given_arrow
+        else:
+            current = given_arrow._datetime + relativedelta(**relative_kwargs)
+            return Arrow.fromdatetime(current)
+
+    # query functions
     def is_between(self, start, end, bounds="()"):
         """ Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.
