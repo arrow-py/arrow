@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime, timedelta
 
-from arrow
+import arrow
 from chai import Chai
 
 
