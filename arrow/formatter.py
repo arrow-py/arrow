@@ -100,10 +100,8 @@ class DateTimeFormatter(object):
         if token == "X":
             microsecond = str(int(dt.microsecond))
             return str(calendar.timegm(dt.utctimetuple())) + '.' + microsecond
-
         if token == "x":
             microsecond = str(int(dt.microsecond))
-
             return str(calendar.timegm(dt.utctimetuple())) + microsecond.rstrip('0')
 
         if token == "ZZZ":
