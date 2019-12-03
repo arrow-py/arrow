@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 
 import arrow
 from chai import Chai
+from arrow import locales
 
 
 utc = arrow.utcnow()
