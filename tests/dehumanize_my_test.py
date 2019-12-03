@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
+from datetime import date, datetime, timedelta
+
 import arrow
 from chai import Chai
 
+
 utc = arrow.utcnow()
+
+def assertDtEqual(dt1, dt2, within=10):
+    assertEqual(dt1.tzinfo, dt2.tzinfo)  # noqa: F821
+    assertTrue(abs(util.total_seconds(dt1 - dt2)) < within)  # noqa: F821
+
 class ArrowDehumanizeTestsWithLocale(Chai):
     def setUp(self):
         super(ArrowDehumanizeTestsWithLocale, self).setUp()
