@@ -56,37 +56,37 @@ class LocaleTests(Chai):
     
     def test_delocale(self):
         k_hours, v_n2 = self.locale.delocale("2 hours ago")
-        self.assertEqual(self.locale.delocale("2 hours ago"), "hours")
+        self.assertEqual(self.locale.delocale("2 hours ago"), (u'hours', -2))
         self.assertEqual(k_hours, "hours")
         self.assertEqual(v_n2, -2)
         
         k_hours, v_2 = self.locale.delocale("in 2 hours")
-        self.assertEqual(self.locale.delocale("in 2 hours"), "hours")
+        self.assertEqual(self.locale.delocale("in 2 hours"), (u'hours', 2))
         self.assertEqual(k_hours, "hours")
         self.assertEqual(v_2, 2)
 
         k_years, v_n1 = self.locale.delocale("1 years ago")
-        self.assertEqual(self.locale.delocale("1 years ago"), "years")
+        self.assertEqual(self.locale.delocale("1 years ago"), (u'years', -1))
         self.assertEqual(k_years, "years")
         self.assertEqual(v_n1, -1)
         
         k_years, v_1 = self.locale.delocale("in 1 years")
-        self.assertEqual(self.locale.delocale("in 1 years"), "years")
+        self.assertEqual(self.locale.delocale("in 1 years"), (u'years', 1))
         self.assertEqual(k_years, "years")
         self.assertEqual(v_1, 1)
 
         k_seconds, v_n11 = self.locale.delocale("11 seconds ago")
-        self.assertEqual(self.locale.delocale("11 seconds ago"), "seconds")
+        self.assertEqual(self.locale.delocale("11 seconds ago"), (u'seconds', -1))
         self.assertEqual(k_seconds, "seconds")
         self.assertEqual(v_n11, -11)
         
         k_seconds, v_11 = self.locale.delocale("in 11 seconds")
-        self.assertEqual(self.locale.delocale("in 11 seconds"), "seconds")
+        self.assertEqual(self.locale.delocale("in 11 seconds"), (u'seconds', 11))
         self.assertEqual(k_seconds, "seconds")
         self.assertEqual(v_11, 11)
 
         k_now, v_0 = self.locale.delocale("now")
-        self.assertEqual(self.locale.delocale("now"), "now")
+        self.assertEqual(self.locale.delocale("now"), (u'now', 0))
         self.assertEqual(k_now, "now")
         self.assertEqual(v_0, 0)
 
