@@ -65,11 +65,11 @@ class LocaleTests(Chai):
 
         k_years, v_n1 = self.locale.delocale("1 years ago")
         self.assertEqual(k_years, "years")
-        self.assertEqual(v_n2, -1)
+        self.assertEqual(v_n1, -1)
         
         k_years, v_1 = self.locale.delocale("in 1 years")
         self.assertEqual(k_years, "years")
-        self.assertEqual(v_2, 1)
+        self.assertEqual(v_1, 1)
 
         k_seconds, v_n11 = self.locale.delocale("11 seconds ago")
         self.assertEqual(k_seconds, "seconds")
