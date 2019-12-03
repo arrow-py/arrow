@@ -110,7 +110,7 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
         dt = datetime(2019, 12, 3, 0, 20, 1, 728968)
         self.assertEqual(self.formatter._format_token(dt, "x"), "1575332401728968")
-        
+
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
