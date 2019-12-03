@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import arrow
+from chai import Chai
+
 utc = arrow.utcnow()
 class ArrowDehumanizeTestsWithLocale(Chai):
     def setUp(self):
