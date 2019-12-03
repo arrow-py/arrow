@@ -55,14 +55,28 @@ class LocaleTests(Chai):
         self.locale = locales.EnglishLocale()
     
     def test_delocale(self):
-        self.assertEqual(self.locale.delocale("2 hours ago"), "hours", -2)
-        self.assertEqual(self.locale.delocale("in 2 hours"), "hours", 2)
-        self.assertEqual(self.locale.delocale("2 years ago"), "years", -2)
-        self.assertEqual(self.locale.delocale("in 2 years"), "years", 2)
-        self.assertEqual(self.locale.delocale("2 days ago"), "days", -2)
-        self.assertEqual(self.locale.delocale("in 2 days"), "days", 2)
-        self.assertEqual(self.locale.delocale("11 seconds ago"), "seconds", -11)
-        self.assertEqual(self.locale.delocale("in 11 seconds"), "seconds", 11)
-        self.assertEqual(self.locale.delocale("now"), "now", 0)
+        k_hours, v_n2 = self.locale.delocale("2 hours ago")
+        self.assertEqual(k_hours, "hours")
+        self.assertEqual(v_n2, -2)
+        
+        k_hours, v_2 = self.locale.delocale("in 2 hours")
+        self.assertEqual(k_hours, "hours")
+        self.assertEqual(v_2, 2)
+
+        k_years, v_n1 = self.locale.delocale("1 years ago")
+        self.assertEqual(k_years, "years")
+        self.assertEqual(v_n2, -1)
+        
+        k_years, v_1 = self.locale.delocale("in 1 years")
+        self.assertEqual(k_years, "years")
+        self.assertEqual(v_2, 1)
+
+        k_seconds, v_n11 = self.locale.delocale("11 seconds ago")
+        self.assertEqual(k_seconds, "seconds")
+        self.assertEqual(v_n11, -11)
+        
+        k_seconds, v_11 = self.locale.delocale("in 11 seconds")
+        self.assertEqual(k_seconds, "seconds")
+        self.assertEqual(v_11, 11)
 
     
