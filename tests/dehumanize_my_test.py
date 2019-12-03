@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime, timedelta
 
-import arrow
+from arrow import arrow, locales
 from chai import Chai
 
 
@@ -46,3 +46,22 @@ class ArrowDehumanizeTestsWithLocale(Chai):
 
         self.assertEqual(result, arw_0)
         self.assertEqual(result_1, arw_1)
+
+class LocaleTests(Chai):
+    def setUp(self):
+        super(LocaleTests, self).setUp()
+
+        self.locale = locales.EnglishLocale()
+    
+    def test_delocale(self):
+        self.assertEqual(self.locale.delocale("2 hours ago"), "hours", -2)
+        self.assertEqual(self.locale.delocale("in 2 hours"), "hours", 2)
+        self.assertEqual(self.locale.delocale("2 years ago"), "years", -2)
+        self.assertEqual(self.locale.delocale("in 2 years"), "years", 2)
+        self.assertEqual(self.locale.delocale("2 days ago"), "days", -2)
+        self.assertEqual(self.locale.delocale("in 2 days"), "days", 2)
+        self.assertEqual(self.locale.delocale("11 seconds ago"), "seconds", -11)
+        self.assertEqual(self.locale.delocale("in 11 seconds"), "seconds", 11)
+        self.assertEqual(self.locale.delocale("now"), "now", 0)
+
+    
