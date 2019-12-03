@@ -104,11 +104,12 @@ class DateTimeFormatterFormatTokenTests(Chai):
         self.assertEqual(self.formatter._format_token(dt, "S"), "0")
 
     def test_timestamp(self):
-
-        timestamp = time.time()
-        dt = datetime.utcfromtimestamp(timestamp)
-        self.assertEqual(self.formatter._format_token(dt, "X"), str(int(timestamp)))
-
+        dt = datetime(2019, 12, 3, 0, 20, 1, 728968)
+        self.assertEqual(self.formatter._format_token(dt, "X"), "1575332401.728968")
+        
+        dt = datetime(2019, 12, 3, 0, 20, 1, 728968)
+        self.assertEqual(self.formatter._format_token(dt, "X"), "1575332401728968")
+        
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
