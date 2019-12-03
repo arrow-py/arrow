@@ -218,6 +218,7 @@ class DateTimeParser(object):
         fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
 
         match = fmt_pattern_re.search(datetime_string)
+
         if match is None:
             raise ParserMatchError(
                 "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
@@ -292,9 +293,19 @@ class DateTimeParser(object):
         # and time string in a natural language sentence. Therefore, searching
         # for a string of the form YYYY-MM-DD in "blah 1998-09-12 blah" will
         # work properly.
-        # Reference: https://stackoverflow.com/q/14232931/3820660
-        starting_word_boundary = r"(?<![\S])"
-        ending_word_boundary = r"(?![\S])"
+        # Certain punctuation before or after the target pattern such as
+        # "1998-09-12," is permitted. For the full list of valid punctuation,
+        # see the documentation.
+
+        starting_word_boundary = (
+            r"(?<!\S\S)"  # Don't have two consecutive non-whitespace characters. This ensures that we allow cases like .11.25.2019 but not 1.11.25.2019 (for pattern MM.DD.YYYY)
+            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)<>\s])"  # This is the list of punctuation that is ok before the pattern (i.e. "It can't not be these characters before the pattern")
+            r"(\b|^)"  # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a negative number through i.e. before epoch numbers
+        )
+        ending_word_boundary = (
+            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
+            r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
+        )
         bounded_fmt_pattern = r"{}{}{}".format(
             starting_word_boundary, final_fmt_pattern, ending_word_boundary
         )

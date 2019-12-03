@@ -323,6 +323,14 @@ class GetTests(Chai):
             result._datetime, datetime(2010, 1, 1, 0, 0, 0, 0, tzinfo=tz.tzutc())
         )
 
+        # regression test for issue #701
+        result = self.factory.get(
+            "Montag, 9. September 2019, 16:15-20:00", "dddd, D. MMMM YYYY", locale="de"
+        )
+        self.assertEqual(
+            result._datetime, datetime(2019, 9, 9, 0, 0, 0, 0, tzinfo=tz.tzutc())
+        )
+
     def test_locale_kwarg_only(self):
         res = self.factory.get(locale="ja")
         self.assertEqual(res.tzinfo, tz.tzutc())

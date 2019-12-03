@@ -467,7 +467,10 @@ class DateTimeParserParseTests(Chai):
 
     def test_parse_with_extra_words_at_start_and_end_valid(self):
         # Spaces surrounding the parsable date are ok because we
-        # allow the parsing of natural language input
+        # allow the parsing of natural language input. Additionally, a single
+        # character of specific punctuation before or after the date is okay.
+        # See docs for full list of valid punctuation.
+
         self.assertEqual(
             self.parser.parse("blah 2016 blah", "YYYY"), datetime(2016, 1, 1)
         )
@@ -521,6 +524,38 @@ class DateTimeParserParseTests(Chai):
             ),
             datetime(2016, 5, 16, 4, 5, 6, 789120),
         )
+
+    # regression test for issue #701
+    # tests cases of a partial match surrounded by punctuation
+    # for the list of valid punctuation, see documentation
+    def test_parse_with_punctuation_fences(self):
+        self.assertEqual(
+            self.parser.parse(
+                "Meet me at my house on Halloween (2019-31-10)", "YYYY-DD-MM"
+            ),
+            datetime(2019, 10, 31),
+        )
+
+        self.assertEqual(
+            self.parser.parse(
+                "Monday, 9. September 2019, 16:15-20:00", "dddd, D. MMMM YYYY"
+            ),
+            datetime(2019, 9, 9),
+        )
+
+        self.assertEqual(
+            self.parser.parse("A date is 11.11.2011.", "DD.MM.YYYY"),
+            datetime(2011, 11, 11),
+        )
+
+        with self.assertRaises(ParserMatchError):
+            self.parser.parse("11.11.2011.1 is not a valid date.", "DD.MM.YYYY")
+
+        with self.assertRaises(ParserMatchError):
+            self.parser.parse(
+                "This date has too many punctuation marks following it (11.11.2011).",
+                "DD.MM.YYYY",
+            )
 
     def test_parse_with_leading_and_trailing_whitespace(self):
         self.assertEqual(self.parser.parse("      2016", "YYYY"), datetime(2016, 1, 1))
