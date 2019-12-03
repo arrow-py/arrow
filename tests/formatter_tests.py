@@ -108,7 +108,7 @@ class DateTimeFormatterFormatTokenTests(Chai):
         self.assertEqual(self.formatter._format_token(dt, "X"), "1575332401.728968")
         
         dt = datetime(2019, 12, 3, 0, 20, 1, 728968)
-        self.assertEqual(self.formatter._format_token(dt, "X"), "1575332401728968")
+        self.assertEqual(self.formatter._format_token(dt, "x"), "1575332401728968")
         
     def test_timezone(self):
 
