@@ -62,11 +62,13 @@ class LocaleTests(Chai):
         
         k_hours, v_2 = self.locale.delocale("in 2 hours")
         self.assertEqual(self.locale.delocale("in 2 hours"), (u'hours', 2))
+        self.assertEqual(self.locale.delocale("in an hours"), (u'hours', 1))
         self.assertEqual(k_hours, "hours")
         self.assertEqual(v_2, 2)
 
         k_years, v_n1 = self.locale.delocale("1 years ago")
         self.assertEqual(self.locale.delocale("1 years ago"), (u'years', -1))
+        self.assertEqual(self.locale.delocale("a years ago"), (u'years', -1))
         self.assertEqual(k_years, "years")
         self.assertEqual(v_n1, -1)
         
