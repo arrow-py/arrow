@@ -79,4 +79,8 @@ class LocaleTests(Chai):
         self.assertEqual(k_seconds, "seconds")
         self.assertEqual(v_11, 11)
 
+        k_now, v_0 = self.locale.delocale("now")
+        self.assertEqual(k_now, "now")
+        self.assertEqual(v_0, 0)
+
     

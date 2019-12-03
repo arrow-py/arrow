@@ -82,9 +82,11 @@ class Locale(object):
         """consumes:
         humanized_str: a given string
         returns:
-        a string XXXXX used in time.shift(XXXXX)"""
+        k: granularity: currently like hours, years
+        v: number: positive or negative numbers
+        """
         ss = humanized_str.split(' ')
-        if(len(ss) == 1):
+        if(len(ss) < 3):
             return "now", 0
         sign = ''
         granularity = ''
