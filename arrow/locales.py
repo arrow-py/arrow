@@ -91,7 +91,7 @@ class Locale(object):
         sign = ""
         granularity = ""
         number = ""
-        reversed_dict = {v: k for k, v in self.timeframes.items()}
+        # reversed_dict = {v: k for k, v in self.timeframes.items()}
         if ss[2] == self.past or ss[2] == "ago":  # number granularity ago
             sign = -1
             number = ss[0]
