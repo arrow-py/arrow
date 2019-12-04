@@ -1682,6 +1682,24 @@ class ArrowHumanizeTests(Chai):
 
             with self.assertRaises(ValueError):
                 arw.humanize(later, granularity="week")
+                
+    def test_oneday_date(self):
+
+        yesterday = datetime.utcnow() - timedelta(1)
+        result = factory.ArrowFactory().get(yesterday).humanize()
+
+        self.assertEqual(result, "a day ago")
+
+        yesterday_date = yesterday.date()
+        result = factory.ArrowFactory().get(yesterday_date).humanize()
+
+        self.assertEqual(result, "a day ago")
+
+        two_days_ago = datetime.utcnow() - timedelta(2)
+        new_two_days_ago = two_days_ago.replace(hour=23, minute=59)
+        result = factory.ArrowFactory().get(new_two_days_ago).humanize()
+
+        self.assertEqual(result, "2 days ago")
 
 
 class ArrowHumanizeTestsWithLocale(Chai):
