@@ -87,8 +87,7 @@ class Locale(object):
         """
 
         humanized = ""
-        for index in range(len(timeframes)):
-            timeframe, delta = timeframes[index]
+        for index, (timeframe, delta) in enumerate(timeframes):
             humanized += self._format_timeframe(timeframe, delta)
             if index == len(timeframes) - 2 and self.and_word:
                 humanized += " " + self.and_word + " "
