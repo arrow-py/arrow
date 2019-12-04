@@ -50,6 +50,7 @@ class ArrowDehumanizeTestsWithLocale(Chai):
         self.assertEqual(result, arw_0)
         self.assertEqual(result_1, arw_1)
 
+
 class LocaleTests(Chai):
     def setUp(self):
         super(LocaleTests, self).setUp()
