@@ -908,7 +908,18 @@ class Arrow(object):
                     return locale.describe("hours", hours, only_distance=only_distance)
 
                 elif diff < 129600:
+                    if (
+                        self._datetime.month == dt.month
+                        and self._datetime.day == dt.day - 2
+                    ):
+                        days = sign * int(max(delta / 86400, 2))
+                        return locale.describe(
+                            "days", days, only_distance=only_distance
+                        )
                     return locale.describe("day", sign, only_distance=only_distance)
+                elif diff < 172801:
+                    days = sign * int(max(delta / 86400, 2))
+                    return locale.describe("days", days, only_distance=only_distance)
                 elif diff < 554400:
                     days = sign * int(max(delta / 86400, 2))
                     return locale.describe("days", days, only_distance=only_distance)
