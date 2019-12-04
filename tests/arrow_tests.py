@@ -14,7 +14,7 @@ from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
 from mock import patch
 
-from arrow import arrow, util
+from arrow import arrow, factory, util
 
 
 def assertDtEqual(dt1, dt2, within=10):
