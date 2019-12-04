@@ -995,7 +995,7 @@ class Arrow(object):
             self._datetime.minute,
             self._datetime.second,
         )
-        #locale_name = locale
+        # locale_name = locale
         locale = locales.get_locale(locale)
         # get locale object
         k, v = locale.delocale(humanized_str)
