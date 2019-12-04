@@ -77,7 +77,7 @@ class Locale(object):
             humanized = self._format_relative(humanized, timeframe, delta)
 
         return humanized
-    
+
     def delocale(self, humanized_str):
         """consumes:
         humanized_str: a given string
@@ -85,29 +85,29 @@ class Locale(object):
         k: granularity: currently like hours, years
         v: number: positive or negative numbers
         """
-        ss = humanized_str.split(' ')
-        if(len(ss) < 3):
+        ss = humanized_str.split(" ")
+        if len(ss) < 3:
             return "now", 0
-        sign = ''
-        granularity = ''
-        number = ''        
-        reversed_dict = {v : k for k, v in self.timeframes.items()}
-        if ss[2] == self.past or ss[2] == 'ago':  # number granularity ago
+        sign = ""
+        granularity = ""
+        number = ""
+        reversed_dict = {v: k for k, v in self.timeframes.items()}
+        if ss[2] == self.past or ss[2] == "ago":  # number granularity ago
             sign = -1
-            number =  ss[0]
-            #granularity = reversed_dict[ss[1]]
+            number = ss[0]
+            # granularity = reversed_dict[ss[1]]
             granularity = ss[1]
-        else:   # in number granularity
+        else:  # in number granularity
             sign = 1
             number = ss[1]
-            #granularity = reversed_dict[ss[2]]
+            # granularity = reversed_dict[ss[2]]
             granularity = ss[2]
 
-        if(number == "a" or number == "an"):
+        if number == "a" or number == "an":
             number = 1
         else:
             number = int(number)
-        return granularity, sign*number
+        return granularity, sign * number
 
     def day_name(self, day):
         """ Returns the day name for a specified day of the week.
@@ -211,7 +211,9 @@ class Locale(object):
 
         return direction.format(humanized)
 
+
 # base locale type implementations.
+
 
 class EnglishLocale(Locale):
 
