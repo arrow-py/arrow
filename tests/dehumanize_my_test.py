@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
 from chai import Chai
 
