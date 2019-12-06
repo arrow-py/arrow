@@ -75,13 +75,13 @@ class GetTests(Chai):
 
     def test_one_arg_timestamp_with_tzinfo(self):
 
-        int_timestamp = int(time.time())
-        timestamp_dt = datetime.fromtimestamp(int_timestamp, tz=tz.tzutc()).astimezone(
+        timestamp = time.time()
+        timestamp_dt = datetime.fromtimestamp(timestamp, tz=tz.tzutc()).astimezone(
             tz.gettz("US/Pacific")
         )
         timezone = tz.gettz("US/Pacific")
 
-        assertDtEqual(self.factory.get(int_timestamp, tzinfo=timezone), timestamp_dt)
+        assertDtEqual(self.factory.get(timestamp, tzinfo=timezone), timestamp_dt)
 
     def test_one_arg_arrow(self):
 
