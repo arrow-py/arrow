@@ -169,12 +169,11 @@ class ArrowFactory(object):
                 return self.type.utcnow()
 
             # try (int, float) -> from timestamp with tz
-            elif not isstr(arg) and is_timestamp(arg) and tz is not None:
-                return self.type.fromtimestamp(arg, tzinfo=tz)
-
-            # try (int, float) -> utc, from timestamp.
             elif not isstr(arg) and is_timestamp(arg):
-                return self.type.utcfromtimestamp(arg)
+                if tz is None:
+                    # set to UTC by default
+                    tz = dateutil_tz.tzutc()
+                return self.type.fromtimestamp(arg, tzinfo=tz)
 
             # (Arrow) -> from the object's datetime.
             elif isinstance(arg, Arrow):
