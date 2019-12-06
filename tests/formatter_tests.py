@@ -109,7 +109,9 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
         timestamp = time.time()
         dt = datetime.utcfromtimestamp(timestamp)
-        self.assertEqual(self.formatter._format_token(dt, "X"), str(int(timestamp)))
+        self.assertEqual(self.formatter._format_token(dt, "X"), str(round(timestamp,6)))
+        self.assertEqual(self.formatter._format_token(dt, "X").replace(".", ""), self.formatter._format_token(dt, "x"))
+
 
     def test_timezone(self):
 

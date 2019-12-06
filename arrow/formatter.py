@@ -16,7 +16,7 @@ class DateTimeFormatter(object):
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
     # TODO: test against full timezone DB
     _FORMAT_RE = re.compile(
-        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x)"
     )
 
     def __init__(self, locale="en_us"):
@@ -24,11 +24,10 @@ class DateTimeFormatter(object):
         self.locale = locales.get_locale(locale)
 
     def format(cls, dt, fmt):
-
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
     def _format_token(self, dt, token):
-
+        # print("JJJJ")
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]
 
@@ -98,7 +97,10 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
-            return str(calendar.timegm(dt.utctimetuple()))
+            return str(calendar.timegm(dt.utctimetuple()) + dt.microsecond/1000000)
+
+        if token == "x":
+            return str(calendar.timegm(dt.utctimetuple()) * 1000000 + dt.microsecond)
 
         if token == "ZZZ":
             return dt.tzname()
