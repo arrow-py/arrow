@@ -1531,15 +1531,22 @@ class ArrowHumanizeTests(Chai):
 
         later108onlydistance = self.now.shift(seconds=10 ** 8)
         self.assertEqual(
-            self.now.humanize(later108onlydistance, granularity=["year"]), "3 years ago"
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["year"]
+            ),
+            "3 years",
         )
         self.assertEqual(
-            self.now.humanize(later108onlydistance, granularity=["month", "week"]),
-            "37 months and 4 weeks ago",
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["month", "week"]
+            ),
+            "37 months and 4 weeks",
         )
         self.assertEqual(
-            self.now.humanize(later108onlydistance, granularity=["year", "second"]),
-            "3 years and seconds ago",
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["year", "second"]
+            ),
+            "3 years and seconds",
         )
 
     def test_seconds(self):

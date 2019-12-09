@@ -977,37 +977,44 @@ class Arrow(object):
                 timeframes = []
                 if "year" in granularity:
                     years = sign * delta / self._SECS_PER_YEAR
-                    delta = delta % self._SECS_PER_YEAR
+                    delta %= self._SECS_PER_YEAR
                     timeframes.append(["year", years])
+
                 if "month" in granularity:
                     months = sign * delta / self._SECS_PER_MONTH
-                    delta = delta % self._SECS_PER_MONTH
+                    delta %= self._SECS_PER_MONTH
                     timeframes.append(["month", months])
+
                 if "week" in granularity:
                     weeks = sign * delta / self._SECS_PER_WEEK
-                    delta = delta % self._SECS_PER_WEEK
+                    delta %= self._SECS_PER_WEEK
                     timeframes.append(["week", weeks])
+
                 if "day" in granularity:
                     days = sign * delta / self._SECS_PER_DAY
-                    delta = delta % self._SECS_PER_DAY
+                    delta %= self._SECS_PER_DAY
                     timeframes.append(["day", days])
+
                 if "hour" in granularity:
                     hours = sign * delta / self._SECS_PER_HOUR
-                    delta = delta % self._SECS_PER_HOUR
+                    delta %= self._SECS_PER_HOUR
                     timeframes.append(["hour", hours])
+
                 if "minute" in granularity:
                     minutes = sign * delta / self._SECS_PER_MINUTE
-                    delta = delta % self._SECS_PER_MINUTE
+                    delta %= self._SECS_PER_MINUTE
                     timeframes.append(["minute", minutes])
+
                 if "second" in granularity:
                     seconds = sign * delta
                     timeframes.append(["second", seconds])
+
                 if len(timeframes) < len(granularity):
                     raise AttributeError(
                         "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
                     )
-                for index in range(len(timeframes)):
-                    gran, delta = timeframes[index]
+
+                for index, (_, delta) in enumerate(timeframes):
                     if trunc(abs(delta)) != 1:
                         timeframes[index][0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
