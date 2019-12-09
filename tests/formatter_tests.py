@@ -117,7 +117,6 @@ class DateTimeFormatterFormatTokenTests(Chai):
             self.formatter._format_token(dt, "x"),
         )
 
-
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))

@@ -27,7 +27,6 @@ class DateTimeFormatter(object):
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
     def _format_token(self, dt, token):
-        # print("JJJJ")
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]
 
@@ -97,7 +96,7 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
-            return str(calendar.timegm(dt.utctimetuple()) + dt.microsecond / 1000000)
+            return str(calendar.timegm(dt.utctimetuple()) + dt.microsecond / 1000000.0)
 
         if token == "x":
             return str(calendar.timegm(dt.utctimetuple()) * 1000000 + dt.microsecond)
