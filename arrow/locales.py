@@ -51,6 +51,7 @@ class Locale(object):
 
     past = None
     future = None
+    and_word = None
 
     month_names = []
     month_abbreviations = []
@@ -73,6 +74,26 @@ class Locale(object):
         """
 
         humanized = self._format_timeframe(timeframe, delta)
+        if not only_distance:
+            humanized = self._format_relative(humanized, timeframe, delta)
+
+        return humanized
+
+    def describe_multi(self, timeframes, only_distance=False):
+        """ Describes a delta within multiple timeframes in plain language.
+
+        :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.
+        :param only_distance: return only distance eg: "2 hours 11 seconds" without "in" or "ago" keywords
+        """
+
+        humanized = ""
+        for index, (timeframe, delta) in enumerate(timeframes):
+            humanized += self._format_timeframe(timeframe, delta)
+            if index == len(timeframes) - 2 and self.and_word:
+                humanized += " " + self.and_word + " "
+            elif index < len(timeframes) - 1:
+                humanized += " "
+
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
 
@@ -200,6 +221,7 @@ class EnglishLocale(Locale):
 
     past = "{0} ago"
     future = "in {0}"
+    and_word = "and"
 
     timeframes = {
         "now": "just now",
@@ -295,6 +317,7 @@ class ItalianLocale(Locale):
     names = ["it", "it_it"]
     past = "{0} fa"
     future = "tra {0}"
+    and_word = "e"
 
     timeframes = {
         "now": "adesso",
@@ -364,6 +387,7 @@ class SpanishLocale(Locale):
     names = ["es", "es_es"]
     past = "hace {0}"
     future = "en {0}"
+    and_word = "y"
 
     timeframes = {
         "now": "ahora",
@@ -437,6 +461,7 @@ class FrenchLocale(Locale):
     names = ["fr", "fr_fr"]
     past = "il y a {0}"
     future = "dans {0}"
+    and_word = "et"
 
     timeframes = {
         "now": "maintenant",
@@ -514,6 +539,7 @@ class GreekLocale(Locale):
 
     past = "{0} πριν"
     future = "σε {0}"
+    and_word = "και"
 
     timeframes = {
         "now": "τώρα",
@@ -639,6 +665,7 @@ class SwedishLocale(Locale):
 
     past = "för {0} sen"
     future = "om {0}"
+    and_word = "och"
 
     timeframes = {
         "now": "just nu",
@@ -1527,6 +1554,7 @@ class DeutschBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
+    and_word = "und"
 
     timeframes = {
         "now": "gerade eben",
@@ -1778,6 +1806,7 @@ class PortugueseLocale(Locale):
 
     past = "há {0}"
     future = "em {0}"
+    and_word = "e"
 
     timeframes = {
         "now": "agora",
@@ -2495,6 +2524,7 @@ class DanishLocale(Locale):
 
     past = "for {0} siden"
     future = "efter {0}"
+    and_word = "og"
 
     timeframes = {
         "now": "lige nu",
@@ -2802,6 +2832,7 @@ class SlovakLocale(Locale):
 
     past = "Pred {0}"
     future = "O {0}"
+    and_word = "a"
 
     month_names = [
         "",
@@ -3101,6 +3132,7 @@ class CatalanLocale(Locale):
     names = ["ca", "ca_es", "ca_ad", "ca_fr", "ca_it"]
     past = "Fa {0}"
     future = "En {0}"
+    and_word = "i"
 
     timeframes = {
         "now": "Ara mateix",
@@ -3685,6 +3717,7 @@ class RomanianLocale(Locale):
 
     past = "{0} în urmă"
     future = "peste {0}"
+    and_word = "și"
 
     timeframes = {
         "now": "acum",
@@ -3750,6 +3783,7 @@ class SlovenianLocale(Locale):
 
     past = "pred {0}"
     future = "čez {0}"
+    and_word = "in"
 
     timeframes = {
         "now": "zdaj",
@@ -3820,6 +3854,7 @@ class IndonesianLocale(Locale):
 
     past = "{0} yang lalu"
     future = "dalam {0}"
+    and_word = "dan"
 
     timeframes = {
         "now": "baru saja",
@@ -3957,6 +3992,7 @@ class EstonianLocale(Locale):
 
     past = "{0} tagasi"
     future = "{0} pärast"
+    and_word = "ja"
 
     timeframes = {
         "now": {"past": "just nüüd", "future": "just nüüd"},
