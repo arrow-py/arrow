@@ -357,7 +357,9 @@ class Arrow(object):
             )
 
     @classmethod
-    def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)", exact=False):
+    def span_range(
+        cls, frame, start, end, tz=None, limit=None, bounds="[)", exact=False
+    ):
         """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
@@ -470,7 +472,9 @@ class Arrow(object):
         if interval < 1:
             raise ValueError("interval has to be a positive integer")
 
-        spanRange = iter(cls.span_range(frame, start, end, tz, bounds=bounds, exact=exact))
+        spanRange = iter(
+            cls.span_range(frame, start, end, tz, bounds=bounds, exact=exact)
+        )
         while True:
             intvlStart, intvlEnd = next(spanRange)
             for _ in range(interval - 1):
@@ -806,7 +810,7 @@ class Arrow(object):
         if not exact:
             index = self._ATTRS.index(attr)
             frames = self._ATTRS[: index + 1]
-        
+
             values = [getattr(self, f) for f in frames]
 
             for _ in range(3 - len(values)):
