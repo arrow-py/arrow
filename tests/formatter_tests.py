@@ -111,6 +111,13 @@ class DateTimeFormatterFormatTokenTests(Chai):
         dt = datetime.utcfromtimestamp(timestamp)
         self.assertEqual(self.formatter._format_token(dt, "X"), str(int(timestamp)))
 
+        # timestamp_two = time.time()
+        # dt_two = datetime.utcfromtimestamp(timestamp_two)
+        # timestamp_with_microseconds = dt_two.timestamp() * 1000000
+        self.assertEqual(
+            int(self.formatter._format_token(dt, "x")), int(dt.timestamp() * 1000000)
+        )
+
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))

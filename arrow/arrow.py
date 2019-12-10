@@ -857,6 +857,9 @@ class Arrow(object):
             >>> arrow.utcnow().format('X')
             '1368071882'
 
+            >>> arrow.utcnow().format('x')
+            '1575957563663201'
+
             >>> arrow.utcnow().format('MMMM DD, YYYY')
             'May 09, 2013'
 

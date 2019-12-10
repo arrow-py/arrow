@@ -16,7 +16,7 @@ class DateTimeFormatter(object):
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
     # TODO: test against full timezone DB
     _FORMAT_RE = re.compile(
-        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x)"
     )
 
     def __init__(self, locale="en_us"):
@@ -99,6 +99,9 @@ class DateTimeFormatter(object):
 
         if token == "X":
             return str(calendar.timegm(dt.utctimetuple()))
+
+        if token == "x":
+            return str("{:.0f}".format(dt.timestamp() * 1000000))
 
         if token == "ZZZ":
             return dt.tzname()
