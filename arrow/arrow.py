@@ -476,13 +476,16 @@ class Arrow(object):
             cls.span_range(frame, start, end, tz, bounds=bounds, exact=exact)
         )
         while True:
-            intvlStart, intvlEnd = next(spanRange)
-            for _ in range(interval - 1):
-                try:
-                    _, intvlEnd = next(spanRange)
-                except StopIteration:
-                    continue
-            yield intvlStart, intvlEnd
+            try:
+                intvlStart, intvlEnd = next(spanRange)
+                for _ in range(interval - 1):
+                    try:
+                        _, intvlEnd = next(spanRange)
+                    except StopIteration:
+                        continue
+                yield intvlStart, intvlEnd
+            except StopIteration:
+                return
 
     # representations
 
