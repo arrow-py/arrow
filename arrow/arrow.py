@@ -374,7 +374,7 @@ class Arrow(object):
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
         :parem exact: (optional) whether to have the first timespan start exactly
-            at the time specified by ``start`` and the final span truncated 
+            at the time specified by ``start`` and the final span truncated
             so as not to extend beyond ``end``.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
@@ -441,7 +441,7 @@ class Arrow(object):
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
         :parem exact: (optional) whether to have the first timespan start exactly
-            at the time specified by ``start`` and the final interval truncated 
+            at the time specified by ``start`` and the final interval truncated
             so as not to extend beyond ``end``.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second

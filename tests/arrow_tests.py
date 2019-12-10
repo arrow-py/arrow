@@ -1265,7 +1265,7 @@ class ArrowSpanRangeTests(Chai):
                 "hour",
                 datetime(2013, 5, 5, 12, 30),
                 datetime(2013, 5, 5, 17, 15),
-                bounds='[]',
+                bounds="[]",
                 exact=True,
             )
         )
@@ -1273,26 +1273,11 @@ class ArrowSpanRangeTests(Chai):
         self.assertEqual(
             result,
             [
-                (
-                    arrow.Arrow(2013, 5, 5, 12, 30),
-                    arrow.Arrow(2013, 5, 5, 13, 30),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 13, 30),
-                    arrow.Arrow(2013, 5, 5, 14, 30),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 14, 30),
-                    arrow.Arrow(2013, 5, 5, 15, 30),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 15, 30),
-                    arrow.Arrow(2013, 5, 5, 16, 30),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 16, 30),
-                    arrow.Arrow(2013, 5, 5, 17, 15),
-                ),
+                (arrow.Arrow(2013, 5, 5, 12, 30), arrow.Arrow(2013, 5, 5, 13, 30),),
+                (arrow.Arrow(2013, 5, 5, 13, 30), arrow.Arrow(2013, 5, 5, 14, 30),),
+                (arrow.Arrow(2013, 5, 5, 14, 30), arrow.Arrow(2013, 5, 5, 15, 30),),
+                (arrow.Arrow(2013, 5, 5, 15, 30), arrow.Arrow(2013, 5, 5, 16, 30),),
+                (arrow.Arrow(2013, 5, 5, 16, 30), arrow.Arrow(2013, 5, 5, 17, 15),),
             ],
         )
 
