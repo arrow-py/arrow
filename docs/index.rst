@@ -163,7 +163,7 @@ Format
 Convert
 ~~~~~~~
 
-Convert to timezones by name or tzinfo:
+Convert from UTC to other timezones by name or tzinfo:
 
 .. code-block:: python
 

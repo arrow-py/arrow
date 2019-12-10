@@ -512,6 +512,51 @@ class ArrowDatetimeInterfaceTests(Chai):
         self.assertEqual(result, self.arrow._datetime.strftime("%Y"))
 
 
+class ArrowDstTests(Chai):
+    def test_dst_ceil(self):
+        before_dst_1 = arrow.get('2016-11-06 03:59').to('America/New_York').ceil('day')
+        before_dst_2 = arrow.get('2016-11-06 00:00').to('America/New_York').ceil('day')
+        before_dst_3 = arrow.get('2016-11-06').to('America/New_York').ceil('day')
+
+        self.assertEqual(before_dst_1, before_dst_2)
+        self.assertEqual(before_dst_1, before_dst_3)
+
+        after_dst_1 = arrow.get('2016-11-06 04:00').to('America/New_York').ceil('day')
+        after_dst_2 = arrow.get('2016-11-06 12:00').to('America/New_York').ceil('day')
+        after_dst_3 = arrow.get('2016-11-06 23:59').to('America/New_York').ceil('day')
+
+        self.assertEqual(after_dst_1, after_dst_2)
+        self.assertEqual(after_dst_1, after_dst_3)
+
+    def test_dst_floor(self):
+        before_dst_1 = arrow.get('2016-11-06 03:59').to('America/New_York').floor('day')
+        before_dst_2 = arrow.get('2016-11-06 00:00').to('America/New_York').floor('day')
+        before_dst_3 = arrow.get('2016-11-06').to('America/New_York').floor('day')
+
+        self.assertEqual(before_dst_1, before_dst_2)
+        self.assertEqual(before_dst_1, before_dst_3)
+
+        after_dst_1 = arrow.get('2016-11-06 04:00').to('America/New_York').floor('day')
+        after_dst_2 = arrow.get('2016-11-06 12:00').to('America/New_York').floor('day')
+        after_dst_3 = arrow.get('2016-11-06 23:59').to('America/New_York').floor('day')
+
+        self.assertEqual(after_dst_1, after_dst_2)
+        self.assertEqual(after_dst_1, after_dst_3)
+
+    def test_dst_replace(self):
+        before_utc = arrow.get('2018-11-04T05:59:59.999999')
+        before_est_1 = before_utc.replace(tzinfo='US/Eastern')
+        before_est_2 = arrow.get('2018-11-04T01:59:59.999999').to('America/New_York')
+
+        self.assertEqual(before_est_1, before_est_2)
+
+        after_utc = arrow.get('2018-11-04T01:59:59.999999').shift(microseconds=1)
+        after_est_1 = after_utc.replace(tzinfo='US/Eastern')
+        after_est_2 = arrow.get('2018-11-04T07:00').to('America/New_York')
+
+        self.assertEqual(after_est_1, after_est_2)
+
+
 class ArrowConversionTests(Chai):
     def test_to(self):
 
