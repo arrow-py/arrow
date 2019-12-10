@@ -1222,6 +1222,36 @@ class ArrowSpanRangeTests(Chai):
                 (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 7, 1)),
             ],
         )
+    def test_exact(self):
+        result = list(
+            arrow.Arrow.span_range("hour", datetime(2013, 5, 5, 12, 30), datetime(2013, 5, 5, 17, 15), exact=True)
+        )
+        
+        self.assertEqual(
+            result,
+            [
+                (
+                    arrow.Arrow(2013, 5, 5, 12, 30),
+                    arrow.Arrow(2013, 5, 5, 13, 29, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 13, 30),
+                    arrow.Arrow(2013, 5, 5, 14, 29, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 14, 30),
+                    arrow.Arrow(2013, 5, 5, 15, 29, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 15, 30),
+                    arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 16, 30),
+                    arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+                ),
+            ],
+        )
 
 
 class ArrowIntervalTests(Chai):
@@ -1280,6 +1310,26 @@ class ArrowIntervalTests(Chai):
                 (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 14)),
                 (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 16)),
                 (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 18)),
+            ],
+        )
+
+    def test_exact(self):
+        result = list(
+            arrow.Arrow.interval("hour", datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 17, 15), 4, exact=True)
+        )
+        
+        self.assertEqual(
+            result,
+            [
+                (
+                    arrow.Arrow(2013, 5, 5, 12, 30),
+                    arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 16, 30),
+                    arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+                ),
             ],
         )
 
@@ -1432,6 +1482,14 @@ class ArrowSpanTests(Chai):
         with self.assertRaises(AttributeError):
             floor, ceil = self.arrow.span("hour", bounds="][")
 
+    def test_exact(self):
+
+        floor, ceil = self.arrow.span("hour", exact=True)
+
+        self.assertEqual(floor, datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc()))
+        self.assertEqual(
+            ceil, datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
+        )
 
 class ArrowHumanizeTests(Chai):
     def setUp(self):
