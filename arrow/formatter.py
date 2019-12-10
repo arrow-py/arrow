@@ -96,7 +96,7 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
-            return str(calendar.timegm(dt.utctimetuple()) + dt.microsecond / 1000000.0)
+            return repr(calendar.timegm(dt.utctimetuple()) + dt.microsecond / 1000000.0)
 
         if token == "x":
             return str(calendar.timegm(dt.utctimetuple()) * 1000000 + dt.microsecond)
