@@ -110,10 +110,6 @@ class DateTimeFormatterFormatTokenTests(Chai):
         timestamp = time.time()
         dt = datetime.utcfromtimestamp(timestamp)
         self.assertEqual(self.formatter._format_token(dt, "X"), str(int(timestamp)))
-
-        # timestamp_two = time.time()
-        # dt_two = datetime.utcfromtimestamp(timestamp_two)
-        # timestamp_with_microseconds = dt_two.timestamp() * 1000000
         self.assertEqual(
             int(self.formatter._format_token(dt, "x")), int(dt.timestamp() * 1000000)
         )
