@@ -2,6 +2,8 @@
 import io
 
 from setuptools import setup
+from distutils.core import setup
+from Cython.Build import cythonize
 
 with io.open("README.rst", "r", encoding="utf-8") as f:
     readme = f.read()
@@ -48,4 +50,5 @@ setup(
         "Bug Reports": "https://github.com/crsmithdev/arrow/issues",
         "Documentation": "https://arrow.readthedocs.io",
     },
+    ext_modules=cythonize(["factory.pyx", "parser.pyx"]),
 )
