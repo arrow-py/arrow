@@ -1223,7 +1223,7 @@ class ArrowSpanRangeTests(Chai):
             ],
         )
 
-    def test_exact(self):
+    def test_exact_bound_exclude(self):
         result = list(
             arrow.Arrow.span_range(
                 "hour",
@@ -1255,6 +1255,43 @@ class ArrowSpanRangeTests(Chai):
                 (
                     arrow.Arrow(2013, 5, 5, 16, 30),
                     arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+                ),
+            ],
+        )
+
+    def test_exact_bound_include(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "hour",
+                datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 17, 15),
+                bounds='[]'
+                exact=True,
+            )
+        )
+
+        self.assertEqual(
+            result,
+            [
+                (
+                    arrow.Arrow(2013, 5, 5, 12, 30),
+                    arrow.Arrow(2013, 5, 5, 13, 30),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 13, 30),
+                    arrow.Arrow(2013, 5, 5, 14, 30),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 14, 30),
+                    arrow.Arrow(2013, 5, 5, 15, 30),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 15, 30),
+                    arrow.Arrow(2013, 5, 5, 16, 30),
+                ),
+                (
+                    arrow.Arrow(2013, 5, 5, 16, 30),
+                    arrow.Arrow(2013, 5, 5, 17, 15),
                 ),
             ],
         )
