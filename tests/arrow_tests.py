@@ -1052,6 +1052,36 @@ class ArrowSpanRangeTests(Chai):
             ],
         )
 
+    def test_days(self):
+
+        result = list(
+            arrow.Arrow.span_range(
+                "days", datetime(2013, 1, 1, 12), datetime(2013, 1, 4, 12)
+            )
+        )
+
+        self.assertEqual(
+            result,
+            [
+                (
+                    arrow.Arrow(2013, 1, 1, 0),
+                    arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 1, 2, 0),
+                    arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 1, 3, 0),
+                    arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),
+                ),
+                (
+                    arrow.Arrow(2013, 1, 4, 0),
+                    arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),
+                ),
+            ],
+        )
+
     def test_hour(self):
 
         result = list(
