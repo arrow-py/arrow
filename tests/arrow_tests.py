@@ -506,6 +506,9 @@ class ArrowDatetimeInterfaceTests(Chai):
         self.assertEqual(result, self.arrow._datetime.strftime("%Y"))
 
 class ArrowDstTests(Chai):
+    def setUp(self):
+        super(ArrowDstTests, self).setUp()
+
     def test_dst_ceil(self):
         before_dst_1 = self.arrow.get('2016-11-06 03:59').to('America/New_York').ceil('day')
         before_dst_2 = self.arrow.get('2016-11-06').to('America/New_York').ceil('day')
@@ -533,6 +536,20 @@ class ArrowDstTests(Chai):
 
         self.assertEqual(after_dst_1.day, after_dst_2.day)
         self.assertEqual(after_dst_1.day, after_dst_3.day)
+
+    def test_dst_replace(self):
+        before_utc = self.arrow.get('2018-11-04T05:59:59.999999')
+        before_est_1 = before_utc.replace(tzinfo='US/Eastern')
+        before_est_2 = self.arrow.get('2018-11-04T01:59:59.999999').to('America/New_York')
+
+        self.assertEqual(before_est_1.day, before_est_2.day)
+
+        after_utc = self.arrow.get('2018-11-04T01:59:59.999999').shift(microseconds=1)
+        after_est_1 = after_utc.replace(tzinfo='US/Eastern')
+        after_est_2 = self.arrow.get('2018-11-04T07:00').to('America/New_York')
+
+        self.assertEqual(after_est_1.day, after_est_2.day)
+
 
 class ArrowConversionTests(Chai):
     def test_to(self):
