@@ -505,7 +505,9 @@ class ArrowDatetimeInterfaceTests(Chai):
 
         self.assertEqual(result, self.arrow._datetime.strftime("%Y"))
 
+
 class ArrowDstTests(Chai):
+
     def setUp(self):
         super(ArrowDstTests, self).setUp()
         self.before_1 = arrow.Arrow(
@@ -516,7 +518,6 @@ class ArrowDstTests(Chai):
         self.after_2 = arrow.Arrow(
             2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
         )
- 
         self.before_3 = arrow.Arrow(
             2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
         )
@@ -525,7 +526,7 @@ class ArrowDstTests(Chai):
         self.after_4 = arrow.Arrow(
             2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
         )
- 
+
     def test_dst(self):
         self.assertEqual(self.before_1.day, self.before_2.day)
         self.assertEqual(self.after_1.day, self.after_2.day)
