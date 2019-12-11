@@ -507,29 +507,29 @@ class ArrowDatetimeInterfaceTests(Chai):
 
 class ArrowDstTests(Chai):
     def test_dst_ceil(self):
-        before_dst_1 = arrow.get('2016-11-06 03:59').to('America/New_York').ceil('day')
-        before_dst_2 = arrow.get('2016-11-06').to('America/New_York').ceil('day')
+        before_dst_1 = self.arrow.get('2016-11-06 03:59').to('America/New_York').ceil('day')
+        before_dst_2 = self.arrow.get('2016-11-06').to('America/New_York').ceil('day')
 
         self.assertEqual(before_dst_1.day, before_dst_2.day)
 
-        after_dst_1 = arrow.get('2016-11-06 04:00').to('America/New_York').ceil('day')
-        after_dst_2 = arrow.get('2016-11-06 12:00').to('America/New_York').ceil('day')
-        after_dst_3 = arrow.get('2016-11-06 23:59').to('America/New_York').ceil('day')
+        after_dst_1 = self.arrow.get('2016-11-06 04:00').to('America/New_York').ceil('day')
+        after_dst_2 = self.arrow.get('2016-11-06 12:00').to('America/New_York').ceil('day')
+        after_dst_3 = self.arrow.get('2016-11-06 23:59').to('America/New_York').ceil('day')
 
         self.assertEqual(after_dst_1.day, after_dst_2.day)
         self.assertEqual(after_dst_1.day, after_dst_3.day)
 
     def test_dst_floor(self):
-        before_dst_1 = arrow.get('2016-11-06 03:59').to('America/New_York').floor('day')
-        before_dst_2 = arrow.get('2016-11-06 00:00').to('America/New_York').floor('day')
-        before_dst_3 = arrow.get('2016-11-06').to('America/New_York').floor('day')
+        before_dst_1 = self.arrow.get('2016-11-06 03:59').to('America/New_York').floor('day')
+        before_dst_2 = self.arrow.get('2016-11-06 00:00').to('America/New_York').floor('day')
+        before_dst_3 = self.arrow.get('2016-11-06').to('America/New_York').floor('day')
 
         self.assertEqual(before_dst_1.day, before_dst_2.day)
         self.assertEqual(before_dst_1.day, before_dst_3.day)
 
-        after_dst_1 = arrow.get('2016-11-06 04:00').to('America/New_York').floor('day')
-        after_dst_2 = arrow.get('2016-11-06 12:00').to('America/New_York').floor('day')
-        after_dst_3 = arrow.get('2016-11-06 23:59').to('America/New_York').floor('day')
+        after_dst_1 = self.arrow.get('2016-11-06 04:00').to('America/New_York').floor('day')
+        after_dst_2 = self.arrow.get('2016-11-06 12:00').to('America/New_York').floor('day')
+        after_dst_3 = self.arrow.get('2016-11-06 23:59').to('America/New_York').floor('day')
 
         self.assertEqual(after_dst_1.day, after_dst_2.day)
         self.assertEqual(after_dst_1.day, after_dst_3.day)
