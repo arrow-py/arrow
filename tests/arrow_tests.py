@@ -508,6 +508,7 @@ class ArrowDatetimeInterfaceTests(Chai):
 class ArrowDstTests(Chai):
     def setUp(self):
         super(ArrowDstTests, self).setUp()
+        self.arrow = arrow.Arrow.utcnow()
 
     def test_dst_ceil(self):
         before_dst_1 = self.arrow.Arrow.get('2016-11-06 03:59').to('America/New_York').ceil('day')
