@@ -508,23 +508,30 @@ class ArrowDatetimeInterfaceTests(Chai):
 class ArrowDstTests(Chai):
     def setUp(self):
         super(ArrowDstTests, self).setUp()
-        self.before_1 = arrow.Arrow(2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York"))
+        self.before_1 = arrow.Arrow(
+            2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
         self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
         self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
-        self.after_2 = arrow.Arrow(2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York"))
-
-        self.before_3 = arrow.Arrow(2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York"))
+        self.after_2 = arrow.Arrow(
+            2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
+ 
+        self.before_3 = arrow.Arrow(
+            2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
         self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
         self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
-        self.after_4 = arrow.Arrow(2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York"))
-
+        self.after_4 = arrow.Arrow(
+            2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
+ 
     def test_dst(self):
         self.assertEqual(self.before_1.day, self.before_2.day)
         self.assertEqual(self.after_1.day, self.after_2.day)
         self.assertEqual(self.before_3.day, self.before_4.day)
-        self.assertEqual(self.after_3.day,self.after_4.day)
+        self.assertEqual(self.after_3.day, self.after_4.day)
         
- 
 
 class ArrowConversionTests(Chai):
     def test_to(self):
