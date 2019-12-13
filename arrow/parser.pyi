@@ -98,7 +98,7 @@ class DateTimeParser(object):
     def parse_iso(self, datetime_string: _basestring) -> datetime:
         ...
 
-    def parse(self, datetime_string: _basestring, fmt: _basestring) -> datetime:
+    def parse(self, datetime_string: _basestring, fmt: Union[_basestring, Sequence[_basestring]]) -> datetime:
         ...
 
     def _generate_pattern_re(self, fmt: _basestring) -> Tuple[List[_basestring], Pattern[Text]]:
