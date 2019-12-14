@@ -10,9 +10,13 @@ from arrow import locales, util
 
 
 class DateTimeFormatter(object):
+
+    # This pattern matches characters enclosed in square brackes are matched as
+    # an atomic group. For more info on atomic groups and how to they are
+    # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
     # TODO: test against full timezone DB
     _FORMAT_RE = re.compile(
-        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
     )
 
     def __init__(self, locale="en_us"):
@@ -24,6 +28,9 @@ class DateTimeFormatter(object):
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
     def _format_token(self, dt, token):
+
+        if token and token.startswith("[") and token.endswith("]"):
+            return token[1:-1]
 
         if token == "YYYY":
             return self.locale.year_full(dt.year)
@@ -91,7 +98,11 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
-            return str(calendar.timegm(dt.utctimetuple()))
+            microsecond = str(int(dt.microsecond))
+            return str(calendar.timegm(dt.utctimetuple())) + "." + microsecond
+        if token == "x":
+            microsecond = str(int(dt.microsecond))
+            return str(calendar.timegm(dt.utctimetuple())) + microsecond.rstrip("0")
 
         if token == "ZZZ":
             return dt.tzname()
