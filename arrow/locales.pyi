@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from typing import (Any, ClassVar, Dict, List, Literal, Optional, SupportsAbs, SupportsFloat, Text, Type,
-                    TypeVar, TypedDict)
+from typing import (
+    Any, ClassVar, Dict, List, Literal, Optional, SupportsAbs, SupportsFloat, Text, Type, TypedDict
+)
 
 
 def get_locale(name: Text) -> Locale: ...
@@ -10,23 +11,10 @@ def get_locale(name: Text) -> Locale: ...
 
 # base locale type.
 
-_TimeFrames = TypeVar(
-        '_TimeFrames',
-        Literal['now'],
-        Literal['seconds'],
-        Literal['minute'],
-        Literal['minutes'],
-        Literal['hour'],
-        Literal['hours'],
-        Literal['day'],
-        Literal['days'],
-        Literal['week'],
-        Literal['weeks'],
-        Literal['month'],
-        Literal['months'],
-        Literal['year'],
-        Literal['years'],
-)
+_TimeFrames = Literal[
+    'now', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day',
+    'days', 'week', 'weeks', 'month', 'months', 'year', 'years'
+]
 
 
 class _TimeFrameDict(TypedDict):

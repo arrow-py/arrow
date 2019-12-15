@@ -66,7 +66,7 @@ class _Parts(TypedDict, total=False):
     timestamp: float
     expanded_timestamp: int
     tzinfo: tzinfo
-    am_pm: Union[Literal['am'], Literal['pm']]
+    am_pm: Literal['am', 'pm']
 
 
 class DateTimeParser(object):
@@ -107,23 +107,9 @@ class DateTimeParser(object):
     @overload
     def _parse_token(
             self,
-            token: Union[
-                Literal['YYYY'],
-                Literal['YY'],
-                Literal['MM'],
-                Literal['M'],
-                Literal['DDDD'],
-                Literal['DDD'],
-                Literal['DD'],
-                Literal['D'],
-                Literal['Do'],
-                Literal['HH'], Literal['Hh'], Literal['hH'], Literal['hh'],
-                Literal['h'], Literal['H'],
-                Literal['mm'],
-                Literal['m'],
-                Literal['ss'],
-                Literal['s'],
-                Literal['x'],
+            token: Literal[
+                'YYYY', 'YY', 'MM', 'M', 'DDDD', 'DDD', 'DD', 'D', 'Do',
+                'HH', 'Hh', 'hH', 'hh', 'h', 'H', 'mm', 'm', 'ss', 's', 'x'
             ],
             value: Union[AnyStr, SupportsInt, SupportsIndex],
             parts: _Parts
@@ -142,7 +128,7 @@ class DateTimeParser(object):
     @overload
     def _parse_token(
             self,
-            token: Union[Literal['MMMM'], Literal['MMM']],
+            token: Literal['MMMM', 'MMM'],
             value: AnyStr,
             parts: _Parts
     ) -> None:
@@ -151,7 +137,7 @@ class DateTimeParser(object):
     @overload
     def _parse_token(
             self,
-            token: Union[Literal['S'], Literal['a'], Literal['A'], Literal['ZZZ'], Literal['ZZ'], Literal['Z']],
+            token: Literal['S', 'a', 'A', 'ZZZ', 'ZZ', 'Z'],
             value: _basestring,
             parts: _Parts
     ) -> None:
