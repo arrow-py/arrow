@@ -4,12 +4,21 @@ from __future__ import absolute_import, unicode_literals
 
 from datetime import datetime, tzinfo
 from typing import (
-    AnyStr, ClassVar, Iterable, List, Literal, Pattern, Sequence, SupportsFloat,
-    SupportsIndex, SupportsInt, Text, Tuple, TypedDict, Union, overload
+    AnyStr, ClassVar, Iterable, List, Literal, Pattern, Protocol, Sequence,
+    SupportsFloat, SupportsInt, TYPE_CHECKING, Text, Tuple, TypedDict, Union, overload
 )
 
 from arrow import _basestring
 from arrow.locales import Locale
+
+if TYPE_CHECKING:
+    import sys
+
+    if sys.version_info < (3, 0):
+        class SupportsIndex(Protocol):
+            def __index__(self) -> int: ...
+    else:
+        from typing import SupportsIndex
 
 
 class ParserError(ValueError):
