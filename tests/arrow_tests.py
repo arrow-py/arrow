@@ -1499,6 +1499,12 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(
             later105.humanize(self.now, granularity="month"), "in 0 months"
         )
+        self.assertEqual(
+            self.now.humanize(later105, granularity=["month"]), "0 months ago"
+        )
+        self.assertEqual(
+            later105.humanize(self.now, granularity=["month"]), "in 0 months"
+        )
 
         later106 = self.now.shift(seconds=3 * 10 ** 6)
         self.assertEqual(self.now.humanize(later106, granularity="day"), "34 days ago")
@@ -1543,8 +1549,69 @@ class ArrowHumanizeTests(Chai):
             ),
             "3 years",
         )
+
         with self.assertRaises(AttributeError):
             self.now.humanize(later108, granularity="years")
+
+    def test_multiple_granularity(self):
+        self.assertEqual(self.now.humanize(granularity="second"), "just now")
+        self.assertEqual(self.now.humanize(granularity=["second"]), "just now")
+        self.assertEqual(
+            self.now.humanize(granularity=["year", "month", "day", "hour", "second"]),
+            "in 0 years 0 months 0 days 0 hours and seconds",
+        )
+
+        later4000 = self.now.shift(seconds=4000)
+        self.assertEqual(
+            later4000.humanize(self.now, granularity=["hour", "minute"]),
+            "in an hour and 6 minutes",
+        )
+        self.assertEqual(
+            self.now.humanize(later4000, granularity=["hour", "minute"]),
+            "an hour and 6 minutes ago",
+        )
+        self.assertEqual(
+            later4000.humanize(
+                self.now, granularity=["hour", "minute"], only_distance=True
+            ),
+            "an hour and 6 minutes",
+        )
+        self.assertEqual(
+            later4000.humanize(self.now, granularity=["day", "hour", "minute"]),
+            "in 0 days an hour and 6 minutes",
+        )
+        self.assertEqual(
+            self.now.humanize(later4000, granularity=["day", "hour", "minute"]),
+            "0 days an hour and 6 minutes ago",
+        )
+
+        later105 = self.now.shift(seconds=10 ** 5)
+        self.assertEqual(
+            self.now.humanize(later105, granularity=["hour", "day", "minute"]),
+            "a day 3 hours and 46 minutes ago",
+        )
+        with self.assertRaises(AttributeError):
+            self.now.humanize(later105, granularity=["error", "second"])
+
+        later108onlydistance = self.now.shift(seconds=10 ** 8)
+        self.assertEqual(
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["year"]
+            ),
+            "3 years",
+        )
+        self.assertEqual(
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["month", "week"]
+            ),
+            "37 months and 4 weeks",
+        )
+        self.assertEqual(
+            self.now.humanize(
+                later108onlydistance, only_distance=True, granularity=["year", "second"]
+            ),
+            "3 years and seconds",
+        )
 
     def test_seconds(self):
 
