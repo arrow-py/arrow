@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 
 from datetime import datetime, tzinfo
 from typing import (
-    AnyStr, ClassVar, Iterable, List, Literal, Pattern, Protocol, Sequence,
+    AnyStr, ClassVar, Dict, Iterable, List, Literal, Pattern, Protocol, Sequence,
     SupportsFloat, SupportsInt, TYPE_CHECKING, Text, Tuple, TypedDict, Union, overload
 )
 
@@ -149,6 +149,15 @@ class DateTimeParser(object):
             token: Literal['S', 'a', 'A', 'ZZZ', 'ZZ', 'Z'],
             value: _basestring,
             parts: _Parts
+    ) -> None:
+        ...
+
+    @overload
+    def _parse_token(
+            self,
+            token: _basestring,
+            value: _basestring,
+            parts: Dict[Text, Union[int, float, tzinfo, _basestring]]
     ) -> None:
         ...
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
+from __future__ import unicode_literals
 
 from typing import (
-    Any, ClassVar, Dict, List, Literal, Optional, SupportsAbs, SupportsFloat, Text, Type, TypedDict
+    Any, ClassVar, Dict, List, Literal, Optional, Sequence, SupportsAbs, SupportsFloat, Text, Type, TypedDict, Union
 )
 
 
@@ -13,7 +13,7 @@ def get_locale(name: Text) -> Locale: ...
 
 _TimeFrames = Literal[
     'now', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day',
-    'days', 'week', 'weeks', 'month', 'months', 'year', 'years'
+    'days', 'week', 'weeks', 'month', 'months', 'year', 'years',
 ]
 
 
@@ -147,7 +147,13 @@ class SwedishLocale(Locale):
 
 
 class FinnishLocale(Locale):
-    ...
+    def _format_relative(
+            self,
+            humanized: Sequence[Text],
+            timeframe: _TimeFrames,
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
 
 
 class ChineseCNLocale(Locale):
@@ -220,11 +226,71 @@ class NewNorwegianLocale(Locale):
 
 
 class PortugueseLocale(Locale):
-    ...
+    timeframes: ClassVar[Union[_TimeFrames, Literal['second']]] = ...  # type: ignore[assignment]
+
+    def describe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat] = 0,
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def describe_multi(  # type: ignore[override]
+            self,
+            timeframes: List[Union[_TimeFrames, Literal['second']]],
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def _format_timeframe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
+
+    def _format_relative(
+            self,
+            humanized: Text,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
 
 
 class BrazilianPortugueseLocale(PortugueseLocale):
-    ...
+    timeframes: ClassVar[Union[_TimeFrames, Literal['second']]] = ...
+
+    def describe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat] = 0,
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def describe_multi(  # type: ignore[override]
+            self,
+            timeframes: Union[_TimeFrames, Literal['second']],
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def _format_timeframe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
+
+    def _format_relative(
+            self,
+            humanized: Text,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
 
 
 class TagalogLocale(Locale):
@@ -292,7 +358,39 @@ class FarsiLocale(Locale):
 
 
 class HebrewLocale(Locale):
-    ...
+    timeframes: ClassVar[
+        Union[_TimeFrames, Literal['2-hours', '2-days', '2-months', '2-years']]
+    ] = ...  # type: ignore[assignment]
+
+    def describe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['2-hours', '2-days', '2-months', '2-years']],
+            delta: SupportsAbs[SupportsFloat] = 0,
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def describe_multi(  # type: ignore[override]
+            self,
+            timeframes: Union[_TimeFrames, Literal['2-hours', '2-days', '2-months', '2-years']],
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def _format_timeframe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['2-hours', '2-days', '2-months', '2-years']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
+
+    def _format_relative(
+            self,
+            humanized: Text,
+            timeframe: Union[_TimeFrames, Literal['2-hours', '2-days', '2-months', '2-years']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
 
 
 class MarathiLocale(Locale):
@@ -351,7 +449,37 @@ class NepaliLocale(Locale):
 
 
 class EstonianLocale(Locale):
-    ...
+    timeframes: ClassVar[Union[_TimeFrames, Literal['second']]] = ...  # type: ignore[assignment]
+
+    def describe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat] = 0,
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def describe_multi(  # type: ignore[override]
+            self,
+            timeframes: List[Union[_TimeFrames, Literal['second']]],
+            only_distance: bool = False
+    ) -> Text:
+        ...
+
+    def _format_timeframe(
+            self,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
+
+    def _format_relative(
+            self,
+            humanized: Text,
+            timeframe: Union[_TimeFrames, Literal['second']],
+            delta: SupportsAbs[SupportsFloat]
+    ) -> Text:
+        ...
 
 
 _locales: Dict[Text, Type[Locale]] = ...

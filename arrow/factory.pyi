@@ -2,10 +2,10 @@
 
 from datetime import date, datetime, tzinfo as dt_tzinfo
 from time import struct_time
-
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar, Union, overload
 
-from arrow import _basestring, _tzinfo_exp
+# noinspection PyUnresolvedReferences
+from arrow import _basestring, _tzinfo_exp, parser
 from arrow.arrow import Arrow
 
 _AT = TypeVar('_AT', bound=Arrow)

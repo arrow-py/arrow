@@ -8,19 +8,21 @@ from typing import (
     Any, ClassVar, Generator, List, Literal, Optional, SupportsFloat, Tuple, Type, TypeVar, Union, overload
 )
 
+from dateutil._common import weekday
 from dateutil.relativedelta import relativedelta
 
-from arrow import _basestring, _tzinfo_exp
+# noinspection PyUnresolvedReferences
+from arrow import _basestring, _tzinfo_exp, formatter, locales, parser, util
 
 _AT = TypeVar('_AT', bound='Arrow')
 
-_T_ATTRS = Literal['year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond']
-_T_ATTRS_PLURAL = Literal['years', 'months', 'days', 'hours', 'minutes', 'seconds', 'microseconds']
-_T_FRAMES = Literal[_T_ATTRS, 'week', 'weeks', 'quarter', 'quarters']
+_T_FRAMES = Literal[
+    'year', 'month', 'day', 'hour', 'minute', 'second', 'microsecond', 'week', 'weeks', 'quarter', 'quarters'
+]
 
 _BOUNDS = Literal['[)', '()', '(]', '[]']
 
-_GRANULARITY = Literal['auto', 'second', 'minute', 'hour', 'week', 'month', 'year']
+_GRANULARITY = Literal['auto', 'second', 'minute', 'hour', 'day', 'week', 'month', 'year']
 
 _V = TypeVar('_V')
 _W = TypeVar('_W')
@@ -92,9 +94,9 @@ class Arrow(object):
     @classmethod
     def range(
             cls: Type[_AT],
-            frame: _T_ATTRS,
-            start: dt.datetime,
-            end: Optional[dt.datetime] = None,
+            frame: _T_FRAMES,
+            start: Union[Arrow, dt.datetime],
+            end: Union[Arrow, dt.datetime, None] = None,
             tz: Optional[_tzinfo_exp] = None,
             limit: Optional[int] = None
     ) -> Generator[_AT, None, None]:
@@ -103,7 +105,7 @@ class Arrow(object):
     @classmethod
     def span_range(
             cls: Type[_AT],
-            frame: _T_ATTRS,
+            frame: _T_FRAMES,
             start: dt.datetime,
             end: dt.datetime,
             tz: Optional[_tzinfo_exp] = None,
@@ -115,7 +117,7 @@ class Arrow(object):
     @classmethod
     def interval(
             cls: Type[_AT],
-            frame: _T_ATTRS,
+            frame: _T_FRAMES,
             start: dt.datetime,
             end: dt.datetime,
             interval: int = 1,
@@ -144,7 +146,7 @@ class Arrow(object):
         ...
 
     @property
-    def tzinfo(self) -> dt.tzinfo:
+    def tzinfo(self) -> Optional[dt.tzinfo]:
         ...
 
     @tzinfo.setter
@@ -175,15 +177,17 @@ class Arrow(object):
     def replace(
             self: _AT,
             *,
-            year: int, month: int, day: int, hour: int, minute: int, second: int, microsecond: int, tzinfo: _tzinfo_exp
+            year: int = ..., month: int = ..., day: int = ..., hour: int = ...,
+            minute: int = ..., second: int = ..., microsecond: int = ..., tzinfo: Optional[_tzinfo_exp] = ...
     ) -> _AT:
         ...
 
     def shift(
             self: _AT,
             *,
-            years: int, months: int, days: int, hours: int, minutes: int,
-            seconds: int, microseconds: int, weeks: int, quarters: int, weekday: int
+            years: int = ..., months: int = ..., days: int = ..., hours: int = ...,
+            minutes: int = ..., seconds: int = ..., microseconds: int = ...,
+            weeks: int = ..., quarters: int = ..., weekday: Union[int, weekday] = ...
     ) -> _AT:
         ...
 
@@ -210,7 +214,7 @@ class Arrow(object):
 
     def humanize(
             self,
-            other: Optional[Arrow] = None,
+            other: Union[Arrow, dt.datetime, None] = None,
             locale: _basestring = 'en_us',
             only_distance: bool = False,
             granularity: Union[_GRANULARITY, List[_GRANULARITY]] = 'auto'

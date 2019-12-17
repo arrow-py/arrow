@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from typing import ClassVar, Pattern
+from typing import ClassVar, Pattern, Optional
 
-from arrow import _basestring
+# noinspection PyUnresolvedReferences
+from arrow import _basestring, locales, util
 from arrow.locales import Locale
 
 
@@ -18,5 +19,5 @@ class DateTimeFormatter(object):
     def format(cls, dt: datetime, fmt: _basestring) -> _basestring:
         ...
 
-    def _format_token(self, dt: datetime, token: _basestring) -> _basestring:
+    def _format_token(self, dt: datetime, token: Optional[_basestring]) -> Optional[_basestring]:
         ...
