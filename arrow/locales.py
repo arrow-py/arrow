@@ -1006,6 +1006,8 @@ class DutchLocale(Locale):
         "hours": "{0} uur",
         "day": "een dag",
         "days": "{0} dagen",
+        "week": "een week",
+        "weeks": "{0} weken",
         "month": "een maand",
         "months": "{0} maanden",
         "year": "een jaar",
