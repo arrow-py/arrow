@@ -5,6 +5,7 @@ import datetime
 
 
 def total_seconds(td):  # pragma: no cover
+    """Get total seconds for timedelta."""
     return td.total_seconds()
 
 
