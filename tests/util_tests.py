@@ -40,6 +40,8 @@ class UtilTests(Chai):
     def test_windows_datetime_from_negative_timestamp(self):
         timestamp = -1572204340.6460679
         result = util.windows_datetime_from_negative_timestamp(timestamp)
+        # astimezone(tz=tzlocal()) fails on Windows, so we need to
+        # fake the local timezone.
         local_tz = tz.gettz(datetime.now(tz.tzlocal()).tzname())
         expected = (
             datetime(1920, 3, 7, 4, 34, 19, 353932, tzinfo=tz.tzlocal())
