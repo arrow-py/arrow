@@ -37,16 +37,20 @@ class UtilTests(Chai):
         with self.assertRaises(ValueError):
             util.iso_to_gregorian(2013, 8, 0)
 
-    def test_windows_datetime_from_timestamp(self):
-        timestamp = 1572204340.6460679
-        result = util.windows_datetime_from_timestamp(timestamp)
-        expected = datetime.fromtimestamp(timestamp).replace(tzinfo=tz.tzlocal())
+    def test_windows_datetime_from_negative_timestamp(self):
+        timestamp = -1572204340.6460679
+        result = util.windows_datetime_from_negative_timestamp(timestamp)
+        expected = (
+            datetime(1920, 3, 7, 4, 34, 19, 353932)
+            .replace(tzinfo=tz.tzutc())
+            .astimezone(tz=tz.tzlocal())
+        )
         self.assertEqual(result, expected)
 
-    def test_windows_datetime_from_timestamp_utc(self):
-        timestamp = 1572204340.6460679
-        result = util.windows_datetime_from_timestamp(timestamp, tz.tzutc())
-        expected = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+    def test_windows_datetime_from_negative_timestamp_utc(self):
+        timestamp = -1572204340.6460679
+        result = util.windows_datetime_from_negative_timestamp(timestamp, tz.tzutc())
+        expected = datetime(1920, 3, 7, 4, 34, 19, 353932).replace(tzinfo=tz.tzutc())
         self.assertEqual(result, expected)
 
     def test_safe_utcfromtimestamp(self):

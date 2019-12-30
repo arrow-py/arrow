@@ -28,7 +28,7 @@ def is_timestamp(value):
         return False
 
 
-def windows_datetime_from_timestamp(timestamp, tz=None):
+def windows_datetime_from_negative_timestamp(timestamp, tz=None):
     """Computes datetime from timestamp. Supports negative timestamps on Windows platform."""
     sec_frac, sec = math.modf(timestamp)
     dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc()) + datetime.timedelta(
@@ -51,17 +51,17 @@ def windows_datetime_from_timestamp(timestamp, tz=None):
 
 
 def safe_utcfromtimestamp(timestamp):
-    """ datetime.utcfromtimestamp alternative which supports negative timestamps on Windows platform."""
+    """datetime.utcfromtimestamp alternative that supports negative timestamps on Windows platform."""
     if os_name == "nt" and timestamp < 0:
-        return windows_datetime_from_timestamp(timestamp, dateutil.tz.tzutc())
+        return windows_datetime_from_negative_timestamp(timestamp, dateutil.tz.tzutc())
     else:
         return datetime.datetime.utcfromtimestamp(timestamp)
 
 
 def safe_fromtimestamp(timestamp, tz=None):
-    """ datetime.fromtimestamp alternative which supports negative timestamps on Windows platform."""
+    """datetime.fromtimestamp alternative that supports negative timestamps on Windows platform."""
     if os_name == "nt" and timestamp < 0:
-        return windows_datetime_from_timestamp(timestamp, tz)
+        return windows_datetime_from_negative_timestamp(timestamp, tz)
     else:
         return datetime.datetime.fromtimestamp(timestamp, tz)
 
@@ -105,7 +105,7 @@ __all__ = [
     "is_timestamp",
     "isstr",
     "iso_to_gregorian",
-    "windows_datetime_from_timestamp",
+    "windows_datetime_from_negative_timestamp",
     "safe_utcfromtimestamp",
     "safe_fromtimestamp",
 ]
