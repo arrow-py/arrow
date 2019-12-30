@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import datetime
-import math
 import time
 from os import name as os_name
 
@@ -30,10 +29,25 @@ def is_timestamp(value):
 
 def windows_datetime_from_negative_timestamp(timestamp, tz=None):
     """Computes datetime from timestamp. Supports negative timestamps on Windows platform."""
-    sec_frac, sec = math.modf(timestamp)
-    dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc()) + datetime.timedelta(
-        seconds=sec, microseconds=sec_frac * 1000000
-    )
+
+    positive_timestamp = abs(timestamp)
+    seconds_after_epoch_dt = datetime.datetime.fromtimestamp(positive_timestamp, tz=tz)
+    seconds_after_epoch_dt = seconds_after_epoch_dt.astimezone(tz=dateutil.tz.tzutc())
+
+    epoch_dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc())
+
+    before_epoch_delta = epoch_dt - seconds_after_epoch_dt
+
+    dt = epoch_dt + before_epoch_delta
+
+    # if tz is None:
+    # final_dt = final_dt.astimezone(tz)
+
+    # sec_frac, sec = math.modf(timestamp)
+    # dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc()) + datetime.timedelta(
+    #     seconds=sec, microseconds=sec_frac * 1000000
+    # )
+
     if tz is None:
         tz = dateutil.tz.tzlocal()
 

@@ -44,7 +44,7 @@ class UtilTests(Chai):
         # fake the local timezone.
         local_tz = tz.gettz(datetime.now(tz.tzlocal()).tzname())
         expected = (
-            datetime(1920, 3, 7, 4, 34, 19, 353932, tzinfo=tz.tzlocal())
+            datetime(1920, 3, 7, 4, 34, 19, 353932)
             .replace(tzinfo=tz.tzutc())
             .astimezone(tz=local_tz)
             .replace(tzinfo=tz.tzlocal())
