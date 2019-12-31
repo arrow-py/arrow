@@ -37,24 +37,47 @@ class UtilTests(Chai):
         with self.assertRaises(ValueError):
             util.iso_to_gregorian(2013, 8, 0)
 
-    def test_windows_datetime_from_negative_timestamp(self):
-        timestamp = -1572204340.6460679
-        result = util.windows_datetime_from_negative_timestamp(timestamp)
-        # astimezone(tz=tzlocal()) fails on Windows, so we need to
-        # fake the local timezone.
-        local_tz = tz.gettz(datetime.now(tz.tzlocal()).tzname())
-        expected = (
-            datetime(1920, 3, 7, 4, 34, 19, 353932)
-            .replace(tzinfo=tz.tzutc())
-            .astimezone(tz=local_tz)
-            .replace(tzinfo=tz.tzlocal())
+    def test_windows_datetime_from_timestamp_positive(self):
+        # positive timestamps should be tested because
+        # datetime.fromtimestamp can be used as
+        # the source of truth
+        positive_timestamp = 1572204340.6460679
+
+        result = util.windows_datetime_from_timestamp(positive_timestamp)
+        expected = datetime.fromtimestamp(positive_timestamp).replace(
+            tzinfo=tz.tzlocal()
         )
         self.assertEqual(result, expected)
 
-    def test_windows_datetime_from_negative_timestamp_utc(self):
+        result = util.windows_datetime_from_timestamp(
+            positive_timestamp, tz.gettz("EST")
+        )
+        expected = datetime.fromtimestamp(positive_timestamp, tz.gettz("EST")).replace(
+            tzinfo=tz.gettz("EST")
+        )
+        self.assertEqual(result, expected)
+
+    def test_windows_datetime_from_timestamp_negative(self):
+        negative_timestamp = -1572204340.6460679
+        result = util.windows_datetime_from_timestamp(negative_timestamp)
+        # astimezone(tzlocal()) fails on Windows, so we need to
+        # fake the local timezone by (1) fetching the local tzname
+        # and (2) forming a tzinfo object from that tzname
+        local_tz = tz.gettz(datetime.now(tz.tzlocal()).tzname())
+        expected_dt = (
+            datetime(1920, 3, 7, 4, 34, 19, 353932)
+            .replace(tzinfo=tz.tzutc())
+            .astimezone(local_tz)
+            .replace(tzinfo=tz.tzlocal())
+        )
+        expected = expected_dt + expected_dt.dst()
+        self.assertEqual(result, expected)
+
+    def test_windows_datetime_from_timestamp_utc(self):
         timestamp = -1572204340.6460679
-        result = util.windows_datetime_from_negative_timestamp(timestamp, tz.tzutc())
-        expected = datetime(1920, 3, 7, 4, 34, 19, 353932).replace(tzinfo=tz.tzutc())
+        result = util.windows_datetime_from_timestamp(timestamp, tz.tzutc())
+        expected_dt = datetime(1920, 3, 7, 4, 34, 19, 353932).replace(tzinfo=tz.tzutc())
+        expected = expected_dt + expected_dt.dst()
         self.assertEqual(result, expected)
 
     def test_safe_utcfromtimestamp(self):
