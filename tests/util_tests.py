@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
-from datetime import datetime
 
 from chai import Chai
-from dateutil import tz
-from mock import patch
 
 from arrow import util
 
@@ -36,63 +33,3 @@ class UtilTests(Chai):
 
         with self.assertRaises(ValueError):
             util.iso_to_gregorian(2013, 8, 0)
-
-    def test_windows_datetime_from_timestamp(self):
-        timestamp = 1572204340.6460679
-        result = util.windows_datetime_from_timestamp(timestamp)
-        expected = datetime.fromtimestamp(timestamp).replace(tzinfo=tz.tzlocal())
-        self.assertEqual(result, expected)
-
-    def test_windows_datetime_from_timestamp_utc(self):
-        timestamp = 1572204340.6460679
-        result = util.windows_datetime_from_timestamp(timestamp, tz.tzutc())
-        expected = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
-        self.assertEqual(result, expected)
-
-    def test_safe_utcfromtimestamp(self):
-        timestamp = 1572204340.6460679
-        result = util.safe_utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
-        expected = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
-        self.assertEqual(result, expected)
-
-    def test_safe_fromtimestamp_default_tz(self):
-        timestamp = 1572204340.6460679
-        result = util.safe_fromtimestamp(timestamp).replace(tzinfo=tz.tzlocal())
-        expected = datetime.fromtimestamp(timestamp).replace(tzinfo=tz.tzlocal())
-        self.assertEqual(result, expected)
-
-    def test_safe_fromtimestamp_paris_tz(self):
-        timestamp = 1572204340.6460679
-        result = util.safe_fromtimestamp(timestamp, tz.gettz("Europe/Paris"))
-        expected = datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris"))
-        self.assertEqual(result, expected)
-
-    def test_safe_utcfromtimestamp_negative(self):
-        timestamp = -1572204340.6460679
-        result = util.safe_utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
-        expected = datetime(1920, 3, 7, 4, 34, 19, 353932, tzinfo=tz.tzutc())
-        self.assertEqual(result, expected)
-
-    def test_safe_fromtimestamp_negative(self):
-        timestamp = -1572204340.6460679
-        result = util.safe_fromtimestamp(timestamp, tz.gettz("Europe/Paris"))
-        expected = datetime(
-            1920, 3, 7, 5, 34, 19, 353932, tzinfo=tz.gettz("Europe/Paris")
-        )
-        self.assertEqual(result, expected)
-
-    @patch.object(util, "os_name", "nt")
-    def test_safe_utcfromtimestamp_negative_nt(self):
-        timestamp = -1572204340.6460679
-        result = util.safe_utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
-        expected = datetime(1920, 3, 7, 4, 34, 19, 353932, tzinfo=tz.tzutc())
-        self.assertEqual(result, expected)
-
-    @patch.object(util, "os_name", "nt")
-    def test_safe_fromtimestamp_negative_nt(self):
-        timestamp = -1572204340.6460679
-        result = util.safe_fromtimestamp(timestamp, tz.gettz("Europe/Paris"))
-        expected = datetime(
-            1920, 3, 7, 5, 34, 19, 353932, tzinfo=tz.gettz("Europe/Paris")
-        )
-        self.assertEqual(result, expected)

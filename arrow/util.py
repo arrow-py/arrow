@@ -2,11 +2,6 @@
 from __future__ import absolute_import
 
 import datetime
-import math
-import time
-from os import name as os_name
-
-import dateutil
 
 
 def total_seconds(td):  # pragma: no cover
@@ -26,44 +21,6 @@ def is_timestamp(value):
         return True
     except ValueError:
         return False
-
-
-def windows_datetime_from_timestamp(timestamp, tz=None):
-    """Computes datetime from timestamp. Supports negative timestamps on Windows platform."""
-    sec_frac, sec = math.modf(timestamp)
-    dt = datetime.datetime(1970, 1, 1, tzinfo=dateutil.tz.tzutc()) + datetime.timedelta(
-        seconds=sec, microseconds=sec_frac * 1000000
-    )
-    if tz is None:
-        tz = dateutil.tz.tzlocal()
-
-    if tz == dateutil.tz.tzlocal():
-        # because datetime.astimezone does not work on Windows for tzlocal() and dates before the 1970-01-01
-        # take timestamp from appropriate time of the year, because of daylight saving time changes
-        ts = time.mktime(dt.replace(year=1970).timetuple())
-        dt += datetime.datetime.fromtimestamp(ts) - datetime.datetime.utcfromtimestamp(
-            ts
-        )
-        dt = dt.replace(tzinfo=dateutil.tz.tzlocal())
-    else:
-        dt = dt.astimezone(tz)
-    return dt
-
-
-def safe_utcfromtimestamp(timestamp):
-    """ datetime.utcfromtimestamp alternative which supports negative timestamps on Windows platform."""
-    if os_name == "nt" and timestamp < 0:
-        return windows_datetime_from_timestamp(timestamp, dateutil.tz.tzutc())
-    else:
-        return datetime.datetime.utcfromtimestamp(timestamp)
-
-
-def safe_fromtimestamp(timestamp, tz=None):
-    """ datetime.fromtimestamp alternative which supports negative timestamps on Windows platform."""
-    if os_name == "nt" and timestamp < 0:
-        return windows_datetime_from_timestamp(timestamp, tz)
-    else:
-        return datetime.datetime.fromtimestamp(timestamp, tz)
 
 
 # Credit to https://stackoverflow.com/a/1700069
@@ -100,12 +57,4 @@ except NameError:  # pragma: no cover
         return isinstance(s, str)
 
 
-__all__ = [
-    "total_seconds",
-    "is_timestamp",
-    "isstr",
-    "iso_to_gregorian",
-    "windows_datetime_from_timestamp",
-    "safe_utcfromtimestamp",
-    "safe_fromtimestamp",
-]
+__all__ = ["total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]
