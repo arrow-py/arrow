@@ -662,7 +662,7 @@ class Arrow(object):
         """
 
         relative_kwargs = {}
-        additional_attrs = ["days", "weeks", "quarters", "weekday"]
+        additional_attrs = ["weeks", "quarters", "weekday"]
 
         for key, value in kwargs.items():
 
