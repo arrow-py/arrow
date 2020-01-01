@@ -928,3 +928,27 @@ class BrazilianLocaleTests(Chai):
         self.assertEqual(self.locale._format_timeframe("months", 11), "11 meses")
         self.assertEqual(self.locale._format_timeframe("year", 1), "um ano")
         self.assertEqual(self.locale._format_timeframe("years", 12), "12 anos")
+
+
+class HongKongLocaleTests(Chai):
+    def setUp(self):
+        super(HongKongLocaleTests, self).setUp()
+
+        self.locale = locales.HongKongLocale()
+
+    def test_format_timeframe(self):
+        self.assertEqual(self.locale._format_timeframe("now", 0), "剛才")
+        self.assertEqual(self.locale._format_timeframe("second", 1), "1秒")
+        self.assertEqual(self.locale._format_timeframe("seconds", 30), "30秒")
+        self.assertEqual(self.locale._format_timeframe("minute", 1), "1分鐘")
+        self.assertEqual(self.locale._format_timeframe("minutes", 40), "40分鐘")
+        self.assertEqual(self.locale._format_timeframe("hour", 1), "1小時")
+        self.assertEqual(self.locale._format_timeframe("hours", 23), "23小時")
+        self.assertEqual(self.locale._format_timeframe("day", 1), "1天")
+        self.assertEqual(self.locale._format_timeframe("days", 12), "12天")
+        self.assertEqual(self.locale._format_timeframe("week", 1), "1星期")
+        self.assertEqual(self.locale._format_timeframe("weeks", 38), "38星期")
+        self.assertEqual(self.locale._format_timeframe("month", 1), "1個月")
+        self.assertEqual(self.locale._format_timeframe("months", 11), "11個月")
+        self.assertEqual(self.locale._format_timeframe("year", 1), "1年")
+        self.assertEqual(self.locale._format_timeframe("years", 12), "12年")
