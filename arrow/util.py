@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import datetime
 
 
-def total_seconds(td):  # pragma: no cover
+def total_seconds(td):
     """Get total seconds for timedelta."""
     return td.total_seconds()
 
