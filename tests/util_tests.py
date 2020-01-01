@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
+from datetime import datetime
 
 from chai import Chai
 
@@ -7,6 +8,10 @@ from arrow import util
 
 
 class UtilTests(Chai):
+    def test_total_seconds(self):
+        td = datetime(2019, 1, 1) - datetime(2018, 1, 1)
+        self.assertEqual(util.total_seconds(td), td.total_seconds())
+
     def test_is_timestamp(self):
         timestamp_float = time.time()
         timestamp_int = int(timestamp_float)

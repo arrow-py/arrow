@@ -146,16 +146,12 @@ class Arrow(object):
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
-
-        Timestamps should always be UTC. If you have a non-UTC timestamp::
-
-            >>> arrow.Arrow.utcfromtimestamp(1367900664).replace(tzinfo='US/Pacific')
-            <Arrow [2013-05-07T04:24:24-07:00]>
-
         """
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
+        elif util.isstr(tzinfo):
+            tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
             raise ValueError(
@@ -1423,19 +1419,17 @@ class Arrow(object):
 
     @classmethod
     def _get_datetime(cls, expr):
-
+        """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime
-
-        if isinstance(expr, datetime):
+        elif isinstance(expr, datetime):
             return expr
-
-        try:
-            expr = float(expr)
-            return cls.utcfromtimestamp(expr).datetime
-        except Exception:
+        elif util.is_timestamp(expr):
+            timestamp = float(expr)
+            return cls.utcfromtimestamp(timestamp).datetime
+        else:
             raise ValueError(
-                "'{}' not recognized as a timestamp or datetime".format(expr)
+                "'{}' not recognized as a datetime or timestamp.".format(expr)
             )
 
     @classmethod

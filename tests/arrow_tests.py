@@ -103,6 +103,12 @@ class ArrowFactoryTests(Chai):
             datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
         )
 
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo="Europe/Paris")
+        assertDtEqual(
+            result._datetime,
+            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+        )
+
         with self.assertRaises(ValueError):
             arrow.Arrow.fromtimestamp("invalid timestamp")
 
