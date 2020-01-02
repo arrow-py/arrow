@@ -512,6 +512,58 @@ class ArrowDatetimeInterfaceTests(Chai):
         self.assertEqual(result, self.arrow._datetime.strftime("%Y"))
 
 
+class ArrowFalsePositiveDstTests(Chai):
+    """These tests relate to issues #376 and #551.
+    The key points in both issues are that arrow will assign a UTC timezone if none is provided and
+    .to() will change other attributes to be correct whereas .replace() only changes the specified attribute.
+
+    Issue 376
+    >>> arrow.get('2016-11-06').to('America/New_York').ceil('day')
+    < Arrow [2016-11-05T23:59:59.999999-04:00] >
+
+    Issue 551
+    >>> just_before = arrow.get('2018-11-04T01:59:59.999999')
+    >>> just_before
+    2018-11-04T01:59:59.999999+00:00
+    >>> just_after = just_before.shift(microseconds=1)
+    >>> just_after
+    2018-11-04T02:00:00+00:00
+    >>> just_before_eastern = just_before.replace(tzinfo='US/Eastern')
+    >>> just_before_eastern
+    2018-11-04T01:59:59.999999-04:00
+    >>> just_after_eastern = just_after.replace(tzinfo='US/Eastern')
+    >>> just_after_eastern
+    2018-11-04T02:00:00-05:00
+    """
+
+    def setUp(self):
+
+        super(ArrowFalsePositiveDstTests, self).setUp()
+        self.before_1 = arrow.Arrow(
+            2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
+        self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_2 = arrow.Arrow(
+            2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_3 = arrow.Arrow(
+            2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_4 = arrow.Arrow(
+            2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
+
+    def test_dst(self):
+
+        self.assertEqual(self.before_1.day, self.before_2.day)
+        self.assertEqual(self.after_1.day, self.after_2.day)
+        self.assertEqual(self.before_3.day, self.before_4.day)
+        self.assertEqual(self.after_3.day, self.after_4.day)
+
+
 class ArrowConversionTests(Chai):
     def test_to(self):
 
