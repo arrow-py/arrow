@@ -939,7 +939,9 @@ class Arrow(object):
                     hours = sign * int(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
-                elif diff < 129600:
+                # elif diff < 129600:
+                # 48*60*60 = 172800
+                elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < 554400:
                     days = sign * int(max(delta / 86400, 2))
@@ -1033,17 +1035,23 @@ class Arrow(object):
 
                 if len(timeframes) < len(granularity):
                     raise AttributeError(
-                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                        "Invalid level of granularity. "
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
-                for index, (_, delta) in enumerate(timeframes):
-                    if trunc(abs(delta)) != 1:
-                        timeframes[index][0] += "s"
+                for tf in timeframes:
+                    # if granularity is 'second' (singular version has no translation)
+                    # or the delta is not equal to 1, we need to make granularity plural
+                    if trunc(abs(tf[1])) != 1:
+                        tf[0] += "s"
+                    # if tf[0] == "second" or trunc(abs(tf[1])) != 1:
+                    #     tf[0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
             raise ValueError(
-                "Humanization of the {} granularity is not currently translated in the '{}' locale. Please consider making a contribution to this locale.".format(
+                "Humanization of the {} granularity is not currently translated in the '{}' locale. "
+                "Please consider making a contribution to this locale.".format(
                     e, locale_name
                 )
             )

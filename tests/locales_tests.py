@@ -153,9 +153,9 @@ class SpanishLocalesTests(Chai):
     def test_format_timeframe(self):
         locale = locales.SpanishLocale()
         self.assertEqual(locale._format_timeframe("now", 0), "ahora")
-        self.assertEqual(locale._format_timeframe("seconds", 1), "segundos")
-        self.assertEqual(locale._format_timeframe("seconds", 3), "segundos")
-        self.assertEqual(locale._format_timeframe("seconds", 30), "segundos")
+        self.assertEqual(locale._format_timeframe("seconds", 1), "1 segundos")
+        self.assertEqual(locale._format_timeframe("seconds", 3), "3 segundos")
+        self.assertEqual(locale._format_timeframe("seconds", 30), "30 segundos")
         self.assertEqual(locale._format_timeframe("minute", 1), "un minuto")
         self.assertEqual(locale._format_timeframe("minutes", 4), "4 minutos")
         self.assertEqual(locale._format_timeframe("minutes", 40), "40 minutos")
@@ -176,9 +176,9 @@ class SpanishLocalesTests(Chai):
         self.assertEqual(locale._format_timeframe("years", 12), "12 años")
 
         self.assertEqual(locale._format_timeframe("now", 0), "ahora")
-        self.assertEqual(locale._format_timeframe("seconds", -1), "segundos")
-        self.assertEqual(locale._format_timeframe("seconds", -9), "segundos")
-        self.assertEqual(locale._format_timeframe("seconds", -12), "segundos")
+        self.assertEqual(locale._format_timeframe("seconds", -1), "1 segundos")
+        self.assertEqual(locale._format_timeframe("seconds", -9), "9 segundos")
+        self.assertEqual(locale._format_timeframe("seconds", -12), "12 segundos")
         self.assertEqual(locale._format_timeframe("minute", -1), "un minuto")
         self.assertEqual(locale._format_timeframe("minutes", -2), "2 minutos")
         self.assertEqual(locale._format_timeframe("minutes", -10), "10 minutos")
@@ -805,7 +805,7 @@ class TagalogLocaleTests(Chai):
         self.assertEqual(self.locale._format_timeframe("month", 1), "isang buwan")
         self.assertEqual(self.locale._format_timeframe("year", 1), "isang taon")
 
-        self.assertEqual(self.locale._format_timeframe("seconds", 2), "segundo")
+        self.assertEqual(self.locale._format_timeframe("seconds", 2), "2 segundo")
         self.assertEqual(self.locale._format_timeframe("minutes", 3), "3 minuto")
         self.assertEqual(self.locale._format_timeframe("hours", 4), "4 oras")
         self.assertEqual(self.locale._format_timeframe("months", 5), "5 buwan")
@@ -846,7 +846,6 @@ class EstonianLocaleTests(Chai):
 
     def test_format_timeframe(self):
         self.assertEqual(self.locale._format_timeframe("now", 0), "just nüüd")
-        self.assertEqual(self.locale._format_timeframe("second", 1), "ühe sekundi")
         self.assertEqual(self.locale._format_timeframe("seconds", 3), "3 sekundi")
         self.assertEqual(self.locale._format_timeframe("seconds", 30), "30 sekundi")
         self.assertEqual(self.locale._format_timeframe("minute", 1), "ühe minuti")
@@ -866,7 +865,6 @@ class EstonianLocaleTests(Chai):
         self.assertEqual(self.locale._format_timeframe("years", 12), "12 aasta")
 
         self.assertEqual(self.locale._format_timeframe("now", 0), "just nüüd")
-        self.assertEqual(self.locale._format_timeframe("second", -1), "üks sekund")
         self.assertEqual(self.locale._format_timeframe("seconds", -9), "9 sekundit")
         self.assertEqual(self.locale._format_timeframe("seconds", -12), "12 sekundit")
         self.assertEqual(self.locale._format_timeframe("minute", -1), "üks minut")
@@ -894,7 +892,6 @@ class PortugueseLocaleTests(Chai):
 
     def test_format_timeframe(self):
         self.assertEqual(self.locale._format_timeframe("now", 0), "agora")
-        self.assertEqual(self.locale._format_timeframe("second", 1), "um segundo")
         self.assertEqual(self.locale._format_timeframe("seconds", 30), "30 segundos")
         self.assertEqual(self.locale._format_timeframe("minute", 1), "um minuto")
         self.assertEqual(self.locale._format_timeframe("minutes", 40), "40 minutos")
@@ -916,7 +913,6 @@ class BrazilianLocaleTests(Chai):
 
     def test_format_timeframe(self):
         self.assertEqual(self.locale._format_timeframe("now", 0), "agora")
-        self.assertEqual(self.locale._format_timeframe("second", 1), "um segundo")
         self.assertEqual(self.locale._format_timeframe("seconds", 30), "30 segundos")
         self.assertEqual(self.locale._format_timeframe("minute", 1), "um minuto")
         self.assertEqual(self.locale._format_timeframe("minutes", 40), "40 minutos")
@@ -938,7 +934,6 @@ class HongKongLocaleTests(Chai):
 
     def test_format_timeframe(self):
         self.assertEqual(self.locale._format_timeframe("now", 0), "剛才")
-        self.assertEqual(self.locale._format_timeframe("second", 1), "1秒")
         self.assertEqual(self.locale._format_timeframe("seconds", 30), "30秒")
         self.assertEqual(self.locale._format_timeframe("minute", 1), "1分鐘")
         self.assertEqual(self.locale._format_timeframe("minutes", 40), "40分鐘")
