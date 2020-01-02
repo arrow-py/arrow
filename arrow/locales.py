@@ -4107,7 +4107,7 @@ class EstonianLocale(Locale):
 
     timeframes = {
         "now": {"past": "just nüüd", "future": "just nüüd"},
-        "second": {"past": "sekund", "future": "sekund"},
+        "second": {"past": "üks sekund", "future": "ühe sekundi"},
         "seconds": {"past": "{0} sekundit", "future": "{0} sekundi"},
         "minute": {"past": "üks minut", "future": "ühe minuti"},
         "minutes": {"past": "{0} minutit", "future": "{0} minuti"},

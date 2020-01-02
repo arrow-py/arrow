@@ -939,8 +939,7 @@ class Arrow(object):
                     hours = sign * int(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
-                # elif diff < 129600:
-                # 48*60*60 = 172800
+                # anything less than 48 hours should be 1 day
                 elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < 554400:
@@ -1044,8 +1043,6 @@ class Arrow(object):
                     # or the delta is not equal to 1, we need to make granularity plural
                     if trunc(abs(tf[1])) != 1:
                         tf[0] += "s"
-                    # if tf[0] == "second" or trunc(abs(tf[1])) != 1:
-                    #     tf[0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
