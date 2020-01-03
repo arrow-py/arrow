@@ -1044,8 +1044,7 @@ class Arrow(object):
                     )
 
                 for tf in timeframes:
-                    # if granularity is 'second' (singular version has no translation)
-                    # or the delta is not equal to 1, we need to make granularity plural
+                    # Make granularity plural if the delta is not equal to 1
                     if trunc(abs(tf[1])) != 1:
                         tf[0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
