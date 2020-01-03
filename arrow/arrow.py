@@ -904,7 +904,12 @@ class Arrow(object):
                 dt = other.astimezone(self._datetime.tzinfo)
 
         else:
-            raise TypeError()
+            raise TypeError(
+                "Invalid 'other' argument of type '{}'. "
+                "Argument must be of type None, Arrow, or datetime.".format(
+                    type(other).__name__
+                )
+            )
 
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
@@ -939,7 +944,8 @@ class Arrow(object):
                     hours = sign * int(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
-                elif diff < 129600:
+                # anything less than 48 hours should be 1 day
+                elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < 554400:
                     days = sign * int(max(delta / 86400, 2))
@@ -1033,17 +1039,20 @@ class Arrow(object):
 
                 if len(timeframes) < len(granularity):
                     raise AttributeError(
-                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                        "Invalid level of granularity. "
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
-                for index, (_, delta) in enumerate(timeframes):
-                    if trunc(abs(delta)) != 1:
-                        timeframes[index][0] += "s"
+                for tf in timeframes:
+                    # Make granularity plural if the delta is not equal to 1
+                    if trunc(abs(tf[1])) != 1:
+                        tf[0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
             raise ValueError(
-                "Humanization of the {} granularity is not currently translated in the '{}' locale. Please consider making a contribution to this locale.".format(
+                "Humanization of the {} granularity is not currently translated in the '{}' locale. "
+                "Please consider making a contribution to this locale.".format(
                     e, locale_name
                 )
             )

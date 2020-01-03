@@ -1544,10 +1544,10 @@ class ArrowHumanizeTests(Chai):
 
         later100 = self.now.shift(seconds=100)
         self.assertEqual(
-            self.now.humanize(later100, granularity="second"), "seconds ago"
+            self.now.humanize(later100, granularity="second"), "100 seconds ago"
         )
         self.assertEqual(
-            later100.humanize(self.now, granularity="second"), "in seconds"
+            later100.humanize(self.now, granularity="second"), "in 100 seconds"
         )
         self.assertEqual(
             self.now.humanize(later100, granularity="minute"), "a minute ago"
@@ -1646,7 +1646,7 @@ class ArrowHumanizeTests(Chai):
         self.assertEqual(self.now.humanize(granularity=["second"]), "just now")
         self.assertEqual(
             self.now.humanize(granularity=["year", "month", "day", "hour", "second"]),
-            "in 0 years 0 months 0 days 0 hours and seconds",
+            "in 0 years 0 months 0 days 0 hours and 0 seconds",
         )
 
         later4000 = self.now.shift(seconds=4000)
@@ -1698,18 +1698,31 @@ class ArrowHumanizeTests(Chai):
             self.now.humanize(
                 later108onlydistance, only_distance=True, granularity=["year", "second"]
             ),
-            "3 years and seconds",
+            "3 years and 5327200 seconds",
+        )
+
+        one_min_one_sec_ago = self.now.shift(minutes=-1, seconds=-1)
+        self.assertEqual(
+            one_min_one_sec_ago.humanize(self.now, granularity=["minute", "second"]),
+            "a minute and a second ago",
+        )
+
+        one_min_two_secs_ago = self.now.shift(minutes=-1, seconds=-2)
+        self.assertEqual(
+            one_min_two_secs_ago.humanize(self.now, granularity=["minute", "second"]),
+            "a minute and 2 seconds ago",
         )
 
     def test_seconds(self):
 
         later = self.now.shift(seconds=10)
 
-        self.assertEqual(self.now.humanize(later), "seconds ago")
-        self.assertEqual(later.humanize(self.now), "in seconds")
+        # regression test for issue #727
+        self.assertEqual(self.now.humanize(later), "10 seconds ago")
+        self.assertEqual(later.humanize(self.now), "in 10 seconds")
 
-        self.assertEqual(self.now.humanize(later, only_distance=True), "seconds")
-        self.assertEqual(later.humanize(self.now, only_distance=True), "seconds")
+        self.assertEqual(self.now.humanize(later, only_distance=True), "10 seconds")
+        self.assertEqual(later.humanize(self.now, only_distance=True), "10 seconds")
 
     def test_minute(self):
 
@@ -1757,6 +1770,23 @@ class ArrowHumanizeTests(Chai):
 
         self.assertEqual(self.now.humanize(later), "a day ago")
         self.assertEqual(later.humanize(self.now), "in a day")
+
+        # regression test for issue #697
+        less_than_48_hours = self.now.shift(
+            days=1, hours=23, seconds=59, microseconds=999999
+        )
+        self.assertEqual(self.now.humanize(less_than_48_hours), "a day ago")
+        self.assertEqual(less_than_48_hours.humanize(self.now), "in a day")
+
+        less_than_48_hours_date = less_than_48_hours._datetime.date()
+        with self.assertRaises(TypeError):
+            # humanize other argument does not take raw datetime.date objects
+            self.now.humanize(less_than_48_hours_date)
+
+        # convert from date to arrow object
+        less_than_48_hours_date = arrow.Arrow.fromdate(less_than_48_hours_date)
+        self.assertEqual(self.now.humanize(less_than_48_hours_date), "a day ago")
+        self.assertEqual(less_than_48_hours_date.humanize(self.now), "in a day")
 
         self.assertEqual(self.now.humanize(later, only_distance=True), "a day")
         self.assertEqual(later.humanize(self.now, only_distance=True), "a day")
@@ -1922,7 +1952,7 @@ class ArrowHumanizeTestsWithLocale(Chai):
 
         result = arw.humanize(self.datetime, locale="ru")
 
-        self.assertEqual(result, "через несколько секунд")
+        self.assertEqual(result, "через 44 несколько секунд")
 
     def test_years(self):
 
