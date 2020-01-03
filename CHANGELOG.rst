@@ -1,6 +1,35 @@
 Changelog
 =========
 
+0.15.5 (2020-01-03)
+-------------------
+
+- [WARN] Python 2 reached EOL on 2020-01-01. arrow will **drop support** for Python 2 in a future release to be decided (see `#739 <https://github.com/crsmithdev/arrow/issues/739>`_).
+- [NEW] Added bounds parameter to ``span_range``, ``interval`` and ``span`` methods. This allows you to include or exclude the start and end values.
+- [NEW] ``arrow.get()`` can now create arrow objects from a timestamp with a timezone, for example:
+
+.. code-block:: python
+
+    >>> arrow.get(1367900664, tzinfo=tz.gettz('US/Pacific'))
+    <Arrow [2013-05-06T21:24:24-07:00]>
+
+- [NEW] ``humanize`` can now combine multiple levels of granularity, for example:
+
+.. code-block:: python
+
+    >>> later140 = arrow.utcnow().shift(seconds=+8400)
+    >>> later140.humanize(granularity="minute")
+    'in 139 minutes'
+    >>> later140.humanize(granularity=["hour", "minute"])
+    'in 2 hours and 19 minutes'
+
+- [NEW] Added Hong Kong locale (``zh_hk``).
+- [NEW] Added ``humanize`` week granularity translation for Dutch.
+- [NEW] Numbers are now displayed when using the seconds granularity in ``humanize``.
+- [CHANGE] ``range`` now supports both the singular and plural forms of the ``frames`` argument (e.g. day and days).
+- [FIX] Improved parsing of strings that contain punctuation.
+- [FIX] Improved behaviour of ``humanize`` when singular seconds are involved.
+
 0.15.4 (2019-11-02)
 -------------------
 
