@@ -904,7 +904,12 @@ class Arrow(object):
                 dt = other.astimezone(self._datetime.tzinfo)
 
         else:
-            raise TypeError()
+            raise TypeError(
+                "Invalid 'other' argument of type '{}'. "
+                "Argument must be of type None, Arrow, or datetime.".format(
+                    type(other).__name__
+                )
+            )
 
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
