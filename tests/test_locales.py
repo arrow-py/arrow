@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from arrow import arrow, locales
-
 import pytest
+
+from arrow import arrow, locales
 
 
 class TestLocaleValidation:
@@ -641,11 +641,17 @@ class TestRomanianLocale:
         assert self.locale._format_relative("o oră", "hour", 1) == "peste o oră"
         assert self.locale._format_relative("o oră", "hour", -1) == "o oră în urmă"
         assert self.locale._format_relative("un minut", "minute", 1) == "peste un minut"
-        assert self.locale._format_relative("un minut", "minute", -1) == "un minut în urmă"
-        assert self.locale._format_relative("câteva secunde", "seconds", -1) == \
-            "câteva secunde în urmă"
-        assert self.locale._format_relative("câteva secunde", "seconds", 1) == \
-            "peste câteva secunde"
+        assert (
+            self.locale._format_relative("un minut", "minute", -1) == "un minut în urmă"
+        )
+        assert (
+            self.locale._format_relative("câteva secunde", "seconds", -1)
+            == "câteva secunde în urmă"
+        )
+        assert (
+            self.locale._format_relative("câteva secunde", "seconds", 1)
+            == "peste câteva secunde"
+        )
         assert self.locale._format_relative("o zi", "day", -1) == "o zi în urmă"
         assert self.locale._format_relative("o zi", "day", 1) == "peste o zi"
 

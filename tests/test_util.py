@@ -2,8 +2,9 @@
 import time
 from datetime import datetime
 
-from arrow import util
 import pytest
+
+from arrow import util
 
 
 class TestUtil:

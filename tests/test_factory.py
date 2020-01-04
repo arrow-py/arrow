@@ -3,16 +3,13 @@ import time
 from datetime import date, datetime
 
 import dateparser
+import pytest
 from dateutil import tz
 
-from arrow import factory, util
+from arrow import factory
 from arrow.parser import ParserError
-import pytest
 
-
-def assertDtEqual(dt1, dt2, within=10):
-    assert dt1.tzinfo == dt2.tzinfo
-    assert abs(util.total_seconds(dt1 - dt2)) < within
+from .utils import assert_datetime_equality
 
 
 class TestGet:
@@ -22,7 +19,9 @@ class TestGet:
 
     def test_no_args(self):
 
-        assertDtEqual(self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc()))
+        assert_datetime_equality(
+            self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc())
+        )
 
     def test_timestamp_one_arg_no_arg(self):
 
@@ -33,13 +32,13 @@ class TestGet:
 
     def test_one_arg_none(self):
 
-        assertDtEqual(
+        assert_datetime_equality(
             self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc())
         )
 
     def test_struct_time(self):
 
-        assertDtEqual(
+        assert_datetime_equality(
             self.factory.get(time.gmtime()),
             datetime.utcnow().replace(tzinfo=tz.tzutc()),
         )
@@ -80,7 +79,9 @@ class TestGet:
         )
         timezone = tz.gettz("US/Pacific")
 
-        assertDtEqual(self.factory.get(timestamp, tzinfo=timezone), timestamp_dt)
+        assert_datetime_equality(
+            self.factory.get(timestamp, tzinfo=timezone), timestamp_dt
+        )
 
     def test_one_arg_arrow(self):
 
@@ -110,7 +111,9 @@ class TestGet:
             .astimezone(tz.gettz("US/Pacific"))
         )
 
-        assertDtEqual(self.factory.get(tz.gettz("US/Pacific")), self.expected)
+        assert_datetime_equality(
+            self.factory.get(tz.gettz("US/Pacific")), self.expected
+        )
 
     # regression test for issue #658
     def test_one_arg_dateparser_datetime(self):
@@ -128,7 +131,9 @@ class TestGet:
             .astimezone(tz.gettz("US/Pacific"))
         )
 
-        assertDtEqual(self.factory.get(tzinfo=tz.gettz("US/Pacific")), self.expected)
+        assert_datetime_equality(
+            self.factory.get(tzinfo=tz.gettz("US/Pacific")), self.expected
+        )
 
     def test_kwarg_tzinfo_string(self):
 
@@ -138,7 +143,7 @@ class TestGet:
             .astimezone(tz.gettz("US/Pacific"))
         )
 
-        assertDtEqual(self.factory.get(tzinfo="US/Pacific"), self.expected)
+        assert_datetime_equality(self.factory.get(tzinfo="US/Pacific"), self.expected)
 
         with pytest.raises(ParserError):
             self.factory.get(tzinfo="US/PacificInvalidTzinfo")
@@ -147,7 +152,9 @@ class TestGet:
 
         dt = datetime.utcnow()
 
-        assertDtEqual(self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc()))
+        assert_datetime_equality(
+            self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc())
+        )
 
     def test_one_arg_iso_calendar(self):
 
@@ -235,7 +242,7 @@ class TestGet:
 
         result = self.factory.get("2013-01-01", tzinfo=tz.gettz("US/Pacific"))
 
-        assertDtEqual(
+        assert_datetime_equality(
             result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
         )
 
@@ -333,7 +340,7 @@ class TestUtcNow:
 
     def test_utcnow(self):
 
-        assertDtEqual(
+        assert_datetime_equality(
             self.factory.utcnow()._datetime,
             datetime.utcnow().replace(tzinfo=tz.tzutc()),
         )
@@ -346,12 +353,14 @@ class TestNow:
 
     def test_no_tz(self):
 
-        assertDtEqual(self.factory.now(), datetime.now(tz.tzlocal()))
+        assert_datetime_equality(self.factory.now(), datetime.now(tz.tzlocal()))
 
     def test_tzinfo(self):
 
-        assertDtEqual(self.factory.now(tz.gettz("EST")), datetime.now(tz.gettz("EST")))
+        assert_datetime_equality(
+            self.factory.now(tz.gettz("EST")), datetime.now(tz.gettz("EST"))
+        )
 
     def test_tz_str(self):
 
-        assertDtEqual(self.factory.now("EST"), datetime.now(tz.gettz("EST")))
+        assert_datetime_equality(self.factory.now("EST"), datetime.now(tz.gettz("EST")))

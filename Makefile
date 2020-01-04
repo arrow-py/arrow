@@ -14,8 +14,8 @@ build27 build35 build36 build37 build38:
 	venv/bin/pre-commit install
 
 test:
-	rm -f .coverage
-	. venv/bin/activate && nosetests
+	rm -f .coverage coverage.xml
+	. venv/bin/activate && pytest
 
 lint:
 	venv/bin/pre-commit run --all-files --show-diff-on-failure

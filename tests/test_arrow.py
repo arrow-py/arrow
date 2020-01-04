@@ -13,12 +13,9 @@ import simplejson as json
 from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
 
-from arrow import arrow, util
+from arrow import arrow
 
-
-def assertDtEqual(dt1, dt2, within=10):
-    assert dt1.tzinfo == dt2.tzinfo
-    assert abs(util.total_seconds(dt1 - dt2)) < within
+from .utils import assert_datetime_equality
 
 
 class TestTestArrowInit:
@@ -73,7 +70,7 @@ class TestTestArrowInit:
             2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
         )
         assert result._datetime == self.expected
-        assertDtEqual(result._datetime, self.expected, 1)
+        assert_datetime_equality(result._datetime, self.expected, 1)
 
 
 class TestTestArrowFactory:
@@ -81,29 +78,35 @@ class TestTestArrowFactory:
 
         result = arrow.Arrow.now()
 
-        assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+        assert_datetime_equality(
+            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
+        )
 
     def test_utcnow(self):
 
         result = arrow.Arrow.utcnow()
 
-        assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
+        assert_datetime_equality(
+            result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc())
+        )
 
     def test_fromtimestamp(self):
 
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-        assertDtEqual(result._datetime, datetime.now().replace(tzinfo=tz.tzlocal()))
+        assert_datetime_equality(
+            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
+        )
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
-        assertDtEqual(
+        assert_datetime_equality(
             result._datetime,
             datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
         )
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo="Europe/Paris")
-        assertDtEqual(
+        assert_datetime_equality(
             result._datetime,
             datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
         )
@@ -116,7 +119,9 @@ class TestTestArrowFactory:
         timestamp = time.time()
 
         result = arrow.Arrow.utcfromtimestamp(timestamp)
-        assertDtEqual(result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc()))
+        assert_datetime_equality(
+            result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc())
+        )
 
         with pytest.raises(ValueError):
             arrow.Arrow.utcfromtimestamp("invalid timestamp")
