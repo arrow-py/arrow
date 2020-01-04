@@ -12,7 +12,6 @@ import pytz
 import simplejson as json
 from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
-from mock import patch
 
 from arrow import arrow, util
 
@@ -1678,17 +1677,16 @@ class TestArrowHumanize:
 
         assert result == "just now"
 
-    def test_untranslated_granularity(self):
+    def test_untranslated_granularity(self, mocker):
 
         arw = arrow.Arrow.utcnow()
         later = arw.shift(weeks=1)
 
         # simulate an untranslated timeframe key
-        with patch.dict("arrow.locales.EnglishLocale.timeframes"):
-            del arrow.locales.EnglishLocale.timeframes["week"]
-
-            with pytest.raises(ValueError):
-                arw.humanize(later, granularity="week")
+        mocker.patch.dict("arrow.locales.EnglishLocale.timeframes")
+        del arrow.locales.EnglishLocale.timeframes["week"]
+        with pytest.raises(ValueError):
+            arw.humanize(later, granularity="week")
 
 
 class TestArrowHumanizeTestsWithLocale:
