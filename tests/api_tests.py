@@ -1,33 +1,28 @@
 # -*- coding: utf-8 -*-
-from chai import Chai
-
-from arrow import api, arrow, factory
+import arrow
 
 
-class ModuleTests(Chai):
-    def test_get(self):
+class TestModule:
+    def test_get(self, mocker):
+        mocker.patch("arrow.api._factory.get", return_value="result")
 
-        self.expect(api._factory.get).args(1, b=2).returns("result")
+        assert arrow.api.get() == "result"
 
-        self.assertEqual(api.get(1, b=2), "result")
+    def test_utcnow(self, mocker):
+        mocker.patch("arrow.api._factory.utcnow", return_value="utcnow")
 
-    def test_utcnow(self):
+        assert arrow.api.utcnow() == "utcnow"
 
-        self.expect(api._factory.utcnow).returns("utcnow")
+    def test_now(self, mocker):
+        mocker.patch("arrow.api._factory.now", tz="tz", return_value="now")
 
-        self.assertEqual(api.utcnow(), "utcnow")
-
-    def test_now(self):
-
-        self.expect(api._factory.now).args("tz").returns("now")
-
-        self.assertEqual(api.now("tz"), "now")
+        assert arrow.api.now("tz") == "now"
 
     def test_factory(self):
         class MockCustomArrowClass(arrow.Arrow):
             pass
 
-        result = api.factory(MockCustomArrowClass)
+        result = arrow.api.factory(MockCustomArrowClass)
 
-        self.assertIsInstance(result, factory.ArrowFactory)
-        self.assertIsInstance(result.utcnow(), MockCustomArrowClass)
+        assert isinstance(result, arrow.factory.ArrowFactory)
+        assert isinstance(result.utcnow(), MockCustomArrowClass)
