@@ -3,7 +3,6 @@ import time
 from datetime import datetime
 
 import pytz
-from chai import Chai
 from dateutil import tz as dateutil_tz
 
 from arrow import formatter
@@ -11,11 +10,10 @@ from arrow import formatter
 from .utils import make_full_tz_list
 
 
-class DateTimeFormatterFormatTokenTests(Chai):
-    def setUp(self):
-        super(DateTimeFormatterFormatTokenTests, self).setUp()
-
-        self.formatter = formatter.DateTimeFormatter()
+class TestDateTimeFormatterFormatToken:
+    @classmethod
+    def setup_class(cls):
+        cls.formatter = formatter.DateTimeFormatter()
 
     def test_format(self):
 
@@ -23,103 +21,103 @@ class DateTimeFormatterFormatTokenTests(Chai):
 
         result = self.formatter.format(dt, "MM-DD-YYYY hh:mm:ss a")
 
-        self.assertEqual(result, "02-05-2013 12:32:51 pm")
+        assert result == "02-05-2013 12:32:51 pm"
 
     def test_year(self):
 
         dt = datetime(2013, 1, 1)
-        self.assertEqual(self.formatter._format_token(dt, "YYYY"), "2013")
-        self.assertEqual(self.formatter._format_token(dt, "YY"), "13")
+        assert self.formatter._format_token(dt, "YYYY") == "2013"
+        assert self.formatter._format_token(dt, "YY") == "13"
 
     def test_month(self):
 
         dt = datetime(2013, 1, 1)
-        self.assertEqual(self.formatter._format_token(dt, "MMMM"), "January")
-        self.assertEqual(self.formatter._format_token(dt, "MMM"), "Jan")
-        self.assertEqual(self.formatter._format_token(dt, "MM"), "01")
-        self.assertEqual(self.formatter._format_token(dt, "M"), "1")
+        assert self.formatter._format_token(dt, "MMMM") == "January"
+        assert self.formatter._format_token(dt, "MMM") == "Jan"
+        assert self.formatter._format_token(dt, "MM") == "01"
+        assert self.formatter._format_token(dt, "M") == "1"
 
     def test_day(self):
 
         dt = datetime(2013, 2, 1)
-        self.assertEqual(self.formatter._format_token(dt, "DDDD"), "032")
-        self.assertEqual(self.formatter._format_token(dt, "DDD"), "32")
-        self.assertEqual(self.formatter._format_token(dt, "DD"), "01")
-        self.assertEqual(self.formatter._format_token(dt, "D"), "1")
-        self.assertEqual(self.formatter._format_token(dt, "Do"), "1st")
+        assert self.formatter._format_token(dt, "DDDD") == "032"
+        assert self.formatter._format_token(dt, "DDD") == "32"
+        assert self.formatter._format_token(dt, "DD") == "01"
+        assert self.formatter._format_token(dt, "D") == "1"
+        assert self.formatter._format_token(dt, "Do") == "1st"
 
-        self.assertEqual(self.formatter._format_token(dt, "dddd"), "Friday")
-        self.assertEqual(self.formatter._format_token(dt, "ddd"), "Fri")
-        self.assertEqual(self.formatter._format_token(dt, "d"), "5")
+        assert self.formatter._format_token(dt, "dddd") == "Friday"
+        assert self.formatter._format_token(dt, "ddd") == "Fri"
+        assert self.formatter._format_token(dt, "d") == "5"
 
     def test_hour(self):
 
         dt = datetime(2013, 1, 1, 2)
-        self.assertEqual(self.formatter._format_token(dt, "HH"), "02")
-        self.assertEqual(self.formatter._format_token(dt, "H"), "2")
+        assert self.formatter._format_token(dt, "HH") == "02"
+        assert self.formatter._format_token(dt, "H") == "2"
 
         dt = datetime(2013, 1, 1, 13)
-        self.assertEqual(self.formatter._format_token(dt, "HH"), "13")
-        self.assertEqual(self.formatter._format_token(dt, "H"), "13")
+        assert self.formatter._format_token(dt, "HH") == "13"
+        assert self.formatter._format_token(dt, "H") == "13"
 
         dt = datetime(2013, 1, 1, 2)
-        self.assertEqual(self.formatter._format_token(dt, "hh"), "02")
-        self.assertEqual(self.formatter._format_token(dt, "h"), "2")
+        assert self.formatter._format_token(dt, "hh") == "02"
+        assert self.formatter._format_token(dt, "h") == "2"
 
         dt = datetime(2013, 1, 1, 13)
-        self.assertEqual(self.formatter._format_token(dt, "hh"), "01")
-        self.assertEqual(self.formatter._format_token(dt, "h"), "1")
+        assert self.formatter._format_token(dt, "hh") == "01"
+        assert self.formatter._format_token(dt, "h") == "1"
 
         # test that 12-hour time converts to '12' at midnight
         dt = datetime(2013, 1, 1, 0)
-        self.assertEqual(self.formatter._format_token(dt, "hh"), "12")
-        self.assertEqual(self.formatter._format_token(dt, "h"), "12")
+        assert self.formatter._format_token(dt, "hh") == "12"
+        assert self.formatter._format_token(dt, "h") == "12"
 
     def test_minute(self):
 
         dt = datetime(2013, 1, 1, 0, 1)
-        self.assertEqual(self.formatter._format_token(dt, "mm"), "01")
-        self.assertEqual(self.formatter._format_token(dt, "m"), "1")
+        assert self.formatter._format_token(dt, "mm") == "01"
+        assert self.formatter._format_token(dt, "m") == "1"
 
     def test_second(self):
 
         dt = datetime(2013, 1, 1, 0, 0, 1)
-        self.assertEqual(self.formatter._format_token(dt, "ss"), "01")
-        self.assertEqual(self.formatter._format_token(dt, "s"), "1")
+        assert self.formatter._format_token(dt, "ss") == "01"
+        assert self.formatter._format_token(dt, "s") == "1"
 
     def test_sub_second(self):
 
         dt = datetime(2013, 1, 1, 0, 0, 0, 123456)
-        self.assertEqual(self.formatter._format_token(dt, "SSSSSS"), "123456")
-        self.assertEqual(self.formatter._format_token(dt, "SSSSS"), "12345")
-        self.assertEqual(self.formatter._format_token(dt, "SSSS"), "1234")
-        self.assertEqual(self.formatter._format_token(dt, "SSS"), "123")
-        self.assertEqual(self.formatter._format_token(dt, "SS"), "12")
-        self.assertEqual(self.formatter._format_token(dt, "S"), "1")
+        assert self.formatter._format_token(dt, "SSSSSS") == "123456"
+        assert self.formatter._format_token(dt, "SSSSS") == "12345"
+        assert self.formatter._format_token(dt, "SSSS") == "1234"
+        assert self.formatter._format_token(dt, "SSS") == "123"
+        assert self.formatter._format_token(dt, "SS") == "12"
+        assert self.formatter._format_token(dt, "S") == "1"
 
         dt = datetime(2013, 1, 1, 0, 0, 0, 2000)
-        self.assertEqual(self.formatter._format_token(dt, "SSSSSS"), "002000")
-        self.assertEqual(self.formatter._format_token(dt, "SSSSS"), "00200")
-        self.assertEqual(self.formatter._format_token(dt, "SSSS"), "0020")
-        self.assertEqual(self.formatter._format_token(dt, "SSS"), "002")
-        self.assertEqual(self.formatter._format_token(dt, "SS"), "00")
-        self.assertEqual(self.formatter._format_token(dt, "S"), "0")
+        assert self.formatter._format_token(dt, "SSSSSS") == "002000"
+        assert self.formatter._format_token(dt, "SSSSS") == "00200"
+        assert self.formatter._format_token(dt, "SSSS") == "0020"
+        assert self.formatter._format_token(dt, "SSS") == "002"
+        assert self.formatter._format_token(dt, "SS") == "00"
+        assert self.formatter._format_token(dt, "S") == "0"
 
     def test_timestamp(self):
 
         timestamp = time.time()
         dt = datetime.utcfromtimestamp(timestamp)
-        self.assertEqual(self.formatter._format_token(dt, "X"), str(int(timestamp)))
+        assert self.formatter._format_token(dt, "X") == str(int(timestamp))
 
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
 
         result = self.formatter._format_token(dt, "ZZ")
-        self.assertTrue(result == "-07:00" or result == "-08:00")
+        assert result == "-07:00" or result == "-08:00"
 
         result = self.formatter._format_token(dt, "Z")
-        self.assertTrue(result == "-0700" or result == "-0800")
+        assert result == "-0700" or result == "-0800"
 
     def test_timezone_formatter(self):
 
@@ -131,69 +129,69 @@ class DateTimeFormatterFormatTokenTests(Chai):
             abbreviation = dt.tzname()
 
             result = self.formatter._format_token(dt, "ZZZ")
-            self.assertEqual(result, abbreviation)
+            assert result == abbreviation
 
     def test_am_pm(self):
 
         dt = datetime(2012, 1, 1, 11)
-        self.assertEqual(self.formatter._format_token(dt, "a"), "am")
-        self.assertEqual(self.formatter._format_token(dt, "A"), "AM")
+        assert self.formatter._format_token(dt, "a") == "am"
+        assert self.formatter._format_token(dt, "A") == "AM"
 
         dt = datetime(2012, 1, 1, 13)
-        self.assertEqual(self.formatter._format_token(dt, "a"), "pm")
-        self.assertEqual(self.formatter._format_token(dt, "A"), "PM")
+        assert self.formatter._format_token(dt, "a") == "pm"
+        assert self.formatter._format_token(dt, "A") == "PM"
 
     def test_nonsense(self):
         dt = datetime(2012, 1, 1, 11)
-        self.assertEqual(self.formatter._format_token(dt, None), None)
-        self.assertEqual(self.formatter._format_token(dt, "NONSENSE"), None)
+        assert self.formatter._format_token(dt, None) == None
+        assert self.formatter._format_token(dt, "NONSENSE") == None
 
     def test_escape(self):
 
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(2015, 12, 10, 17, 9), "MMMM D, YYYY [at] h:mma"
-            ),
-            "December 10, 2015 at 5:09pm",
+            )
+            == "December 10, 2015 at 5:09pm"
         )
 
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(2015, 12, 10, 17, 9), "[MMMM] M D, YYYY [at] h:mma"
-            ),
-            "MMMM 12 10, 2015 at 5:09pm",
+            )
+            == "MMMM 12 10, 2015 at 5:09pm"
         )
 
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(1990, 11, 25),
                 "[It happened on] MMMM Do [in the year] YYYY [a long time ago]",
-            ),
-            "It happened on November 25th in the year 1990 a long time ago",
+            )
+            == "It happened on November 25th in the year 1990 a long time ago"
         )
 
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(1990, 11, 25),
                 "[It happened on] MMMM Do [in the][ year] YYYY [a long time ago]",
-            ),
-            "It happened on November 25th in the year 1990 a long time ago",
+            )
+            == "It happened on November 25th in the year 1990 a long time ago"
         )
 
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(1, 1, 1), "[I'm][ entirely][ escaped,][ weee!]"
-            ),
-            "I'm entirely escaped, weee!",
+            )
+            == "I'm entirely escaped, weee!"
         )
 
         # Special RegEx characters
-        self.assertEqual(
+        assert (
             self.formatter.format(
                 datetime(2017, 12, 31, 2, 0), "MMM DD, YYYY |^${}().*+?<>-& h:mm A"
-            ),
-            "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM",
+            )
+            == "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM"
         )
 
         # Escaping is atomic: brackets inside brackets are treated litterally
-        self.assertEqual(self.formatter.format(datetime(1, 1, 1), "[[[ ]]"), "[[ ]")
+        assert self.formatter.format(datetime(1, 1, 1), "[[[ ]]") == "[[ ]"
