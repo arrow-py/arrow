@@ -2,39 +2,38 @@
 import time
 from datetime import datetime
 
-from chai import Chai
-
 from arrow import util
+import pytest
 
 
-class UtilTests(Chai):
+class TestUtil:
     def test_total_seconds(self):
         td = datetime(2019, 1, 1) - datetime(2018, 1, 1)
-        self.assertEqual(util.total_seconds(td), td.total_seconds())
+        assert util.total_seconds(td) == td.total_seconds()
 
     def test_is_timestamp(self):
         timestamp_float = time.time()
         timestamp_int = int(timestamp_float)
 
-        self.assertTrue(util.is_timestamp(timestamp_int))
-        self.assertTrue(util.is_timestamp(timestamp_float))
-        self.assertTrue(util.is_timestamp(str(timestamp_int)))
-        self.assertTrue(util.is_timestamp(str(timestamp_float)))
+        assert util.is_timestamp(timestamp_int)
+        assert util.is_timestamp(timestamp_float)
+        assert util.is_timestamp(str(timestamp_int))
+        assert util.is_timestamp(str(timestamp_float))
 
-        self.assertFalse(util.is_timestamp(True))
-        self.assertFalse(util.is_timestamp(False))
+        assert not util.is_timestamp(True)
+        assert not util.is_timestamp(False)
 
         class InvalidTimestamp:
             pass
 
-        self.assertFalse(util.is_timestamp(InvalidTimestamp()))
+        assert not util.is_timestamp(InvalidTimestamp())
 
         full_datetime = "2019-06-23T13:12:42"
-        self.assertFalse(util.is_timestamp(full_datetime))
+        assert not util.is_timestamp(full_datetime)
 
     def test_iso_gregorian(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 0, 5)
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 8, 0)

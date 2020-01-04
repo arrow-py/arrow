@@ -5,6 +5,7 @@ from arrow import arrow, locales
 
 import pytest
 
+
 class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""
 
