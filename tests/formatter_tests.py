@@ -143,8 +143,8 @@ class TestDateTimeFormatterFormatToken:
 
     def test_nonsense(self):
         dt = datetime(2012, 1, 1, 11)
-        assert self.formatter._format_token(dt, None) == None
-        assert self.formatter._format_token(dt, "NONSENSE") == None
+        assert self.formatter._format_token(dt, None) is None
+        assert self.formatter._format_token(dt, "NONSENSE") is None
 
     def test_escape(self):
 
