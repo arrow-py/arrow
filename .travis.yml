@@ -5,6 +5,8 @@ matrix:
     - name: "Python 2.7"
       python: "2.7"
       env: TOXENV=py27
+      before_install: pip install --upgrade pip
+      install: pip install -U codecov tox
     - name: "Python 3.5"
       dist: xenial
       python: "3.5"
@@ -38,7 +40,7 @@ matrix:
       cache:
         directories:
           - $HOME/.cache/pre-commit
-before_install: pip3 install --upgrade pip || pip install --upgrade pip
-install: pip3 install -U codecov tox || pip install -U codecov tox
+before_install: pip3 install --upgrade pip
+install: pip3 install -U codecov tox
 script: tox
 after_success: codecov
