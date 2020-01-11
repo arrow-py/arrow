@@ -1167,31 +1167,28 @@ class TestArrowSpanRange:
             )
         )
 
-        self.assertEqual(
-            result,
-            [
-                (
-                    arrow.Arrow(2013, 5, 5, 12, 30),
-                    arrow.Arrow(2013, 5, 5, 13, 29, 59, 999999),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 13, 30),
-                    arrow.Arrow(2013, 5, 5, 14, 29, 59, 999999),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 14, 30),
-                    arrow.Arrow(2013, 5, 5, 15, 29, 59, 999999),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 15, 30),
-                    arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 16, 30),
-                    arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
-                ),
-            ],
-        )
+        assert result == [
+            (
+                arrow.Arrow(2013, 5, 5, 12, 30),
+                arrow.Arrow(2013, 5, 5, 13, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 13, 30),
+                arrow.Arrow(2013, 5, 5, 14, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14, 30),
+                arrow.Arrow(2013, 5, 5, 15, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 15, 30),
+                arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16, 30),
+                arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+            ),
+        ]
 
     def test_exact_bound_include(self):
         result = list(
@@ -1204,16 +1201,13 @@ class TestArrowSpanRange:
             )
         )
 
-        self.assertEqual(
-            result,
-            [
-                (arrow.Arrow(2013, 5, 5, 12, 30), arrow.Arrow(2013, 5, 5, 13, 30),),
-                (arrow.Arrow(2013, 5, 5, 13, 30), arrow.Arrow(2013, 5, 5, 14, 30),),
-                (arrow.Arrow(2013, 5, 5, 14, 30), arrow.Arrow(2013, 5, 5, 15, 30),),
-                (arrow.Arrow(2013, 5, 5, 15, 30), arrow.Arrow(2013, 5, 5, 16, 30),),
-                (arrow.Arrow(2013, 5, 5, 16, 30), arrow.Arrow(2013, 5, 5, 17, 15),),
-            ],
-        )
+        assert result == [
+            (arrow.Arrow(2013, 5, 5, 12, 30), arrow.Arrow(2013, 5, 5, 13, 30),),
+            (arrow.Arrow(2013, 5, 5, 13, 30), arrow.Arrow(2013, 5, 5, 14, 30),),
+            (arrow.Arrow(2013, 5, 5, 14, 30), arrow.Arrow(2013, 5, 5, 15, 30),),
+            (arrow.Arrow(2013, 5, 5, 15, 30), arrow.Arrow(2013, 5, 5, 16, 30),),
+            (arrow.Arrow(2013, 5, 5, 16, 30), arrow.Arrow(2013, 5, 5, 17, 15),),
+        ]
 
 
 class TestArrowInterval:
@@ -1266,19 +1260,16 @@ class TestArrowInterval:
             )
         )
 
-        self.assertEqual(
-            result,
-            [
-                (
-                    arrow.Arrow(2013, 5, 5, 12, 30),
-                    arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
-                ),
-                (
-                    arrow.Arrow(2013, 5, 5, 16, 30),
-                    arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
-                ),
-            ],
-        )
+        assert result == [
+            (
+                arrow.Arrow(2013, 5, 5, 12, 30),
+                arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16, 30),
+                arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+            ),
+        ]
 
 
 class TestArrowSpan:
@@ -1406,12 +1397,9 @@ class TestArrowSpan:
 
         floor, ceil = self.arrow.span("hour", exact=True)
 
-        self.assertEqual(
-            floor, datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
-        )
-        self.assertEqual(
-            ceil, datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
-        )
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+
+        assert ceil == datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
 
 
 class TestArrowHumanize:
