@@ -373,7 +373,7 @@ class Arrow(object):
             whether to include or exclude the start and end values in each span in the range. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
-        :parem exact: (optional) whether to have the first timespan start exactly
+        :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final span truncated
             so as not to extend beyond ``end``.
 
@@ -440,7 +440,7 @@ class Arrow(object):
             whether to include or exclude the start and end values in the intervals. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
-        :parem exact: (optional) whether to have the first timespan start exactly
+        :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final interval truncated
             so as not to extend beyond ``end``.
 
@@ -774,8 +774,9 @@ class Arrow(object):
             whether to include or exclude the start and end values in the span. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
-        :parem exact: (optional) whether to return a timespan that starts exactly
+        :param exact: (optional) whether to return a timespan that starts exactly
             at the :class:`Arrow <arrow.arrow.Arrow>` this function is called on
+            and spans exactly ``frame`` amount of time
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -795,6 +796,9 @@ class Arrow(object):
 
             >>> arrow.utcnow().span('day', bounds='[]')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
+
+            >>> arrow.utcnow().span('hour', exact=True)
+            (<Arrow [2013-05-09T03:32:36.186203+00:00]>, <Arrow [2013-05-09T04:32:36.186202+00:00]>)
 
         """
 
