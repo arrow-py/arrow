@@ -146,23 +146,19 @@ class Arrow(object):
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
-
-        Timestamps should always be UTC. If you have a non-UTC timestamp::
-
-            >>> arrow.Arrow.utcfromtimestamp(1367900664).replace(tzinfo='US/Pacific')
-            <Arrow [2013-05-07T04:24:24-07:00]>
-
         """
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
+        elif util.isstr(tzinfo):
+            tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
             raise ValueError(
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = util.safe_fromtimestamp(float(timestamp), tzinfo)
+        dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
         return cls(
             dt.year,
@@ -188,7 +184,7 @@ class Arrow(object):
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = util.safe_utcfromtimestamp(float(timestamp))
+        dt = datetime.utcfromtimestamp(float(timestamp))
 
         return cls(
             dt.year,
@@ -939,7 +935,12 @@ class Arrow(object):
                 dt = other.astimezone(self._datetime.tzinfo)
 
         else:
-            raise TypeError()
+            raise TypeError(
+                "Invalid 'other' argument of type '{}'. "
+                "Argument must be of type None, Arrow, or datetime.".format(
+                    type(other).__name__
+                )
+            )
 
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
@@ -974,7 +975,8 @@ class Arrow(object):
                     hours = sign * int(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
-                elif diff < 129600:
+                # anything less than 48 hours should be 1 day
+                elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < 554400:
                     days = sign * int(max(delta / 86400, 2))
@@ -1068,17 +1070,20 @@ class Arrow(object):
 
                 if len(timeframes) < len(granularity):
                     raise AttributeError(
-                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                        "Invalid level of granularity. "
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
-                for index, (_, delta) in enumerate(timeframes):
-                    if trunc(abs(delta)) != 1:
-                        timeframes[index][0] += "s"
+                for tf in timeframes:
+                    # Make granularity plural if the delta is not equal to 1
+                    if trunc(abs(tf[1])) != 1:
+                        tf[0] += "s"
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
             raise ValueError(
-                "Humanization of the {} granularity is not currently translated in the '{}' locale. Please consider making a contribution to this locale.".format(
+                "Humanization of the {} granularity is not currently translated in the '{}' locale. "
+                "Please consider making a contribution to this locale.".format(
                     e, locale_name
                 )
             )
@@ -1454,19 +1459,17 @@ class Arrow(object):
 
     @classmethod
     def _get_datetime(cls, expr):
-
+        """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime
-
-        if isinstance(expr, datetime):
+        elif isinstance(expr, datetime):
             return expr
-
-        try:
-            expr = float(expr)
-            return cls.utcfromtimestamp(expr).datetime
-        except Exception:
+        elif util.is_timestamp(expr):
+            timestamp = float(expr)
+            return cls.utcfromtimestamp(timestamp).datetime
+        else:
             raise ValueError(
-                "'{}' not recognized as a timestamp or datetime".format(expr)
+                "'{}' not recognized as a datetime or timestamp.".format(expr)
             )
 
     @classmethod
@@ -1474,13 +1477,26 @@ class Arrow(object):
 
         if name in cls._ATTRS:
             return name, "{}s".format(name), 1
-
+        elif name[-1] == "s" and name[:-1] in cls._ATTRS:
+            return name[:-1], name, 1
         elif name in ["week", "weeks"]:
             return "week", "weeks", 1
         elif name in ["quarter", "quarters"]:
             return "quarter", "months", 3
 
-        supported = ", ".join(cls._ATTRS + ["week", "weeks"] + ["quarter", "quarters"])
+        supported = ", ".join(
+            [
+                "year(s)",
+                "month(s)",
+                "day(s)",
+                "hour(s)",
+                "minute(s)",
+                "second(s)",
+                "microsecond(s)",
+                "week(s)",
+                "quarter(s)",
+            ]
+        )
         raise AttributeError(
             "range/span over frame {} not supported. Supported frames: {}".format(
                 name, supported

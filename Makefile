@@ -14,8 +14,8 @@ build27 build35 build36 build37 build38:
 	venv/bin/pre-commit install
 
 test:
-	rm -f .coverage
-	. venv/bin/activate && nosetests
+	rm -f .coverage coverage.xml
+	. venv/bin/activate && pytest
 
 lint:
 	venv/bin/pre-commit run --all-files --show-diff-on-failure
@@ -27,7 +27,7 @@ docs:
 clean:
 	rm -rf venv .tox ./**/__pycache__
 	rm -rf dist build .egg .eggs arrow.egg-info
-	rm -f ./**/*.pyc .coverage
+	rm -f ./**/*.pyc .coverage coverage.xml
 
 publish:
 	rm -rf dist build .egg .eggs arrow.egg-info

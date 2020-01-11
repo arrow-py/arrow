@@ -32,6 +32,7 @@ class Locale(object):
 
     timeframes = {
         "now": "",
+        "second": "",
         "seconds": "",
         "minute": "",
         "minutes": "",
@@ -83,7 +84,7 @@ class Locale(object):
         """ Describes a delta within multiple timeframes in plain language.
 
         :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.
-        :param only_distance: return only distance eg: "2 hours 11 seconds" without "in" or "ago" keywords
+        :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
         """
 
         humanized = ""
@@ -225,7 +226,8 @@ class EnglishLocale(Locale):
 
     timeframes = {
         "now": "just now",
-        "seconds": "seconds",
+        "second": "a second",
+        "seconds": "{0} seconds",
         "minute": "a minute",
         "minutes": "{0} minutes",
         "hour": "an hour",
@@ -321,7 +323,8 @@ class ItalianLocale(Locale):
 
     timeframes = {
         "now": "adesso",
-        "seconds": "qualche secondo",
+        "second": "un secondo",
+        "seconds": "{0} qualche secondo",
         "minute": "un minuto",
         "minutes": "{0} minuti",
         "hour": "un'ora",
@@ -391,7 +394,8 @@ class SpanishLocale(Locale):
 
     timeframes = {
         "now": "ahora",
-        "seconds": "segundos",
+        "second": "un segundo",
+        "seconds": "{0} segundos",
         "minute": "un minuto",
         "minutes": "{0} minutos",
         "hour": "una hora",
@@ -465,7 +469,8 @@ class FrenchLocale(Locale):
 
     timeframes = {
         "now": "maintenant",
-        "seconds": "quelques secondes",
+        "second": "une seconde",
+        "seconds": "{0} quelques secondes",
         "minute": "une minute",
         "minutes": "{0} minutes",
         "hour": "une heure",
@@ -543,7 +548,8 @@ class GreekLocale(Locale):
 
     timeframes = {
         "now": "τώρα",
-        "seconds": "δευτερόλεπτα",
+        "second": "ένα δεύτερο",
+        "seconds": "{0} δευτερόλεπτα",
         "minute": "ένα λεπτό",
         "minutes": "{0} λεπτά",
         "hour": "μία ώρα",
@@ -609,7 +615,8 @@ class JapaneseLocale(Locale):
 
     timeframes = {
         "now": "現在",
-        "seconds": "数秒",
+        "second": "二番目の",
+        "seconds": "{0}数秒",
         "minute": "1分",
         "minutes": "{0}分",
         "hour": "1時間",
@@ -669,7 +676,8 @@ class SwedishLocale(Locale):
 
     timeframes = {
         "now": "just nu",
-        "seconds": "några sekunder",
+        "second": "en sekund",
+        "seconds": "{0} några sekunder",
         "minute": "en minut",
         "minutes": "{0} minuter",
         "hour": "en timme",
@@ -738,7 +746,8 @@ class FinnishLocale(Locale):
 
     timeframes = {
         "now": ["juuri nyt", "juuri nyt"],
-        "seconds": ["muutama sekunti", "muutaman sekunnin"],
+        "second": ["sekunti", "sekunti"],
+        "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
         "minute": ["minuutti", "minuutin"],
         "minutes": ["{0} minuuttia", "{0} minuutin"],
         "hour": ["tunti", "tunnin"],
@@ -825,7 +834,8 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         "now": "刚才",
-        "seconds": "几秒",
+        "second": "一秒",
+        "seconds": "{0}几秒",
         "minute": "1分钟",
         "minutes": "{0}分钟",
         "hour": "1小时",
@@ -884,7 +894,8 @@ class ChineseTWLocale(Locale):
 
     timeframes = {
         "now": "剛才",
-        "seconds": "幾秒",
+        "second": "一秒",
+        "seconds": "{0}幾秒",
         "minute": "1分鐘",
         "minutes": "{0}分鐘",
         "hour": "1小時",
@@ -932,6 +943,66 @@ class ChineseTWLocale(Locale):
     day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
 
 
+class HongKongLocale(Locale):
+
+    names = ["zh_hk"]
+
+    past = "{0}前"
+    future = "{0}後"
+
+    timeframes = {
+        "now": "剛才",
+        "second": "1秒",
+        "seconds": "{0}秒",
+        "minute": "1分鐘",
+        "minutes": "{0}分鐘",
+        "hour": "1小時",
+        "hours": "{0}小時",
+        "day": "1天",
+        "days": "{0}天",
+        "week": "1星期",
+        "weeks": "{0}星期",
+        "month": "1個月",
+        "months": "{0}個月",
+        "year": "1年",
+        "years": "{0}年",
+    }
+
+    month_names = [
+        "",
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月",
+    ]
+    month_abbreviations = [
+        "",
+        " 1",
+        " 2",
+        " 3",
+        " 4",
+        " 5",
+        " 6",
+        " 7",
+        " 8",
+        " 9",
+        "10",
+        "11",
+        "12",
+    ]
+
+    day_names = ["", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+    day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
+
+
 class KoreanLocale(Locale):
 
     names = ["ko", "ko_kr"]
@@ -941,7 +1012,8 @@ class KoreanLocale(Locale):
 
     timeframes = {
         "now": "지금",
-        "seconds": "몇 초",
+        "second": "두 번째",
+        "seconds": "{0}몇 초",
         "minute": "1분",
         "minutes": "{0}분",
         "hour": "1시간",
@@ -999,13 +1071,16 @@ class DutchLocale(Locale):
 
     timeframes = {
         "now": "nu",
-        "seconds": "seconden",
+        "second": "een seconde",
+        "seconds": "{0} seconden",
         "minute": "een minuut",
         "minutes": "{0} minuten",
         "hour": "een uur",
         "hours": "{0} uur",
         "day": "een dag",
         "days": "{0} dagen",
+        "week": "een week",
+        "weeks": "{0} weken",
         "month": "een maand",
         "months": "{0} maanden",
         "year": "een jaar",
@@ -1085,7 +1160,8 @@ class BelarusianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "зараз",
-        "seconds": "некалькі секунд",
+        "second": "секунду",
+        "seconds": "{0} некалькі секунд",
         "minute": "хвіліну",
         "minutes": ["{0} хвіліну", "{0} хвіліны", "{0} хвілін"],
         "hour": "гадзіну",
@@ -1151,7 +1227,8 @@ class PolishLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "teraz",
-        "seconds": "kilka sekund",
+        "second": "sekunda",
+        "seconds": "{0} kilka sekund",
         "minute": "minutę",
         "minutes": ["{0} minut", "{0} minuty", "{0} minut"],
         "hour": "godzina",
@@ -1217,7 +1294,8 @@ class RussianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сейчас",
-        "seconds": "несколько секунд",
+        "second": "Второй",
+        "seconds": "{0} несколько секунд",
         "minute": "минуту",
         "minutes": ["{0} минуту", "{0} минуты", "{0} минут"],
         "hour": "час",
@@ -1285,7 +1363,8 @@ class AfrikaansLocale(Locale):
 
     timeframes = {
         "now": "nou",
-        "seconds": "sekondes",
+        "second": "n sekonde",
+        "seconds": "{0} sekondes",
         "minute": "minuut",
         "minutes": "{0} minute",
         "hour": "uur",
@@ -1351,7 +1430,8 @@ class BulgarianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сега",
-        "seconds": "няколко секунди",
+        "second": "секунда",
+        "seconds": "{0} няколко секунди",
         "minute": "минута",
         "minutes": ["{0} минута", "{0} минути", "{0} минути"],
         "hour": "час",
@@ -1417,7 +1497,8 @@ class UkrainianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "зараз",
-        "seconds": "кілька секунд",
+        "second": "секунда",
+        "seconds": "{0} кілька секунд",
         "minute": "хвилину",
         "minutes": ["{0} хвилину", "{0} хвилини", "{0} хвилин"],
         "hour": "годину",
@@ -1482,7 +1563,8 @@ class MacedonianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сега",
-        "seconds": "секунди",
+        "second": "секунда",
+        "seconds": "{0} секунди",
         "minute": "една минута",
         "minutes": ["{0} минута", "{0} минути", "{0} минути"],
         "hour": "еден саат",
@@ -1558,7 +1640,8 @@ class DeutschBaseLocale(Locale):
 
     timeframes = {
         "now": "gerade eben",
-        "seconds": "Sekunden",
+        "second": "eine Sekunde",
+        "seconds": "{0} Sekunden",
         "minute": "einer Minute",
         "minutes": "{0} Minuten",
         "hour": "einer Stunde",
@@ -1678,7 +1761,8 @@ class NorwegianLocale(Locale):
 
     timeframes = {
         "now": "nå nettopp",
-        "seconds": "noen sekunder",
+        "second": "et sekund",
+        "seconds": "{0} noen sekunder",
         "minute": "ett minutt",
         "minutes": "{0} minutter",
         "hour": "en time",
@@ -1744,7 +1828,8 @@ class NewNorwegianLocale(Locale):
 
     timeframes = {
         "now": "no nettopp",
-        "seconds": "nokre sekund",
+        "second": "et sekund",
+        "seconds": "{0} nokre sekund",
         "minute": "ett minutt",
         "minutes": "{0} minutt",
         "hour": "ein time",
@@ -1948,7 +2033,8 @@ class TagalogLocale(Locale):
 
     timeframes = {
         "now": "ngayon lang",
-        "seconds": "segundo",
+        "second": "isang segundo",
+        "seconds": "{0} segundo",
         "minute": "isang minuto",
         "minutes": "{0} minuto",
         "hour": "isang oras",
@@ -2017,7 +2103,8 @@ class VietnameseLocale(Locale):
 
     timeframes = {
         "now": "hiện tại",
-        "seconds": "giây",
+        "second": "một giây",
+        "seconds": "{0} giây",
         "minute": "một phút",
         "minutes": "{0} phút",
         "hour": "một giờ",
@@ -2085,7 +2172,8 @@ class TurkishLocale(Locale):
 
     timeframes = {
         "now": "şimdi",
-        "seconds": "saniye",
+        "second": "bir saniye",
+        "seconds": "{0} saniye",
         "minute": "bir dakika",
         "minutes": "{0} dakika",
         "hour": "bir saat",
@@ -2151,7 +2239,8 @@ class AzerbaijaniLocale(Locale):
 
     timeframes = {
         "now": "indi",
-        "seconds": "saniyə",
+        "second": "saniyə",
+        "seconds": "{0} saniyə",
         "minute": "bir dəqiqə",
         "minutes": "{0} dəqiqə",
         "hour": "bir saat",
@@ -2235,6 +2324,7 @@ class ArabicLocale(Locale):
 
     timeframes = {
         "now": "الآن",
+        "second": "ثانية",
         "seconds": {"double": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
         "minute": "دقيقة",
         "minutes": {"double": "دقيقتين", "ten": "{0} دقائق", "higher": "{0} دقيقة"},
@@ -2459,7 +2549,8 @@ class IcelandicLocale(Locale):
 
     timeframes = {
         "now": "rétt í þessu",
-        "seconds": ("nokkrum sekúndum", "nokkrar sekúndur"),
+        "second": ("sekúndu", "sekúndu"),
+        "seconds": ("{0} nokkrum sekúndum", "nokkrar sekúndur"),
         "minute": ("einni mínútu", "eina mínútu"),
         "minutes": ("{0} mínútum", "{0} mínútur"),
         "hour": ("einum tíma", "einn tíma"),
@@ -2528,7 +2619,8 @@ class DanishLocale(Locale):
 
     timeframes = {
         "now": "lige nu",
-        "seconds": "et par sekunder",
+        "second": "et sekund",
+        "seconds": "{0} et par sekunder",
         "minute": "et minut",
         "minutes": "{0} minutter",
         "hour": "en time",
@@ -2594,7 +2686,8 @@ class MalayalamLocale(Locale):
 
     timeframes = {
         "now": "ഇപ്പോൾ",
-        "seconds": "സെക്കന്റ്‌",
+        "second": "ഒരു നിമിഷം",
+        "seconds": "{0} സെക്കന്റ്‌",
         "minute": "ഒരു മിനിറ്റ്",
         "minutes": "{0} മിനിറ്റ്",
         "hour": "ഒരു മണിക്കൂർ",
@@ -2667,7 +2760,8 @@ class HindiLocale(Locale):
 
     timeframes = {
         "now": "अभी",
-        "seconds": "सेकंड्",
+        "second": "एक पल",
+        "seconds": "{0} सेकंड्",
         "minute": "एक मिनट ",
         "minutes": "{0} मिनट ",
         "hour": "एक घंटा",
@@ -2731,6 +2825,7 @@ class CzechLocale(Locale):
 
     timeframes = {
         "now": "Teď",
+        "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
         "seconds": {"past": "{0} sekundami", "future": ["{0} sekundy", "{0} sekund"]},
         "minute": {"past": "minutou", "future": "minutu", "zero": "{0} minut"},
         "minutes": {"past": "{0} minutami", "future": ["{0} minuty", "{0} minut"]},
@@ -2817,6 +2912,7 @@ class SlovakLocale(Locale):
 
     timeframes = {
         "now": "Teraz",
+        "second": {"past": "druhý", "future": "druhý", "zero": "druhý"},
         "seconds": {"past": "pár sekundami", "future": ["{0} sekundy", "{0} sekúnd"]},
         "minute": {"past": "minútou", "future": "minútu", "zero": "{0} minút"},
         "minutes": {"past": "{0} minútami", "future": ["{0} minúty", "{0} minút"]},
@@ -2908,7 +3004,8 @@ class FarsiLocale(Locale):
 
     timeframes = {
         "now": "اکنون",
-        "seconds": "ثانیه",
+        "second": "یک لحظه",
+        "seconds": "{0} ثانیه",
         "minute": "یک دقیقه",
         "minutes": "{0} دقیقه",
         "hour": "یک ساعت",
@@ -2981,7 +3078,8 @@ class HebrewLocale(Locale):
 
     timeframes = {
         "now": "הרגע",
-        "seconds": "שניות",
+        "second": "שנייה",
+        "seconds": "{0} שניות",
         "minute": "דקה",
         "minutes": "{0} דקות",
         "hour": "שעה",
@@ -3057,7 +3155,8 @@ class MarathiLocale(Locale):
 
     timeframes = {
         "now": "सद्य",
-        "seconds": "सेकंद",
+        "second": "एक सेकंद",
+        "seconds": "{0} सेकंद",
         "minute": "एक मिनिट ",
         "minutes": "{0} मिनिट ",
         "hour": "एक तास",
@@ -3136,7 +3235,8 @@ class CatalanLocale(Locale):
 
     timeframes = {
         "now": "Ara mateix",
-        "seconds": "segons",
+        "second": "un segon",
+        "seconds": "{0} segons",
         "minute": "1 minut",
         "minutes": "{0} minuts",
         "hour": "una hora",
@@ -3208,7 +3308,8 @@ class BasqueLocale(Locale):
 
     timeframes = {
         "now": "Orain",
-        "seconds": "segundu",
+        "second": "segundo bat",
+        "seconds": "{0} segundu",
         "minute": "minutu bat",
         "minutes": "{0} minutu",
         "hour": "ordu bat",
@@ -3273,7 +3374,8 @@ class HungarianLocale(Locale):
 
     timeframes = {
         "now": "éppen most",
-        "seconds": {"past": "másodpercekkel", "future": "pár másodperc"},
+        "second": {"past": "egy második", "future": "egy második"},
+        "seconds": {"past": "{0} másodpercekkel", "future": "{0} pár másodperc"},
         "minute": {"past": "egy perccel", "future": "egy perc"},
         "minutes": {"past": "{0} perccel", "future": "{0} perc"},
         "hour": {"past": "egy órával", "future": "egy óra"},
@@ -3350,7 +3452,8 @@ class EsperantoLocale(Locale):
 
     timeframes = {
         "now": "nun",
-        "seconds": "kelkaj sekundoj",
+        "second": "sekundo",
+        "seconds": "{0} kelkaj sekundoj",
         "minute": "unu minuto",
         "minutes": "{0} minutoj",
         "hour": "un horo",
@@ -3423,7 +3526,8 @@ class ThaiLocale(Locale):
 
     timeframes = {
         "now": "ขณะนี้",
-        "seconds": "ไม่กี่วินาที",
+        "second": "วินาที",
+        "seconds": "{0} ไม่กี่วินาที",
         "minute": "1 นาที",
         "minutes": "{0} นาที",
         "hour": "1 ชั่วโมง",
@@ -3503,7 +3607,8 @@ class BengaliLocale(Locale):
 
     timeframes = {
         "now": "এখন",
-        "seconds": "সেকেন্ড",
+        "second": "একটি দ্বিতীয়",
+        "seconds": "{0} সেকেন্ড",
         "minute": "এক মিনিট",
         "minutes": "{0} মিনিট",
         "hour": "এক ঘণ্টা",
@@ -3583,7 +3688,8 @@ class RomanshLocale(Locale):
 
     timeframes = {
         "now": "en quest mument",
-        "seconds": "secundas",
+        "second": "in secunda",
+        "seconds": "{0} secundas",
         "minute": "ina minuta",
         "minutes": "{0} minutas",
         "hour": "in'ura",
@@ -3651,7 +3757,8 @@ class SwissLocale(Locale):
 
     timeframes = {
         "now": "gerade eben",
-        "seconds": "Sekunden",
+        "second": "eine Sekunde",
+        "seconds": "{0} Sekunden",
         "minute": "einer Minute",
         "minutes": "{0} Minuten",
         "hour": "einer Stunde",
@@ -3721,7 +3828,8 @@ class RomanianLocale(Locale):
 
     timeframes = {
         "now": "acum",
-        "seconds": "câteva secunde",
+        "second": "o secunda",
+        "seconds": "{0} câteva secunde",
         "minute": "un minut",
         "minutes": "{0} minute",
         "hour": "o oră",
@@ -3787,7 +3895,8 @@ class SlovenianLocale(Locale):
 
     timeframes = {
         "now": "zdaj",
-        "seconds": "sekund",
+        "second": "sekundo",
+        "seconds": "{0} sekund",
         "minute": "minuta",
         "minutes": "{0} minutami",
         "hour": "uro",
@@ -3858,7 +3967,8 @@ class IndonesianLocale(Locale):
 
     timeframes = {
         "now": "baru saja",
-        "seconds": "detik",
+        "second": "1 sebentar",
+        "seconds": "{0} detik",
         "minute": "1 menit",
         "minutes": "{0} menit",
         "hour": "1 jam",
@@ -3927,7 +4037,8 @@ class NepaliLocale(Locale):
 
     timeframes = {
         "now": "अहिले",
-        "seconds": "सेकण्ड",
+        "second": "एक सेकेन्ड",
+        "seconds": "{0} सेकण्ड",
         "minute": "मिनेट",
         "minutes": "{0} मिनेट",
         "hour": "एक घण्टा",
