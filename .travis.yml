@@ -38,6 +38,7 @@ matrix:
       cache:
         directories:
           - $HOME/.cache/pre-commit
-install: pip3 install -U codecov tox
+before_install: pip3 install --upgrade pip || pip install --upgrade pip
+install: pip3 install -U codecov tox || pip install -U codecov tox
 script: tox
 after_success: codecov
