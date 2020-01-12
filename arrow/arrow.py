@@ -64,7 +64,16 @@ class Arrow(object):
     _SECS_PER_YEAR = float(60 * 60 * 24 * 365.25)
 
     def __init__(
-        self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
+        self,
+        year,
+        month,
+        day,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+        tzinfo=None,
+        fold=0,
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -80,7 +89,7 @@ class Arrow(object):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         self._datetime = datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo
+            year, month, day, hour, minute, second, microsecond, tzinfo, fold=fold
         )
 
     # factories: single object, both original and from datetime.
@@ -112,6 +121,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -169,6 +179,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -230,6 +241,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -276,6 +288,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            dt.fold,
         )
 
     # factories: ranges and spans
@@ -728,6 +741,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
