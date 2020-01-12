@@ -1167,7 +1167,7 @@ class TestArrowSpanRange:
             )
         )
 
-        assert result == [
+        expected = [
             (
                 arrow.Arrow(2013, 5, 5, 12, 30),
                 arrow.Arrow(2013, 5, 5, 13, 29, 59, 999999),
@@ -1190,6 +1190,8 @@ class TestArrowSpanRange:
             ),
         ]
 
+        assert result == expected
+
     def test_exact_bound_include(self):
         result = list(
             arrow.Arrow.span_range(
@@ -1201,13 +1203,15 @@ class TestArrowSpanRange:
             )
         )
 
-        assert result == [
+        expected = [
             (arrow.Arrow(2013, 5, 5, 12, 30), arrow.Arrow(2013, 5, 5, 13, 30),),
             (arrow.Arrow(2013, 5, 5, 13, 30), arrow.Arrow(2013, 5, 5, 14, 30),),
             (arrow.Arrow(2013, 5, 5, 14, 30), arrow.Arrow(2013, 5, 5, 15, 30),),
             (arrow.Arrow(2013, 5, 5, 15, 30), arrow.Arrow(2013, 5, 5, 16, 30),),
             (arrow.Arrow(2013, 5, 5, 16, 30), arrow.Arrow(2013, 5, 5, 17, 15),),
         ]
+
+        assert result == expected
 
 
 class TestArrowInterval:
@@ -1260,7 +1264,7 @@ class TestArrowInterval:
             )
         )
 
-        assert result == [
+        expected = [
             (
                 arrow.Arrow(2013, 5, 5, 12, 30),
                 arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
@@ -1270,6 +1274,8 @@ class TestArrowInterval:
                 arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
             ),
         ]
+
+        assert result == expected
 
 
 class TestArrowSpan:
@@ -1395,11 +1401,13 @@ class TestArrowSpan:
 
     def test_exact(self):
 
-        floor, ceil = self.arrow.span("hour", exact=True)
+        result_floor, result_ceil = self.arrow.span("hour", exact=True)
 
-        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+        expected_floor = datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+        expected_ceil = datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
 
-        assert ceil == datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
+        assert result_floor == expected_floor
+        assert result_ceil == expected_ceil
 
 
 class TestArrowHumanize:
