@@ -744,6 +744,52 @@ class TestArrowShift:
             2013, 5, 5, 12, 30, 45, 1
         )
 
+    def test_shift_imaginary(self):
+
+        # Avoid shifting into imaginary datetimes, take into account DST and other timezone changes.
+
+        new_york = arrow.Arrow(2017, 3, 12, 1, 30, tzinfo="America/New_York")
+        assert new_york.shift(hours=+1) == arrow.Arrow(
+            2017, 3, 12, 3, 30, tzinfo="America/New_York"
+        )
+
+        paris = arrow.Arrow(2013, 3, 31, 1, 50, tzinfo="Europe/Paris")
+        assert paris.shift(minutes=+20) == arrow.Arrow(
+            2013, 3, 31, 3, 10, tzinfo="Europe/Paris"
+        )
+
+        # likely needs fold attribute here for shift back, review imaginary dt in Paul's talk
+        # london = arrow.Arrow(2019, 10, 27, 1, 30, tzinfo="Europe/London")
+        # assert london.shift(hours=+1) == arrow.Arrow(2019, 10, 27, 10, 30, tzinfo="Europe/London")
+
+        canberra = arrow.Arrow(2018, 10, 7, 1, 30, tzinfo="Australia/Canberra")
+        assert canberra.shift(hours=+1) == arrow.Arrow(
+            2018, 10, 7, 3, 30, tzinfo="Australia/Canberra"
+        )
+
+        kiev = arrow.Arrow(2018, 3, 25, 2, 30, tzinfo="Europe/Kiev")
+        assert kiev.shift(hours=+1) == arrow.Arrow(
+            2018, 3, 25, 4, 30, tzinfo="Europe/Kiev"
+        )
+
+        # Edge case, the entire day of 2011-12-30 is imaginary in this zone!
+        apia = arrow.Arrow(2011, 12, 29, 23, tzinfo="Pacific/Apia")
+        assert apia.shift(hours=+2) == arrow.Arrow(
+            2011, 12, 31, 1, tzinfo="Pacific/Apia"
+        )
+
+        # corrected 2018d tz database release, will fail in earlier versions
+        kiritimati = arrow.Arrow(1994, 12, 31, 12, 30, tzinfo="Pacific/Kiritimati")
+        assert kiritimati.shift(days=+1) == arrow.Arrow(
+            1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
+        )
+
+        # offset has a seconds component
+        monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")
+        assert monrovia.shift(hours=+1, minutes=+30) == arrow.Arrow(
+            1972, 1, 7, 1, 14, 30, tzinfo="Africa/Monrovia"
+        )
+
 
 class TestArrowRange:
     def test_year(self):

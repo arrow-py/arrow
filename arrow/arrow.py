@@ -358,7 +358,7 @@ class Arrow(object):
 
         while current <= end and i < limit:
             i += 1
-            yield current
+            yield dateutil_tz.resolve_imaginary(current)
 
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo) + relativedelta(
@@ -696,6 +696,8 @@ class Arrow(object):
 
         current = self._datetime + relativedelta(**relative_kwargs)
 
+        current = dateutil_tz.resolve_imaginary(current)
+
         return self.fromdatetime(current)
 
     def to(self, tz):
@@ -848,7 +850,7 @@ class Arrow(object):
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
         """
-
+        # NOTE may cause weird behaviour with resolve imaginary
         return self.span(frame)[1]
 
     # string output and formatting.
