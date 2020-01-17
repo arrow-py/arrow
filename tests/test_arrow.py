@@ -72,6 +72,14 @@ class TestTestArrowInit:
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
 
+    def test_init_with_fold(self):
+        before = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
+        after = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1)
+
+        # PEP-495 requires the equality below to be true
+        assert before == after
+        assert before.utcoffset() != after.utcoffset()
+
 
 class TestTestArrowFactory:
     def test_now(self):
@@ -568,6 +576,20 @@ class TestArrowConversion:
         assert arrow_from.to("UTC").datetime == self.expected
         assert arrow_from.to(tz.tzutc()).datetime == self.expected
 
+    def test_to_pacific_then_utc(self):
+        result = arrow.Arrow(2018, 11, 4, 1, tzinfo="-08:00").to("US/Pacific").to("UTC")
+        assert result == arrow.Arrow(2018, 11, 4, 9)
+
+    # regression test for #690 unsure of correct result here
+    # def test_to_israel_same_offset(self):
+    #     first = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00")
+    #     print(first)
+    #     result = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00").to("Israel")
+    #     print(result)
+    #     final=arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="Israel")
+    #     print(final)
+    #     assert result == arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="Israel")
+
 
 class TestArrowPickling:
     def test_pickle_and_unpickle(self):
@@ -758,7 +780,17 @@ class TestArrowShift:
             2013, 3, 31, 3, 10, tzinfo="Europe/Paris"
         )
 
+        # london
+
+        # 2015-10-06T02:00:00+02:00
+
+        # berlin = arrow.Arrow(2015)
+
+        # >> > arrow.get('2019-11-03 01:05:00-05:00').to('America/New_York')
+        # < Arrow[2019 - 11 - 03T01: 05:00 - 04: 00] >
+
         # likely needs fold attribute here for shift back, review imaginary dt in Paul's talk
+        # maybe info not available yet!
         # london = arrow.Arrow(2019, 10, 27, 1, 30, tzinfo="Europe/London")
         # assert london.shift(hours=+1) == arrow.Arrow(2019, 10, 27, 10, 30, tzinfo="Europe/London")
 
@@ -983,6 +1015,16 @@ class TestArrowRange:
 
         with pytest.raises(AttributeError):
             next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
+
+    # def test_imaginary(self):
+
+    # WHY!!!???? I thought this was fixed!
+    # (< Arrow[2018-03-11T00:00:00-08:00] >, < Arrow[2018-03-11T08:00:00+00:00] >)
+    # (< Arrow[2018-03-11T01:00:00-08:00] >, < Arrow[2018-03-11T09:00:00+00:00] >)
+    # (< Arrow[2018-03-11T02:00:00-07:00] >, < Arrow[2018-03-11T09:00:00+00:00] >)
+    # (< Arrow[2018-03-11T03:00:00-07:00] >, < Arrow[2018-03-11T10:00:00+00:00] >)
+    # (< Arrow[2018-03-11T04:00:00-07:00] >, < Arrow[2018-03-11T11:00:00+00:00] >)
+    # (< Arrow[2018-03-11T05:00:00-07:00] >, < Arrow[2018-03-11T12:00:00+00:00] >)
 
 
 class TestArrowSpanRange:

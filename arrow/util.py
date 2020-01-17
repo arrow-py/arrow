@@ -2,6 +2,11 @@
 from __future__ import absolute_import
 
 import datetime
+import sys
+
+from dateutil import tz as dateutil_tz
+
+NO_FOLD = sys.version_info < (3, 6)
 
 
 def total_seconds(td):
@@ -56,6 +61,18 @@ except NameError:  # pragma: no cover
 
     def isstr(s):
         return isinstance(s, str)
+
+
+def ensure_fold(dt):
+    # use enfold here
+    # is_ambiguous
+    pass
+
+
+def _calculate_fold():
+    # how do I deal with all the dt.fold in arrow.py - don't just apply method before
+    # read dateutil code
+    pass
 
 
 __all__ = ["total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]

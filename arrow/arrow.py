@@ -18,6 +18,8 @@ from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
 
+# from util import NO_FOLD
+
 
 class Arrow(object):
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
