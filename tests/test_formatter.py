@@ -141,6 +141,14 @@ class TestDateTimeFormatterFormatToken:
         assert self.formatter._format_token(dt, "a") == "pm"
         assert self.formatter._format_token(dt, "A") == "PM"
 
+    def test_week(self):
+        dt = datetime(2017, 5, 19)
+        assert self.formatter._format_token(dt, "W") == "2017-W20-5"
+
+        # make sure week is zero padded when needed
+        dt_early = datetime(2011, 1, 20)
+        assert self.formatter._format_token(dt_early, "W") == "2011-W03-4"
+
     def test_nonsense(self):
         dt = datetime(2012, 1, 1, 11)
         assert self.formatter._format_token(dt, None) is None
@@ -193,5 +201,5 @@ class TestDateTimeFormatterFormatToken:
             == "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM"
         )
 
-        # Escaping is atomic: brackets inside brackets are treated litterally
+        # Escaping is atomic: brackets inside brackets are treated literally
         assert self.formatter.format(datetime(1, 1, 1), "[[[ ]]") == "[[ ]"

@@ -621,6 +621,29 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("2019-12-31T24:00:00.999999", "YYYY-MM-DDTHH:mm:ss.S")
 
+    def test_parse_W(self):
+        good_full_formats = ["2011-W05-4", "2011W054"]
+        good_part_formats = ["2011-W05", "2011W05"]
+
+        for fmt in good_full_formats:
+            assert self.parser.parse(fmt, "W") == datetime(2011, 2, 3, 0, 0, 0, 0)
+
+        for fmt in good_part_formats:
+            assert self.parser.parse(fmt, "W") == datetime(2011, 1, 31, 0, 0, 0, 0)
+
+        bad_formats = [
+            "201W22",
+            "1995-W1-4",
+            "2001-W34-90",
+            "2001--W34",
+            "2011-W03--3",
+            "thstrdjtrsrd676776r65",
+        ]
+
+        for fmt in bad_formats:
+            with pytest.raises(ParserError):
+                self.parser.parse(fmt, "W")
+
 
 class TestDateTimeParserRegex:
     @classmethod
@@ -963,6 +986,10 @@ class TestDateTimeParserISO:
         assert self.parser.parse_iso("2013-02-03 04:05:06.78912Z") == datetime(
             2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzutc()
         )
+
+    def test_W(self):
+
+        assert self.parser.parse_iso("2011-W05-4") == datetime(2011, 2, 3, 0, 0, 0, 0)
 
     def test_invalid_Z(self):
 
