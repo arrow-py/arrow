@@ -6,8 +6,6 @@ import sys
 
 from dateutil import tz as dateutil_tz
 
-NO_FOLD = sys.version_info < (3, 6)
-
 
 def total_seconds(td):
     """Get total seconds for timedelta."""
@@ -63,15 +61,7 @@ except NameError:  # pragma: no cover
         return isinstance(s, str)
 
 
-def ensure_fold(dt):
-    # use enfold here
-    # is_ambiguous
-    pass
-
-
-def _calculate_fold():
-    # how do I deal with all the dt.fold in arrow.py - don't just apply method before
-    # read dateutil code
+class ImaginaryDatetimeWarning(UserWarning):
     pass
 
 
