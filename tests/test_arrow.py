@@ -76,6 +76,12 @@ class TestTestArrowInit:
         before = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
         after = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1)
 
+        assert hasattr(before, "fold")
+        assert hasattr(after, "fold")
+
+        assert hasattr(before._datetime, "fold")
+        assert hasattr(after._datetime, "fold")
+
         # PEP-495 requires the equality below to be true
         assert before == after
         assert before.utcoffset() != after.utcoffset()
@@ -791,8 +797,8 @@ class TestArrowShift:
 
         # likely needs fold attribute here for shift back, review imaginary dt in Paul's talk
         # maybe info not available yet!
-        # london = arrow.Arrow(2019, 10, 27, 1, 30, tzinfo="Europe/London")
-        # assert london.shift(hours=+1) == arrow.Arrow(2019, 10, 27, 10, 30, tzinfo="Europe/London")
+        london = arrow.Arrow(2019, 10, 27, 2, 30, tzinfo="Europe/London")
+        assert london.shift(hours=-2) == arrow.Arrow(2019, 10, 27, 0, 30, tzinfo="Europe/London")
 
         canberra = arrow.Arrow(2018, 10, 7, 1, 30, tzinfo="Australia/Canberra")
         assert canberra.shift(hours=+1) == arrow.Arrow(
@@ -810,12 +816,21 @@ class TestArrowShift:
             2011, 12, 31, 1, tzinfo="Pacific/Apia"
         )
 
+        # NOTE very odd behaviour here -<Arrow [2011-12-31T23:00:00+14:00]>
+        #apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
+        #assert apia.shift(hours=-2) == arrow.Arrow(
+        #    2011, 12, 29, 23, tzinfo="Pacific/Apia"
+        #)
+
         # corrected 2018d tz database release, will fail in earlier versions
-        kiritimati = arrow.Arrow(1994, 12, 31, 12, 30, tzinfo="Pacific/Kiritimati")
+        # TODO dateutil 2.7.0 contains 2018c, is this really worth testing in arrow?
+        kiritimati = arrow.Arrow(1994, 12, 30, 12, 30, tzinfo="Pacific/Kiritimati")
         assert kiritimati.shift(days=+1) == arrow.Arrow(
             1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
         )
 
+    @pytest.mark.skipif(sys.version_info < (3, 6), reason="unsupported before python3.6")
+    def shift_imaginary_seconds(self):
         # offset has a seconds component
         monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")
         assert monrovia.shift(hours=+1, minutes=+30) == arrow.Arrow(
@@ -1016,15 +1031,19 @@ class TestArrowRange:
         with pytest.raises(AttributeError):
             next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
 
-    # def test_imaginary(self):
+    @pytest.mark.xfail
+    def test_imaginary(self):
+        # avoid duplication in utc column
+        # issue #72
 
-    # WHY!!!???? I thought this was fixed!
-    # (< Arrow[2018-03-11T00:00:00-08:00] >, < Arrow[2018-03-11T08:00:00+00:00] >)
-    # (< Arrow[2018-03-11T01:00:00-08:00] >, < Arrow[2018-03-11T09:00:00+00:00] >)
-    # (< Arrow[2018-03-11T02:00:00-07:00] >, < Arrow[2018-03-11T09:00:00+00:00] >)
-    # (< Arrow[2018-03-11T03:00:00-07:00] >, < Arrow[2018-03-11T10:00:00+00:00] >)
-    # (< Arrow[2018-03-11T04:00:00-07:00] >, < Arrow[2018-03-11T11:00:00+00:00] >)
-    # (< Arrow[2018-03-11T05:00:00-07:00] >, < Arrow[2018-03-11T12:00:00+00:00] >)
+        before = arrow.Arrow(2018, 3, 10, 23, tzinfo='US/Pacific')
+        after = arrow.Arrow(2018, 3, 11, 4, tzinfo='US/Pacific')
+
+        pacific_range = [t for t in arrow.Arrow.range('hour', before, after)]
+        utc_range = [t.to('utc') for t in arrow.Arrow.range('hour', before, after)]
+
+        assert len(pacific_range) == len(set(pacific_range))
+        assert len(utc_range) == len(set(utc_range))
 
 
 class TestArrowSpanRange:
