@@ -15,10 +15,10 @@ from math import trunc
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
+from dateutil.tz import enfold
 
 from arrow import formatter, locales, parser, util
-
-# from util import NO_FOLD
+import warnings
 
 
 class Arrow(object):
@@ -90,9 +90,18 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        self._datetime = datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo, fold=fold
+        # TODO drop and use _datetime attr instead?
+        self._fold = fold
+
+        self._datetime = enfold(datetime(
+            year, month, day, hour, minute, second, microsecond, tzinfo), fold=self._fold
         )
+
+        # TODO make easier to understand
+        # warn user if dt is imaginary
+        if not dateutil_tz.datetime_exists(self._datetime):
+            warnings.warn("{} does not exist in current timezone".format(self._datetime), util.ImaginaryDatetimeWarning)
+
 
     # factories: single object, both original and from datetime.
 
@@ -113,6 +122,7 @@ class Arrow(object):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -139,6 +149,7 @@ class Arrow(object):
         """
 
         dt = datetime.now(dateutil_tz.tzutc())
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -149,6 +160,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold
         )
 
     @classmethod
@@ -171,6 +183,8 @@ class Arrow(object):
             )
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
+
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -198,6 +212,7 @@ class Arrow(object):
             )
 
         dt = datetime.utcfromtimestamp(float(timestamp))
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -208,6 +223,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
+            dt.fold
         )
 
     @classmethod
@@ -233,6 +249,8 @@ class Arrow(object):
                 tzinfo = dateutil_tz.tzutc()
             else:
                 tzinfo = dt.tzinfo
+
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -280,6 +298,8 @@ class Arrow(object):
         dt = datetime.strptime(date_str, fmt)
         if tzinfo is None:
             tzinfo = dt.tzinfo
+
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -361,6 +381,7 @@ class Arrow(object):
         while current <= end and i < limit:
             i += 1
             yield dateutil_tz.resolve_imaginary(current)
+            # TODO still results in duplication and imaginary dt's
 
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo) + relativedelta(
@@ -590,6 +611,23 @@ class Arrow(object):
 
         return self.timestamp + float(self.microsecond) / 1000000
 
+    # TODO step through with debugger
+    @property
+    def fold(self):
+        return getattr(self._datetime, 'fold', self._fold)
+
+    @fold.setter
+    def fold(self, val):
+        if getattr(self._datetime, 'fold', None) is None:
+            # NOTE as currently designed there will always be a fold attr
+            if val not in {0, 1}:
+                raise ValueError('fold attribute must be either 0 or 1')
+            self._fold = val
+        else:
+            self._fold = val   #?????
+            self._datetime = enfold(self._datetime, fold=val)#self._datetime.replace(fold, val)
+            # updating object but not fold attr
+
     # mutation and duplication.
 
     def clone(self):
@@ -735,6 +773,8 @@ class Arrow(object):
             tz = parser.TzinfoParser.parse(tz)
 
         dt = self._datetime.astimezone(tz)
+
+        dt = enfold(dt)
 
         return self.__class__(
             dt.year,
