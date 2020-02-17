@@ -79,9 +79,6 @@ class TestTestArrowInit:
         assert hasattr(before, "fold")
         assert hasattr(after, "fold")
 
-        assert hasattr(before._datetime, "fold")
-        assert hasattr(after._datetime, "fold")
-
         # PEP-495 requires the equality below to be true
         assert before == after
         assert before.utcoffset() != after.utcoffset()
@@ -296,6 +293,13 @@ class TestArrowAttribute:
 
         assert result == self.arrow.microsecond
 
+    def test_fold(self):
+
+        assert self.arrow.fold == 0
+
+        self.arrow.fold = 1
+
+        assert self.arrow.fold == 1
 
 class TestArrowComparison:
     @classmethod

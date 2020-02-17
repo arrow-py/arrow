@@ -90,14 +90,13 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        # TODO drop and use _datetime attr instead?
         self._fold = fold
 
         self._datetime = enfold(datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo), fold=self._fold
         )
 
-        # TODO make easier to understand
+        # TODO make easier to understand, use actual timezone name
         # warn user if dt is imaginary
         if not dateutil_tz.datetime_exists(self._datetime):
             warnings.warn("{} does not exist in current timezone".format(self._datetime), util.ImaginaryDatetimeWarning)
@@ -614,19 +613,17 @@ class Arrow(object):
     # TODO step through with debugger
     @property
     def fold(self):
+        # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
+        # otherwise, so we need to define a _fold attribute to cover this case
         return getattr(self._datetime, 'fold', self._fold)
 
     @fold.setter
     def fold(self, val):
-        if getattr(self._datetime, 'fold', None) is None:
-            # NOTE as currently designed there will always be a fold attr
-            if val not in {0, 1}:
-                raise ValueError('fold attribute must be either 0 or 1')
-            self._fold = val
-        else:
-            self._fold = val   #?????
-            self._datetime = enfold(self._datetime, fold=val)#self._datetime.replace(fold, val)
-            # updating object but not fold attr
+        if val not in {0, 1}:
+            raise ValueError('fold attribute must be either 0 or 1')
+        self._fold = val
+        self._datetime = enfold(self._datetime, fold=val)
+
 
     # mutation and duplication.
 
