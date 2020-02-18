@@ -296,10 +296,11 @@ class TestArrowAttribute:
     def test_fold(self):
 
         assert self.arrow.fold == 0
-
         self.arrow.fold = 1
-
         assert self.arrow.fold == 1
+
+        with pytest.raises(ValueError):
+            self.arrow.fold = 123
 
 class TestArrowComparison:
     @classmethod
@@ -590,15 +591,21 @@ class TestArrowConversion:
         result = arrow.Arrow(2018, 11, 4, 1, tzinfo="-08:00").to("US/Pacific").to("UTC")
         assert result == arrow.Arrow(2018, 11, 4, 9)
 
-    # regression test for #690 unsure of correct result here
-    # def test_to_israel_same_offset(self):
-    #     first = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00")
-    #     print(first)
-    #     result = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00").to("Israel")
-    #     print(result)
-    #     final=arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="Israel")
-    #     print(final)
-    #     assert result == arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="Israel")
+    # regression test for #690
+    def test_to_israel_same_offset(self):
+
+        result = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00").to("Israel")
+        expected = arrow.Arrow(2019, 10, 27, 1, 21, 1, tzinfo="Israel")
+
+        assert result == expected
+        assert_datetime_equality(result, expected)
+
+    # issue 315
+    def test_anchorage_dst(self):
+        before = arrow.Arrow(2016, 3, 12).to("America/Anchorage")
+        after = arrow.Arrow(2016, 3, 15).to("America/Anchorage")
+
+        assert before.utcoffset() != after.utcoffset()
 
 
 class TestArrowPickling:
