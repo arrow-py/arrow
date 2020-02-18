@@ -331,6 +331,8 @@ class ItalianLocale(Locale):
         "hours": "{0} ore",
         "day": "un giorno",
         "days": "{0} giorni",
+        "week": "una settimana,",
+        "weeks": "{0} settimane",
         "month": "un mese",
         "months": "{0} mesi",
         "year": "un anno",
