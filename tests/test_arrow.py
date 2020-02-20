@@ -1042,7 +1042,6 @@ class TestArrowRange:
         with pytest.raises(AttributeError):
             next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
 
-    @pytest.mark.xfail
     def test_imaginary(self):
         # avoid duplication in utc column
         # issue #72

@@ -99,7 +99,7 @@ class Arrow(object):
         # TODO make easier to understand, use actual timezone name
         # warn user if dt is imaginary
         if not dateutil_tz.datetime_exists(self._datetime):
-            warnings.warn("{} does not exist in current timezone".format(self._datetime), util.ImaginaryDatetimeWarning)
+            warnings.warn("{} does not exist in the current timezone - {}".format(self._datetime, tzinfo), util.ImaginaryDatetimeWarning)
 
 
     # factories: single object, both original and from datetime.
@@ -379,13 +379,29 @@ class Arrow(object):
 
         while current <= end and i < limit:
             i += 1
-            yield dateutil_tz.resolve_imaginary(current)
-            # TODO still results in duplication and imaginary dt's
-
+            yield current
+            # TODO solution works but code style could be improved
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(
+
+            # TODO avoid printing warning output
+            with warnings.catch_warnings():
+                warnings.filterwarnings("error", category=util.ImaginaryDatetimeWarning)
+
+                try:
+                    base = cls(*values, tzinfo=tzinfo)
+                except util.ImaginaryDatetimeWarning:
+                    dt_base = datetime(*values, tzinfo=tzinfo)
+                    non_im_base = dateutil_tz.resolve_imaginary(dt_base)
+                    base = cls.fromdatetime(non_im_base)
+
+            # IDEA use shift here instead?
+
+            current = base + relativedelta(
                 **{frame_relative: relative_steps}
             )
+
+            current = dateutil_tz.resolve_imaginary(current._datetime)
+            current = cls.fromdatetime(current)
 
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):
