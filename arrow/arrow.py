@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 import calendar
 import sys
+import warnings
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
@@ -18,7 +19,6 @@ from dateutil.relativedelta import relativedelta
 from dateutil.tz import enfold
 
 from arrow import formatter, locales, parser, util
-import warnings
 
 
 class Arrow(object):
@@ -92,15 +92,19 @@ class Arrow(object):
 
         self._fold = fold
 
-        self._datetime = enfold(datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo), fold=self._fold
+        self._datetime = enfold(
+            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            fold=self._fold,
         )
 
-        # TODO make easier to understand, use actual timezone name
         # warn user if dt is imaginary
         if not dateutil_tz.datetime_exists(self._datetime):
-            warnings.warn("{} does not exist in the current timezone - {}".format(self._datetime, tzinfo), util.ImaginaryDatetimeWarning)
-
+            warnings.warn(
+                "{} does not exist in the current timezone - {}".format(
+                    self._datetime, tzinfo
+                ),
+                util.ImaginaryDatetimeWarning,
+            )
 
     # factories: single object, both original and from datetime.
 
@@ -159,7 +163,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            dt.fold
+            dt.fold,
         )
 
     @classmethod
@@ -222,7 +226,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
-            dt.fold
+            dt.fold,
         )
 
     @classmethod
@@ -396,9 +400,7 @@ class Arrow(object):
 
             # IDEA use shift here instead?
 
-            current = base + relativedelta(
-                **{frame_relative: relative_steps}
-            )
+            current = base + relativedelta(**{frame_relative: relative_steps})
 
             current = dateutil_tz.resolve_imaginary(current._datetime)
             current = cls.fromdatetime(current)
@@ -626,20 +628,18 @@ class Arrow(object):
 
         return self.timestamp + float(self.microsecond) / 1000000
 
-    # TODO step through with debugger
     @property
     def fold(self):
         # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
         # otherwise, so we need to define a _fold attribute to cover this case
-        return getattr(self._datetime, 'fold', self._fold)
+        return getattr(self._datetime, "fold", self._fold)
 
     @fold.setter
     def fold(self, val):
         if val not in {0, 1}:
-            raise ValueError('fold attribute must be either 0 or 1')
+            raise ValueError("fold attribute must be either 0 or 1")
         self._fold = val
         self._datetime = enfold(self._datetime, fold=val)
-
 
     # mutation and duplication.
 

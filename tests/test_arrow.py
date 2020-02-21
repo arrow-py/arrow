@@ -302,6 +302,7 @@ class TestArrowAttribute:
         with pytest.raises(ValueError):
             self.arrow.fold = 123
 
+
 class TestArrowComparison:
     @classmethod
     def setup_class(cls):
@@ -809,7 +810,9 @@ class TestArrowShift:
         # likely needs fold attribute here for shift back, review imaginary dt in Paul's talk
         # maybe info not available yet!
         london = arrow.Arrow(2019, 10, 27, 2, 30, tzinfo="Europe/London")
-        assert london.shift(hours=-2) == arrow.Arrow(2019, 10, 27, 0, 30, tzinfo="Europe/London")
+        assert london.shift(hours=-2) == arrow.Arrow(
+            2019, 10, 27, 0, 30, tzinfo="Europe/London"
+        )
 
         canberra = arrow.Arrow(2018, 10, 7, 1, 30, tzinfo="Australia/Canberra")
         assert canberra.shift(hours=+1) == arrow.Arrow(
@@ -828,10 +831,10 @@ class TestArrowShift:
         )
 
         # NOTE very odd behaviour here -<Arrow [2011-12-31T23:00:00+14:00]>
-        #apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
-        #assert apia.shift(hours=-2) == arrow.Arrow(
+        # apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
+        # assert apia.shift(hours=-2) == arrow.Arrow(
         #    2011, 12, 29, 23, tzinfo="Pacific/Apia"
-        #)
+        # )
 
         # corrected 2018d tz database release, will fail in earlier versions
         # TODO dateutil 2.7.0 contains 2018c, is this really worth testing in arrow?
@@ -840,7 +843,9 @@ class TestArrowShift:
             1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
         )
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="unsupported before python3.6")
+    @pytest.mark.skipif(
+        sys.version_info < (3, 6), reason="unsupported before python3.6"
+    )
     def shift_imaginary_seconds(self):
         # offset has a seconds component
         monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")
@@ -1046,11 +1051,11 @@ class TestArrowRange:
         # avoid duplication in utc column
         # issue #72
 
-        before = arrow.Arrow(2018, 3, 10, 23, tzinfo='US/Pacific')
-        after = arrow.Arrow(2018, 3, 11, 4, tzinfo='US/Pacific')
+        before = arrow.Arrow(2018, 3, 10, 23, tzinfo="US/Pacific")
+        after = arrow.Arrow(2018, 3, 11, 4, tzinfo="US/Pacific")
 
-        pacific_range = [t for t in arrow.Arrow.range('hour', before, after)]
-        utc_range = [t.to('utc') for t in arrow.Arrow.range('hour', before, after)]
+        pacific_range = [t for t in arrow.Arrow.range("hour", before, after)]
+        utc_range = [t.to("utc") for t in arrow.Arrow.range("hour", before, after)]
 
         assert len(pacific_range) == len(set(pacific_range))
         assert len(utc_range) == len(set(utc_range))

@@ -2,9 +2,6 @@
 from __future__ import absolute_import
 
 import datetime
-import sys
-
-from dateutil import tz as dateutil_tz
 
 
 def total_seconds(td):
