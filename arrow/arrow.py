@@ -387,23 +387,18 @@ class Arrow(object):
             # TODO solution works but code style could be improved
             values = [getattr(current, f) for f in cls._ATTRS]
 
-            # TODO avoid printing warning output
             with warnings.catch_warnings():
-                warnings.filterwarnings("error", category=util.ImaginaryDatetimeWarning)
+                warnings.filterwarnings(
+                    "ignore", category=util.ImaginaryDatetimeWarning
+                )
+                base = cls(*values, tzinfo=tzinfo)
 
-                try:
-                    base = cls(*values, tzinfo=tzinfo)
-                except util.ImaginaryDatetimeWarning:
-                    dt_base = datetime(*values, tzinfo=tzinfo)
-                    non_im_base = dateutil_tz.resolve_imaginary(dt_base)
-                    base = cls.fromdatetime(non_im_base)
+                # IDEA use shift here instead?
 
-            # IDEA use shift here instead?
+                current = base + relativedelta(**{frame_relative: relative_steps})
 
-            current = base + relativedelta(**{frame_relative: relative_steps})
-
-            current = dateutil_tz.resolve_imaginary(current._datetime)
-            current = cls.fromdatetime(current)
+                current = dateutil_tz.resolve_imaginary(current._datetime)
+                current = cls.fromdatetime(current)
 
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):

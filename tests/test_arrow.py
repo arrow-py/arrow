@@ -7,6 +7,7 @@ import sys
 import time
 from datetime import date, datetime, timedelta
 
+import dateutil
 import pytest
 import pytz
 import simplejson as json
@@ -793,26 +794,16 @@ class TestArrowShift:
             2017, 3, 12, 3, 30, tzinfo="America/New_York"
         )
 
+        # pendulum example
         paris = arrow.Arrow(2013, 3, 31, 1, 50, tzinfo="Europe/Paris")
         assert paris.shift(minutes=+20) == arrow.Arrow(
             2013, 3, 31, 3, 10, tzinfo="Europe/Paris"
         )
 
-        # london
-
-        # 2015-10-06T02:00:00+02:00
-
-        # berlin = arrow.Arrow(2015)
-
-        # >> > arrow.get('2019-11-03 01:05:00-05:00').to('America/New_York')
-        # < Arrow[2019 - 11 - 03T01: 05:00 - 04: 00] >
-
-        # likely needs fold attribute here for shift back, review imaginary dt in Paul's talk
-        # maybe info not available yet!
         london = arrow.Arrow(2019, 10, 27, 2, 30, tzinfo="Europe/London")
-        assert london.shift(hours=-2) == arrow.Arrow(
-            2019, 10, 27, 0, 30, tzinfo="Europe/London"
-        )
+        before = london.shift(hours=-2)
+        assert before == arrow.Arrow(2019, 10, 27, 0, 30, tzinfo="Europe/London")
+        assert london.utcoffset() != before.utcoffset()
 
         canberra = arrow.Arrow(2018, 10, 7, 1, 30, tzinfo="Australia/Canberra")
         assert canberra.shift(hours=+1) == arrow.Arrow(
@@ -831,13 +822,19 @@ class TestArrowShift:
         )
 
         # NOTE very odd behaviour here -<Arrow [2011-12-31T23:00:00+14:00]>
+        # How does dateutil.resolve_imaginary work here?
         # apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
         # assert apia.shift(hours=-2) == arrow.Arrow(
-        #    2011, 12, 29, 23, tzinfo="Pacific/Apia"
+        #    2011, 12, 29, 23, tzinfo="Pacific/Apia"deac
         # )
 
+    # TODO dateutil 2.7.0 contains 2018c, is this really worth testing in arrow?
+    @pytest.mark.skipif(
+        dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"
+    )
+    def test_shift_kiritimati(self):
         # corrected 2018d tz database release, will fail in earlier versions
-        # TODO dateutil 2.7.0 contains 2018c, is this really worth testing in arrow?
+
         kiritimati = arrow.Arrow(1994, 12, 30, 12, 30, tzinfo="Pacific/Kiritimati")
         assert kiritimati.shift(days=+1) == arrow.Arrow(
             1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
