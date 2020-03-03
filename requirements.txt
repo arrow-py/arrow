@@ -1,6 +1,7 @@
 backports.functools_lru_cache==1.6.1; python_version == "2.7"
 dateparser==0.7.*
-pre-commit==2.1.*
+pre-commit==1.20.*; python_version <= "3.5"
+pre-commit==2.1.*; python_version >= "3.6"
 pytest==4.6.*; python_version == "2.7"
 pytest==5.3.*; python_version >= "3.5"
 pytest-cov==2.8.*
