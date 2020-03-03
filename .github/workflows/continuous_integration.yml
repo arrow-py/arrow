@@ -30,7 +30,6 @@ jobs:
         run: tox -e docs
 
   Linux:
-    needs: Linting
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -55,7 +54,6 @@ jobs:
           file: .coverage
 
   MacOS:
-    needs: Linting
     runs-on: macos-latest
     strategy:
       matrix:
@@ -80,7 +78,6 @@ jobs:
           file: .coverage
 
   Windows:
-    needs: Linting
     runs-on: windows-latest
     strategy:
       matrix:
