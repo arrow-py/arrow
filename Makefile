@@ -1,6 +1,6 @@
 .PHONY: auto test docs clean
 
-auto: build27
+auto: build38
 
 build27: PYTHON_VER = python2.7
 build35: PYTHON_VER = python3.5
@@ -14,7 +14,7 @@ build27 build35 build36 build37 build38:
 	venv/bin/pre-commit install
 
 test:
-	rm -f .coverage coverage.xml
+	rm -f .coverage
 	. venv/bin/activate && pytest
 
 lint:
@@ -27,7 +27,7 @@ docs:
 clean:
 	rm -rf venv .tox ./**/__pycache__
 	rm -rf dist build .egg .eggs arrow.egg-info
-	rm -f ./**/*.pyc .coverage coverage.xml
+	rm -f ./**/*.pyc .coverage
 
 publish:
 	rm -rf dist build .egg .eggs arrow.egg-info
