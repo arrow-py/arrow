@@ -1,7 +1,7 @@
 Arrow: Better dates & times for Python
 ======================================
 
-Release v\ |release|. (`Installation`_) (`Changelog <releases.html>`_)
+Release v\ |release| (`Installation`_) (`Changelog <releases.html>`_)
 
 .. include:: ../README.rst
   :start-after: start-inclusion-marker-do-not-remove
