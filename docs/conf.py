@@ -15,7 +15,7 @@ with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
 # -- Project information -----------------------------------------------------
 
 project = u"Arrow 🏹"
-copyright = "2019, Chris Smith"
+copyright = "2020, Chris Smith"
 author = "Chris Smith"
 
 release = about["__version__"]
@@ -44,6 +44,7 @@ html_show_sourcelink = False
 html_show_sphinx = False
 html_show_copyright = True
 
+# https://alabaster.readthedocs.io/en/latest/customization.html
 html_theme_options = {
     "description": "Arrow is a sensible and human-friendly approach to dates, times and timestamps.",
     "github_user": "crsmithdev",
@@ -51,6 +52,9 @@ html_theme_options = {
     "github_banner": True,
     "show_related": False,
     "show_powered_by": False,
+    "github_button": True,
+    "github_type": "star",
+    "github_count": "true",  # must be a string
 }
 
 html_sidebars = {
