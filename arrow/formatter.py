@@ -11,12 +11,12 @@ from arrow import locales, util
 
 class DateTimeFormatter(object):
 
-    # This pattern matches characters enclosed in square brackes are matched as
+    # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
-    # TODO: test against full timezone DB
+
     _FORMAT_RE = re.compile(
-        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|W)"
     )
 
     def __init__(self, locale="en_us"):
@@ -116,3 +116,7 @@ class DateTimeFormatter(object):
 
         if token in ("a", "A"):
             return self.locale.meridian(dt.hour, token)
+
+        if token == "W":
+            year, week, day = dt.isocalendar()
+            return "{}-W{:02d}-{}".format(year, week, day)

@@ -332,7 +332,7 @@ Then get and use a factory for it:
 Supported Tokens
 ~~~~~~~~~~~~~~~~
 
-Use the following tokens in parsing and formatting.  Note that they're not the same as the tokens for `strptime(3) <https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html#index-strptime>`_:
+Use the following tokens for parsing and formatting. Note that they are **not** the same as the tokens for `strptime <https://linux.die.net/man/3/strptime>`_:
 
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Token         |Output                                     |
@@ -364,6 +364,8 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 |                                |ddd           |Mon, Tue, Wed ... [#t2]_                   |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |d             |1, 2, 3 ... 6, 7                           |
++--------------------------------+--------------+-------------------------------------------+
+|**ISO week date**               |W             |2011-W05-4, 2019-W17                       |
 +--------------------------------+--------------+-------------------------------------------+
 |**Hour**                        |HH            |00, 01, 02 ... 23, 24                      |
 +--------------------------------+--------------+-------------------------------------------+
