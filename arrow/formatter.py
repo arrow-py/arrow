@@ -14,7 +14,7 @@ class DateTimeFormatter(object):
     # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
-    # TODO: test against full timezone DB
+
     _FORMAT_RE = re.compile(
         r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|W)"
     )

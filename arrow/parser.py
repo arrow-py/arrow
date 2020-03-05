@@ -50,7 +50,7 @@ class DateTimeParser(object):
     _TIMESTAMP_RE = re.compile(r"^\-?\d+\.?\d+$")
     _TIMESTAMP_EXPANDED_RE = re.compile(r"^\-?\d+$")
     _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
-    _WEEK_DATE_RE = re.compile(r"^(\d{4})([\-])?W(\d{2})(?:([\-])?(\d))?$")
+    _WEEK_DATE_RE = re.compile(r"(\d{4})([\-])?W(\d{2})(?:([\-])?(\d))?")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
