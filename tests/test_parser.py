@@ -622,18 +622,26 @@ class TestDateTimeParserParse:
             self.parser.parse("2019-12-31T24:00:00.999999", "YYYY-MM-DDTHH:mm:ss.S")
 
     def test_parse_W(self):
-        good_full_formats = ["2011-W05-4", "2011W054"]
-        good_part_formats = ["2011-W05", "2011W05"]
-        good_formats_with_time = ["2011-W05-4T14:17:01", "2011W054T14:17:01", "2011-W05-4T141701", "2011W054T141701"]
 
-        for fmt in good_full_formats:
-            assert self.parser.parse(fmt, "W") == datetime(2011, 2, 3)
-
-        for fmt in good_part_formats:
-            assert self.parser.parse(fmt, "W") == datetime(2011, 1, 31)
-
-        for fmt in good_formats_with_time:
-            assert self.parser.parse(fmt, "W") == datetime(2011, 1, 31, 14, 17, 1)
+        assert self.parser.parse("2011-W05-4", "W") == datetime(2011, 2, 3)
+        assert self.parser.parse("2011W054", "W") == datetime(2011, 2, 3)
+        assert self.parser.parse("2011-W05", "W") == datetime(2011, 1, 31)
+        assert self.parser.parse("2011W05", "W") == datetime(2011, 1, 31)
+        assert self.parser.parse("2011-W05-4T14:17:01", "WTHH:mm:ss") == datetime(
+            2011, 2, 3, 14, 17, 1
+        )
+        assert self.parser.parse("2011W054T14:17:01", "WTHH:mm:ss") == datetime(
+            2011, 2, 3, 14, 17, 1
+        )
+        assert self.parser.parse("2011-W05T14:17:01", "WTHH:mm:ss") == datetime(
+            2011, 1, 31, 14, 17, 1
+        )
+        assert self.parser.parse("2011W05T141701", "WTHHmmss") == datetime(
+            2011, 1, 31, 14, 17, 1
+        )
+        assert self.parser.parse("2011W054T141701", "WTHHmmss") == datetime(
+            2011, 2, 3, 14, 17, 1
+        )
 
         bad_formats = [
             "201W22",
@@ -642,7 +650,8 @@ class TestDateTimeParserParse:
             "2001--W34",
             "2011-W03--3",
             "thstrdjtrsrd676776r65",
-            "2002-W66-1T14:17:01"
+            "2002-W66-1T14:17:01",
+            "2002-W23-03T14:17:01",
         ]
 
         for fmt in bad_formats:
@@ -996,11 +1005,15 @@ class TestDateTimeParserISO:
 
         assert self.parser.parse_iso("2011-W05-4") == datetime(2011, 2, 3)
 
-        assert self.parser.parse_iso("2011-W05-4T14:17:01") == datetime(2011, 2, 3, 14, 17, 1)
+        assert self.parser.parse_iso("2011-W05-4T14:17:01") == datetime(
+            2011, 2, 3, 14, 17, 1
+        )
 
         assert self.parser.parse_iso("2011W054") == datetime(2011, 2, 3)
 
-        assert self.parser.parse_iso("2011W054T141701") == datetime(2011, 2, 3, 14, 17, 1)
+        assert self.parser.parse_iso("2011W054T141701") == datetime(
+            2011, 2, 3, 14, 17, 1
+        )
 
     def test_invalid_Z(self):
 

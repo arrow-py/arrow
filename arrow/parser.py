@@ -50,7 +50,7 @@ class DateTimeParser(object):
     _TIMESTAMP_RE = re.compile(r"^\-?\d+\.?\d+$")
     _TIMESTAMP_EXPANDED_RE = re.compile(r"^\-?\d+$")
     _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
-    _WEEK_DATE_RE = re.compile(r"(\d{4})([\-])?W(\d{2})(?:([\-])?(\d))?")
+    _WEEK_DATE_RE = re.compile(r"(?P<year>\d{4})[\-]?W(?P<week>\d{2})[\-]?(?P<day>\d)?")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
@@ -233,7 +233,7 @@ class DateTimeParser(object):
             if token == "Do":
                 value = match.group("value")
             elif token == "W":
-                value = (match.group(3), match.group(5), match.group(7))
+                value = (match.group("year"), match.group("week"), match.group("day"))
             else:
                 value = match.group(token)
             self._parse_token(token, value, parts)
@@ -309,7 +309,7 @@ class DateTimeParser(object):
             r"(\b|^)"  # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a negative number through i.e. before epoch numbers
         )
         ending_word_boundary = (
-            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
+            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>T]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
             r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
         )
         bounded_fmt_pattern = r"{}{}{}".format(
@@ -395,9 +395,9 @@ class DateTimeParser(object):
             # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
             year, week = int(weekdate[0]), int(weekdate[1].lstrip("0"))
 
-            try:
+            if weekdate[2] is not None:
                 day = int(weekdate[2])
-            except TypeError:
+            else:
                 # day not given, default to 1
                 day = 1
 
