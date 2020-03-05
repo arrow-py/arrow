@@ -309,7 +309,7 @@ class DateTimeParser(object):
             r"(\b|^)"  # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a negative number through i.e. before epoch numbers
         )
         ending_word_boundary = (
-            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>T]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
+            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
             r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
         )
         bounded_fmt_pattern = r"{}{}{}".format(
@@ -393,7 +393,7 @@ class DateTimeParser(object):
 
         if weekdate is not None:
             # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
-            year, week = int(weekdate[0]), int(weekdate[1].lstrip("0"))
+            year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
                 day = int(weekdate[2])
