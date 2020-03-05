@@ -3,9 +3,9 @@ Arrow: Better dates & times for Python
 
 .. start-inclusion-marker-do-not-remove
 
-.. image:: https://travis-ci.org/crsmithdev/arrow.svg?branch=master
+.. image:: https://github.com/crsmithdev/arrow/workflows/tests/badge.svg?branch=master
    :alt: Build Status
-   :target: https://travis-ci.org/crsmithdev/arrow
+   :target: https://github.com/crsmithdev/arrow/actions?query=workflow%3Atests+branch%3Amaster
 
 .. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
    :alt: Codecov
