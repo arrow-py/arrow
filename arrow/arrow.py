@@ -900,7 +900,7 @@ class Arrow(object):
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
         """
-        # NOTE may cause weird behaviour with resolve imaginary
+
         return self.span(frame)[1]
 
     # string output and formatting.

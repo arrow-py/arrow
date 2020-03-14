@@ -821,8 +821,11 @@ class TestArrowShift:
             2011, 12, 31, 1, tzinfo="Pacific/Apia"
         )
 
-        # NOTE very odd behaviour here -<Arrow [2011-12-31T23:00:00+14:00]>
-        # How does dateutil.resolve_imaginary work here?
+        # NOTE very odd behaviour here -<Arrow [2011-12-30T23:00:00+14:00]>
+        # How does dateutil.resolve_imaginary work here? This dt should be resolved in the shift method.
+
+        # dateutil says that the method will always fall forward.
+
         # apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
         # assert apia.shift(hours=-2) == arrow.Arrow(
         #    2011, 12, 29, 23, tzinfo="Pacific/Apia"deac
@@ -841,7 +844,7 @@ class TestArrowShift:
         )
 
     @pytest.mark.skipif(
-        sys.version_info < (3, 6), reason="unsupported before python3.6"
+        sys.version_info < (3, 6), reason="unsupported before python 3.6"
     )
     def shift_imaginary_seconds(self):
         # offset has a seconds component
