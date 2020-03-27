@@ -9,12 +9,16 @@ from arrow import formatter
 
 from .utils import make_full_tz_list
 
+import pytest
 
+
+@pytest.fixture(scope="class")
+def formatting_fixture(request):
+    request.cls.formatter = formatter.DateTimeFormatter()
+
+
+@pytest.mark.usefixtures("formatting_fixture")
 class TestDateTimeFormatterFormatToken:
-    @classmethod
-    def setup_class(cls):
-        cls.formatter = formatter.DateTimeFormatter()
-
     def test_format(self):
 
         dt = datetime(2013, 2, 5, 12, 32, 51)
