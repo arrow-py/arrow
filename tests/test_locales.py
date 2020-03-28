@@ -10,6 +10,7 @@ import pytest
 def locales_fixture(request):
     request.cls.locales = locales._locales
 
+
 @pytest.fixture(scope="class")
 def lang_locale_fixture(request):
     name = request.cls.__name__[4:]
@@ -72,7 +73,6 @@ class TestModule:
 
 @pytest.mark.usefixtures("lang_locale_fixture")
 class TestLocale:
-
     def test_format_timeframe(self):
 
         assert self.locale._format_timeframe("hours", 2) == "2 hours"
@@ -205,44 +205,41 @@ class TestFrenchLocale:
         assert self.locale.ordinal_number(1) == "1er"
         assert self.locale.ordinal_number(2) == "2e"
 
+
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestRussianLocale:
     def test_plurals2(self):
-
-        locale = locales.RussianLocale()
-
-        assert locale._format_timeframe("hours", 0) == "0 часов"
-        assert locale._format_timeframe("hours", 1) == "1 час"
-        assert locale._format_timeframe("hours", 2) == "2 часа"
-        assert locale._format_timeframe("hours", 4) == "4 часа"
-        assert locale._format_timeframe("hours", 5) == "5 часов"
-        assert locale._format_timeframe("hours", 21) == "21 час"
-        assert locale._format_timeframe("hours", 22) == "22 часа"
-        assert locale._format_timeframe("hours", 25) == "25 часов"
+        assert self.locale._format_timeframe("hours", 0) == "0 часов"
+        assert self.locale._format_timeframe("hours", 1) == "1 час"
+        assert self.locale._format_timeframe("hours", 2) == "2 часа"
+        assert self.locale._format_timeframe("hours", 4) == "4 часа"
+        assert self.locale._format_timeframe("hours", 5) == "5 часов"
+        assert self.locale._format_timeframe("hours", 21) == "21 час"
+        assert self.locale._format_timeframe("hours", 22) == "22 часа"
+        assert self.locale._format_timeframe("hours", 25) == "25 часов"
 
         # feminine grammatical gender should be tested separately
-        assert locale._format_timeframe("minutes", 0) == "0 минут"
-        assert locale._format_timeframe("minutes", 1) == "1 минуту"
-        assert locale._format_timeframe("minutes", 2) == "2 минуты"
-        assert locale._format_timeframe("minutes", 4) == "4 минуты"
-        assert locale._format_timeframe("minutes", 5) == "5 минут"
-        assert locale._format_timeframe("minutes", 21) == "21 минуту"
-        assert locale._format_timeframe("minutes", 22) == "22 минуты"
-        assert locale._format_timeframe("minutes", 25) == "25 минут"
+        assert self.locale._format_timeframe("minutes", 0) == "0 минут"
+        assert self.locale._format_timeframe("minutes", 1) == "1 минуту"
+        assert self.locale._format_timeframe("minutes", 2) == "2 минуты"
+        assert self.locale._format_timeframe("minutes", 4) == "4 минуты"
+        assert self.locale._format_timeframe("minutes", 5) == "5 минут"
+        assert self.locale._format_timeframe("minutes", 21) == "21 минуту"
+        assert self.locale._format_timeframe("minutes", 22) == "22 минуты"
+        assert self.locale._format_timeframe("minutes", 25) == "25 минут"
 
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestPolishLocale:
     def test_plurals(self):
-
-        locale = locales.PolishLocale()
-
-        assert locale._format_timeframe("hours", 0) == "0 godzin"
-        assert locale._format_timeframe("hours", 1) == "1 godzin"
-        assert locale._format_timeframe("hours", 2) == "2 godziny"
-        assert locale._format_timeframe("hours", 4) == "4 godziny"
-        assert locale._format_timeframe("hours", 5) == "5 godzin"
-        assert locale._format_timeframe("hours", 21) == "21 godzin"
-        assert locale._format_timeframe("hours", 22) == "22 godziny"
-        assert locale._format_timeframe("hours", 25) == "25 godzin"
+        assert self.locale._format_timeframe("hours", 0) == "0 godzin"
+        assert self.locale._format_timeframe("hours", 1) == "1 godzin"
+        assert self.locale._format_timeframe("hours", 2) == "2 godziny"
+        assert self.locale._format_timeframe("hours", 4) == "4 godziny"
+        assert self.locale._format_timeframe("hours", 5) == "5 godzin"
+        assert self.locale._format_timeframe("hours", 21) == "21 godzin"
+        assert self.locale._format_timeframe("hours", 22) == "22 godziny"
+        assert self.locale._format_timeframe("hours", 25) == "25 godzin"
 
 
 @pytest.mark.usefixtures("lang_locale_fixture")
@@ -256,8 +253,8 @@ class TestIcelandicLocale:
         assert self.locale._format_timeframe("hours", 2) == "2 tíma"
         assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
 
-@pytest.mark.usefixtures("lang_locale_fixture")
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestMalayalamLocale:
     def test_format_timeframe(self):
 
@@ -280,8 +277,8 @@ class TestMalayalamLocale:
         result = self.locale._format_relative("ഒരു മണിക്കൂർ", "hour", -1)
         assert result == "ഒരു മണിക്കൂർ മുമ്പ്"
 
-@pytest.mark.usefixtures("lang_locale_fixture")
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestHindiLocale:
     def test_format_timeframe(self):
 
@@ -291,7 +288,6 @@ class TestHindiLocale:
     def test_format_relative_now(self):
 
         result = self.locale._format_relative("अभी", "now", 0)
-
         assert result == "अभी"
 
     def test_format_relative_past(self):
@@ -303,6 +299,7 @@ class TestHindiLocale:
 
         result = self.locale._format_relative("एक घंटा", "hour", -1)
         assert result == "एक घंटा पहले"
+
 
 @pytest.mark.usefixtures("lang_locale_fixture")
 class TestCzechLocale:
@@ -330,10 +327,9 @@ class TestCzechLocale:
         result = self.locale._format_relative("hodinou", "hour", -1)
         assert result == "Před hodinou"
 
+
 @pytest.mark.usefixtures("lang_locale_fixture")
-
 class TestSlovakLocale:
-
     def test_format_timeframe(self):
 
         assert self.locale._format_timeframe("hours", 2) == "2 hodiny"
@@ -359,73 +355,68 @@ class TestSlovakLocale:
         assert result == "Pred hodinou"
 
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestBulgarianLocale:
     def test_plurals2(self):
-
-        locale = locales.BulgarianLocale()
-
-        assert locale._format_timeframe("hours", 0) == "0 часа"
-        assert locale._format_timeframe("hours", 1) == "1 час"
-        assert locale._format_timeframe("hours", 2) == "2 часа"
-        assert locale._format_timeframe("hours", 4) == "4 часа"
-        assert locale._format_timeframe("hours", 5) == "5 часа"
-        assert locale._format_timeframe("hours", 21) == "21 час"
-        assert locale._format_timeframe("hours", 22) == "22 часа"
-        assert locale._format_timeframe("hours", 25) == "25 часа"
+        assert self.locale._format_timeframe("hours", 0) == "0 часа"
+        assert self.locale._format_timeframe("hours", 1) == "1 час"
+        assert self.locale._format_timeframe("hours", 2) == "2 часа"
+        assert self.locale._format_timeframe("hours", 4) == "4 часа"
+        assert self.locale._format_timeframe("hours", 5) == "5 часа"
+        assert self.locale._format_timeframe("hours", 21) == "21 час"
+        assert self.locale._format_timeframe("hours", 22) == "22 часа"
+        assert self.locale._format_timeframe("hours", 25) == "25 часа"
 
         # feminine grammatical gender should be tested separately
-        assert locale._format_timeframe("minutes", 0) == "0 минути"
-        assert locale._format_timeframe("minutes", 1) == "1 минута"
-        assert locale._format_timeframe("minutes", 2) == "2 минути"
-        assert locale._format_timeframe("minutes", 4) == "4 минути"
-        assert locale._format_timeframe("minutes", 5) == "5 минути"
-        assert locale._format_timeframe("minutes", 21) == "21 минута"
-        assert locale._format_timeframe("minutes", 22) == "22 минути"
-        assert locale._format_timeframe("minutes", 25) == "25 минути"
+        assert self.locale._format_timeframe("minutes", 0) == "0 минути"
+        assert self.locale._format_timeframe("minutes", 1) == "1 минута"
+        assert self.locale._format_timeframe("minutes", 2) == "2 минути"
+        assert self.locale._format_timeframe("minutes", 4) == "4 минути"
+        assert self.locale._format_timeframe("minutes", 5) == "5 минути"
+        assert self.locale._format_timeframe("minutes", 21) == "21 минута"
+        assert self.locale._format_timeframe("minutes", 22) == "22 минути"
+        assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestMacedonianLocale:
     def test_plurals_mk(self):
-
-        locale = locales.MacedonianLocale()
-
         # time
-        assert locale._format_relative("сега", "now", 0) == "сега"
+        assert self.locale._format_relative("сега", "now", 0) == "сега"
 
         # Hours
-        assert locale._format_timeframe("hours", 0) == "0 саати"
-        assert locale._format_timeframe("hours", 1) == "1 саат"
-        assert locale._format_timeframe("hours", 2) == "2 саати"
-        assert locale._format_timeframe("hours", 4) == "4 саати"
-        assert locale._format_timeframe("hours", 5) == "5 саати"
-        assert locale._format_timeframe("hours", 21) == "21 саат"
-        assert locale._format_timeframe("hours", 22) == "22 саати"
-        assert locale._format_timeframe("hours", 25) == "25 саати"
+        assert self.locale._format_timeframe("hours", 0) == "0 саати"
+        assert self.locale._format_timeframe("hours", 1) == "1 саат"
+        assert self.locale._format_timeframe("hours", 2) == "2 саати"
+        assert self.locale._format_timeframe("hours", 4) == "4 саати"
+        assert self.locale._format_timeframe("hours", 5) == "5 саати"
+        assert self.locale._format_timeframe("hours", 21) == "21 саат"
+        assert self.locale._format_timeframe("hours", 22) == "22 саати"
+        assert self.locale._format_timeframe("hours", 25) == "25 саати"
 
         # Minutes
-        assert locale._format_timeframe("minutes", 0) == "0 минути"
-        assert locale._format_timeframe("minutes", 1) == "1 минута"
-        assert locale._format_timeframe("minutes", 2) == "2 минути"
-        assert locale._format_timeframe("minutes", 4) == "4 минути"
-        assert locale._format_timeframe("minutes", 5) == "5 минути"
-        assert locale._format_timeframe("minutes", 21) == "21 минута"
-        assert locale._format_timeframe("minutes", 22) == "22 минути"
-        assert locale._format_timeframe("minutes", 25) == "25 минути"
+        assert self.locale._format_timeframe("minutes", 0) == "0 минути"
+        assert self.locale._format_timeframe("minutes", 1) == "1 минута"
+        assert self.locale._format_timeframe("minutes", 2) == "2 минути"
+        assert self.locale._format_timeframe("minutes", 4) == "4 минути"
+        assert self.locale._format_timeframe("minutes", 5) == "5 минути"
+        assert self.locale._format_timeframe("minutes", 21) == "21 минута"
+        assert self.locale._format_timeframe("minutes", 22) == "22 минути"
+        assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
+@pytest.mark.usefixtures("lang_locale_fixture")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
-        locale = locales.HebrewLocale()
+        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
+        assert self.locale._format_timeframe("months", 2) == "חודשיים"
+        assert self.locale._format_timeframe("days", 2) == "יומיים"
+        assert self.locale._format_timeframe("years", 2) == "שנתיים"
+        assert self.locale._format_timeframe("hours", 3) == "3 שעות"
+        assert self.locale._format_timeframe("months", 4) == "4 חודשים"
+        assert self.locale._format_timeframe("days", 3) == "3 ימים"
+        assert self.locale._format_timeframe("years", 5) == "5 שנים"
 
-        assert locale._format_timeframe("hours", 2) == "שעתיים"
-        assert locale._format_timeframe("months", 2) == "חודשיים"
-        assert locale._format_timeframe("days", 2) == "יומיים"
-        assert locale._format_timeframe("years", 2) == "שנתיים"
-
-        assert locale._format_timeframe("hours", 3) == "3 שעות"
-        assert locale._format_timeframe("months", 4) == "4 חודשים"
-        assert locale._format_timeframe("days", 3) == "3 ימים"
-        assert locale._format_timeframe("years", 5) == "5 שנים"
 
 @pytest.mark.usefixtures("lang_locale_fixture")
 class TestMarathiLocale:
@@ -546,24 +537,15 @@ class TestThaiLocale:
 @pytest.mark.usefixtures("lang_locale_fixture")
 class TestBengaliLocale:
     def test_ordinal_number(self):
-        result0 = self.locale._ordinal_number(0)
-        result1 = self.locale._ordinal_number(1)
-        result3 = self.locale._ordinal_number(3)
-        result4 = self.locale._ordinal_number(4)
-        result5 = self.locale._ordinal_number(5)
-        result6 = self.locale._ordinal_number(6)
-        result10 = self.locale._ordinal_number(10)
-        result11 = self.locale._ordinal_number(11)
-        result42 = self.locale._ordinal_number(42)
-        assert result0 == "0তম"
-        assert result1 == "1ম"
-        assert result3 == "3য়"
-        assert result4 == "4র্থ"
-        assert result5 == "5ম"
-        assert result6 == "6ষ্ঠ"
-        assert result10 == "10ম"
-        assert result11 == "11তম"
-        assert result42 == "42তম"
+        assert self.locale._ordinal_number(0) == "0তম"
+        assert self.locale._ordinal_number(1) == "1ম"
+        assert self.locale._ordinal_number(3) == "3য়"
+        assert self.locale._ordinal_number(4) == "4র্থ"
+        assert self.locale._ordinal_number(5) == "5ম"
+        assert self.locale._ordinal_number(6) == "6ষ্ঠ"
+        assert self.locale._ordinal_number(10) == "10ম"
+        assert self.locale._ordinal_number(11) == "11তম"
+        assert self.locale._ordinal_number(42) == "42তম"
         assert self.locale._ordinal_number(-1) is None
 
 
