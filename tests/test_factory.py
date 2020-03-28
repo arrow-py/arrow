@@ -3,7 +3,6 @@ import time
 from datetime import date, datetime
 
 import dateparser
-import pytest
 from dateutil import tz
 
 from arrow import factory
@@ -11,12 +10,15 @@ from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
 
+import pytest
 
+@pytest.fixture(scope="class")
+def factory_fixture(request):
+    request.cls.factory = factory.ArrowFactory()
+
+
+@pytest.mark.usefixtures("factory_fixture")
 class TestGet:
-    @classmethod
-    def setup_class(cls):
-        cls.factory = factory.ArrowFactory()
-
     def test_no_args(self):
 
         assert_datetime_equality(
@@ -333,11 +335,8 @@ class TestGet:
         assert res.tzinfo == tz.gettz("Asia/Tokyo")
 
 
+@pytest.mark.usefixtures("factory_fixture")
 class TestUtcNow:
-    @classmethod
-    def setup_class(cls):
-        cls.factory = factory.ArrowFactory()
-
     def test_utcnow(self):
 
         assert_datetime_equality(
@@ -346,11 +345,8 @@ class TestUtcNow:
         )
 
 
+@pytest.mark.usefixtures("factory_fixture")
 class TestNow:
-    @classmethod
-    def setup_class(cls):
-        cls.factory = factory.ArrowFactory()
-
     def test_no_tz(self):
 
         assert_datetime_equality(self.factory.now(), datetime.now(tz.tzlocal()))
