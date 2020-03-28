@@ -21,6 +21,20 @@ def get_locale(name):
 
     return locale_cls()
 
+def get_locale_by_class_name(name):
+    """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
+    corresponding to an locale class name.
+
+    :param name: the name of the locale class.
+
+    """
+    locale_cls = globals()[name]
+
+    if locale_cls is None:
+        raise ValueError("Unsupported locale '{}'".format(name))
+
+    return locale_cls()
+
 
 # base locale type.
 
