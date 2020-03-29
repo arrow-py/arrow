@@ -2,14 +2,13 @@
 import time
 from datetime import datetime
 
+import pytest
 import pytz
 from dateutil import tz as dateutil_tz
 
 from arrow import formatter
 
 from .utils import make_full_tz_list
-
-import pytest
 
 
 @pytest.fixture(scope="class")

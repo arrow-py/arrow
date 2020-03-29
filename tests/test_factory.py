@@ -3,6 +3,7 @@ import time
 from datetime import date, datetime
 
 import dateparser
+import pytest
 from dateutil import tz
 
 from arrow import factory
@@ -10,7 +11,6 @@ from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
 
-import pytest
 
 @pytest.fixture(scope="class")
 def factory_fixture(request):

@@ -6,6 +6,7 @@ import os
 import time
 from datetime import datetime
 
+import pytest
 from dateutil import tz
 
 import arrow
@@ -14,8 +15,6 @@ from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 
 from .utils import make_full_tz_list
-
-import pytest
 
 
 @pytest.fixture(scope="class")

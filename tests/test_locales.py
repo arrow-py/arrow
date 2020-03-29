@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from arrow import arrow, locales
-
 import pytest
+
+from arrow import arrow, locales
 
 
 @pytest.fixture(scope="class")
@@ -14,8 +14,8 @@ def locales_fixture(request):
 @pytest.fixture(scope="class")
 def lang_locale_fixture(request):
     name = request.cls.__name__[4:]
-    if name == 'Locale':
-        request.cls.locale = locales.get_locale_by_class_name('EnglishLocale')
+    if name == "Locale":
+        request.cls.locale = locales.get_locale_by_class_name("EnglishLocale")
     else:
         request.cls.locale = locales.get_locale_by_class_name(name)
 
@@ -23,6 +23,7 @@ def lang_locale_fixture(request):
 @pytest.mark.usefixtures("locales_fixture")
 class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""
+
     def test_locale_validation(self):
 
         for _, locale_cls in self.locales.items():
