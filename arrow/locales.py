@@ -21,6 +21,7 @@ def get_locale(name):
 
     return locale_cls()
 
+
 def get_locale_by_class_name(name):
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
     corresponding to an locale class name.
