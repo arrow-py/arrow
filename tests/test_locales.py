@@ -6,20 +6,6 @@ import pytest
 from arrow import arrow, locales
 
 
-@pytest.fixture(scope="class")
-def locales_fixture(request):
-    request.cls.locales = locales._locales
-
-
-@pytest.fixture(scope="class")
-def lang_locale_fixture(request):
-    name = request.cls.__name__[4:]
-    if name == "Locale":
-        request.cls.locale = locales.get_locale_by_class_name("EnglishLocale")
-    else:
-        request.cls.locale = locales.get_locale_by_class_name(name)
-
-
 @pytest.mark.usefixtures("locales_fixture")
 class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""

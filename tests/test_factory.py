@@ -6,15 +6,9 @@ import dateparser
 import pytest
 from dateutil import tz
 
-from arrow import factory
 from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
-
-
-@pytest.fixture(scope="class")
-def factory_fixture(request):
-    request.cls.factory = factory.ArrowFactory()
 
 
 @pytest.mark.usefixtures("factory_fixture")

@@ -6,14 +6,7 @@ import pytest
 import pytz
 from dateutil import tz as dateutil_tz
 
-from arrow import formatter
-
 from .utils import make_full_tz_list
-
-
-@pytest.fixture(scope="class")
-def formatting_fixture(request):
-    request.cls.formatter = formatter.DateTimeFormatter()
 
 
 @pytest.mark.usefixtures("formatting_fixture")

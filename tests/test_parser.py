@@ -17,21 +17,6 @@ from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 from .utils import make_full_tz_list
 
 
-@pytest.fixture(scope="class")
-def parser_fixture(request):
-    request.cls.parser = parser.DateTimeParser()
-
-
-@pytest.fixture(scope="class")
-def regex_fixture(request):
-    request.cls.format_regex = parser.DateTimeParser._FORMAT_RE
-
-
-@pytest.fixture(scope="class")
-def tzinfo_fixture(request):
-    request.cls.parser = parser.TzinfoParser()
-
-
 @pytest.mark.usefixtures("parser_fixture")
 class TestDateTimeParser:
     def test_parse_multiformat(self, mocker):
