@@ -59,7 +59,11 @@ class TestModule:
 
 
 @pytest.mark.usefixtures("lang_locale_fixture")
-class TestLocale:
+class TestEnglishLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "instantly"
+        assert self.locale.describe("now", only_distance=False) == "just now"
+
     def test_format_timeframe(self):
 
         assert self.locale._format_timeframe("hours", 2) == "2 hours"
@@ -118,13 +122,6 @@ class TestLocale:
         assert self.locale.meridian(7, None) is None
         assert self.locale.meridian(7, "B") is None
         assert self.locale.meridian(7, "NONSENSE") is None
-
-
-@pytest.mark.usefixtures("lang_locale_fixture")
-class TestEnglishLocale:
-    def test_describe(self):
-        assert self.locale.describe("now", only_distance=True) == "instantly"
-        assert self.locale.describe("now", only_distance=False) == "just now"
 
 
 @pytest.mark.usefixtures("lang_locale_fixture")

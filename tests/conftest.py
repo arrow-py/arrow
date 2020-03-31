@@ -41,11 +41,10 @@ def locales_fixture(request):
 
 @pytest.fixture(scope="class")
 def lang_locale_fixture(request):
+    # As locale test classes are prefixed with Test, we are dynamically getting the locale by the test class name.
+    # TestEnglishLocale -> EnglishLocale
     name = request.cls.__name__[4:]
-    if name == "Locale":
-        request.cls.locale = locales.get_locale_by_class_name("EnglishLocale")
-    else:
-        request.cls.locale = locales.get_locale_by_class_name(name)
+    request.cls.locale = locales.get_locale_by_class_name(name)
 
 
 @pytest.fixture(scope="class")
