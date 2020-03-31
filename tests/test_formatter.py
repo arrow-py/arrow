@@ -107,7 +107,24 @@ class TestDateTimeFormatterFormatToken:
 
         timestamp = time.time()
         dt = datetime.utcfromtimestamp(timestamp)
+
         assert self.formatter._format_token(dt, "X") == str(int(timestamp))
+
+        # time.time() may return a float with greater than 6 digits of precision
+        # time_parts = str(timestamp).split(".")
+        # if len(time_parts[1]) > 6:
+        #     shortened = time_parts[1][:6]
+        #     truncated_timestamp = time_parts[0] + "." + shortened
+        #     timestamp = float(truncated_timestamp)
+        #
+        # assert self.formatter._format_token(dt, "x") == str(int(timestamp*1000000))
+
+        # TODO failing test for discussion with Jad
+        bad_timestamp = 1585668666.7198436
+        dt = datetime.utcfromtimestamp(bad_timestamp)
+        assert self.formatter._format_token(dt, "x") == str(
+            int(bad_timestamp * 1000000)
+        )
 
     def test_timezone(self):
 
