@@ -489,7 +489,6 @@ class TestArrowDatetimeInterface:
         assert result == self.arrow._datetime.strftime("%Y")
 
 
-@pytest.mark.usefixtures("timedst_fixture")
 class TestArrowFalsePositiveDst:
     """These tests relate to issues #376 and #551.
     The key points in both issues are that arrow will assign a UTC timezone if none is provided and
@@ -515,6 +514,22 @@ class TestArrowFalsePositiveDst:
     """
 
     def test_dst(self):
+        self.before_1 = arrow.Arrow(
+            2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
+        self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_2 = arrow.Arrow(
+            2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_3 = arrow.Arrow(
+            2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
+        )
+        self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_4 = arrow.Arrow(
+            2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
+        )
         assert self.before_1.day == self.before_2.day
         assert self.after_1.day == self.after_2.day
         assert self.before_3.day == self.before_4.day
