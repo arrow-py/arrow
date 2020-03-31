@@ -173,7 +173,7 @@ class TestTestArrowFactory:
         )
 
 
-@pytest.mark.usefixtures("time2013_02_03_fixture")
+@pytest.mark.usefixtures("time_2013_02_03")
 class TestTestArrowRepresentation:
     def test_repr(self):
 
@@ -219,7 +219,7 @@ class TestTestArrowRepresentation:
         assert result._datetime == self.arrow._datetime
 
 
-@pytest.mark.usefixtures("time2013_01_01_fixture")
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowAttribute:
     def test_getattr_base(self):
 
@@ -277,7 +277,7 @@ class TestArrowAttribute:
         assert result == self.arrow.microsecond
 
 
-@pytest.mark.usefixtures("utcnow_fixture")
+@pytest.mark.usefixtures("time_utcnow")
 class TestArrowComparison:
     def test_eq(self):
 
@@ -334,7 +334,7 @@ class TestArrowComparison:
         assert self.arrow <= self.arrow.datetime
 
 
-@pytest.mark.usefixtures("time2013_01_01_fixture")
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowMath:
     def test_add_timedelta(self):
 
@@ -388,7 +388,7 @@ class TestArrowMath:
             timedelta(days=1) - self.arrow
 
 
-@pytest.mark.usefixtures("utcnow_fixture")
+@pytest.mark.usefixtures("time_utcnow")
 class TestArrowDatetimeInterface:
     def test_date(self):
 
@@ -1179,7 +1179,7 @@ class TestArrowInterval:
         ]
 
 
-@pytest.mark.usefixtures("time2013_02_15_fixture")
+@pytest.mark.usefixtures("time_2013_02_15")
 class TestArrowSpan:
     def test_span_attribute(self):
 
@@ -1297,7 +1297,7 @@ class TestArrowSpan:
             floor, ceil = self.arrow.span("hour", bounds="][")
 
 
-@pytest.mark.usefixtures("time2013_01_01_fixture")
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanize:
     def test_granularity(self):
 
@@ -1667,7 +1667,7 @@ class TestArrowHumanize:
             arw.humanize(later, granularity="week")
 
 
-@pytest.mark.usefixtures("time2013_01_01_fixture")
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanizeTestsWithLocale:
     def test_now(self):
 

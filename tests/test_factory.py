@@ -11,7 +11,7 @@ from arrow.parser import ParserError
 from .utils import assert_datetime_equality
 
 
-@pytest.mark.usefixtures("factory_fixture")
+@pytest.mark.usefixtures("arrow_factory")
 class TestGet:
     def test_no_args(self):
 
@@ -329,7 +329,7 @@ class TestGet:
         assert res.tzinfo == tz.gettz("Asia/Tokyo")
 
 
-@pytest.mark.usefixtures("factory_fixture")
+@pytest.mark.usefixtures("arrow_factory")
 class TestUtcNow:
     def test_utcnow(self):
 
@@ -339,7 +339,7 @@ class TestUtcNow:
         )
 
 
-@pytest.mark.usefixtures("factory_fixture")
+@pytest.mark.usefixtures("arrow_factory")
 class TestNow:
     def test_no_tz(self):
 

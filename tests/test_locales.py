@@ -6,7 +6,7 @@ import pytest
 from arrow import arrow, locales
 
 
-@pytest.mark.usefixtures("locales_fixture")
+@pytest.mark.usefixtures("lang_locales")
 class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""
 
@@ -58,7 +58,7 @@ class TestModule:
         assert len(locales._locales) > 0
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestEnglishLocale:
     def test_describe(self):
         assert self.locale.describe("now", only_distance=True) == "instantly"
@@ -124,13 +124,13 @@ class TestEnglishLocale:
         assert self.locale.meridian(7, "NONSENSE") is None
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestItalianLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1º"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestSpanishLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1º"
@@ -183,14 +183,14 @@ class TestSpanishLocale:
         assert self.locale._format_timeframe("years", -14) == "14 años"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestFrenchLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1er"
         assert self.locale.ordinal_number(2) == "2e"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestRussianLocale:
     def test_plurals2(self):
         assert self.locale._format_timeframe("hours", 0) == "0 часов"
@@ -213,7 +213,7 @@ class TestRussianLocale:
         assert self.locale._format_timeframe("minutes", 25) == "25 минут"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestPolishLocale:
     def test_plurals(self):
         assert self.locale._format_timeframe("hours", 0) == "0 godzin"
@@ -226,7 +226,7 @@ class TestPolishLocale:
         assert self.locale._format_timeframe("hours", 25) == "25 godzin"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestIcelandicLocale:
     def test_format_timeframe(self):
 
@@ -238,7 +238,7 @@ class TestIcelandicLocale:
         assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestMalayalamLocale:
     def test_format_timeframe(self):
 
@@ -262,7 +262,7 @@ class TestMalayalamLocale:
         assert result == "ഒരു മണിക്കൂർ മുമ്പ്"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestHindiLocale:
     def test_format_timeframe(self):
 
@@ -285,7 +285,7 @@ class TestHindiLocale:
         assert result == "एक घंटा पहले"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestCzechLocale:
     def test_format_timeframe(self):
 
@@ -312,7 +312,7 @@ class TestCzechLocale:
         assert result == "Před hodinou"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestSlovakLocale:
     def test_format_timeframe(self):
 
@@ -339,7 +339,7 @@ class TestSlovakLocale:
         assert result == "Pred hodinou"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestBulgarianLocale:
     def test_plurals2(self):
         assert self.locale._format_timeframe("hours", 0) == "0 часа"
@@ -362,7 +362,7 @@ class TestBulgarianLocale:
         assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestMacedonianLocale:
     def test_plurals_mk(self):
         # time
@@ -389,7 +389,7 @@ class TestMacedonianLocale:
         assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "שעתיים"
@@ -402,7 +402,7 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestMarathiLocale:
     def test_dateCoreFunctionality(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
@@ -432,7 +432,7 @@ class TestMarathiLocale:
         assert self.locale.ordinal_number(1) == "1"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestFinnishLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == ("2 tuntia", "2 tunnin")
@@ -454,7 +454,7 @@ class TestFinnishLocale:
         assert self.locale.ordinal_number(1) == "1."
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestGermanLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1."
@@ -472,7 +472,7 @@ class TestGermanLocale:
         assert self.locale.describe("year", only_distance=False) == "in einem Jahr"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestHungarianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "2 óra"
@@ -481,7 +481,7 @@ class TestHungarianLocale:
         assert self.locale._format_timeframe("now", 0) == "éppen most"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestEsperantoLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "2 horoj"
@@ -493,7 +493,7 @@ class TestEsperantoLocale:
         assert self.locale.ordinal_number(1) == "1a"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestThaiLocale:
     def test_year_full(self):
         assert self.locale.year_full(2015) == "2558"
@@ -518,7 +518,7 @@ class TestThaiLocale:
         assert result == "1 ชั่วโมง ที่ผ่านมา"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestBengaliLocale:
     def test_ordinal_number(self):
         assert self.locale._ordinal_number(0) == "0তম"
@@ -533,7 +533,7 @@ class TestBengaliLocale:
         assert self.locale._ordinal_number(-1) is None
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestSwissLocale:
     def test_ordinal_number(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
@@ -543,7 +543,7 @@ class TestSwissLocale:
         assert self.locale.day_abbreviation(dt.isoweekday()) == "Sa"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestRomanianLocale:
     def test_timeframes(self):
 
@@ -578,7 +578,7 @@ class TestRomanianLocale:
         assert self.locale._format_relative("o zi", "day", 1) == "peste o zi"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestArabicLocale:
     def test_timeframes(self):
 
@@ -611,7 +611,7 @@ class TestArabicLocale:
         assert self.locale._format_timeframe("years", 115) == "115 سنة"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestNepaliLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 3) == "3 घण्टा"
@@ -630,7 +630,7 @@ class TestNepaliLocale:
         assert result == "एक घण्टा पहिले"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestIndonesianLocale:
     def test_timeframes(self):
         assert self.locale._format_timeframe("hours", 2) == "2 jam"
@@ -655,7 +655,7 @@ class TestIndonesianLocale:
         assert self.locale._format_relative("1 jam", "hour", -1) == "1 jam yang lalu"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestTagalogLocale:
     def test_format_timeframe(self):
 
@@ -691,7 +691,7 @@ class TestTagalogLocale:
         assert self.locale.ordinal_number(114) == "ika-114"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
@@ -735,7 +735,7 @@ class TestEstonianLocale:
         assert self.locale._format_timeframe("years", -14) == "14 aastat"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestPortugueseLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "agora"
@@ -753,7 +753,7 @@ class TestPortugueseLocale:
         assert self.locale._format_timeframe("years", 12) == "12 anos"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestBrazilianPortugueseLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "agora"
@@ -771,7 +771,7 @@ class TestBrazilianPortugueseLocale:
         assert self.locale._format_timeframe("years", 12) == "12 anos"
 
 
-@pytest.mark.usefixtures("lang_locale_fixture")
+@pytest.mark.usefixtures("lang_locale")
 class TestHongKongLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "剛才"

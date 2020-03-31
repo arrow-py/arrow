@@ -17,7 +17,7 @@ from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 from .utils import make_full_tz_list
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParser:
     def test_parse_multiformat(self, mocker):
         mocker.patch(
@@ -165,7 +165,7 @@ class TestDateTimeParser:
             self.parser.parse("15 Jul", "X")
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserParse:
     def test_parse_list(self, mocker):
 
@@ -653,7 +653,7 @@ class TestDateTimeParserParse:
                 self.parser.parse(fmt, "W")
 
 
-@pytest.mark.usefixtures("regex_fixture")
+@pytest.mark.usefixtures("dt_regex")
 class TestDateTimeParserRegex:
     def test_format_year(self):
 
@@ -801,7 +801,7 @@ class TestDateTimeParserRegex:
         assert time_re.findall("12:35:46,") == []
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserISO:
     def test_YYYY(self):
 
@@ -1205,7 +1205,7 @@ class TestDateTimeParserISO:
             self.parser.parse_iso("2019-12-31T24:00:00.999999")
 
 
-@pytest.mark.usefixtures("tzinfo_fixture")
+@pytest.mark.usefixtures("dt_tzinfo")
 class TestTzinfoParser:
     def test_parse_local(self):
 
@@ -1241,7 +1241,7 @@ class TestTzinfoParser:
             self.parser.parse("fail")
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthName:
     def test_shortmonth_capitalized(self):
 
@@ -1284,7 +1284,7 @@ class TestDateTimeParserMonthName:
         assert parser_.parse("2013-Gen-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMeridians:
     def test_meridians_lowercase(self):
         assert self.parser.parse("2013-01-01 5am", "YYYY-MM-DD ha") == datetime(
@@ -1345,7 +1345,7 @@ class TestDateTimeParserMeridians:
             parser_.parse("Janvier 30, 2019 - 08:00 pm", "MMMM DD, YYYY - hh:mm a")
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthOrdinalDay:
     def test_english(self):
         parser_ = parser.DateTimeParser("en_us")
@@ -1412,7 +1412,7 @@ class TestDateTimeParserMonthOrdinalDay:
         )
 
 
-@pytest.mark.usefixtures("parser_fixture")
+@pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserSearchDate:
     def test_parse_search(self):
 

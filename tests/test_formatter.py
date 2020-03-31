@@ -9,7 +9,7 @@ from dateutil import tz as dateutil_tz
 from .utils import make_full_tz_list
 
 
-@pytest.mark.usefixtures("formatting_fixture")
+@pytest.mark.usefixtures("arrow_formatter")
 class TestDateTimeFormatterFormatToken:
     def test_format(self):
 

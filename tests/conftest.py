@@ -7,40 +7,45 @@ from arrow import arrow, factory, formatter, locales, parser
 
 
 @pytest.fixture(scope="class")
-def utcnow_fixture(request):
+def time_utcnow(request):
     request.cls.arrow = arrow.Arrow.utcnow()
 
 
 @pytest.fixture(scope="class")
-def time2013_01_01_fixture(request):
+def time_2013_01_01(request):
     request.cls.now = arrow.Arrow.utcnow()
     request.cls.arrow = arrow.Arrow(2013, 1, 1)
     request.cls.datetime = datetime(2013, 1, 1)
 
 
 @pytest.fixture(scope="class")
-def time2013_02_03_fixture(request):
+def time_2013_02_03(request):
     request.cls.arrow = arrow.Arrow(2013, 2, 3, 12, 30, 45, 1)
 
 
 @pytest.fixture(scope="class")
-def time2013_02_15_fixture(request):
+def time_2013_02_15(request):
     request.cls.datetime = datetime(2013, 2, 15, 3, 41, 22, 8923)
     request.cls.arrow = arrow.Arrow.fromdatetime(request.cls.datetime)
 
 
 @pytest.fixture(scope="class")
-def formatting_fixture(request):
+def arrow_formatter(request):
     request.cls.formatter = formatter.DateTimeFormatter()
 
 
 @pytest.fixture(scope="class")
-def locales_fixture(request):
+def arrow_factory(request):
+    request.cls.factory = factory.ArrowFactory()
+
+
+@pytest.fixture(scope="class")
+def lang_locales(request):
     request.cls.locales = locales._locales
 
 
 @pytest.fixture(scope="class")
-def lang_locale_fixture(request):
+def lang_locale(request):
     # As locale test classes are prefixed with Test, we are dynamically getting the locale by the test class name.
     # TestEnglishLocale -> EnglishLocale
     name = request.cls.__name__[4:]
@@ -48,20 +53,15 @@ def lang_locale_fixture(request):
 
 
 @pytest.fixture(scope="class")
-def factory_fixture(request):
-    request.cls.factory = factory.ArrowFactory()
-
-
-@pytest.fixture(scope="class")
-def parser_fixture(request):
+def dt_parser(request):
     request.cls.parser = parser.DateTimeParser()
 
 
 @pytest.fixture(scope="class")
-def regex_fixture(request):
+def dt_regex(request):
     request.cls.format_regex = parser.DateTimeParser._FORMAT_RE
 
 
 @pytest.fixture(scope="class")
-def tzinfo_fixture(request):
+def dt_tzinfo(request):
     request.cls.parser = parser.TzinfoParser()
