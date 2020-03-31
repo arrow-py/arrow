@@ -653,7 +653,7 @@ class TestDateTimeParserParse:
                 self.parser.parse(fmt, "W")
 
 
-@pytest.mark.usefixtures("dt_regex")
+@pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
     def test_format_year(self):
 
@@ -1205,7 +1205,7 @@ class TestDateTimeParserISO:
             self.parser.parse_iso("2019-12-31T24:00:00.999999")
 
 
-@pytest.mark.usefixtures("dt_tzinfo")
+@pytest.mark.usefixtures("tzinfo_parser")
 class TestTzinfoParser:
     def test_parse_local(self):
 

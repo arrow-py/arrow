@@ -58,10 +58,10 @@ def dt_parser(request):
 
 
 @pytest.fixture(scope="class")
-def dt_regex(request):
+def dt_parser_regex(request):
     request.cls.format_regex = parser.DateTimeParser._FORMAT_RE
 
 
 @pytest.fixture(scope="class")
-def dt_tzinfo(request):
+def tzinfo_parser(request):
     request.cls.parser = parser.TzinfoParser()
