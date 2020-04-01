@@ -109,6 +109,10 @@ class TestDateTimeFormatterFormatToken:
         dt = datetime.utcfromtimestamp(timestamp)
         assert self.formatter._format_token(dt, "X") == str(int(timestamp))
 
+        # time.time() may return a float with greater than 6 digits of precision
+        rounded_ts = str(round(timestamp * 1000000))
+        assert self.formatter._format_token(dt, "x") == rounded_ts.format("{f}")
+
     def test_timezone(self):
 
         dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
