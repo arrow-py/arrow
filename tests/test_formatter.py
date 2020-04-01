@@ -107,7 +107,6 @@ class TestDateTimeFormatterFormatToken:
 
         timestamp = time.time()
         dt = datetime.utcfromtimestamp(timestamp)
-
         assert self.formatter._format_token(dt, "X") == str(int(timestamp))
 
         # time.time() may return a float with greater than 6 digits of precision
