@@ -1665,6 +1665,8 @@ class DeutschBaseLocale(Locale):
         "hours": "{0} Stunden",
         "day": "einem Tag",
         "days": "{0} Tagen",
+        "week": "einer Woche",
+        "weeks": "{0} Wochen",
         "month": "einem Monat",
         "months": "{0} Monaten",
         "year": "einem Jahr",
@@ -1675,6 +1677,7 @@ class DeutschBaseLocale(Locale):
     timeframes_only_distance["minute"] = "eine Minute"
     timeframes_only_distance["hour"] = "eine Stunde"
     timeframes_only_distance["day"] = "ein Tag"
+    timeframes_only_distance["week"] = "eine Woche"
     timeframes_only_distance["month"] = "ein Monat"
     timeframes_only_distance["year"] = "ein Jahr"
 

@@ -482,6 +482,8 @@ class TestGermanLocale:
         assert self.locale.describe("hour", only_distance=False) == "in einer Stunde"
         assert self.locale.describe("day", only_distance=True) == "ein Tag"
         assert self.locale.describe("day", only_distance=False) == "in einem Tag"
+        assert self.locale.describe("week", only_distance=True) == "eine Woche"
+        assert self.locale.describe("week", only_distance=False) == "in einer Woche"
         assert self.locale.describe("month", only_distance=True) == "ein Monat"
         assert self.locale.describe("month", only_distance=False) == "in einem Monat"
         assert self.locale.describe("year", only_distance=True) == "ein Jahr"
