@@ -1649,7 +1649,7 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
 
 
-class DeutschBaseLocale(Locale):
+class GermanBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
@@ -1746,12 +1746,12 @@ class DeutschBaseLocale(Locale):
         return humanized
 
 
-class GermanLocale(DeutschBaseLocale, Locale):
+class GermanLocale(GermanBaseLocale, Locale):
 
     names = ["de", "de_de"]
 
 
-class AustrianLocale(DeutschBaseLocale, Locale):
+class AustrianLocale(GermanBaseLocale, Locale):
 
     names = ["de_at"]
 
