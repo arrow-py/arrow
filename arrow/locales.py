@@ -1753,6 +1753,11 @@ class GermanLocale(GermanBaseLocale, Locale):
     names = ["de", "de_de"]
 
 
+class SwissLocale(GermanBaseLocale, Locale):
+
+    names = ["de_ch"]
+
+
 class AustrianLocale(GermanBaseLocale, Locale):
 
     names = ["de_at"]
@@ -3768,77 +3773,6 @@ class RomanshLocale(Locale):
     ]
 
     day_abbreviations = ["", "gli", "ma", "me", "gie", "ve", "so", "du"]
-
-
-class SwissLocale(Locale):
-
-    names = ["de", "de_ch"]
-
-    past = "vor {0}"
-    future = "in {0}"
-
-    timeframes = {
-        "now": "gerade eben",
-        "second": "eine Sekunde",
-        "seconds": "{0} Sekunden",
-        "minute": "einer Minute",
-        "minutes": "{0} Minuten",
-        "hour": "einer Stunde",
-        "hours": "{0} Stunden",
-        "day": "einem Tag",
-        "days": "{0} Tagen",
-        "week": "einer Woche",
-        "weeks": "{0} Wochen",
-        "month": "einem Monat",
-        "months": "{0} Monaten",
-        "year": "einem Jahr",
-        "years": "{0} Jahren",
-    }
-
-    month_names = [
-        "",
-        "Januar",
-        "Februar",
-        "März",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember",
-    ]
-
-    month_abbreviations = [
-        "",
-        "Jan",
-        "Feb",
-        "Mär",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dez",
-    ]
-
-    day_names = [
-        "",
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
-        "Sonntag",
-    ]
-
-    day_abbreviations = ["", "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
 
 class RomanianLocale(Locale):

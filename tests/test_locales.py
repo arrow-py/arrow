@@ -489,6 +489,11 @@ class TestGermanLocale:
         assert self.locale.describe("year", only_distance=True) == "ein Jahr"
         assert self.locale.describe("year", only_distance=False) == "in einem Jahr"
 
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Samstag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sa"
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestHungarianLocale:
@@ -549,16 +554,6 @@ class TestBengaliLocale:
         assert self.locale._ordinal_number(11) == "11তম"
         assert self.locale._ordinal_number(42) == "42তম"
         assert self.locale._ordinal_number(-1) is None
-
-
-@pytest.mark.usefixtures("lang_locale")
-class TestSwissLocale:
-    def test_ordinal_number(self):
-        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
-
-        assert self.locale._format_timeframe("minute", 1) == "einer Minute"
-        assert self.locale._format_timeframe("hour", 1) == "einer Stunde"
-        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sa"
 
 
 @pytest.mark.usefixtures("lang_locale")
