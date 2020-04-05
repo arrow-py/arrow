@@ -1227,22 +1227,24 @@ class PolishLocale(SlavicBaseLocale):
     past = "{0} temu"
     future = "za {0}"
 
+    # The nouns should be in genitive case (Polish: "dopełniacz")
+    # in order to correctly form `past` & `future` expressions.
     timeframes = {
         "now": "teraz",
-        "second": "sekunda",
-        "seconds": "{0} kilka sekund",
+        "second": "sekundę",
+        "seconds":  ["{0} sekund", "{0} sekundy", "{0} sekund"],
         "minute": "minutę",
         "minutes": ["{0} minut", "{0} minuty", "{0} minut"],
-        "hour": "godzina",
+        "hour": "godzinę",
         "hours": ["{0} godzin", "{0} godziny", "{0} godzin"],
         "day": "dzień",
-        "days": ["{0} dzień", "{0} dni", "{0} dni"],
+        "days": "{0} dni",
         "week": "tydzień",
         "weeks": ["{0} tygodni", "{0} tygodnie", "{0} tygodni"],
         "month": "miesiąc",
-        "months": ["{0} miesiąc", "{0} miesiące", "{0} miesięcy"],
+        "months": ["{0} miesięcy", "{0} miesiące", "{0} miesięcy"],
         "year": "rok",
-        "years": ["{0} rok", "{0} lata", "{0} lat"],
+        "years": ["{0} lat", "{0} lata", "{0} lat"],
     }
 
     month_names = [
