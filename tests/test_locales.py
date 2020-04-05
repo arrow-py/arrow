@@ -237,7 +237,7 @@ class TestPolishLocales:
         locale = locales.PolishLocale()
 
         assert locale._format_timeframe("seconds", 0) == "0 sekund"
-        assert locale._format_timeframe("second", 1) == "sekundę" 
+        assert locale._format_timeframe("second", 1) == "sekundę"
         assert locale._format_timeframe("seconds", 2) == "2 sekundy"
         assert locale._format_timeframe("seconds", 5) == "5 sekund"
         assert locale._format_timeframe("seconds", 21) == "21 sekund"
@@ -245,7 +245,7 @@ class TestPolishLocales:
         assert locale._format_timeframe("seconds", 25) == "25 sekund"
 
         assert locale._format_timeframe("minutes", 0) == "0 minut"
-        assert locale._format_timeframe("minute", 1) == "minutę" 
+        assert locale._format_timeframe("minute", 1) == "minutę"
         assert locale._format_timeframe("minutes", 2) == "2 minuty"
         assert locale._format_timeframe("minutes", 5) == "5 minut"
         assert locale._format_timeframe("minutes", 21) == "21 minut"
@@ -261,7 +261,7 @@ class TestPolishLocales:
         assert locale._format_timeframe("hours", 25) == "25 godzin"
 
         assert locale._format_timeframe("weeks", 0) == "0 tygodni"
-        assert locale._format_timeframe("week", 1) == "tydzień" 
+        assert locale._format_timeframe("week", 1) == "tydzień"
         assert locale._format_timeframe("weeks", 2) == "2 tygodnie"
         assert locale._format_timeframe("weeks", 5) == "5 tygodni"
         assert locale._format_timeframe("weeks", 21) == "21 tygodni"
@@ -269,7 +269,7 @@ class TestPolishLocales:
         assert locale._format_timeframe("weeks", 25) == "25 tygodni"
 
         assert locale._format_timeframe("months", 0) == "0 miesięcy"
-        assert locale._format_timeframe("month", 1) == "miesiąc" 
+        assert locale._format_timeframe("month", 1) == "miesiąc"
         assert locale._format_timeframe("months", 2) == "2 miesiące"
         assert locale._format_timeframe("months", 5) == "5 miesięcy"
         assert locale._format_timeframe("months", 21) == "21 miesięcy"
@@ -277,12 +277,13 @@ class TestPolishLocales:
         assert locale._format_timeframe("months", 25) == "25 miesięcy"
 
         assert locale._format_timeframe("years", 0) == "0 lat"
-        assert locale._format_timeframe("year", 1) == "rok" 
+        assert locale._format_timeframe("year", 1) == "rok"
         assert locale._format_timeframe("years", 2) == "2 lata"
         assert locale._format_timeframe("years", 5) == "5 lat"
         assert locale._format_timeframe("years", 21) == "21 lat"
         assert locale._format_timeframe("years", 22) == "22 lata"
         assert locale._format_timeframe("years", 25) == "25 lat"
+
 
 class TestIcelandicLocales:
     @classmethod

@@ -1232,7 +1232,7 @@ class PolishLocale(SlavicBaseLocale):
     timeframes = {
         "now": "teraz",
         "second": "sekundę",
-        "seconds":  ["{0} sekund", "{0} sekundy", "{0} sekund"],
+        "seconds": ["{0} sekund", "{0} sekundy", "{0} sekund"],
         "minute": "minutę",
         "minutes": ["{0} minut", "{0} minuty", "{0} minut"],
         "hour": "godzinę",
