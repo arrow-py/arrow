@@ -1237,6 +1237,8 @@ class PolishLocale(SlavicBaseLocale):
         "hours": ["{0} godzin", "{0} godziny", "{0} godzin"],
         "day": "dzień",
         "days": ["{0} dzień", "{0} dni", "{0} dni"],
+        "week": "tydzień",
+        "weeks": ["{0} tygodni", "{0} tygodnie", "{0} tygodni"],
         "month": "miesiąc",
         "months": ["{0} miesiąc", "{0} miesiące", "{0} miesięcy"],
         "year": "rok",
