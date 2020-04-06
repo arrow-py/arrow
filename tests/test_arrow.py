@@ -173,11 +173,8 @@ class TestTestArrowFactory:
         )
 
 
+@pytest.mark.usefixtures("time_2013_02_03")
 class TestTestArrowRepresentation:
-    @classmethod
-    def setup_class(cls):
-        cls.arrow = arrow.Arrow(2013, 2, 3, 12, 30, 45, 1)
-
     def test_repr(self):
 
         result = self.arrow.__repr__()
@@ -222,11 +219,8 @@ class TestTestArrowRepresentation:
         assert result._datetime == self.arrow._datetime
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowAttribute:
-    @classmethod
-    def setup_class(cls):
-        cls.arrow = arrow.Arrow(2013, 1, 1)
-
     def test_getattr_base(self):
 
         with pytest.raises(AttributeError):
@@ -283,11 +277,8 @@ class TestArrowAttribute:
         assert result == self.arrow.microsecond
 
 
+@pytest.mark.usefixtures("time_utcnow")
 class TestArrowComparison:
-    @classmethod
-    def setup_class(cls):
-        cls.arrow = arrow.Arrow.utcnow()
-
     def test_eq(self):
 
         assert self.arrow == self.arrow
@@ -343,11 +334,8 @@ class TestArrowComparison:
         assert self.arrow <= self.arrow.datetime
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowMath:
-    @classmethod
-    def setup_class(cls):
-        cls.arrow = arrow.Arrow(2013, 1, 1)
-
     def test_add_timedelta(self):
 
         result = self.arrow.__add__(timedelta(days=1))
@@ -400,11 +388,8 @@ class TestArrowMath:
             timedelta(days=1) - self.arrow
 
 
+@pytest.mark.usefixtures("time_utcnow")
 class TestArrowDatetimeInterface:
-    @classmethod
-    def setup_class(cls):
-        cls.arrow = arrow.Arrow.utcnow()
-
     def test_date(self):
 
         result = self.arrow.date()
@@ -528,27 +513,23 @@ class TestArrowFalsePositiveDst:
     2018-11-04T02:00:00-05:00
     """
 
-    @classmethod
-    def setup_class(cls):
-        cls.before_1 = arrow.Arrow(
+    def test_dst(self):
+        self.before_1 = arrow.Arrow(
             2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York")
         )
-        cls.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
-        cls.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
-        cls.after_2 = arrow.Arrow(
+        self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
+        self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_2 = arrow.Arrow(
             2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
         )
-        cls.before_3 = arrow.Arrow(
+        self.before_3 = arrow.Arrow(
             2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
         )
-        cls.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
-        cls.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
-        cls.after_4 = arrow.Arrow(
+        self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
+        self.after_4 = arrow.Arrow(
             2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
         )
-
-    def test_dst(self):
-
         assert self.before_1.day == self.before_2.day
         assert self.after_1.day == self.after_2.day
         assert self.before_3.day == self.before_4.day
@@ -1198,12 +1179,8 @@ class TestArrowInterval:
         ]
 
 
+@pytest.mark.usefixtures("time_2013_02_15")
 class TestArrowSpan:
-    @classmethod
-    def setup_class(cls):
-        cls.datetime = datetime(2013, 2, 15, 3, 41, 22, 8923)
-        cls.arrow = arrow.Arrow.fromdatetime(cls.datetime)
-
     def test_span_attribute(self):
 
         with pytest.raises(AttributeError):
@@ -1320,12 +1297,8 @@ class TestArrowSpan:
             floor, ceil = self.arrow.span("hour", bounds="][")
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanize:
-    @classmethod
-    def setup_class(cls):
-        cls.datetime = datetime(2013, 1, 1)
-        cls.now = arrow.Arrow.utcnow()
-
     def test_granularity(self):
 
         assert self.now.humanize(granularity="second") == "just now"
@@ -1694,11 +1667,8 @@ class TestArrowHumanize:
             arw.humanize(later, granularity="week")
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanizeTestsWithLocale:
-    @classmethod
-    def setup_class(cls):
-        cls.datetime = datetime(2013, 1, 1)
-
     def test_now(self):
 
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
