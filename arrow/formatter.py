@@ -121,7 +121,6 @@ class DateTimeFormatter(object):
             year, week, day = dt.isocalendar()
             return "{}-W{:02d}-{}".format(year, week, day)
 
-
     # COOKIE FORMAT: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def _format_cookie(self, dt):
         # Date information
@@ -129,17 +128,16 @@ class DateTimeFormatter(object):
         day = self._format_token(dt, "DD")
         month = self._format_token(dt, "MMM")
         year = self._format_token(dt, "YYYY")
-        
-        # Time information 
+
+        # Time information
         hour = self._format_token(dt, "HH")
         minute = self._format_token(dt, "mm")
         second = self._format_token(dt, "ss")
         timezone = self._format_token(dt, "ZZZ")
-        
-        day_format = weekday + ", " + day + "-" + month + "-" + year + " " 
-        time_format = hour + ":" + minute + ":" + second + " " + timezone
-        return day_format + time_format
 
+        return "{}, {}-{}-{} {}:{}:{} {}".format(
+            weekday, day, month, year, hour, minute, second, timezone
+        )
 
     # rfc822 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
     def _format_rfc822(self, dt):
@@ -148,17 +146,16 @@ class DateTimeFormatter(object):
         day = self._format_token(dt, "DD")
         month = self._format_token(dt, "MMM")
         year = self._format_token(dt, "YY")
-        
+
         # Time info
         hour = self._format_token(dt, "HH")
         minute = self._format_token(dt, "mm")
         second = self._format_token(dt, "ss")
         timezone = self._format_token(dt, "Z")
-        
-        day_format = weekday + ", " + day + " " + month + " " + year + " " 
-        time_format = hour + ":" + minute + ":" + second + " " + timezone
-        return day_format + time_format
 
+        return "{}, {} {} {} {}:{}:{} {}".format(
+            weekday, day, month, year, hour, minute, second, timezone
+        )
 
     # rfc850 FORMAT: 'Thursday, 25-Dec-75 14:15:16 EST'
     def _format_rfc850(self, dt):
@@ -167,17 +164,16 @@ class DateTimeFormatter(object):
         day = self._format_token(dt, "DD")
         month = self._format_token(dt, "MMM")
         year = self._format_token(dt, "YY")
-        
-        # Time information 
+
+        # Time information
         hour = self._format_token(dt, "HH")
         minute = self._format_token(dt, "mm")
         second = self._format_token(dt, "ss")
         timezone = self._format_token(dt, "ZZZ")
-        
-        day_format = weekday + ", " + day + "-" + month + "-" + year + " " 
-        time_format = hour + ":" + minute + ":" + second + " " + timezone
-        return day_format + time_format
 
+        return "{}, {}-{}-{} {}:{}:{} {}".format(
+            weekday, day, month, year, hour, minute, second, timezone
+        )
 
     #  rfc1036 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
     def _format_rfc1036(self, dt):
@@ -186,13 +182,13 @@ class DateTimeFormatter(object):
         day = self._format_token(dt, "DD")
         month = self._format_token(dt, "MMM")
         year = self._format_token(dt, "YY")
-        
+
         # Time info
         hour = self._format_token(dt, "HH")
         minute = self._format_token(dt, "mm")
         second = self._format_token(dt, "ss")
         timezone = self._format_token(dt, "Z")
-        
-        day_format = weekday + ", " + day + " " + month + " " + year + " " 
-        time_format = hour + ":" + minute + ":" + second + " " + timezone
-        return day_format + time_format
+
+        return "{}, {} {} {} {}:{}:{} {}".format(
+            weekday, day, month, year, hour, minute, second, timezone
+        )
