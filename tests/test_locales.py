@@ -216,14 +216,54 @@ class TestRussianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestPolishLocale:
     def test_plurals(self):
+
+        assert self.locale._format_timeframe("seconds", 0) == "0 sekund"
+        assert self.locale._format_timeframe("second", 1) == "sekundę"
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekundy"
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekund"
+        assert self.locale._format_timeframe("seconds", 21) == "21 sekund"
+        assert self.locale._format_timeframe("seconds", 22) == "22 sekundy"
+        assert self.locale._format_timeframe("seconds", 25) == "25 sekund"
+
+        assert self.locale._format_timeframe("minutes", 0) == "0 minut"
+        assert self.locale._format_timeframe("minute", 1) == "minutę"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minuty"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minut"
+        assert self.locale._format_timeframe("minutes", 21) == "21 minut"
+        assert self.locale._format_timeframe("minutes", 22) == "22 minuty"
+        assert self.locale._format_timeframe("minutes", 25) == "25 minut"
+
         assert self.locale._format_timeframe("hours", 0) == "0 godzin"
-        assert self.locale._format_timeframe("hours", 1) == "1 godzin"
+        assert self.locale._format_timeframe("hour", 1) == "godzinę"
         assert self.locale._format_timeframe("hours", 2) == "2 godziny"
-        assert self.locale._format_timeframe("hours", 4) == "4 godziny"
         assert self.locale._format_timeframe("hours", 5) == "5 godzin"
         assert self.locale._format_timeframe("hours", 21) == "21 godzin"
         assert self.locale._format_timeframe("hours", 22) == "22 godziny"
         assert self.locale._format_timeframe("hours", 25) == "25 godzin"
+
+        assert self.locale._format_timeframe("weeks", 0) == "0 tygodni"
+        assert self.locale._format_timeframe("week", 1) == "tydzień"
+        assert self.locale._format_timeframe("weeks", 2) == "2 tygodnie"
+        assert self.locale._format_timeframe("weeks", 5) == "5 tygodni"
+        assert self.locale._format_timeframe("weeks", 21) == "21 tygodni"
+        assert self.locale._format_timeframe("weeks", 22) == "22 tygodnie"
+        assert self.locale._format_timeframe("weeks", 25) == "25 tygodni"
+
+        assert self.locale._format_timeframe("months", 0) == "0 miesięcy"
+        assert self.locale._format_timeframe("month", 1) == "miesiąc"
+        assert self.locale._format_timeframe("months", 2) == "2 miesiące"
+        assert self.locale._format_timeframe("months", 5) == "5 miesięcy"
+        assert self.locale._format_timeframe("months", 21) == "21 miesięcy"
+        assert self.locale._format_timeframe("months", 22) == "22 miesiące"
+        assert self.locale._format_timeframe("months", 25) == "25 miesięcy"
+
+        assert self.locale._format_timeframe("years", 0) == "0 lat"
+        assert self.locale._format_timeframe("year", 1) == "rok"
+        assert self.locale._format_timeframe("years", 2) == "2 lata"
+        assert self.locale._format_timeframe("years", 5) == "5 lat"
+        assert self.locale._format_timeframe("years", 21) == "21 lat"
+        assert self.locale._format_timeframe("years", 22) == "22 lata"
+        assert self.locale._format_timeframe("years", 25) == "25 lat"
 
 
 @pytest.mark.usefixtures("lang_locale")
