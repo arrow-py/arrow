@@ -2,19 +2,15 @@
 import time
 from datetime import datetime
 
+import pytest
 import pytz
 from dateutil import tz as dateutil_tz
-
-from arrow import formatter
 
 from .utils import make_full_tz_list
 
 
+@pytest.mark.usefixtures("arrow_formatter")
 class TestDateTimeFormatterFormatToken:
-    @classmethod
-    def setup_class(cls):
-        cls.formatter = formatter.DateTimeFormatter()
-
     def test_format(self):
 
         dt = datetime(2013, 2, 5, 12, 32, 51)
