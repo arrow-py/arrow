@@ -29,7 +29,7 @@ def get_locale_by_class_name(name):
     :param name: the name of the locale class.
 
     """
-    locale_cls = globals()[name]
+    locale_cls = globals().get(name)
 
     if locale_cls is None:
         raise ValueError("Unsupported locale '{}'".format(name))
