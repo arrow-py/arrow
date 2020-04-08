@@ -129,16 +129,16 @@ class DateTimeFormatter(object):
 
     # COOKIE FORMAT: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def format_cookie(cls, dt):
-        return cls.format(dt, 'dddd, DD-MMM-YYYY HH:mm:ss ZZZ')
+        return cls.format(dt, "dddd, DD-MMM-YYYY HH:mm:ss ZZZ")
 
     # rfc822 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
     def format_rfc822(cls, dt):
-        return cls.format(dt, 'ddd, DD MMM YY HH:mm:ss Z')
+        return cls.format(dt, "ddd, DD MMM YY HH:mm:ss Z")
 
     # rfc850 FORMAT: 'Thursday, 25-Dec-75 14:15:16 EST'
     def format_rfc850(cls, dt):
-        return cls.format(dt, 'dddd, DD-MMM-YY HH:mm:ss ZZZ')
+        return cls.format(dt, "dddd, DD-MMM-YY HH:mm:ss ZZZ")
 
     #  rfc1036 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
     def format_rfc1036(cls, dt):
-        return cls.format(dt, 'ddd, DD MMM YY HH:mm:ss Z')
+        return cls.format(dt, "ddd, DD MMM YY HH:mm:ss Z")
