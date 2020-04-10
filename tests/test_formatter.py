@@ -212,7 +212,7 @@ class TestDateTimeFormatterPremadeFormats:
 
     # cookie format: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def test_cookie(self):
-        tz = list(make_full_tz_list())[0]
+        tz = "America/New_York"
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
 
         correct_timezone = self.formatter._format_token(dt, "ZZZ")
