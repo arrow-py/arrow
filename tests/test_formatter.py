@@ -206,85 +206,60 @@ class TestDateTimeFormatterFormatToken:
         assert self.formatter.format(datetime(1, 1, 1), "[[[ ]]") == "[[ ]"
 
 
+@pytest.mark.usefixtures("arrow_formatter")
 class TestDateTimeFormatterPremadeFormats:
-    def setup_class(cls):
-        cls.formatter = formatter.DateTimeFormatter()
-
     # cookie format: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def test_cookie(self):
         tz = "America/New_York"
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-
-        correct_timezone = self.formatter._format_token(dt, "ZZZ")
-        assert (
-            self.formatter.format_cookie(dt)
-            == "Thursday, 25-Dec-1975 14:15:16 " + correct_timezone
-        )
+        assert self.formatter.format_cookie(dt) == "Thursday, 25-Dec-1975 14:15:16 EST"
 
         # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(
-            1975, 2, 5, 4, 5, 6, tzinfo=pytz.timezone("UTC")
-        ).replace(tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt_single_digit, "ZZZ")
+        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format_cookie(dt_single_digit)
-            == "Wednesday, 05-Feb-1975 04:05:06 " + correct_timezone
+            == "Wednesday, 05-Feb-1975 04:05:06 EST"
         )
 
     # rfc833 format: 'Thu, 25 Dec 75 14:15:16 -0500'
     def test_rfc_822(self):
-        tz = list(make_full_tz_list())[0]
+        tz = "America/New_York"
 
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt, "Z")
-        assert (
-            self.formatter.format_rfc822(dt)
-            == "Thu, 25 Dec 75 14:15:16 " + correct_timezone
-        )
+        assert self.formatter.format_rfc822(dt) == "Thu, 25 Dec 75 14:15:16 -0500"
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt_single_digit, "Z")
         assert (
             self.formatter.format_rfc822(dt_single_digit)
-            == "Wed, 05 Feb 75 04:05:06 " + correct_timezone
+            == "Wed, 05 Feb 75 04:05:06 -0500"
         )
 
     # rfc850 format: 'Thursday, 25-Dec-75 14:15:16 EST'
     def test_rfc_850(self):
-        tz = list(make_full_tz_list())[0]
+        tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt, "ZZZ")
-        assert (
-            self.formatter.format_rfc850(dt)
-            == "Thursday, 25-Dec-75 14:15:16 " + correct_timezone
-        )
+        assert self.formatter.format_rfc850(dt) == "Thursday, 25-Dec-75 14:15:16 EST"
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt_single_digit, "ZZZ")
         assert (
             self.formatter.format_rfc850(dt_single_digit)
-            == "Wednesday, 05-Feb-75 04:05:06 " + correct_timezone
+            == "Wednesday, 05-Feb-75 04:05:06 EST"
         )
 
     #  rfc1036 format: 'Thu, 25 Dec 75 14:15:16 -0500'
     def test_rfc_1036(self):
-        tz = list(make_full_tz_list())[0]
+        tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt, "Z")
-        assert (
-            self.formatter.format_rfc1036(dt)
-            == "Thu, 25 Dec 75 14:15:16 " + correct_timezone
-        )
+        assert self.formatter.format_rfc1036(dt) == "Thu, 25 Dec 75 14:15:16 -0500"
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        correct_timezone = self.formatter._format_token(dt_single_digit, "Z")
         assert (
             self.formatter.format_rfc1036(dt_single_digit)
-            == "Wed, 05 Feb 75 04:05:06 " + correct_timezone
+            == "Wed, 05 Feb 75 04:05:06 -0500"
         )
