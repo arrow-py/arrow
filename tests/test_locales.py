@@ -53,6 +53,22 @@ class TestModule:
 
         assert result == mock_locale
 
+    def test_get_locale_by_class_name(self, mocker):
+        mock_locale_cls = mocker.Mock()
+        mock_locale_obj = mock_locale_cls.return_value = mocker.Mock()
+
+        globals_fn = mocker.Mock()
+        globals_fn.return_value = {"NonExistentLocale": mock_locale_cls}
+
+        with pytest.raises(ValueError):
+            arrow.locales.get_locale_by_class_name("NonExistentLocale")
+
+        mocker.patch.object(locales, "globals", globals_fn)
+        result = arrow.locales.get_locale_by_class_name("NonExistentLocale")
+
+        mock_locale_cls.assert_called_once_with()
+        assert result == mock_locale_obj
+
     def test_locales(self):
 
         assert len(locales._locales) > 0
@@ -506,10 +522,17 @@ class TestGermanLocale:
         assert self.locale.describe("hour", only_distance=False) == "in einer Stunde"
         assert self.locale.describe("day", only_distance=True) == "ein Tag"
         assert self.locale.describe("day", only_distance=False) == "in einem Tag"
+        assert self.locale.describe("week", only_distance=True) == "eine Woche"
+        assert self.locale.describe("week", only_distance=False) == "in einer Woche"
         assert self.locale.describe("month", only_distance=True) == "ein Monat"
         assert self.locale.describe("month", only_distance=False) == "in einem Monat"
         assert self.locale.describe("year", only_distance=True) == "ein Jahr"
         assert self.locale.describe("year", only_distance=False) == "in einem Jahr"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Samstag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sa"
 
 
 @pytest.mark.usefixtures("lang_locale")
@@ -571,16 +594,6 @@ class TestBengaliLocale:
         assert self.locale._ordinal_number(11) == "11তম"
         assert self.locale._ordinal_number(42) == "42তম"
         assert self.locale._ordinal_number(-1) is None
-
-
-@pytest.mark.usefixtures("lang_locale")
-class TestSwissLocale:
-    def test_ordinal_number(self):
-        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
-
-        assert self.locale._format_timeframe("minute", 1) == "einer Minute"
-        assert self.locale._format_timeframe("hour", 1) == "einer Stunde"
-        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sa"
 
 
 @pytest.mark.usefixtures("lang_locale")

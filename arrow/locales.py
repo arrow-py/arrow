@@ -29,7 +29,7 @@ def get_locale_by_class_name(name):
     :param name: the name of the locale class.
 
     """
-    locale_cls = globals()[name]
+    locale_cls = globals().get(name)
 
     if locale_cls is None:
         raise ValueError("Unsupported locale '{}'".format(name))
@@ -1653,7 +1653,7 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
 
 
-class DeutschBaseLocale(Locale):
+class GermanBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
@@ -1669,6 +1669,8 @@ class DeutschBaseLocale(Locale):
         "hours": "{0} Stunden",
         "day": "einem Tag",
         "days": "{0} Tagen",
+        "week": "einer Woche",
+        "weeks": "{0} Wochen",
         "month": "einem Monat",
         "months": "{0} Monaten",
         "year": "einem Jahr",
@@ -1679,6 +1681,7 @@ class DeutschBaseLocale(Locale):
     timeframes_only_distance["minute"] = "eine Minute"
     timeframes_only_distance["hour"] = "eine Stunde"
     timeframes_only_distance["day"] = "ein Tag"
+    timeframes_only_distance["week"] = "eine Woche"
     timeframes_only_distance["month"] = "ein Monat"
     timeframes_only_distance["year"] = "ein Jahr"
 
@@ -1738,21 +1741,28 @@ class DeutschBaseLocale(Locale):
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
-
         if not only_distance:
-            humanized = self._format_timeframe(timeframe, delta)
-            humanized = self._format_relative(humanized, timeframe, delta)
+            return super(GermanBaseLocale, self).describe(
+                timeframe, delta, only_distance
+            )
+
+        # German uses a different case without 'in' or 'ago'
+        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
 
         return humanized
 
 
-class GermanLocale(DeutschBaseLocale, Locale):
+class GermanLocale(GermanBaseLocale, Locale):
 
     names = ["de", "de_de"]
 
 
-class AustrianLocale(DeutschBaseLocale, Locale):
+class SwissLocale(GermanBaseLocale, Locale):
+
+    names = ["de_ch"]
+
+
+class AustrianLocale(GermanBaseLocale, Locale):
 
     names = ["de_at"]
 
@@ -3767,77 +3777,6 @@ class RomanshLocale(Locale):
     ]
 
     day_abbreviations = ["", "gli", "ma", "me", "gie", "ve", "so", "du"]
-
-
-class SwissLocale(Locale):
-
-    names = ["de", "de_ch"]
-
-    past = "vor {0}"
-    future = "in {0}"
-
-    timeframes = {
-        "now": "gerade eben",
-        "second": "eine Sekunde",
-        "seconds": "{0} Sekunden",
-        "minute": "einer Minute",
-        "minutes": "{0} Minuten",
-        "hour": "einer Stunde",
-        "hours": "{0} Stunden",
-        "day": "einem Tag",
-        "days": "{0} Tagen",
-        "week": "einer Woche",
-        "weeks": "{0} Wochen",
-        "month": "einem Monat",
-        "months": "{0} Monaten",
-        "year": "einem Jahr",
-        "years": "{0} Jahren",
-    }
-
-    month_names = [
-        "",
-        "Januar",
-        "Februar",
-        "März",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember",
-    ]
-
-    month_abbreviations = [
-        "",
-        "Jan",
-        "Feb",
-        "Mär",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dez",
-    ]
-
-    day_names = [
-        "",
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
-        "Sonntag",
-    ]
-
-    day_abbreviations = ["", "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
 
 class RomanianLocale(Locale):
