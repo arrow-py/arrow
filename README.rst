@@ -151,7 +151,6 @@ Individuals
     :target: https://opencollective.com/arrow
 
 Organizations
-
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Support this project with your organization. Your logo will show up here with a link to your website. Contribute_
