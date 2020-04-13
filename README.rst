@@ -130,17 +130,17 @@ Contributions are welcome for both code and localizations (adding and updating l
 If you have any questions along the way, feel free to ask them `here <https://github.com/crsmithdev/arrow/issues/new?labels=question>`_.
 
 Contributors
-+++++++
+++++++++++++++
 
 Code Contributors
-------------------
+------------------------------------
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
 .. image:: https://opencollective.com/arrow/contributors.svg?width=890&button=false
 
 Financial Contributors
-------------------
+------------------------------------
 
 Become a financial contributor and help us sustain our community. Contribute_
 
