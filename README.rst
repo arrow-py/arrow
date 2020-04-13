@@ -137,7 +137,7 @@ Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
-.. image:: https://opencollective.com/arrow/contributors.svg?width=890&button=false 
+.. image:: https://opencollective.com/arrow/contributors.svg?width=890&button=false
 
 Financial Contributors
 ------------------
