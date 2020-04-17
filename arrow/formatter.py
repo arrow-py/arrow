@@ -142,3 +142,15 @@ class DateTimeFormatter(object):
     #  rfc1036 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
     def format_rfc1036(cls, dt):
         return cls.format(dt, "ddd, DD MMM YY HH:mm:ss Z")
+
+    # rfc1123 FORMAT: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def format_rfc1123(cls, dt):
+        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")
+
+    # rfc2822 format: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def format_rfc2822(cls, dt):
+        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")
+
+    # rss format: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def format_rss(cls, dt):
+        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")

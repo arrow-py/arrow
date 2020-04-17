@@ -263,3 +263,45 @@ class TestDateTimeFormatterPremadeFormats:
             self.formatter.format_rfc1036(dt_single_digit)
             == "Wed, 05 Feb 75 04:05:06 -0500"
         )
+
+    # rfc1123 FORMAT: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def test_rfc_1123(self):
+        tz = "America/New_York"
+        # Testing functionality of basic values and timezones
+        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
+        assert self.formatter.format_rfc1123(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+
+        # Testing that single digit values return with a 0 in front
+        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
+        assert (
+            self.formatter.format_rfc1123(dt_single_digit)
+            == "Wed, 05 Feb 1975 04:05:06 -0500"
+        )
+
+    # rfc2822 format: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def test_rfc_2822(self):
+        tz = "America/New_York"
+        # Testing functionality of basic values and timezones
+        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
+        assert self.formatter.format_rfc2822(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+
+        # Testing that single digit values return with a 0 in front
+        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
+        assert (
+            self.formatter.format_rfc2822(dt_single_digit)
+            == "Wed, 05 Feb 1975 04:05:06 -0500"
+        )
+
+    # rss format: 'Thu, 25 Dec 1975 14:15:16 -0500'
+    def test_rss(self):
+        tz = "America/New_York"
+        # Testing functionality of basic values and timezones
+        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
+        assert self.formatter.format_rss(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+
+        # Testing that single digit values return with a 0 in front
+        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
+        assert (
+            self.formatter.format_rss(dt_single_digit)
+            == "Wed, 05 Feb 1975 04:05:06 -0500"
+        )
