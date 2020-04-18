@@ -1299,6 +1299,7 @@ class TestArrowSpan:
 
 class TestArrowDehumanize:
     def test_dehumanize(self):
+
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
 
         assert arw.dehumanize('in 1 second') == arrow.Arrow(2014, 4, 18, 12, 30, 1)
@@ -1336,6 +1337,19 @@ class TestArrowDehumanize:
 
         assert arw.dehumanize('in 5 hours 10 minutes 4 seconds') == arrow.Arrow(2014, 4, 18, 17, 40, 4)
         assert arw.dehumanize('5 hours 10 minutes 4 seconds ago') == arrow.Arrow(2014, 4, 18, 7, 19, 56)
+
+    def test_invalid_input(self):
+
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
+        with pytest.raises(ValueError):
+            arw.dehumanize('4 hours')
+        
+        with pytest.raises(ValueError):
+            arw.dehumanize('in 4 hours 3')
+
+        with pytest.raises(ValueError):
+            arw.dehumanize('in 3 lightyears')
 
 
 @pytest.mark.usefixtures("time_2013_01_01")
