@@ -1056,6 +1056,78 @@ class Arrow(object):
                     e, locale_name
                 )
             )
+    
+    def dehumanize(self, timestring):
+        """ Returns an arrow object relative to the humanized difference in time given.
+            Only works with specifically formatted strings for the time being.
+
+        :param timestring: A string in the format returned by humanize by default
+            Number must be before unit of time, i.e. (4 hours)
+            
+        Usage:
+
+            >>> arrow.utcnow()
+            <Arrow [2020-04-17T00:57:03+00:00]>
+
+            >>> arrow.utcnow().dehumanize('4 hours ago')
+            <Arrow [2020-04-17T20:57:03+00:00]>
+
+            >>> arrow.utcnow().dehumanize('in 4 hours')
+            <Arrow [2020-04-18T04:57:03+00:00]>
+
+            >>> arrow.utcnow().dehumanize('4 days 7 hours 10 minutes 5 seconds ago')
+            <Arrow [2020-04-12T19:46:58+00:00]>
+        """
+
+        current = self.fromdatetime(self._datetime)
+
+        times = timestring.split(' ')
+
+        if times[-1] == 'ago':
+            shiftVal = -1
+            times = times[:-1]
+        elif times[0] == 'in':
+            shiftVal = 1
+            times = times[1:]
+        else:
+            raise ValueError("Invalid prefix or suffix")
+
+        if len(times) % 2 != 0:
+            raise ValueError("Invalid time input")
+
+        month = 0
+        year = 0
+
+        for i in range(0, len(times), 2):
+            tval = int(times[i])
+            tunit = times[i + 1]
+
+            if tunit in ['second', 'seconds']:
+                current += shiftVal * timedelta(seconds=tval)
+            elif tunit in ['minute', 'minutes']:
+                current += shiftVal * timedelta(minutes=tval)
+            elif tunit in ['hour', 'hours']:
+                current += shiftVal * timedelta(hours=tval)
+            elif tunit in ['day', 'days']:
+                current += shiftVal * timedelta(days=tval)
+            elif tunit in ['week', 'weeks']:
+                current += shiftVal * timedelta(weeks=tval)
+            elif tunit in ['month', 'months']:
+                month += shiftVal * tval
+            elif tunit in ['year', 'years']:
+                year += shiftVal * tval
+            else:
+                raise ValueError("Error parsing time string")
+
+        month = current.month + month
+        year += month // 12
+        year = current.year + year
+        month = month % 12
+
+        dateobj = datetime(year, month, current.day, current.hour, current.minute, current.second)
+
+        return self.fromdatetime(dateobj)
+
 
     # query functions
 
