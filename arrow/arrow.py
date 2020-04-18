@@ -1099,23 +1099,23 @@ class Arrow(object):
         year = 0
 
         for i in range(0, len(times), 2):
-            tval = int(times[i])
-            tunit = times[i + 1]
+            val = int(times[i])
+            unit = times[i + 1]
 
-            if tunit in ['second', 'seconds']:
-                current += shiftVal * timedelta(seconds=tval)
-            elif tunit in ['minute', 'minutes']:
-                current += shiftVal * timedelta(minutes=tval)
-            elif tunit in ['hour', 'hours']:
-                current += shiftVal * timedelta(hours=tval)
-            elif tunit in ['day', 'days']:
-                current += shiftVal * timedelta(days=tval)
-            elif tunit in ['week', 'weeks']:
-                current += shiftVal * timedelta(weeks=tval)
-            elif tunit in ['month', 'months']:
-                month += shiftVal * tval
-            elif tunit in ['year', 'years']:
-                year += shiftVal * tval
+            if unit in ['second', 'seconds']:
+                current += shiftVal * timedelta(seconds=val)
+            elif unit in ['minute', 'minutes']:
+                current += shiftVal * timedelta(minutes=val)
+            elif unit in ['hour', 'hours']:
+                current += shiftVal * timedelta(hours=val)
+            elif unit in ['day', 'days']:
+                current += shiftVal * timedelta(days=val)
+            elif unit in ['week', 'weeks']:
+                current += shiftVal * timedelta(weeks=val)
+            elif unit in ['month', 'months']:
+                month += shiftVal * val
+            elif unit in ['year', 'years']:
+                year += shiftVal * val
             else:
                 raise ValueError("Error parsing time string")
 
