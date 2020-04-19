@@ -1122,7 +1122,7 @@ class Arrow(object):
             elif unit in ["year", "years"]:
                 year = sign * val
             else:
-                raise ValueError("Error parsing time string")
+                raise ValueError("Invalid unit of time")
 
         return current.shift(
             seconds=second,
