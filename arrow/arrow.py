@@ -408,6 +408,68 @@ class Arrow(object):
         return (r.span(frame, bounds=bounds) for r in _range)
 
     @classmethod
+    def custom_span_range(cls, frame, start, end, custom):
+        """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        representing a series of CUSTOM timespans between two inputs.
+
+        :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param start: A datetime expression, the start of the range.
+        :param end: (optional) A datetime expression, the end of the range.
+        :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
+            ``start``'s timezone, or UTC if ``start`` is naive.
+
+        Supported frame values: day, hour, minute.
+
+        Recognized datetime expressions:
+
+            - An :class:`Arrow <arrow.arrow.Arrow>` object.
+            - A ``datetime`` object.
+
+        Usage:
+
+            >>> start = datetime.datetime(2020, 4, 17, 13, 30, 0)
+            >>> end = datetime.datetime(2020, 4, 17, 18, 0, 0)
+            >>> for r in arrow.Arrow.custom_span_range('minute', start, end, 90):
+            ...     print(r))
+            ...
+            (<Arrow [2020-04-17T13:30:00+00:00]>, <Arrow [2020-04-17T14:59:59.999999+00:00]>)
+            (<Arrow [2020-04-17T15:00:00+00:00]>, <Arrow [2020-04-17T16:29:59.999999+00:00]>)
+            (<Arrow [2020-04-17T16:30:00+00:00]>, <Arrow [2020-04-17T17:59:59.999999+00:00]>)
+            (<Arrow [2020-04-17T18:00:00+00:00]>, <Arrow [2020-04-17T19:29:59.999999+00:00]>)
+
+        """
+
+        custom_range = []
+        start_arrow = cls(
+            start.year,
+            start.month,
+            start.day,
+            start.hour,
+            start.minute,
+            start.second,
+            start.microsecond,
+        )
+        end_arrow = cls(
+            end.year,
+            end.month,
+            end.day,
+            end.hour,
+            end.minute,
+            end.second,
+            end.microsecond,
+        )
+
+        for r in cls.range("hour", start, end):
+            if start_arrow > end_arrow:
+                break
+            custom_range.append(start_arrow.span(frame, count=custom))
+            start_arrow = start_arrow.span(frame, count=custom)[1]
+            start_arrow = cls.ceil(start_arrow, "microseconds")
+            start_arrow = cls.shift(start_arrow, seconds=59.9)
+            r = r.shift(minutes=30)
+        return iter(custom_range)
+
+    @classmethod
     def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)"):
         """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.

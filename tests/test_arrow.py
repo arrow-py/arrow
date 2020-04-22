@@ -1138,6 +1138,83 @@ class TestArrowSpanRange:
             (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 7, 1)),
         ]
 
+        assert result == [
+            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999),),
+            (arrow.Arrow(2014, 1, 1), arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999),),
+            (arrow.Arrow(2015, 1, 1), arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999),),
+            (arrow.Arrow(2016, 1, 1), arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999),),
+        ]
+
+
+class TestArrowCustomSpanRange:
+    def test_minute(self):
+
+        result = list(
+            arrow.Arrow.custom_span_range(
+                frame="minute",
+                start=datetime(2020, 4, 10, 13, 30),
+                end=datetime(2020, 4, 10, 18),
+                custom=90,
+            )
+        )
+
+        assert result == [
+            (
+                arrow.Arrow(2020, 4, 10, 13, 30),
+                arrow.Arrow(2020, 4, 10, 14, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2020, 4, 10, 15),
+                arrow.Arrow(2020, 4, 10, 16, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2020, 4, 10, 16, 30),
+                arrow.Arrow(2020, 4, 10, 17, 59, 59, 999999),
+            ),
+        ]
+
+    def test_hour(self):
+
+        result = list(
+            arrow.Arrow.custom_span_range(
+                frame="hour",
+                start=datetime(2020, 4, 10, 13),
+                end=datetime(2020, 4, 10, 19),
+                custom=2,
+            )
+        )
+
+        assert result == [
+            (
+                arrow.Arrow(2020, 4, 10, 13),
+                arrow.Arrow(2020, 4, 10, 14, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2020, 4, 10, 15),
+                arrow.Arrow(2020, 4, 10, 16, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2020, 4, 10, 17),
+                arrow.Arrow(2020, 4, 10, 18, 59, 59, 999999),
+            ),
+        ]
+
+    def test_day(self):
+
+        result = list(
+            arrow.Arrow.custom_span_range(
+                frame="day",
+                start=datetime(2020, 4, 10),
+                end=datetime(2020, 4, 16),
+                custom=3,
+            )
+        )
+
+        assert result == [
+            (arrow.Arrow(2020, 4, 10), arrow.Arrow(2020, 4, 12, 23, 59, 59, 999999),),
+            (arrow.Arrow(2020, 4, 13), arrow.Arrow(2020, 4, 15, 23, 59, 59, 999999),),
+        ]
+
 
 class TestArrowInterval:
     def test_incorrect_input(self):
