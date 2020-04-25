@@ -842,3 +842,23 @@ class TestHongKongLocale:
         assert self.locale._format_timeframe("months", 11) == "11個月"
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestChineseTWLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "剛才"
+        assert self.locale._format_timeframe("second", 1) == "1秒"
+        assert self.locale._format_timeframe("seconds", 30) == "30秒"
+        assert self.locale._format_timeframe("minute", 1) == "1分鐘"
+        assert self.locale._format_timeframe("minutes", 40) == "40分鐘"
+        assert self.locale._format_timeframe("hour", 1) == "1小時"
+        assert self.locale._format_timeframe("hours", 23) == "23小時"
+        assert self.locale._format_timeframe("day", 1) == "1天"
+        assert self.locale._format_timeframe("days", 12) == "12天"
+        assert self.locale._format_timeframe("week", 1) == "1週"
+        assert self.locale._format_timeframe("weeks", 38) == "38週"
+        assert self.locale._format_timeframe("month", 1) == "1個月"
+        assert self.locale._format_timeframe("months", 11) == "11個月"
+        assert self.locale._format_timeframe("year", 1) == "1年"
+        assert self.locale._format_timeframe("years", 12) == "12年"

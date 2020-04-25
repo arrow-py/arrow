@@ -908,17 +908,20 @@ class ChineseTWLocale(Locale):
 
     past = "{0}前"
     future = "{0}後"
+    and_word = "和"
 
     timeframes = {
         "now": "剛才",
-        "second": "一秒",
-        "seconds": "{0}幾秒",
+        "second": "1秒",
+        "seconds": "{0}秒",
         "minute": "1分鐘",
         "minutes": "{0}分鐘",
         "hour": "1小時",
         "hours": "{0}小時",
         "day": "1天",
         "days": "{0}天",
+        "week": "1週",
+        "weeks": "{0}週",
         "month": "1個月",
         "months": "{0}個月",
         "year": "1年",
@@ -956,7 +959,7 @@ class ChineseTWLocale(Locale):
         "12",
     ]
 
-    day_names = ["", "周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+    day_names = ["", "週一", "週二", "週三", "週四", "週五", "週六", "週日"]
     day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
 
 
