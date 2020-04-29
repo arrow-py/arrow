@@ -1,6 +1,38 @@
 Changelog
 =========
 
+0.15.6 (2020-04-29)
+-------------------
+
+- [NEW] Added support for parsing and formatting `ISO 8601 week dates <https://en.wikipedia.org/wiki/ISO_week_date>`_ via a new token **W**, for example:
+
+.. code-block:: python
+
+    >>> arrow.get("2013-W29-6", "W")
+    <Arrow [2013-07-20T00:00:00+00:00]>
+    >>> utc=arrow.utcnow()
+    >>> utc
+    <Arrow [2020-01-23T18:37:55.417624+00:00]>
+    >>> utc.format("W")
+    '2020-W04-4'
+
+- [NEW] Formatting with ``x`` token (microseconds) is now possible, for example:
+
+.. code-block:: python
+
+    >>> dt = arrow.utcnow()
+    >>> dt.format("x")
+    '1585669870688329'
+    >>> dt.format("X")
+    '1585669870'
+
+- [NEW] Added ``humanize`` week granularity translation for German, Italian, Polish & Taiwanese locales.
+- [FIX] Consolidated and simplified German locales.
+- [INTERNAL] Moved testing suite from Chai to pytest.
+- [INTERNAL] Started using pytest fixtures for tests.
+- [INTERNAL] Setup Github Actions for CI alongside Travis.
+- [INTERNAL] You can now donate to arrow on `Open Collective <https://opencollective.com/arrow>`_.
+
 0.15.5 (2020-01-03)
 -------------------
 
