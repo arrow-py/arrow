@@ -4,7 +4,7 @@ Changelog
 0.15.6 (2020-04-29)
 -------------------
 
-- [NEW] Added support for parsing and formatting `ISO 8601 week dates <https://en.wikipedia.org/wiki/ISO_week_date>`_ via a new token **W**, for example:
+- [NEW] Added support for parsing and formatting `ISO 8601 week dates <https://en.wikipedia.org/wiki/ISO_week_date>`_ via a new token ``W``, for example:
 
 .. code-block:: python
 
@@ -28,10 +28,10 @@ Changelog
 
 - [NEW] Added ``humanize`` week granularity translation for German, Italian, Polish & Taiwanese locales.
 - [FIX] Consolidated and simplified German locales.
-- [INTERNAL] Moved testing suite from Chai to pytest.
-- [INTERNAL] Started using pytest fixtures for tests.
+- [INTERNAL] Moved testing suite from nosetest/Chai to pytest/pytest-mock.
+- [INTERNAL] Converted xunit-style setup and teardown functions in tests to pytest fixtures.
 - [INTERNAL] Setup Github Actions for CI alongside Travis.
-- [INTERNAL] You can now donate to arrow on `Open Collective <https://opencollective.com/arrow>`_.
+- [INTERNAL] Help support Arrow's future development by donating to the project on `Open Collective <https://opencollective.com/arrow>`_.
 
 0.15.5 (2020-01-03)
 -------------------
