@@ -352,8 +352,6 @@ class TestDateTimeParserParse:
             self.parser.parse("2013-01-01 12:30:45.9-10", "YYYY-MM-DDZZZ")
 
     def test_parse_subsecond(self):
-        # TODO: make both test_parse_subsecond functions in Parse and ParseISO
-        # tests use the same expected objects (use pytest fixtures)
         self.expected = datetime(2013, 1, 1, 12, 30, 45, 900000)
         assert (
             self.parser.parse("2013-01-01 12:30:45.9", "YYYY-MM-DD HH:mm:ss.S")
