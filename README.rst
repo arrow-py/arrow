@@ -130,6 +130,6 @@ Contributions are welcome for both code and localizations (adding and updating l
 If you have any questions along the way, feel free to ask them `here <https://github.com/crsmithdev/arrow/issues/new?labels=question>`_.
 
 Support Arrow
-+++++++++++++
+-------------
 
 `Open Collective <https://opencollective.com/>`_ is an online funding platform that provides tools to raise money and share your finances with full transparency. It is the platform of choice for individuals and companies to make one-time or recurring donations directly to the project. If you are interested in making a financial contribution, please visit the `Arrow collective <https://opencollective.com/arrow>`_.
