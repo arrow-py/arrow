@@ -701,6 +701,8 @@ class SwedishLocale(Locale):
         "hours": "{0} timmar",
         "day": "en dag",
         "days": "{0} dagar",
+        "week": "en vecka",
+        "weeks": "{0} veckor",
         "month": "en månad",
         "months": "{0} månader",
         "year": "ett år",
