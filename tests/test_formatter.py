@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import time
 from datetime import datetime
 
 import pytest
@@ -101,11 +100,13 @@ class TestDateTimeFormatterFormatToken:
 
     def test_timestamp(self):
 
-        timestamp = time.time()
+        timestamp = 1588437009.8952794
         dt = datetime.utcfromtimestamp(timestamp)
         expected = str(int(timestamp))
         assert self.formatter._format_token(dt, "X") == expected
 
+        # Must round because time.time() may return a float with greater
+        # than 6 digits of precision
         expected = str(int(timestamp * 1000000))
         assert self.formatter._format_token(dt, "x") == expected
 
