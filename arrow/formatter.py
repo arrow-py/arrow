@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import calendar
 import re
@@ -98,9 +98,11 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
+            # TODO: replace with a call to dt.timestamp() when we drop Python 2.7
             return str(calendar.timegm(dt.utctimetuple()))
 
         if token == "x":
+            # TODO: replace with a call to dt.timestamp() when we drop Python 2.7
             ts = calendar.timegm(dt.utctimetuple()) + (dt.microsecond / 1000000)
             return str(int(ts * 1000000))
 
