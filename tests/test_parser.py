@@ -324,6 +324,7 @@ class TestDateTimeParserParse:
         assert self.parser.parse("12 pm", "h A") == self.expected
 
     def test_parse_tz_hours_only(self):
+
         self.expected = datetime(2025, 10, 17, 5, 30, 10, tzinfo=tz.tzoffset(None, 0))
         parsed = self.parser.parse("2025-10-17 05:30:10+00", "YYYY-MM-DD HH:mm:ssZ")
         assert parsed == self.expected
@@ -333,13 +334,14 @@ class TestDateTimeParserParse:
         self.expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
         assert self.parser.parse("2013-01-01 -07:00", "YYYY-MM-DD ZZ") == self.expected
 
-    def test_parse_tz_name_zzz(self):
-        for tz_name in make_full_tz_list():
-            self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(tz_name))
-            assert (
-                self.parser.parse("2013-01-01 %s" % tz_name, "YYYY-MM-DD ZZZ")
-                == self.expected
-            )
+    @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
+    def test_parse_tz_name_zzz(self, full_tz_name):
+
+        self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
+        assert (
+            self.parser.parse("2013-01-01 {}".format(full_tz_name), "YYYY-MM-DD ZZZ")
+            == self.expected
+        )
 
         # note that offsets are not timezones
         with pytest.raises(ParserError):
