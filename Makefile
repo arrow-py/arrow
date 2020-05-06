@@ -26,8 +26,8 @@ docs:
 	. venv/bin/activate; cd docs; make html
 
 clean: clean-dist
-	rm -rf venv ./**/__pycache__ .pytest_cache
-	rm -f ./**/*.pyc .coverage
+	rm -rf venv .pytest_cache ./**/__pycache__
+	rm -f .coverage ./**/*.pyc
 
 clean-dist:
 	rm -rf dist build .egg .eggs arrow.egg-info
