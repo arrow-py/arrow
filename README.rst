@@ -119,13 +119,11 @@ Contributing
 
 Contributions are welcome for both code and localizations (adding and updating locales). Begin by gaining familiarity with the Arrow library and its features. Then, jump into contributing:
 
-1. Find an issue or feature to tackle on the `issue tracker <https://github.com/crsmithdev/arrow/issues>`_. Issues marked with the `"good first issue" label <https://github.com/crsmithdev/arrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ may be a great place to start!
-2. Fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub and begin making changes in a branch.
-3. Add a few tests to ensure that the bug was fixed or the feature works as expected.
-4. Run the entire test suite and linting checks by running one of the following commands:
-    a. :code:`tox` (if you have `tox <https://tox.readthedocs.io/en/latest/>`_ installed)
-    b. :code:`make build38 && make test && make lint` (if you do not have Python 3.8 installed, replace :code:`build38` with the latest Python version on your system)
-5. Submit a pull request and await feedback 😃.
+#. Find an issue or feature to tackle on the `issue tracker <https://github.com/crsmithdev/arrow/issues>`_. Issues marked with the `"good first issue" label <https://github.com/crsmithdev/arrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ may be a great place to start!
+#. Fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub and begin making changes in a branch.
+#. Add a few tests to ensure that the bug was fixed or the feature works as expected.
+#. Run the entire test suite and linting checks by running one of the following commands: :code:`tox` (if you have `tox <https://tox.readthedocs.io/en/latest/>`_ installed) **OR** :code:`make build38 && make test && make lint` (if you do not have Python 3.8 installed, replace :code:`build38` with the latest Python version on your system)
+#. Submit a pull request and await feedback 😃.
 
 If you have any questions along the way, feel free to ask them `here <https://github.com/crsmithdev/arrow/issues/new?labels=question>`_.
 
