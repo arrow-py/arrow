@@ -120,17 +120,17 @@ class TestDateTimeFormatterFormatToken:
         result = self.formatter._format_token(dt, "Z")
         assert result == "-0700" or result == "-0800"
 
-    def test_timezone_formatter(self):
+    @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
+    def test_timezone_formatter(self, full_tz_name):
 
-        for full_name in make_full_tz_list():
-            # This test will fail if we use "now" as date as soon as we change from/to DST
-            dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
-                tzinfo=dateutil_tz.gettz(full_name)
-            )
-            abbreviation = dt.tzname()
+        # This test will fail if we use "now" as date as soon as we change from/to DST
+        dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
+            tzinfo=dateutil_tz.gettz(full_tz_name)
+        )
+        abbreviation = dt.tzname()
 
-            result = self.formatter._format_token(dt, "ZZZ")
-            assert result == abbreviation
+        result = self.formatter._format_token(dt, "ZZZ")
+        assert result == abbreviation
 
     def test_am_pm(self):
 
