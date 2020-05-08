@@ -15,6 +15,7 @@ from math import trunc
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
+from dateutil.tz import enfold
 
 from arrow import formatter, locales, parser, util
 
@@ -64,7 +65,16 @@ class Arrow(object):
     _SECS_PER_YEAR = float(60 * 60 * 24 * 365.25)
 
     def __init__(
-        self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
+        self,
+        year,
+        month,
+        day,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+        tzinfo=None,
+        fold=0,
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -79,8 +89,11 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        self._datetime = datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo
+        self._fold = fold
+
+        self._datetime = enfold(
+            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            fold=self._fold,
         )
 
     # factories: single object, both original and from datetime.
@@ -103,6 +116,8 @@ class Arrow(object):
             tzinfo = dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
 
+        dt = enfold(dt)
+
         return cls(
             dt.year,
             dt.month,
@@ -112,6 +127,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -128,6 +144,8 @@ class Arrow(object):
 
         dt = datetime.now(dateutil_tz.tzutc())
 
+        dt = enfold(dt)
+
         return cls(
             dt.year,
             dt.month,
@@ -137,6 +155,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -160,6 +179,8 @@ class Arrow(object):
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
+        dt = enfold(dt)
+
         return cls(
             dt.year,
             dt.month,
@@ -169,6 +190,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -185,6 +207,8 @@ class Arrow(object):
             )
 
         dt = datetime.utcfromtimestamp(float(timestamp))
+
+        dt = enfold(dt)
 
         return cls(
             dt.year,
@@ -221,6 +245,8 @@ class Arrow(object):
             else:
                 tzinfo = dt.tzinfo
 
+        dt = enfold(dt)
+
         return cls(
             dt.year,
             dt.month,
@@ -230,6 +256,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            dt.fold,
         )
 
     @classmethod
@@ -267,6 +294,8 @@ class Arrow(object):
         if tzinfo is None:
             tzinfo = dt.tzinfo
 
+        dt = enfold(dt)
+
         return cls(
             dt.year,
             dt.month,
@@ -276,6 +305,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            dt.fold,
         )
 
     # factories: ranges and spans
@@ -575,6 +605,19 @@ class Arrow(object):
 
         return self.timestamp + float(self.microsecond) / 1000000
 
+    @property
+    def fold(self):
+        # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
+        # otherwise, so we need to define a _fold attribute to cover this case
+        return getattr(self._datetime, "fold", self._fold)
+
+    @fold.setter
+    def fold(self, val):
+        if val not in {0, 1}:
+            raise ValueError("fold attribute must be either 0 or 1")
+        self._fold = val
+        self._datetime = enfold(self._datetime, fold=val)
+
     # mutation and duplication.
 
     def clone(self):
@@ -719,6 +762,8 @@ class Arrow(object):
 
         dt = self._datetime.astimezone(tz)
 
+        dt = enfold(dt)
+
         return self.__class__(
             dt.year,
             dt.month,
@@ -728,6 +773,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            dt.fold,
         )
 
     @classmethod

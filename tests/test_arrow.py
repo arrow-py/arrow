@@ -72,6 +72,17 @@ class TestTestArrowInit:
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
 
+    def test_init_with_fold(self):
+        before = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
+        after = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1)
+
+        assert hasattr(before, "fold")
+        assert hasattr(after, "fold")
+
+        # PEP-495 requires the comparisons below to be true
+        assert before == after
+        assert before.utcoffset() != after.utcoffset()
+
 
 class TestTestArrowFactory:
     def test_now(self):
@@ -275,6 +286,15 @@ class TestArrowAttribute:
         result = self.arrow.float_timestamp - self.arrow.timestamp
 
         assert result == self.arrow.microsecond
+
+    def test_getattr_fold(self):
+
+        assert self.arrow.fold == 0
+        self.arrow.fold = 1
+        assert self.arrow.fold == 1
+
+        with pytest.raises(ValueError):
+            self.arrow.fold = 123
 
 
 @pytest.mark.usefixtures("time_utcnow")
@@ -548,6 +568,26 @@ class TestArrowConversion:
 
         assert arrow_from.to("UTC").datetime == self.expected
         assert arrow_from.to(tz.tzutc()).datetime == self.expected
+
+    def test_to_pacific_then_utc(self):
+        result = arrow.Arrow(2018, 11, 4, 1, tzinfo="-08:00").to("US/Pacific").to("UTC")
+        assert result == arrow.Arrow(2018, 11, 4, 9)
+
+    # regression test for #690
+    def test_to_israel_same_offset(self):
+
+        result = arrow.Arrow(2019, 10, 27, 2, 21, 1, tzinfo="+03:00").to("Israel")
+        expected = arrow.Arrow(2019, 10, 27, 1, 21, 1, tzinfo="Israel")
+
+        assert result == expected
+        assert_datetime_equality(result, expected)
+
+    # issue 315
+    def test_anchorage_dst(self):
+        before = arrow.Arrow(2016, 3, 12).to("America/Anchorage")
+        after = arrow.Arrow(2016, 3, 15).to("America/Anchorage")
+
+        assert before.utcoffset() != after.utcoffset()
 
 
 class TestArrowPickling:
