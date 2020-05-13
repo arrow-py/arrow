@@ -2948,14 +2948,16 @@ class SlovakLocale(Locale):
 
     timeframes = {
         "now": "Teraz",
-        "second": {"past": "druhý", "future": "druhý", "zero": "druhý"},
-        "seconds": {"past": "pár sekundami", "future": ["{0} sekundy", "{0} sekúnd"]},
+        "second": {"past": "sekundou", "future": "sekundu", "zero": "{0} sekúnd"},
+        "seconds": {"past": "{0} sekundami", "future": ["{0} sekundy", "{0} sekúnd"]},
         "minute": {"past": "minútou", "future": "minútu", "zero": "{0} minút"},
         "minutes": {"past": "{0} minútami", "future": ["{0} minúty", "{0} minút"]},
         "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodín"},
         "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodín"]},
         "day": {"past": "dňom", "future": "deň", "zero": "{0} dní"},
         "days": {"past": "{0} dňami", "future": ["{0} dni", "{0} dní"]},
+        "week": {"past": "týždňom", "future": "týždeň", "zero": "{0} týždňov"},
+        "weeks": {"past": "{0} týždňami", "future": ["{0} týždne", "{0} týždňov"]},
         "month": {"past": "mesiacom", "future": "mesiac", "zero": "{0} mesiacov"},
         "months": {"past": "{0} mesiacmi", "future": ["{0} mesiace", "{0} mesiacov"]},
         "year": {"past": "rokom", "future": "rok", "zero": "{0} rokov"},

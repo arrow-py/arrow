@@ -372,11 +372,62 @@ class TestCzechLocale:
 class TestSlovakLocale:
     def test_format_timeframe(self):
 
+        assert self.locale._format_timeframe("seconds", -5) == "5 sekundami"
+        assert self.locale._format_timeframe("seconds", -2) == "2 sekundami"
+        assert self.locale._format_timeframe("second", -1) == "sekundou"
+        assert self.locale._format_timeframe("second", 0) == "0 sekúnd"
+        assert self.locale._format_timeframe("second", 1) == "sekundu"
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekundy"
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekúnd"
+
+        assert self.locale._format_timeframe("minutes", -5) == "5 minútami"
+        assert self.locale._format_timeframe("minutes", -2) == "2 minútami"
+        assert self.locale._format_timeframe("minute", -1) == "minútou"
+        assert self.locale._format_timeframe("minute", 0) == "0 minút"
+        assert self.locale._format_timeframe("minute", 1) == "minútu"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minúty"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minút"
+
+        assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
+        assert self.locale._format_timeframe("hours", -2) == "2 hodinami"
+        assert self.locale._format_timeframe("hour", -1) == "hodinou"
+        assert self.locale._format_timeframe("hour", 0) == "0 hodín"
+        assert self.locale._format_timeframe("hour", 1) == "hodinu"
         assert self.locale._format_timeframe("hours", 2) == "2 hodiny"
         assert self.locale._format_timeframe("hours", 5) == "5 hodín"
-        assert self.locale._format_timeframe("hour", 0) == "0 hodín"
-        assert self.locale._format_timeframe("hours", -2) == "2 hodinami"
-        assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
+
+        assert self.locale._format_timeframe("days", -5) == "5 dňami"
+        assert self.locale._format_timeframe("days", -2) == "2 dňami"
+        assert self.locale._format_timeframe("day", -1) == "dňom"
+        assert self.locale._format_timeframe("day", 0) == "0 dní"
+        assert self.locale._format_timeframe("day", 1) == "deň"
+        assert self.locale._format_timeframe("days", 2) == "2 dni"
+        assert self.locale._format_timeframe("days", 5) == "5 dní"
+
+        assert self.locale._format_timeframe("weeks", -5) == "5 týždňami"
+        assert self.locale._format_timeframe("weeks", -2) == "2 týždňami"
+        assert self.locale._format_timeframe("week", -1) == "týždňom"
+        assert self.locale._format_timeframe("week", 0) == "0 týždňov"
+        assert self.locale._format_timeframe("week", 1) == "týždeň"
+        assert self.locale._format_timeframe("weeks", 2) == "2 týždne"
+        assert self.locale._format_timeframe("weeks", 5) == "5 týždňov"
+
+        assert self.locale._format_timeframe("months", -5) == "5 mesiacmi"
+        assert self.locale._format_timeframe("months", -2) == "2 mesiacmi"
+        assert self.locale._format_timeframe("month", -1) == "mesiacom"
+        assert self.locale._format_timeframe("month", 0) == "0 mesiacov"
+        assert self.locale._format_timeframe("month", 1) == "mesiac"
+        assert self.locale._format_timeframe("months", 2) == "2 mesiace"
+        assert self.locale._format_timeframe("months", 5) == "5 mesiacov"
+
+        assert self.locale._format_timeframe("years", -5) == "5 rokmi"
+        assert self.locale._format_timeframe("years", -2) == "2 rokmi"
+        assert self.locale._format_timeframe("year", -1) == "rokom"
+        assert self.locale._format_timeframe("year", 0) == "0 rokov"
+        assert self.locale._format_timeframe("year", 1) == "rok"
+        assert self.locale._format_timeframe("years", 2) == "2 roky"
+        assert self.locale._format_timeframe("years", 5) == "5 rokov"
+
         assert self.locale._format_timeframe("now", 0) == "Teraz"
 
     def test_format_relative_now(self):
