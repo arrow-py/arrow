@@ -8,6 +8,14 @@ from dateutil import tz as dateutil_tz
 
 from arrow import locales, util
 
+COOKIE_FORMAT = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
+RFC822_FORMAT = "ddd, DD MMM YY HH:mm:ss Z"
+RFC850_FORMAT = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
+RFC1036_FORMAT = "ddd, DD MMM YY HH:mm:ss Z"
+RFC1123_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
+RFC2822_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
+RSS_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
+
 
 class DateTimeFormatter(object):
 
@@ -126,31 +134,3 @@ class DateTimeFormatter(object):
         if token == "W":
             year, week, day = dt.isocalendar()
             return "{}-W{:02d}-{}".format(year, week, day)
-
-    # COOKIE FORMAT: 'Thursday, 25-Dec-1975 14:15:16 EST'
-    def format_cookie(cls, dt):
-        return cls.format(dt, "dddd, DD-MMM-YYYY HH:mm:ss ZZZ")
-
-    # rfc822 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
-    def format_rfc822(cls, dt):
-        return cls.format(dt, "ddd, DD MMM YY HH:mm:ss Z")
-
-    # rfc850 FORMAT: 'Thursday, 25-Dec-75 14:15:16 EST'
-    def format_rfc850(cls, dt):
-        return cls.format(dt, "dddd, DD-MMM-YY HH:mm:ss ZZZ")
-
-    #  rfc1036 FORMAT: 'Thu, 25 Dec 75 14:15:16 -0500'
-    def format_rfc1036(cls, dt):
-        return cls.format(dt, "ddd, DD MMM YY HH:mm:ss Z")
-
-    # rfc1123 FORMAT: 'Thu, 25 Dec 1975 14:15:16 -0500'
-    def format_rfc1123(cls, dt):
-        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")
-
-    # rfc2822 format: 'Thu, 25 Dec 1975 14:15:16 -0500'
-    def format_rfc2822(cls, dt):
-        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")
-
-    # rss format: 'Thu, 25 Dec 1975 14:15:16 -0500'
-    def format_rss(cls, dt):
-        return cls.format(dt, "ddd, DD MMM YYYY HH:mm:ss Z")

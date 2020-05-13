@@ -11,8 +11,7 @@ from dateutil import tz
 
 import arrow
 from arrow import parser
-from arrow.constants import MAX_TIMESTAMP_US
-from arrow.parser import DateTimeParser, ParserError, ParserMatchError
+from arrow.parser import MAX_TIMESTAMP_US, DateTimeParser, ParserError, ParserMatchError
 
 from .utils import make_full_tz_list
 

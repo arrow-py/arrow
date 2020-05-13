@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from dateutil import tz
 
 from arrow import locales
-from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 from arrow.util import iso_to_gregorian
 
 try:
@@ -27,6 +26,15 @@ class ParserError(ValueError):
 # transmitted to the user.
 class ParserMatchError(ParserError):
     pass
+
+
+# Output of time.mktime(datetime.max.timetuple()) on macOS
+# This value must be hardcoded for compatibility with Windows
+# Platform-independent max timestamps are hard to form
+# https://stackoverflow.com/q/46133223
+MAX_TIMESTAMP = 253402318799.0
+MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1e3
+MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1e6
 
 
 class DateTimeParser(object):
@@ -79,6 +87,14 @@ class DateTimeParser(object):
     }
 
     SEPARATORS = ["-", "/", "."]
+
+    # # Output of time.mktime(datetime.max.timetuple()) on macOS
+    # # This value must be hardcoded for compatibility with Windows
+    # # Platform-independent max timestamps are hard to form
+    # # https://stackoverflow.com/q/46133223
+    # MAX_TIMESTAMP = 253402318799.0
+    # MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1e3
+    # MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1e6
 
     def __init__(self, locale="en_us", cache_size=0):
 
@@ -417,9 +433,9 @@ class DateTimeParser(object):
 
             if expanded_timestamp > MAX_TIMESTAMP:
                 if expanded_timestamp < MAX_TIMESTAMP_MS:
-                    expanded_timestamp /= 1000.0
+                    expanded_timestamp /= 1e3
                 elif expanded_timestamp < MAX_TIMESTAMP_US:
-                    expanded_timestamp /= 1000000.0
+                    expanded_timestamp /= 1e6
                 else:
                     raise ValueError(
                         "The specified timestamp '{}' is too large.".format(

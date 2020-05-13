@@ -5,6 +5,16 @@ import pytest
 import pytz
 from dateutil import tz as dateutil_tz
 
+from arrow import (
+    COOKIE_FORMAT,
+    RFC822_FORMAT,
+    RFC850_FORMAT,
+    RFC1036_FORMAT,
+    RFC1123_FORMAT,
+    RFC2822_FORMAT,
+    RSS_FORMAT,
+)
+
 from .utils import make_full_tz_list
 
 
@@ -207,17 +217,20 @@ class TestDateTimeFormatterFormatToken:
 
 
 @pytest.mark.usefixtures("arrow_formatter")
-class TestDateTimeFormatterPremadeFormats:
+class TestDateTimeFormatterBuiltinFormats:
     # cookie format: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def test_cookie(self):
         tz = "America/New_York"
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_cookie(dt) == "Thursday, 25-Dec-1975 14:15:16 EST"
+        assert (
+            self.formatter.format(dt, COOKIE_FORMAT)
+            == "Thursday, 25-Dec-1975 14:15:16 EST"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_cookie(dt_single_digit)
+            self.formatter.format(dt_single_digit, COOKIE_FORMAT)
             == "Wednesday, 05-Feb-1975 04:05:06 EST"
         )
 
@@ -227,12 +240,14 @@ class TestDateTimeFormatterPremadeFormats:
 
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rfc822(dt) == "Thu, 25 Dec 75 14:15:16 -0500"
+        assert (
+            self.formatter.format(dt, RFC822_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rfc822(dt_single_digit)
+            self.formatter.format(dt_single_digit, RFC822_FORMAT)
             == "Wed, 05 Feb 75 04:05:06 -0500"
         )
 
@@ -241,12 +256,15 @@ class TestDateTimeFormatterPremadeFormats:
         tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rfc850(dt) == "Thursday, 25-Dec-75 14:15:16 EST"
+        assert (
+            self.formatter.format(dt, RFC850_FORMAT)
+            == "Thursday, 25-Dec-75 14:15:16 EST"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rfc850(dt_single_digit)
+            self.formatter.format(dt_single_digit, RFC850_FORMAT)
             == "Wednesday, 05-Feb-75 04:05:06 EST"
         )
 
@@ -255,12 +273,14 @@ class TestDateTimeFormatterPremadeFormats:
         tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rfc1036(dt) == "Thu, 25 Dec 75 14:15:16 -0500"
+        assert (
+            self.formatter.format(dt, RFC1036_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rfc1036(dt_single_digit)
+            self.formatter.format(dt_single_digit, RFC1036_FORMAT)
             == "Wed, 05 Feb 75 04:05:06 -0500"
         )
 
@@ -269,12 +289,15 @@ class TestDateTimeFormatterPremadeFormats:
         tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rfc1123(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+        assert (
+            self.formatter.format(dt, RFC1123_FORMAT)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rfc1123(dt_single_digit)
+            self.formatter.format(dt_single_digit, RFC1123_FORMAT)
             == "Wed, 05 Feb 1975 04:05:06 -0500"
         )
 
@@ -283,12 +306,15 @@ class TestDateTimeFormatterPremadeFormats:
         tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rfc2822(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+        assert (
+            self.formatter.format(dt, RFC2822_FORMAT)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rfc2822(dt_single_digit)
+            self.formatter.format(dt_single_digit, RFC2822_FORMAT)
             == "Wed, 05 Feb 1975 04:05:06 -0500"
         )
 
@@ -297,11 +323,13 @@ class TestDateTimeFormatterPremadeFormats:
         tz = "America/New_York"
         # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
-        assert self.formatter.format_rss(dt) == "Thu, 25 Dec 1975 14:15:16 -0500"
+        assert (
+            self.formatter.format(dt, RSS_FORMAT) == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
 
         # Testing that single digit values return with a 0 in front
         dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format_rss(dt_single_digit)
+            self.formatter.format(dt_single_digit, RSS_FORMAT)
             == "Wed, 05 Feb 1975 04:05:06 -0500"
         )
