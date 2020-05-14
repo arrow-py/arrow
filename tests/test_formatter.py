@@ -218,7 +218,6 @@ class TestDateTimeFormatterFormatToken:
 
 @pytest.mark.usefixtures("arrow_formatter")
 class TestDateTimeFormatterBuiltinFormats:
-    # cookie format: 'Thursday, 25-Dec-1975 14:15:16 EST'
     def test_cookie(self):
         tz = "America/New_York"
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
@@ -227,109 +226,47 @@ class TestDateTimeFormatterBuiltinFormats:
             == "Thursday, 25-Dec-1975 14:15:16 EST"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, COOKIE_FORMAT)
-            == "Wednesday, 05-Feb-1975 04:05:06 EST"
-        )
-
-    # rfc833 format: 'Thu, 25 Dec 75 14:15:16 -0500'
     def test_rfc_822(self):
         tz = "America/New_York"
-
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RFC822_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RFC822_FORMAT)
-            == "Wed, 05 Feb 75 04:05:06 -0500"
-        )
-
-    # rfc850 format: 'Thursday, 25-Dec-75 14:15:16 EST'
     def test_rfc_850(self):
         tz = "America/New_York"
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RFC850_FORMAT)
             == "Thursday, 25-Dec-75 14:15:16 EST"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RFC850_FORMAT)
-            == "Wednesday, 05-Feb-75 04:05:06 EST"
-        )
-
-    #  rfc1036 format: 'Thu, 25 Dec 75 14:15:16 -0500'
     def test_rfc_1036(self):
         tz = "America/New_York"
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RFC1036_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RFC1036_FORMAT)
-            == "Wed, 05 Feb 75 04:05:06 -0500"
-        )
-
-    # rfc1123 FORMAT: 'Thu, 25 Dec 1975 14:15:16 -0500'
     def test_rfc_1123(self):
         tz = "America/New_York"
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RFC1123_FORMAT)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RFC1123_FORMAT)
-            == "Wed, 05 Feb 1975 04:05:06 -0500"
-        )
-
-    # rfc2822 format: 'Thu, 25 Dec 1975 14:15:16 -0500'
     def test_rfc_2822(self):
         tz = "America/New_York"
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RFC2822_FORMAT)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RFC2822_FORMAT)
-            == "Wed, 05 Feb 1975 04:05:06 -0500"
-        )
-
-    # rss format: 'Thu, 25 Dec 1975 14:15:16 -0500'
     def test_rss(self):
         tz = "America/New_York"
-        # Testing functionality of basic values and timezones
         dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
             self.formatter.format(dt, RSS_FORMAT) == "Thu, 25 Dec 1975 14:15:16 -0500"
-        )
-
-        # Testing that single digit values return with a 0 in front
-        dt_single_digit = datetime(1975, 2, 5, 4, 5, 6, tzinfo=dateutil_tz.gettz(tz))
-        assert (
-            self.formatter.format(dt_single_digit, RSS_FORMAT)
-            == "Wed, 05 Feb 1975 04:05:06 -0500"
         )
