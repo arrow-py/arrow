@@ -205,6 +205,15 @@ class TestFrenchLocale:
         assert self.locale.ordinal_number(1) == "1er"
         assert self.locale.ordinal_number(2) == "2e"
 
+    def test_month_abbreviation(self):
+        assert "juil" in self.locale.month_abbreviations
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestFrenchCanadianLocale:
+    def test_month_abbreviation(self):
+        assert "juill" in self.locale.month_abbreviations
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestRussianLocale:

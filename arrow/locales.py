@@ -478,8 +478,8 @@ class SpanishLocale(Locale):
         return "{}º".format(n)
 
 
-class FrenchLocale(Locale):
-    names = ["fr", "fr_fr"]
+class FrenchBaseLocale(Locale):
+
     past = "il y a {0}"
     future = "dans {0}"
     and_word = "et"
@@ -517,21 +517,6 @@ class FrenchLocale(Locale):
         "novembre",
         "décembre",
     ]
-    month_abbreviations = [
-        "",
-        "janv",
-        "févr",
-        "mars",
-        "avr",
-        "mai",
-        "juin",
-        "juil",
-        "août",
-        "sept",
-        "oct",
-        "nov",
-        "déc",
-    ]
 
     day_names = [
         "",
@@ -553,6 +538,48 @@ class FrenchLocale(Locale):
         if abs(n) == 1:
             return "{}er".format(n)
         return "{}e".format(n)
+
+
+class FrenchLocale(FrenchBaseLocale, Locale):
+
+    names = ["fr", "fr_fr"]
+
+    month_abbreviations = [
+        "",
+        "janv",
+        "févr",
+        "mars",
+        "avr",
+        "mai",
+        "juin",
+        "juil",
+        "août",
+        "sept",
+        "oct",
+        "nov",
+        "déc",
+    ]
+
+
+class FrenchCanadianLocale(FrenchBaseLocale, Locale):
+
+    names = ["fr_ca"]
+
+    month_abbreviations = [
+        "",
+        "janv",
+        "févr",
+        "mars",
+        "avr",
+        "mai",
+        "juin",
+        "juill",
+        "août",
+        "sept",
+        "oct",
+        "nov",
+        "déc",
+    ]
 
 
 class GreekLocale(Locale):
