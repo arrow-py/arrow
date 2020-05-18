@@ -216,57 +216,46 @@ class TestDateTimeFormatterFormatToken:
         assert self.formatter.format(datetime(1, 1, 1), "[[[ ]]") == "[[ ]"
 
 
-@pytest.mark.usefixtures("arrow_formatter")
+@pytest.mark.usefixtures("arrow_formatter", "time_1975_12_25")
 class TestDateTimeFormatterBuiltinFormats:
     def test_cookie(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, COOKIE_FORMAT)
+            self.formatter.format(self.datetime, COOKIE_FORMAT)
             == "Thursday, 25-Dec-1975 14:15:16 EST"
         )
 
     def test_rfc_822(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RFC822_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
+            self.formatter.format(self.datetime, RFC822_FORMAT)
+            == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
     def test_rfc_850(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RFC850_FORMAT)
+            self.formatter.format(self.datetime, RFC850_FORMAT)
             == "Thursday, 25-Dec-75 14:15:16 EST"
         )
 
     def test_rfc_1036(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RFC1036_FORMAT) == "Thu, 25 Dec 75 14:15:16 -0500"
+            self.formatter.format(self.datetime, RFC1036_FORMAT)
+            == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
     def test_rfc_1123(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RFC1123_FORMAT)
+            self.formatter.format(self.datetime, RFC1123_FORMAT)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
     def test_rfc_2822(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RFC2822_FORMAT)
+            self.formatter.format(self.datetime, RFC2822_FORMAT)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
     def test_rss(self):
-        tz = "America/New_York"
-        dt = datetime(1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz(tz))
         assert (
-            self.formatter.format(dt, RSS_FORMAT) == "Thu, 25 Dec 1975 14:15:16 -0500"
+            self.formatter.format(self.datetime, RSS_FORMAT)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
