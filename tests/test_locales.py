@@ -882,6 +882,7 @@ class TestBrazilianPortugueseLocale:
         assert self.locale._format_timeframe("months", 11) == "11 meses"
         assert self.locale._format_timeframe("year", 1) == "um ano"
         assert self.locale._format_timeframe("years", 12) == "12 anos"
+        assert self.locale._format_relative("uma hora", "hour", -1) == "faz uma hora"
 
 
 @pytest.mark.usefixtures("lang_locale")

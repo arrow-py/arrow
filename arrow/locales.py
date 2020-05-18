@@ -1976,75 +1976,6 @@ class PortugueseLocale(Locale):
 
     month_names = [
         "",
-        "janeiro",
-        "fevereiro",
-        "março",
-        "abril",
-        "maio",
-        "junho",
-        "julho",
-        "agosto",
-        "setembro",
-        "outubro",
-        "novembro",
-        "dezembro",
-    ]
-    month_abbreviations = [
-        "",
-        "jan",
-        "fev",
-        "mar",
-        "abr",
-        "maio",
-        "jun",
-        "jul",
-        "ago",
-        "set",
-        "out",
-        "nov",
-        "dez",
-    ]
-
-    day_names = [
-        "",
-        "segunda-feira",
-        "terça-feira",
-        "quarta-feira",
-        "quinta-feira",
-        "sexta-feira",
-        "sábado",
-        "domingo",
-    ]
-    day_abbreviations = ["", "seg", "ter", "qua", "qui", "sex", "sab", "dom"]
-
-
-class BrazilianPortugueseLocale(PortugueseLocale):
-    names = ["pt_br"]
-
-    past = "faz {0}"
-
-    future = "em {0}"
-
-    timeframes = {
-        "now": "agora",
-        "second": "um segundo",
-        "seconds": "{0} segundos",
-        "minute": "um minuto",
-        "minutes": "{0} minutos",
-        "hour": "uma hora",
-        "hours": "{0} horas",
-        "day": "um dia",
-        "days": "{0} dias",
-        "week": "uma semana",
-        "weeks": "{0} semanas",
-        "month": "um mês",
-        "months": "{0} meses",
-        "year": "um ano",
-        "years": "{0} anos",
-    }
-
-    month_names = [
-        "",
         "Janeiro",
         "Fevereiro",
         "Março",
@@ -2085,6 +2016,12 @@ class BrazilianPortugueseLocale(PortugueseLocale):
         "Domingo",
     ]
     day_abbreviations = ["", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"]
+
+
+class BrazilianPortugueseLocale(PortugueseLocale):
+    names = ["pt_br"]
+
+    past = "faz {0}"
 
 
 class TagalogLocale(Locale):
