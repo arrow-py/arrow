@@ -8,13 +8,13 @@ from dateutil import tz as dateutil_tz
 
 from arrow import locales, util
 
-COOKIE_FORMAT = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
-RFC822_FORMAT = "ddd, DD MMM YY HH:mm:ss Z"
-RFC850_FORMAT = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
-RFC1036_FORMAT = "ddd, DD MMM YY HH:mm:ss Z"
-RFC1123_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
-RFC2822_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
-RSS_FORMAT = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_COOKIE = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
+FORMAT_RFC822 = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC850 = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
+FORMAT_RFC1036 = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC1123 = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC2822 = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RSS = "ddd, DD MMM YYYY HH:mm:ss Z"
 
 
 class DateTimeFormatter(object):

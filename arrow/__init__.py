@@ -4,12 +4,12 @@ from .api import get, now, utcnow
 from .arrow import Arrow
 from .factory import ArrowFactory
 from .formatter import (
-    COOKIE_FORMAT,
-    RFC822_FORMAT,
-    RFC850_FORMAT,
-    RFC1036_FORMAT,
-    RFC1123_FORMAT,
-    RFC2822_FORMAT,
-    RSS_FORMAT,
+    FORMAT_COOKIE,
+    FORMAT_RFC822,
+    FORMAT_RFC850,
+    FORMAT_RFC1036,
+    FORMAT_RFC1123,
+    FORMAT_RFC2822,
+    FORMAT_RSS,
 )
 from .parser import ParserError

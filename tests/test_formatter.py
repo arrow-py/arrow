@@ -6,13 +6,13 @@ import pytz
 from dateutil import tz as dateutil_tz
 
 from arrow import (
-    COOKIE_FORMAT,
-    RFC822_FORMAT,
-    RFC850_FORMAT,
-    RFC1036_FORMAT,
-    RFC1123_FORMAT,
-    RFC2822_FORMAT,
-    RSS_FORMAT,
+    FORMAT_COOKIE,
+    FORMAT_RFC822,
+    FORMAT_RFC850,
+    FORMAT_RFC1036,
+    FORMAT_RFC1123,
+    FORMAT_RFC2822,
+    FORMAT_RSS,
 )
 
 from .utils import make_full_tz_list
@@ -220,42 +220,42 @@ class TestDateTimeFormatterFormatToken:
 class TestDateTimeFormatterBuiltinFormats:
     def test_cookie(self):
         assert (
-            self.formatter.format(self.datetime, COOKIE_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_COOKIE)
             == "Thursday, 25-Dec-1975 14:15:16 EST"
         )
 
     def test_rfc_822(self):
         assert (
-            self.formatter.format(self.datetime, RFC822_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RFC822)
             == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
     def test_rfc_850(self):
         assert (
-            self.formatter.format(self.datetime, RFC850_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RFC850)
             == "Thursday, 25-Dec-75 14:15:16 EST"
         )
 
     def test_rfc_1036(self):
         assert (
-            self.formatter.format(self.datetime, RFC1036_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RFC1036)
             == "Thu, 25 Dec 75 14:15:16 -0500"
         )
 
     def test_rfc_1123(self):
         assert (
-            self.formatter.format(self.datetime, RFC1123_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RFC1123)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
     def test_rfc_2822(self):
         assert (
-            self.formatter.format(self.datetime, RFC2822_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RFC2822)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
     def test_rss(self):
         assert (
-            self.formatter.format(self.datetime, RSS_FORMAT)
+            self.formatter.format(self.datetime, FORMAT_RSS)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
