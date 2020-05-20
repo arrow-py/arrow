@@ -589,6 +589,15 @@ class TestArrowConversion:
 
         assert before.utcoffset() != after.utcoffset()
 
+    # issue 476
+    def test_chicago_fall(self):
+
+        result = arrow.Arrow(2017, 11, 5, 2, 1, tzinfo="-05:00").to("America/Chicago")
+        expected = arrow.Arrow(2017, 11, 5, 1, 1, tzinfo="America/Chicago")
+
+        assert result == expected
+        assert result.utcoffset() != expected.utcoffset()
+
 
 class TestArrowPickling:
     def test_pickle_and_unpickle(self):
