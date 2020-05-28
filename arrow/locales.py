@@ -3077,6 +3077,7 @@ class HebrewLocale(Locale):
 
     past = "לפני {0}"
     future = "בעוד {0}"
+    and_word = "וגם"
 
     timeframes = {
         "now": "הרגע",
@@ -3090,6 +3091,9 @@ class HebrewLocale(Locale):
         "day": "יום",
         "days": "{0} ימים",
         "2-days": "יומיים",
+        "week": "שבוע",
+        "weeks": "{0} שבועות",
+        "2-weeks": "שבועיים",
         "month": "חודש",
         "months": "{0} חודשים",
         "2-months": "חודשיים",
