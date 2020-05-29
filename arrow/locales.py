@@ -3172,9 +3172,6 @@ class HebrewLocale(Locale):
             elif index < len(timeframes) - 1:  # Don't add for the last one
                 humanized += ", " + last_humanized
 
-            # if index != len(timeframes) - 1:
-            #    humanized += " "
-
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
 
