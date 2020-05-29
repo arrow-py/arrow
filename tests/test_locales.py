@@ -509,37 +509,42 @@ class TestMacedonianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
+        assert self.locale._format_timeframe("days", 1) == "יום"
         assert self.locale._format_timeframe("days", 2) == "יומיים"
         assert self.locale._format_timeframe("days", 3) == "3 ימים"
 
+        assert self.locale._format_timeframe("hours", 1) == "שעה"
         assert self.locale._format_timeframe("hours", 2) == "שעתיים"
-        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
+        assert self.locale._format_timeframe("hours", 3) == "3 שעות"
 
         assert self.locale._format_timeframe("week", 1) == "שבוע"
         assert self.locale._format_timeframe("weeks", 2) == "שבועיים"
         assert self.locale._format_timeframe("weeks", 3) == "3 שבועות"
 
+        assert self.locale._format_timeframe("months", 1) == "חודש"
         assert self.locale._format_timeframe("months", 2) == "חודשיים"
         assert self.locale._format_timeframe("months", 4) == "4 חודשים"
 
+        assert self.locale._format_timeframe("years", 1) == "שנה"
         assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
 
-        later4000 = self.now.shift(seconds=4000)
-        later3700 = arrow.Arrow.shift(arrow.Arrow.utcnow(), seconds=3700)
-        later300 = arrow.Arrow.shift(arrow.Arrow.utcnow(), seconds=300)
-        hebrew = {"locale": "he_IL"}
-        assert (
-            later4000.humanize(granularity=["day", "hour", "minute"], **hebrew)
-            == "בעוד 0 ימים, שעה ו־6 דקות"
-        )
-
-        mock_params = {"granularity": ["hour", "minute"]}
-        mock_params.update(hebrew)
-        assert later4000.humanize(**mock_params) == "בעוד שעה ו־6 דקות"
-        assert later3700.humanize(**mock_params) == "בעוד שעה ודקה"
-        assert later300.humanize(**mock_params) == "בעוד 0 שעות ו־5 דקות"
-        assert later300.humanize(granularity="minute", **hebrew) == "בעוד 5 דקות"
+        fulltest = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 6)]
+        seconds4000_0hours = [("days", 0), ("hours", 1), ("minutes", 6)]
+        seconds4000 = [("hours", 1), ("minutes", 6)]
+        seconds3700 = [("hours", 1), ("minutes", 1)]
+        seconds300_0hours = [("hours", 0), ("minutes", 5)]
+        seconds300 = [("minutes", 5)]
+        seconds60 = [("minutes", 1)]
+        describe = self.locale.describe_multi
+        assert describe(fulltest) == "בעוד 5 שנים, שבוע, שעה ו־6 דקות"
+        assert describe(seconds4000_0hours) == "בעוד 0 ימים, שעה ו־6 דקות"
+        assert describe(seconds4000) == "בעוד שעה ו־6 דקות"
+        assert describe(seconds4000, only_distance=True) == "שעה ו־6 דקות"
+        assert describe(seconds3700) == "בעוד שעה ודקה"
+        assert describe(seconds300_0hours) == "בעוד 0 שעות ו־5 דקות"
+        assert describe(seconds300) == "בעוד 5 דקות"
+        assert describe(seconds60, only_distance=True) == "דקה"
 
 
 @pytest.mark.usefixtures("lang_locale")

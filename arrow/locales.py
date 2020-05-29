@@ -3146,8 +3146,11 @@ class HebrewLocale(Locale):
     def _format_timeframe(self, timeframe, delta):
         """Hebrew couple of <timeframe> aware"""
         couple = "2-{}".format(timeframe)
+        single = timeframe.rstrip("s")
         if abs(delta) == 2 and couple in self.timeframes:
             return self.timeframes[couple].format(trunc(abs(delta)))
+        elif abs(delta) == 1 and single in self.timeframes:
+            return self.timeframes[single].format(trunc(abs(delta)))
         else:
             return self.timeframes[timeframe].format(trunc(abs(delta)))
 
@@ -3169,7 +3172,7 @@ class HebrewLocale(Locale):
                 if last_humanized[0].isdecimal():
                     humanized += "־"
                 humanized += last_humanized
-            elif index < len(timeframes) - 1:  # Don't add for the last one
+            else:  # Don't add for the last one
                 humanized += ", " + last_humanized
 
         if not only_distance:
