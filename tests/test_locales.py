@@ -529,21 +529,24 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
 
-        fulltest = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 6)]
-        seconds4000_0hours = [("days", 0), ("hours", 1), ("minutes", 6)]
-        seconds4000 = [("hours", 1), ("minutes", 6)]
-        seconds3700 = [("hours", 1), ("minutes", 1)]
-        seconds300_0hours = [("hours", 0), ("minutes", 5)]
-        seconds300 = [("minutes", 5)]
-        seconds60 = [("minutes", 1)]
+    def test_describe_multi(self):
         describe = self.locale.describe_multi
+
+        fulltest = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 6)]
         assert describe(fulltest) == "בעוד 5 שנים, שבוע, שעה ו־6 דקות"
-        assert describe(seconds4000_0hours) == "בעוד 0 ימים, שעה ו־6 דקות"
+        seconds4000_0days = [("days", 0), ("hours", 1), ("minutes", 6)]
+        assert describe(seconds4000_0days) == "בעוד 0 ימים, שעה ו־6 דקות"
+        seconds4000 = [("hours", 1), ("minutes", 6)]
         assert describe(seconds4000) == "בעוד שעה ו־6 דקות"
         assert describe(seconds4000, only_distance=True) == "שעה ו־6 דקות"
+        seconds3700 = [("hours", 1), ("minutes", 1)]
         assert describe(seconds3700) == "בעוד שעה ודקה"
+        seconds300_0hours = [("hours", 0), ("minutes", 5)]
         assert describe(seconds300_0hours) == "בעוד 0 שעות ו־5 דקות"
+        seconds300 = [("minutes", 5)]
         assert describe(seconds300) == "בעוד 5 דקות"
+        seconds60 = [("minutes", 1)]
+        assert describe(seconds60) == "בעוד דקה"
         assert describe(seconds60, only_distance=True) == "דקה"
 
 

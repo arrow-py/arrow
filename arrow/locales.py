@@ -3148,11 +3148,13 @@ class HebrewLocale(Locale):
         couple = "2-{}".format(timeframe)
         single = timeframe.rstrip("s")
         if abs(delta) == 2 and couple in self.timeframes:
-            return self.timeframes[couple].format(trunc(abs(delta)))
+            key = couple
         elif abs(delta) == 1 and single in self.timeframes:
-            return self.timeframes[single].format(trunc(abs(delta)))
+            key = single
         else:
-            return self.timeframes[timeframe].format(trunc(abs(delta)))
+            key = timeframe
+
+        return self.timeframes[key].format(trunc(abs(delta)))
 
     def describe_multi(self, timeframes, only_distance=False):
         """ Describes a delta within multiple timeframes in plain language.
