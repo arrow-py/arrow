@@ -505,17 +505,41 @@ class TestMacedonianLocale:
         assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 @pytest.mark.usefixtures("lang_locale")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
-        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
-        assert self.locale._format_timeframe("months", 2) == "חודשיים"
         assert self.locale._format_timeframe("days", 2) == "יומיים"
-        assert self.locale._format_timeframe("years", 2) == "שנתיים"
-        assert self.locale._format_timeframe("hours", 3) == "3 שעות"
-        assert self.locale._format_timeframe("months", 4) == "4 חודשים"
         assert self.locale._format_timeframe("days", 3) == "3 ימים"
+
+        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
+        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
+
+        assert self.locale._format_timeframe("week", 1) == "שבוע"
+        assert self.locale._format_timeframe("weeks", 2) == "שבועיים"
+        assert self.locale._format_timeframe("weeks", 3) == "3 שבועות"
+
+        assert self.locale._format_timeframe("months", 2) == "חודשיים"
+        assert self.locale._format_timeframe("months", 4) == "4 חודשים"
+
+        assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
+
+        later4000 = self.now.shift(seconds=4000)
+        later3700 = arrow.Arrow.shift(arrow.Arrow.utcnow(), seconds=3700)
+        later300 = arrow.Arrow.shift(arrow.Arrow.utcnow(), seconds=300)
+        hebrew = {"locale": "he_IL"}
+        assert (
+            later4000.humanize(granularity=["day", "hour", "minute"], **hebrew)
+            == "בעוד 0 ימים, שעה ו־6 דקות"
+        )
+
+        mock_params = {"granularity": ["hour", "minute"]}
+        mock_params.update(hebrew)
+        assert later4000.humanize(**mock_params) == "בעוד שעה ו־6 דקות"
+        assert later3700.humanize(**mock_params) == "בעוד שעה ודקה"
+        assert later300.humanize(**mock_params) == "בעוד 0 שעות ו־5 דקות"
+        assert later300.humanize(granularity="minute", **hebrew) == "בעוד 5 דקות"
 
 
 @pytest.mark.usefixtures("lang_locale")
