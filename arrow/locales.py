@@ -3077,6 +3077,7 @@ class HebrewLocale(Locale):
 
     past = "לפני {0}"
     future = "בעוד {0}"
+    and_word = "ו"
 
     timeframes = {
         "now": "הרגע",
@@ -3090,6 +3091,9 @@ class HebrewLocale(Locale):
         "day": "יום",
         "days": "{0} ימים",
         "2-days": "יומיים",
+        "week": "שבוע",
+        "weeks": "{0} שבועות",
+        "2-weeks": "שבועיים",
         "month": "חודש",
         "months": "{0} חודשים",
         "2-months": "חודשיים",
@@ -3142,10 +3146,41 @@ class HebrewLocale(Locale):
     def _format_timeframe(self, timeframe, delta):
         """Hebrew couple of <timeframe> aware"""
         couple = "2-{}".format(timeframe)
+        single = timeframe.rstrip("s")
         if abs(delta) == 2 and couple in self.timeframes:
-            return self.timeframes[couple].format(abs(delta))
+            key = couple
+        elif abs(delta) == 1 and single in self.timeframes:
+            key = single
         else:
-            return self.timeframes[timeframe].format(abs(delta))
+            key = timeframe
+
+        return self.timeframes[key].format(trunc(abs(delta)))
+
+    def describe_multi(self, timeframes, only_distance=False):
+        """ Describes a delta within multiple timeframes in plain language.
+        In Hebrew, the and word behaves a bit differently.
+
+        :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.
+        :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
+        """
+
+        humanized = ""
+        for index, (timeframe, delta) in enumerate(timeframes):
+            last_humanized = self._format_timeframe(timeframe, delta)
+            if index == 0:
+                humanized = last_humanized
+            elif index == len(timeframes) - 1:  # Must have at least 2 items
+                humanized += " " + self.and_word
+                if last_humanized[0].isdecimal():
+                    humanized += "־"
+                humanized += last_humanized
+            else:  # Don't add for the last one
+                humanized += ", " + last_humanized
+
+        if not only_distance:
+            humanized = self._format_relative(humanized, timeframe, delta)
+
+        return humanized
 
 
 class MarathiLocale(Locale):

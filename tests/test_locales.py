@@ -505,17 +505,49 @@ class TestMacedonianLocale:
         assert self.locale._format_timeframe("minutes", 25) == "25 минути"
 
 
+@pytest.mark.usefixtures("time_2013_01_01")
 @pytest.mark.usefixtures("lang_locale")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
-        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
-        assert self.locale._format_timeframe("months", 2) == "חודשיים"
+        assert self.locale._format_timeframe("days", 1) == "יום"
         assert self.locale._format_timeframe("days", 2) == "יומיים"
-        assert self.locale._format_timeframe("years", 2) == "שנתיים"
-        assert self.locale._format_timeframe("hours", 3) == "3 שעות"
-        assert self.locale._format_timeframe("months", 4) == "4 חודשים"
         assert self.locale._format_timeframe("days", 3) == "3 ימים"
+
+        assert self.locale._format_timeframe("hours", 1) == "שעה"
+        assert self.locale._format_timeframe("hours", 2) == "שעתיים"
+        assert self.locale._format_timeframe("hours", 3) == "3 שעות"
+
+        assert self.locale._format_timeframe("week", 1) == "שבוע"
+        assert self.locale._format_timeframe("weeks", 2) == "שבועיים"
+        assert self.locale._format_timeframe("weeks", 3) == "3 שבועות"
+
+        assert self.locale._format_timeframe("months", 1) == "חודש"
+        assert self.locale._format_timeframe("months", 2) == "חודשיים"
+        assert self.locale._format_timeframe("months", 4) == "4 חודשים"
+
+        assert self.locale._format_timeframe("years", 1) == "שנה"
+        assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
+
+    def test_describe_multi(self):
+        describe = self.locale.describe_multi
+
+        fulltest = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 6)]
+        assert describe(fulltest) == "בעוד 5 שנים, שבוע, שעה ו־6 דקות"
+        seconds4000_0days = [("days", 0), ("hours", 1), ("minutes", 6)]
+        assert describe(seconds4000_0days) == "בעוד 0 ימים, שעה ו־6 דקות"
+        seconds4000 = [("hours", 1), ("minutes", 6)]
+        assert describe(seconds4000) == "בעוד שעה ו־6 דקות"
+        assert describe(seconds4000, only_distance=True) == "שעה ו־6 דקות"
+        seconds3700 = [("hours", 1), ("minutes", 1)]
+        assert describe(seconds3700) == "בעוד שעה ודקה"
+        seconds300_0hours = [("hours", 0), ("minutes", 5)]
+        assert describe(seconds300_0hours) == "בעוד 0 שעות ו־5 דקות"
+        seconds300 = [("minutes", 5)]
+        assert describe(seconds300) == "בעוד 5 דקות"
+        seconds60 = [("minutes", 1)]
+        assert describe(seconds60) == "בעוד דקה"
+        assert describe(seconds60, only_distance=True) == "דקה"
 
 
 @pytest.mark.usefixtures("lang_locale")
