@@ -415,7 +415,7 @@ There are several formatting standards that are provided as built-in tokens.
 
 .. code-block:: python
 
-    >>> arw=arrow.utcnow()
+    >>> arw = arrow.utcnow()
     >>> arw.format(arrow.FORMAT_COOKIE)
     'Wednesday, 27-May-2020 10:30:35 UTC'
     >>> arw.format(arrow.FORMAT_RSS)
