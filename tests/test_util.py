@@ -32,6 +32,15 @@ class TestUtil:
         full_datetime = "2019-06-23T13:12:42"
         assert not util.is_timestamp(full_datetime)
 
+    def test_normalize_timestamp(self):
+        timestamp = 1591161115.194556
+        assert util.normalize_timestamp(timestamp) == timestamp
+        assert util.normalize_timestamp(int(timestamp * 1e3)) == 1591161115.194
+        assert util.normalize_timestamp(int(timestamp * 1e6)) == 1591161115.194556
+
+        with pytest.raises(ValueError):
+            util.normalize_timestamp(3e17)
+
     def test_iso_gregorian(self):
         with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 0, 5)

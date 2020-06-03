@@ -3,6 +3,8 @@ from __future__ import absolute_import
 
 import datetime
 
+from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
+
 
 def total_seconds(td):
     """Get total seconds for timedelta."""
@@ -22,6 +24,20 @@ def is_timestamp(value):
         return True
     except ValueError:
         return False
+
+
+def normalize_timestamp(timestamp):
+    """Normalize millisecond and microsecond timestamps into normal timestamps."""
+    if timestamp > MAX_TIMESTAMP:
+        if timestamp < MAX_TIMESTAMP_MS:
+            timestamp /= 1e3
+        elif timestamp < MAX_TIMESTAMP_US:
+            timestamp /= 1e6
+        else:
+            raise ValueError(
+                "The specified timestamp '{}' is too large.".format(timestamp)
+            )
+    return timestamp
 
 
 # Credit to https://stackoverflow.com/a/1700069
