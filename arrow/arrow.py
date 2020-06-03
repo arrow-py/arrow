@@ -15,7 +15,7 @@ from math import trunc
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
-from dateutil.tz import enfold
+#from dateutil.tz import util.determine_fold
 
 from arrow import formatter, locales, parser, util
 
@@ -89,14 +89,13 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        self._fold = fold
+        #self._fold = fold
 
-        self._datetime = enfold(
-            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
-            fold=self._fold,
-        )
+        self._datetime = datetime(year, month, day, hour, minute, second, microsecond, tzinfo, fold=fold)
 
     # factories: single object, both original and from datetime.
+
+    # TODO add spring tests
 
     @classmethod
     def now(cls, tzinfo=None):
@@ -116,7 +115,7 @@ class Arrow(object):
             tzinfo = dateutil_tz.tzlocal()
         dt = datetime.now(tzinfo)
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -144,7 +143,7 @@ class Arrow(object):
 
         dt = datetime.now(dateutil_tz.tzutc())
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -179,7 +178,7 @@ class Arrow(object):
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -208,7 +207,7 @@ class Arrow(object):
 
         dt = datetime.utcfromtimestamp(float(timestamp))
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -245,7 +244,7 @@ class Arrow(object):
             else:
                 tzinfo = dt.tzinfo
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -294,7 +293,7 @@ class Arrow(object):
         if tzinfo is None:
             tzinfo = dt.tzinfo
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -616,7 +615,7 @@ class Arrow(object):
         if val not in {0, 1}:
             raise ValueError("fold attribute must be either 0 or 1")
         self._fold = val
-        self._datetime = enfold(self._datetime, fold=val)
+        self._datetime = util.determine_fold(self._datetime, fold=val)
 
     # mutation and duplication.
 
@@ -762,7 +761,7 @@ class Arrow(object):
 
         dt = self._datetime.astimezone(tz)
 
-        dt = enfold(dt)
+        dt = util.determine_fold(dt)
 
         return self.__class__(
             dt.year,
