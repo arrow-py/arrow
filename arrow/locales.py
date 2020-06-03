@@ -89,9 +89,9 @@ class Locale(object):
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = self._format_timeframe(timeframe, trunc(delta))
+        humanized = self._format_timeframe(timeframe, delta)
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, trunc(delta))
+            humanized = self._format_relative(humanized, timeframe, delta)
 
         return humanized
 
