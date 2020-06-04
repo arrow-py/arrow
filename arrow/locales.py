@@ -4139,4 +4139,80 @@ class EstonianLocale(Locale):
         return form.format(abs(delta))
 
 
+class SwahiliLocale(Locale):
+
+    names = [
+        "sw",
+        "sw_ke",
+        "sw_tz",
+    ]
+
+    past = "{0} zilizopita"
+    future = "muda wa {0}"
+    and_word = "na"
+
+    timeframes = {
+        "now": "sasa hivi",
+        "second": "sekunde",
+        "seconds": "sekunde {0}",
+        "minute": "dakika moja",
+        "minutes": "dakika {0} ",
+        "hour": "kwa saa moja",
+        "hours": "saa {0}",
+        "day": "siku moja",
+        "days": "siku {0}",
+        "week": "kwa wiki",
+        "weeks": "wiki {0}",
+        "month": "kwa mwezi",
+        "months": "miezi {0}",
+        "year": "kwa mwaka",
+        "years": "miaka {0}",
+    }
+
+    meridians = {"am": "asu", "pm": "mch", "AM": "ASU", "PM": "MCH"}
+
+    month_names = [
+        "",
+        "Januari",
+        "Februari",
+        "Machi",
+        "Aprili",
+        "Mei",
+        "Juni",
+        "Julai",
+        "Agosti",
+        "Septemba",
+        "Oktoba",
+        "Novemba",
+        "Desemba",
+    ]
+    month_abbreviations = [
+        "",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+    ]
+
+    day_names = [
+        "",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
+        "Jumapili",
+    ]
+    day_abbreviations = ["", "Jumatatu", "Jumanne", "Jumatano", "Alhamisi", "Ijumaa", "Jumamosi", "Jumapili"]
+
+
 _locales = _map_locales()
