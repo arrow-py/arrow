@@ -4212,7 +4212,16 @@ class SwahiliLocale(Locale):
         "Jumamosi",
         "Jumapili",
     ]
-    day_abbreviations = ["", "Jumatatu", "Jumanne", "Jumatano", "Alhamisi", "Ijumaa", "Jumamosi", "Jumapili"]
+    day_abbreviations = [
+        "",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
+        "Jumapili",
+    ]
 
 
 _locales = _map_locales()
