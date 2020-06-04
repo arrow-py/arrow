@@ -975,6 +975,8 @@ class TestSwahiliLocale:
         assert self.locale._format_timeframe("days", 12) == "siku 12"
         assert self.locale._format_timeframe("month", 1) == "mwezi moja"
         assert self.locale._format_timeframe("months", 7) == "miezi 7"
+        assert self.locale._format_timeframe("week", 1) == "wiki moja"
+        assert self.locale._format_timeframe("weeks", 2) == "wiki 2"
         assert self.locale._format_timeframe("months", 11) == "miezi 11"
         assert self.locale._format_timeframe("year", 1) == "mwaka moja"
         assert self.locale._format_timeframe("years", 8) == "miaka 8"

@@ -4147,7 +4147,7 @@ class SwahiliLocale(Locale):
         "sw_tz",
     ]
 
-    past = "{0} zilizopita"
+    past = "{0} iliyopita"
     future = "muda wa {0}"
     and_word = "na"
 
@@ -4161,7 +4161,7 @@ class SwahiliLocale(Locale):
         "hours": "saa {0}",
         "day": "siku moja",
         "days": "siku {0}",
-        "week": "wiki",
+        "week": "wiki moja",
         "weeks": "wiki {0}",
         "month": "mwezi moja",
         "months": "miezi {0}",
