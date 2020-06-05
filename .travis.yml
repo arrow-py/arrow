@@ -2,15 +2,6 @@ language: python
 dist: bionic
 matrix:
   include:
-    - name: "Python 2.7"
-      python: "2.7"
-      env: TOXENV=py27
-      before_install: pip install --upgrade pip
-      install: pip install -U codecov tox
-    - name: "Python 3.5"
-      dist: xenial
-      python: "3.5"
-      env: TOXENV=py35
     - name: "Python 3.6"
       python: "3.6"
       env: TOXENV=py36
