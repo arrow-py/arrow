@@ -179,7 +179,7 @@ class TestTestArrowRepresentation:
 
         result = self.arrow.__repr__()
 
-        assert result == "<Arrow [{}]>".format(self.arrow._datetime.isoformat())
+        assert result == f"<Arrow [{self.arrow._datetime.isoformat()}]>"
 
     def test_str(self):
 
@@ -195,7 +195,7 @@ class TestTestArrowRepresentation:
 
     def test_format(self):
 
-        result = "{:YYYY-MM-DD}".format(self.arrow)
+        result = f"{self.arrow:YYYY-MM-DD}"
 
         assert result == "2013-02-03"
 
@@ -207,7 +207,7 @@ class TestTestArrowRepresentation:
 
     def test_format_no_format_string(self):
 
-        result = "{}".format(self.arrow)
+        result = f"{self.arrow}"
 
         assert result == str(self.arrow)
 

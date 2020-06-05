@@ -52,7 +52,7 @@ class Arrow:
     resolution = datetime.resolution
 
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
-    _ATTRS_PLURAL = ["{}s".format(a) for a in _ATTRS]
+    _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
     _SECS_PER_MINUTE = float(60)
     _SECS_PER_HOUR = float(60 * 60)
@@ -152,9 +152,7 @@ class Arrow:
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
@@ -178,9 +176,7 @@ class Arrow:
         """
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         dt = datetime.utcfromtimestamp(float(timestamp))
 
@@ -461,7 +457,7 @@ class Arrow:
     # representations
 
     def __repr__(self):
-        return "<{} [{}]>".format(self.__class__.__name__, self.__str__())
+        return f"<{self.__class__.__name__} [{self.__str__()}]>"
 
     def __str__(self):
         return self._datetime.isoformat()
@@ -615,9 +611,9 @@ class Arrow:
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
-                raise AttributeError("setting absolute {} is not supported".format(key))
+                raise AttributeError(f"setting absolute {key} is not supported")
             elif key != "tzinfo":
-                raise AttributeError('unknown attribute: "{}"'.format(key))
+                raise AttributeError(f'unknown attribute: "{key}"')
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -1422,7 +1418,7 @@ class Arrow:
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError("'{}' not recognized as a timezone".format(tz_expr))
+                raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -1435,15 +1431,13 @@ class Arrow:
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
         else:
-            raise ValueError(
-                "'{}' not recognized as a datetime or timestamp.".format(expr)
-            )
+            raise ValueError(f"'{expr}' not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name):
 
         if name in cls._ATTRS:
-            return name, "{}s".format(name), 1
+            return name, f"{name}s", 1
         elif name[-1] == "s" and name[:-1] in cls._ATTRS:
             return name[:-1], name, 1
         elif name in ["week", "weeks"]:
