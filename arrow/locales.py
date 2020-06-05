@@ -1616,7 +1616,7 @@ class MacedonianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сега",
-        "second": "секунда",
+        "second": "една секунда",
         "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
         "minute": "една минута",
         "minutes": ["{0} минута", "{0} минути", "{0} минути"],

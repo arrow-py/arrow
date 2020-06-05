@@ -481,6 +481,7 @@ class TestBulgarianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestMacedonianLocale:
     def test_singles_mk(self):
+        assert self.locale._format_timeframe("second", 1) == "една секунда"
         assert self.locale._format_timeframe("minute", 1) == "една минута"
         assert self.locale._format_timeframe("hour", 1) == "еден саат"
         assert self.locale._format_timeframe("day", 1) == "еден ден"
@@ -495,6 +496,8 @@ class TestMacedonianLocale:
         assert self.locale.meridian(22, "a") == "пп"
 
     def test_describe_mk(self):
+        assert self.locale.describe("second", only_distance=True) == "една секунда"
+        assert self.locale.describe("second", only_distance=False) == "за една секунда"
         assert self.locale.describe("minute", only_distance=True) == "една минута"
         assert self.locale.describe("minute", only_distance=False) == "за една минута"
         assert self.locale.describe("hour", only_distance=True) == "еден саат"
@@ -511,12 +514,16 @@ class TestMacedonianLocale:
     def test_relative_mk(self):
         # time
         assert self.locale._format_relative("сега", "now", 0) == "сега"
+        assert self.locale._format_relative("1 секунда", "seconds", 1) == "за 1 секунда"
         assert self.locale._format_relative("1 минута", "minutes", 1) == "за 1 минута"
         assert self.locale._format_relative("1 саат", "hours", 1) == "за 1 саат"
         assert self.locale._format_relative("1 ден", "days", 1) == "за 1 ден"
         assert self.locale._format_relative("1 недела", "weeks", 1) == "за 1 недела"
         assert self.locale._format_relative("1 месец", "months", 1) == "за 1 месец"
         assert self.locale._format_relative("1 година", "years", 1) == "за 1 година"
+        assert (
+            self.locale._format_relative("1 секунда", "seconds", -1) == "пред 1 секунда"
+        )
         assert (
             self.locale._format_relative("1 минута", "minutes", -1) == "пред 1 минута"
         )
