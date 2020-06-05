@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Provides the :class:`Arrow <arrow.arrow.Arrow>` class, an enhanced ``datetime``
 replacement.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 import sys
@@ -19,7 +17,7 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 
 
-class Arrow(object):
+class Arrow:
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
 
     Implements the ``datetime`` interface, behaving as an aware ``datetime`` while implementing

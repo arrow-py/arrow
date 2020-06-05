@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Implements the :class:`ArrowFactory <arrow.factory.ArrowFactory>` class,
 providing factory methods for common :class:`Arrow <arrow.arrow.Arrow>`
@@ -6,7 +5,6 @@ construction scenarios.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 from datetime import date, datetime
@@ -20,7 +18,7 @@ from arrow.arrow import Arrow
 from arrow.util import is_timestamp, iso_to_gregorian, isstr
 
 
-class ArrowFactory(object):
+class ArrowFactory:
     """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
     :param type: (optional) the :class:`Arrow <arrow.arrow.Arrow>`-based class to construct from.

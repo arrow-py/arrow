@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytz
 from dateutil.zoneinfo import get_zonefile_instance
 

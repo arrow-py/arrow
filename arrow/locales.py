@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import inspect
 import sys
 from math import trunc
@@ -25,7 +22,7 @@ def get_locale(name):
 # base locale type.
 
 
-class Locale(object):
+class Locale:
     """ Represents locale-specific data and functionality. """
 
     names = []
@@ -308,7 +305,7 @@ class EnglishLocale(Locale):
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = super(EnglishLocale, self).describe(timeframe, delta, only_distance)
+        humanized = super().describe(timeframe, delta, only_distance)
         if only_distance and timeframe == "now":
             humanized = "instantly"
 

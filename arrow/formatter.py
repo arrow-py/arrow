@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import calendar
 import re
 
@@ -9,7 +6,7 @@ from dateutil import tz as dateutil_tz
 from arrow import locales, util
 
 
-class DateTimeFormatter(object):
+class DateTimeFormatter:
 
     # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are
