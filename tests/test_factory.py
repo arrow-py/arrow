@@ -66,6 +66,14 @@ class TestGet:
         with pytest.raises((OverflowError, ValueError)):
             self.factory.get(timestamp)
 
+    def test_one_arg_expanded_timestamp(self):
+
+        timestamp = time.time()
+        timestamp_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=tz.tzutc())
+
+        assert self.factory.get(timestamp * 1e6) == timestamp_dt
+        assert self.factory.get(timestamp * 1e3) == timestamp_dt
+
     def test_one_arg_timestamp_with_tzinfo(self):
 
         timestamp = time.time()
