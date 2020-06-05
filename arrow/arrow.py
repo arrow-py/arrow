@@ -608,14 +608,19 @@ class Arrow(object):
     def fold(self):
         # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
         # otherwise, so we need to define a _fold attribute to cover this case
-        return getattr(self._datetime, "fold", self._fold)
+        return getattr(self._datetime, "fold", 0)
 
     @fold.setter
     def fold(self, val):
         if val not in {0, 1}:
             raise ValueError("fold attribute must be either 0 or 1")
-        self._fold = val
-        self._datetime = util.determine_fold(self._datetime, fold=val)
+        if not dateutil_tz.datetime_ambiguous(self._datetime):
+            # for non ambiguous datetimes fold must be 0
+            self._fold = 0
+            self._datetime = dateutil_tz.enfold(self._datetime, fold=self._fold)
+        else:
+            self._fold = val
+            self._datetime = dateutil_tz.enfold(self._datetime, fold=val)
 
     # mutation and duplication.
 

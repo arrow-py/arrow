@@ -291,12 +291,14 @@ class TestArrowAttribute:
 
     def test_getattr_fold(self):
 
-        assert self.arrow.fold == 0
-        self.arrow.fold = 1
-        assert self.arrow.fold == 1
+        assert self.now.fold == 0
+
+        # TODO test fold setting on non ambiguous and ambiguous dts
+        self.now.fold = 1
+        assert self.now.fold == 0
 
         with pytest.raises(ValueError):
-            self.arrow.fold = 123
+            self.now.fold = 123
 
 
 @pytest.mark.usefixtures("time_utcnow")
