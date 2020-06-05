@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import datetime
+import numbers
 
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
@@ -16,7 +17,9 @@ def is_timestamp(value):
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
+        isinstance(value, numbers.Integral)
+        or isinstance(value, float)
+        or isinstance(value, str)
     ):
         return False
     try:
