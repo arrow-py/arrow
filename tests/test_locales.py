@@ -981,3 +981,15 @@ class TestSwahiliLocale:
         assert self.locale._format_timeframe("year", 1) == "mwaka moja"
         assert self.locale._format_timeframe("years", 8) == "miaka 8"
         assert self.locale._format_timeframe("years", 12) == "miaka 12"
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("sasa hivi", "now", 0)
+        assert result == "sasa hivi"
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative("saa moja", "hour", 1)
+        assert result == "muda wa saa moja"
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("saa moja", "hour", -1)
+        assert result == "saa moja iliyopita"
