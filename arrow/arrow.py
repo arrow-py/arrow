@@ -54,8 +54,8 @@ class Arrow:
     """
 
     resolution = datetime.resolution
-    min = None
-    max = None
+    min: "Arrow"
+    max: "Arrow"
 
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
     _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
@@ -76,7 +76,7 @@ class Arrow:
         minute: int = 0,
         second: int = 0,
         microsecond: int = 0,
-        tzinfo: Any = None,
+        tzinfo: Optional[Union["dt_tzinfo", tzfile]] = None,
     ) -> None:
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -154,7 +154,9 @@ class Arrow:
         )
 
     @classmethod
-    def fromtimestamp(cls, timestamp: Union[float, str], tzinfo: Any = None) -> "Arrow":
+    def fromtimestamp(
+        cls, timestamp: Union[float, str], tzinfo: Optional[Any] = None
+    ) -> "Arrow":
         """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
 
@@ -208,7 +210,7 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(cls, dt: datetime, tzinfo: Any = None) -> "Arrow":
+    def fromdatetime(cls, dt: Union[datetime, "Arrow"], tzinfo: Any = None) -> "Arrow":
         """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -243,7 +245,9 @@ class Arrow:
         )
 
     @classmethod
-    def fromdate(cls, date: date, tzinfo: Union[None, tzfile, str] = None) -> "Arrow":
+    def fromdate(
+        cls, date: date, tzinfo: Optional[Union[dt_tzinfo, tzfile, str, None]] = None
+    ) -> "Arrow":
         """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  Time values are set to 0.
 
@@ -258,7 +262,7 @@ class Arrow:
 
     @classmethod
     def strptime(
-        cls, date_str: str, fmt: str, tzinfo: Optional[tzfile] = None
+        cls, date_str: str, fmt: str, tzinfo: Optional[Union[tzfile, dt_tzinfo]] = None
     ) -> "Arrow":
         """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
@@ -297,10 +301,10 @@ class Arrow:
         cls,
         frame: str,
         start: Union["Arrow", datetime],
-        end: Union["Arrow", datetime] = None,
-        tz: Union[None, tzfile, str] = None,
+        end: Optional[Union["Arrow", datetime]] = None,
+        tz: Optional[Union[None, tzfile, str]] = None,
         limit: Optional[int] = None,
-    ) -> Iterator[Union[Iterator, Iterator["Arrow"]]]:
+    ) -> Union[Iterator[Union[Iterator, Iterator["Arrow"]]], "Arrow"]:
         """ Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         points in time between two inputs.
 
@@ -355,14 +359,16 @@ class Arrow:
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
-        start = cls._get_datetime(start).replace(tzinfo=tzinfo)
-        end, limit = cls._get_iteration_params(end, limit)
-        end = cls._get_datetime(end).replace(tzinfo=tzinfo)
+        _start: Union["Arrow", datetime] = cls._get_datetime(start).replace(
+            tzinfo=tzinfo
+        )
+        _end, limit = cls._get_iteration_params(end, limit)
+        __end = cls._get_datetime(_end).replace(tzinfo=tzinfo)
 
-        current = cls.fromdatetime(start)
+        current: Union["Arrow", datetime] = cls.fromdatetime(_start)
         i = 0
 
-        while current <= end and i < limit:
+        while current <= __end and i < limit:
             i += 1
             yield current
 
@@ -429,9 +435,11 @@ class Arrow:
 
         """
 
-        tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdatetime(start, tzinfo).span(frame)[0]
-        _range = cls.range(frame, start, end, tz, limit)
+        tzinfo: dt_tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
+        _start: Union[datetime, Arrow] = cls.fromdatetime(start, tzinfo).span(frame)[0]
+        _range: Union[
+            Iterator[Union[Iterator[Any], Iterator[Arrow]]], Arrow
+        ] = cls.range(frame, _start, end, tz, limit)
         return (r.span(frame, bounds=bounds) for r in _range)
 
     @classmethod
@@ -951,11 +959,13 @@ class Arrow:
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
 
-        delta = int(round(util.total_seconds(self._datetime - dt)))
+        delta: float = int(round(util.total_seconds(self._datetime - dt)))
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
-
+        days: float
+        weeks: float
+        years: float
         try:
             if granularity == "auto":
                 if diff < 10:
@@ -1458,7 +1468,7 @@ class Arrow:
                 raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
-    def _get_datetime(cls, expr: Any) -> datetime:
+    def _get_datetime(cls, expr: Any) -> "datetime":
         """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime

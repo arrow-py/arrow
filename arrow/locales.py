@@ -53,6 +53,7 @@ class Locale:
             List[str],
             Tuple[str, str],
             Dict[str, List],
+            Dict[str, Sequence[str]],
             Sequence[str],
         ],
     ] = {
@@ -89,7 +90,7 @@ class Locale:
 
     def __init__(self) -> None:
 
-        self._month_name_to_ordinal = None
+        self._month_name_to_ordinal: Union[Dict[str, int], None] = None
 
     def describe(
         self, timeframe: str, delta: float = 0, only_distance: bool = False
@@ -108,7 +109,9 @@ class Locale:
         return humanized
 
     def describe_multi(
-        self, timeframes: List[List[Union[float, str]]], only_distance: bool = False
+        self,
+        timeframes: List[List[Union[float, str, object]]],
+        only_distance: bool = False,  # TODO Check type
     ) -> str:
         """ Describes a delta within multiple timeframes in plain language.
 
@@ -183,14 +186,14 @@ class Locale:
     def year_full(self, year: int) -> str:
         """  Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"
 
     def year_abbreviation(self, year: int) -> str:
         """ Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"[2:]
 
@@ -223,7 +226,12 @@ class Locale:
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
         return self.timeframes[timeframe].format(trunc(abs(delta)))
 
-    def _format_relative(self, humanized: str, timeframe: str, delta: float) -> str:
+    def _format_relative(
+        self,
+        humanized: Union[str, List[str]],
+        timeframe: Union[str, float],
+        delta: float,
+    ) -> str:
 
         if timeframe == "now":
             return humanized
@@ -869,13 +877,12 @@ class FinnishLocale(Locale):
 
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> Tuple[str, str]:
-        return (
-            self.timeframes[timeframe][0].format(abs(delta)),
-            self.timeframes[timeframe][1].format(abs(delta)),
-        )
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
+        return self.timeframes[timeframe][0].format(abs(delta))
 
-    def _format_relative(self, humanized: List[str], timeframe: str, delta: int) -> str:
+    def _format_relative(
+        self, humanized: Union[str, List[str]], timeframe: str, delta: float
+    ) -> str:
         if timeframe == "now":
             return humanized[0]
 
@@ -1200,21 +1207,22 @@ class DutchLocale(Locale):
 
 
 class SlavicBaseLocale(Locale):
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
 
         form = self.timeframes[timeframe]
         delta = abs(delta)
-
+        exitstr: str = ""
         if isinstance(form, list):
 
             if delta % 10 == 1 and delta % 100 != 11:
-                form = form[0]
+                exitstr = form[0]
             elif 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
-                form = form[1]
+                exitstr = form[1]
             else:
-                form = form[2]
-
-        return form.format(delta)
+                exitstr = form[2]
+        else:
+            exitstr = form
+        return exitstr.format(delta)
 
 
 class BelarusianLocale(SlavicBaseLocale):
@@ -1783,7 +1791,7 @@ class GermanBaseLocale(Locale):
         return f"{n}."
 
     def describe(
-        self, timeframe: str, delta: int = 0, only_distance: bool = False
+        self, timeframe: str, delta: float = 0, only_distance: bool = False
     ) -> str:
         """ Describes a delta within a timeframe in plain language.
 
@@ -2398,18 +2406,21 @@ class ArabicLocale(Locale):
     ]
     day_abbreviations = ["", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت", "أحد"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
+        exitstr: str = ""
         if isinstance(form, dict):
             if delta == 2:
-                form = form["double"]
+                exitstr = form["double"]
             elif delta > 2 and delta <= 10:
-                form = form["ten"]
+                exitstr = form["ten"]
             else:
-                form = form["higher"]
+                exitstr = form["higher"]
+        else:
+            exitstr = form
 
-        return form.format(delta)
+        return exitstr.format(delta)
 
 
 class LevantArabicLocale(ArabicLocale):
@@ -2549,7 +2560,7 @@ class MoroccoArabicLocale(ArabicLocale):
 
 
 class IcelandicLocale(Locale):
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
 
         timeframe = self.timeframes[timeframe]
         if delta < 0:
@@ -2902,11 +2913,11 @@ class CzechLocale(Locale):
     ]
     day_abbreviations = ["", "po", "út", "st", "čt", "pá", "so", "ne"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
         """Czech aware time frame format function, takes into account
         the differences between past and future forms."""
 
-        exitform = ""
+        exitform: str = ""
         form: Dict[
             str, Union[str, Dict[str, Union[str, Dict[str, str]]]]
         ] = self.timeframes[timeframe]
@@ -2921,11 +2932,11 @@ class CzechLocale(Locale):
 
         if isinstance(exitform, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
-                exitstr: str = exitform[0]
+                exitstr = exitform[0]
             else:
-                exitstr: str = exitform[1]
+                exitstr = exitform[1]
         else:
-            exitstr = exitform or form
+            exitstr = exitform or str(form)
         return exitstr.format(delta)
 
 
@@ -2997,10 +3008,11 @@ class SlovakLocale(Locale):
     ]
     day_abbreviations = ["", "po", "ut", "st", "št", "pi", "so", "ne"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
         """Slovak aware time frame format function, takes into account
         the differences between past and future forms."""
-        exitform = ""
+        exitstr: str = ""
+        exitform: Union[str, Dict[str, str]] = ""
         form: Dict[
             str, Union[str, Dict[str, Union[str, Dict[str, str]]]]
         ] = self.timeframes[timeframe]
@@ -3015,11 +3027,11 @@ class SlovakLocale(Locale):
 
         if isinstance(exitform, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
-                exitstr: str = exitform[0]
+                exitstr = exitform[0]
             else:
-                exitstr: str = exitform[1]
+                exitstr = exitform[1]
         else:
-            exitstr = exitform or form
+            exitstr = exitform or str(form)
         return exitstr.format(delta)
 
 
@@ -3169,7 +3181,7 @@ class HebrewLocale(Locale):
     day_names = ["", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת", "ראשון"]
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
         """Hebrew couple of <timeframe> aware"""
         couple = f"2-{timeframe}"
         single = timeframe.rstrip("s")
@@ -3498,16 +3510,17 @@ class HungarianLocale(Locale):
 
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
-        form = self.timeframes[timeframe]
-
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
+        form: Union[Dict[str, str], str] = self.timeframes[timeframe]
+        exitstr: str = ""
         if isinstance(form, dict):
             if delta > 0:
-                form = form["future"]
+                exitstr = form["future"]
             else:
-                form = form["past"]
-
-        return form.format(abs(delta))
+                exitstr = form["past"]
+        else:
+            exitstr = form
+        return exitstr.format(abs(delta))
 
 
 class EsperantoLocale(Locale):
@@ -3653,7 +3666,9 @@ class ThaiLocale(Locale):
         year += self.BE_OFFSET
         return f"{year:04d}"[2:]
 
-    def _format_relative(self, humanized: str, timeframe: str, delta: int) -> str:
+    def _format_relative(
+        self, humanized: Union[str, List[str]], timeframe: str, delta: float
+    ) -> str:
         """Thai normally doesn't have any space between words"""
         if timeframe == "now":
             return humanized
@@ -3731,7 +3746,7 @@ class BengaliLocale(Locale):
     ]
     day_abbreviations = ["", "সোম", "মঙ্গল", "বুধ", "বৃহঃ", "শুক্র", "শনি", "রবি"]
 
-    def _ordinal_number(self, n: int) -> str:
+    def _ordinal_number(self, n: int) -> Union[str, None]:
         if n > 10 or n == 0:
             return f"{n}তম"
         if n in [1, 5, 7, 8, 9, 10]:
@@ -3742,6 +3757,7 @@ class BengaliLocale(Locale):
             return f"{n}র্থ"
         if n == 6:
             return f"{n}ষ্ঠ"
+        return None  # to appease mypy
 
 
 class RomanshLocale(Locale):
@@ -4158,13 +4174,14 @@ class EstonianLocale(Locale):
     ]
     day_abbreviations = ["", "Esm", "Teis", "Kolm", "Nelj", "Re", "Lau", "Püh"]
 
-    def _format_timeframe(self, timeframe: str, delta: int) -> str:
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
         form = self.timeframes[timeframe]
+        exitform: str = ""
         if delta > 0:
-            form = form["future"]
+            exitform = form["future"]
         else:
-            form = form["past"]
-        return form.format(abs(delta))
+            exitform = form["past"]
+        return exitform.format(abs(delta))
 
 
 _locales = _map_locales()

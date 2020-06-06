@@ -1,17 +1,14 @@
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, tzinfo
+from functools import lru_cache
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from dateutil import tz
+from dateutil.tz import tzfile
 
 from arrow import locales
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 from arrow.util import iso_to_gregorian
-
-try:
-    from functools import lru_cache
-except ImportError:  # pragma: no cover
-    from backports.functools_lru_cache import lru_cache  # pragma: no cover
 
 
 class ParserError(ValueError):
@@ -224,7 +221,7 @@ class DateTimeParser:
                 f"Failed to match '{fmt}' when parsing '{datetime_string}'"
             )
 
-        parts = {}
+        parts: Dict = {}
         for token in fmt_tokens:
             if token == "Do":
                 value = match.group("value")
@@ -532,7 +529,7 @@ class TzinfoParser:
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
-    def parse(cls, tzinfo_string: str) -> Any:
+    def parse(cls, tzinfo_string: Union[str, tzinfo, tzfile]) -> Any:
 
         tzinfo = None
 
