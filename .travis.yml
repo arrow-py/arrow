@@ -34,6 +34,9 @@ matrix:
     - name: "Python 3.8"
       python: "3.8"
       env: TOXENV=py38
+    - name: "Python 3.9"
+      python: "3.9"
+      env: TOXENV=py39
     - name: "Linting"
       python: "3.7"
       env: TOXENV=lint,docs
