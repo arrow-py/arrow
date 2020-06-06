@@ -1,5 +1,7 @@
 import calendar
 import re
+from datetime import datetime
+from typing import Optional
 
 from dateutil import tz as dateutil_tz
 
@@ -16,7 +18,7 @@ class DateTimeFormatter:
         r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
     )
 
-    def __init__(self, locale="en_us"):
+    def __init__(self, locale: str = "en_us") -> None:
 
         self.locale = locales.get_locale(locale)
 
@@ -24,7 +26,7 @@ class DateTimeFormatter:
 
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
-    def _format_token(self, dt, token):
+    def _format_token(self, dt: datetime, token: Optional[str]) -> Optional[str]:
 
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]
@@ -123,3 +125,5 @@ class DateTimeFormatter:
         if token == "W":
             year, week, day = dt.isocalendar()
             return f"{year}-W{week:02d}-{day}"
+
+        return None  # To appease the pymy

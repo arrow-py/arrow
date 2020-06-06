@@ -1,5 +1,6 @@
 import re
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from dateutil import tz
 
@@ -77,7 +78,7 @@ class DateTimeParser:
 
     SEPARATORS = ["-", "/", "."]
 
-    def __init__(self, locale="en_us", cache_size=0):
+    def __init__(self, locale: str = "en_us", cache_size: int = 0) -> None:
 
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
@@ -112,7 +113,7 @@ class DateTimeParser:
 
     # TODO: since we support more than ISO 8601, we should rename this function
     # IDEA: break into multiple functions
-    def parse_iso(self, datetime_string):
+    def parse_iso(self, datetime_string: str) -> datetime:
         # TODO: add a flag to normalize whitespace (useful in logs, ref issue #421)
         has_space_divider = " " in datetime_string
         has_t_divider = "T" in datetime_string
@@ -207,7 +208,9 @@ class DateTimeParser:
 
         return self._parse_multiformat(datetime_string, formats)
 
-    def parse(self, datetime_string, fmt):
+    def parse(
+        self, datetime_string: str, fmt: Union[List[str], str]
+    ) -> Union[datetime, str]:
 
         if isinstance(fmt, list):
             return self._parse_multiformat(datetime_string, fmt)
@@ -233,7 +236,7 @@ class DateTimeParser:
 
         return self._build_datetime(parts)
 
-    def _generate_pattern_re(self, fmt):
+    def _generate_pattern_re(self, fmt: str) -> Tuple[List[str], Any]:
 
         # fmt is a string of tokens like 'YYYY-MM-DD'
         # we construct a new string by replacing each
@@ -311,7 +314,12 @@ class DateTimeParser:
 
         return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
 
-    def _parse_token(self, token, value, parts):
+    def _parse_token(
+        self,
+        token: str,
+        value: Union[Tuple[str, str, Optional[str]], str],
+        parts: Dict[str, Any],
+    ) -> None:
 
         if token == "YYYY":
             parts["year"] = int(value)
@@ -380,7 +388,7 @@ class DateTimeParser:
             parts["weekdate"] = value
 
     @staticmethod
-    def _build_datetime(parts):
+    def _build_datetime(parts: Dict[str, Any]) -> datetime:
 
         weekdate = parts.get("weekdate")
 
@@ -494,7 +502,7 @@ class DateTimeParser:
             + increment
         )
 
-    def _parse_multiformat(self, string, formats):
+    def _parse_multiformat(self, string: str, formats: List[str]) -> datetime:
 
         _datetime = None
 
@@ -514,7 +522,9 @@ class DateTimeParser:
 
     # generates a capture group of choices separated by an OR operator
     @staticmethod
-    def _generate_choice_re(choices, flags=0):
+    def _generate_choice_re(
+        choices: Union[List[str], Tuple[str, str]], flags: Union[int, Any] = 0
+    ) -> Any:
         return re.compile(fr"({'|'.join(choices)})", flags=flags)
 
 
@@ -522,7 +532,7 @@ class TzinfoParser:
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
-    def parse(cls, tzinfo_string):
+    def parse(cls, tzinfo_string: str) -> Any:
 
         tzinfo = None
 

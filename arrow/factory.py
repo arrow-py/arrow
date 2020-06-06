@@ -10,8 +10,10 @@ import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
+from typing import Any, Optional, Type, Union
 
 from dateutil import tz as dateutil_tz
+from dateutil.tz.tz import tzfile, tzlocal
 
 from arrow import parser
 from arrow.arrow import Arrow
@@ -26,10 +28,10 @@ class ArrowFactory:
 
     """
 
-    def __init__(self, type=Arrow):
-        self.type = type
+    def __init__(self, type: Type["Arrow"] = Arrow) -> None:
+        self.type: Type[Arrow] = type
 
-    def get(self, *args, **kwargs):
+    def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """ Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to
@@ -191,8 +193,8 @@ class ArrowFactory:
 
             # (str) -> parse.
             elif isstr(arg):
-                dt = parser.DateTimeParser(locale).parse_iso(arg)
-                return self.type.fromdatetime(dt, tz)
+                dt_str: datetime = parser.DateTimeParser(locale).parse_iso(arg)
+                return self.type.fromdatetime(dt_str, tz)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
@@ -200,8 +202,8 @@ class ArrowFactory:
 
             # (iso calendar) -> convert then from date
             elif isinstance(arg, tuple) and len(arg) == 3:
-                dt = iso_to_gregorian(*arg)
-                return self.type.fromdate(dt)
+                dt_iso: Union[date, datetime] = iso_to_gregorian(*arg)
+                return self.type.fromdate(dt_iso)
 
             else:
                 raise TypeError(f"Can't parse single argument of type '{type(arg)}'")
@@ -232,7 +234,9 @@ class ArrowFactory:
 
             # (str, format) -> parse.
             elif isstr(arg_1) and (isstr(arg_2) or isinstance(arg_2, list)):
-                dt = parser.DateTimeParser(locale).parse(args[0], args[1])
+                dt: Any = parser.DateTimeParser(locale).parse(
+                    args[0], args[1]
+                )  # TODO Better type check
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
@@ -244,7 +248,7 @@ class ArrowFactory:
         else:
             return self.type(*args, **kwargs)
 
-    def utcnow(self):
+    def utcnow(self) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC time.
 
         Usage::
@@ -256,7 +260,7 @@ class ArrowFactory:
 
         return self.type.utcnow()
 
-    def now(self, tz=None):
+    def now(self, tz: Optional[Union[tzfile, tzlocal, "dt_tzinfo"]] = None) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
 

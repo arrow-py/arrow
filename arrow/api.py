@@ -3,15 +3,18 @@ Provides the default implementation of :class:`ArrowFactory <arrow.factory.Arrow
 methods for use as a module API.
 
 """
+from typing import Any, Optional, Type, Union
 
+from dateutil.tz import tzfile, tzlocal
 
+from arrow.arrow import Arrow
 from arrow.factory import ArrowFactory
 
 # internal default factory.
 _factory = ArrowFactory()
 
 
-def get(*args, **kwargs):
+def get(*args: Any, **kwargs: Any) -> Arrow:
     """ Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``get`` method.
 
     """
@@ -22,7 +25,7 @@ def get(*args, **kwargs):
 get.__doc__ = _factory.get.__doc__
 
 
-def utcnow():
+def utcnow() -> Arrow:
     """ Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``utcnow`` method.
 
     """
@@ -33,7 +36,7 @@ def utcnow():
 utcnow.__doc__ = _factory.utcnow.__doc__
 
 
-def now(tz=None):
+def now(tz: Optional[Union[tzfile, tzlocal]] = None) -> Arrow:
     """ Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``now`` method.
 
     """
@@ -44,7 +47,7 @@ def now(tz=None):
 now.__doc__ = _factory.now.__doc__
 
 
-def factory(type):
+def factory(type: Type[Arrow]) -> ArrowFactory:
     """ Returns an :class:`.ArrowFactory` for the specified :class:`Arrow <arrow.arrow.Arrow>`
     or derived type.
 

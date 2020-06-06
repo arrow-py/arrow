@@ -1638,7 +1638,7 @@ class TestArrowHumanize:
         arw = arrow.Arrow.fromdatetime(self.datetime)
 
         with pytest.raises(ValueError):
-            arw.humanize(locale="klingon")
+            arw.humanize(locale_code="klingon")
 
     def test_none(self):
 
@@ -1670,14 +1670,14 @@ class TestArrowHumanizeTestsWithLocale:
 
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
 
-        result = arw.humanize(self.datetime, locale="ru")
+        result = arw.humanize(self.datetime, locale_code="ru")
 
         assert result == "сейчас"
 
     def test_seconds(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
 
-        result = arw.humanize(self.datetime, locale="ru")
+        result = arw.humanize(self.datetime, locale_code="ru")
 
         assert result == "через 44 несколько секунд"
 
@@ -1685,7 +1685,7 @@ class TestArrowHumanizeTestsWithLocale:
 
         arw = arrow.Arrow(2011, 7, 2)
 
-        result = arw.humanize(self.datetime, locale="ru")
+        result = arw.humanize(self.datetime, locale_code="ru")
 
         assert result == "2 года назад"
 
