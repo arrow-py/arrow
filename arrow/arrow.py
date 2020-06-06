@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Provides the :class:`Arrow <arrow.arrow.Arrow>` class, an enhanced ``datetime``
 replacement.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 import sys
@@ -19,7 +17,7 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 
 
-class Arrow(object):
+class Arrow:
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
 
     Implements the ``datetime`` interface, behaving as an aware ``datetime`` while implementing
@@ -54,7 +52,7 @@ class Arrow(object):
     resolution = datetime.resolution
 
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
-    _ATTRS_PLURAL = ["{}s".format(a) for a in _ATTRS]
+    _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
     _SECS_PER_MINUTE = float(60)
     _SECS_PER_HOUR = float(60 * 60)
@@ -154,9 +152,7 @@ class Arrow(object):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
@@ -180,9 +176,7 @@ class Arrow(object):
         """
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         dt = datetime.utcfromtimestamp(float(timestamp))
 
@@ -463,7 +457,7 @@ class Arrow(object):
     # representations
 
     def __repr__(self):
-        return "<{} [{}]>".format(self.__class__.__name__, self.__str__())
+        return f"<{self.__class__.__name__} [{self.__str__()}]>"
 
     def __str__(self):
         return self._datetime.isoformat()
@@ -617,9 +611,9 @@ class Arrow(object):
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
-                raise AttributeError("setting absolute {} is not supported".format(key))
+                raise AttributeError(f"setting absolute {key} is not supported")
             elif key != "tzinfo":
-                raise AttributeError('unknown attribute: "{}"'.format(key))
+                raise AttributeError(f'unknown attribute: "{key}"')
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -670,9 +664,7 @@ class Arrow(object):
                 relative_kwargs[key] = value
             else:
                 raise AttributeError(
-                    "Invalid shift time frame. Please select one of the following: {}.".format(
-                        ", ".join(self._ATTRS_PLURAL + additional_attrs)
-                    )
+                    f"Invalid shift time frame. Please select one of the following: {', '.join(self._ATTRS_PLURAL + additional_attrs)}."
                 )
 
         # core datetime does not support quarters, translate to months.
@@ -905,10 +897,8 @@ class Arrow(object):
 
         else:
             raise TypeError(
-                "Invalid 'other' argument of type '{}'. "
-                "Argument must be of type None, Arrow, or datetime.".format(
-                    type(other).__name__
-                )
+                f"Invalid 'other' argument of type '{type(other).__name__}'. "
+                "Argument must be of type None, Arrow, or datetime."
             )
 
         if isinstance(granularity, list) and len(granularity) == 1:
@@ -1051,10 +1041,8 @@ class Arrow(object):
 
         except KeyError as e:
             raise ValueError(
-                "Humanization of the {} granularity is not currently translated in the '{}' locale. "
-                "Please consider making a contribution to this locale.".format(
-                    e, locale_name
-                )
+                f"Humanization of the {e} granularity is not currently translated in the '{locale_name}' locale. "
+                "Please consider making a contribution to this locale."
             )
 
     # query functions
@@ -1092,14 +1080,10 @@ class Arrow(object):
         self._validate_bounds(bounds)
 
         if not isinstance(start, Arrow):
-            raise TypeError(
-                "Can't parse start date argument type of '{}'".format(type(start))
-            )
+            raise TypeError(f"Can't parse start date argument type of '{type(start)}'")
 
         if not isinstance(end, Arrow):
-            raise TypeError(
-                "Can't parse end date argument type of '{}'".format(type(end))
-            )
+            raise TypeError(f"Can't parse end date argument type of '{type(end)}'")
 
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
@@ -1205,9 +1189,7 @@ class Arrow(object):
     def __cmp__(self, other):
         if sys.version_info[0] < 3:  # pragma: no cover
             if not isinstance(other, (Arrow, datetime)):
-                raise TypeError(
-                    "can't compare '{}' to '{}'".format(type(self), type(other))
-                )
+                raise TypeError(f"can't compare '{type(self)}' to '{type(other)}'")
 
     # datetime methods
 
@@ -1424,7 +1406,7 @@ class Arrow(object):
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError("'{}' not recognized as a timezone".format(tz_expr))
+                raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -1437,15 +1419,13 @@ class Arrow(object):
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
         else:
-            raise ValueError(
-                "'{}' not recognized as a datetime or timestamp.".format(expr)
-            )
+            raise ValueError(f"'{expr}' not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name):
 
         if name in cls._ATTRS:
-            return name, "{}s".format(name), 1
+            return name, f"{name}s", 1
         elif name[-1] == "s" and name[:-1] in cls._ATTRS:
             return name[:-1], name, 1
         elif name in ["week", "weeks"]:
@@ -1467,9 +1447,7 @@ class Arrow(object):
             ]
         )
         raise AttributeError(
-            "range/span over frame {} not supported. Supported frames: {}".format(
-                name, supported
-            )
+            f"range/span over frame {name} not supported. Supported frames: {supported}"
         )
 
     @classmethod

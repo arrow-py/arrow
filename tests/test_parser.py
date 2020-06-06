@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import calendar
 import os
 import time
@@ -219,24 +216,19 @@ class TestDateTimeParserParse:
         tz_utc = tz.tzutc()
         int_timestamp = int(time.time())
         self.expected = datetime.fromtimestamp(int_timestamp, tz=tz_utc)
-        assert self.parser.parse("{:d}".format(int_timestamp), "X") == self.expected
+        assert self.parser.parse(f"{int_timestamp:d}", "X") == self.expected
 
         float_timestamp = time.time()
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
-        assert self.parser.parse("{:f}".format(float_timestamp), "X") == self.expected
+        assert self.parser.parse(f"{float_timestamp:f}", "X") == self.expected
 
         # test handling of ns timestamp (arrow will round to 6 digits regardless)
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
-        assert (
-            self.parser.parse("{:f}123".format(float_timestamp), "X") == self.expected
-        )
+        assert self.parser.parse(f"{float_timestamp:f}123", "X") == self.expected
 
         # test ps timestamp (arrow will round to 6 digits regardless)
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
-        assert (
-            self.parser.parse("{:f}123456".format(float_timestamp), "X")
-            == self.expected
-        )
+        assert self.parser.parse(f"{float_timestamp:f}123456", "X") == self.expected
 
         # NOTE: negative timestamps cannot be handled by datetime on Window
         # Must use timedelta to handle them. ref: https://stackoverflow.com/questions/36179914
@@ -245,23 +237,19 @@ class TestDateTimeParserParse:
             negative_int_timestamp = -int_timestamp
             self.expected = datetime.fromtimestamp(negative_int_timestamp, tz=tz_utc)
             assert (
-                self.parser.parse("{:d}".format(negative_int_timestamp), "X")
-                == self.expected
+                self.parser.parse(f"{negative_int_timestamp:d}", "X") == self.expected
             )
 
             negative_float_timestamp = -float_timestamp
             self.expected = datetime.fromtimestamp(negative_float_timestamp, tz=tz_utc)
             assert (
-                self.parser.parse("{:f}".format(negative_float_timestamp), "X")
-                == self.expected
+                self.parser.parse(f"{negative_float_timestamp:f}", "X") == self.expected
             )
 
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
         # break cases like "15 Jul 2000" and a format list (see issue #447)
         with pytest.raises(ParserError):
-            natural_lang_string = "Meet me at {} at the restaurant.".format(
-                float_timestamp
-            )
+            natural_lang_string = f"Meet me at {float_timestamp} at the restaurant."
             self.parser.parse(natural_lang_string, "X")
 
         with pytest.raises(ParserError):
@@ -282,21 +270,21 @@ class TestDateTimeParserParse:
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)
-        assert self.parser.parse("{:d}".format(int(timestamp)), "x") == self.expected
+        assert self.parser.parse(f"{int(timestamp):d}", "x") == self.expected
 
         self.expected = datetime.fromtimestamp(round(timestamp, 3), tz=tz_utc)
-        assert self.parser.parse("{:d}".format(timestamp_milli), "x") == self.expected
+        assert self.parser.parse(f"{timestamp_milli:d}", "x") == self.expected
 
         self.expected = datetime.fromtimestamp(timestamp, tz=tz_utc)
-        assert self.parser.parse("{:d}".format(timestamp_micro), "x") == self.expected
+        assert self.parser.parse(f"{timestamp_micro:d}", "x") == self.expected
 
         # anything above max µs timestamp should fail
         with pytest.raises(ValueError):
-            self.parser.parse("{:d}".format(int(MAX_TIMESTAMP_US) + 1), "x")
+            self.parser.parse(f"{int(MAX_TIMESTAMP_US) + 1:d}", "x")
 
         # floats are not allowed with the "x" token
         with pytest.raises(ParserMatchError):
-            self.parser.parse("{:f}".format(timestamp), "x")
+            self.parser.parse(f"{timestamp:f}", "x")
 
     def test_parse_names(self):
 
@@ -339,7 +327,7 @@ class TestDateTimeParserParse:
 
         self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
         assert (
-            self.parser.parse("2013-01-01 {}".format(full_tz_name), "YYYY-MM-DD ZZZ")
+            self.parser.parse(f"2013-01-01 {full_tz_name}", "YYYY-MM-DD ZZZ")
             == self.expected
         )
 
@@ -783,16 +771,12 @@ class TestDateTimeParserRegex:
 
         for sep in time_seperators:
             assert time_re.findall("12") == [("12", "", "", "", "")]
-            assert time_re.findall("12{sep}35".format(sep=sep)) == [
-                ("12", "35", "", "", "")
-            ]
-            assert time_re.findall("12{sep}35{sep}46".format(sep=sep)) == [
-                ("12", "35", "46", "", "")
-            ]
-            assert time_re.findall("12{sep}35{sep}46.952313".format(sep=sep)) == [
+            assert time_re.findall(f"12{sep}35") == [("12", "35", "", "", "")]
+            assert time_re.findall(f"12{sep}35{sep}46") == [("12", "35", "46", "", "")]
+            assert time_re.findall(f"12{sep}35{sep}46.952313") == [
                 ("12", "35", "46", ".", "952313")
             ]
-            assert time_re.findall("12{sep}35{sep}46,952313".format(sep=sep)) == [
+            assert time_re.findall(f"12{sep}35{sep}46,952313") == [
                 ("12", "35", "46", ",", "952313")
             ]
 

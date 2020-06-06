@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Provides the default implementation of :class:`ArrowFactory <arrow.factory.ArrowFactory>`
 methods for use as a module API.
 
 """
 
-from __future__ import absolute_import
 
 from arrow.factory import ArrowFactory
 

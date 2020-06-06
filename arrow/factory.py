@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Implements the :class:`ArrowFactory <arrow.factory.ArrowFactory>` class,
 providing factory methods for common :class:`Arrow <arrow.arrow.Arrow>`
@@ -6,7 +5,6 @@ construction scenarios.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 from datetime import date, datetime
@@ -20,7 +18,7 @@ from arrow.arrow import Arrow
 from arrow.util import is_timestamp, iso_to_gregorian, isstr
 
 
-class ArrowFactory(object):
+class ArrowFactory:
     """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
     :param type: (optional) the :class:`Arrow <arrow.arrow.Arrow>`-based class to construct from.
@@ -206,9 +204,7 @@ class ArrowFactory(object):
                 return self.type.fromdate(dt)
 
             else:
-                raise TypeError(
-                    "Can't parse single argument of type '{}'".format(type(arg))
-                )
+                raise TypeError(f"Can't parse single argument of type '{type(arg)}'")
 
         elif arg_count == 2:
 
@@ -221,9 +217,7 @@ class ArrowFactory(object):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
                     raise TypeError(
-                        "Can't parse two arguments of types 'datetime', '{}'".format(
-                            type(arg_2)
-                        )
+                        f"Can't parse two arguments of types 'datetime', '{type(arg_2)}'"
                     )
 
             elif isinstance(arg_1, date):
@@ -233,9 +227,7 @@ class ArrowFactory(object):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
                 else:
                     raise TypeError(
-                        "Can't parse two arguments of types 'date', '{}'".format(
-                            type(arg_2)
-                        )
+                        f"Can't parse two arguments of types 'date', '{type(arg_2)}'"
                     )
 
             # (str, format) -> parse.
@@ -245,9 +237,7 @@ class ArrowFactory(object):
 
             else:
                 raise TypeError(
-                    "Can't parse two arguments of types '{}' and '{}'".format(
-                        type(arg_1), type(arg_2)
-                    )
+                    f"Can't parse two arguments of types '{type(arg_1)}' and '{type(arg_2)}'"
                 )
 
         # 3+ args -> datetime-like via constructor.

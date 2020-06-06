@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division
-
 import calendar
 import re
 
@@ -9,7 +6,7 @@ from dateutil import tz as dateutil_tz
 from arrow import locales, util
 
 
-class DateTimeFormatter(object):
+class DateTimeFormatter:
 
     # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are
@@ -42,16 +39,16 @@ class DateTimeFormatter(object):
         if token == "MMM":
             return self.locale.month_abbreviation(dt.month)
         if token == "MM":
-            return "{:02d}".format(dt.month)
+            return f"{dt.month:02d}"
         if token == "M":
             return str(dt.month)
 
         if token == "DDDD":
-            return "{:03d}".format(dt.timetuple().tm_yday)
+            return f"{dt.timetuple().tm_yday:03d}"
         if token == "DDD":
             return str(dt.timetuple().tm_yday)
         if token == "DD":
-            return "{:02d}".format(dt.day)
+            return f"{dt.day:02d}"
         if token == "D":
             return str(dt.day)
 
@@ -66,34 +63,34 @@ class DateTimeFormatter(object):
             return str(dt.isoweekday())
 
         if token == "HH":
-            return "{:02d}".format(dt.hour)
+            return f"{dt.hour:02d}"
         if token == "H":
             return str(dt.hour)
         if token == "hh":
-            return "{:02d}".format(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
+            return f"{dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12):02d}"
         if token == "h":
             return str(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
 
         if token == "mm":
-            return "{:02d}".format(dt.minute)
+            return f"{dt.minute:02d}"
         if token == "m":
             return str(dt.minute)
 
         if token == "ss":
-            return "{:02d}".format(dt.second)
+            return f"{dt.second:02d}"
         if token == "s":
             return str(dt.second)
 
         if token == "SSSSSS":
-            return str("{:06d}".format(int(dt.microsecond)))
+            return str(f"{int(dt.microsecond):06d}")
         if token == "SSSSS":
-            return str("{:05d}".format(int(dt.microsecond / 10)))
+            return str(f"{int(dt.microsecond / 10):05d}")
         if token == "SSSS":
-            return str("{:04d}".format(int(dt.microsecond / 100)))
+            return str(f"{int(dt.microsecond / 100):04d}")
         if token == "SSS":
-            return str("{:03d}".format(int(dt.microsecond / 1000)))
+            return str(f"{int(dt.microsecond / 1000):03d}")
         if token == "SS":
-            return str("{:02d}".format(int(dt.microsecond / 10000)))
+            return str(f"{int(dt.microsecond / 10000):02d}")
         if token == "S":
             return str(int(dt.microsecond / 100000))
 
@@ -118,11 +115,11 @@ class DateTimeFormatter(object):
             total_minutes = abs(total_minutes)
             hour, minute = divmod(total_minutes, 60)
 
-            return "{}{:02d}{}{:02d}".format(sign, hour, separator, minute)
+            return f"{sign}{hour:02d}{separator}{minute:02d}"
 
         if token in ("a", "A"):
             return self.locale.meridian(dt.hour, token)
 
         if token == "W":
             year, week, day = dt.isocalendar()
-            return "{}-W{:02d}-{}".format(year, week, day)
+            return f"{year}-W{week:02d}-{day}"

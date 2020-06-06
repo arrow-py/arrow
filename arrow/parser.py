@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import re
 from datetime import datetime, timedelta
 
@@ -29,7 +26,7 @@ class ParserMatchError(ParserError):
     pass
 
 
-class DateTimeParser(object):
+class DateTimeParser:
 
     _FORMAT_RE = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
@@ -123,9 +120,7 @@ class DateTimeParser(object):
         num_spaces = datetime_string.count(" ")
         if has_space_divider and num_spaces != 1 or has_t_divider and num_spaces > 0:
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
-                    datetime_string
-                )
+                f"Expected an ISO 8601-like string, but was given '{datetime_string}'. Try passing in a format string to resolve this."
             )
 
         has_time = has_space_divider or has_t_divider
@@ -192,25 +187,23 @@ class DateTimeParser(object):
             time_sep = "" if is_basic_time_format else ":"
 
             if has_subseconds:
-                time_string = "HH{time_sep}mm{time_sep}ss{subseconds_sep}S".format(
-                    time_sep=time_sep, subseconds_sep=subseconds_sep
-                )
+                time_string = f"HH{time_sep}mm{time_sep}ss{subseconds_sep}S"
             elif has_seconds:
-                time_string = "HH{time_sep}mm{time_sep}ss".format(time_sep=time_sep)
+                time_string = f"HH{time_sep}mm{time_sep}ss"
             elif has_minutes:
-                time_string = "HH{time_sep}mm".format(time_sep=time_sep)
+                time_string = f"HH{time_sep}mm"
             else:
                 time_string = "HH"
 
             if has_space_divider:
-                formats = ["{} {}".format(f, time_string) for f in formats]
+                formats = [f"{f} {time_string}" for f in formats]
             else:
-                formats = ["{}T{}".format(f, time_string) for f in formats]
+                formats = [f"{f}T{time_string}" for f in formats]
 
         if has_time and has_tz:
             # Add "Z" or "ZZ" to the format strings to indicate to
             # _parse_token() that a timezone needs to be parsed
-            formats = ["{}{}".format(f, tz_format) for f in formats]
+            formats = [f"{f}{tz_format}" for f in formats]
 
         return self._parse_multiformat(datetime_string, formats)
 
@@ -225,7 +218,7 @@ class DateTimeParser(object):
 
         if match is None:
             raise ParserMatchError(
-                "Failed to match '{}' when parsing '{}'".format(fmt, datetime_string)
+                f"Failed to match '{fmt}' when parsing '{datetime_string}'"
             )
 
         parts = {}
@@ -268,8 +261,8 @@ class DateTimeParser(object):
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
-                raise ParserError("Unrecognized token '{}'".format(token))
-            input_pattern = "(?P<{}>{})".format(token, input_re.pattern)
+                raise ParserError(f"Unrecognized token '{token}'")
+            input_pattern = f"(?P<{token}>{input_re.pattern})"
             tokens.append(token)
             # a pattern doesn't have the same length as the token
             # it replaces! We keep the difference in the offset variable.
@@ -312,8 +305,8 @@ class DateTimeParser(object):
             r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks can appear after the pattern at most 1 time
             r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
         )
-        bounded_fmt_pattern = r"{}{}{}".format(
-            starting_word_boundary, final_fmt_pattern, ending_word_boundary
+        bounded_fmt_pattern = (
+            fr"{starting_word_boundary}{final_fmt_pattern}{ending_word_boundary}"
         )
 
         return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
@@ -355,7 +348,7 @@ class DateTimeParser(object):
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
             # IDEA: add nanosecond support somehow? Need datetime support for it first.
-            value = value.ljust(7, str("0"))
+            value = value.ljust(7, "0")
 
             # floating-point (IEEE-754) defaults to half-to-even rounding
             seventh_digit = int(value[6])
@@ -422,9 +415,7 @@ class DateTimeParser(object):
                     expanded_timestamp /= 1000000.0
                 else:
                     raise ValueError(
-                        "The specified timestamp '{}' is too large.".format(
-                            expanded_timestamp
-                        )
+                        f"The specified timestamp '{expanded_timestamp}' is too large."
                     )
 
             return datetime.fromtimestamp(expanded_timestamp, tz=tz.tzutc())
@@ -444,12 +435,12 @@ class DateTimeParser(object):
                     "Month component is not allowed with the DDD and DDDD tokens."
                 )
 
-            date_string = "{}-{}".format(year, day_of_year)
+            date_string = f"{year}-{day_of_year}"
             try:
                 dt = datetime.strptime(date_string, "%Y-%j")
             except ValueError:
                 raise ParserError(
-                    "The provided day of year '{}' is invalid.".format(day_of_year)
+                    f"The provided day of year '{day_of_year}' is invalid."
                 )
 
             parts["year"] = dt.year
@@ -516,9 +507,7 @@ class DateTimeParser(object):
 
         if _datetime is None:
             raise ParserError(
-                "Could not match input '{}' to any of the following formats: {}".format(
-                    string, ", ".join(formats)
-                )
+                f"Could not match input '{string}' to any of the following formats: {', '.join(formats)}"
             )
 
         return _datetime
@@ -526,10 +515,10 @@ class DateTimeParser(object):
     # generates a capture group of choices separated by an OR operator
     @staticmethod
     def _generate_choice_re(choices, flags=0):
-        return re.compile(r"({})".format("|".join(choices)), flags=flags)
+        return re.compile(fr"({'|'.join(choices)})", flags=flags)
 
 
-class TzinfoParser(object):
+class TzinfoParser:
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
@@ -562,8 +551,6 @@ class TzinfoParser(object):
                 tzinfo = tz.gettz(tzinfo_string)
 
         if tzinfo is None:
-            raise ParserError(
-                'Could not parse timezone expression "{}"'.format(tzinfo_string)
-            )
+            raise ParserError(f'Could not parse timezone expression "{tzinfo_string}"')
 
         return tzinfo
