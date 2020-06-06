@@ -416,6 +416,8 @@ There are several formatting standards that are provided as built-in tokens.
 .. code-block:: python
 
     >>> arw = arrow.utcnow()
+    >>> arw.format(arrow.FORMAT_ATOM)
+    '2020-05-27 10:30:35+00:00'
     >>> arw.format(arrow.FORMAT_COOKIE)
     'Wednesday, 27-May-2020 10:30:35 UTC'
     >>> arw.format(arrow.FORMAT_RSS)
@@ -430,6 +432,10 @@ There are several formatting standards that are provided as built-in tokens.
     'Wed, 27 May 2020 10:30:35 +0000'
     >>> arw.format(arrow.FORMAT_RFC2822)
     'Wed, 27 May 2020 10:30:35 +0000'
+     >>> arw.format(arrow.FORMAT_RFC3339)
+    '2020-05-27 10:30:35+00:00'
+     >>> arw.format(arrow.FORMAT_W3C)
+    '2020-05-27 10:30:35+00:00'
 
 Escaping Formats
 ~~~~~~~~~~~~~~~~

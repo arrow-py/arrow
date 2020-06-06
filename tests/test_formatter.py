@@ -6,13 +6,16 @@ import pytz
 from dateutil import tz as dateutil_tz
 
 from arrow import (
+    FORMAT_ATOM,
     FORMAT_COOKIE,
     FORMAT_RFC822,
     FORMAT_RFC850,
     FORMAT_RFC1036,
     FORMAT_RFC1123,
     FORMAT_RFC2822,
+    FORMAT_RFC3339,
     FORMAT_RSS,
+    FORMAT_W3C,
 )
 
 from .utils import make_full_tz_list
@@ -218,6 +221,12 @@ class TestDateTimeFormatterFormatToken:
 
 @pytest.mark.usefixtures("arrow_formatter", "time_1975_12_25")
 class TestDateTimeFormatterBuiltinFormats:
+    def test_atom(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_ATOM)
+            == "1975-12-25 14:15:16-05:00"
+        )
+
     def test_cookie(self):
         assert (
             self.formatter.format(self.datetime, FORMAT_COOKIE)
@@ -254,8 +263,20 @@ class TestDateTimeFormatterBuiltinFormats:
             == "Thu, 25 Dec 1975 14:15:16 -0500"
         )
 
+    def test_rfc3339(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC3339)
+            == "1975-12-25 14:15:16-05:00"
+        )
+
     def test_rss(self):
         assert (
             self.formatter.format(self.datetime, FORMAT_RSS)
             == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
+
+    def test_w3c(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_W3C)
+            == "1975-12-25 14:15:16-05:00"
         )
