@@ -4190,7 +4190,7 @@ class SwahiliLocale(Locale):
         "",
         "Jan",
         "Feb",
-        "Mar",
+        "Mac",
         "Apr",
         "Mei",
         "Jun",
