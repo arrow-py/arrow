@@ -3,8 +3,6 @@ from __future__ import absolute_import
 
 import datetime
 
-from dateutil import tz as dateutil_tz
-
 
 def total_seconds(td):
     """Get total seconds for timedelta."""
@@ -58,23 +56,6 @@ except NameError:  # pragma: no cover
 
     def isstr(s):
         return isinstance(s, str)
-
-
-def determine_fold(dt):
-    if hasattr(dt, "fold"):
-        # python 3.6 or higher, apply enfold() later in Arrow init
-        return dt
-
-    if dt.tzinfo is None:
-        # can happen on datetime min/max checks, requires tz to avoid datetime_ambiguous ValueError
-        dt = dt.replace(tzinfo=dateutil_tz.tzutc())
-
-    if not dateutil_tz.datetime_ambiguous(dt):
-        # datetime is not ambiguous, PEP495 says fold should default to 0
-        return dateutil_tz.enfold(dt, fold=0)
-    else:
-        # this will return a DatetimewithFold object
-        return dateutil_tz.enfold(dt, fold=1)
 
 
 __all__ = ["total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]

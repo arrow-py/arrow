@@ -88,7 +88,7 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        # use enfold for consistency even on python 3.6
+        # use enfold here to cover arrow.Arrow init on 2.7/3.5
         self._datetime = dateutil_tz.enfold(
             datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
             fold=fold,
@@ -112,9 +112,8 @@ class Arrow(object):
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
-        dt = datetime.now(tzinfo)
 
-        dt = util.determine_fold(dt)
+        dt = datetime.now(tzinfo)
 
         return cls(
             dt.year,
@@ -141,8 +140,6 @@ class Arrow(object):
         """
 
         dt = datetime.now(dateutil_tz.tzutc())
-
-        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -177,8 +174,6 @@ class Arrow(object):
 
         dt = datetime.fromtimestamp(float(timestamp), tzinfo)
 
-        dt = util.determine_fold(dt)
-
         return cls(
             dt.year,
             dt.month,
@@ -205,8 +200,6 @@ class Arrow(object):
             )
 
         dt = datetime.utcfromtimestamp(float(timestamp))
-
-        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -243,8 +236,6 @@ class Arrow(object):
                 tzinfo = dateutil_tz.tzutc()
             else:
                 tzinfo = dt.tzinfo
-
-        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -292,8 +283,6 @@ class Arrow(object):
         dt = datetime.strptime(date_str, fmt)
         if tzinfo is None:
             tzinfo = dt.tzinfo
-
-        dt = util.determine_fold(dt)
 
         return cls(
             dt.year,
@@ -765,8 +754,6 @@ class Arrow(object):
             tz = parser.TzinfoParser.parse(tz)
 
         dt = self._datetime.astimezone(tz)
-
-        dt = util.determine_fold(dt)
 
         return self.__class__(
             dt.year,
