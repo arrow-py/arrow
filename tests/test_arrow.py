@@ -290,12 +290,15 @@ class TestArrowAttribute:
         assert result == self.arrow.microsecond
 
     def test_getattr_fold(self):
-
+        # action on utc which is always unambiguous
         assert self.now.fold == 0
-
-        # TODO test fold setting on non ambiguous and ambiguous dts
         self.now.fold = 1
         assert self.now.fold == 0
+
+        ambiguous_dt = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
+        assert ambiguous_dt.fold == 0
+        ambiguous_dt.fold = 1
+        assert ambiguous_dt.fold == 1
 
         with pytest.raises(ValueError):
             self.now.fold = 123
@@ -585,11 +588,12 @@ class TestArrowConversion:
 
         assert result == expected
         assert_datetime_equality(result, expected)
+        assert result.utcoffset() != expected.utcoffset()
 
     # issue 315
     def test_anchorage_dst(self):
-        before = arrow.Arrow(2016, 3, 12).to("America/Anchorage")
-        after = arrow.Arrow(2016, 3, 15).to("America/Anchorage")
+        before = arrow.Arrow(2016, 3, 13, 1, 59, tzinfo="America/Anchorage")
+        after = arrow.Arrow(2016, 3, 13, 2, 1, tzinfo="America/Anchorage")
 
         assert before.utcoffset() != after.utcoffset()
 
@@ -601,6 +605,26 @@ class TestArrowConversion:
 
         assert result == expected
         assert result.utcoffset() != expected.utcoffset()
+
+    def test_toronto_gap(self):
+
+        before = arrow.Arrow(2011, 3, 13, 6, 30, tzinfo="UTC").to("America/Toronto")
+        after = arrow.Arrow(2011, 3, 13, 7, 30, tzinfo="UTC").to("America/Toronto")
+
+        assert before.datetime.replace(tzinfo=None) == datetime(2011, 3, 13, 1, 30)
+        assert after.datetime.replace(tzinfo=None) == datetime(2011, 3, 13, 3, 30)
+
+        assert before.utcoffset() != after.utcoffset()
+
+    def test_sydney_gap(self):
+
+        before = arrow.Arrow(2012, 10, 6, 15, 30, tzinfo="UTC").to("Australia/Sydney")
+        after = arrow.Arrow(2012, 10, 6, 16, 30, tzinfo="UTC").to("Australia/Sydney")
+
+        assert before.datetime.replace(tzinfo=None) == datetime(2012, 10, 7, 1, 30)
+        assert after.datetime.replace(tzinfo=None) == datetime(2012, 10, 7, 3, 30)
+
+        assert before.utcoffset() != after.utcoffset()
 
 
 class TestArrowPickling:

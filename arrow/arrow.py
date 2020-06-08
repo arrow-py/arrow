@@ -15,7 +15,6 @@ from math import trunc
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
-#from dateutil.tz import util.determine_fold
 
 from arrow import formatter, locales, parser, util
 
@@ -89,13 +88,13 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        #self._fold = fold
-
-        self._datetime = datetime(year, month, day, hour, minute, second, microsecond, tzinfo, fold=fold)
+        # use enfold for consistency even on python 3.6
+        self._datetime = dateutil_tz.enfold(
+            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            fold=fold,
+        )
 
     # factories: single object, both original and from datetime.
-
-    # TODO add spring tests
 
     @classmethod
     def now(cls, tzinfo=None):
@@ -126,7 +125,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -154,7 +153,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -189,7 +188,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -218,6 +217,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -255,7 +255,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -304,7 +304,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     # factories: ranges and spans
@@ -607,7 +607,7 @@ class Arrow(object):
     @property
     def fold(self):
         # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
-        # otherwise, so we need to define a _fold attribute to cover this case
+        # otherwise, so we need to return zero to cover the latter case
         return getattr(self._datetime, "fold", 0)
 
     @fold.setter
@@ -616,10 +616,8 @@ class Arrow(object):
             raise ValueError("fold attribute must be either 0 or 1")
         if not dateutil_tz.datetime_ambiguous(self._datetime):
             # for non ambiguous datetimes fold must be 0
-            self._fold = 0
-            self._datetime = dateutil_tz.enfold(self._datetime, fold=self._fold)
+            self._datetime = dateutil_tz.enfold(self._datetime, fold=0)
         else:
-            self._fold = val
             self._datetime = dateutil_tz.enfold(self._datetime, fold=val)
 
     # mutation and duplication.
@@ -667,6 +665,8 @@ class Arrow(object):
                 raise AttributeError("setting absolute {} is not supported".format(key))
             elif key != "tzinfo":
                 raise AttributeError('unknown attribute: "{}"'.format(key))
+
+        # TODO allow replacing fold here
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -777,7 +777,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            dt.fold,
+            getattr(dt, "fold", 0),
         )
 
     @classmethod
