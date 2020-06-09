@@ -408,6 +408,35 @@ Use the following tokens for parsing and formatting. Note that they are **not** 
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
 .. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
 
+Built-in Formats
+++++++++++++++++
+
+There are several formatting standards that are provided as built-in tokens.
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw.format(arrow.FORMAT_ATOM)
+    '2020-05-27 10:30:35+00:00'
+    >>> arw.format(arrow.FORMAT_COOKIE)
+    'Wednesday, 27-May-2020 10:30:35 UTC'
+    >>> arw.format(arrow.FORMAT_RSS)
+    'Wed, 27 May 2020 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC822)
+    'Wed, 27 May 20 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC850)
+    'Wednesday, 27-May-20 10:30:35 UTC'
+    >>> arw.format(arrow.FORMAT_RFC1036)
+    'Wed, 27 May 20 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC1123)
+    'Wed, 27 May 2020 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC2822)
+    'Wed, 27 May 2020 10:30:35 +0000'
+     >>> arw.format(arrow.FORMAT_RFC3339)
+    '2020-05-27 10:30:35+00:00'
+     >>> arw.format(arrow.FORMAT_W3C)
+    '2020-05-27 10:30:35+00:00'
+
 Escaping Formats
 ~~~~~~~~~~~~~~~~
 
