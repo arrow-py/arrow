@@ -1060,7 +1060,7 @@ class KoreanLocale(Locale):
     future = "{0} 후"
 
     timeframes = {
-        "now": ["조금", "잠시"],
+        "now": "지금",
         "second": "1초",
         "seconds": "{0}초",
         "minute": "1분",
@@ -1076,6 +1076,18 @@ class KoreanLocale(Locale):
         "year": "1년",
         "years": "{0}년",
     }
+
+    special_dayframes = {
+        -3: "그끄제",
+        -2: "그제",
+        -1: "어제",
+        1: "내일",
+        2: "모레",
+        3: "글피",
+        4: "그글피",
+    }
+
+    special_yearframes = {-2: "제작년", -1: "작년", 1: "내년", 2: "내후년"}
 
     month_names = [
         "",
@@ -1117,32 +1129,17 @@ class KoreanLocale(Locale):
             return "{}번째".format(ordinals[n])
         return "{}번째".format(n)
 
-    def _format_timeframe(self, timeframe, delta):
-        if timeframe == 'now':
-            _past, _future = self.timeframes[timeframe]
-            if delta < 0:
-                return _past
-            else:
-                return _future
-        return super(KoreanLocale, self)._format_timeframe(timeframe, delta)
+    def _format_relative(self, humanized, timeframe, delta):
+        if timeframe in ("day", "days"):
+            special = self.special_dayframes.get(delta)
+            if special:
+                return special
+        elif timeframe in ("year", "years"):
+            special = self.special_yearframes.get(delta)
+            if special:
+                return special
 
-
-    def describe(self, timeframe, delta=0, only_distance=False):
-        """ Describes a delta within a timeframe in plain language.
-
-        :param timeframe: a string representing a timeframe.
-        :param delta: a quantity representing a delta in a timeframe.
-        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
-        """
-
-        humanized = super(KoreanLocale, self).describe(timeframe, delta, only_distance)
-        if timeframe == "now":
-            if only_distance:
-                humanized = "방금"
-            else:
-                humanized = "지금 막"
-
-        return humanized
+        return super(KoreanLocale, self)._format_relative(humanized, timeframe, delta)
 
 
 # derived locale types & implementations.

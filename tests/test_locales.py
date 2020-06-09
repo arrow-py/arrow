@@ -997,44 +997,64 @@ class TestSwahiliLocale:
 
 @pytest.mark.usefixtures("lang_locale")
 class TestKoreanLocale:
-    def test_describe(self):
-        assert self.locale.describe("now", only_distance=True) == "방금"
-        assert self.locale.describe("now", only_distance=False) == "지금 막"
-
     def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "지금"
+        assert self.locale._format_timeframe("second", 1) == "1초"
+        assert self.locale._format_timeframe("seconds", 2) == "2초"
+        assert self.locale._format_timeframe("minute", 1) == "1분"
+        assert self.locale._format_timeframe("minutes", 2) == "2분"
         assert self.locale._format_timeframe("hour", 1) == "한시간"
         assert self.locale._format_timeframe("hours", 2) == "2시간"
-
         assert self.locale._format_timeframe("day", 1) == "하루"
         assert self.locale._format_timeframe("days", 2) == "2일"
-
         assert self.locale._format_timeframe("week", 1) == "1주"
         assert self.locale._format_timeframe("weeks", 2) == "2주"
-
         assert self.locale._format_timeframe("month", 1) == "한달"
         assert self.locale._format_timeframe("months", 2) == "2개월"
-
         assert self.locale._format_timeframe("year", 1) == "1년"
         assert self.locale._format_timeframe("years", 2) == "2년"
 
-
     def test_format_relative_now(self):
-
-        result = self.locale._format_relative("조금 전", "now", 0)
-
-        assert result == "조금 전"
+        assert self.locale._format_relative("지금", "now", 0) == "지금"
 
     def test_format_relative_past(self):
-
-        result = self.locale._format_relative("한시간", "hour", 1)
-
-        assert result == "한시간 후"
+        assert self.locale._format_relative("1초", "second", 1) == "1초 후"
+        assert self.locale._format_relative("2초", "seconds", 2) == "2초 후"
+        assert self.locale._format_relative("1분", "minute", 1) == "1분 후"
+        assert self.locale._format_relative("2분", "minutes", 2) == "2분 후"
+        assert self.locale._format_relative("한시간", "hour", 1) == "한시간 후"
+        assert self.locale._format_relative("2시간", "hours", 2) == "2시간 후"
+        assert self.locale._format_relative("하루", "day", 1) == "내일"
+        assert self.locale._format_relative("2일", "days", 2) == "모레"
+        assert self.locale._format_relative("3일", "days", 3) == "글피"
+        assert self.locale._format_relative("4일", "days", 4) == "그글피"
+        assert self.locale._format_relative("5일", "days", 5) == "5일 후"
+        assert self.locale._format_relative("1주", "week", 1) == "1주 후"
+        assert self.locale._format_relative("2주", "weeks", 2) == "2주 후"
+        assert self.locale._format_relative("한달", "momth", 1) == "한달 후"
+        assert self.locale._format_relative("2개월", "months", 2) == "2개월 후"
+        assert self.locale._format_relative("1년", "year", 1) == "내년"
+        assert self.locale._format_relative("2년", "years", 2) == "내후년"
+        assert self.locale._format_relative("3년", "years", 3) == "3년 후"
 
     def test_format_relative_future(self):
-
-        result = self.locale._format_relative("한시간", "hour", -1)
-
-        assert result == "한시간 전"
+        assert self.locale._format_relative("1초", "second", -1) == "1초 전"
+        assert self.locale._format_relative("2초", "seconds", -2) == "2초 전"
+        assert self.locale._format_relative("1분", "minute", -1) == "1분 전"
+        assert self.locale._format_relative("2분", "minutes", -2) == "2분 전"
+        assert self.locale._format_relative("한시간", "hour", -1) == "한시간 전"
+        assert self.locale._format_relative("2시간", "hours", -2) == "2시간 전"
+        assert self.locale._format_relative("하루", "day", -1) == "어제"
+        assert self.locale._format_relative("2일", "days", -2) == "그제"
+        assert self.locale._format_relative("3일", "days", -3) == "그끄제"
+        assert self.locale._format_relative("4일", "days", -4) == "4일 전"
+        assert self.locale._format_relative("1주", "week", -1) == "1주 전"
+        assert self.locale._format_relative("2주", "weeks", -2) == "2주 전"
+        assert self.locale._format_relative("한달", "momth", -1) == "한달 전"
+        assert self.locale._format_relative("2개월", "months", -2) == "2개월 전"
+        assert self.locale._format_relative("1년", "year", -1) == "작년"
+        assert self.locale._format_relative("2년", "years", -2) == "제작년"
+        assert self.locale._format_relative("3년", "years", -3) == "3년 전"
 
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(0) == "0번째"
@@ -1042,27 +1062,12 @@ class TestKoreanLocale:
         assert self.locale.ordinal_number(2) == "두번째"
         assert self.locale.ordinal_number(3) == "세번째"
         assert self.locale.ordinal_number(4) == "네번째"
+        assert self.locale.ordinal_number(5) == "다섯번째"
+        assert self.locale.ordinal_number(6) == "여섯번째"
+        assert self.locale.ordinal_number(7) == "일곱번째"
+        assert self.locale.ordinal_number(8) == "여덟번째"
+        assert self.locale.ordinal_number(9) == "아홉번째"
         assert self.locale.ordinal_number(10) == "열번째"
         assert self.locale.ordinal_number(11) == "11번째"
         assert self.locale.ordinal_number(12) == "12번째"
-        assert self.locale.ordinal_number(13) == "13번째"
-        assert self.locale.ordinal_number(14) == "14번째"
-        assert self.locale.ordinal_number(21) == "21번째"
-        assert self.locale.ordinal_number(22) == "22번째"
-        assert self.locale.ordinal_number(23) == "23번째"
-        assert self.locale.ordinal_number(24) == "24번째"
-
         assert self.locale.ordinal_number(100) == "100번째"
-        assert self.locale.ordinal_number(101) == "101번째"
-        assert self.locale.ordinal_number(102) == "102번째"
-        assert self.locale.ordinal_number(103) == "103번째"
-        assert self.locale.ordinal_number(104) == "104번째"
-        assert self.locale.ordinal_number(110) == "110번째"
-        assert self.locale.ordinal_number(111) == "111번째"
-        assert self.locale.ordinal_number(112) == "112번째"
-        assert self.locale.ordinal_number(113) == "113번째"
-        assert self.locale.ordinal_number(114) == "114번째"
-        assert self.locale.ordinal_number(121) == "121번째"
-        assert self.locale.ordinal_number(122) == "122번째"
-        assert self.locale.ordinal_number(123) == "123번째"
-        assert self.locale.ordinal_number(124) == "124번째"
