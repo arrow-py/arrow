@@ -1060,16 +1060,18 @@ class KoreanLocale(Locale):
     future = "{0} 후"
 
     timeframes = {
-        "now": "지금",
-        "second": "두 번째",
-        "seconds": "{0}몇 초",
+        "now": ["조금", "잠시"],
+        "second": "1초",
+        "seconds": "{0}초",
         "minute": "1분",
         "minutes": "{0}분",
-        "hour": "1시간",
+        "hour": "한시간",
         "hours": "{0}시간",
-        "day": "1일",
+        "day": "하루",
         "days": "{0}일",
-        "month": "1개월",
+        "week": "1주",
+        "weeks": "{0}주",
+        "month": "한달",
         "months": "{0}개월",
         "year": "1년",
         "years": "{0}년",
@@ -1108,6 +1110,39 @@ class KoreanLocale(Locale):
 
     day_names = ["", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
     day_abbreviations = ["", "월", "화", "수", "목", "금", "토", "일"]
+
+    def _ordinal_number(self, n):
+        ordinals = ["0", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"]
+        if n < len(ordinals):
+            return "{}번째".format(ordinals[n])
+        return "{}번째".format(n)
+
+    def _format_timeframe(self, timeframe, delta):
+        if timeframe == 'now':
+            _past, _future = self.timeframes[timeframe]
+            if delta < 0:
+                return _past
+            else:
+                return _future
+        return super(KoreanLocale, self)._format_timeframe(timeframe, delta)
+
+
+    def describe(self, timeframe, delta=0, only_distance=False):
+        """ Describes a delta within a timeframe in plain language.
+
+        :param timeframe: a string representing a timeframe.
+        :param delta: a quantity representing a delta in a timeframe.
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        """
+
+        humanized = super(KoreanLocale, self).describe(timeframe, delta, only_distance)
+        if timeframe == "now":
+            if only_distance:
+                humanized = "방금"
+            else:
+                humanized = "지금 막"
+
+        return humanized
 
 
 # derived locale types & implementations.

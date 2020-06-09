@@ -993,3 +993,76 @@ class TestSwahiliLocale:
     def test_format_relative_future(self):
         result = self.locale._format_relative("saa moja", "hour", -1)
         assert result == "saa moja iliyopita"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestKoreanLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "방금"
+        assert self.locale.describe("now", only_distance=False) == "지금 막"
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("hour", 1) == "한시간"
+        assert self.locale._format_timeframe("hours", 2) == "2시간"
+
+        assert self.locale._format_timeframe("day", 1) == "하루"
+        assert self.locale._format_timeframe("days", 2) == "2일"
+
+        assert self.locale._format_timeframe("week", 1) == "1주"
+        assert self.locale._format_timeframe("weeks", 2) == "2주"
+
+        assert self.locale._format_timeframe("month", 1) == "한달"
+        assert self.locale._format_timeframe("months", 2) == "2개월"
+
+        assert self.locale._format_timeframe("year", 1) == "1년"
+        assert self.locale._format_timeframe("years", 2) == "2년"
+
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative("조금 전", "now", 0)
+
+        assert result == "조금 전"
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("한시간", "hour", 1)
+
+        assert result == "한시간 후"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("한시간", "hour", -1)
+
+        assert result == "한시간 전"
+
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(0) == "0번째"
+        assert self.locale.ordinal_number(1) == "첫번째"
+        assert self.locale.ordinal_number(2) == "두번째"
+        assert self.locale.ordinal_number(3) == "세번째"
+        assert self.locale.ordinal_number(4) == "네번째"
+        assert self.locale.ordinal_number(10) == "열번째"
+        assert self.locale.ordinal_number(11) == "11번째"
+        assert self.locale.ordinal_number(12) == "12번째"
+        assert self.locale.ordinal_number(13) == "13번째"
+        assert self.locale.ordinal_number(14) == "14번째"
+        assert self.locale.ordinal_number(21) == "21번째"
+        assert self.locale.ordinal_number(22) == "22번째"
+        assert self.locale.ordinal_number(23) == "23번째"
+        assert self.locale.ordinal_number(24) == "24번째"
+
+        assert self.locale.ordinal_number(100) == "100번째"
+        assert self.locale.ordinal_number(101) == "101번째"
+        assert self.locale.ordinal_number(102) == "102번째"
+        assert self.locale.ordinal_number(103) == "103번째"
+        assert self.locale.ordinal_number(104) == "104번째"
+        assert self.locale.ordinal_number(110) == "110번째"
+        assert self.locale.ordinal_number(111) == "111번째"
+        assert self.locale.ordinal_number(112) == "112번째"
+        assert self.locale.ordinal_number(113) == "113번째"
+        assert self.locale.ordinal_number(114) == "114번째"
+        assert self.locale.ordinal_number(121) == "121번째"
+        assert self.locale.ordinal_number(122) == "122번째"
+        assert self.locale.ordinal_number(123) == "123번째"
+        assert self.locale.ordinal_number(124) == "124번째"
