@@ -21,7 +21,9 @@ jobs:
         with:
           python-version: "3.8"
       - name: Install dependencies
-        run: pip install -U tox
+        run: |
+          pip install -U pip setuptools wheel
+          pip install tox
       - name: Linting code
         run: tox -e lint
       - name: Linting docs
@@ -40,7 +42,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install -U tox tox-gh-actions
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
       - name: Test with tox
         run: tox
       - name: Upload coverage to Codecov
@@ -61,7 +65,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install -U tox tox-gh-actions
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
       - name: Test with tox
         run: tox
       - name: Upload coverage to Codecov
@@ -82,7 +88,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pip install -U tox tox-gh-actions
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
       - name: Test with tox
         run: tox
       - name: Upload coverage to Codecov
