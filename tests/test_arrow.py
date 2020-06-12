@@ -576,9 +576,15 @@ class TestArrowConversion:
         assert arrow_from.to("UTC").datetime == self.expected
         assert arrow_from.to(tz.tzutc()).datetime == self.expected
 
+    # issue #368
     def test_to_pacific_then_utc(self):
         result = arrow.Arrow(2018, 11, 4, 1, tzinfo="-08:00").to("US/Pacific").to("UTC")
         assert result == arrow.Arrow(2018, 11, 4, 9)
+
+    # issue #368
+    def test_to_amsterdam_then_utc(self):
+        result = arrow.Arrow(2016, 10, 30).to("Europe/Amsterdam")
+        assert result.utcoffset() == timedelta(seconds=7200)
 
     # regression test for #690
     def test_to_israel_same_offset(self):
@@ -663,6 +669,16 @@ class TestArrowReplace:
         result = arw.replace(tzinfo=tz.gettz("US/Pacific"))
 
         assert result == arw.datetime.replace(tzinfo=tz.gettz("US/Pacific"))
+
+    def test_replace_fold(self):
+
+        arw = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
+        result = arw.replace(fold=1)
+
+        assert arw.utcoffset() != result.utcoffset()
+
+        with pytest.raises(ValueError):
+            arrow.Arrow.utcnow().replace(fold=1)
 
     def test_replace_week(self):
 

@@ -650,12 +650,15 @@ class Arrow(object):
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
+            elif key == "fold":
+                if dateutil_tz.datetime_ambiguous(self._datetime):
+                    absolute_kwargs[key] = value
+                else:
+                    raise ValueError("For non ambiguous datetimes fold must be zero")
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
             elif key != "tzinfo":
                 raise AttributeError('unknown attribute: "{}"'.format(key))
-
-        # TODO allow replacing fold here
 
         current = self._datetime.replace(**absolute_kwargs)
 
