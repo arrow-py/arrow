@@ -7,8 +7,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 
 from arrow import locales
-from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
-from arrow.util import iso_to_gregorian
+from arrow.util import iso_to_gregorian, normalize_timestamp
 
 try:
     from functools import lru_cache
@@ -414,20 +413,9 @@ class DateTimeParser(object):
         expanded_timestamp = parts.get("expanded_timestamp")
 
         if expanded_timestamp is not None:
-
-            if expanded_timestamp > MAX_TIMESTAMP:
-                if expanded_timestamp < MAX_TIMESTAMP_MS:
-                    expanded_timestamp /= 1e3
-                elif expanded_timestamp < MAX_TIMESTAMP_US:
-                    expanded_timestamp /= 1e6
-                else:
-                    raise ValueError(
-                        "The specified timestamp '{}' is too large.".format(
-                            expanded_timestamp
-                        )
-                    )
-
-            return datetime.fromtimestamp(expanded_timestamp, tz=tz.tzutc())
+            return datetime.fromtimestamp(
+                normalize_timestamp(expanded_timestamp), tz=tz.tzutc(),
+            )
 
         day_of_year = parts.get("day_of_year")
 
