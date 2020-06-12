@@ -1538,13 +1538,13 @@ class TestArrowHumanize:
 
         # Regression tests for humanize bug referenced in issue 541
         later = self.now.shift(days=3)
-        assert later.humanize() == "in 3 days"
+        assert later.humanize(self.now) == "in 3 days"
 
         later = self.now.shift(days=3, seconds=1)
-        assert later.humanize() == "in 3 days"
+        assert later.humanize(self.now) == "in 3 days"
 
         later = self.now.shift(days=4)
-        assert later.humanize() == "in 4 days"
+        assert later.humanize(self.now) == "in 4 days"
 
     def test_week(self):
 
