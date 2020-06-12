@@ -34,9 +34,12 @@ class TestUtil:
 
     def test_normalize_timestamp(self):
         timestamp = 1591161115.194556
+        millisecond_timestamp = 1591161115194
+        microsecond_timestamp = 1591161115194556
+
         assert util.normalize_timestamp(timestamp) == timestamp
-        assert util.normalize_timestamp(int(timestamp * 1e3)) == 1591161115.194
-        assert util.normalize_timestamp(int(timestamp * 1e6)) == 1591161115.194556
+        assert util.normalize_timestamp(millisecond_timestamp) == 1591161115.194
+        assert util.normalize_timestamp(microsecond_timestamp) == 1591161115.194556
 
         with pytest.raises(ValueError):
             util.normalize_timestamp(3e17)

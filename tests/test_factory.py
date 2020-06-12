@@ -68,14 +68,15 @@ class TestGet:
 
     def test_one_arg_expanded_timestamp(self):
 
-        timestamp = 1591328104.308505
+        millisecond_timestamp = 1591328104308
+        microsecond_timestamp = 1591328104308505
 
         # Regression test for issue #796
-        assert self.factory.get(int(timestamp * 1e6)) == datetime.utcfromtimestamp(
-            1591328104.308505
-        ).replace(tzinfo=tz.tzutc())
-        assert self.factory.get(int(timestamp * 1e3)) == datetime.utcfromtimestamp(
+        assert self.factory.get(millisecond_timestamp) == datetime.utcfromtimestamp(
             1591328104.308
+        ).replace(tzinfo=tz.tzutc())
+        assert self.factory.get(microsecond_timestamp) == datetime.utcfromtimestamp(
+            1591328104.308505
         ).replace(tzinfo=tz.tzutc())
 
     def test_one_arg_timestamp_with_tzinfo(self):
