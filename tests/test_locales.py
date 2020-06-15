@@ -1014,10 +1014,9 @@ class TestKoreanLocale:
         assert self.locale._format_timeframe("year", 1) == "1년"
         assert self.locale._format_timeframe("years", 2) == "2년"
 
-    def test_format_relative_now(self):
+    def test_format_relative(self):
         assert self.locale._format_relative("지금", "now", 0) == "지금"
 
-    def test_format_relative_past(self):
         assert self.locale._format_relative("1초", "second", 1) == "1초 후"
         assert self.locale._format_relative("2초", "seconds", 2) == "2초 후"
         assert self.locale._format_relative("1분", "minute", 1) == "1분 후"
@@ -1031,13 +1030,12 @@ class TestKoreanLocale:
         assert self.locale._format_relative("5일", "days", 5) == "5일 후"
         assert self.locale._format_relative("1주", "week", 1) == "1주 후"
         assert self.locale._format_relative("2주", "weeks", 2) == "2주 후"
-        assert self.locale._format_relative("한달", "momth", 1) == "한달 후"
+        assert self.locale._format_relative("한달", "month", 1) == "한달 후"
         assert self.locale._format_relative("2개월", "months", 2) == "2개월 후"
         assert self.locale._format_relative("1년", "year", 1) == "내년"
         assert self.locale._format_relative("2년", "years", 2) == "내후년"
         assert self.locale._format_relative("3년", "years", 3) == "3년 후"
 
-    def test_format_relative_future(self):
         assert self.locale._format_relative("1초", "second", -1) == "1초 전"
         assert self.locale._format_relative("2초", "seconds", -2) == "2초 전"
         assert self.locale._format_relative("1분", "minute", -1) == "1분 전"
@@ -1050,7 +1048,7 @@ class TestKoreanLocale:
         assert self.locale._format_relative("4일", "days", -4) == "4일 전"
         assert self.locale._format_relative("1주", "week", -1) == "1주 전"
         assert self.locale._format_relative("2주", "weeks", -2) == "2주 전"
-        assert self.locale._format_relative("한달", "momth", -1) == "한달 전"
+        assert self.locale._format_relative("한달", "month", -1) == "한달 전"
         assert self.locale._format_relative("2개월", "months", -2) == "2개월 전"
         assert self.locale._format_relative("1년", "year", -1) == "작년"
         assert self.locale._format_relative("2년", "years", -2) == "제작년"
