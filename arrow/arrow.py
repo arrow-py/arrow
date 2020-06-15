@@ -33,6 +33,7 @@ class Arrow(object):
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
+    :param fold: (optional) Used to disambiguate ambiguous times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -88,7 +89,7 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        # use enfold here to cover arrow.Arrow init on 2.7/3.5
+        # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
         self._datetime = dateutil_tz.enfold(
             datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
             fold=fold,
@@ -595,12 +596,16 @@ class Arrow(object):
 
     @property
     def fold(self):
+        """ Gets the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+
         # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
         # otherwise, so we need to return zero to cover the latter case
         return getattr(self._datetime, "fold", 0)
 
     @fold.setter
     def fold(self, val):
+        """ Sets the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+
         if val not in {0, 1}:
             raise ValueError("fold attribute must be either 0 or 1")
         if not dateutil_tz.datetime_ambiguous(self._datetime):
@@ -608,6 +613,12 @@ class Arrow(object):
             self._datetime = dateutil_tz.enfold(self._datetime, fold=0)
         else:
             self._datetime = dateutil_tz.enfold(self._datetime, fold=val)
+
+    @property
+    def ambiguous(self):
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+
+        return dateutil_tz.datetime_ambiguous(self._datetime)
 
     # mutation and duplication.
 
@@ -651,10 +662,10 @@ class Arrow(object):
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key == "fold":
-                if dateutil_tz.datetime_ambiguous(self._datetime):
-                    absolute_kwargs[key] = value
-                else:
-                    raise ValueError("For non ambiguous datetimes fold must be zero")
+                raise AttributeError(
+                    "Setting fold attribute using replace() is not supported, set directly "
+                    "instead i.e. object.fold=1"
+                )
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
             elif key != "tzinfo":

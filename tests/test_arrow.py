@@ -303,6 +303,14 @@ class TestArrowAttribute:
         with pytest.raises(ValueError):
             self.now.fold = 123
 
+    def test_getattr_ambiguous(self):
+
+        assert not self.now.ambiguous
+
+        ambiguous_dt = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
+
+        assert ambiguous_dt.ambiguous
+
 
 @pytest.mark.usefixtures("time_utcnow")
 class TestArrowComparison:
@@ -672,12 +680,7 @@ class TestArrowReplace:
 
     def test_replace_fold(self):
 
-        arw = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
-        result = arw.replace(fold=1)
-
-        assert arw.utcoffset() != result.utcoffset()
-
-        with pytest.raises(ValueError):
+        with pytest.raises(AttributeError):
             arrow.Arrow.utcnow().replace(fold=1)
 
     def test_replace_week(self):
