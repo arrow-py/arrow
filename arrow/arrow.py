@@ -359,9 +359,7 @@ class Arrow:
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
-        _start: Union["Arrow", datetime] = cls._get_datetime(start).replace(
-            tzinfo=tzinfo
-        )
+        _start: "Arrow" = cls._get_datetime(start).replace(tzinfo=tzinfo)
         _end, limit = cls._get_iteration_params(end, limit)
         __end = cls._get_datetime(_end).replace(tzinfo=tzinfo)
 
@@ -574,7 +572,7 @@ class Arrow:
         return self._datetime
 
     @property
-    def naive(self) -> datetime:
+    def naive(self) -> datetime:  # type: ignore
         """ Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object.
 
@@ -1264,7 +1262,7 @@ class Arrow:
 
         return self._datetime.date()
 
-    def time(self) -> time:
+    def time(self) -> time:  # type: ignore
         """ Returns a ``time`` object with the same hour, minute, second, microsecond.
 
         Usage::
@@ -1276,7 +1274,7 @@ class Arrow:
 
         return self._datetime.time()
 
-    def timetz(self) -> time:
+    def timetz(self) -> time:  # type: ignore
         """ Returns a ``time`` object with the same hour, minute, second, microsecond and
         tzinfo.
 
@@ -1289,7 +1287,7 @@ class Arrow:
 
         return self._datetime.timetz()
 
-    def astimezone(self, tz: tzfile) -> datetime:
+    def astimezone(self, tz: tzfile) -> datetime:  # type: ignore
         """ Returns a ``datetime`` object, converted to the specified timezone.
 
         :param tz: a ``tzinfo`` object.
@@ -1305,7 +1303,7 @@ class Arrow:
 
         return self._datetime.astimezone(tz)
 
-    def utcoffset(self) -> timedelta:
+    def utcoffset(self) -> timedelta:  # type: ignore
         """ Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
@@ -1468,7 +1466,7 @@ class Arrow:
                 raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
-    def _get_datetime(cls, expr: Any) -> "datetime":
+    def _get_datetime(cls, expr: Any) -> datetime:  # type: ignore
         """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime

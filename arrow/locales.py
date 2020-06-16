@@ -52,7 +52,7 @@ class Locale:
             Dict[str, str],
             List[str],
             Tuple[str, str],
-            Dict[str, List],
+            Dict[str, List[str]],
             Dict[str, Sequence[str]],
             Sequence[str],
         ],
@@ -110,7 +110,7 @@ class Locale:
 
     def describe_multi(
         self,
-        timeframes: List[List[Union[float, str, object]]],
+        timeframes: List[List[str]],
         only_distance: bool = False,  # TODO Check type
     ) -> str:
         """ Describes a delta within multiple timeframes in plain language.
@@ -120,6 +120,9 @@ class Locale:
         """
 
         humanized: str = ""
+        delta: float
+        timeframe: str
+        index: float
         for index, (timeframe, delta) in enumerate(timeframes):
             humanized += self._format_timeframe(timeframe, delta)
             if index == len(timeframes) - 2 and self.and_word:
@@ -168,7 +171,7 @@ class Locale:
 
         return self.month_abbreviations[month]
 
-    def month_number(self, name: str) -> int:
+    def month_number(self, name: str) -> Union[Optional[int], int]:
         """ Returns the month number for a month specified by name or abbreviation.
 
         :param name: the month name or abbreviation.
@@ -224,19 +227,15 @@ class Locale:
         return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
 
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
-        return self.timeframes[timeframe].format(trunc(abs(delta)))
+        timeframe_str: str = self.timeframes[timeframe]
+        return timeframe_str.format(trunc(abs(delta)))
 
-    def _format_relative(
-        self,
-        humanized: Union[str, List[str]],
-        timeframe: Union[str, float],
-        delta: float,
-    ) -> str:
+    def _format_relative(self, humanized: str, timeframe: str, delta: float,) -> str:
 
         if timeframe == "now":
             return humanized
 
-        direction = self.past if delta < 0 else self.future
+        direction: str = self.past if delta < 0 else self.future
 
         return direction.format(humanized)
 
@@ -2562,13 +2561,14 @@ class MoroccoArabicLocale(ArabicLocale):
 class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
 
-        timeframe = self.timeframes[timeframe]
+        tf_seq: Sequence[str] = self.timeframes[timeframe]
+        tf: str
         if delta < 0:
-            timeframe = timeframe[0]
+            tf = tf_seq[0]
         elif delta > 0:
-            timeframe = timeframe[1]
+            tf = tf_seq[1]
 
-        return timeframe.format(abs(delta))
+        return tf.format(abs(delta))
 
     names = ["is", "is_is"]
 
@@ -3519,7 +3519,7 @@ class HungarianLocale(Locale):
             else:
                 exitstr = form["past"]
         else:
-            exitstr = form
+            exitstr = str(form)
         return exitstr.format(abs(delta))
 
 

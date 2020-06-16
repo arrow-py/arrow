@@ -1,7 +1,8 @@
 import re
+from builtins import _SupportsIndex
 from datetime import datetime, timedelta, tzinfo
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, SupportsInt, Tuple, Union
 
 from dateutil import tz
 from dateutil.tz import tzfile
@@ -314,7 +315,9 @@ class DateTimeParser:
     def _parse_token(
         self,
         token: str,
-        value: Union[Tuple[str, str, Optional[str]], str],
+        value: Union[
+            Tuple[str, str, Optional[str]], str, bytes, SupportsInt, _SupportsIndex
+        ],
         parts: Dict[str, Any],
     ) -> None:
 
