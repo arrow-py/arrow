@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import pytest
+import pytest  # type: ignore
 
 from arrow import arrow, factory, formatter, locales, parser
 

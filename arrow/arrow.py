@@ -3,19 +3,17 @@ Provides the :class:`Arrow <arrow.arrow.Arrow>` class, an enhanced ``datetime``
 replacement.
 
 """
-# from __future__ import annotations
-
 import calendar
 import sys
 from datetime import date, datetime, time, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
-from typing import Any, Iterator, List, Optional, Tuple, Union
+from typing import Any, Iterator, List, Optional, SupportsAbs, Tuple, Union
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
-from dateutil.tz.tz import tzfile, tzlocal, tzutc
+from dateutil.tz.tz import tzfile, tzlocal
 
 from arrow import formatter, locales, parser, util
 from arrow.locales import Locale
@@ -85,11 +83,11 @@ class Arrow:
             isinstance(tzinfo, dt_tzinfo)
             and hasattr(tzinfo, "localize")
             and hasattr(tzinfo, "zone")
-            and tzinfo.zone
+            and tzinfo.zone  # type: ignore
         ):
-            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
+            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore
         elif util.isstr(tzinfo):
-            tzinfo = parser.TzinfoParser.parse(tzinfo)
+            tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
 
         self._datetime = datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo
@@ -258,7 +256,7 @@ class Arrow:
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
 
-        return cls(date.year, date.month, date.day, tzinfo=tzinfo)
+        return cls(date.year, date.month, date.day, tzinfo=tzinfo)  # type: ignore
 
     @classmethod
     def strptime(
@@ -359,9 +357,9 @@ class Arrow:
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
-        _start: "Arrow" = cls._get_datetime(start).replace(tzinfo=tzinfo)
+        _start: "Arrow" = cls._get_datetime(start).replace(tzinfo=tzinfo)  # type: ignore
         _end, limit = cls._get_iteration_params(end, limit)
-        __end = cls._get_datetime(_end).replace(tzinfo=tzinfo)
+        __end = cls._get_datetime(_end).replace(tzinfo=tzinfo)  # type: ignore
 
         current: Union["Arrow", datetime] = cls.fromdatetime(_start)
         i = 0
@@ -371,8 +369,8 @@ class Arrow:
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(
-                **{frame_relative: relative_steps}
+            current = cls(*values, tzinfo=tzinfo) + relativedelta(  # type: ignore
+                **{frame_relative: relative_steps}  # type: ignore
             )
 
     @classmethod
@@ -438,7 +436,7 @@ class Arrow:
         _range: Union[
             Iterator[Union[Iterator[Any], Iterator[Arrow]]], Arrow
         ] = cls.range(frame, _start, end, tz, limit)
-        return (r.span(frame, bounds=bounds) for r in _range)
+        return (r.span(frame, bounds=bounds) for r in _range)  # type: ignore
 
     @classmethod
     def interval(
@@ -497,7 +495,7 @@ class Arrow:
                 intvlStart, intvlEnd = next(spanRange)
                 for _ in range(interval - 1):
                     _, intvlEnd = next(spanRange)
-                yield intvlStart, intvlEnd
+                yield intvlStart, intvlEnd  # type: ignore
             except StopIteration:
                 return
 
@@ -572,7 +570,7 @@ class Arrow:
         return self._datetime
 
     @property
-    def naive(self) -> datetime:  # type: ignore
+    def naive(self) -> datetime:  # type: ignore[valid-type]
         """ Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object.
 
@@ -724,7 +722,7 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def to(self, tz: Union[tzutc, str]) -> "Arrow":
+    def to(self, tz: Optional[dt_tzinfo]) -> "Arrow":
         """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
@@ -754,7 +752,7 @@ class Arrow:
         """
 
         if not isinstance(tz, dt_tzinfo):
-            tz = parser.TzinfoParser.parse(tz)
+            tz = parser.TzinfoParser.parse(tz)  # type: ignore
 
         dt = self._datetime.astimezone(tz)
 
@@ -829,14 +827,14 @@ class Arrow:
         for _ in range(3 - len(values)):
             values.append(1)
 
-        floor = self.__class__(*values, tzinfo=self.tzinfo)
+        floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
 
         if frame_absolute == "week":
             floor = floor + relativedelta(days=-(self.isoweekday() - 1))
         elif frame_absolute == "quarter":
             floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})  # type: ignore
 
         if bounds[0] == "(":
             floor += relativedelta(microseconds=1)
@@ -978,7 +976,7 @@ class Arrow:
                 elif diff < 90:
                     return locale.describe("minute", sign, only_distance=only_distance)
                 elif diff < 2700:
-                    minutes = sign * int(max(delta / 60, 2))
+                    minutes = sign * float(max(delta / 60, 2))
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
@@ -986,20 +984,20 @@ class Arrow:
                 elif diff < 5400:
                     return locale.describe("hour", sign, only_distance=only_distance)
                 elif diff < 79200:
-                    hours = sign * int(max(delta / 3600, 2))
+                    hours = sign * float(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
                 # anything less than 48 hours should be 1 day
                 elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < 554400:
-                    days = sign * int(max(delta / 86400, 2))
+                    days = sign * float(max(delta / 86400, 2))
                     return locale.describe("days", days, only_distance=only_distance)
 
                 elif diff < 907200:
                     return locale.describe("week", sign, only_distance=only_distance)
                 elif diff < 2419200:
-                    weeks = sign * int(max(delta / 604800, 2))
+                    weeks = sign * float(max(delta / 604800, 2))
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < 3888000:
@@ -1008,7 +1006,7 @@ class Arrow:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
-                    months = sign * int(max(abs(other_months - self_months), 2))
+                    months = sign * float(max(abs(other_months - self_months), 2))
 
                     return locale.describe(
                         "months", months, only_distance=only_distance
@@ -1017,7 +1015,7 @@ class Arrow:
                 elif diff < 47260800:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta / 31536000, 2))
+                    years = sign * float(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif util.isstr(granularity):
@@ -1043,8 +1041,10 @@ class Arrow:
                     )
 
                 if trunc(abs(delta)) != 1:
-                    granularity += "s"
-                return locale.describe(granularity, delta, only_distance=only_distance)
+                    granularity += "s"  # type: ignore
+                return locale.describe(
+                    str(granularity), delta, only_distance=only_distance
+                )
 
             else:
                 timeframes = []
@@ -1088,10 +1088,11 @@ class Arrow:
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
-                for tf in timeframes:
+                tf: List[Union[str, SupportsAbs[float]]]
+                for tf in timeframes:  # type: ignore
                     # Make granularity plural if the delta is not equal to 1
-                    if trunc(abs(tf[1])) != 1:
-                        tf[0] += "s"
+                    if trunc(abs(tf[1])) != 1:  # type: ignore
+                        tf[0] += "s"  # type: ignore
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
@@ -1262,7 +1263,7 @@ class Arrow:
 
         return self._datetime.date()
 
-    def time(self) -> time:  # type: ignore
+    def time(self) -> time:  # type: ignore[valid-type]
         """ Returns a ``time`` object with the same hour, minute, second, microsecond.
 
         Usage::
@@ -1274,7 +1275,7 @@ class Arrow:
 
         return self._datetime.time()
 
-    def timetz(self) -> time:  # type: ignore
+    def timetz(self) -> time:  # type: ignore[valid-type]
         """ Returns a ``time`` object with the same hour, minute, second, microsecond and
         tzinfo.
 
@@ -1287,7 +1288,7 @@ class Arrow:
 
         return self._datetime.timetz()
 
-    def astimezone(self, tz: tzfile) -> datetime:  # type: ignore
+    def astimezone(self, tz: tzfile) -> datetime:  # type: ignore[valid-type]
         """ Returns a ``datetime`` object, converted to the specified timezone.
 
         :param tz: a ``tzinfo`` object.
@@ -1303,7 +1304,7 @@ class Arrow:
 
         return self._datetime.astimezone(tz)
 
-    def utcoffset(self) -> timedelta:  # type: ignore
+    def utcoffset(self) -> Optional[timedelta]:  # type: ignore[valid-type]
         """ Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
@@ -1316,7 +1317,7 @@ class Arrow:
 
         return self._datetime.utcoffset()
 
-    def dst(self) -> timedelta:
+    def dst(self) -> Optional[timedelta]:
         """ Returns the daylight savings time adjustment.
 
         Usage::
@@ -1453,7 +1454,7 @@ class Arrow:
     # internal tools.
 
     @staticmethod
-    def _get_tzinfo(tz_expr: Any) -> Union[tzfile, tzutc]:
+    def _get_tzinfo(tz_expr: Any) -> dt_tzinfo:
 
         if tz_expr is None:
             return dateutil_tz.tzutc()
@@ -1466,7 +1467,7 @@ class Arrow:
                 raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
-    def _get_datetime(cls, expr: Any) -> datetime:  # type: ignore
+    def _get_datetime(cls, expr: Any) -> datetime:  # type: ignore[valid-type]
         """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime

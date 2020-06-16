@@ -1,4 +1,4 @@
-import pytest
+import pytest  # type: ignore
 
 from arrow import arrow, locales
 
@@ -683,7 +683,7 @@ class TestBengaliLocale:
         assert self.locale._ordinal_number(10) == "10ম"
         assert self.locale._ordinal_number(11) == "11তম"
         assert self.locale._ordinal_number(42) == "42তম"
-        assert self.locale._ordinal_number(-1) is None
+        assert self.locale._ordinal_number(-1) == "-1"
 
 
 @pytest.mark.usefixtures("lang_locale")

@@ -1,11 +1,9 @@
 import re
-from builtins import _SupportsIndex
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime, timedelta
 from functools import lru_cache
 from typing import Any, Dict, List, Optional, SupportsInt, Tuple, Union
 
 from dateutil import tz
-from dateutil.tz import tzfile
 
 from arrow import locales
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
@@ -105,7 +103,7 @@ class DateTimeParser:
             }
         )
         if cache_size > 0:
-            self._generate_pattern_re = lru_cache(maxsize=cache_size)(
+            self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore
                 self._generate_pattern_re
             )
 
@@ -206,9 +204,7 @@ class DateTimeParser:
 
         return self._parse_multiformat(datetime_string, formats)
 
-    def parse(
-        self, datetime_string: str, fmt: Union[List[str], str]
-    ) -> Union[datetime, str]:
+    def parse(self, datetime_string: str, fmt: Union[List[str], str]) -> datetime:
 
         if isinstance(fmt, list):
             return self._parse_multiformat(datetime_string, fmt)
@@ -312,14 +308,7 @@ class DateTimeParser:
 
         return tokens, re.compile(bounded_fmt_pattern, flags=re.IGNORECASE)
 
-    def _parse_token(
-        self,
-        token: str,
-        value: Union[
-            Tuple[str, str, Optional[str]], str, bytes, SupportsInt, _SupportsIndex
-        ],
-        parts: Dict[str, Any],
-    ) -> None:
+    def _parse_token(self, token: str, value: Any, parts: Dict[str, Any],) -> None:
 
         if token == "YYYY":
             parts["year"] = int(value)
@@ -394,6 +383,8 @@ class DateTimeParser:
 
         if weekdate is not None:
             # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
+            week: Union[str, bytes, SupportsInt]
+            year: Union[str, bytes, SupportsInt]
             year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
@@ -431,19 +422,17 @@ class DateTimeParser:
         day_of_year = parts.get("day_of_year")
 
         if day_of_year is not None:
-            year = parts.get("year")
-            month = parts.get("month")
-            if year is None:
+            if "year" not in parts:
                 raise ParserError(
                     "Year component is required with the DDD and DDDD tokens."
                 )
 
-            if month is not None:
+            if "month" in parts:
                 raise ParserError(
                     "Month component is not allowed with the DDD and DDDD tokens."
                 )
 
-            date_string = f"{year}-{day_of_year}"
+            date_string = f"{parts['year']}-{day_of_year}"
             try:
                 dt = datetime.strptime(date_string, "%Y-%j")
             except ValueError:
@@ -504,7 +493,7 @@ class DateTimeParser:
 
     def _parse_multiformat(self, string: str, formats: List[str]) -> datetime:
 
-        _datetime = None
+        _datetime: Optional[datetime] = None
 
         for fmt in formats:
             try:
@@ -532,9 +521,9 @@ class TzinfoParser:
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
-    def parse(cls, tzinfo_string: Union[str, tzinfo, tzfile]) -> Any:
+    def parse(cls, tzinfo_string: str) -> Any:
 
-        tzinfo = None
+        tzinfo: Any = None
 
         if tzinfo_string == "local":
             tzinfo = tz.tzlocal()

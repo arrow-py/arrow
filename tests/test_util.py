@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 
-import pytest
+import pytest  # type: ignore
 
 from arrow import util
 

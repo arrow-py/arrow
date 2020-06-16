@@ -1,7 +1,7 @@
 import inspect
 import sys
 from math import trunc
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Collection, Dict, List, Optional, Sequence, Tuple, Union
 
 # from mypy_extensions import NoReturn
 
@@ -110,7 +110,7 @@ class Locale:
 
     def describe_multi(
         self,
-        timeframes: List[List[str]],
+        timeframes: List[List[Any]],
         only_distance: bool = False,  # TODO Check type
     ) -> str:
         """ Describes a delta within multiple timeframes in plain language.
@@ -227,7 +227,7 @@ class Locale:
         return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
 
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
-        timeframe_str: str = self.timeframes[timeframe]
+        timeframe_str: str = str(self.timeframes[timeframe])
         return timeframe_str.format(trunc(abs(delta)))
 
     def _format_relative(self, humanized: str, timeframe: str, delta: float,) -> str:
@@ -235,7 +235,7 @@ class Locale:
         if timeframe == "now":
             return humanized
 
-        direction: str = self.past if delta < 0 else self.future
+        direction: str = str(self.past if delta < 0 else self.future)
 
         return direction.format(humanized)
 
@@ -804,94 +804,94 @@ class SwedishLocale(Locale):
     day_abbreviations = ["", "mån", "tis", "ons", "tor", "fre", "lör", "sön"]
 
 
-class FinnishLocale(Locale):
-
-    names = ["fi", "fi_fi"]
-
-    # The finnish grammar is very complex, and its hard to convert
-    # 1-to-1 to something like English.
-
-    past = "{0} sitten"
-    future = "{0} kuluttua"
-
-    timeframes = {
-        "now": ["juuri nyt", "juuri nyt"],
-        "second": ["sekunti", "sekunti"],
-        "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
-        "minute": ["minuutti", "minuutin"],
-        "minutes": ["{0} minuuttia", "{0} minuutin"],
-        "hour": ["tunti", "tunnin"],
-        "hours": ["{0} tuntia", "{0} tunnin"],
-        "day": ["päivä", "päivä"],
-        "days": ["{0} päivää", "{0} päivän"],
-        "month": ["kuukausi", "kuukauden"],
-        "months": ["{0} kuukautta", "{0} kuukauden"],
-        "year": ["vuosi", "vuoden"],
-        "years": ["{0} vuotta", "{0} vuoden"],
-    }
-
-    # Months and days are lowercase in Finnish
-    month_names = [
-        "",
-        "tammikuu",
-        "helmikuu",
-        "maaliskuu",
-        "huhtikuu",
-        "toukokuu",
-        "kesäkuu",
-        "heinäkuu",
-        "elokuu",
-        "syyskuu",
-        "lokakuu",
-        "marraskuu",
-        "joulukuu",
-    ]
-
-    month_abbreviations = [
-        "",
-        "tammi",
-        "helmi",
-        "maalis",
-        "huhti",
-        "touko",
-        "kesä",
-        "heinä",
-        "elo",
-        "syys",
-        "loka",
-        "marras",
-        "joulu",
-    ]
-
-    day_names = [
-        "",
-        "maanantai",
-        "tiistai",
-        "keskiviikko",
-        "torstai",
-        "perjantai",
-        "lauantai",
-        "sunnuntai",
-    ]
-
-    day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
-
-    def _format_timeframe(self, timeframe: str, delta: float) -> str:
-        return self.timeframes[timeframe][0].format(abs(delta))
-
-    def _format_relative(
-        self, humanized: Union[str, List[str]], timeframe: str, delta: float
-    ) -> str:
-        if timeframe == "now":
-            return humanized[0]
-
-        direction = self.past if delta < 0 else self.future
-        which = 0 if delta < 0 else 1
-
-        return direction.format(humanized[which])
-
-    def _ordinal_number(self, n: int) -> str:
-        return f"{n}."
+# class FinnishLocale(Locale):
+#
+#     names = ["fi", "fi_fi"]
+#
+#     # The finnish grammar is very complex, and its hard to convert
+#     # 1-to-1 to something like English.
+#
+#     past = "{0} sitten"
+#     future = "{0} kuluttua"
+#
+#     timeframes = {
+#         "now": ["juuri nyt", "juuri nyt"],
+#         "second": ["sekunti", "sekunti"],
+#         "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
+#         "minute": ["minuutti", "minuutin"],
+#         "minutes": ["{0} minuuttia", "{0} minuutin"],
+#         "hour": ["tunti", "tunnin"],
+#         "hours": ["{0} tuntia", "{0} tunnin"],
+#         "day": ["päivä", "päivä"],
+#         "days": ["{0} päivää", "{0} päivän"],
+#         "month": ["kuukausi", "kuukauden"],
+#         "months": ["{0} kuukautta", "{0} kuukauden"],
+#         "year": ["vuosi", "vuoden"],
+#         "years": ["{0} vuotta", "{0} vuoden"],
+#     }
+#
+#     # Months and days are lowercase in Finnish
+#     month_names = [
+#         "",
+#         "tammikuu",
+#         "helmikuu",
+#         "maaliskuu",
+#         "huhtikuu",
+#         "toukokuu",
+#         "kesäkuu",
+#         "heinäkuu",
+#         "elokuu",
+#         "syyskuu",
+#         "lokakuu",
+#         "marraskuu",
+#         "joulukuu",
+#     ]
+#
+#     month_abbreviations = [
+#         "",
+#         "tammi",
+#         "helmi",
+#         "maalis",
+#         "huhti",
+#         "touko",
+#         "kesä",
+#         "heinä",
+#         "elo",
+#         "syys",
+#         "loka",
+#         "marras",
+#         "joulu",
+#     ]
+#
+#     day_names = [
+#         "",
+#         "maanantai",
+#         "tiistai",
+#         "keskiviikko",
+#         "torstai",
+#         "perjantai",
+#         "lauantai",
+#         "sunnuntai",
+#     ]
+#
+#     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
+#
+#     def _format_timeframe(self, timeframe: str, delta: float) -> str:
+#         return self.timeframes[timeframe][0].format(abs(delta))
+#
+#     def _format_relative(
+#         self, humanized: Union[str, List[str]], timeframe: str, delta: float
+#     ) -> str:
+#         if timeframe == "now":
+#             return humanized[0]
+#
+#         direction = self.past if delta < 0 else self.future
+#         which = 0 if delta < 0 else 1
+#
+#         return direction.format(humanized[which])
+#
+#     def _ordinal_number(self, n: int) -> str:
+#         return f"{n}."
 
 
 class ChineseCNLocale(Locale):
@@ -1220,7 +1220,7 @@ class SlavicBaseLocale(Locale):
             else:
                 exitstr = form[2]
         else:
-            exitstr = form
+            exitstr = str(form)
         return exitstr.format(delta)
 
 
@@ -2417,7 +2417,7 @@ class ArabicLocale(Locale):
             else:
                 exitstr = form["higher"]
         else:
-            exitstr = form
+            exitstr = str(form)
 
         return exitstr.format(delta)
 
@@ -2562,11 +2562,12 @@ class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
 
         tf_seq: Sequence[str] = self.timeframes[timeframe]
-        tf: str
         if delta < 0:
             tf = tf_seq[0]
         elif delta > 0:
             tf = tf_seq[1]
+        else:
+            tf = str(tf_seq)
 
         return tf.format(abs(delta))
 
@@ -2916,11 +2917,8 @@ class CzechLocale(Locale):
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
         """Czech aware time frame format function, takes into account
         the differences between past and future forms."""
-
         exitform: str = ""
-        form: Dict[
-            str, Union[str, Dict[str, Union[str, Dict[str, str]]]]
-        ] = self.timeframes[timeframe]
+        form: Collection[str] = self.timeframes[timeframe]
         if isinstance(form, dict):
             if delta == 0:
                 exitform = form["zero"]  # And *never* use 0 in the singular!
@@ -2928,8 +2926,6 @@ class CzechLocale(Locale):
                 exitform = form["future"]
             else:
                 exitform = form["past"]
-        delta = abs(delta)
-
         if isinstance(exitform, list):
             if 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
                 exitstr = exitform[0]
@@ -2937,7 +2933,7 @@ class CzechLocale(Locale):
                 exitstr = exitform[1]
         else:
             exitstr = exitform or str(form)
-        return exitstr.format(delta)
+        return exitstr.format(abs(delta))
 
 
 class SlovakLocale(Locale):
@@ -3013,9 +3009,7 @@ class SlovakLocale(Locale):
         the differences between past and future forms."""
         exitstr: str = ""
         exitform: Union[str, Dict[str, str]] = ""
-        form: Dict[
-            str, Union[str, Dict[str, Union[str, Dict[str, str]]]]
-        ] = self.timeframes[timeframe]
+        form: Collection[str] = self.timeframes[timeframe]
         if isinstance(form, dict):
             if delta == 0:
                 exitform = form["zero"]  # And *never* use 0 in the singular!
@@ -3031,7 +3025,7 @@ class SlovakLocale(Locale):
             else:
                 exitstr = exitform[1]
         else:
-            exitstr = exitform or str(form)
+            exitstr = str(exitform) or str(form)
         return exitstr.format(delta)
 
 
@@ -3195,7 +3189,7 @@ class HebrewLocale(Locale):
         return self.timeframes[key].format(trunc(abs(delta)))
 
     def describe_multi(
-        self, timeframes: List[Tuple[str, int]], only_distance: bool = False
+        self, timeframes: List[List[Any]], only_distance: bool = False
     ) -> str:
         """ Describes a delta within multiple timeframes in plain language.
         In Hebrew, the and word behaves a bit differently.
@@ -3511,7 +3505,7 @@ class HungarianLocale(Locale):
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
-        form: Union[Dict[str, str], str] = self.timeframes[timeframe]
+        form: Collection[str] = self.timeframes[timeframe]
         exitstr: str = ""
         if isinstance(form, dict):
             if delta > 0:
@@ -3671,7 +3665,7 @@ class ThaiLocale(Locale):
     ) -> str:
         """Thai normally doesn't have any space between words"""
         if timeframe == "now":
-            return humanized
+            return str(humanized)
         space = "" if timeframe == "seconds" else " "
         direction = self.past if delta < 0 else self.future
 
@@ -3746,7 +3740,7 @@ class BengaliLocale(Locale):
     ]
     day_abbreviations = ["", "সোম", "মঙ্গল", "বুধ", "বৃহঃ", "শুক্র", "শনি", "রবি"]
 
-    def _ordinal_number(self, n: int) -> Union[str, None]:
+    def _ordinal_number(self, n: int) -> str:
         if n > 10 or n == 0:
             return f"{n}তম"
         if n in [1, 5, 7, 8, 9, 10]:
@@ -3757,7 +3751,7 @@ class BengaliLocale(Locale):
             return f"{n}র্থ"
         if n == 6:
             return f"{n}ষ্ঠ"
-        return None  # to appease mypy
+        return f"{n}"
 
 
 class RomanshLocale(Locale):

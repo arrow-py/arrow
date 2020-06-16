@@ -1,7 +1,7 @@
 import time
 from datetime import date, datetime
 
-import pytest
+import pytest  # type: ignore
 from dateutil import tz
 
 from arrow.parser import ParserError

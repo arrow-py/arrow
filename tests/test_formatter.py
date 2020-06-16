@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import pytest
+import pytest  # type: ignore
 import pytz
 from dateutil import tz as dateutil_tz
 

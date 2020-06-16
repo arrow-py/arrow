@@ -1,5 +1,5 @@
 import pytz
-from dateutil.zoneinfo import get_zonefile_instance
+from dateutil.zoneinfo import get_zonefile_instance  # type: ignore
 
 from arrow import util
 
