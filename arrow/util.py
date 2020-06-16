@@ -1,6 +1,9 @@
 import datetime as dt
+import numbers
 from datetime import date, datetime, timedelta
 from typing import Any, Union
+
+from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 
 def total_seconds(td: timedelta) -> float:
@@ -13,7 +16,9 @@ def is_timestamp(value: Any) -> bool:
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
+        isinstance(value, numbers.Integral)
+        or isinstance(value, float)
+        or isinstance(value, str)
     ):
         return False
     try:
@@ -21,6 +26,20 @@ def is_timestamp(value: Any) -> bool:
         return True
     except ValueError:
         return False
+
+
+def normalize_timestamp(timestamp):
+    """Normalize millisecond and microsecond timestamps into normal timestamps."""
+    if timestamp > MAX_TIMESTAMP:
+        if timestamp < MAX_TIMESTAMP_MS:
+            timestamp /= 1e3
+        elif timestamp < MAX_TIMESTAMP_US:
+            timestamp /= 1e6
+        else:
+            raise ValueError(
+                "The specified timestamp '{}' is too large.".format(timestamp)
+            )
+    return timestamp
 
 
 # Credit to https://stackoverflow.com/a/1700069
@@ -44,8 +63,4 @@ def iso_to_gregorian(
     return gregorian
 
 
-def isstr(s: Any) -> bool:
-    return isinstance(s, str)
-
-
-__all__ = ["total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]
+__all__ = ["total_seconds", "is_timestamp", "iso_to_gregorian"]

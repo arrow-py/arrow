@@ -86,7 +86,7 @@ class Arrow:
             and tzinfo.zone  # type: ignore
         ):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
 
         self._datetime = datetime(
@@ -164,13 +164,14 @@ class Arrow:
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
             raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
-        dt = datetime.fromtimestamp(float(timestamp), tzinfo)
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.fromtimestamp(timestamp, tzinfo)
 
         return cls(
             dt.year,
@@ -194,7 +195,8 @@ class Arrow:
         if not util.is_timestamp(timestamp):
             raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
-        dt = datetime.utcfromtimestamp(float(timestamp))
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.utcfromtimestamp(timestamp)
 
         return cls(
             dt.year,
@@ -1018,7 +1020,7 @@ class Arrow:
                     years = sign * float(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
-            elif util.isstr(granularity):
+            elif isinstance(granularity, str):
                 if granularity == "second":
                     delta = sign * delta
                     if abs(delta) < 2:

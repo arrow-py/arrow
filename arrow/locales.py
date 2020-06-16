@@ -1640,14 +1640,16 @@ class MacedonianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сега",
-        "second": "секунда",
-        "seconds": "{0} секунди",
+        "second": "една секунда",
+        "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
         "minute": "една минута",
         "minutes": ["{0} минута", "{0} минути", "{0} минути"],
         "hour": "еден саат",
         "hours": ["{0} саат", "{0} саати", "{0} саати"],
         "day": "еден ден",
         "days": ["{0} ден", "{0} дена", "{0} дена"],
+        "week": "една недела",
+        "weeks": ["{0} недела", "{0} недели", "{0} недели"],
         "month": "еден месец",
         "months": ["{0} месец", "{0} месеци", "{0} месеци"],
         "year": "една година",
@@ -1673,39 +1675,39 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
     month_abbreviations = [
         "",
-        "Јан.",
-        " Фев.",
-        " Мар.",
-        " Апр.",
-        " Мај",
-        " Јун.",
-        " Јул.",
-        " Авг.",
-        " Септ.",
-        " Окт.",
-        " Ноем.",
-        " Декем.",
+        "Јан",
+        "Фев",
+        "Мар",
+        "Апр",
+        "Мај",
+        "Јун",
+        "Јул",
+        "Авг",
+        "Септ",
+        "Окт",
+        "Ноем",
+        "Декем",
     ]
 
     day_names = [
         "",
         "Понеделник",
-        " Вторник",
-        " Среда",
-        " Четврток",
-        " Петок",
-        " Сабота",
-        " Недела",
+        "Вторник",
+        "Среда",
+        "Четврток",
+        "Петок",
+        "Сабота",
+        "Недела",
     ]
     day_abbreviations = [
         "",
-        "Пон.",
-        " Вт.",
-        " Сре.",
-        " Чет.",
-        " Пет.",
-        " Саб.",
-        " Нед.",
+        "Пон",
+        "Вт",
+        "Сре",
+        "Чет",
+        "Пет",
+        "Саб",
+        "Нед",
     ]
 
 
@@ -4176,6 +4178,91 @@ class EstonianLocale(Locale):
         else:
             exitform = form["past"]
         return exitform.format(abs(delta))
+
+
+class SwahiliLocale(Locale):
+
+    names = [
+        "sw",
+        "sw_ke",
+        "sw_tz",
+    ]
+
+    past = "{0} iliyopita"
+    future = "muda wa {0}"
+    and_word = "na"
+
+    timeframes = {
+        "now": "sasa hivi",
+        "second": "sekunde",
+        "seconds": "sekunde {0}",
+        "minute": "dakika moja",
+        "minutes": "dakika {0}",
+        "hour": "saa moja",
+        "hours": "saa {0}",
+        "day": "siku moja",
+        "days": "siku {0}",
+        "week": "wiki moja",
+        "weeks": "wiki {0}",
+        "month": "mwezi moja",
+        "months": "miezi {0}",
+        "year": "mwaka moja",
+        "years": "miaka {0}",
+    }
+
+    meridians = {"am": "asu", "pm": "mch", "AM": "ASU", "PM": "MCH"}
+
+    month_names = [
+        "",
+        "Januari",
+        "Februari",
+        "Machi",
+        "Aprili",
+        "Mei",
+        "Juni",
+        "Julai",
+        "Agosti",
+        "Septemba",
+        "Oktoba",
+        "Novemba",
+        "Desemba",
+    ]
+    month_abbreviations = [
+        "",
+        "Jan",
+        "Feb",
+        "Mac",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+    ]
+
+    day_names = [
+        "",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
+        "Jumapili",
+    ]
+    day_abbreviations = [
+        "",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
+        "Jumapili",
+    ]
 
 
 _locales = _map_locales()
