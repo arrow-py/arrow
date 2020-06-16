@@ -120,7 +120,7 @@ class DateTimeParser(object):
         has_t_divider = "T" in datetime_string
 
         num_spaces = datetime_string.count(" ")
-        if has_space_divider and num_spaces != 1 or has_t_divider and num_spaces > 0:
+        if has_space_divider and num_spaces not in [1, 2] or has_t_divider and num_spaces > 0:
             raise ParserError(
                 "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
                     datetime_string
@@ -154,12 +154,16 @@ class DateTimeParser(object):
 
         if has_time:
 
+            time_parts_re = r"[\+\-Z]"
+
             if has_space_divider:
                 date_string, time_string = datetime_string.split(" ", 1)
+                if num_spaces == 2:
+                    time_parts_re = " " + time_parts_re
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
+            time_parts = re.split(time_parts_re, time_string, 1, re.IGNORECASE)
 
             time_components = self._TIME_RE.match(time_parts[0])
 
@@ -207,9 +211,13 @@ class DateTimeParser(object):
                 formats = ["{}T{}".format(f, time_string) for f in formats]
 
         if has_time and has_tz:
+            if has_space_divider and num_spaces == 2:
+                fmt_str = "{} {}"
+            else:
+                fmt_str = "{}{}"
             # Add "Z" or "ZZ" to the format strings to indicate to
             # _parse_token() that a timezone needs to be parsed
-            formats = ["{}{}".format(f, tz_format) for f in formats]
+            formats = [fmt_str.format(f, tz_format) for f in formats]
 
         return self._parse_multiformat(datetime_string, formats)
 

@@ -989,6 +989,32 @@ class TestDateTimeParserISO:
             2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzutc()
         )
 
+    def test_YYYY_MM_DD_HH_mm_ss_S_Z(self):
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.7 +01:00") == datetime(
+            2013, 2, 3, 4, 5, 6, 700000, tzinfo=tz.tzoffset(None, 3600)
+        )
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.78 +01:00") == datetime(
+            2013, 2, 3, 4, 5, 6, 780000, tzinfo=tz.tzoffset(None, 3600)
+        )
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.789 +01:00") == datetime(
+            2013, 2, 3, 4, 5, 6, 789000, tzinfo=tz.tzoffset(None, 3600)
+        )
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.7891 +01:00") == datetime(
+            2013, 2, 3, 4, 5, 6, 789100, tzinfo=tz.tzoffset(None, 3600)
+        )
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.78912 +01:00") == datetime(
+            2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600)
+        )
+
+        assert self.parser.parse_iso("2013-02-03 04:05:06.78912 Z") == datetime(
+            2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzutc()
+        )
+
     def test_W(self):
 
         assert self.parser.parse_iso("2011-W05-4") == datetime(2011, 2, 3)
