@@ -36,9 +36,7 @@ def normalize_timestamp(timestamp):
         elif timestamp < MAX_TIMESTAMP_US:
             timestamp /= 1e6
         else:
-            raise ValueError(
-                "The specified timestamp '{}' is too large.".format(timestamp)
-            )
+            raise ValueError(f"The specified timestamp '{timestamp}' is too large.")
     return timestamp
 
 
