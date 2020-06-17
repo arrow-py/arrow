@@ -1,5 +1,4 @@
 import datetime as dt
-import numbers
 from datetime import date, datetime, timedelta
 from typing import Any, Union
 
@@ -16,9 +15,7 @@ def is_timestamp(value: Any) -> bool:
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, numbers.Integral)
-        or isinstance(value, float)
-        or isinstance(value, str)
+        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
     ):
         return False
     try:
