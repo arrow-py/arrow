@@ -1,6 +1,33 @@
 Changelog
 =========
 
+0.15.7 (2020-06-19)
+-------------------
+
+- [NEW] Added a number of built-in format strings. See the `docs <https://arrow.readthedocs.io/#built-in-formats>`_ for a complete list of supported formats. For example:
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw.format(arrow.FORMAT_COOKIE)
+    'Wednesday, 27-May-2020 10:30:35 UTC'
+
+- [NEW] Arrow is now fully compatible with Python 3.9 and PyPy3.
+- [NEW] Added Makefile, tox.ini, and requirements.txt files to the distribution bundle.
+- [NEW] Added French Canadian and Swahili locales.
+- [NEW] Added ``humanize`` week granularity translation for Hebrew, Greek, Macedonian, Swedish, Slovak.
+- [FIX] ms and μs timestamps are now normalized in ``arrow.get()``, ``arrow.fromtimestamp()``, and ``arrow.utcfromtimestamp()``. For example:
+
+.. code-block:: python
+
+    >>> ts = 1591161115194556
+    >>> arw = arrow.get(ts)
+    <Arrow [2020-06-03T05:11:55.194556+00:00]>
+    >>> arw.timestamp
+    1591161115
+
+- [FIX] Refactored and updated Macedonian, Hebrew, Korean, and Portuguese locales.
+
 0.15.6 (2020-04-29)
 -------------------
 
