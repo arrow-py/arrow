@@ -12,7 +12,7 @@ Changelog
     >>> arw.format(arrow.FORMAT_COOKIE)
     'Wednesday, 27-May-2020 10:30:35 UTC'
 
-- [NEW] Added full Python 3.9 compatibility.
+- [NEW] Arrow is now fully compatible with Python 3.9 and PyPy3.
 - [NEW] Added Makefile, tox.ini, and requirements.txt files to the distribution bundle.
 - [NEW] Added French Canadian and Swahili locales.
 - [NEW] Added ``humanize`` week granularity translation for Hebrew, Greek, Macedonian, Swedish, Slovak.
