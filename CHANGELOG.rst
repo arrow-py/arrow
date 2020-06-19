@@ -26,7 +26,7 @@ Changelog
     >>> arw.timestamp
     1591161115
 
-- [FIX] Refactored and updated Macedonian, Hebrew, and Portuguese locales.
+- [FIX] Refactored and updated Macedonian, Hebrew, Korean, and Portuguese locales.
 
 0.15.6 (2020-04-29)
 -------------------
