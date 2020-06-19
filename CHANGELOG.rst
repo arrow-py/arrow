@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.15.7 (2020-06-xx)
+0.15.7 (2020-06-19)
 -------------------
 
 - [NEW] Added a number of built-in format strings. See the `docs <https://arrow.readthedocs.io/#built-in-formats>`_ for a complete list of supported formats. For example:
