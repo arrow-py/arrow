@@ -160,7 +160,7 @@ The following will work in v0.15.0:
 
 - [CHANGE] When a meridian token (a|A) is passed and no meridians are available for the specified locale (e.g. unsupported or untranslated) a ``ParserError`` is raised.
 - [CHANGE] The timestamp token (``X``) will now match float timestamps of type ``str``: ``arrow.get(“1565358758.123415”, “X”)``.
-- [CHANGE] Strings with leading and/or trailing whitespace will no longer be parsed without a format string. Please see `the docs <https://arrow.readthedocs.io/en/latest/#regular-expressions>`_ for ways to handle this.
+- [CHANGE] Strings with leading and/or trailing whitespace will no longer be parsed without a format string. Please see `the docs <https://arrow.readthedocs.io/#regular-expressions>`_ for ways to handle this.
 - [FIX] The timestamp token (``X``) will now only match on strings that **strictly contain integers and floats**, preventing incorrect matches.
 - [FIX] Most instances of ``arrow.get()`` returning an incorrect ``Arrow`` object from a partial parsing match have been eliminated. The following issue have been addressed: `#91 <https://github.com/crsmithdev/arrow/issues/91>`_, `#196 <https://github.com/crsmithdev/arrow/issues/196>`_, `#396 <https://github.com/crsmithdev/arrow/issues/396>`_, `#434 <https://github.com/crsmithdev/arrow/issues/434>`_, `#447 <https://github.com/crsmithdev/arrow/issues/447>`_, `#456 <https://github.com/crsmithdev/arrow/issues/456>`_, `#519 <https://github.com/crsmithdev/arrow/issues/519>`_, `#538 <https://github.com/crsmithdev/arrow/issues/538>`_, `#560 <https://github.com/crsmithdev/arrow/issues/560>`_.
 
