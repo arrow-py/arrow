@@ -692,6 +692,15 @@ class Arrow(object):
 
         """
 
+        warnings.warn(
+            "For datetime compatibility reasons this property will be removed in the future, instead use .unix_timestamp",
+            PendingDeprecationWarning,
+        )
+        return calendar.timegm(self._datetime.utctimetuple())
+
+    @property
+    def unix_timestamp(self):
+
         return calendar.timegm(self._datetime.utctimetuple())
 
     @property
@@ -706,7 +715,8 @@ class Arrow(object):
 
         """
 
-        return self.timestamp + float(self.microsecond) / 1000000
+        # return self.timestamp + float(self.microsecond) / 1000000
+        return self._datetime.timestamp()
 
     @property
     def fold(self):
