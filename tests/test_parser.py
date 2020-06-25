@@ -652,6 +652,14 @@ class TestDateTimeParserParse:
             with pytest.raises(ParserError):
                 self.parser.parse(fmt, "W")
 
+    def test_parse_normalize_spaces(self):
+        assert self.parser.parse(
+            "Jun 1 2005  1:33PM", "MMM D YYYY H:mmA", normalize_spaces=True
+        ) == datetime(2005, 6, 1, 13, 33)
+        assert self.parser.parse(
+            "  \n Jun   1\t 2005\n ", "MMM D YYYY", normalize_spaces=True
+        ) == datetime(2005, 6, 1)
+
 
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
@@ -1066,6 +1074,11 @@ class TestDateTimeParserISO:
         dt = datetime.utcnow()
 
         assert self.parser.parse_iso(dt.isoformat()) == dt
+
+    def test_parse_iso_normalize_spaces(self):
+        assert self.parser.parse_iso(
+            "2013-036  04:05:06Z", normalize_spaces=True
+        ) == datetime(2013, 2, 5, 4, 5, 6, tzinfo=tz.tzutc())
 
     def test_parse_iso_with_leading_and_trailing_whitespace(self):
         datetime_string = "    2016-11-15T06:37:19.123456"

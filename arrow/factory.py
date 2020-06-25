@@ -141,6 +141,7 @@ class ArrowFactory(object):
         arg_count = len(args)
         locale = kwargs.pop("locale", "en_us")
         tz = kwargs.get("tzinfo", None)
+        normalize_spaces = kwargs.pop("normalize_spaces", False)
 
         # if kwargs given, send to constructor unless only tzinfo provided
         if len(kwargs) > 1:
@@ -193,7 +194,7 @@ class ArrowFactory(object):
 
             # (str) -> parse.
             elif isstr(arg):
-                dt = parser.DateTimeParser(locale).parse_iso(arg)
+                dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_spaces)
                 return self.type.fromdatetime(dt, tz)
 
             # (struct_time) -> from struct_time
@@ -240,7 +241,9 @@ class ArrowFactory(object):
 
             # (str, format) -> parse.
             elif isstr(arg_1) and (isstr(arg_2) or isinstance(arg_2, list)):
-                dt = parser.DateTimeParser(locale).parse(args[0], args[1])
+                dt = parser.DateTimeParser(locale).parse(
+                    args[0], args[1], normalize_spaces
+                )
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
