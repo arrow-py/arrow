@@ -739,7 +739,7 @@ class Arrow(object):
                 'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
             )
 
-    def span(self, frame, count=1, bounds="[)"):
+    def span(self, frame, count=1, bounds="[)", **kwargs):
         """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
@@ -749,6 +749,8 @@ class Arrow(object):
             whether to include or exclude the start and end values in the span. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
+        :param startSunday: (optional) if startSunday=True is specified, weekday will start on
+            Sunday instead of Monday
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -793,7 +795,8 @@ class Arrow(object):
         floor = self.__class__(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+            dayOfWeek = self.isoweekday(kwargs["startSunday"] if kwargs else None)
+            floor = floor + relativedelta(days=-(dayOfWeek - 1))
         elif frame_absolute == "quarter":
             floor = floor + relativedelta(months=-((self.month - 1) % 3))
 
@@ -1339,17 +1342,27 @@ class Arrow(object):
 
         return self._datetime.weekday()
 
-    def isoweekday(self):
+    def isoweekday(self, startSunday=False):
         """ Returns the ISO day of the week as an integer (1-7).
+        :param startSunday (optional): if startSunday=True is specified, weekday
+            will start on Sunday instead of Monday
 
         Usage::
 
             >>> arrow.utcnow().isoweekday()
             6
+            >>> arrow.utcnow().isoweekday(startSunday=True)
+            7
 
         """
-
-        return self._datetime.isoweekday()
+        dayOfWeek = self._datetime.isoweekday()
+        if startSunday:
+            if dayOfWeek == 7:
+                return 1
+            else:
+                return dayOfWeek + 1
+        else:
+            return dayOfWeek
 
     def isocalendar(self):
         """ Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).

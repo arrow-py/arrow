@@ -458,6 +458,24 @@ class TestArrowDatetimeInterface:
 
         assert result == self.arrow._datetime.isoweekday()
 
+    def test_isoweekday_startSunday(self):
+
+        result = self.arrow.isoweekday(startSunday=True)
+        dayOfWeek = self.arrow._datetime.isoweekday()
+
+        assert result == 1 if dayOfWeek == 7 else dayOfWeek + 1
+
+    def test_isoweekday_startSunday_edge(self):
+
+        dateSun = self.arrow.fromdatetime(datetime(2020, 6, 28))
+        dateMon = self.arrow.fromdatetime(datetime(2020, 6, 29))
+
+        resultSun = dateSun.isoweekday(startSunday=True)
+        resultMon = dateMon.isoweekday(startSunday=True)
+
+        assert resultSun == 1
+        assert resultMon == 2
+
     def test_isocalendar(self):
 
         result = self.arrow.isocalendar()
@@ -1227,6 +1245,13 @@ class TestArrowSpan:
 
         assert floor == datetime(2013, 2, 11, tzinfo=tz.tzutc())
         assert ceil == datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+
+    def test_span_week_startSunday(self):
+
+        floor, ceil = self.arrow.span("week", startSunday=True)
+
+        assert floor == datetime(2013, 2, 10, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 16, 23, 59, 59, 999999, tzinfo=tz.tzutc())
 
     def test_span_day(self):
 
