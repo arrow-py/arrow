@@ -693,7 +693,8 @@ class Arrow(object):
         """
 
         warnings.warn(
-            "For datetime compatibility reasons this property will be removed in the future, instead use .unix_timestamp",
+            "For datetime compatibility reasons this property will be removed in the future, instead use "
+            ".unix_timestamp for the same behaviour",
             PendingDeprecationWarning,
         )
         return calendar.timegm(self._datetime.utctimetuple())
@@ -715,6 +716,8 @@ class Arrow(object):
 
         """
 
+        # IDEA get rid of this in 1.0.0 and make a timestamp method?
+        # Or for compatibility retain this but make it call the timestamp method
         # return self.timestamp + float(self.microsecond) / 1000000
         return self._datetime.timestamp()
 
