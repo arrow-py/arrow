@@ -2867,6 +2867,8 @@ class CzechLocale(Locale):
         "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodin"]},
         "day": {"past": "dnem", "future": "den", "zero": "{0} dnů"},
         "days": {"past": "{0} dny", "future": ["{0} dny", "{0} dnů"]},
+        "week": {"past": "týdnem", "future": "týden", "zero": "{0} týdnů"},
+        "weeks": {"past": "{0} týdny", "future": ["{0} týdny", "{0} týdnů"]},
         "month": {"past": "měsícem", "future": "měsíc", "zero": "{0} měsíců"},
         "months": {"past": "{0} měsíci", "future": ["{0} měsíce", "{0} měsíců"]},
         "year": {"past": "rokem", "future": "rok", "zero": "{0} let"},
