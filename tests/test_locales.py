@@ -361,6 +361,12 @@ class TestCzechLocale:
         assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
         assert self.locale._format_timeframe("now", 0) == "Teď"
 
+        assert self.locale._format_timeframe("weeks", 2) == "2 týdny"
+        assert self.locale._format_timeframe("weeks", 5) == "5 týdnů"
+        assert self.locale._format_timeframe("week", 0) == "0 týdnů"
+        assert self.locale._format_timeframe("weeks", -2) == "2 týdny"
+        assert self.locale._format_timeframe("weeks", -5) == "5 týdny"
+
     def test_format_relative_now(self):
 
         result = self.locale._format_relative("Teď", "now", 0)
