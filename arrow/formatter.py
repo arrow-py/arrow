@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, division
 
 import calendar
 import re
@@ -8,15 +8,26 @@ from dateutil import tz as dateutil_tz
 
 from arrow import locales, util
 
+FORMAT_ATOM = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_COOKIE = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
+FORMAT_RFC822 = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC850 = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
+FORMAT_RFC1036 = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC1123 = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC2822 = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC3339 = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_RSS = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_W3C = "YYYY-MM-DD HH:mm:ssZZ"
+
 
 class DateTimeFormatter(object):
 
-    # This pattern matches characters enclosed in square brackes are matched as
+    # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
-    # TODO: test against full timezone DB
+
     _FORMAT_RE = re.compile(
-        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
     )
 
     def __init__(self, locale="en_us"):
@@ -98,7 +109,13 @@ class DateTimeFormatter(object):
             return str(int(dt.microsecond / 100000))
 
         if token == "X":
+            # TODO: replace with a call to dt.timestamp() when we drop Python 2.7
             return str(calendar.timegm(dt.utctimetuple()))
+
+        if token == "x":
+            # TODO: replace with a call to dt.timestamp() when we drop Python 2.7
+            ts = calendar.timegm(dt.utctimetuple()) + (dt.microsecond / 1000000)
+            return str(int(ts * 1000000))
 
         if token == "ZZZ":
             return dt.tzname()
@@ -116,3 +133,7 @@ class DateTimeFormatter(object):
 
         if token in ("a", "A"):
             return self.locale.meridian(dt.hour, token)
+
+        if token == "W":
+            year, week, day = dt.isocalendar()
+            return "{}-W{:02d}-{}".format(year, week, day)

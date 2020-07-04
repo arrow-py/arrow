@@ -1,0 +1,99 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 1 * *" # run tests monthly
+
+jobs:
+  Linting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install tox
+      - name: Linting code
+        run: tox -e lint
+      - name: Linting docs
+        run: tox -e docs
+
+  Linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["pypy3", "2.7", "3.5", "3.6", "3.7", "3.8"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
+      - name: Test with tox
+        run: tox
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: .coverage
+
+  MacOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: ["pypy3", "2.7", "3.5", "3.6", "3.7", "3.8"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
+      - name: Test with tox
+        run: tox
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: .coverage
+
+  Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["pypy3", "2.7", "3.5", "3.6", "3.7", "3.8"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox tox-gh-actions
+      - name: Test with tox
+        run: tox
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: .coverage

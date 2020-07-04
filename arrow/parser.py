@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 
 from arrow import locales
-from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
+from arrow.util import iso_to_gregorian, normalize_timestamp
 
 try:
     from functools import lru_cache
@@ -31,7 +31,7 @@ class ParserMatchError(ParserError):
 class DateTimeParser(object):
 
     _FORMAT_RE = re.compile(
-        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X)"
+        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
     )
     _ESCAPE_RE = re.compile(r"\[[^\[\]]*\]")
 
@@ -49,6 +49,7 @@ class DateTimeParser(object):
     _TIMESTAMP_RE = re.compile(r"^\-?\d+\.?\d+$")
     _TIMESTAMP_EXPANDED_RE = re.compile(r"^\-?\d+$")
     _TIME_RE = re.compile(r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$")
+    _WEEK_DATE_RE = re.compile(r"(?P<year>\d{4})[\-]?W(?P<week>\d{2})[\-]?(?P<day>\d)?")
 
     _BASE_INPUT_RE_MAP = {
         "YYYY": _FOUR_DIGIT_RE,
@@ -73,6 +74,7 @@ class DateTimeParser(object):
         "ZZ": _TZ_ZZ_RE,
         "Z": _TZ_Z_RE,
         "S": _ONE_OR_MORE_DIGIT_RE,
+        "W": _WEEK_DATE_RE,
     }
 
     SEPARATORS = ["-", "/", "."]
@@ -147,6 +149,7 @@ class DateTimeParser(object):
             "YYYY/MM",
             "YYYY.MM",
             "YYYY",
+            "W",
         ]
 
         if has_time:
@@ -228,6 +231,8 @@ class DateTimeParser(object):
         for token in fmt_tokens:
             if token == "Do":
                 value = match.group("value")
+            elif token == "W":
+                value = (match.group("year"), match.group("week"), match.group("day"))
             else:
                 value = match.group(token)
             self._parse_token(token, value, parts)
@@ -377,8 +382,28 @@ class DateTimeParser(object):
             elif value in (self.locale.meridians["pm"], self.locale.meridians["PM"]):
                 parts["am_pm"] = "pm"
 
+        elif token == "W":
+            parts["weekdate"] = value
+
     @staticmethod
     def _build_datetime(parts):
+
+        weekdate = parts.get("weekdate")
+
+        if weekdate is not None:
+            # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
+            year, week = int(weekdate[0]), int(weekdate[1])
+
+            if weekdate[2] is not None:
+                day = int(weekdate[2])
+            else:
+                # day not given, default to 1
+                day = 1
+
+            dt = iso_to_gregorian(year, week, day)
+            parts["year"] = dt.year
+            parts["month"] = dt.month
+            parts["day"] = dt.day
 
         timestamp = parts.get("timestamp")
 
@@ -388,20 +413,9 @@ class DateTimeParser(object):
         expanded_timestamp = parts.get("expanded_timestamp")
 
         if expanded_timestamp is not None:
-
-            if expanded_timestamp > MAX_TIMESTAMP:
-                if expanded_timestamp < MAX_TIMESTAMP_MS:
-                    expanded_timestamp /= 1000.0
-                elif expanded_timestamp < MAX_TIMESTAMP_US:
-                    expanded_timestamp /= 1000000.0
-                else:
-                    raise ValueError(
-                        "The specified timestamp '{}' is too large.".format(
-                            expanded_timestamp
-                        )
-                    )
-
-            return datetime.fromtimestamp(expanded_timestamp, tz=tz.tzutc())
+            return datetime.fromtimestamp(
+                normalize_timestamp(expanded_timestamp), tz=tz.tzutc(),
+            )
 
         day_of_year = parts.get("day_of_year")
 

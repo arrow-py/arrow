@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
-import time
 from datetime import datetime
 
+import pytest
 import pytz
 from dateutil import tz as dateutil_tz
 
-from arrow import formatter
+from arrow import (
+    FORMAT_ATOM,
+    FORMAT_COOKIE,
+    FORMAT_RFC822,
+    FORMAT_RFC850,
+    FORMAT_RFC1036,
+    FORMAT_RFC1123,
+    FORMAT_RFC2822,
+    FORMAT_RFC3339,
+    FORMAT_RSS,
+    FORMAT_W3C,
+)
 
 from .utils import make_full_tz_list
 
 
+@pytest.mark.usefixtures("arrow_formatter")
 class TestDateTimeFormatterFormatToken:
-    @classmethod
-    def setup_class(cls):
-        cls.formatter = formatter.DateTimeFormatter()
-
     def test_format(self):
 
         dt = datetime(2013, 2, 5, 12, 32, 51)
@@ -105,9 +113,15 @@ class TestDateTimeFormatterFormatToken:
 
     def test_timestamp(self):
 
-        timestamp = time.time()
+        timestamp = 1588437009.8952794
         dt = datetime.utcfromtimestamp(timestamp)
-        assert self.formatter._format_token(dt, "X") == str(int(timestamp))
+        expected = str(int(timestamp))
+        assert self.formatter._format_token(dt, "X") == expected
+
+        # Must round because time.time() may return a float with greater
+        # than 6 digits of precision
+        expected = str(int(timestamp * 1000000))
+        assert self.formatter._format_token(dt, "x") == expected
 
     def test_timezone(self):
 
@@ -119,17 +133,17 @@ class TestDateTimeFormatterFormatToken:
         result = self.formatter._format_token(dt, "Z")
         assert result == "-0700" or result == "-0800"
 
-    def test_timezone_formatter(self):
+    @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
+    def test_timezone_formatter(self, full_tz_name):
 
-        for full_name in make_full_tz_list():
-            # This test will fail if we use "now" as date as soon as we change from/to DST
-            dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
-                tzinfo=dateutil_tz.gettz(full_name)
-            )
-            abbreviation = dt.tzname()
+        # This test will fail if we use "now" as date as soon as we change from/to DST
+        dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
+            tzinfo=dateutil_tz.gettz(full_tz_name)
+        )
+        abbreviation = dt.tzname()
 
-            result = self.formatter._format_token(dt, "ZZZ")
-            assert result == abbreviation
+        result = self.formatter._format_token(dt, "ZZZ")
+        assert result == abbreviation
 
     def test_am_pm(self):
 
@@ -140,6 +154,14 @@ class TestDateTimeFormatterFormatToken:
         dt = datetime(2012, 1, 1, 13)
         assert self.formatter._format_token(dt, "a") == "pm"
         assert self.formatter._format_token(dt, "A") == "PM"
+
+    def test_week(self):
+        dt = datetime(2017, 5, 19)
+        assert self.formatter._format_token(dt, "W") == "2017-W20-5"
+
+        # make sure week is zero padded when needed
+        dt_early = datetime(2011, 1, 20)
+        assert self.formatter._format_token(dt_early, "W") == "2011-W03-4"
 
     def test_nonsense(self):
         dt = datetime(2012, 1, 1, 11)
@@ -193,5 +215,68 @@ class TestDateTimeFormatterFormatToken:
             == "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM"
         )
 
-        # Escaping is atomic: brackets inside brackets are treated litterally
+        # Escaping is atomic: brackets inside brackets are treated literally
         assert self.formatter.format(datetime(1, 1, 1), "[[[ ]]") == "[[ ]"
+
+
+@pytest.mark.usefixtures("arrow_formatter", "time_1975_12_25")
+class TestDateTimeFormatterBuiltinFormats:
+    def test_atom(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_ATOM)
+            == "1975-12-25 14:15:16-05:00"
+        )
+
+    def test_cookie(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_COOKIE)
+            == "Thursday, 25-Dec-1975 14:15:16 EST"
+        )
+
+    def test_rfc_822(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC822)
+            == "Thu, 25 Dec 75 14:15:16 -0500"
+        )
+
+    def test_rfc_850(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC850)
+            == "Thursday, 25-Dec-75 14:15:16 EST"
+        )
+
+    def test_rfc_1036(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC1036)
+            == "Thu, 25 Dec 75 14:15:16 -0500"
+        )
+
+    def test_rfc_1123(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC1123)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
+
+    def test_rfc_2822(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC2822)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
+
+    def test_rfc3339(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC3339)
+            == "1975-12-25 14:15:16-05:00"
+        )
+
+    def test_rss(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RSS)
+            == "Thu, 25 Dec 1975 14:15:16 -0500"
+        )
+
+    def test_w3c(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_W3C)
+            == "1975-12-25 14:15:16-05:00"
+        )

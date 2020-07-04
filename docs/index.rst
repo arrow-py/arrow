@@ -1,7 +1,7 @@
 Arrow: Better dates & times for Python
 ======================================
 
-Release v\ |release|. (`Installation`_) (`Changelog <releases.html>`_)
+Release v\ |release| (`Installation`_) (`Changelog <releases.html>`_)
 
 .. include:: ../README.rst
   :start-after: start-inclusion-marker-do-not-remove
@@ -332,7 +332,7 @@ Then get and use a factory for it:
 Supported Tokens
 ~~~~~~~~~~~~~~~~
 
-Use the following tokens in parsing and formatting.  Note that they're not the same as the tokens for `strptime(3) <https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html#index-strptime>`_:
+Use the following tokens for parsing and formatting. Note that they are **not** the same as the tokens for `strptime <https://linux.die.net/man/3/strptime>`_:
 
 +--------------------------------+--------------+-------------------------------------------+
 |                                |Token         |Output                                     |
@@ -364,6 +364,8 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 |                                |ddd           |Mon, Tue, Wed ... [#t2]_                   |
 +--------------------------------+--------------+-------------------------------------------+
 |                                |d             |1, 2, 3 ... 6, 7                           |
++--------------------------------+--------------+-------------------------------------------+
+|**ISO week date**               |W             |2011-W05-4, 2019-W17                       |
 +--------------------------------+--------------+-------------------------------------------+
 |**Hour**                        |HH            |00, 01, 02 ... 23, 24                      |
 +--------------------------------+--------------+-------------------------------------------+
@@ -405,6 +407,35 @@ Use the following tokens in parsing and formatting.  Note that they're not the s
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
 .. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
+
+Built-in Formats
+++++++++++++++++
+
+There are several formatting standards that are provided as built-in tokens.
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw.format(arrow.FORMAT_ATOM)
+    '2020-05-27 10:30:35+00:00'
+    >>> arw.format(arrow.FORMAT_COOKIE)
+    'Wednesday, 27-May-2020 10:30:35 UTC'
+    >>> arw.format(arrow.FORMAT_RSS)
+    'Wed, 27 May 2020 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC822)
+    'Wed, 27 May 20 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC850)
+    'Wednesday, 27-May-20 10:30:35 UTC'
+    >>> arw.format(arrow.FORMAT_RFC1036)
+    'Wed, 27 May 20 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC1123)
+    'Wed, 27 May 2020 10:30:35 +0000'
+    >>> arw.format(arrow.FORMAT_RFC2822)
+    'Wed, 27 May 2020 10:30:35 +0000'
+     >>> arw.format(arrow.FORMAT_RFC3339)
+    '2020-05-27 10:30:35+00:00'
+     >>> arw.format(arrow.FORMAT_W3C)
+    '2020-05-27 10:30:35+00:00'
 
 Escaping Formats
 ~~~~~~~~~~~~~~~~

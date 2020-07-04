@@ -2,6 +2,9 @@
 from __future__ import absolute_import
 
 import datetime
+import numbers
+
+from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 
 def total_seconds(td):
@@ -14,7 +17,9 @@ def is_timestamp(value):
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
+        isinstance(value, numbers.Integral)
+        or isinstance(value, float)
+        or isinstance(value, str)
     ):
         return False
     try:
@@ -22,6 +27,20 @@ def is_timestamp(value):
         return True
     except ValueError:
         return False
+
+
+def normalize_timestamp(timestamp):
+    """Normalize millisecond and microsecond timestamps into normal timestamps."""
+    if timestamp > MAX_TIMESTAMP:
+        if timestamp < MAX_TIMESTAMP_MS:
+            timestamp /= 1e3
+        elif timestamp < MAX_TIMESTAMP_US:
+            timestamp /= 1e6
+        else:
+            raise ValueError(
+                "The specified timestamp '{}' is too large.".format(timestamp)
+            )
+    return timestamp
 
 
 # Credit to https://stackoverflow.com/a/1700069

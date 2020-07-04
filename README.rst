@@ -3,9 +3,9 @@ Arrow: Better dates & times for Python
 
 .. start-inclusion-marker-do-not-remove
 
-.. image:: https://travis-ci.org/crsmithdev/arrow.svg?branch=master
+.. image:: https://github.com/crsmithdev/arrow/workflows/tests/badge.svg?branch=master
    :alt: Build Status
-   :target: https://travis-ci.org/crsmithdev/arrow
+   :target: https://github.com/crsmithdev/arrow/actions?query=workflow%3Atests+branch%3Amaster
 
 .. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
    :alt: Codecov
@@ -47,7 +47,7 @@ Features
 --------
 
 - Fully-implemented, drop-in replacement for datetime
-- Supports Python 2.7, 3.5, 3.6, 3.7 and 3.8
+- Supports Python 2.7, 3.5, 3.6, 3.7, 3.8 and 3.9
 - Timezone-aware and UTC by default
 - Provides super-simple creation options for many common input scenarios
 - :code:`shift` method with support for relative offsets, including weeks
@@ -65,7 +65,7 @@ Quick Start
 Installation
 ~~~~~~~~~~~~
 
-To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pipenv <https://docs.pipenv.org/en/latest/>`_:
+To install Arrow, use `pip <https://pip.pypa.io/en/stable/quickstart/>`_ or `pipenv <https://docs.pipenv.org>`_:
 
 .. code-block:: console
 
@@ -112,16 +112,22 @@ Example Usage
 Documentation
 -------------
 
-For full documentation, please visit `arrow.readthedocs.io <https://arrow.readthedocs.io/en/latest/>`_.
+For full documentation, please visit `arrow.readthedocs.io <https://arrow.readthedocs.io>`_.
 
 Contributing
 ------------
 
 Contributions are welcome for both code and localizations (adding and updating locales). Begin by gaining familiarity with the Arrow library and its features. Then, jump into contributing:
 
-1. Find an issue or feature to tackle on the `issue tracker <https://github.com/crsmithdev/arrow/issues>`_. Issues marked with the `"good first issue" label <https://github.com/crsmithdev/arrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ may be a great place to start!
-2. Fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub and begin making changes in a branch.
-3. Add a few tests to ensure that the bug was fixed or the feature works as expected.
-4. Submit a pull request and await feedback 😃.
+#. Find an issue or feature to tackle on the `issue tracker <https://github.com/crsmithdev/arrow/issues>`_. Issues marked with the `"good first issue" label <https://github.com/crsmithdev/arrow/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22>`_ may be a great place to start!
+#. Fork `this repository <https://github.com/crsmithdev/arrow>`_ on GitHub and begin making changes in a branch.
+#. Add a few tests to ensure that the bug was fixed or the feature works as expected.
+#. Run the entire test suite and linting checks by running one of the following commands: :code:`tox` (if you have `tox <https://tox.readthedocs.io>`_ installed) **OR** :code:`make build38 && make test && make lint` (if you do not have Python 3.8 installed, replace :code:`build38` with the latest Python version on your system).
+#. Submit a pull request and await feedback 😃.
 
 If you have any questions along the way, feel free to ask them `here <https://github.com/crsmithdev/arrow/issues/new?labels=question>`_.
+
+Support Arrow
+-------------
+
+`Open Collective <https://opencollective.com/>`_ is an online funding platform that provides tools to raise money and share your finances with full transparency. It is the platform of choice for individuals and companies to make one-time or recurring donations directly to the project. If you are interested in making a financial contribution, please visit the `Arrow collective <https://opencollective.com/arrow>`_.

@@ -158,7 +158,8 @@ class Arrow(object):
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = datetime.fromtimestamp(float(timestamp), tzinfo)
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.fromtimestamp(timestamp, tzinfo)
 
         return cls(
             dt.year,
@@ -184,7 +185,8 @@ class Arrow(object):
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = datetime.utcfromtimestamp(float(timestamp))
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.utcfromtimestamp(timestamp)
 
         return cls(
             dt.year,
