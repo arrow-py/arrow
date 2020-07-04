@@ -1144,6 +1144,7 @@ class TestArrowSpanRange:
                 "hour",
                 datetime(2013, 5, 5, 12, 30),
                 datetime(2013, 5, 5, 17, 15),
+                bounds="[)",
                 exact=True,
             )
         )
