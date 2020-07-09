@@ -1,6 +1,33 @@
 Changelog
 =========
 
+0.15.7 (2020-06-19)
+-------------------
+
+- [NEW] Added a number of built-in format strings. See the `docs <https://arrow.readthedocs.io/#built-in-formats>`_ for a complete list of supported formats. For example:
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw.format(arrow.FORMAT_COOKIE)
+    'Wednesday, 27-May-2020 10:30:35 UTC'
+
+- [NEW] Arrow is now fully compatible with Python 3.9 and PyPy3.
+- [NEW] Added Makefile, tox.ini, and requirements.txt files to the distribution bundle.
+- [NEW] Added French Canadian and Swahili locales.
+- [NEW] Added ``humanize`` week granularity translation for Hebrew, Greek, Macedonian, Swedish, Slovak.
+- [FIX] ms and μs timestamps are now normalized in ``arrow.get()``, ``arrow.fromtimestamp()``, and ``arrow.utcfromtimestamp()``. For example:
+
+.. code-block:: python
+
+    >>> ts = 1591161115194556
+    >>> arw = arrow.get(ts)
+    <Arrow [2020-06-03T05:11:55.194556+00:00]>
+    >>> arw.timestamp
+    1591161115
+
+- [FIX] Refactored and updated Macedonian, Hebrew, Korean, and Portuguese locales.
+
 0.15.6 (2020-04-29)
 -------------------
 
@@ -133,7 +160,7 @@ The following will work in v0.15.0:
 
 - [CHANGE] When a meridian token (a|A) is passed and no meridians are available for the specified locale (e.g. unsupported or untranslated) a ``ParserError`` is raised.
 - [CHANGE] The timestamp token (``X``) will now match float timestamps of type ``str``: ``arrow.get(“1565358758.123415”, “X”)``.
-- [CHANGE] Strings with leading and/or trailing whitespace will no longer be parsed without a format string. Please see `the docs <https://arrow.readthedocs.io/en/latest/#regular-expressions>`_ for ways to handle this.
+- [CHANGE] Strings with leading and/or trailing whitespace will no longer be parsed without a format string. Please see `the docs <https://arrow.readthedocs.io/#regular-expressions>`_ for ways to handle this.
 - [FIX] The timestamp token (``X``) will now only match on strings that **strictly contain integers and floats**, preventing incorrect matches.
 - [FIX] Most instances of ``arrow.get()`` returning an incorrect ``Arrow`` object from a partial parsing match have been eliminated. The following issue have been addressed: `#91 <https://github.com/crsmithdev/arrow/issues/91>`_, `#196 <https://github.com/crsmithdev/arrow/issues/196>`_, `#396 <https://github.com/crsmithdev/arrow/issues/396>`_, `#434 <https://github.com/crsmithdev/arrow/issues/434>`_, `#447 <https://github.com/crsmithdev/arrow/issues/447>`_, `#456 <https://github.com/crsmithdev/arrow/issues/456>`_, `#519 <https://github.com/crsmithdev/arrow/issues/519>`_, `#538 <https://github.com/crsmithdev/arrow/issues/538>`_, `#560 <https://github.com/crsmithdev/arrow/issues/560>`_.
 
