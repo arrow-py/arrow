@@ -703,7 +703,10 @@ class TestFinnishLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "2 tunnin"
         assert self.locale._format_timeframe("hours", 10) == "10 tunnin"
+        assert self.locale._format_timeframe("hours", 1) == "1 tunnin"
+        assert self.locale._format_timeframe("hours", 0) == "0 tuntia"
         assert self.locale._format_timeframe("hour", 0) == "tunti"
+        assert self.locale._format_timeframe("hour", 1) == "tunnin"
 
     def test_format_relative_now(self):
         result = self.locale._format_relative(["juuri nyt", "juuri nyt"], "now", 0)
