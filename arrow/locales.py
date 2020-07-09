@@ -804,94 +804,99 @@ class SwedishLocale(Locale):
     day_abbreviations = ["", "mån", "tis", "ons", "tor", "fre", "lör", "sön"]
 
 
-# class FinnishLocale(Locale):
-#
-#     names = ["fi", "fi_fi"]
-#
-#     # The finnish grammar is very complex, and its hard to convert
-#     # 1-to-1 to something like English.
-#
-#     past = "{0} sitten"
-#     future = "{0} kuluttua"
-#
-#     timeframes = {
-#         "now": ["juuri nyt", "juuri nyt"],
-#         "second": ["sekunti", "sekunti"],
-#         "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
-#         "minute": ["minuutti", "minuutin"],
-#         "minutes": ["{0} minuuttia", "{0} minuutin"],
-#         "hour": ["tunti", "tunnin"],
-#         "hours": ["{0} tuntia", "{0} tunnin"],
-#         "day": ["päivä", "päivä"],
-#         "days": ["{0} päivää", "{0} päivän"],
-#         "month": ["kuukausi", "kuukauden"],
-#         "months": ["{0} kuukautta", "{0} kuukauden"],
-#         "year": ["vuosi", "vuoden"],
-#         "years": ["{0} vuotta", "{0} vuoden"],
-#     }
-#
-#     # Months and days are lowercase in Finnish
-#     month_names = [
-#         "",
-#         "tammikuu",
-#         "helmikuu",
-#         "maaliskuu",
-#         "huhtikuu",
-#         "toukokuu",
-#         "kesäkuu",
-#         "heinäkuu",
-#         "elokuu",
-#         "syyskuu",
-#         "lokakuu",
-#         "marraskuu",
-#         "joulukuu",
-#     ]
-#
-#     month_abbreviations = [
-#         "",
-#         "tammi",
-#         "helmi",
-#         "maalis",
-#         "huhti",
-#         "touko",
-#         "kesä",
-#         "heinä",
-#         "elo",
-#         "syys",
-#         "loka",
-#         "marras",
-#         "joulu",
-#     ]
-#
-#     day_names = [
-#         "",
-#         "maanantai",
-#         "tiistai",
-#         "keskiviikko",
-#         "torstai",
-#         "perjantai",
-#         "lauantai",
-#         "sunnuntai",
-#     ]
-#
-#     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
-#
-#     def _format_timeframe(self, timeframe: str, delta: float) -> str:
-#         return self.timeframes[timeframe][0].format(abs(delta))
-#
-#     def _format_relative(
-#         self, humanized: Union[str, List[str]], timeframe: str, delta: float
-#     ) -> str:
-#         if timeframe == "now":
-#             return humanized[0]
-#
-#         direction = self.past if delta < 0 else self.future
-#         which = 0 if delta < 0 else 1
-#
-#         return direction.format(humanized[which])
-#
-#     def _ordinal_number(self, n: int) -> str:
-#         return f"{n}."
+class FinnishLocale(Locale):
+
+    names = ["fi", "fi_fi"]
+
+    # The finnish grammar is very complex, and its hard to convert
+    # 1-to-1 to something like English.
+
+    past = "{0} sitten"
+    future = "{0} kuluttua"
+
+    timeframes = {
+        "now": ["juuri nyt", "juuri nyt"],
+        "second": ["sekunti", "sekunti"],
+        "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
+        "minute": ["minuutti", "minuutin"],
+        "minutes": ["{0} minuuttia", "{0} minuutin"],
+        "hour": ["tunti", "tunnin"],
+        "hours": ["{0} tuntia", "{0} tunnin"],
+        "day": ["päivä", "päivä"],
+        "days": ["{0} päivää", "{0} päivän"],
+        "month": ["kuukausi", "kuukauden"],
+        "months": ["{0} kuukautta", "{0} kuukauden"],
+        "year": ["vuosi", "vuoden"],
+        "years": ["{0} vuotta", "{0} vuoden"],
+    }
+
+    # Months and days are lowercase in Finnish
+    month_names = [
+        "",
+        "tammikuu",
+        "helmikuu",
+        "maaliskuu",
+        "huhtikuu",
+        "toukokuu",
+        "kesäkuu",
+        "heinäkuu",
+        "elokuu",
+        "syyskuu",
+        "lokakuu",
+        "marraskuu",
+        "joulukuu",
+    ]
+
+    month_abbreviations = [
+        "",
+        "tammi",
+        "helmi",
+        "maalis",
+        "huhti",
+        "touko",
+        "kesä",
+        "heinä",
+        "elo",
+        "syys",
+        "loka",
+        "marras",
+        "joulu",
+    ]
+
+    day_names = [
+        "",
+        "maanantai",
+        "tiistai",
+        "keskiviikko",
+        "torstai",
+        "perjantai",
+        "lauantai",
+        "sunnuntai",
+    ]
+
+    day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
+
+    def _format_timeframe(self, timeframe: str, delta: float) -> str:
+        tf_seq: Sequence[str] = self.timeframes[timeframe]
+        if delta < 1:
+            tf = tf_seq[0]
+        elif delta >= 1:
+            tf = tf_seq[1]
+        return tf.format(abs(delta))
+
+    def _format_relative(
+        self, humanized: Union[str, List[str]], timeframe: str, delta: float
+    ) -> str:
+        if timeframe == "now":
+            return humanized[0]
+
+        direction = self.past if delta < 0 else self.future
+        which = 0 if delta < 0 else 1
+
+        return direction.format(humanized[which])
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
 
 
 class ChineseCNLocale(Locale):

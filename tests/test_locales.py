@@ -698,12 +698,12 @@ class TestMarathiLocale:
         assert self.locale.ordinal_number(1) == "1"
 
 
-@pytest.mark.skip()
 @pytest.mark.usefixtures("lang_locale")
 class TestFinnishLocale:
     def test_format_timeframe(self):
-        assert self.locale._format_timeframe("hours", 2) == ("2 tuntia", "2 tunnin")
-        assert self.locale._format_timeframe("hour", 0) == ("tunti", "tunnin")
+        assert self.locale._format_timeframe("hours", 2) == "2 tunnin"
+        assert self.locale._format_timeframe("hours", 10) == "10 tunnin"
+        assert self.locale._format_timeframe("hour", 0) == "tunti"
 
     def test_format_relative_now(self):
         result = self.locale._format_relative(["juuri nyt", "juuri nyt"], "now", 0)
