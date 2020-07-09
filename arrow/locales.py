@@ -878,10 +878,10 @@ class FinnishLocale(Locale):
 
     def _format_timeframe(self, timeframe: str, delta: float) -> str:
         tf_seq: Sequence[str] = self.timeframes[timeframe]
-        if delta < 1:
-            tf = tf_seq[0]
-        elif delta >= 1:
+        if delta > 0:
             tf = tf_seq[1]
+        else:
+            tf = tf_seq[0]
         return tf.format(abs(delta))
 
     def _format_relative(
