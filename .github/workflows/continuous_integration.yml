@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   test:
-    # name: ${{ matrix.os }} (${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -42,7 +41,7 @@ jobs:
         run: |
           pip install -U pip setuptools wheel
           pip install tox
-      - name: Linting code
+      - name: Lint code
         run: tox -e lint
-      - name: Linting docs
+      - name: Lint docs
         run: tox -e docs
