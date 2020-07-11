@@ -12,6 +12,7 @@ on:
 
 jobs:
   test:
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
