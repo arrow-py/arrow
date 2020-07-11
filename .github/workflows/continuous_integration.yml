@@ -1,18 +1,18 @@
 name: tests
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
+  # pull_request:
+  #   branches:
+  #     - master
   schedule:
     - cron: "0 0 1 * *" # run tests monthly
 
 jobs:
   test:
-    name: ${{ matrix.os }} (${{ matrix.python-version }})
+    # name: ${{ matrix.os }} (${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
 
     strategy:
