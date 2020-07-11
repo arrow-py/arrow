@@ -457,6 +457,7 @@ class DateTimeParser(object):
             month = parts.get("month")
             day = parts.get("day")
 
+            # Only handle day_of_week if it is passed alone
             if year is None and month is None and day is None:
                 next_weekday_dt = next_weekday(datetime(1970, 1, 1), day_of_week)
                 parts["year"] = next_weekday_dt.year
