@@ -8,6 +8,35 @@ from arrow import util
 
 
 class TestUtil:
+    def test_next_weekday(self):
+        # Get first Monday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 0) == datetime(1970, 1, 5)
+
+        # Get first Tuesday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 1) == datetime(1970, 1, 6)
+
+        # Get first Wednesday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 2) == datetime(1970, 1, 7)
+
+        # Get first Thursday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 3) == datetime(1970, 1, 1)
+
+        # Get first Friday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 4) == datetime(1970, 1, 2)
+
+        # Get first Saturday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 5) == datetime(1970, 1, 3)
+
+        # Get first Sunday after epoch
+        assert util.next_weekday(datetime(1970, 1, 1), 6) == datetime(1970, 1, 4)
+
+        # Weekdays are 0-indexed
+        with pytest.raises(ValueError):
+            util.next_weekday(datetime(1970, 1, 1), 7)
+
+        with pytest.raises(ValueError):
+            util.next_weekday(datetime(1970, 1, 1), -1)
+
     def test_total_seconds(self):
         td = datetime(2019, 1, 1) - datetime(2018, 1, 1)
         assert util.total_seconds(td) == td.total_seconds()

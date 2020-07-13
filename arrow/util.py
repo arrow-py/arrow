@@ -18,15 +18,15 @@ def next_weekday(start_date, weekday):
 
     Usage::
 
-        # Get the first Monday after the epoch
-        >>> next_weekday(datetime(1970, 1, 1), 1)
+        # Get first Monday after epoch
+        >>> next_weekday(datetime(1970, 1, 1), 0)
         1970-01-05 00:00:00
 
-        # Get the first Thursday after the epoch
+        # Get first Thursday after epoch
         >>> next_weekday(datetime(1970, 1, 1), 3)
         1970-01-01 00:00:00
 
-        # Get the first Sunday after the epoch
+        # Get first Sunday after epoch
         >>> next_weekday(datetime(1970, 1, 1), 6)
         1970-01-04 00:00:00
     """

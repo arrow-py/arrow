@@ -580,6 +580,74 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("145", "DDDD")
 
+    # Regression test for issue #446
+    def test_parse_ddd_and_dddd(self):
+        fr_parser = parser.DateTimeParser("fr")
+
+        # Day of week should be ignored when a day is passed
+        # 2019-10-17 is a Thursday, so we know day of week
+        # is ignored if the same date is outputted
+        expected = datetime(2019, 10, 17)
+        assert self.parser.parse("Tue 2019-10-17", "ddd YYYY-MM-DD") == expected
+        assert fr_parser.parse("mar 2019-10-17", "ddd YYYY-MM-DD") == expected
+        assert self.parser.parse("Tuesday 2019-10-17", "dddd YYYY-MM-DD") == expected
+        assert fr_parser.parse("mardi 2019-10-17", "dddd YYYY-MM-DD") == expected
+
+        # Get first Tuesday after epoch
+        expected = datetime(1970, 1, 6)
+        assert self.parser.parse("Tue", "ddd") == expected
+        assert fr_parser.parse("mar", "ddd") == expected
+        assert self.parser.parse("Tuesday", "dddd") == expected
+        assert fr_parser.parse("mardi", "dddd") == expected
+
+        # Get first Tuesday in 2020
+        expected = datetime(2020, 1, 7)
+        assert self.parser.parse("Tue 2020", "ddd YYYY") == expected
+        assert fr_parser.parse("mar 2020", "ddd YYYY") == expected
+        assert self.parser.parse("Tuesday 2020", "dddd YYYY") == expected
+        assert fr_parser.parse("mardi 2020", "dddd YYYY") == expected
+
+        # Get first Tuesday in February 2020
+        expected = datetime(2020, 2, 4)
+        assert self.parser.parse("Tue 02 2020", "ddd MM YYYY") == expected
+        assert fr_parser.parse("mar 02 2020", "ddd MM YYYY") == expected
+        assert self.parser.parse("Tuesday 02 2020", "dddd MM YYYY") == expected
+        assert fr_parser.parse("mardi 02 2020", "dddd MM YYYY") == expected
+
+        # Get first Tuesday in February after epoch
+        expected = datetime(1970, 2, 3)
+        assert self.parser.parse("Tue 02", "ddd MM") == expected
+        assert fr_parser.parse("mar 02", "ddd MM") == expected
+        assert self.parser.parse("Tuesday 02", "dddd MM") == expected
+        assert fr_parser.parse("mardi 02", "dddd MM") == expected
+
+        # Times remain intact
+        expected = datetime(2020, 2, 4, 10, 25, 54, 123456, tz.tzoffset(None, -3600))
+        assert (
+            self.parser.parse(
+                "Tue 02 2020 10:25:54.123456-01:00", "ddd MM YYYY HH:mm:ss.SZZ"
+            )
+            == expected
+        )
+        assert (
+            fr_parser.parse(
+                "mar 02 2020 10:25:54.123456-01:00", "ddd MM YYYY HH:mm:ss.SZZ"
+            )
+            == expected
+        )
+        assert (
+            self.parser.parse(
+                "Tuesday 02 2020 10:25:54.123456-01:00", "dddd MM YYYY HH:mm:ss.SZZ"
+            )
+            == expected
+        )
+        assert (
+            fr_parser.parse(
+                "mardi 02 2020 10:25:54.123456-01:00", "dddd MM YYYY HH:mm:ss.SZZ"
+            )
+            == expected
+        )
+
     def test_parse_HH_24(self):
         assert self.parser.parse(
             "2019-10-30T24:00:00", "YYYY-MM-DDTHH:mm:ss"

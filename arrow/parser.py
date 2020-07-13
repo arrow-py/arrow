@@ -451,18 +451,22 @@ class DateTimeParser(object):
             parts["day"] = dt.day
 
         day_of_week = parts.get("day_of_week")
+        day = parts.get("day")
 
-        if day_of_week is not None:
-            year = parts.get("year")
-            month = parts.get("month")
-            day = parts.get("day")
+        # If day is passed, ignore day of week
+        if day_of_week is not None and day is None:
+            year = parts.get("year", 1970)
+            month = parts.get("month", 1)
+            day = 1
 
-            # Only handle day_of_week if it is passed alone
-            if year is None and month is None and day is None:
-                next_weekday_dt = next_weekday(datetime(1970, 1, 1), day_of_week)
-                parts["year"] = next_weekday_dt.year
-                parts["month"] = next_weekday_dt.month
-                parts["day"] = next_weekday_dt.day
+            # dddd => first day after epoch
+            # dddd YYYY => first day after specified year
+            # dddd MM YYYY => first day after specified year and month
+            # dddd MM => first day after epoch in specified month
+            next_weekday_dt = next_weekday(datetime(year, month, day), day_of_week)
+            parts["year"] = next_weekday_dt.year
+            parts["month"] = next_weekday_dt.month
+            parts["day"] = next_weekday_dt.day
 
         am_pm = parts.get("am_pm")
         hour = parts.get("hour", 0)
