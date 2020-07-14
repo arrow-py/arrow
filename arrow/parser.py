@@ -459,9 +459,9 @@ class DateTimeParser(object):
             month = parts.get("month", 1)
             day = 1
 
-            # dddd => first day after epoch
-            # dddd YYYY => first day after specified year
-            # dddd MM YYYY => first day after specified year and month
+            # dddd => first day of week after epoch
+            # dddd YYYY => first day of week in specified year
+            # dddd MM YYYY => first day of week in specified year and month
             # dddd MM => first day after epoch in specified month
             next_weekday_dt = next_weekday(datetime(year, month, day), day_of_week)
             parts["year"] = next_weekday_dt.year
