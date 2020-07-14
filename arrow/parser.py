@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from dateutil import tz
 
 from arrow import locales
-from arrow.util import iso_to_gregorian, normalize_timestamp
+from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
 
 try:
     from functools import lru_cache
@@ -338,8 +338,14 @@ class DateTimeParser(object):
         elif token in ["DD", "D"]:
             parts["day"] = int(value)
 
-        elif token in ["Do"]:
+        elif token == "Do":
             parts["day"] = int(value)
+
+        elif token == "dddd":
+            parts["day_of_week"] = self.locale.day_names.index(value) - 1
+
+        elif token == "ddd":
+            parts["day_of_week"] = self.locale.day_abbreviations.index(value) - 1
 
         elif token.upper() in ["HH", "H"]:
             parts["hour"] = int(value)
@@ -443,6 +449,24 @@ class DateTimeParser(object):
             parts["year"] = dt.year
             parts["month"] = dt.month
             parts["day"] = dt.day
+
+        day_of_week = parts.get("day_of_week")
+        day = parts.get("day")
+
+        # If day is passed, ignore day of week
+        if day_of_week is not None and day is None:
+            year = parts.get("year", 1970)
+            month = parts.get("month", 1)
+            day = 1
+
+            # dddd => first day of week after epoch
+            # dddd YYYY => first day of week in specified year
+            # dddd MM YYYY => first day of week in specified year and month
+            # dddd MM => first day after epoch in specified month
+            next_weekday_dt = next_weekday(datetime(year, month, day), day_of_week)
+            parts["year"] = next_weekday_dt.year
+            parts["month"] = next_weekday_dt.month
+            parts["day"] = next_weekday_dt.day
 
         am_pm = parts.get("am_pm")
         hour = parts.get("hour", 0)
