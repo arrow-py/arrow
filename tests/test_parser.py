@@ -10,7 +10,7 @@ import pytest
 from dateutil import tz
 
 import arrow
-from arrow import parser
+from arrow import formatter, parser
 from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 
@@ -580,7 +580,6 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("145", "DDDD")
 
-    # Regression test for issue #446
     def test_parse_ddd_and_dddd(self):
         fr_parser = parser.DateTimeParser("fr")
 
@@ -647,6 +646,29 @@ class TestDateTimeParserParse:
             )
             == expected
         )
+
+        # Regression test for issue #446
+        arw_formatter = formatter.DateTimeFormatter()
+        arw_formatter.format(self.parser.parse("Mon", "ddd"), "ddd") == "Mon"
+        arw_formatter.format(self.parser.parse("Monday", "dddd"), "dddd") == "Monday"
+        arw_formatter.format(self.parser.parse("Tue", "ddd"), "ddd") == "Tue"
+        arw_formatter.format(self.parser.parse("Tuesday", "dddd"), "dddd") == "Tuesday"
+        arw_formatter.format(self.parser.parse("Wed", "ddd"), "ddd") == "Wed"
+        arw_formatter.format(
+            self.parser.parse("Wednesday", "dddd"), "dddd"
+        ) == "Wednesday"
+        arw_formatter.format(self.parser.parse("Thu", "ddd"), "ddd") == "Thu"
+        arw_formatter.format(
+            self.parser.parse("Thursday", "dddd"), "dddd"
+        ) == "Thursday"
+        arw_formatter.format(self.parser.parse("Fri", "ddd"), "ddd") == "Fri"
+        arw_formatter.format(self.parser.parse("Friday", "dddd"), "dddd") == "Friday"
+        arw_formatter.format(self.parser.parse("Sat", "ddd"), "ddd") == "Sat"
+        arw_formatter.format(
+            self.parser.parse("Saturday", "dddd"), "dddd"
+        ) == "Saturday"
+        arw_formatter.format(self.parser.parse("Sun", "ddd"), "ddd") == "Sun"
+        arw_formatter.format(self.parser.parse("Sunday", "dddd"), "dddd") == "Sunday"
 
     def test_parse_HH_24(self):
         assert self.parser.parse(
