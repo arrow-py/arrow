@@ -30,6 +30,12 @@ class TestTestArrowInit:
         with pytest.raises(ValueError):
             arrow.Arrow(2013, 2, 2, 12, 30, 45, 9999999)
 
+        with pytest.raises(TypeError):
+            arrow.Arrow(2019, 3, 1, 2, fold="nonsense")
+
+        with pytest.raises(ValueError):
+            arrow.Arrow(2014, 7, 4, 11, fold=3)
+
     def test_init(self):
 
         result = arrow.Arrow(2013, 2, 2)
