@@ -596,23 +596,11 @@ class Arrow(object):
 
     @property
     def fold(self):
-        """ Gets the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+        """ Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
 
         # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
         # otherwise, so we need to return zero to cover the latter case
         return getattr(self._datetime, "fold", 0)
-
-    @fold.setter
-    def fold(self, val):
-        """ Sets the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
-
-        if val not in {0, 1}:
-            raise ValueError("fold attribute must be either 0 or 1")
-        if not dateutil_tz.datetime_ambiguous(self._datetime):
-            # for non ambiguous datetimes fold must be 0
-            self._datetime = dateutil_tz.enfold(self._datetime, fold=0)
-        else:
-            self._datetime = dateutil_tz.enfold(self._datetime, fold=val)
 
     @property
     def ambiguous(self):
@@ -662,10 +650,9 @@ class Arrow(object):
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key == "fold":
-                raise AttributeError(
-                    "Setting fold attribute using replace() is not supported, set directly "
-                    "instead i.e. object.fold=1"
-                )
+                # datetime replace will not work in 2.7/3.5
+                current = dateutil_tz.enfold(self._datetime, fold=value)
+                return self.fromdatetime(current)
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
             elif key != "tzinfo":

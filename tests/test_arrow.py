@@ -30,12 +30,6 @@ class TestTestArrowInit:
         with pytest.raises(ValueError):
             arrow.Arrow(2013, 2, 2, 12, 30, 45, 9999999)
 
-        with pytest.raises(TypeError):
-            arrow.Arrow(2019, 3, 1, 2, fold="nonsense")
-
-        with pytest.raises(ValueError):
-            arrow.Arrow(2014, 7, 4, 11, fold=3)
-
     def test_init(self):
 
         result = arrow.Arrow(2013, 2, 2)
@@ -296,18 +290,17 @@ class TestArrowAttribute:
         assert result == self.arrow.microsecond
 
     def test_getattr_fold(self):
-        # action on utc which is always unambiguous
-        assert self.now.fold == 0
-        self.now.fold = 1
+
+        # UTC is always unambiguous
         assert self.now.fold == 0
 
-        ambiguous_dt = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
-        assert ambiguous_dt.fold == 0
-        ambiguous_dt.fold = 1
+        ambiguous_dt = arrow.Arrow(
+            2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1
+        )
         assert ambiguous_dt.fold == 1
 
-        with pytest.raises(ValueError):
-            self.now.fold = 123
+        with pytest.raises(AttributeError):
+            ambiguous_dt.fold = 0
 
     def test_getattr_ambiguous(self):
 
@@ -686,8 +679,13 @@ class TestArrowReplace:
 
     def test_replace_fold(self):
 
-        with pytest.raises(AttributeError):
-            arrow.Arrow.utcnow().replace(fold=1)
+        before = arrow.Arrow(2017, 11, 5, 1, tzinfo="America/New_York")
+        after = before.replace(fold=1)
+
+        assert before.fold == 0
+        assert after.fold == 1
+        assert before == after
+        assert before.utcoffset() != after.utcoffset()
 
     def test_replace_week(self):
 
