@@ -2,7 +2,7 @@ name: tests
 
 on:
   pull_request: # run on all pull requests
-  push: # run on pushes to master branch
+  push: # run only on pushes to master
     branches:
       - master
   schedule: # run monthly
