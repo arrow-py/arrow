@@ -1,8 +1,10 @@
 name: tests
 
 on:
-  push: # run on all pushes
   pull_request: # run on all pull requests
+  push: # run on pushes to master branch
+    branches:
+      - master
   schedule: # run monthly
     - cron: "0 0 1 * *"
 
