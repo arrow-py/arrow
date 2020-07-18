@@ -33,7 +33,9 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          file: ./.coverage
+          file: .coverage
+        env:
+          GITHUB_ACTION: ""
 
   lint:
     runs-on: ubuntu-latest
