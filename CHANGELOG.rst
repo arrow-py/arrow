@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.15.8 (2020-07-19)
+-------------------
+
+- [NEW] Added ``humanize`` week granularity translation for Czech.
+- [FIX] ``arrow.get`` will now parse weekdays with no other inputs, see `#446 <https://github.com/arrow-py/arrow/issues/446>`_.
+- [INTERNAL] Moved arrow into an `organization <https://github.com/arrow-py>`_.
+- [INTERNAL] Added Python 3.9 to CI pipeline.
+
 0.15.7 (2020-06-19)
 -------------------
 
