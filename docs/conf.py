@@ -47,7 +47,7 @@ html_show_copyright = True
 # https://alabaster.readthedocs.io/en/latest/customization.html
 html_theme_options = {
     "description": "Arrow is a sensible and human-friendly approach to dates, times and timestamps.",
-    "github_user": "crsmithdev",
+    "github_user": "arrow-py",
     "github_repo": "arrow",
     "github_banner": True,
     "show_related": False,

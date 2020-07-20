@@ -16,7 +16,7 @@ If you have *any* questions about your code changes or any of the points above, 
 <!--
 Replace this commented text block with a description of your code changes.
 
-If your PR has an associated issue, insert the issue number (e.g. #703) or directly link to the GitHub issue (e.g. https://github.com/crsmithdev/arrow/issues/703).
+If your PR has an associated issue, insert the issue number (e.g. #703) or directly link to the GitHub issue (e.g. https://github.com/arrow-py/arrow/issues/703).
 
 For example, doing the following will automatically close issue #703 when this PR is merged:
 

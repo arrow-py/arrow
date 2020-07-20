@@ -3,13 +3,13 @@ Arrow: Better dates & times for Python
 
 .. start-inclusion-marker-do-not-remove
 
-.. image:: https://github.com/crsmithdev/arrow/workflows/tests/badge.svg?branch=master
+.. image:: https://github.com/arrow-py/arrow/workflows/tests/badge.svg?branch=master
    :alt: Build Status
    :target: https://github.com/arrow-py/arrow/actions?query=workflow%3Atests+branch%3Amaster
 
-.. image:: https://codecov.io/github/crsmithdev/arrow/coverage.svg?branch=master
-   :alt: Codecov
-   :target: https://codecov.io/github/arrow-py/arrow
+.. image:: https://codecov.io/gh/arrow-py/arrow/branch/master/graph/badge.svg
+   :alt: Coverage
+   :target: https://codecov.io/gh/arrow-py/arrow
 
 .. image:: https://img.shields.io/pypi/v/arrow.svg
    :alt: PyPI Version
