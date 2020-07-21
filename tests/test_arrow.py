@@ -1805,3 +1805,12 @@ class TestArrowUtil:
 
         with pytest.raises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
+
+
+class TestArrowPy2Deprecation:
+    @pytest.mark.skipif(
+        sys.version_info[:2] > (3, 5), reason="requires python3.6 or higher"
+    )
+    def test_py2deprecation(self):
+        with pytest.deprecated_call():
+            arrow.Arrow(2020, 12, 12)

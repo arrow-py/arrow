@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 import calendar
 import sys
+import warnings
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
@@ -66,6 +67,14 @@ class Arrow(object):
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
     ):
+        if sys.version_info[:2] < (3, 6):  # pragma: no cover
+            with warnings.catch_warnings():
+                warnings.simplefilter("default")
+                warnings.warn(
+                    "Arrow will drop support for Python 2.6 and 3.5 in the upcoming v1.0.0 release. Please upgrade to "
+                    "Python 3.6+ to continue receiving updates for Arrow.",
+                    DeprecationWarning,
+                )
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
         # detect that tzinfo is a pytz object (issue #626)
