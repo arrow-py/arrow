@@ -19,6 +19,15 @@ from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
 
+if sys.version_info[:2] < (3, 6):  # pragma: no cover
+    with warnings.catch_warnings():
+        warnings.simplefilter("default", DeprecationWarning)
+        warnings.warn(
+            "Arrow will drop support for Python 2.7 and 3.5 in the upcoming v1.0.0 release. Please upgrade to "
+            "Python 3.6+ to continue receiving updates for Arrow.",
+            DeprecationWarning,
+        )
+
 
 class Arrow(object):
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -67,14 +76,6 @@ class Arrow(object):
     def __init__(
         self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
     ):
-        if sys.version_info[:2] < (3, 6):  # pragma: no cover
-            with warnings.catch_warnings():
-                warnings.simplefilter("default")
-                warnings.warn(
-                    "Arrow will drop support for Python 2.6 and 3.5 in the upcoming v1.0.0 release. Please upgrade to "
-                    "Python 3.6+ to continue receiving updates for Arrow.",
-                    DeprecationWarning,
-                )
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
         # detect that tzinfo is a pytz object (issue #626)
