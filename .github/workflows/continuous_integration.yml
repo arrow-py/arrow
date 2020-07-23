@@ -20,7 +20,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
-      # Checkout latest code
+      # Check out latest code
       - uses: actions/checkout@v2
 
       # Configure pip cache
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout latest code
+      # Check out latest code
       - uses: actions/checkout@v2
 
       # Set up Python
@@ -93,12 +93,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          pip install -U pip setuptools wheel
-          pip install tox
-
       # Configure pre-commit cache
       - name: Cache pre-commit
         uses: actions/cache@v2
@@ -107,6 +101,12 @@ jobs:
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pre-commit-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox
 
       # Lint code
       - name: Lint code
