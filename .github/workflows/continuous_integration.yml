@@ -25,21 +25,21 @@ jobs:
 
       # Configure pip cache
       - uses: actions/cache@v2
-        if: startsWith(runner.os, "Linux")
+        if: startsWith(runner.os, 'Linux')
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - uses: actions/cache@v2
-        if: startsWith(runner.os, "macOS")
+        if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - uses: actions/cache@v2
-        if: startsWith(runner.os, "Windows")
+        if: startsWith(runner.os, 'Windows')
         with:
           path: ~\AppData\Local\pip\Cache
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
