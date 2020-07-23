@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.15.8 (2020-07-21)
+0.15.8 (2020-07-23)
 -------------------
 
 - [WARN] arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.15.x and 0.16.x releases are the last to support Python 2.7 and 3.5.
