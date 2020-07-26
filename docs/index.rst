@@ -493,8 +493,11 @@ Date and time formats may be fenced on either side by one punctuation character 
 
 .. code-block:: python
 
-    >>> arrow.get("Tomorrow (2019-10-31T09:12:45) is Halloween!", "YYYY-MM-DDTHH:mm:ss")
-    <Arrow [2019-10-31T09:12:45+00:00]>
+    >>> arrow.get("Cool date: 2019-10-31T09:12:45.123456+04:30.", "YYYY-MM-DDTHH:mm:ss.SZZ")
+    <Arrow [2019-10-31T09:12:45.123456+04:30]>
+
+    >>> arrow.get("Tomorrow (2019-10-31) is Halloween!", "YYYY-MM-DD")
+    <Arrow [2019-10-31T00:00:00+00:00]>
 
     >>> arrow.get("Halloween is on 2019.10.31.", "YYYY.MM.DD")
     <Arrow [2019-10-31T00:00:00+00:00]>
@@ -505,7 +508,7 @@ Date and time formats may be fenced on either side by one punctuation character 
 Redundant Whitespace
 ~~~~~~~~~~~~~~~~~~~~
 
-Redundant whitespace characters (space, tab, or newline) can be normalized automatically by passing in the ``normalize_whitespace`` flag to ``arrow.get``:
+Redundant whitespace characters (spaces, tabs, and newlines) can be normalized automatically by passing in the ``normalize_whitespace`` flag to ``arrow.get``:
 
 .. code-block:: python
 
