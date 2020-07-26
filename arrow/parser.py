@@ -114,10 +114,10 @@ class DateTimeParser(object):
 
     # TODO: since we support more than ISO 8601, we should rename this function
     # IDEA: break into multiple functions
-    def parse_iso(self, datetime_string, normalize_spaces=False):
+    def parse_iso(self, datetime_string, normalize_whitespace=False):
 
-        if normalize_spaces:
-            datetime_string = re.sub(r"\s+", " ", datetime_string)
+        if normalize_whitespace:
+            datetime_string = re.sub(r"\s+", " ", datetime_string.strip())
 
         has_space_divider = " " in datetime_string
         has_t_divider = "T" in datetime_string
@@ -216,9 +216,9 @@ class DateTimeParser(object):
 
         return self._parse_multiformat(datetime_string, formats)
 
-    def parse(self, datetime_string, fmt, normalize_spaces=False):
+    def parse(self, datetime_string, fmt, normalize_whitespace=False):
 
-        if normalize_spaces:
+        if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string)
 
         if isinstance(fmt, list):
