@@ -157,6 +157,24 @@ class TestGet:
         with pytest.raises(ParserError):
             self.factory.get(tzinfo="US/PacificInvalidTzinfo")
 
+    def test_kwarg_normalize_whitespace(self):
+        result = self.factory.get(
+            "Jun 1 2005  1:33PM",
+            "MMM D YYYY H:mmA",
+            tzinfo=tz.tzutc(),
+            normalize_whitespace=True,
+        )
+        assert result._datetime == datetime(2005, 6, 1, 13, 33, tzinfo=tz.tzutc())
+
+        result = self.factory.get(
+            "\t 2013-05-05T12:30:45.123456 \t \n",
+            tzinfo=tz.tzutc(),
+            normalize_whitespace=True,
+        )
+        assert result._datetime == datetime(
+            2013, 5, 5, 12, 30, 45, 123456, tzinfo=tz.tzutc()
+        )
+
     def test_one_arg_iso_str(self):
 
         dt = datetime.utcnow()

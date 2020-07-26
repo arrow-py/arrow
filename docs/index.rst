@@ -489,9 +489,12 @@ You can also escape regular expressions by enclosing them within square brackets
 Punctuation
 ~~~~~~~~~~~
 
-Date formats may be fenced on either side by one punctuation character from the following list: :literal:`, . ; : ? ! " \` ' [ ] { } ( ) < >`
+Date and time formats may be fenced on either side by one punctuation character from the following list: ``, . ; : ? ! " \` ' [ ] { } ( ) < >``
 
 .. code-block:: python
+
+    >>> arrow.get("Cool date: 2019-10-31T09:12:45.123456+04:30.", "YYYY-MM-DDTHH:mm:ss.SZZ")
+    <Arrow [2019-10-31T09:12:45.123456+04:30]>
 
     >>> arrow.get("Tomorrow (2019-10-31) is Halloween!", "YYYY-MM-DD")
     <Arrow [2019-10-31T00:00:00+00:00]>
@@ -501,6 +504,19 @@ Date formats may be fenced on either side by one punctuation character from the 
 
     >>> arrow.get("It's Halloween tomorrow (2019-10-31)!", "YYYY-MM-DD")
     # Raises exception because there are multiple punctuation marks following the date
+
+Redundant Whitespace
+~~~~~~~~~~~~~~~~~~~~
+
+Redundant whitespace characters (spaces, tabs, and newlines) can be normalized automatically by passing in the ``normalize_whitespace`` flag to ``arrow.get``:
+
+.. code-block:: python
+
+    >>> arrow.get('\t \n  2013-05-05T12:30:45.123456 \t \n', normalize_whitespace=True)
+    <Arrow [2013-05-05T12:30:45.123456+00:00]>
+
+    >>> arrow.get('2013-05-05  T \n   12:30:45\t123456', 'YYYY-MM-DD T HH:mm:ss S', normalize_whitespace=True)
+    <Arrow [2013-05-05T12:30:45.123456+00:00]>
 
 API Guide
 ---------

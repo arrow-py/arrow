@@ -742,6 +742,33 @@ class TestDateTimeParserParse:
             with pytest.raises(ParserError):
                 self.parser.parse(fmt, "W")
 
+    def test_parse_normalize_whitespace(self):
+        assert self.parser.parse(
+            "Jun 1 2005  1:33PM", "MMM D YYYY H:mmA", normalize_whitespace=True
+        ) == datetime(2005, 6, 1, 13, 33)
+
+        with pytest.raises(ParserError):
+            self.parser.parse("Jun 1 2005  1:33PM", "MMM D YYYY H:mmA")
+
+        assert self.parser.parse(
+            "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
+            "YYYY-MM-DD T HH:mm:ss S",
+            normalize_whitespace=True,
+        ) == datetime(2013, 5, 5, 12, 30, 45, 123456)
+
+        with pytest.raises(ParserError):
+            self.parser.parse(
+                "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
+                "YYYY-MM-DD T HH:mm:ss S",
+            )
+
+        assert self.parser.parse(
+            "  \n Jun   1\t 2005\n ", "MMM D YYYY", normalize_whitespace=True
+        ) == datetime(2005, 6, 1)
+
+        with pytest.raises(ParserError):
+            self.parser.parse("  \n Jun   1\t 2005\n ", "MMM D YYYY")
+
 
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
@@ -1156,6 +1183,21 @@ class TestDateTimeParserISO:
         dt = datetime.utcnow()
 
         assert self.parser.parse_iso(dt.isoformat()) == dt
+
+    def test_parse_iso_normalize_whitespace(self):
+        assert self.parser.parse_iso(
+            "2013-036 \t  04:05:06Z", normalize_whitespace=True
+        ) == datetime(2013, 2, 5, 4, 5, 6, tzinfo=tz.tzutc())
+
+        with pytest.raises(ParserError):
+            self.parser.parse_iso("2013-036 \t  04:05:06Z")
+
+        assert self.parser.parse_iso(
+            "\t 2013-05-05T12:30:45.123456 \t \n", normalize_whitespace=True
+        ) == datetime(2013, 5, 5, 12, 30, 45, 123456)
+
+        with pytest.raises(ParserError):
+            self.parser.parse_iso("\t 2013-05-05T12:30:45.123456 \t \n")
 
     def test_parse_iso_with_leading_and_trailing_whitespace(self):
         datetime_string = "    2016-11-15T06:37:19.123456"

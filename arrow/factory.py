@@ -34,11 +34,13 @@ class ArrowFactory(object):
     def get(self, *args, **kwargs):
         """ Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
-        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to
-            'en_us'.
+        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en_us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
             the timezone in a positional argument. Defaults to UTC.
+        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
+            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
+            Defaults to false.
 
         Usage::
 
@@ -141,6 +143,7 @@ class ArrowFactory(object):
         arg_count = len(args)
         locale = kwargs.pop("locale", "en_us")
         tz = kwargs.get("tzinfo", None)
+        normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
         # if kwargs given, send to constructor unless only tzinfo provided
         if len(kwargs) > 1:
@@ -193,7 +196,7 @@ class ArrowFactory(object):
 
             # (str) -> parse.
             elif isstr(arg):
-                dt = parser.DateTimeParser(locale).parse_iso(arg)
+                dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
                 return self.type.fromdatetime(dt, tz)
 
             # (struct_time) -> from struct_time
@@ -240,7 +243,9 @@ class ArrowFactory(object):
 
             # (str, format) -> parse.
             elif isstr(arg_1) and (isstr(arg_2) or isinstance(arg_2, list)):
-                dt = parser.DateTimeParser(locale).parse(args[0], args[1])
+                dt = parser.DateTimeParser(locale).parse(
+                    args[0], args[1], normalize_whitespace
+                )
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
