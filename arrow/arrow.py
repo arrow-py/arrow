@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 import calendar
 import sys
+import warnings
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
@@ -17,6 +18,15 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
+
+if sys.version_info[:2] < (3, 6):  # pragma: no cover
+    with warnings.catch_warnings():
+        warnings.simplefilter("default", DeprecationWarning)
+        warnings.warn(
+            "Arrow will drop support for Python 2.7 and 3.5 in the upcoming v1.0.0 release. Please upgrade to "
+            "Python 3.6+ to continue receiving updates for Arrow.",
+            DeprecationWarning,
+        )
 
 
 class Arrow(object):
@@ -173,7 +183,8 @@ class Arrow(object):
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = datetime.fromtimestamp(float(timestamp), tzinfo)
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.fromtimestamp(timestamp, tzinfo)
 
         return cls(
             dt.year,
@@ -200,7 +211,8 @@ class Arrow(object):
                 "The provided timestamp '{}' is invalid.".format(timestamp)
             )
 
-        dt = datetime.utcfromtimestamp(float(timestamp))
+        timestamp = util.normalize_timestamp(float(timestamp))
+        dt = datetime.utcfromtimestamp(timestamp)
 
         return cls(
             dt.year,

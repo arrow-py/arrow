@@ -1061,19 +1061,33 @@ class KoreanLocale(Locale):
 
     timeframes = {
         "now": "지금",
-        "second": "두 번째",
-        "seconds": "{0}몇 초",
+        "second": "1초",
+        "seconds": "{0}초",
         "minute": "1분",
         "minutes": "{0}분",
-        "hour": "1시간",
+        "hour": "한시간",
         "hours": "{0}시간",
-        "day": "1일",
+        "day": "하루",
         "days": "{0}일",
-        "month": "1개월",
+        "week": "1주",
+        "weeks": "{0}주",
+        "month": "한달",
         "months": "{0}개월",
         "year": "1년",
         "years": "{0}년",
     }
+
+    special_dayframes = {
+        -3: "그끄제",
+        -2: "그제",
+        -1: "어제",
+        1: "내일",
+        2: "모레",
+        3: "글피",
+        4: "그글피",
+    }
+
+    special_yearframes = {-2: "제작년", -1: "작년", 1: "내년", 2: "내후년"}
 
     month_names = [
         "",
@@ -1108,6 +1122,24 @@ class KoreanLocale(Locale):
 
     day_names = ["", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
     day_abbreviations = ["", "월", "화", "수", "목", "금", "토", "일"]
+
+    def _ordinal_number(self, n):
+        ordinals = ["0", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"]
+        if n < len(ordinals):
+            return "{}번째".format(ordinals[n])
+        return "{}번째".format(n)
+
+    def _format_relative(self, humanized, timeframe, delta):
+        if timeframe in ("day", "days"):
+            special = self.special_dayframes.get(delta)
+            if special:
+                return special
+        elif timeframe in ("year", "years"):
+            special = self.special_yearframes.get(delta)
+            if special:
+                return special
+
+        return super(KoreanLocale, self)._format_relative(humanized, timeframe, delta)
 
 
 # derived locale types & implementations.
@@ -1616,14 +1648,16 @@ class MacedonianLocale(SlavicBaseLocale):
 
     timeframes = {
         "now": "сега",
-        "second": "секунда",
-        "seconds": "{0} секунди",
+        "second": "една секунда",
+        "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
         "minute": "една минута",
         "minutes": ["{0} минута", "{0} минути", "{0} минути"],
         "hour": "еден саат",
         "hours": ["{0} саат", "{0} саати", "{0} саати"],
         "day": "еден ден",
         "days": ["{0} ден", "{0} дена", "{0} дена"],
+        "week": "една недела",
+        "weeks": ["{0} недела", "{0} недели", "{0} недели"],
         "month": "еден месец",
         "months": ["{0} месец", "{0} месеци", "{0} месеци"],
         "year": "една година",
@@ -1649,39 +1683,39 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
     month_abbreviations = [
         "",
-        "Јан.",
-        " Фев.",
-        " Мар.",
-        " Апр.",
-        " Мај",
-        " Јун.",
-        " Јул.",
-        " Авг.",
-        " Септ.",
-        " Окт.",
-        " Ноем.",
-        " Декем.",
+        "Јан",
+        "Фев",
+        "Мар",
+        "Апр",
+        "Мај",
+        "Јун",
+        "Јул",
+        "Авг",
+        "Септ",
+        "Окт",
+        "Ноем",
+        "Декем",
     ]
 
     day_names = [
         "",
         "Понеделник",
-        " Вторник",
-        " Среда",
-        " Четврток",
-        " Петок",
-        " Сабота",
-        " Недела",
+        "Вторник",
+        "Среда",
+        "Четврток",
+        "Петок",
+        "Сабота",
+        "Недела",
     ]
     day_abbreviations = [
         "",
-        "Пон.",
-        " Вт.",
-        " Сре.",
-        " Чет.",
-        " Пет.",
-        " Саб.",
-        " Нед.",
+        "Пон",
+        "Вт",
+        "Сре",
+        "Чет",
+        "Пет",
+        "Саб",
+        "Нед",
     ]
 
 
@@ -2833,6 +2867,8 @@ class CzechLocale(Locale):
         "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodin"]},
         "day": {"past": "dnem", "future": "den", "zero": "{0} dnů"},
         "days": {"past": "{0} dny", "future": ["{0} dny", "{0} dnů"]},
+        "week": {"past": "týdnem", "future": "týden", "zero": "{0} týdnů"},
+        "weeks": {"past": "{0} týdny", "future": ["{0} týdny", "{0} týdnů"]},
         "month": {"past": "měsícem", "future": "měsíc", "zero": "{0} měsíců"},
         "months": {"past": "{0} měsíci", "future": ["{0} měsíce", "{0} měsíců"]},
         "year": {"past": "rokem", "future": "rok", "zero": "{0} let"},
