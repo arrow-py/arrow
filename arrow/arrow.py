@@ -661,14 +661,9 @@ class Arrow(object):
 
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
-            elif key == "fold":
-                # datetime replace will not work in 2.7/3.5
-                # TODO revisit this once we drop support for python 2.7/3.5
-                current = dateutil_tz.enfold(self._datetime, fold=value)
-                return self.fromdatetime(current)
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
-            elif key != "tzinfo":
+            elif key not in ["tzinfo", "fold"]:
                 raise AttributeError('unknown attribute: "{}"'.format(key))
 
         current = self._datetime.replace(**absolute_kwargs)
@@ -678,6 +673,12 @@ class Arrow(object):
         if tzinfo is not None:
             tzinfo = self._get_tzinfo(tzinfo)
             current = current.replace(tzinfo=tzinfo)
+
+        fold = kwargs.get("fold")
+
+        # TODO revisit this once we drop support for 2.7/3.5
+        if fold is not None:
+            current = dateutil_tz.enfold(current, fold=fold)
 
         return self.fromdatetime(current)
 

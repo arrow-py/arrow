@@ -686,6 +686,13 @@ class TestArrowReplace:
         assert before == after
         assert before.utcoffset() != after.utcoffset()
 
+    def test_replace_fold_and_other(self):
+
+        arw = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        assert arw.replace(fold=1, minute=50) == arrow.Arrow(2013, 5, 5, 12, 50, 45)
+        assert arw.replace(minute=50, fold=1) == arrow.Arrow(2013, 5, 5, 12, 50, 45)
+
     def test_replace_week(self):
 
         with pytest.raises(AttributeError):
@@ -695,6 +702,13 @@ class TestArrowReplace:
 
         with pytest.raises(AttributeError):
             arrow.Arrow.utcnow().replace(quarter=1)
+
+    def test_replace_quarter_and_fold(self):
+        with pytest.raises(AttributeError):
+            arrow.utcnow().replace(fold=1, quarter=1)
+
+        with pytest.raises(AttributeError):
+            arrow.utcnow().replace(quarter=1, fold=1)
 
     def test_replace_other_kwargs(self):
 
