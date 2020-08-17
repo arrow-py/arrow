@@ -600,7 +600,6 @@ class TestArrowConversion:
         expected = arrow.Arrow(2019, 10, 27, 1, 21, 1, tzinfo="Israel")
 
         assert result == expected
-        assert_datetime_equality(result, expected)
         assert result.utcoffset() != expected.utcoffset()
 
     # issue 315

@@ -663,6 +663,7 @@ class Arrow(object):
                 absolute_kwargs[key] = value
             elif key == "fold":
                 # datetime replace will not work in 2.7/3.5
+                # TODO revisit this once we drop support for python 2.7/3.5
                 current = dateutil_tz.enfold(self._datetime, fold=value)
                 return self.fromdatetime(current)
             elif key in ["week", "quarter"]:
