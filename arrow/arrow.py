@@ -43,7 +43,7 @@ class Arrow(object):
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
-    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
+    :param fold: (keyword) 0 or 1, used to disambiguate repeated times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -84,7 +84,7 @@ class Arrow(object):
         second=0,
         microsecond=0,
         tzinfo=None,
-        fold=0,
+        **kwargs
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -98,6 +98,8 @@ class Arrow(object):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
+
+        fold = kwargs.get("fold", 0)
 
         # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
         self._datetime = dateutil_tz.enfold(
@@ -135,7 +137,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -161,7 +163,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -195,7 +197,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -223,7 +225,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -259,7 +261,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -306,7 +308,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     # factories: ranges and spans
@@ -779,7 +781,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            getattr(dt, "fold", 0),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
