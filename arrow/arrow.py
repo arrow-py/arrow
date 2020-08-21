@@ -43,7 +43,7 @@ class Arrow(object):
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
-    :param fold: (keyword) 0 or 1, used to disambiguate repeated times. Defaults to 0.
+    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
 
     .. _tz-expr:
 
