@@ -41,8 +41,9 @@ class Arrow(object):
     :param hour: (optional) the hour. Defaults to 0.
     :param minute: (optional) the minute, Defaults to 0.
     :param second: (optional) the second, Defaults to 0.
-    :param microsecond: (optional) the microsecond. Defaults 0.
+    :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
+    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -74,7 +75,16 @@ class Arrow(object):
     _SECS_PER_YEAR = float(60 * 60 * 24 * 365.25)
 
     def __init__(
-        self, year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None
+        self,
+        year,
+        month,
+        day,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+        tzinfo=None,
+        **kwargs
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -89,8 +99,12 @@ class Arrow(object):
         elif util.isstr(tzinfo):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
-        self._datetime = datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo
+        fold = kwargs.get("fold", 0)
+
+        # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
+        self._datetime = dateutil_tz.enfold(
+            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            fold=fold,
         )
 
     # factories: single object, both original and from datetime.
@@ -111,6 +125,7 @@ class Arrow(object):
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
+
         dt = datetime.now(tzinfo)
 
         return cls(
@@ -122,6 +137,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -147,6 +163,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -180,6 +197,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -207,6 +225,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -242,6 +261,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -288,6 +308,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     # factories: ranges and spans
@@ -587,6 +608,20 @@ class Arrow(object):
 
         return self.timestamp + float(self.microsecond) / 1000000
 
+    @property
+    def fold(self):
+        """ Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+
+        # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
+        # otherwise, so we need to return zero to cover the latter case
+        return getattr(self._datetime, "fold", 0)
+
+    @property
+    def ambiguous(self):
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+
+        return dateutil_tz.datetime_ambiguous(self._datetime)
+
     # mutation and duplication.
 
     def clone(self):
@@ -630,7 +665,7 @@ class Arrow(object):
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
                 raise AttributeError("setting absolute {} is not supported".format(key))
-            elif key != "tzinfo":
+            elif key not in ["tzinfo", "fold"]:
                 raise AttributeError('unknown attribute: "{}"'.format(key))
 
         current = self._datetime.replace(**absolute_kwargs)
@@ -640,6 +675,12 @@ class Arrow(object):
         if tzinfo is not None:
             tzinfo = self._get_tzinfo(tzinfo)
             current = current.replace(tzinfo=tzinfo)
+
+        fold = kwargs.get("fold")
+
+        # TODO revisit this once we drop support for 2.7/3.5
+        if fold is not None:
+            current = dateutil_tz.enfold(current, fold=fold)
 
         return self.fromdatetime(current)
 
@@ -740,6 +781,7 @@ class Arrow(object):
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod

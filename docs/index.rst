@@ -151,6 +151,17 @@ Even replace the timezone without altering other attributes:
     >>> arw.replace(tzinfo='US/Pacific')
     <Arrow [2013-05-12T03:29:35.334214-07:00]>
 
+Move between the earlier and later moments of an ambiguous time:
+
+.. code-block:: python
+
+    >>> paris_transition = arrow.Arrow(2019, 10, 27, 2, tzinfo="Europe/Paris", fold=0)
+    >>> paris_transition
+    <Arrow [2019-10-27T02:00:00+02:00]>
+    >>> paris_transition.ambiguous
+    True
+    >>> paris_transition.replace(fold=1)
+    <Arrow [2019-10-27T02:00:00+01:00]>
 
 Format
 ~~~~~~
