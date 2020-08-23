@@ -1,10 +1,38 @@
 Changelog
 =========
 
+0.16.0 (2020-08-23)
+-------------------
+
+- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.16.x and 0.17.x releases are the last to support Python 2.7 and 3.5.
+- [NEW] Implemented `PEP 495 <https://www.python.org/dev/peps/pep-0495/>`_ to handle ambiguous datetimes. This is achieved by the addition of the ``fold`` attribute for Arrow objects. For example:
+
+.. code-block:: python
+
+    >>> before = Arrow(2017, 10, 29, 2, 0, tzinfo='Europe/Stockholm')
+    <Arrow [2017-10-29T02:00:00+02:00]>
+    >>> before.fold
+    0
+    >>> before.ambiguous
+    True
+    >>> after = Arrow(2017, 10, 29, 2, 0, tzinfo='Europe/Stockholm', fold=1)
+    <Arrow [2017-10-29T02:00:00+01:00]>
+    >>> after = before.replace(fold=1)
+    <Arrow [2017-10-29T02:00:00+01:00]>
+
+- [NEW] Added ``normalize_whitespace`` flag to ``arrow.get``. This is useful for parsing log files and/or any files that may contain inconsistent spacing. For example:
+
+.. code-block:: python
+
+    >>> arrow.get("Jun 1 2005     1:33PM", "MMM D YYYY H:mmA", normalize_whitespace=True)
+    <Arrow [2005-06-01T13:33:00+00:00]>
+    >>> arrow.get("2013-036 \t  04:05:06Z", normalize_whitespace=True)
+    <Arrow [2013-02-05T04:05:06+00:00]>
+
 0.15.8 (2020-07-23)
 -------------------
 
-- [WARN] arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.15.x and 0.16.x releases are the last to support Python 2.7 and 3.5.
+- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.15.x, 0.16.x, and 0.17.x releases are the last to support Python 2.7 and 3.5.
 - [NEW] Added ``humanize`` week granularity translation for Czech.
 - [FIX] ``arrow.get`` will now pick sane defaults when weekdays are passed with particular token combinations, see `#446 <https://github.com/arrow-py/arrow/issues/446>`_.
 - [INTERNAL] Moved arrow to an organization. The repo can now be found `here <https://github.com/arrow-py/arrow>`_.
