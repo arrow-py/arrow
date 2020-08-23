@@ -5,7 +5,7 @@ Changelog
 -------------------
 
 - [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.16.x and 0.17.x releases are the last to support Python 2.7 and 3.5.
-- [NEW] Implemented `PEP 495 <https://www.python.org/dev/peps/pep-0495/>`_ to handle ambiguous datetimes. This is achieved by the addition of the **fold** attribute for Arrow objects.
+- [NEW] Implemented `PEP 495 <https://www.python.org/dev/peps/pep-0495/>`_ to handle ambiguous datetimes. This is achieved by the addition of the ``fold`` attribute for Arrow objects. For example:
 
 .. code-block:: python
 
