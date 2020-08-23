@@ -381,7 +381,10 @@ class Arrow(object):
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(
+            # current = cls(*values, tzinfo=tzinfo) + relativedelta(
+            #     **{frame_relative: relative_steps}
+            # )
+            current = cls(*values, tzinfo=tzinfo).shift(
                 **{frame_relative: relative_steps}
             )
 
@@ -722,7 +725,21 @@ class Arrow(object):
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
-    # mutation and duplication
+    @property
+    def imaginary(self):
+        """Returns a boolean indicating whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current
+        timezone """
+
+        return not dateutil_tz.datetime_exists(self._datetime)
+
+    @property
+    def imaginary(self):
+        """Returns a boolean indicating whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current
+        timezone """
+
+        return not dateutil_tz.datetime_exists(self._datetime)
+
+    # mutation and duplication.
 
     def clone(self):
         """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
@@ -835,6 +852,9 @@ class Arrow(object):
         )
 
         current = self._datetime + relativedelta(**relative_kwargs)
+
+        if not dateutil_tz.datetime_exists(current):
+            current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
 
