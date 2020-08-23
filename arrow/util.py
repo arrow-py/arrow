@@ -90,6 +90,13 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
     return gregorian
 
 
+def validate_bounds(bounds):
+    if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
+        raise ValueError(
+            'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
+        )
+
+
 # Python 2.7 / 3.0+ definitions for isstr function.
 
 try:  # pragma: no cover

@@ -385,6 +385,106 @@ class Arrow(object):
                 **{frame_relative: relative_steps}
             )
 
+    def span(self, frame, count=1, bounds="[)"):
+        """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
+        of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param count: (optional) the number of frames to span.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the span. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '[)' is used.
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+
+        Usage::
+
+            >>> arrow.utcnow()
+            <Arrow [2013-05-09T03:32:36.186203+00:00]>
+
+            >>> arrow.utcnow().span('hour')
+            (<Arrow [2013-05-09T03:00:00+00:00]>, <Arrow [2013-05-09T03:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day', count=2)
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day', bounds='[]')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
+
+        """
+
+        util.validate_bounds(bounds)
+
+        frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
+
+        if frame_absolute == "week":
+            attr = "day"
+        elif frame_absolute == "quarter":
+            attr = "month"
+        else:
+            attr = frame_absolute
+
+        index = self._ATTRS.index(attr)
+        frames = self._ATTRS[: index + 1]
+
+        values = [getattr(self, f) for f in frames]
+
+        for _ in range(3 - len(values)):
+            values.append(1)
+
+        floor = self.__class__(*values, tzinfo=self.tzinfo)
+
+        if frame_absolute == "week":
+            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+        elif frame_absolute == "quarter":
+            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+
+        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+
+        if bounds[0] == "(":
+            floor += relativedelta(microseconds=1)
+
+        if bounds[1] == ")":
+            ceil += relativedelta(microseconds=-1)
+
+        return floor, ceil
+
+    def floor(self, frame):
+        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
+        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+        Equivalent to the first element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().floor('hour')
+            <Arrow [2013-05-09T03:00:00+00:00]>
+        """
+
+        return self.span(frame)[0]
+
+    def ceil(self, frame):
+        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
+        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+        Equivalent to the second element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().ceil('hour')
+            <Arrow [2013-05-09T03:59:59.999999+00:00]>
+        """
+
+        return self.span(frame)[1]
+
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):
         """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
@@ -511,7 +611,7 @@ class Arrow(object):
     def __hash__(self):
         return self._datetime.__hash__()
 
-    # attributes & properties
+    # attributes and properties
 
     def __getattr__(self, name):
 
@@ -622,7 +722,7 @@ class Arrow(object):
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
-    # mutation and duplication.
+    # mutation and duplication
 
     def clone(self):
         """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
@@ -784,114 +884,7 @@ class Arrow(object):
             fold=getattr(dt, "fold", 0),
         )
 
-    @classmethod
-    def _validate_bounds(cls, bounds):
-        if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
-            raise AttributeError(
-                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
-            )
-
-    def span(self, frame, count=1, bounds="[)"):
-        """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
-        of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param count: (optional) the number of frames to span.
-        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
-            whether to include or exclude the start and end values in the span. '(' excludes
-            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
-            If the bounds are not specified, the default bound '[)' is used.
-
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
-
-        Usage::
-
-            >>> arrow.utcnow()
-            <Arrow [2013-05-09T03:32:36.186203+00:00]>
-
-            >>> arrow.utcnow().span('hour')
-            (<Arrow [2013-05-09T03:00:00+00:00]>, <Arrow [2013-05-09T03:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day')
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day', count=2)
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day', bounds='[]')
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
-
-        """
-
-        self._validate_bounds(bounds)
-
-        frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
-
-        if frame_absolute == "week":
-            attr = "day"
-        elif frame_absolute == "quarter":
-            attr = "month"
-        else:
-            attr = frame_absolute
-
-        index = self._ATTRS.index(attr)
-        frames = self._ATTRS[: index + 1]
-
-        values = [getattr(self, f) for f in frames]
-
-        for _ in range(3 - len(values)):
-            values.append(1)
-
-        floor = self.__class__(*values, tzinfo=self.tzinfo)
-
-        if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
-        elif frame_absolute == "quarter":
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
-
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
-
-        if bounds[0] == "(":
-            floor += relativedelta(microseconds=1)
-
-        if bounds[1] == ")":
-            ceil += relativedelta(microseconds=-1)
-
-        return floor, ceil
-
-    def floor(self, frame):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
-        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the first element in the 2-tuple returned by
-        :func:`span <arrow.arrow.Arrow.span>`.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-
-        Usage::
-
-            >>> arrow.utcnow().floor('hour')
-            <Arrow [2013-05-09T03:00:00+00:00]>
-        """
-
-        return self.span(frame)[0]
-
-    def ceil(self, frame):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
-        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the second element in the 2-tuple returned by
-        :func:`span <arrow.arrow.Arrow.span>`.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-
-        Usage::
-
-            >>> arrow.utcnow().ceil('hour')
-            <Arrow [2013-05-09T03:59:59.999999+00:00]>
-        """
-
-        return self.span(frame)[1]
-
-    # string output and formatting.
+    # string output and formatting
 
     def format(self, fmt="YYYY-MM-DD HH:mm:ssZZ", locale="en_us"):
         """ Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
@@ -1143,7 +1136,7 @@ class Arrow(object):
 
         """
 
-        self._validate_bounds(bounds)
+        util.validate_bounds(bounds)
 
         if not isinstance(start, Arrow):
             raise TypeError(
@@ -1179,89 +1172,6 @@ class Arrow(object):
             return (
                 target_timestamp > start_timestamp and target_timestamp < end_timestamp
             )
-
-    # math
-
-    def __add__(self, other):
-
-        if isinstance(other, (timedelta, relativedelta)):
-            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
-
-        return NotImplemented
-
-    def __radd__(self, other):
-        return self.__add__(other)
-
-    def __sub__(self, other):
-
-        if isinstance(other, (timedelta, relativedelta)):
-            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
-
-        elif isinstance(other, datetime):
-            return self._datetime - other
-
-        elif isinstance(other, Arrow):
-            return self._datetime - other._datetime
-
-        return NotImplemented
-
-    def __rsub__(self, other):
-
-        if isinstance(other, datetime):
-            return other - self._datetime
-
-        return NotImplemented
-
-    # comparisons
-
-    def __eq__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return False
-
-        return self._datetime == self._get_datetime(other)
-
-    def __ne__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return True
-
-        return not self.__eq__(other)
-
-    def __gt__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime > self._get_datetime(other)
-
-    def __ge__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime >= self._get_datetime(other)
-
-    def __lt__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime < self._get_datetime(other)
-
-    def __le__(self, other):
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime <= self._get_datetime(other)
-
-    def __cmp__(self, other):
-        if sys.version_info[0] < 3:  # pragma: no cover
-            if not isinstance(other, (Arrow, datetime)):
-                raise TypeError(
-                    "can't compare '{}' to '{}'".format(type(self), type(other))
-                )
 
     # datetime methods
 
@@ -1465,7 +1375,90 @@ class Arrow(object):
 
         return self.isoformat()
 
-    # internal tools.
+    # math
+
+    def __add__(self, other):
+
+        if isinstance(other, (timedelta, relativedelta)):
+            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
+
+        return NotImplemented
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __sub__(self, other):
+
+        if isinstance(other, (timedelta, relativedelta)):
+            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
+
+        elif isinstance(other, datetime):
+            return self._datetime - other
+
+        elif isinstance(other, Arrow):
+            return self._datetime - other._datetime
+
+        return NotImplemented
+
+    def __rsub__(self, other):
+
+        if isinstance(other, datetime):
+            return other - self._datetime
+
+        return NotImplemented
+
+    # comparisons
+
+    def __eq__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return False
+
+        return self._datetime == self._get_datetime(other)
+
+    def __ne__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return True
+
+        return not self.__eq__(other)
+
+    def __gt__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime > self._get_datetime(other)
+
+    def __ge__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime >= self._get_datetime(other)
+
+    def __lt__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime < self._get_datetime(other)
+
+    def __le__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime <= self._get_datetime(other)
+
+    def __cmp__(self, other):
+        if sys.version_info[0] < 3:  # pragma: no cover
+            if not isinstance(other, (Arrow, datetime)):
+                raise TypeError(
+                    "can't compare '{}' to '{}'".format(type(self), type(other))
+                )
+
+    # internal methods
 
     @staticmethod
     def _get_tzinfo(tz_expr):

@@ -1406,7 +1406,7 @@ class TestArrowSpan:
 
     def test_bounds_are_validated(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             floor, ceil = self.arrow.span("hour", bounds="][")
 
 
@@ -1867,19 +1867,19 @@ class TestArrowIsBetween:
         with pytest.raises(TypeError):
             target.is_between(None, None)
 
-    def test_attribute_error_exception(self):
+    def test_value_error_exception(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
         start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
         end = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             target.is_between(start, end, "][")
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             target.is_between(start, end, "")
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             target.is_between(start, end, "]")
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             target.is_between(start, end, "[")
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             target.is_between(start, end, "hello")
 
 
