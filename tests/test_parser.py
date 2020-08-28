@@ -148,18 +148,24 @@ class TestDateTimeParser:
             2019, 1, 15
         )
 
-        assert self.parser.parse(
-            "15/01/2019T04:05:06.789120Z",
-            ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
-        ) == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
+        assert (
+            self.parser.parse(
+                "15/01/2019T04:05:06.789120Z",
+                ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
+            )
+            == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
+        )
 
     # regression test for issue #447
     def test_timestamp_format_list(self):
         # should not match on the "X" token
-        assert self.parser.parse(
-            "15 Jul 2000",
-            ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
-        ) == datetime(2000, 7, 15)
+        assert (
+            self.parser.parse(
+                "15 Jul 2000",
+                ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
+            )
+            == datetime(2000, 7, 15)
+        )
 
         with pytest.raises(ParserError):
             self.parser.parse("15 Jul", "X")
@@ -500,15 +506,21 @@ class TestDateTimeParserParse:
             "2016-05-16T04:05:06.789120 blah", "YYYY-MM-DDThh:mm:ss.S"
         ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
 
-        assert self.parser.parse(
-            "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
-            "YYYY-MM-DDThh:mm:ss.S",
-        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        assert (
+            self.parser.parse(
+                "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
+                "YYYY-MM-DDThh:mm:ss.S",
+            )
+            == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        )
 
-        assert self.parser.parse(
-            "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
-            "YYYY-MM-DD hh:mm:ss.S",
-        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        assert (
+            self.parser.parse(
+                "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
+                "YYYY-MM-DD hh:mm:ss.S",
+            )
+            == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        )
 
     # regression test for issue #701
     # tests cases of a partial match surrounded by punctuation
@@ -750,11 +762,14 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("Jun 1 2005  1:33PM", "MMM D YYYY H:mmA")
 
-        assert self.parser.parse(
-            "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
-            "YYYY-MM-DD T HH:mm:ss S",
-            normalize_whitespace=True,
-        ) == datetime(2013, 5, 5, 12, 30, 45, 123456)
+        assert (
+            self.parser.parse(
+                "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
+                "YYYY-MM-DD T HH:mm:ss S",
+                normalize_whitespace=True,
+            )
+            == datetime(2013, 5, 5, 12, 30, 45, 123456)
+        )
 
         with pytest.raises(ParserError):
             self.parser.parse(

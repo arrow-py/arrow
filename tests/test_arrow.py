@@ -1041,10 +1041,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2014, 1, 1), arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2015, 1, 1), arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2016, 1, 1), arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1),
+                arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2014, 1, 1),
+                arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2015, 1, 1),
+                arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2016, 1, 1),
+                arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_quarter(self):
@@ -1082,8 +1094,14 @@ class TestArrowSpanRange:
         assert result == [
             (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
             (arrow.Arrow(2013, 2, 4), arrow.Arrow(2013, 2, 10, 23, 59, 59, 999999)),
-            (arrow.Arrow(2013, 2, 11), arrow.Arrow(2013, 2, 17, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 2, 18), arrow.Arrow(2013, 2, 24, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 2, 11),
+                arrow.Arrow(2013, 2, 17, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 2, 18),
+                arrow.Arrow(2013, 2, 24, 23, 59, 59, 999999),
+            ),
             (arrow.Arrow(2013, 2, 25), arrow.Arrow(2013, 3, 3, 23, 59, 59, 999999)),
         ]
 
@@ -1096,10 +1114,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 2, 0), arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 3, 0), arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 4, 0), arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 2, 0),
+                arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 3, 0),
+                arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 4, 0),
+                arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_days(self):
@@ -1111,10 +1141,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 2, 0), arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 3, 0), arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 4, 0), arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 2, 0),
+                arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 3, 0),
+                arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 4, 0),
+                arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_hour(self):
@@ -1126,10 +1168,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 2), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 1),
+                arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 2),
+                arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 3),
+                arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999),
+            ),
         ]
 
         result = list(
@@ -1151,10 +1205,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 1), arrow.Arrow(2013, 1, 1, 0, 1, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 2), arrow.Arrow(2013, 1, 1, 0, 2, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 3), arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 0),
+                arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 1),
+                arrow.Arrow(2013, 1, 1, 0, 1, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 2),
+                arrow.Arrow(2013, 1, 1, 0, 2, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 3),
+                arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999),
+            ),
         ]
 
     def test_second(self):
@@ -1269,9 +1335,18 @@ class TestArrowInterval:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),),
-            (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),),
-            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 5, 5, 12),
+                arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14),
+                arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16),
+                arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),
+            ),
         ]
 
     def test_bounds_param_is_passed(self):
