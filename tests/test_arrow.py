@@ -1034,11 +1034,12 @@ class TestArrowRange:
 
     def test_range_over_months_ending_on_different_days(self):
         # regression test for issue #842
-        result = list(arrow.Arrow.range("month", datetime(2015, 1, 31), limit=3))
+        result = list(arrow.Arrow.range("month", datetime(2015, 1, 31), limit=4))
         assert result == [
             arrow.Arrow(2015, 1, 31),
             arrow.Arrow(2015, 2, 28),
             arrow.Arrow(2015, 3, 31),
+            arrow.Arrow(2015, 4, 30),
         ]
 
         result = list(arrow.Arrow.range("month", datetime(2015, 1, 30), limit=3))
@@ -1068,6 +1069,16 @@ class TestArrowRange:
             arrow.Arrow(2014, 11, 30),
             arrow.Arrow(2015, 2, 28),
             arrow.Arrow(2015, 5, 30),
+        ]
+
+    def test_range_over_year_maintains_end_date_across_leap_year(self):
+        result = list(arrow.Arrow.range("year", datetime(2012, 2, 29), limit=5))
+        assert result == [
+            arrow.Arrow(2012, 2, 29),
+            arrow.Arrow(2013, 2, 28),
+            arrow.Arrow(2014, 2, 28),
+            arrow.Arrow(2015, 2, 28),
+            arrow.Arrow(2016, 2, 29),
         ]
 
 
