@@ -847,13 +847,6 @@ class TestArrowShift:
             2013, 5, 5, 12, 30, 45, 1
         )
 
-    # def test_shift_imaginary(self):
-    #
-    #     just_before = arrow.Arrow(2013, 3, 31, 1, 59, 59, 999999, 'Europe/Paris')
-    #     just_after = just_before.shift(microseconds=+1)
-    #
-    #     assert just_after == arrow.Arrow(2013, 3, 31, 3, tzinfo='Europe/Paris')
-
     def test_shift_positive_imaginary(self):
 
         # Avoid shifting into imaginary datetimes, take into account DST and other timezone changes.
@@ -895,15 +888,19 @@ class TestArrowShift:
             2011, 3, 13, 1, 30, tzinfo="America/New_York"
         )
 
-        # NOTE very odd behaviour here -<Arrow [2011-12-30T23:00:00+14:00]>
-        # How does dateutil.resolve_imaginary work here? This dt should be resolved in the shift method.
+        london = arrow.Arrow(2019, 3, 31, 2, tzinfo="Europe/London")
+        assert london.shift(hours=-1) == arrow.Arrow(
+            2019, 3, 31, 2, tzinfo="Europe/London"
+        )
+        assert london.shift(hours=-2) == arrow.Arrow(
+            2019, 3, 31, tzinfo="Europe/London"
+        )
 
-        # dateutil says that the method will always fall forward.
-
-        # apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
-        # assert apia.shift(hours=-2) == arrow.Arrow(
-        #    2011, 12, 29, 23, tzinfo="Pacific/Apia"deac
-        # )
+        # edge case, crossing the international dateline
+        apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
+        assert apia.shift(hours=-2) == arrow.Arrow(
+            2011, 12, 31, 23, tzinfo="Pacific/Apia"
+        )
 
     @pytest.mark.skipif(
         dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"

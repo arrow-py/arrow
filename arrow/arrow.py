@@ -381,9 +381,6 @@ class Arrow(object):
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            # current = cls(*values, tzinfo=tzinfo) + relativedelta(
-            #     **{frame_relative: relative_steps}
-            # )
             current = cls(*values, tzinfo=tzinfo).shift(
                 **{frame_relative: relative_steps}
             )
@@ -724,13 +721,6 @@ class Arrow(object):
         """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
-
-    @property
-    def imaginary(self):
-        """Returns a boolean indicating whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current
-        timezone """
-
-        return not dateutil_tz.datetime_exists(self._datetime)
 
     @property
     def imaginary(self):
