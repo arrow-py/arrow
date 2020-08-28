@@ -374,6 +374,8 @@ class Arrow(object):
         end = cls._get_datetime(end).replace(tzinfo=tzinfo)
 
         current = cls.fromdatetime(start)
+        original_day = start.day
+        day_is_clipped = False
         i = 0
 
         while current <= end and i < limit:
@@ -384,6 +386,12 @@ class Arrow(object):
             current = cls(*values, tzinfo=tzinfo) + relativedelta(
                 **{frame_relative: relative_steps}
             )
+
+            if frame == "month" and current.day < original_day:
+                day_is_clipped = True
+
+            if day_is_clipped and not cls._is_last_day_of_month(current):
+                current = current.replace(day=original_day)
 
     def span(self, frame, count=1, bounds="[)"):
         """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
@@ -1533,6 +1541,10 @@ class Arrow(object):
             if limit is None:
                 return end, sys.maxsize
             return end, limit
+
+    @classmethod
+    def _is_last_day_of_month(cls, date):
+        return (date + timedelta(days=1)).day == 1
 
 
 Arrow.min = Arrow.fromdatetime(datetime.min)

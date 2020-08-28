@@ -1032,6 +1032,36 @@ class TestArrowRange:
         with pytest.raises(AttributeError):
             next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
 
+    def test_range_over_months_ending_on_different_days(self):
+        # regression test for issue #842
+        result = list(arrow.Arrow.range("month", datetime(2015, 1, 31), limit=3))
+        assert result == [
+            arrow.Arrow(2015, 1, 31),
+            arrow.Arrow(2015, 2, 28),
+            arrow.Arrow(2015, 3, 31),
+        ]
+
+        result = list(arrow.Arrow.range("month", datetime(2015, 1, 30), limit=3))
+        assert result == [
+            arrow.Arrow(2015, 1, 30),
+            arrow.Arrow(2015, 2, 28),
+            arrow.Arrow(2015, 3, 30),
+        ]
+
+        result = list(arrow.Arrow.range("month", datetime(2015, 2, 28), limit=3))
+        assert result == [
+            arrow.Arrow(2015, 2, 28),
+            arrow.Arrow(2015, 3, 28),
+            arrow.Arrow(2015, 4, 28),
+        ]
+
+        result = list(arrow.Arrow.range("month", datetime(2015, 3, 31), limit=3))
+        assert result == [
+            arrow.Arrow(2015, 3, 31),
+            arrow.Arrow(2015, 4, 30),
+            arrow.Arrow(2015, 5, 31),
+        ]
+
 
 class TestArrowSpanRange:
     def test_year(self):
