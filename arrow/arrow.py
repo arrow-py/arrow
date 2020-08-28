@@ -387,7 +387,7 @@ class Arrow(object):
                 **{frame_relative: relative_steps}
             )
 
-            if frame == "month" and current.day < original_day:
+            if frame in ["month", "quarter"] and current.day < original_day:
                 day_is_clipped = True
 
             if day_is_clipped and not cls._is_last_day_of_month(current):

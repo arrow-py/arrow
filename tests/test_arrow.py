@@ -1062,6 +1062,14 @@ class TestArrowRange:
             arrow.Arrow(2015, 5, 31),
         ]
 
+    def test_range_over_quarter_months_ending_on_different_days(self):
+        result = list(arrow.Arrow.range("quarter", datetime(2014, 11, 30), limit=3))
+        assert result == [
+            arrow.Arrow(2014, 11, 30),
+            arrow.Arrow(2015, 2, 28),
+            arrow.Arrow(2015, 5, 30),
+        ]
+
 
 class TestArrowSpanRange:
     def test_year(self):
