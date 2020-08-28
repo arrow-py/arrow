@@ -283,12 +283,12 @@ class TestArrowAttribute:
             self.arrow._datetime.utctimetuple()
         )
 
-        with pytest.warns(PendingDeprecationWarning):
+        with pytest.warns(DeprecationWarning):
             self.arrow.timestamp
 
-    def test_unix_timestamp(self):
+    def test_int_timestamp(self):
 
-        assert self.arrow.unix_timestamp == calendar.timegm(
+        assert self.arrow.int_timestamp == calendar.timegm(
             self.arrow._datetime.utctimetuple()
         )
 
