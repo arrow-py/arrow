@@ -313,15 +313,18 @@ class TestGet:
 
     def test_full_kwargs(self):
 
-        assert self.factory.get(
-            year=2016,
-            month=7,
-            day=14,
-            hour=7,
-            minute=16,
-            second=45,
-            microsecond=631092,
-        ) == datetime(2016, 7, 14, 7, 16, 45, 631092, tzinfo=tz.tzutc())
+        assert (
+            self.factory.get(
+                year=2016,
+                month=7,
+                day=14,
+                hour=7,
+                minute=16,
+                second=45,
+                microsecond=631092,
+            )
+            == datetime(2016, 7, 14, 7, 16, 45, 631092, tzinfo=tz.tzutc())
+        )
 
     def test_three_kwargs(self):
 
