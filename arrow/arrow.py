@@ -439,17 +439,17 @@ class Arrow(object):
         floor = self.__class__(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+            floor = floor.shift(days=-(self.isoweekday() - 1))
         elif frame_absolute == "quarter":
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+            floor = floor.shift(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+        ceil = floor.shift(**{frame_relative: count * relative_steps})
 
         if bounds[0] == "(":
-            floor += relativedelta(microseconds=1)
+            floor = floor.shift(microseconds=+1)
 
         if bounds[1] == ")":
-            ceil += relativedelta(microseconds=-1)
+            ceil = ceil.shift(microseconds=-1)
 
         return floor, ceil
 
