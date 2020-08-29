@@ -893,7 +893,7 @@ class TestArrowShift:
             2019, 3, 31, 2, tzinfo="Europe/London"
         )
         assert london.shift(hours=-2) == arrow.Arrow(
-            2019, 3, 31, tzinfo="Europe/London"
+            2019, 3, 31, 0, tzinfo="Europe/London"
         )
 
         # edge case, crossing the international dateline

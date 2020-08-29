@@ -725,7 +725,7 @@ class Arrow(object):
     @property
     def imaginary(self):
         """Returns a boolean indicating whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current
-        timezone """
+        timezone"""
 
         return not dateutil_tz.datetime_exists(self._datetime)
 
