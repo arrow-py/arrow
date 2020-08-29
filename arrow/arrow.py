@@ -142,7 +142,7 @@ class Arrow(object):
 
     @classmethod
     def utcnow(cls):
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
         time.
 
         Usage::
@@ -168,7 +168,7 @@ class Arrow(object):
 
     @classmethod
     def fromtimestamp(cls, timestamp, tzinfo=None):
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
@@ -230,7 +230,7 @@ class Arrow(object):
 
     @classmethod
     def fromdatetime(cls, dt, tzinfo=None):
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
         :param dt: the ``datetime``
@@ -266,7 +266,7 @@ class Arrow(object):
 
     @classmethod
     def fromdate(cls, date, tzinfo=None):
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  Time values are set to 0.
 
         :param date: the ``date``
@@ -280,7 +280,7 @@ class Arrow(object):
 
     @classmethod
     def strptime(cls, date_str, fmt, tzinfo=None):
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
 
         :param date_str: the date string.
@@ -315,7 +315,7 @@ class Arrow(object):
 
     @classmethod
     def range(cls, frame, start, end=None, tz=None, limit=None):
-        """ Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
+        """Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         points in time between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -386,7 +386,7 @@ class Arrow(object):
             )
 
     def span(self, frame, count=1, bounds="[)"):
-        """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
+        """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -454,7 +454,7 @@ class Arrow(object):
         return floor, ceil
 
     def floor(self, frame):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the first element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
@@ -470,7 +470,7 @@ class Arrow(object):
         return self.span(frame)[0]
 
     def ceil(self, frame):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the second element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
@@ -487,7 +487,7 @@ class Arrow(object):
 
     @classmethod
     def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):
-        """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -542,7 +542,7 @@ class Arrow(object):
 
     @classmethod
     def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)"):
-        """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -631,7 +631,7 @@ class Arrow(object):
 
     @property
     def tzinfo(self):
-        """ Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
+        """Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
 
         Usage::
 
@@ -651,7 +651,7 @@ class Arrow(object):
 
     @property
     def datetime(self):
-        """ Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
+        """Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
 
         Usage::
 
@@ -665,7 +665,7 @@ class Arrow(object):
 
     @property
     def naive(self):
-        """ Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object.
 
         Usage::
@@ -682,7 +682,7 @@ class Arrow(object):
 
     @property
     def timestamp(self):
-        """ Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
 
         Usage::
@@ -696,7 +696,7 @@ class Arrow(object):
 
     @property
     def float_timestamp(self):
-        """ Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object, in UTC time.
 
         Usage::
@@ -732,7 +732,7 @@ class Arrow(object):
     # mutation and duplication.
 
     def clone(self):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
 
         Usage:
 
@@ -744,7 +744,7 @@ class Arrow(object):
         return self.fromdatetime(self._datetime)
 
     def replace(self, **kwargs):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
         Use property names to set their value absolutely::
@@ -792,7 +792,7 @@ class Arrow(object):
         return self.fromdatetime(current)
 
     def shift(self, **kwargs):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
         Use pluralized property names to relatively shift their current value:
@@ -849,7 +849,7 @@ class Arrow(object):
         return self.fromdatetime(current)
 
     def to(self, tz):
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
         :param tz: A :ref:`timezone expression <tz-expr>`.
@@ -897,7 +897,7 @@ class Arrow(object):
     # string output and formatting
 
     def format(self, fmt="YYYY-MM-DD HH:mm:ssZZ", locale="en_us"):
-        """ Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
+        """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to a format string.
 
         :param fmt: the format string.
@@ -923,7 +923,7 @@ class Arrow(object):
     def humanize(
         self, other=None, locale="en_us", only_distance=False, granularity="auto"
     ):
-        """ Returns a localized, humanized representation of a relative difference in time.
+        """Returns a localized, humanized representation of a relative difference in time.
 
         :param other: (optional) an :class:`Arrow <arrow.arrow.Arrow>` or ``datetime`` object.
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
@@ -1117,7 +1117,7 @@ class Arrow(object):
     # query functions
 
     def is_between(self, start, end, bounds="()"):
-        """ Returns a boolean denoting whether the specified date and time is between
+        """Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.
 
         :param start: an :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -1186,7 +1186,7 @@ class Arrow(object):
     # datetime methods
 
     def date(self):
-        """ Returns a ``date`` object with the same year, month and day.
+        """Returns a ``date`` object with the same year, month and day.
 
         Usage::
 
@@ -1198,7 +1198,7 @@ class Arrow(object):
         return self._datetime.date()
 
     def time(self):
-        """ Returns a ``time`` object with the same hour, minute, second, microsecond.
+        """Returns a ``time`` object with the same hour, minute, second, microsecond.
 
         Usage::
 
@@ -1210,7 +1210,7 @@ class Arrow(object):
         return self._datetime.time()
 
     def timetz(self):
-        """ Returns a ``time`` object with the same hour, minute, second, microsecond and
+        """Returns a ``time`` object with the same hour, minute, second, microsecond and
         tzinfo.
 
         Usage::
@@ -1223,7 +1223,7 @@ class Arrow(object):
         return self._datetime.timetz()
 
     def astimezone(self, tz):
-        """ Returns a ``datetime`` object, converted to the specified timezone.
+        """Returns a ``datetime`` object, converted to the specified timezone.
 
         :param tz: a ``tzinfo`` object.
 
@@ -1239,7 +1239,7 @@ class Arrow(object):
         return self._datetime.astimezone(tz)
 
     def utcoffset(self):
-        """ Returns a ``timedelta`` object representing the whole number of minutes difference from
+        """Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
         Usage::
@@ -1252,7 +1252,7 @@ class Arrow(object):
         return self._datetime.utcoffset()
 
     def dst(self):
-        """ Returns the daylight savings time adjustment.
+        """Returns the daylight savings time adjustment.
 
         Usage::
 
@@ -1264,7 +1264,7 @@ class Arrow(object):
         return self._datetime.dst()
 
     def timetuple(self):
-        """ Returns a ``time.struct_time``, in the current timezone.
+        """Returns a ``time.struct_time``, in the current timezone.
 
         Usage::
 
@@ -1276,7 +1276,7 @@ class Arrow(object):
         return self._datetime.timetuple()
 
     def utctimetuple(self):
-        """ Returns a ``time.struct_time``, in UTC time.
+        """Returns a ``time.struct_time``, in UTC time.
 
         Usage::
 
@@ -1288,7 +1288,7 @@ class Arrow(object):
         return self._datetime.utctimetuple()
 
     def toordinal(self):
-        """ Returns the proleptic Gregorian ordinal of the date.
+        """Returns the proleptic Gregorian ordinal of the date.
 
         Usage::
 
@@ -1300,7 +1300,7 @@ class Arrow(object):
         return self._datetime.toordinal()
 
     def weekday(self):
-        """ Returns the day of the week as an integer (0-6).
+        """Returns the day of the week as an integer (0-6).
 
         Usage::
 
@@ -1312,7 +1312,7 @@ class Arrow(object):
         return self._datetime.weekday()
 
     def isoweekday(self):
-        """ Returns the ISO day of the week as an integer (1-7).
+        """Returns the ISO day of the week as an integer (1-7).
 
         Usage::
 
@@ -1324,7 +1324,7 @@ class Arrow(object):
         return self._datetime.isoweekday()
 
     def isocalendar(self):
-        """ Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
+        """Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
 
         Usage::
 
@@ -1348,7 +1348,7 @@ class Arrow(object):
         return self._datetime.isoformat(sep)
 
     def ctime(self):
-        """ Returns a ctime formatted representation of the date and time.
+        """Returns a ctime formatted representation of the date and time.
 
         Usage::
 
@@ -1360,7 +1360,7 @@ class Arrow(object):
         return self._datetime.ctime()
 
     def strftime(self, format):
-        """ Formats in the style of ``datetime.strftime``.
+        """Formats in the style of ``datetime.strftime``.
 
         :param format: the format string.
 

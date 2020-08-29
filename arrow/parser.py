@@ -426,7 +426,8 @@ class DateTimeParser(object):
 
         if expanded_timestamp is not None:
             return datetime.fromtimestamp(
-                normalize_timestamp(expanded_timestamp), tz=tz.tzutc(),
+                normalize_timestamp(expanded_timestamp),
+                tz=tz.tzutc(),
             )
 
         day_of_year = parts.get("day_of_year")
