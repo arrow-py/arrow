@@ -19,8 +19,8 @@ jobs:
         python-version: ["pypy3", "2.7", "3.5", "3.6", "3.7", "3.8", "3.9-dev"]
         os: [ubuntu-latest, macos-latest, windows-latest]
         exclude:
-          # excludes node 4 on macOS
-          - os: macos-latest
+          # pypy3 randomly fails on Windows builds
+          - os: windows-latest
             python-version: "pypy3"
 
     steps:
