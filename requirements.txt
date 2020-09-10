@@ -1,5 +1,4 @@
 dateparser==0.7.*
-mypy==0.782
 pre-commit==2.7.*
 pytest==6.0.*
 pytest-cov==2.10.*
