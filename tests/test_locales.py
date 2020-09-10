@@ -923,29 +923,189 @@ class TestIndonesianLocale:
 
 @pytest.mark.usefixtures("lang_locale")
 class TestTagalogLocale:
-    def test_format_timeframe(self):
-
+    def test_singles_tl(self):
+        assert self.locale._format_timeframe("second", 1) == "isang segundo"
         assert self.locale._format_timeframe("minute", 1) == "isang minuto"
         assert self.locale._format_timeframe("hour", 1) == "isang oras"
+        assert self.locale._format_timeframe("day", 1) == "isang araw"
+        assert self.locale._format_timeframe("week", 1) == "isang linggo"
         assert self.locale._format_timeframe("month", 1) == "isang buwan"
         assert self.locale._format_timeframe("year", 1) == "isang taon"
 
+    def test_meridians_tl(self):
+        assert self.locale.meridian(7, "A") == "ng umaga"
+        assert self.locale.meridian(18, "A") == "ng hapon"
+        assert self.locale.meridian(10, "a") == "nu"
+        assert self.locale.meridian(22, "a") == "nh"
+
+    def test_describe_tl(self):
+        assert self.locale.describe("second", only_distance=True) == "isang segundo"
+        assert (
+            self.locale.describe("second", only_distance=False)
+            == "isang segundo mula ngayon"
+        )
+        assert self.locale.describe("minute", only_distance=True) == "isang minuto"
+        assert (
+            self.locale.describe("minute", only_distance=False)
+            == "isang minuto mula ngayon"
+        )
+        assert self.locale.describe("hour", only_distance=True) == "isang oras"
+        assert (
+            self.locale.describe("hour", only_distance=False)
+            == "isang oras mula ngayon"
+        )
+        assert self.locale.describe("day", only_distance=True) == "isang araw"
+        assert (
+            self.locale.describe("day", only_distance=False) == "isang araw mula ngayon"
+        )
+        assert self.locale.describe("week", only_distance=True) == "isang linggo"
+        assert (
+            self.locale.describe("week", only_distance=False)
+            == "isang linggo mula ngayon"
+        )
+        assert self.locale.describe("month", only_distance=True) == "isang buwan"
+        assert (
+            self.locale.describe("month", only_distance=False)
+            == "isang buwan mula ngayon"
+        )
+        assert self.locale.describe("year", only_distance=True) == "isang taon"
+        assert (
+            self.locale.describe("year", only_distance=False)
+            == "isang taon mula ngayon"
+        )
+
+    def test_relative_tl(self):
+        # time
+        assert self.locale._format_relative("ngayon", "now", 0) == "ngayon"
+        assert (
+            self.locale._format_relative("1 segundo", "seconds", 1)
+            == "1 segundo mula ngayon"
+        )
+        assert (
+            self.locale._format_relative("1 minuto", "minutes", 1)
+            == "1 minuto mula ngayon"
+        )
+        assert (
+            self.locale._format_relative("1 oras", "hours", 1) == "1 oras mula ngayon"
+        )
+        assert self.locale._format_relative("1 araw", "days", 1) == "1 araw mula ngayon"
+        assert (
+            self.locale._format_relative("1 linggo", "weeks", 1)
+            == "1 linggo mula ngayon"
+        )
+        assert (
+            self.locale._format_relative("1 buwan", "months", 1)
+            == "1 buwan mula ngayon"
+        )
+        assert (
+            self.locale._format_relative("1 taon", "years", 1) == "1 taon mula ngayon"
+        )
+        assert (
+            self.locale._format_relative("1 segundo", "seconds", -1)
+            == "nakaraang 1 segundo"
+        )
+        assert (
+            self.locale._format_relative("1 minuto", "minutes", -1)
+            == "nakaraang 1 minuto"
+        )
+        assert self.locale._format_relative("1 oras", "hours", -1) == "nakaraang 1 oras"
+        assert self.locale._format_relative("1 araw", "days", -1) == "nakaraang 1 araw"
+        assert (
+            self.locale._format_relative("1 linggo", "weeks", -1)
+            == "nakaraang 1 linggo"
+        )
+        assert (
+            self.locale._format_relative("1 buwan", "months", -1) == "nakaraang 1 buwan"
+        )
+        assert self.locale._format_relative("1 taon", "years", -1) == "nakaraang 1 taon"
+
+    def test_plurals_tl(self):
+        # Seconds
+        assert self.locale._format_timeframe("seconds", 0) == "0 segundo"
+        assert self.locale._format_timeframe("seconds", 1) == "1 segundo"
         assert self.locale._format_timeframe("seconds", 2) == "2 segundo"
-        assert self.locale._format_timeframe("minutes", 3) == "3 minuto"
+        assert self.locale._format_timeframe("seconds", 4) == "4 segundo"
+        assert self.locale._format_timeframe("seconds", 5) == "5 segundo"
+        assert self.locale._format_timeframe("seconds", 21) == "21 segundo"
+        assert self.locale._format_timeframe("seconds", 22) == "22 segundo"
+        assert self.locale._format_timeframe("seconds", 25) == "25 segundo"
+
+        # Minutes
+        assert self.locale._format_timeframe("minutes", 0) == "0 minuto"
+        assert self.locale._format_timeframe("minutes", 1) == "1 minuto"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minuto"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minuto"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minuto"
+        assert self.locale._format_timeframe("minutes", 21) == "21 minuto"
+        assert self.locale._format_timeframe("minutes", 22) == "22 minuto"
+        assert self.locale._format_timeframe("minutes", 25) == "25 minuto"
+
+        # Hours
+        assert self.locale._format_timeframe("hours", 0) == "0 oras"
+        assert self.locale._format_timeframe("hours", 1) == "1 oras"
+        assert self.locale._format_timeframe("hours", 2) == "2 oras"
         assert self.locale._format_timeframe("hours", 4) == "4 oras"
+        assert self.locale._format_timeframe("hours", 5) == "5 oras"
+        assert self.locale._format_timeframe("hours", 21) == "21 oras"
+        assert self.locale._format_timeframe("hours", 22) == "22 oras"
+        assert self.locale._format_timeframe("hours", 25) == "25 oras"
+
+        # Days
+        assert self.locale._format_timeframe("days", 0) == "0 araw"
+        assert self.locale._format_timeframe("days", 1) == "1 araw"
+        assert self.locale._format_timeframe("days", 2) == "2 araw"
+        assert self.locale._format_timeframe("days", 3) == "3 araw"
+        assert self.locale._format_timeframe("days", 21) == "21 araw"
+
+        # Weeks
+        assert self.locale._format_timeframe("weeks", 0) == "0 linggo"
+        assert self.locale._format_timeframe("weeks", 1) == "1 linggo"
+        assert self.locale._format_timeframe("weeks", 2) == "2 linggo"
+        assert self.locale._format_timeframe("weeks", 4) == "4 linggo"
+        assert self.locale._format_timeframe("weeks", 5) == "5 linggo"
+        assert self.locale._format_timeframe("weeks", 21) == "21 linggo"
+        assert self.locale._format_timeframe("weeks", 22) == "22 linggo"
+        assert self.locale._format_timeframe("weeks", 25) == "25 linggo"
+
+        # Months
+        assert self.locale._format_timeframe("months", 0) == "0 buwan"
+        assert self.locale._format_timeframe("months", 1) == "1 buwan"
+        assert self.locale._format_timeframe("months", 2) == "2 buwan"
+        assert self.locale._format_timeframe("months", 4) == "4 buwan"
         assert self.locale._format_timeframe("months", 5) == "5 buwan"
-        assert self.locale._format_timeframe("years", 6) == "6 taon"
+        assert self.locale._format_timeframe("months", 21) == "21 buwan"
+        assert self.locale._format_timeframe("months", 22) == "22 buwan"
+        assert self.locale._format_timeframe("months", 25) == "25 buwan"
 
-    def test_format_relative_now(self):
-        assert self.locale._format_relative("ngayon lang", "now", 0) == "ngayon lang"
+        # Years
+        assert self.locale._format_timeframe("years", 1) == "1 taon"
+        assert self.locale._format_timeframe("years", 2) == "2 taon"
+        assert self.locale._format_timeframe("years", 5) == "5 taon"
 
-    def test_format_relative_past(self):
-        assert self.locale._format_relative("2 oras", "hour", 2) == "2 oras mula ngayon"
+    def test_multi_describe_tl(self):
+        describe = self.locale.describe_multi
 
-    def test_format_relative_future(self):
-        assert self.locale._format_relative("3 oras", "hour", -3) == "nakaraang 3 oras"
+        fulltest = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 6)]
+        assert describe(fulltest) == "5 taon 1 linggo 1 oras 6 minuto mula ngayon"
+        seconds4000_0days = [("days", 0), ("hours", 1), ("minutes", 6)]
+        assert describe(seconds4000_0days) == "0 araw 1 oras 6 minuto mula ngayon"
+        seconds4000 = [("hours", 1), ("minutes", 6)]
+        assert describe(seconds4000) == "1 oras 6 minuto mula ngayon"
+        assert describe(seconds4000, only_distance=True) == "1 oras 6 minuto"
+        seconds3700 = [("hours", 1), ("minutes", 1)]
+        assert describe(seconds3700) == "1 oras 1 minuto mula ngayon"
+        seconds300_0hours = [("hours", 0), ("minutes", 5)]
+        assert describe(seconds300_0hours) == "0 oras 5 minuto mula ngayon"
+        seconds300 = [("minutes", 5)]
+        assert describe(seconds300) == "5 minuto mula ngayon"
+        seconds60 = [("minutes", 1)]
+        assert describe(seconds60) == "1 minuto mula ngayon"
+        assert describe(seconds60, only_distance=True) == "1 minuto"
+        seconds60 = [("seconds", 1)]
+        assert describe(seconds60) == "1 segundo mula ngayon"
+        assert describe(seconds60, only_distance=True) == "1 segundo"
 
-    def test_ordinal_number(self):
+    def test_ordinal_number_tl(self):
         assert self.locale.ordinal_number(0) == "ika-0"
         assert self.locale.ordinal_number(1) == "ika-1"
         assert self.locale.ordinal_number(2) == "ika-2"
