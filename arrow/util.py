@@ -53,7 +53,7 @@ def is_timestamp(value: Any) -> bool:
         return False
 
 
-def normalize_timestamp(timestamp):
+def normalize_timestamp(timestamp: float) -> float:
     """Normalize millisecond and microsecond timestamps into normal timestamps."""
     if timestamp > MAX_TIMESTAMP:
         if timestamp < MAX_TIMESTAMP_MS:
@@ -86,7 +86,7 @@ def iso_to_gregorian(
     return gregorian
 
 
-def validate_bounds(bounds):
+def validate_bounds(bounds: str):
     if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
         raise ValueError(
             'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'

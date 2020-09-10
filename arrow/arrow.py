@@ -94,7 +94,7 @@ class Arrow:
         fold = kwargs.get("fold", 0)
 
         # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
-        self._datetime = dateutil_tz.enfold(
+        self._datetime = dateutil_tz.enfold(  # type: ignore
             datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
             fold=fold,
         )
@@ -801,7 +801,7 @@ class Arrow:
 
         # TODO revisit this once we drop support for 2.7/3.5
         if fold is not None:
-            current = dateutil_tz.enfold(current, fold=fold)
+            current = dateutil_tz.enfold(current, fold=fold)  # type: ignore
 
         return self.fromdatetime(current)
 

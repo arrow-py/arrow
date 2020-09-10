@@ -1,7 +1,7 @@
 import re
 from datetime import datetime, timedelta
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, SupportsInt, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from dateutil import tz
 
@@ -399,13 +399,13 @@ class DateTimeParser:
 
     @staticmethod
     def _build_datetime(parts: Dict[str, Any]) -> datetime:
-
+        day: Union[int, None]
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
             # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
-            week: Union[str, bytes, SupportsInt]
-            year: Union[str, bytes, SupportsInt]
+            week: int
+            year: int
             year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
