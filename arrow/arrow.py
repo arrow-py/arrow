@@ -31,8 +31,9 @@ class Arrow:
     :param hour: (optional) the hour. Defaults to 0.
     :param minute: (optional) the minute, Defaults to 0.
     :param second: (optional) the second, Defaults to 0.
-    :param microsecond: (optional) the microsecond. Defaults 0.
+    :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
+    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -75,6 +76,7 @@ class Arrow:
         second: int = 0,
         microsecond: int = 0,
         tzinfo: Optional[Union["dt_tzinfo", tzfile]] = None,
+        **kwargs,
     ) -> None:
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -89,8 +91,12 @@ class Arrow:
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
 
-        self._datetime = datetime(
-            year, month, day, hour, minute, second, microsecond, tzinfo
+        fold = kwargs.get("fold", 0)
+
+        # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
+        self._datetime = dateutil_tz.enfold(
+            datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            fold=fold,
         )
 
     # factories: single object, both original and from datetime.
@@ -113,6 +119,7 @@ class Arrow:
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
+
         dt = datetime.now(tzinfo)
 
         return cls(
@@ -124,11 +131,12 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
     def utcnow(cls) -> "Arrow":
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
         time.
 
         Usage::
@@ -149,13 +157,14 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
     def fromtimestamp(
         cls, timestamp: Union[float, str], tzinfo: Optional[Any] = None
     ) -> "Arrow":
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
@@ -182,6 +191,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
@@ -207,11 +217,12 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
     def fromdatetime(cls, dt: Union[datetime, "Arrow"], tzinfo: Any = None) -> "Arrow":
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
         :param dt: the ``datetime``
@@ -242,13 +253,14 @@ class Arrow:
             dt.second,
             dt.microsecond,
             tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
     def fromdate(
         cls, date: date, tzinfo: Optional[Union[dt_tzinfo, tzfile, str, None]] = None
     ) -> "Arrow":
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  Time values are set to 0.
 
         :param date: the ``date``
@@ -264,7 +276,7 @@ class Arrow:
     def strptime(
         cls, date_str: str, fmt: str, tzinfo: Optional[Union[tzfile, dt_tzinfo]] = None
     ) -> "Arrow":
-        """ Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
 
         :param date_str: the date string.
@@ -292,6 +304,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
     # factories: ranges and spans
@@ -305,7 +318,7 @@ class Arrow:
         tz: Optional[Union[None, tzfile, str]] = None,
         limit: Optional[int] = None,
     ) -> Union[Iterator[Union[Iterator, Iterator["Arrow"]]], "Arrow"]:
-        """ Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
+        """Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         points in time between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -375,6 +388,106 @@ class Arrow:
                 **{frame_relative: relative_steps}  # type: ignore
             )
 
+    def span(self, frame, count=1, bounds="[)"):
+        """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
+        of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param count: (optional) the number of frames to span.
+        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
+            whether to include or exclude the start and end values in the span. '(' excludes
+            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
+            If the bounds are not specified, the default bound '[)' is used.
+
+        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+
+        Usage::
+
+            >>> arrow.utcnow()
+            <Arrow [2013-05-09T03:32:36.186203+00:00]>
+
+            >>> arrow.utcnow().span('hour')
+            (<Arrow [2013-05-09T03:00:00+00:00]>, <Arrow [2013-05-09T03:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day', count=2)
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('day', bounds='[]')
+            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
+
+        """
+
+        util.validate_bounds(bounds)
+
+        frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
+
+        if frame_absolute == "week":
+            attr = "day"
+        elif frame_absolute == "quarter":
+            attr = "month"
+        else:
+            attr = frame_absolute
+
+        index = self._ATTRS.index(attr)
+        frames = self._ATTRS[: index + 1]
+
+        values = [getattr(self, f) for f in frames]
+
+        for _ in range(3 - len(values)):
+            values.append(1)
+
+        floor = self.__class__(*values, tzinfo=self.tzinfo)
+
+        if frame_absolute == "week":
+            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+        elif frame_absolute == "quarter":
+            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+
+        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+
+        if bounds[0] == "(":
+            floor += relativedelta(microseconds=1)
+
+        if bounds[1] == ")":
+            ceil += relativedelta(microseconds=-1)
+
+        return floor, ceil
+
+    def floor(self, frame):
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
+        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+        Equivalent to the first element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().floor('hour')
+            <Arrow [2013-05-09T03:00:00+00:00]>
+        """
+
+        return self.span(frame)[0]
+
+    def ceil(self, frame):
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
+        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
+        Equivalent to the second element in the 2-tuple returned by
+        :func:`span <arrow.arrow.Arrow.span>`.
+
+        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+
+        Usage::
+
+            >>> arrow.utcnow().ceil('hour')
+            <Arrow [2013-05-09T03:59:59.999999+00:00]>
+        """
+
+        return self.span(frame)[1]
+
     @classmethod
     def span_range(
         cls,
@@ -385,7 +498,7 @@ class Arrow:
         limit: Optional[Any] = None,
         bounds: str = "[)",
     ) -> Iterator:
-        """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -450,7 +563,7 @@ class Arrow:
         tz: Optional[Any] = None,
         bounds: str = "[)",
     ) -> Iterator[Union[Iterator, Iterator[Tuple["Arrow", "Arrow"]]]]:
-        """ Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
+        """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -519,7 +632,7 @@ class Arrow:
     def __hash__(self) -> int:
         return self._datetime.__hash__()
 
-    # attributes & properties
+    # attributes and properties
 
     def __getattr__(self, name: str) -> int:
 
@@ -539,7 +652,7 @@ class Arrow:
 
     @property
     def tzinfo(self) -> Any:
-        """ Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
+        """Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
 
         Usage::
 
@@ -559,7 +672,7 @@ class Arrow:
 
     @property
     def datetime(self) -> datetime:
-        """ Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
+        """Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
 
         Usage::
 
@@ -573,7 +686,7 @@ class Arrow:
 
     @property
     def naive(self) -> datetime:  # type: ignore[valid-type]
-        """ Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a naive datetime representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object.
 
         Usage::
@@ -590,7 +703,7 @@ class Arrow:
 
     @property
     def timestamp(self) -> int:
-        """ Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
 
         Usage::
@@ -604,7 +717,7 @@ class Arrow:
 
     @property
     def float_timestamp(self) -> float:
-        """ Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object, in UTC time.
 
         Usage::
@@ -616,10 +729,24 @@ class Arrow:
 
         return self.timestamp + float(self.microsecond) / 1000000
 
-    # mutation and duplication.
+    @property
+    def fold(self):
+        """ Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+
+        # in python < 3.6 _datetime will be a _DatetimeWithFold if fold=1 and a datetime with no fold attribute
+        # otherwise, so we need to return zero to cover the latter case
+        return getattr(self._datetime, "fold", 0)
+
+    @property
+    def ambiguous(self):
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+
+        return dateutil_tz.datetime_ambiguous(self._datetime)
+
+    # mutation and duplication
 
     def clone(self) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
 
         Usage:
 
@@ -631,7 +758,7 @@ class Arrow:
         return self.fromdatetime(self._datetime)
 
     def replace(self, **kwargs: Any) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
         Use property names to set their value absolutely::
@@ -659,7 +786,7 @@ class Arrow:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
                 raise AttributeError(f"setting absolute {key} is not supported")
-            elif key != "tzinfo":
+            elif key not in ["tzinfo", "fold"]:
                 raise AttributeError(f'unknown attribute: "{key}"')
 
         current = self._datetime.replace(**absolute_kwargs)
@@ -670,10 +797,16 @@ class Arrow:
             tzinfo = self._get_tzinfo(tzinfo)
             current = current.replace(tzinfo=tzinfo)
 
+        fold = kwargs.get("fold")
+
+        # TODO revisit this once we drop support for 2.7/3.5
+        if fold is not None:
+            current = dateutil_tz.enfold(current, fold=fold)
+
         return self.fromdatetime(current)
 
     def shift(self, **kwargs: Any) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
         Use pluralized property names to relatively shift their current value:
@@ -725,7 +858,7 @@ class Arrow:
         return self.fromdatetime(current)
 
     def to(self, tz: Optional[dt_tzinfo]) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
         :param tz: A :ref:`timezone expression <tz-expr>`.
@@ -767,121 +900,13 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
         )
 
-    @classmethod
-    def _validate_bounds(cls, bounds: str) -> None:
-        if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
-            raise AttributeError(
-                'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
-            )
-
-    def span(
-        self, frame: str, count: int = 1, bounds: str = "[)"
-    ) -> Tuple["Arrow", "Arrow"]:
-        """ Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
-        of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param count: (optional) the number of frames to span.
-        :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
-            whether to include or exclude the start and end values in the span. '(' excludes
-            the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
-            If the bounds are not specified, the default bound '[)' is used.
-
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
-
-        Usage::
-
-            >>> arrow.utcnow()
-            <Arrow [2013-05-09T03:32:36.186203+00:00]>
-
-            >>> arrow.utcnow().span('hour')
-            (<Arrow [2013-05-09T03:00:00+00:00]>, <Arrow [2013-05-09T03:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day')
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-09T23:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day', count=2)
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T23:59:59.999999+00:00]>)
-
-            >>> arrow.utcnow().span('day', bounds='[]')
-            (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
-
-        """
-
-        self._validate_bounds(bounds)
-
-        frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
-
-        if frame_absolute == "week":
-            attr = "day"
-        elif frame_absolute == "quarter":
-            attr = "month"
-        else:
-            attr = frame_absolute
-
-        index = self._ATTRS.index(attr)
-        frames = self._ATTRS[: index + 1]
-
-        values = [getattr(self, f) for f in frames]
-
-        for _ in range(3 - len(values)):
-            values.append(1)
-
-        floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
-
-        if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
-        elif frame_absolute == "quarter":
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
-
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})  # type: ignore
-
-        if bounds[0] == "(":
-            floor += relativedelta(microseconds=1)
-
-        if bounds[1] == ")":
-            ceil += relativedelta(microseconds=-1)
-
-        return floor, ceil
-
-    def floor(self, frame: str) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
-        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the first element in the 2-tuple returned by
-        :func:`span <arrow.arrow.Arrow.span>`.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-
-        Usage::
-
-            >>> arrow.utcnow().floor('hour')
-            <Arrow [2013-05-09T03:00:00+00:00]>
-        """
-
-        return self.span(frame)[0]
-
-    def ceil(self, frame: str) -> "Arrow":
-        """ Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
-        of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
-        Equivalent to the second element in the 2-tuple returned by
-        :func:`span <arrow.arrow.Arrow.span>`.
-
-        :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-
-        Usage::
-
-            >>> arrow.utcnow().ceil('hour')
-            <Arrow [2013-05-09T03:59:59.999999+00:00]>
-        """
-
-        return self.span(frame)[1]
-
-    # string output and formatting.
+    # string output and formatting
 
     def format(self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = "en_us") -> str:
-        """ Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
+        """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to a format string.
 
         :param fmt: the format string.
@@ -911,7 +936,7 @@ class Arrow:
         only_distance: bool = False,
         granularity: Union[List[str], str] = "auto",
     ) -> str:
-        """ Returns a localized, humanized representation of a relative difference in time.
+        """Returns a localized, humanized representation of a relative difference in time.
 
         :param other: (optional) an :class:`Arrow <arrow.arrow.Arrow>` or ``datetime`` object.
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
@@ -1106,9 +1131,12 @@ class Arrow:
     # query functions
 
     def is_between(
-        self, start: Union["Arrow"], end: Union["Arrow"], bounds: str = "[]",
+        self,
+        start: Union["Arrow"],
+        end: Union["Arrow"],
+        bounds: str = "[]",
     ) -> bool:
-        """ Returns a boolean denoting whether the specified date and time is between
+        """Returns a boolean denoting whether the specified date and time is between
         the start and end dates and times.
 
         :param start: an :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -1137,7 +1165,7 @@ class Arrow:
 
         """
 
-        self._validate_bounds(bounds)
+        util.validate_bounds(bounds)
 
         if not isinstance(start, Arrow):
             raise TypeError(f"Can't parse start date argument type of '{type(start)}'")
@@ -1170,91 +1198,10 @@ class Arrow:
                 target_timestamp > start_timestamp and target_timestamp < end_timestamp
             )
 
-    # math
-
-    def __add__(self, other: Union[timedelta, relativedelta, int]) -> Union["Arrow"]:
-
-        if isinstance(other, (timedelta, relativedelta)):
-            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
-
-        return NotImplemented
-
-    def __radd__(self, other: timedelta) -> "Arrow":
-        return self.__add__(other)
-
-    def __sub__(self, other: Any) -> Union["Arrow", timedelta]:
-
-        if isinstance(other, (timedelta, relativedelta)):
-            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
-
-        elif isinstance(other, datetime):
-            return self._datetime - other
-
-        elif isinstance(other, Arrow):
-            return self._datetime - other._datetime
-
-        return NotImplemented
-
-    def __rsub__(self, other: Any) -> Any:  # TODO Check typing  # TODO Check typing
-
-        if isinstance(other, datetime):
-            return other - self._datetime
-
-        return NotImplemented
-
-    # comparisons
-
-    def __eq__(self, other: Any) -> bool:  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return False
-
-        return self._datetime == self._get_datetime(other)
-
-    def __ne__(self, other: Any) -> bool:  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return True
-
-        return not self.__eq__(other)
-
-    def __gt__(self, other: Any) -> Any:  # TODO Check typing  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime > self._get_datetime(other)
-
-    def __ge__(self, other: Any) -> Any:  # TODO Check typing  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime >= self._get_datetime(other)
-
-    def __lt__(self, other: Any) -> Any:  # TODO Check typing  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime < self._get_datetime(other)
-
-    def __le__(self, other: Any) -> Any:  # TODO Check typing  # TODO Check typing
-
-        if not isinstance(other, (Arrow, datetime)):
-            return NotImplemented
-
-        return self._datetime <= self._get_datetime(other)
-
-    def __cmp__(self, other):
-        if sys.version_info[0] < 3:  # pragma: no cover
-            if not isinstance(other, (Arrow, datetime)):
-                raise TypeError(f"can't compare '{type(self)}' to '{type(other)}'")
-
     # datetime methods
 
     def date(self) -> date:
-        """ Returns a ``date`` object with the same year, month and day.
+        """Returns a ``date`` object with the same year, month and day.
 
         Usage::
 
@@ -1266,7 +1213,7 @@ class Arrow:
         return self._datetime.date()
 
     def time(self) -> time:  # type: ignore[valid-type]
-        """ Returns a ``time`` object with the same hour, minute, second, microsecond.
+        """Returns a ``time`` object with the same hour, minute, second, microsecond.
 
         Usage::
 
@@ -1278,7 +1225,7 @@ class Arrow:
         return self._datetime.time()
 
     def timetz(self) -> time:  # type: ignore[valid-type]
-        """ Returns a ``time`` object with the same hour, minute, second, microsecond and
+        """Returns a ``time`` object with the same hour, minute, second, microsecond and
         tzinfo.
 
         Usage::
@@ -1291,7 +1238,7 @@ class Arrow:
         return self._datetime.timetz()
 
     def astimezone(self, tz: tzfile) -> datetime:  # type: ignore[valid-type]
-        """ Returns a ``datetime`` object, converted to the specified timezone.
+        """Returns a ``datetime`` object, converted to the specified timezone.
 
         :param tz: a ``tzinfo`` object.
 
@@ -1307,7 +1254,7 @@ class Arrow:
         return self._datetime.astimezone(tz)
 
     def utcoffset(self) -> Optional[timedelta]:  # type: ignore[valid-type]
-        """ Returns a ``timedelta`` object representing the whole number of minutes difference from
+        """Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
         Usage::
@@ -1320,7 +1267,7 @@ class Arrow:
         return self._datetime.utcoffset()
 
     def dst(self) -> Optional[timedelta]:
-        """ Returns the daylight savings time adjustment.
+        """Returns the daylight savings time adjustment.
 
         Usage::
 
@@ -1332,7 +1279,7 @@ class Arrow:
         return self._datetime.dst()
 
     def timetuple(self) -> struct_time:
-        """ Returns a ``time.struct_time``, in the current timezone.
+        """Returns a ``time.struct_time``, in the current timezone.
 
         Usage::
 
@@ -1344,7 +1291,7 @@ class Arrow:
         return self._datetime.timetuple()
 
     def utctimetuple(self) -> struct_time:
-        """ Returns a ``time.struct_time``, in UTC time.
+        """Returns a ``time.struct_time``, in UTC time.
 
         Usage::
 
@@ -1356,7 +1303,7 @@ class Arrow:
         return self._datetime.utctimetuple()
 
     def toordinal(self) -> int:
-        """ Returns the proleptic Gregorian ordinal of the date.
+        """Returns the proleptic Gregorian ordinal of the date.
 
         Usage::
 
@@ -1368,7 +1315,7 @@ class Arrow:
         return self._datetime.toordinal()
 
     def weekday(self) -> int:
-        """ Returns the day of the week as an integer (0-6).
+        """Returns the day of the week as an integer (0-6).
 
         Usage::
 
@@ -1380,7 +1327,7 @@ class Arrow:
         return self._datetime.weekday()
 
     def isoweekday(self) -> int:
-        """ Returns the ISO day of the week as an integer (1-7).
+        """Returns the ISO day of the week as an integer (1-7).
 
         Usage::
 
@@ -1392,7 +1339,7 @@ class Arrow:
         return self._datetime.isoweekday()
 
     def isocalendar(self) -> Tuple[int, int, int]:
-        """ Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
+        """Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
 
         Usage::
 
@@ -1416,7 +1363,7 @@ class Arrow:
         return self._datetime.isoformat(sep)
 
     def ctime(self) -> str:
-        """ Returns a ctime formatted representation of the date and time.
+        """Returns a ctime formatted representation of the date and time.
 
         Usage::
 
@@ -1428,7 +1375,7 @@ class Arrow:
         return self._datetime.ctime()
 
     def strftime(self, format: str) -> str:
-        """ Formats in the style of ``datetime.strftime``.
+        """Formats in the style of ``datetime.strftime``.
 
         :param format: the format string.
 
@@ -1453,7 +1400,90 @@ class Arrow:
 
         return self.isoformat()
 
-    # internal tools.
+    # math
+
+    def __add__(self, other):
+
+        if isinstance(other, (timedelta, relativedelta)):
+            return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
+
+        return NotImplemented
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __sub__(self, other):
+
+        if isinstance(other, (timedelta, relativedelta)):
+            return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
+
+        elif isinstance(other, datetime):
+            return self._datetime - other
+
+        elif isinstance(other, Arrow):
+            return self._datetime - other._datetime
+
+        return NotImplemented
+
+    def __rsub__(self, other):
+
+        if isinstance(other, datetime):
+            return other - self._datetime
+
+        return NotImplemented
+
+    # comparisons
+
+    def __eq__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return False
+
+        return self._datetime == self._get_datetime(other)
+
+    def __ne__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return True
+
+        return not self.__eq__(other)
+
+    def __gt__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime > self._get_datetime(other)
+
+    def __ge__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime >= self._get_datetime(other)
+
+    def __lt__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime < self._get_datetime(other)
+
+    def __le__(self, other):
+
+        if not isinstance(other, (Arrow, datetime)):
+            return NotImplemented
+
+        return self._datetime <= self._get_datetime(other)
+
+    def __cmp__(self, other):
+        if sys.version_info[0] < 3:  # pragma: no cover
+            if not isinstance(other, (Arrow, datetime)):
+                raise TypeError(
+                    "can't compare '{}' to '{}'".format(type(self), type(other))
+                )
+
+    # internal methods
 
     @staticmethod
     def _get_tzinfo(tz_expr: Any) -> dt_tzinfo:

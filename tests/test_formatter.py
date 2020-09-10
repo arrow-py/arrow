@@ -21,7 +21,7 @@ from .utils import make_full_tz_list
 
 
 @pytest.mark.usefixtures("arrow_formatter")
-class TestDateTimeFormatterFormatToken:
+class TestFormatterFormatToken:
     def test_format(self):
 
         dt = datetime(2013, 2, 5, 12, 32, 51)
@@ -219,7 +219,7 @@ class TestDateTimeFormatterFormatToken:
 
 
 @pytest.mark.usefixtures("arrow_formatter", "time_1975_12_25")
-class TestDateTimeFormatterBuiltinFormats:
+class TestFormatterBuiltinFormats:
     def test_atom(self):
         assert (
             self.formatter.format(self.datetime, FORMAT_ATOM)

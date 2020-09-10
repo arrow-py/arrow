@@ -122,9 +122,9 @@ class DateTimeFormatter:
 
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
-            tz: Union[
-                tzutc, tzinfo
-            ] = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
+            tz: Union[tzutc, tzinfo] = (
+                dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
+            )
             total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)  # type: ignore
 
             sign = "+" if total_minutes >= 0 else "-"

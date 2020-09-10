@@ -95,7 +95,7 @@ class Locale:
     def describe(
         self, timeframe: str, delta: float = 0, only_distance: bool = False
     ) -> str:
-        """ Describes a delta within a timeframe in plain language.
+        """Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
@@ -113,7 +113,7 @@ class Locale:
         timeframes: List[List[Any]],
         only_distance: bool = False,  # TODO Check type
     ) -> str:
-        """ Describes a delta within multiple timeframes in plain language.
+        """Describes a delta within multiple timeframes in plain language.
 
         :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.
         :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
@@ -136,7 +136,7 @@ class Locale:
         return humanized
 
     def day_name(self, day: int) -> str:
-        """ Returns the day name for a specified day of the week.
+        """Returns the day name for a specified day of the week.
 
         :param day: the ``int`` day of the week (1-7).
 
@@ -145,7 +145,7 @@ class Locale:
         return self.day_names[day]
 
     def day_abbreviation(self, day: int) -> str:
-        """ Returns the day abbreviation for a specified day of the week.
+        """Returns the day abbreviation for a specified day of the week.
 
         :param day: the ``int`` day of the week (1-7).
 
@@ -154,7 +154,7 @@ class Locale:
         return self.day_abbreviations[day]
 
     def month_name(self, month: int) -> str:
-        """ Returns the month name for a specified month of the year.
+        """Returns the month name for a specified month of the year.
 
         :param month: the ``int`` month of the year (1-12).
 
@@ -163,7 +163,7 @@ class Locale:
         return self.month_names[month]
 
     def month_abbreviation(self, month: int) -> str:
-        """ Returns the month abbreviation for a specified month of the year.
+        """Returns the month abbreviation for a specified month of the year.
 
         :param month: the ``int`` month of the year (1-12).
 
@@ -172,7 +172,7 @@ class Locale:
         return self.month_abbreviations[month]
 
     def month_number(self, name: str) -> Union[Optional[int], int]:
-        """ Returns the month number for a month specified by name or abbreviation.
+        """Returns the month number for a month specified by name or abbreviation.
 
         :param name: the month name or abbreviation.
 
@@ -187,21 +187,21 @@ class Locale:
         return self._month_name_to_ordinal.get(name)
 
     def year_full(self, year: int) -> str:
-        """  Returns the year for specific locale if available
+        """Returns the year for specific locale if available
 
         :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"
 
     def year_abbreviation(self, year: int) -> str:
-        """ Returns the year for specific locale if available
+        """Returns the year for specific locale if available
 
         :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"[2:]
 
     def meridian(self, hour: int, token: Optional[str]) -> Optional[str]:
-        """ Returns the meridian indicator for a specified hour and format token.
+        """Returns the meridian indicator for a specified hour and format token.
 
         :param hour: the ``int`` hour of the day.
         :param token: the format token.
@@ -214,7 +214,7 @@ class Locale:
         return None  # to appease pymy
 
     def ordinal_number(self, n: int) -> str:
-        """ Returns the ordinal format of a given integer
+        """Returns the ordinal format of a given integer
 
         :param n: an integer
         """
@@ -230,7 +230,12 @@ class Locale:
         timeframe_str: str = str(self.timeframes[timeframe])
         return timeframe_str.format(trunc(abs(delta)))
 
-    def _format_relative(self, humanized: str, timeframe: str, delta: float,) -> str:
+    def _format_relative(
+        self,
+        humanized: str,
+        timeframe: str,
+        delta: float,
+    ) -> str:
 
         if timeframe == "now":
             return humanized
@@ -340,7 +345,7 @@ class EnglishLocale(Locale):
     def describe(
         self, timeframe: str, delta: float = 0, only_distance: bool = False
     ) -> str:
-        """ Describes a delta within a timeframe in plain language.
+        """Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
@@ -1831,7 +1836,7 @@ class GermanBaseLocale(Locale):
     def describe(
         self, timeframe: str, delta: float = 0, only_distance: bool = False
     ) -> str:
-        """ Describes a delta within a timeframe in plain language.
+        """Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
@@ -3232,7 +3237,7 @@ class HebrewLocale(Locale):
     def describe_multi(
         self, timeframes: List[List[Any]], only_distance: bool = False
     ) -> str:
-        """ Describes a delta within multiple timeframes in plain language.
+        """Describes a delta within multiple timeframes in plain language.
         In Hebrew, the and word behaves a bit differently.
 
         :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.

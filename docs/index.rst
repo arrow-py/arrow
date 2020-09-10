@@ -151,6 +151,17 @@ Even replace the timezone without altering other attributes:
     >>> arw.replace(tzinfo='US/Pacific')
     <Arrow [2013-05-12T03:29:35.334214-07:00]>
 
+Move between the earlier and later moments of an ambiguous time:
+
+.. code-block:: python
+
+    >>> paris_transition = arrow.Arrow(2019, 10, 27, 2, tzinfo="Europe/Paris", fold=0)
+    >>> paris_transition
+    <Arrow [2019-10-27T02:00:00+02:00]>
+    >>> paris_transition.ambiguous
+    True
+    >>> paris_transition.replace(fold=1)
+    <Arrow [2019-10-27T02:00:00+01:00]>
 
 Format
 ~~~~~~
@@ -405,7 +416,7 @@ Use the following tokens for parsing and formatting. Note that they are **not** 
 .. [#t1] localization support for parsing and formatting
 .. [#t2] localization support only for formatting
 .. [#t3] the result is truncated to microseconds, with `half-to-even rounding <https://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest>`_.
-.. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package
+.. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package, note that abbreviations such as MST, PDT, BRST are unlikely to parse due to ambiguity. Use the full IANA zone name instead (Asia/Shanghai, Europe/London, America/Chicago etc).
 .. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
 
 Built-in Formats
@@ -489,9 +500,12 @@ You can also escape regular expressions by enclosing them within square brackets
 Punctuation
 ~~~~~~~~~~~
 
-Date formats may be fenced on either side by one punctuation character from the following list: :literal:`, . ; : ? ! " \` ' [ ] { } ( ) < >`
+Date and time formats may be fenced on either side by one punctuation character from the following list: ``, . ; : ? ! " \` ' [ ] { } ( ) < >``
 
 .. code-block:: python
+
+    >>> arrow.get("Cool date: 2019-10-31T09:12:45.123456+04:30.", "YYYY-MM-DDTHH:mm:ss.SZZ")
+    <Arrow [2019-10-31T09:12:45.123456+04:30]>
 
     >>> arrow.get("Tomorrow (2019-10-31) is Halloween!", "YYYY-MM-DD")
     <Arrow [2019-10-31T00:00:00+00:00]>
@@ -501,6 +515,19 @@ Date formats may be fenced on either side by one punctuation character from the 
 
     >>> arrow.get("It's Halloween tomorrow (2019-10-31)!", "YYYY-MM-DD")
     # Raises exception because there are multiple punctuation marks following the date
+
+Redundant Whitespace
+~~~~~~~~~~~~~~~~~~~~
+
+Redundant whitespace characters (spaces, tabs, and newlines) can be normalized automatically by passing in the ``normalize_whitespace`` flag to ``arrow.get``:
+
+.. code-block:: python
+
+    >>> arrow.get('\t \n  2013-05-05T12:30:45.123456 \t \n', normalize_whitespace=True)
+    <Arrow [2013-05-05T12:30:45.123456+00:00]>
+
+    >>> arrow.get('2013-05-05  T \n   12:30:45\t123456', 'YYYY-MM-DD T HH:mm:ss S', normalize_whitespace=True)
+    <Arrow [2013-05-05T12:30:45.123456+00:00]>
 
 API Guide
 ---------

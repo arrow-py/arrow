@@ -21,7 +21,7 @@ from arrow.util import is_timestamp, iso_to_gregorian
 
 
 class ArrowFactory:
-    """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
+    """A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
     :param type: (optional) the :class:`Arrow <arrow.arrow.Arrow>`-based class to construct from.
         Defaults to :class:`Arrow <arrow.arrow.Arrow>`.
@@ -32,13 +32,15 @@ class ArrowFactory:
         self.type: Type[Arrow] = type
 
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
-        """ Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
+        """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
-        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to
-            'en_us'.
+        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en_us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
             the timezone in a positional argument. Defaults to UTC.
+        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
+            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
+            Defaults to false.
 
         Usage::
 
@@ -141,6 +143,7 @@ class ArrowFactory:
         arg_count = len(args)
         locale = kwargs.pop("locale", "en_us")
         tz = kwargs.get("tzinfo", None)
+        normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
         # if kwargs given, send to constructor unless only tzinfo provided
         if len(kwargs) > 1:
@@ -193,7 +196,9 @@ class ArrowFactory:
 
             # (str) -> parse.
             elif isinstance(arg, str):
-                dt_str: datetime = parser.DateTimeParser(locale).parse_iso(arg)
+                dt_str: datetime = parser.DateTimeParser(locale).parse_iso(
+                    arg, normalize_whitespace
+                )
                 return self.type.fromdatetime(dt_str, tz)
 
             # (struct_time) -> from struct_time
@@ -237,8 +242,8 @@ class ArrowFactory:
                 isinstance(arg_2, str) or isinstance(arg_2, list)
             ):
                 dt: Any = parser.DateTimeParser(locale).parse(
-                    args[0], args[1]
-                )  # TODO Better type check
+                    args[0], args[1], normalize_whitespace
+                )
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
