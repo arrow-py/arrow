@@ -1,10 +1,10 @@
 dateparser==0.7.*
 mypy==0.782
 pre-commit==2.7.*
-pytest==5.4.*
+pytest==6.0.*
 pytest-cov==2.10.*
-pytest-mock==3.1.*
+pytest-mock==3.3.*
 python-dateutil==2.8.*
 pytz==2020.*
 simplejson==3.17.*
-sphinx==3.0.*
+sphinx==3.2.*
