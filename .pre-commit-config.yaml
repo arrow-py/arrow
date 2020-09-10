@@ -44,3 +44,7 @@ repos:
     rev: 'v0.782'
     hooks:
       - id: mypy
+  -   repo: https://github.com/pycqa/pydocstyle
+      rev: 5.1.1
+      hooks:
+      -   id: pydocstyle
