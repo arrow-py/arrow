@@ -3,10 +3,11 @@
 import io
 import os
 import sys
+from typing import Any, Dict, List
 
 sys.path.insert(0, os.path.abspath(".."))
 
-about = {}
+about: Dict[Any, Any] = {}
 with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
     exec(f.read(), about)
 
@@ -22,7 +23,7 @@ release = about["__version__"]
 
 extensions = ["sphinx.ext.autodoc"]
 
-templates_path = []
+templates_path: List[Any] = []
 
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
@@ -35,8 +36,8 @@ language = None
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "alabaster"
-html_theme_path = []
-html_static_path = []
+html_theme_path: List[Any] = []
+html_static_path: List[Any] = []
 
 html_show_sourcelink = False
 html_show_sphinx = False

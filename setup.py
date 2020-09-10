@@ -1,11 +1,12 @@
 import io
+from typing import Any, Dict
 
 from setuptools import setup
 
 with io.open("README.rst", "r", encoding="utf-8") as f:
     readme = f.read()
 
-about = {}
+about: Dict[Any, Any] = {}
 with io.open("arrow/_version.py", "r", encoding="utf-8") as f:
     exec(f.read(), about)
 
