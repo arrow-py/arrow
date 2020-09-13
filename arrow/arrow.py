@@ -1042,7 +1042,7 @@ class Arrow:
                 elif diff < 47260800:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * float(max(delta / 31536000, 2))
+                    years = sign * int(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
