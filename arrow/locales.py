@@ -2160,6 +2160,8 @@ class TagalogLocale(Locale):
     ]
     day_abbreviations = ["", "Lun", "Mar", "Miy", "Huw", "Biy", "Sab", "Lin"]
 
+    meridians = {"am": "nu", "pm": "nh", "AM": "ng umaga", "PM": "ng hapon"}
+
     def _ordinal_number(self, n: int) -> str:
         return f"ika-{n}"
 
