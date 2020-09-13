@@ -23,7 +23,7 @@ setup(
     packages=["arrow"],
     zip_safe=False,
     python_requires=">=3.6",
-    install_requires=["python-dateutil"],
+    install_requires=["python-dateutil>=2.7.0"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
