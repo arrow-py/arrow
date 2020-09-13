@@ -4,6 +4,6 @@ pytest==6.0.*
 pytest-cov==2.10.*
 pytest-mock==3.3.*
 python-dateutil==2.8.*
-pytz==2020.*
+pytz==2019.*
 simplejson==3.17.*
 sphinx==3.2.*
