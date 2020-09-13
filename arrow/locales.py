@@ -2109,6 +2109,8 @@ class TagalogLocale(Locale):
         "hours": "{0} oras",
         "day": "isang araw",
         "days": "{0} araw",
+        "week": "isang linggo",
+        "weeks": "{0} linggo",
         "month": "isang buwan",
         "months": "{0} buwan",
         "year": "isang taon",
