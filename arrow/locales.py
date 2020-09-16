@@ -1157,8 +1157,8 @@ class KoreanLocale(Locale):
     def _ordinal_number(self, n):
         ordinals = ["0", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"]
         if n < len(ordinals):
-            return "{}번째".format(ordinals[n])
-        return "{}번째".format(n)
+            return f"{ordinals[n]}번째"
+        return f"{n}번째"
 
     def _format_relative(self, humanized, timeframe, delta):
         if timeframe in ("day", "days"):
@@ -1170,7 +1170,7 @@ class KoreanLocale(Locale):
             if special:
                 return special
 
-        return super(KoreanLocale, self)._format_relative(humanized, timeframe, delta)
+        return super()._format_relative(humanized, timeframe, delta)
 
 
 # derived locale types & implementations.
