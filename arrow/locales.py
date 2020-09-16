@@ -3,8 +3,6 @@ import sys
 from math import trunc
 from typing import Any, Collection, Dict, List, Optional, Sequence, Tuple, Union
 
-# from mypy_extensions import NoReturn
-
 
 def get_locale(name: str) -> Any:
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
