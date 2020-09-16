@@ -718,14 +718,13 @@ class Arrow(object):
 
     @property
     def ambiguous(self):
-        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous."""
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
     @property
     def imaginary(self):
-        """Returns a boolean indicating whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current
-        timezone"""
+        """Indicates whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current timezone."""
 
         return not dateutil_tz.datetime_exists(self._datetime)
 
