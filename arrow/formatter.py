@@ -4,7 +4,6 @@ from datetime import datetime, tzinfo
 from typing import Optional, Union
 
 from dateutil import tz as dateutil_tz
-from dateutil.tz.tz import tzutc
 
 from arrow import locales, util
 
@@ -122,7 +121,7 @@ class DateTimeFormatter:
 
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
-            tz: Union[tzutc, tzinfo] = (
+            tz: Union[dateutil_tz.tzutc, tzinfo] = (
                 dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
             )
             total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)  # type: ignore
