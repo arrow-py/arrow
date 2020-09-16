@@ -5,9 +5,9 @@
 import os
 from datetime import datetime
 
-if os.name == "nt":  # type: ignore
+if os.name == "nt":  # pragma: no cover
     MAX_TIMESTAMP = datetime(3001, 1, 18, 23, 59, 59, 999999).timestamp()
-else:
+else:  # pragma: no cover
     MAX_TIMESTAMP = datetime.max.timestamp()
 MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1000
 MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1000000
