@@ -3,7 +3,7 @@ Provides the default implementation of :class:`ArrowFactory <arrow.factory.Arrow
 methods for use as a module API.
 
 """
-from typing import Any, Optional, Type, Union
+from typing import Any, Type, Union
 
 from dateutil.tz import tzfile, tzlocal
 
@@ -32,7 +32,7 @@ def utcnow() -> Arrow:
 utcnow.__doc__ = _factory.utcnow.__doc__
 
 
-def now(tz: Optional[Union[tzfile, tzlocal]] = None) -> Arrow:
+def now(tz: Union[tzfile, tzlocal, None] = None) -> Arrow:
     """Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``now`` method."""
 
     return _factory.now(tz)

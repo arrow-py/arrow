@@ -9,7 +9,7 @@ from datetime import date, datetime, time, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
-from typing import Any, Iterator, List, Optional, SupportsAbs, Tuple, Union
+from typing import Any, Iterator, List, SupportsAbs, Tuple, Union
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
@@ -75,7 +75,7 @@ class Arrow:
         minute: int = 0,
         second: int = 0,
         microsecond: int = 0,
-        tzinfo: Optional[Union["dt_tzinfo", tzfile]] = None,
+        tzinfo: Union["dt_tzinfo", tzfile, None] = None,
         **kwargs,
     ) -> None:
         if tzinfo is None:
@@ -103,7 +103,7 @@ class Arrow:
 
     @classmethod
     def now(
-        cls, tzinfo: Optional[Union[tzfile, tzlocal, "dt_tzinfo"]] = None
+        cls, tzinfo: Union[tzfile, tzlocal, "dt_tzinfo", None] = None
     ) -> "Arrow":  # tzinfo is type tzinfo
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
@@ -162,7 +162,7 @@ class Arrow:
 
     @classmethod
     def fromtimestamp(
-        cls, timestamp: Union[float, str], tzinfo: Optional[Any] = None
+        cls, timestamp: Union[float, str], tzinfo: Union[Any, None] = None
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
@@ -258,7 +258,7 @@ class Arrow:
 
     @classmethod
     def fromdate(
-        cls, date: date, tzinfo: Optional[Union[dt_tzinfo, tzfile, str, None]] = None
+        cls, date: date, tzinfo: Union[dt_tzinfo, tzfile, str, None] = None
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  Time values are set to 0.
@@ -274,7 +274,7 @@ class Arrow:
 
     @classmethod
     def strptime(
-        cls, date_str: str, fmt: str, tzinfo: Optional[Union[tzfile, dt_tzinfo]] = None
+        cls, date_str: str, fmt: str, tzinfo: Union[tzfile, dt_tzinfo, None] = None
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
@@ -314,9 +314,9 @@ class Arrow:
         cls,
         frame: str,
         start: Union["Arrow", datetime],
-        end: Optional[Union["Arrow", datetime]] = None,
-        tz: Optional[Union[None, tzfile, str]] = None,
-        limit: Optional[int] = None,
+        end: Union["Arrow", datetime, None] = None,
+        tz: Union[tzfile, str, None] = None,
+        limit: Union[int, None] = None,
     ) -> Union[Iterator[Union[Iterator, Iterator["Arrow"]]], "Arrow"]:
         """Returns an iterator of :class:`Arrow <arrow.arrow.Arrow>` objects, representing
         points in time between two inputs.
@@ -494,8 +494,8 @@ class Arrow:
         frame: str,
         start: datetime,
         end: datetime,
-        tz: Optional[str] = None,
-        limit: Optional[Any] = None,
+        tz: Union[str, None] = None,
+        limit: Union[Any, None] = None,
         bounds: str = "[)",
     ) -> Iterator:
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
@@ -560,7 +560,7 @@ class Arrow:
         start: datetime,
         end: datetime,
         interval: int = 1,
-        tz: Optional[Any] = None,
+        tz: Union[Any, None] = None,
         bounds: str = "[)",
     ) -> Iterator[Union[Iterator, Iterator[Tuple["Arrow", "Arrow"]]]]:
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
@@ -665,7 +665,7 @@ class Arrow:
         return self._datetime.tzinfo
 
     @tzinfo.setter
-    def tzinfo(self, tzinfo: Optional[Any]) -> None:
+    def tzinfo(self, tzinfo: Union[Any, None]) -> None:
         """ Sets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. """
 
         self._datetime = self._datetime.replace(tzinfo=tzinfo)
@@ -857,7 +857,7 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def to(self, tz: Optional[dt_tzinfo]) -> "Arrow":
+    def to(self, tz: Union[dt_tzinfo, None]) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
@@ -931,7 +931,7 @@ class Arrow:
 
     def humanize(
         self,
-        other: Optional[Union["Arrow", date]] = None,
+        other: Union["Arrow", date, None] = None,
         locale_code: str = "en_us",
         only_distance: bool = False,
         granularity: Union[List[str], str] = "auto",
@@ -1253,7 +1253,7 @@ class Arrow:
 
         return self._datetime.astimezone(tz)
 
-    def utcoffset(self) -> Optional[timedelta]:  # type: ignore[valid-type]
+    def utcoffset(self) -> Union[timedelta, None]:  # type: ignore[valid-type]
         """Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
@@ -1266,7 +1266,7 @@ class Arrow:
 
         return self._datetime.utcoffset()
 
-    def dst(self) -> Optional[timedelta]:
+    def dst(self) -> Union[timedelta, None]:
         """Returns the daylight savings time adjustment.
 
         Usage::
@@ -1541,7 +1541,9 @@ class Arrow:
         )
 
     @classmethod
-    def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
+    def _get_iteration_params(
+        cls, end: Any, limit: Union[int, None]
+    ) -> Tuple[Any, int]:
 
         if end is None:
 

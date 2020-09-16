@@ -10,7 +10,7 @@ import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
-from typing import Any, Optional, Type, Union
+from typing import Any, Type, Union
 
 from dateutil import tz as dateutil_tz
 from dateutil.tz.tz import tzfile, tzlocal
@@ -267,7 +267,7 @@ class ArrowFactory:
 
         return self.type.utcnow()
 
-    def now(self, tz: Optional[Union[tzfile, tzlocal, "dt_tzinfo"]] = None) -> Arrow:
+    def now(self, tz: Union[tzfile, tzlocal, "dt_tzinfo", None] = None) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
 

@@ -1,7 +1,7 @@
 import calendar
 import re
 from datetime import datetime, tzinfo
-from typing import Optional, Union
+from typing import Union
 
 from dateutil import tz as dateutil_tz
 
@@ -37,7 +37,7 @@ class DateTimeFormatter:
 
         return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
 
-    def _format_token(self, dt: datetime, token: Optional[str]) -> Optional[str]:
+    def _format_token(self, dt: datetime, token: Union[str, None]) -> Union[str, None]:
 
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]

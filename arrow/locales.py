@@ -1,7 +1,7 @@
 import inspect
 import sys
 from math import trunc
-from typing import Any, Collection, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Collection, Dict, List, Sequence, Tuple, Union
 
 
 def get_locale(name: str) -> Any:
@@ -169,7 +169,7 @@ class Locale:
 
         return self.month_abbreviations[month]
 
-    def month_number(self, name: str) -> Union[Optional[int], int]:
+    def month_number(self, name: str) -> Union[Union[int, None], int]:
         """Returns the month number for a month specified by name or abbreviation.
 
         :param name: the month name or abbreviation.
@@ -198,7 +198,7 @@ class Locale:
         """
         return f"{year:04d}"[2:]
 
-    def meridian(self, hour: int, token: Optional[str]) -> Optional[str]:
+    def meridian(self, hour: int, token: Union[str, None]) -> Union[str, None]:
         """Returns the meridian indicator for a specified hour and format token.
 
         :param hour: the ``int`` hour of the day.

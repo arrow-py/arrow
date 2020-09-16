@@ -1,7 +1,7 @@
 import re
 from datetime import datetime, timedelta
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from dateutil import tz
 
@@ -524,7 +524,7 @@ class DateTimeParser:
 
     def _parse_multiformat(self, string: str, formats: List[str]) -> datetime:
 
-        _datetime: Optional[datetime] = None
+        _datetime: Union[datetime, None] = None
 
         for fmt in formats:
             try:
