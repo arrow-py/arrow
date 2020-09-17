@@ -693,8 +693,8 @@ class Arrow(object):
         """
 
         warnings.warn(
-            "For compatibility with the datetime.timestamp() method this property will removed in the 1.0.0 release, "
-            "please switch to .int_timestamp for identical behaviour as soon as possible.",
+            "For compatibility with the datetime.timestamp() method this property will be replaced with a method in "
+            "the 1.0.0 release, please switch to .int_timestamp for identical behaviour as soon as possible.",
             DeprecationWarning,
         )
         return calendar.timegm(self._datetime.utctimetuple())
@@ -706,7 +706,7 @@ class Arrow(object):
 
         Usage::
 
-            >>> arrow.utcnow().timestamp
+            >>> arrow.utcnow().int_timestamp
             1548260567
 
         """
