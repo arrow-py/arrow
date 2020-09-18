@@ -381,7 +381,7 @@ class Arrow(object):
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(
+            current = cls(*values, tzinfo=tzinfo).shift(
                 **{frame_relative: relative_steps}
             )
 
@@ -439,17 +439,17 @@ class Arrow(object):
         floor = self.__class__(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+            floor = floor.shift(days=-(self.isoweekday() - 1))
         elif frame_absolute == "quarter":
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+            floor = floor.shift(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+        ceil = floor.shift(**{frame_relative: count * relative_steps})
 
         if bounds[0] == "(":
-            floor += relativedelta(microseconds=1)
+            floor = floor.shift(microseconds=+1)
 
         if bounds[1] == ")":
-            ceil += relativedelta(microseconds=-1)
+            ceil = ceil.shift(microseconds=-1)
 
         return floor, ceil
 
@@ -741,11 +741,17 @@ class Arrow(object):
 
     @property
     def ambiguous(self):
-        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous."""
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
-    # mutation and duplication
+    @property
+    def imaginary(self):
+        """Indicates whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current timezone."""
+
+        return not dateutil_tz.datetime_exists(self._datetime)
+
+    # mutation and duplication.
 
     def clone(self):
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
@@ -858,6 +864,9 @@ class Arrow(object):
         )
 
         current = self._datetime + relativedelta(**relative_kwargs)
+
+        if not dateutil_tz.datetime_exists(current):
+            current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
 
