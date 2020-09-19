@@ -5,6 +5,7 @@ replacement.
 """
 import calendar
 import sys
+import warnings
 from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
@@ -388,7 +389,7 @@ class Arrow:
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo) + relativedelta(  # type: ignore
+            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore
                 **{frame_relative: relative_steps}  # type: ignore
             )
 
@@ -446,17 +447,17 @@ class Arrow:
         floor = self.__class__(*values, tzinfo=self.tzinfo)
 
         if frame_absolute == "week":
-            floor = floor + relativedelta(days=-(self.isoweekday() - 1))
+            floor = floor.shift(days=-(self.isoweekday() - 1))
         elif frame_absolute == "quarter":
-            floor = floor + relativedelta(months=-((self.month - 1) % 3))
+            floor = floor.shift(months=-((self.month - 1) % 3))
 
-        ceil = floor + relativedelta(**{frame_relative: count * relative_steps})
+        ceil = floor.shift(**{frame_relative: count * relative_steps})
 
         if bounds[0] == "(":
-            floor += relativedelta(microseconds=1)
+            floor = floor.shift(microseconds=+1)
 
         if bounds[1] == ")":
-            ceil += relativedelta(microseconds=-1)
+            ceil = ceil.shift(microseconds=-1)
 
         return floor, ceil
 
@@ -719,6 +720,26 @@ class Arrow:
 
         """
 
+        warnings.warn(
+            "For compatibility with the datetime.timestamp() method this property will be replaced with a method in "
+            "the 1.0.0 release, please switch to the .int_timestamp property for identical behaviour as soon as "
+            "possible.",
+            DeprecationWarning,
+        )
+        return calendar.timegm(self._datetime.utctimetuple())
+
+    @property
+    def int_timestamp(self):
+        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        UTC time.
+
+        Usage::
+
+            >>> arrow.utcnow().int_timestamp
+            1548260567
+
+        """
+
         return calendar.timegm(self._datetime.utctimetuple())
 
     @property
@@ -733,7 +754,11 @@ class Arrow:
 
         """
 
-        return self.timestamp + float(self.microsecond) / 1000000
+        # IDEA get rid of this in 1.0.0 and wrap datetime.timestamp()
+        # Or for compatibility retain this but make it call the timestamp method
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return self.timestamp + float(self.microsecond) / 1000000
 
     @property
     def fold(self):
@@ -745,11 +770,17 @@ class Arrow:
 
     @property
     def ambiguous(self):
-        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous"""
+        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous."""
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
-    # mutation and duplication
+    @property
+    def imaginary(self):
+        """Indicates whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current timezone."""
+
+        return not dateutil_tz.datetime_exists(self._datetime)
+
+    # mutation and duplication.
 
     def clone(self) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
@@ -860,6 +891,9 @@ class Arrow:
         )
 
         current = self._datetime + relativedelta(**relative_kwargs)
+
+        if not dateutil_tz.datetime_exists(current):
+            current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
 
