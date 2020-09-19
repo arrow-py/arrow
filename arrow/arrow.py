@@ -692,6 +692,26 @@ class Arrow(object):
 
         """
 
+        warnings.warn(
+            "For compatibility with the datetime.timestamp() method this property will be replaced with a method in "
+            "the 1.0.0 release, please switch to the .int_timestamp property for identical behaviour as soon as "
+            "possible.",
+            DeprecationWarning,
+        )
+        return calendar.timegm(self._datetime.utctimetuple())
+
+    @property
+    def int_timestamp(self):
+        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        UTC time.
+
+        Usage::
+
+            >>> arrow.utcnow().int_timestamp
+            1548260567
+
+        """
+
         return calendar.timegm(self._datetime.utctimetuple())
 
     @property
@@ -706,7 +726,11 @@ class Arrow(object):
 
         """
 
-        return self.timestamp + float(self.microsecond) / 1000000
+        # IDEA get rid of this in 1.0.0 and wrap datetime.timestamp()
+        # Or for compatibility retain this but make it call the timestamp method
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            return self.timestamp + float(self.microsecond) / 1000000
 
     @property
     def fold(self):
