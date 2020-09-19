@@ -79,7 +79,8 @@ class Arrow:
         second: int = 0,
         microsecond: int = 0,
         tzinfo: Union["dt_tzinfo", tzfile, None] = None,
-        **kwargs,
+        *,
+        fold: int = 0,
     ) -> None:
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -93,8 +94,6 @@ class Arrow:
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
-
-        fold = kwargs.get("fold", 0)
 
         # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
         self._datetime = dateutil_tz.enfold(  # type: ignore
