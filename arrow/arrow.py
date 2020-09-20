@@ -79,12 +79,13 @@ class Arrow:
         minute: int = 0,
         second: int = 0,
         microsecond: int = 0,
-        tzinfo: Union["dt_tzinfo", tzfile, None] = None,
+        tzinfo: Union["dt_tzinfo", tzfile, str, None] = None,
         *,
         fold: int = 0,
     ) -> None:
+        _tzinfo: dt_tzinfo
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+            _tzinfo = dateutil_tz.tzutc()
         # detect that tzinfo is a pytz object (issue #626)
         elif (
             isinstance(tzinfo, dt_tzinfo)
@@ -92,13 +93,15 @@ class Arrow:
             and hasattr(tzinfo, "zone")
             and tzinfo.zone  # type: ignore
         ):
-            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore
+            _tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore
         elif isinstance(tzinfo, str):
-            tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
+            _tzinfo = parser.TzinfoParser.parse(tzinfo)  # type: ignore
+        else:
+            _tzinfo = tzinfo
 
         # use enfold here to cover direct arrow.Arrow init on 2.7/3.5
         self._datetime = dateutil_tz.enfold(  # type: ignore
-            dt_datetime(year, month, day, hour, minute, second, microsecond, tzinfo),
+            dt_datetime(year, month, day, hour, minute, second, microsecond, _tzinfo),
             fold=fold,
         )
 
@@ -897,7 +900,7 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def to(self, tz: Union[dt_tzinfo, None]) -> "Arrow":
+    def to(self, tz: Union[dt_tzinfo, str, None]) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
