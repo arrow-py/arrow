@@ -2832,7 +2832,7 @@ class HindiLocale(Locale):
     month_abbreviations = [
         "",
         "जन",
-        "फ़र",
+        "फ़र",
         "मार्च",
         "अप्रै",
         "मई",
@@ -3328,53 +3328,53 @@ class CatalanLocale(Locale):
 
     month_names = [
         "",
-        "Gener",
-        "Febrer",
-        "Març",
-        "Abril",
-        "Maig",
-        "Juny",
-        "Juliol",
-        "Agost",
-        "Setembre",
-        "Octubre",
-        "Novembre",
-        "Desembre",
+        "gener",
+        "febrer",
+        "març",
+        "abril",
+        "maig",
+        "juny",
+        "juliol",
+        "agost",
+        "setembre",
+        "octubre",
+        "novembre",
+        "desembre",
     ]
     month_abbreviations = [
         "",
-        "Gener",
-        "Febrer",
-        "Març",
-        "Abril",
-        "Maig",
-        "Juny",
-        "Juliol",
-        "Agost",
-        "Setembre",
-        "Octubre",
-        "Novembre",
-        "Desembre",
+        "gen.",
+        "febr.",
+        "març",
+        "abr.",
+        "maig",
+        "juny",
+        "jul.",
+        "ag.",
+        "set.",
+        "oct.",
+        "nov.",
+        "des.",
     ]
     day_names = [
         "",
-        "Dilluns",
-        "Dimarts",
-        "Dimecres",
-        "Dijous",
-        "Divendres",
-        "Dissabte",
-        "Diumenge",
+        "dilluns",
+        "dimarts",
+        "dimecres",
+        "dijous",
+        "divendres",
+        "dissabte",
+        "diumenge",
     ]
     day_abbreviations = [
         "",
-        "Dilluns",
-        "Dimarts",
-        "Dimecres",
-        "Dijous",
-        "Divendres",
-        "Dissabte",
-        "Diumenge",
+        "dl.",
+        "dt.",
+        "dc.",
+        "dj.",
+        "dv.",
+        "ds.",
+        "dg.",
     ]
 
 
@@ -3703,7 +3703,7 @@ class BengaliLocale(Locale):
     month_names = [
         "",
         "জানুয়ারি",
-        "ফেব্রুয়ারি",
+        "ফেব্রুয়ারি",
         "মার্চ",
         "এপ্রিল",
         "মে",
@@ -3749,7 +3749,7 @@ class BengaliLocale(Locale):
         if n in [1, 5, 7, 8, 9, 10]:
             return "{}ম".format(n)
         if n in [2, 3]:
-            return "{}য়".format(n)
+            return "{}য়".format(n)
         if n == 4:
             return "{}র্থ".format(n)
         if n == 6:
