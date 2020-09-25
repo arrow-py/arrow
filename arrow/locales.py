@@ -2832,7 +2832,7 @@ class HindiLocale(Locale):
     month_abbreviations = [
         "",
         "जन",
-        "फ़र",
+        "फ़र",
         "मार्च",
         "अप्रै",
         "मई",
@@ -3703,7 +3703,7 @@ class BengaliLocale(Locale):
     month_names = [
         "",
         "জানুয়ারি",
-        "ফেব্রুয়ারি",
+        "ফেব্রুয়ারি",
         "মার্চ",
         "এপ্রিল",
         "মে",
@@ -3749,7 +3749,7 @@ class BengaliLocale(Locale):
         if n in [1, 5, 7, 8, 9, 10]:
             return "{}ম".format(n)
         if n in [2, 3]:
-            return "{}য়".format(n)
+            return "{}য়".format(n)
         if n == 4:
             return "{}র্থ".format(n)
         if n == 6:
