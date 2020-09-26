@@ -148,18 +148,24 @@ class TestDateTimeParser:
             2019, 1, 15
         )
 
-        assert self.parser.parse(
-            "15/01/2019T04:05:06.789120Z",
-            ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
-        ) == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
+        assert (
+            self.parser.parse(
+                "15/01/2019T04:05:06.789120Z",
+                ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
+            )
+            == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
+        )
 
     # regression test for issue #447
     def test_timestamp_format_list(self):
         # should not match on the "X" token
-        assert self.parser.parse(
-            "15 Jul 2000",
-            ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
-        ) == datetime(2000, 7, 15)
+        assert (
+            self.parser.parse(
+                "15 Jul 2000",
+                ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
+            )
+            == datetime(2000, 7, 15)
+        )
 
         with pytest.raises(ParserError):
             self.parser.parse("15 Jul", "X")
@@ -500,15 +506,21 @@ class TestDateTimeParserParse:
             "2016-05-16T04:05:06.789120 blah", "YYYY-MM-DDThh:mm:ss.S"
         ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
 
-        assert self.parser.parse(
-            "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
-            "YYYY-MM-DDThh:mm:ss.S",
-        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        assert (
+            self.parser.parse(
+                "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
+                "YYYY-MM-DDThh:mm:ss.S",
+            )
+            == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        )
 
-        assert self.parser.parse(
-            "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
-            "YYYY-MM-DD hh:mm:ss.S",
-        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        assert (
+            self.parser.parse(
+                "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
+                "YYYY-MM-DD hh:mm:ss.S",
+            )
+            == datetime(2016, 5, 16, 4, 5, 6, 789120)
+        )
 
     # regression test for issue #701
     # tests cases of a partial match surrounded by punctuation
@@ -647,28 +659,52 @@ class TestDateTimeParserParse:
             == expected
         )
 
+    def test_parse_ddd_and_dddd_ignore_case(self):
+        # Regression test for issue #851
+        expected = datetime(2019, 6, 24)
+        assert (
+            self.parser.parse("MONDAY, June 24, 2019", "dddd, MMMM DD, YYYY")
+            == expected
+        )
+
+    def test_parse_ddd_and_dddd_then_format(self):
         # Regression test for issue #446
         arw_formatter = formatter.DateTimeFormatter()
-        arw_formatter.format(self.parser.parse("Mon", "ddd"), "ddd") == "Mon"
-        arw_formatter.format(self.parser.parse("Monday", "dddd"), "dddd") == "Monday"
-        arw_formatter.format(self.parser.parse("Tue", "ddd"), "ddd") == "Tue"
-        arw_formatter.format(self.parser.parse("Tuesday", "dddd"), "dddd") == "Tuesday"
-        arw_formatter.format(self.parser.parse("Wed", "ddd"), "ddd") == "Wed"
-        arw_formatter.format(
-            self.parser.parse("Wednesday", "dddd"), "dddd"
-        ) == "Wednesday"
-        arw_formatter.format(self.parser.parse("Thu", "ddd"), "ddd") == "Thu"
-        arw_formatter.format(
-            self.parser.parse("Thursday", "dddd"), "dddd"
-        ) == "Thursday"
-        arw_formatter.format(self.parser.parse("Fri", "ddd"), "ddd") == "Fri"
-        arw_formatter.format(self.parser.parse("Friday", "dddd"), "dddd") == "Friday"
-        arw_formatter.format(self.parser.parse("Sat", "ddd"), "ddd") == "Sat"
-        arw_formatter.format(
-            self.parser.parse("Saturday", "dddd"), "dddd"
-        ) == "Saturday"
-        arw_formatter.format(self.parser.parse("Sun", "ddd"), "ddd") == "Sun"
-        arw_formatter.format(self.parser.parse("Sunday", "dddd"), "dddd") == "Sunday"
+        assert arw_formatter.format(self.parser.parse("Mon", "ddd"), "ddd") == "Mon"
+        assert (
+            arw_formatter.format(self.parser.parse("Monday", "dddd"), "dddd")
+            == "Monday"
+        )
+        assert arw_formatter.format(self.parser.parse("Tue", "ddd"), "ddd") == "Tue"
+        assert (
+            arw_formatter.format(self.parser.parse("Tuesday", "dddd"), "dddd")
+            == "Tuesday"
+        )
+        assert arw_formatter.format(self.parser.parse("Wed", "ddd"), "ddd") == "Wed"
+        assert (
+            arw_formatter.format(self.parser.parse("Wednesday", "dddd"), "dddd")
+            == "Wednesday"
+        )
+        assert arw_formatter.format(self.parser.parse("Thu", "ddd"), "ddd") == "Thu"
+        assert (
+            arw_formatter.format(self.parser.parse("Thursday", "dddd"), "dddd")
+            == "Thursday"
+        )
+        assert arw_formatter.format(self.parser.parse("Fri", "ddd"), "ddd") == "Fri"
+        assert (
+            arw_formatter.format(self.parser.parse("Friday", "dddd"), "dddd")
+            == "Friday"
+        )
+        assert arw_formatter.format(self.parser.parse("Sat", "ddd"), "ddd") == "Sat"
+        assert (
+            arw_formatter.format(self.parser.parse("Saturday", "dddd"), "dddd")
+            == "Saturday"
+        )
+        assert arw_formatter.format(self.parser.parse("Sun", "ddd"), "ddd") == "Sun"
+        assert (
+            arw_formatter.format(self.parser.parse("Sunday", "dddd"), "dddd")
+            == "Sunday"
+        )
 
     def test_parse_HH_24(self):
         assert self.parser.parse(
@@ -750,11 +786,14 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("Jun 1 2005  1:33PM", "MMM D YYYY H:mmA")
 
-        assert self.parser.parse(
-            "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
-            "YYYY-MM-DD T HH:mm:ss S",
-            normalize_whitespace=True,
-        ) == datetime(2013, 5, 5, 12, 30, 45, 123456)
+        assert (
+            self.parser.parse(
+                "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
+                "YYYY-MM-DD T HH:mm:ss S",
+                normalize_whitespace=True,
+            )
+            == datetime(2013, 5, 5, 12, 30, 45, 123456)
+        )
 
         with pytest.raises(ParserError):
             self.parser.parse(

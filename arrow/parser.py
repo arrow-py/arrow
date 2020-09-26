@@ -348,10 +348,18 @@ class DateTimeParser(object):
             parts["day"] = int(value)
 
         elif token == "dddd":
-            parts["day_of_week"] = self.locale.day_names.index(value) - 1
+            # locale day names are 1-indexed
+            day_of_week = [x.lower() for x in self.locale.day_names].index(
+                value.lower()
+            )
+            parts["day_of_week"] = day_of_week - 1
 
         elif token == "ddd":
-            parts["day_of_week"] = self.locale.day_abbreviations.index(value) - 1
+            # locale day abbreviations are 1-indexed
+            day_of_week = [x.lower() for x in self.locale.day_abbreviations].index(
+                value.lower()
+            )
+            parts["day_of_week"] = day_of_week - 1
 
         elif token.upper() in ["HH", "H"]:
             parts["hour"] = int(value)
@@ -426,7 +434,8 @@ class DateTimeParser(object):
 
         if expanded_timestamp is not None:
             return datetime.fromtimestamp(
-                normalize_timestamp(expanded_timestamp), tz=tz.tzutc(),
+                normalize_timestamp(expanded_timestamp),
+                tz=tz.tzutc(),
             )
 
         day_of_year = parts.get("day_of_year")

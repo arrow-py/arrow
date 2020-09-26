@@ -7,6 +7,7 @@ import sys
 import time
 from datetime import date, datetime, timedelta
 
+import dateutil
 import pytest
 import pytz
 import simplejson as json
@@ -283,6 +284,15 @@ class TestArrowAttribute:
             self.arrow._datetime.utctimetuple()
         )
 
+        with pytest.warns(DeprecationWarning):
+            self.arrow.timestamp
+
+    def test_int_timestamp(self):
+
+        assert self.arrow.int_timestamp == calendar.timegm(
+            self.arrow._datetime.utctimetuple()
+        )
+
     def test_float_timestamp(self):
 
         result = self.arrow.float_timestamp - self.arrow.timestamp
@@ -309,6 +319,14 @@ class TestArrowAttribute:
         ambiguous_dt = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
 
         assert ambiguous_dt.ambiguous
+
+    def test_getattr_imaginary(self):
+
+        assert not self.now.imaginary
+
+        imaginary_dt = arrow.Arrow(2013, 3, 31, 2, 30, tzinfo="Europe/Paris")
+
+        assert imaginary_dt.imaginary
 
 
 @pytest.mark.usefixtures("time_utcnow")
@@ -838,6 +856,82 @@ class TestArrowShift:
             2013, 5, 5, 12, 30, 45, 1
         )
 
+    def test_shift_positive_imaginary(self):
+
+        # Avoid shifting into imaginary datetimes, take into account DST and other timezone changes.
+
+        new_york = arrow.Arrow(2017, 3, 12, 1, 30, tzinfo="America/New_York")
+        assert new_york.shift(hours=+1) == arrow.Arrow(
+            2017, 3, 12, 3, 30, tzinfo="America/New_York"
+        )
+
+        # pendulum example
+        paris = arrow.Arrow(2013, 3, 31, 1, 50, tzinfo="Europe/Paris")
+        assert paris.shift(minutes=+20) == arrow.Arrow(
+            2013, 3, 31, 3, 10, tzinfo="Europe/Paris"
+        )
+
+        canberra = arrow.Arrow(2018, 10, 7, 1, 30, tzinfo="Australia/Canberra")
+        assert canberra.shift(hours=+1) == arrow.Arrow(
+            2018, 10, 7, 3, 30, tzinfo="Australia/Canberra"
+        )
+
+        kiev = arrow.Arrow(2018, 3, 25, 2, 30, tzinfo="Europe/Kiev")
+        assert kiev.shift(hours=+1) == arrow.Arrow(
+            2018, 3, 25, 4, 30, tzinfo="Europe/Kiev"
+        )
+
+        # Edge case, the entire day of 2011-12-30 is imaginary in this zone!
+        apia = arrow.Arrow(2011, 12, 29, 23, tzinfo="Pacific/Apia")
+        assert apia.shift(hours=+2) == arrow.Arrow(
+            2011, 12, 31, 1, tzinfo="Pacific/Apia"
+        )
+
+    def test_shift_negative_imaginary(self):
+
+        new_york = arrow.Arrow(2011, 3, 13, 3, 30, tzinfo="America/New_York")
+        assert new_york.shift(hours=-1) == arrow.Arrow(
+            2011, 3, 13, 3, 30, tzinfo="America/New_York"
+        )
+        assert new_york.shift(hours=-2) == arrow.Arrow(
+            2011, 3, 13, 1, 30, tzinfo="America/New_York"
+        )
+
+        london = arrow.Arrow(2019, 3, 31, 2, tzinfo="Europe/London")
+        assert london.shift(hours=-1) == arrow.Arrow(
+            2019, 3, 31, 2, tzinfo="Europe/London"
+        )
+        assert london.shift(hours=-2) == arrow.Arrow(
+            2019, 3, 31, 0, tzinfo="Europe/London"
+        )
+
+        # edge case, crossing the international dateline
+        apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
+        assert apia.shift(hours=-2) == arrow.Arrow(
+            2011, 12, 31, 23, tzinfo="Pacific/Apia"
+        )
+
+    @pytest.mark.skipif(
+        dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"
+    )
+    def test_shift_kiritimati(self):
+        # corrected 2018d tz database release, will fail in earlier versions
+
+        kiritimati = arrow.Arrow(1994, 12, 30, 12, 30, tzinfo="Pacific/Kiritimati")
+        assert kiritimati.shift(days=+1) == arrow.Arrow(
+            1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
+        )
+
+    @pytest.mark.skipif(
+        sys.version_info < (3, 6), reason="unsupported before python 3.6"
+    )
+    def shift_imaginary_seconds(self):
+        # offset has a seconds component
+        monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")
+        assert monrovia.shift(hours=+1, minutes=+30) == arrow.Arrow(
+            1972, 1, 7, 1, 14, 30, tzinfo="Africa/Monrovia"
+        )
+
 
 class TestArrowRange:
     def test_year(self):
@@ -1027,6 +1121,18 @@ class TestArrowRange:
         for r in result:
             assert r.tzinfo == tz.gettz("US/Central")
 
+    def test_imaginary(self):
+        # issue #72, avoid duplication in utc column
+
+        before = arrow.Arrow(2018, 3, 10, 23, tzinfo="US/Pacific")
+        after = arrow.Arrow(2018, 3, 11, 4, tzinfo="US/Pacific")
+
+        pacific_range = [t for t in arrow.Arrow.range("hour", before, after)]
+        utc_range = [t.to("utc") for t in arrow.Arrow.range("hour", before, after)]
+
+        assert len(pacific_range) == len(set(pacific_range))
+        assert len(utc_range) == len(set(utc_range))
+
     def test_unsupported(self):
 
         with pytest.raises(AttributeError):
@@ -1090,10 +1196,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2014, 1, 1), arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2015, 1, 1), arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999),),
-            (arrow.Arrow(2016, 1, 1), arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1),
+                arrow.Arrow(2013, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2014, 1, 1),
+                arrow.Arrow(2014, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2015, 1, 1),
+                arrow.Arrow(2015, 12, 31, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2016, 1, 1),
+                arrow.Arrow(2016, 12, 31, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_quarter(self):
@@ -1131,8 +1249,14 @@ class TestArrowSpanRange:
         assert result == [
             (arrow.Arrow(2013, 1, 28), arrow.Arrow(2013, 2, 3, 23, 59, 59, 999999)),
             (arrow.Arrow(2013, 2, 4), arrow.Arrow(2013, 2, 10, 23, 59, 59, 999999)),
-            (arrow.Arrow(2013, 2, 11), arrow.Arrow(2013, 2, 17, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 2, 18), arrow.Arrow(2013, 2, 24, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 2, 11),
+                arrow.Arrow(2013, 2, 17, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 2, 18),
+                arrow.Arrow(2013, 2, 24, 23, 59, 59, 999999),
+            ),
             (arrow.Arrow(2013, 2, 25), arrow.Arrow(2013, 3, 3, 23, 59, 59, 999999)),
         ]
 
@@ -1145,10 +1269,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 2, 0), arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 3, 0), arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 4, 0), arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 2, 0),
+                arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 3, 0),
+                arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 4, 0),
+                arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_days(self):
@@ -1160,10 +1296,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 2, 0), arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 3, 0), arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 4, 0), arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 2, 0),
+                arrow.Arrow(2013, 1, 2, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 3, 0),
+                arrow.Arrow(2013, 1, 3, 23, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 4, 0),
+                arrow.Arrow(2013, 1, 4, 23, 59, 59, 999999),
+            ),
         ]
 
     def test_hour(self):
@@ -1175,10 +1323,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0), arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 1), arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 2), arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 3), arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0),
+                arrow.Arrow(2013, 1, 1, 0, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 1),
+                arrow.Arrow(2013, 1, 1, 1, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 2),
+                arrow.Arrow(2013, 1, 1, 2, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 3),
+                arrow.Arrow(2013, 1, 1, 3, 59, 59, 999999),
+            ),
         ]
 
         result = list(
@@ -1200,10 +1360,22 @@ class TestArrowSpanRange:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 1, 1, 0, 0), arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 1), arrow.Arrow(2013, 1, 1, 0, 1, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 2), arrow.Arrow(2013, 1, 1, 0, 2, 59, 999999),),
-            (arrow.Arrow(2013, 1, 1, 0, 3), arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999),),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 0),
+                arrow.Arrow(2013, 1, 1, 0, 0, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 1),
+                arrow.Arrow(2013, 1, 1, 0, 1, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 2),
+                arrow.Arrow(2013, 1, 1, 0, 2, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 1, 1, 0, 3),
+                arrow.Arrow(2013, 1, 1, 0, 3, 59, 999999),
+            ),
         ]
 
     def test_second(self):
@@ -1318,9 +1490,18 @@ class TestArrowInterval:
         )
 
         assert result == [
-            (arrow.Arrow(2013, 5, 5, 12), arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),),
-            (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),),
-            (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),),
+            (
+                arrow.Arrow(2013, 5, 5, 12),
+                arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14),
+                arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16),
+                arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),
+            ),
         ]
 
     def test_bounds_param_is_passed(self):

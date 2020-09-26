@@ -21,7 +21,7 @@ from arrow.util import is_timestamp, iso_to_gregorian, isstr
 
 
 class ArrowFactory(object):
-    """ A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
+    """A factory for generating :class:`Arrow <arrow.arrow.Arrow>` objects.
 
     :param type: (optional) the :class:`Arrow <arrow.arrow.Arrow>`-based class to construct from.
         Defaults to :class:`Arrow <arrow.arrow.Arrow>`.
@@ -32,7 +32,7 @@ class ArrowFactory(object):
         self.type = type
 
     def get(self, *args, **kwargs):
-        """ Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
+        """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en_us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
