@@ -1542,8 +1542,8 @@ class Arrow(object):
                 return end, sys.maxsize
             return end, limit
 
-    @classmethod
-    def _is_last_day_of_month(cls, date):
+    @staticmethod
+    def _is_last_day_of_month(date):
         return (date + timedelta(days=1)).day == 1
 
 
