@@ -1544,7 +1544,7 @@ class Arrow(object):
 
     @staticmethod
     def _is_last_day_of_month(date):
-        return (date + timedelta(days=1)).day == 1
+        return date.day == calendar.monthrange(date.year, date.month)[1]
 
 
 Arrow.min = Arrow.fromdatetime(datetime.min)
