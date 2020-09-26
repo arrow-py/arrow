@@ -30,7 +30,7 @@ repos:
       - id: python-check-blanket-noqa
       - id: rst-backticks
   - repo: https://github.com/psf/black
-    rev: 19.10b0
+    rev: 20.8b1
     hooks:
       - id: black
         args: [--safe, --quiet]
