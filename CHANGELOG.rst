@@ -25,13 +25,12 @@ Changelog
     (<Arrow [2018-03-11T03:00:00-07:00]>, <Arrow [2018-03-11T10:00:00+00:00]>)
     (<Arrow [2018-03-11T04:00:00-07:00]>, <Arrow [2018-03-11T11:00:00+00:00]>)
 
-
-- [NEW] Implemented `PEP 495 <https://www.python.org/dev/peps/pep-0495/>`_ to handle ambiguous datetimes. This is achieved by the addition of the ``fold`` attribute for Arrow objects. For example:
 - [NEW] Added ``humanize`` week granularity translation for Tagalog.
-- [CHANGE] Calls to the ``timestamp`` property now emit a ``DeprecationWarning``. In a future release, ``timestamp`` will be changed to a function to align with Python's datetime module. If you would like to continue using the property, please change your code to use the ``int_timestamp`` or ``float_timestamp`` properties instead.
+- [CHANGE] Calls to the ``timestamp`` property now emit a ``DeprecationWarning``. In a future release, ``timestamp`` will be changed to a method to align with Python's datetime module. If you would like to continue using the property, please change your code to use the ``int_timestamp`` or ``float_timestamp`` properties instead.
 - [CHANGE] Expanded and improved Catalan locale.
 - [FIX] Fixed a bug that caused ``Arrow.range()`` to incorrectly cut off ranges in certain scenarios when using month, quarter, or year endings.
 - [FIX] Fixed a bug that caused day of week token parsing to be case sensitive.
+- [INTERNAL] A number of functions were reordered in arrow.py for better organization and grouping of related methods. This change will have no impact on usage.
 - [INTERNAL] A minimum tox version is now enforced for compatibility reasons. Contributors must use tox >3.18.0 going forward.
 
 0.16.0 (2020-08-23)
