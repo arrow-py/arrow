@@ -18,5 +18,5 @@ Replace this commented text block with a description of your code changes.
 
 If your PR has an associated issue, insert the issue number (e.g. #703) or directly link to the GitHub issue (e.g. https://github.com/arrow-py/arrow/issues/703).
 
-For example, writing "Closes: #703" will automatically close issue #703 when this PR is merged.
+Pro-tip: writing "Closes: #703" in the PR body will automatically close issue #703 when the PR is merged.
 -->
