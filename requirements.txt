@@ -1,12 +1,12 @@
 backports.functools_lru_cache==1.6.1; python_version == "2.7"
 dateparser==0.7.*
 pre-commit==1.21.*; python_version <= "3.5"
-pre-commit==2.6.*; python_version >= "3.6"
+pre-commit==2.7.*; python_version >= "3.6"
 pytest==4.6.*; python_version == "2.7"
-pytest==6.0.*; python_version >= "3.5"
+pytest==6.1.*; python_version >= "3.5"
 pytest-cov==2.10.*
 pytest-mock==2.0.*; python_version == "2.7"
-pytest-mock==3.2.*; python_version >= "3.5"
+pytest-mock==3.3.*; python_version >= "3.5"
 python-dateutil==2.8.*
 pytz==2019.*
 simplejson==3.17.*

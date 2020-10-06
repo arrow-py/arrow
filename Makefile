@@ -12,6 +12,7 @@ build39: PYTHON_VER = python3.9
 build27 build35 build36 build37 build38 build39: clean
 	virtualenv venv --python=$(PYTHON_VER)
 	. venv/bin/activate; \
+	pip install -U pip setuptools wheel; \
 	pip install -r requirements.txt; \
 	pre-commit install
 
