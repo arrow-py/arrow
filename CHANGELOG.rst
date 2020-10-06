@@ -1,10 +1,42 @@
 Changelog
 =========
 
+0.17.0 (2020-10-2)
+-------------------
+
+- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the upcoming 1.0.0 release. This is the last major release to support Python 2.7 and Python 3.5.
+- [NEW] Arrow now properly handles imaginary datetimes during DST shifts. For example:
+
+..code-block:: python
+    >>> just_before = arrow.get(2013, 3, 31, 1, 55, tzinfo="Europe/Paris")
+    >>> just_before.shift(minutes=+10)
+    <Arrow [2013-03-31T03:05:00+02:00]>
+
+..code-block:: python
+    >>> before = arrow.get("2018-03-10 23:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
+    >>> after = arrow.get("2018-03-11 04:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
+    >>> result=[(t, t.to("utc")) for t in arrow.Arrow.range("hour", before, after)]
+    >>> for r in result:
+    ...     print(r)
+    ...
+    (<Arrow [2018-03-10T23:00:00-08:00]>, <Arrow [2018-03-11T07:00:00+00:00]>)
+    (<Arrow [2018-03-11T00:00:00-08:00]>, <Arrow [2018-03-11T08:00:00+00:00]>)
+    (<Arrow [2018-03-11T01:00:00-08:00]>, <Arrow [2018-03-11T09:00:00+00:00]>)
+    (<Arrow [2018-03-11T03:00:00-07:00]>, <Arrow [2018-03-11T10:00:00+00:00]>)
+    (<Arrow [2018-03-11T04:00:00-07:00]>, <Arrow [2018-03-11T11:00:00+00:00]>)
+
+- [NEW] Added ``humanize`` week granularity translation for Tagalog.
+- [CHANGE] Calls to the ``timestamp`` property now emit a ``DeprecationWarning``. In a future release, ``timestamp`` will be changed to a method to align with Python's datetime module. If you would like to continue using the property, please change your code to use the ``int_timestamp`` or ``float_timestamp`` properties instead.
+- [CHANGE] Expanded and improved Catalan locale.
+- [FIX] Fixed a bug that caused ``Arrow.range()`` to incorrectly cut off ranges in certain scenarios when using month, quarter, or year endings.
+- [FIX] Fixed a bug that caused day of week token parsing to be case sensitive.
+- [INTERNAL] A number of functions were reordered in arrow.py for better organization and grouping of related methods. This change will have no impact on usage.
+- [INTERNAL] A minimum tox version is now enforced for compatibility reasons. Contributors must use tox >3.18.0 going forward.
+
 0.16.0 (2020-08-23)
 -------------------
 
-- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.16.x and 0.17.x releases are the last to support Python 2.7 and 3.5.
+- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the upcoming 1.0.0 release. The 0.16.x and 0.17.x releases are the last to support Python 2.7 and 3.5.
 - [NEW] Implemented `PEP 495 <https://www.python.org/dev/peps/pep-0495/>`_ to handle ambiguous datetimes. This is achieved by the addition of the ``fold`` attribute for Arrow objects. For example:
 
 .. code-block:: python
@@ -32,7 +64,7 @@ Changelog
 0.15.8 (2020-07-23)
 -------------------
 
-- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the 1.0.0 release in late September. The 0.15.x, 0.16.x, and 0.17.x releases are the last to support Python 2.7 and 3.5.
+- [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the upcoming 1.0.0 release. The 0.15.x, 0.16.x, and 0.17.x releases are the last to support Python 2.7 and 3.5.
 - [NEW] Added ``humanize`` week granularity translation for Czech.
 - [FIX] ``arrow.get`` will now pick sane defaults when weekdays are passed with particular token combinations, see `#446 <https://github.com/arrow-py/arrow/issues/446>`_.
 - [INTERNAL] Moved arrow to an organization. The repo can now be found `here <https://github.com/arrow-py/arrow>`_.
