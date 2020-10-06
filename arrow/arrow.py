@@ -13,7 +13,7 @@ from datetime import timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
-from typing import Any, Iterator, List, SupportsAbs, Tuple, Union
+from typing import Any, Iterator, List, Optional, SupportsAbs, Tuple, Union
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
@@ -1175,8 +1175,8 @@ class Arrow:
 
     def is_between(
         self,
-        start: Union["Arrow"],
-        end: Union["Arrow"],
+        start: "Arrow",
+        end: "Arrow",
         bounds: str = "[]",
     ) -> bool:
         """Returns a boolean denoting whether the specified date and time is between
@@ -1296,7 +1296,7 @@ class Arrow:
 
         return self._datetime.astimezone(tz)
 
-    def utcoffset(self) -> Union[timedelta, None]:
+    def utcoffset(self) -> Optional[timedelta]:
         """Returns a ``timedelta`` object representing the whole number of minutes difference from
         UTC time.
 
@@ -1309,7 +1309,7 @@ class Arrow:
 
         return self._datetime.utcoffset()
 
-    def dst(self) -> Union[timedelta, None]:
+    def dst(self) -> Optional[timedelta]:
         """Returns the daylight savings time adjustment.
 
         Usage::
