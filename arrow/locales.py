@@ -487,7 +487,7 @@ class FrenchBaseLocale(Locale):
     timeframes = {
         "now": "maintenant",
         "second": "une seconde",
-        "seconds": "{0} quelques secondes",
+        "seconds": "{0} secondes",
         "minute": "une minute",
         "minutes": "{0} minutes",
         "hour": "une heure",
