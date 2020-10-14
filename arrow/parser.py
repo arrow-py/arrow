@@ -224,7 +224,13 @@ class DateTimeParser(object):
         if isinstance(fmt, list):
             return self._parse_multiformat(datetime_string, fmt)
 
-        fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
+        try:
+            fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
+        # TODO: remove pragma when we drop 2.7
+        except re.error as e:  # pragma: no cover
+            raise ParserMatchError(
+                "Failed to generate regular expression pattern: {}".format(e)
+            )
 
         match = fmt_pattern_re.search(datetime_string)
 
@@ -241,6 +247,15 @@ class DateTimeParser(object):
                 value = (match.group("year"), match.group("week"), match.group("day"))
             else:
                 value = match.group(token)
+
+            # TODO: remove pragma when we drop 2.7
+            if value is None:  # pragma: no cover
+                raise ParserMatchError(
+                    "Unable to find a match group for the specified token '{}'.".format(
+                        token
+                    )
+                )
+
             self._parse_token(token, value, parts)
 
         return self._build_datetime(parts)
