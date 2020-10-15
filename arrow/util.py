@@ -1,12 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
+import calendar
 import datetime
 import numbers
 
 from dateutil.rrule import WEEKLY, rrule
 
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
+
+
+def seconds_in_month(dt):
+
+    year = dt.year
+    month = dt.month
+
+    days_in_month = calendar.monthrange(year, month)[1]
+
+    seconds = days_in_month * 86400
+
+    return seconds
 
 
 def next_weekday(start_date, weekday):

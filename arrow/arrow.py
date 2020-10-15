@@ -1012,42 +1012,42 @@ class Arrow(object):
                 if diff < 10:
                     return locale.describe("now", only_distance=only_distance)
 
-                if diff < 45:
+                if diff < 60:
                     seconds = sign * delta
                     return locale.describe(
                         "seconds", seconds, only_distance=only_distance
                     )
 
-                elif diff < 90:
+                elif diff < 120:
                     return locale.describe("minute", sign, only_distance=only_distance)
-                elif diff < 2700:
+                elif diff < 3600:
                     minutes = sign * int(max(delta / 60, 2))
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
 
-                elif diff < 5400:
+                elif diff < 7200:
                     return locale.describe("hour", sign, only_distance=only_distance)
-                elif diff < 79200:
+                elif diff < 86400:
                     hours = sign * int(max(delta / 3600, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
                 # anything less than 48 hours should be 1 day
                 elif diff < 172800:
                     return locale.describe("day", sign, only_distance=only_distance)
-                elif diff < 554400:
+                elif diff < 604800:
                     days = sign * int(max(delta / 86400, 2))
                     return locale.describe("days", days, only_distance=only_distance)
 
-                elif diff < 907200:
+                elif diff < 1209600:
                     return locale.describe("week", sign, only_distance=only_distance)
-                elif diff < 2419200:
+                elif diff < util.seconds_in_month(dt):
                     weeks = sign * int(max(delta / 604800, 2))
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < 3888000:
                     return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < 29808000:
+                elif diff < 31536000:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
@@ -1057,7 +1057,7 @@ class Arrow(object):
                         "months", months, only_distance=only_distance
                     )
 
-                elif diff < 47260800:
+                elif diff < 63072000:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
                     years = sign * int(max(delta / 31536000, 2))
