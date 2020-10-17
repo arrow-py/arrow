@@ -1954,7 +1954,7 @@ class TestArrowHumanize:
 
         result = arw.humanize(self.datetime)
 
-        assert result == "in 2 years"
+        assert result == "in a year"
 
     def test_arrow(self):
 
@@ -2033,7 +2033,7 @@ class TestArrowHumanizeTestsWithLocale:
 
         result = arw.humanize(self.datetime, locale="ru")
 
-        assert result == "2 года назад"
+        assert result == "год назад"
 
 
 class TestArrowIsBetween:
