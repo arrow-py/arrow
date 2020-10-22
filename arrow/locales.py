@@ -656,6 +656,7 @@ class JapaneseLocale(Locale):
 
     past = "{0}前"
     future = "{0}後"
+    and_word = ""
 
     timeframes = {
         "now": "現在",
