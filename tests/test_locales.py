@@ -1350,3 +1350,23 @@ class TestKoreanLocale:
         assert self.locale.ordinal_number(11) == "11번째"
         assert self.locale.ordinal_number(12) == "12번째"
         assert self.locale.ordinal_number(100) == "100번째"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestJapaneseLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "現在"
+        assert self.locale._format_timeframe("second", 1) == "1秒"
+        assert self.locale._format_timeframe("seconds", 30) == "30秒"
+        assert self.locale._format_timeframe("minute", 1) == "1分"
+        assert self.locale._format_timeframe("minutes", 40) == "40分"
+        assert self.locale._format_timeframe("hour", 1) == "1時間"
+        assert self.locale._format_timeframe("hours", 23) == "23時間"
+        assert self.locale._format_timeframe("day", 1) == "1日"
+        assert self.locale._format_timeframe("days", 12) == "12日"
+        assert self.locale._format_timeframe("week", 1) == "1週間"
+        assert self.locale._format_timeframe("weeks", 38) == "38週間"
+        assert self.locale._format_timeframe("month", 1) == "1ヶ月"
+        assert self.locale._format_timeframe("months", 11) == "11ヶ月"
+        assert self.locale._format_timeframe("year", 1) == "1年"
+        assert self.locale._format_timeframe("years", 12) == "12年"
