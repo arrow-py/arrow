@@ -8,10 +8,6 @@ from arrow import util
 
 
 class TestUtil:
-    def test_seconds_in_month(self):
-        dt = datetime(2020, 10, 15)
-        assert util.seconds_in_month(dt) == 2678400
-
     def test_next_weekday(self):
         # Get first Monday after epoch
         assert util.next_weekday(datetime(1970, 1, 1), 0) == datetime(1970, 1, 5)

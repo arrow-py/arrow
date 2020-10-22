@@ -17,7 +17,7 @@ from math import trunc
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
-from arrow import formatter, locales, parser, util
+from arrow import constants, formatter, locales, parser, util
 
 if sys.version_info[:2] < (3, 6):  # pragma: no cover
     with warnings.catch_warnings():
@@ -1006,48 +1006,49 @@ class Arrow(object):
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
+        limit = constants.humanize_auto_limits
 
         try:
             if granularity == "auto":
-                if diff < 10:
+                if diff < limit["now"]:
                     return locale.describe("now", only_distance=only_distance)
 
-                if diff < 60:
+                if diff < self._SECS_PER_MINUTE:
                     seconds = sign * delta
                     return locale.describe(
                         "seconds", seconds, only_distance=only_distance
                     )
 
-                elif diff < 120:
+                elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
-                elif diff < 3600:
-                    minutes = sign * int(max(delta / 60, 2))
+                elif diff < self._SECS_PER_HOUR:
+                    minutes = sign * int(max(delta / self._SECS_PER_MINUTE, 2))
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
 
-                elif diff < 7200:
+                elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
-                elif diff < 86400:
-                    hours = sign * int(max(delta / 3600, 2))
+                elif diff < self._SECS_PER_DAY:
+                    hours = sign * int(max(delta / self._SECS_PER_HOUR, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
 
                 # anything less than 48 hours should be 1 day
-                elif diff < 172800:
+                elif diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
-                elif diff < 604800:
-                    days = sign * int(max(delta / 86400, 2))
+                elif diff < self._SECS_PER_WEEK:
+                    days = sign * int(max(delta / self._SECS_PER_DAY, 2))
                     return locale.describe("days", days, only_distance=only_distance)
 
-                elif diff < 1209600:
+                elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
-                elif diff < util.seconds_in_month(dt):
-                    weeks = sign * int(max(delta / 604800, 2))
+                elif diff < self._SECS_PER_MONTH:
+                    weeks = sign * int(max(delta / self._SECS_PER_WEEK, 2))
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
-                elif diff < 3888000:
+                elif diff < self._SECS_PER_MONTH * 2:
                     return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < 31536000:
+                elif diff < limit["months"]:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
@@ -1057,10 +1058,10 @@ class Arrow(object):
                         "months", months, only_distance=only_distance
                     )
 
-                elif diff < 63072000:
+                elif diff < limit["year"]:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta / 31536000, 2))
+                    years = sign * int(max(delta / limit["year"], 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif util.isstr(granularity):
