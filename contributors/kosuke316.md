@@ -1,1 +1,0 @@
-Correction of japanese mistakes.
