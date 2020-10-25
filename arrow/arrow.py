@@ -72,7 +72,7 @@ class Arrow(object):
     _SECS_PER_DAY = float(60 * 60 * 24)
     _SECS_PER_WEEK = float(60 * 60 * 24 * 7)
     _SECS_PER_MONTH = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR = float(60 * 60 * 24 * 365.25)
+    _SECS_PER_YEAR = float(60 * 60 * 24 * 365)
 
     def __init__(
         self,
@@ -1048,7 +1048,7 @@ class Arrow(object):
 
                 elif diff < self._SECS_PER_MONTH * 2:
                     return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < limit["months"]:
+                elif diff < self._SECS_PER_YEAR:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 

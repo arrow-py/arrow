@@ -1776,7 +1776,7 @@ class TestArrowHumanize:
             self.now.humanize(
                 later108onlydistance, only_distance=True, granularity=["year", "second"]
             )
-            == "3 years and 5327200 seconds"
+            == "3 years and 5392000 seconds"
         )
 
         one_min_one_sec_ago = self.now.shift(minutes=-1, seconds=-1)

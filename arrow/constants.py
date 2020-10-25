@@ -8,6 +8,7 @@ MAX_TIMESTAMP = 253402318799.0
 MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1000
 MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1000000
 
+# only some of these are used, the others are already covered by Arrow class attributes.
 humanize_auto_limits = {
     "now": 10,
     "seconds": 60,
