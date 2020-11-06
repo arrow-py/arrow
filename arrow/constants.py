@@ -5,9 +5,10 @@
 import os
 from datetime import datetime
 
+MAX_TIMESTAMP: float
 if os.name == "nt":  # pragma: no cover
-    MAX_TIMESTAMP: float = datetime(3001, 1, 18, 23, 59, 59, 999999).timestamp()
+    MAX_TIMESTAMP = datetime(3001, 1, 18, 23, 59, 59, 999999).timestamp()
 else:  # pragma: no cover
-    MAX_TIMESTAMP: float = datetime.max.timestamp()
+    MAX_TIMESTAMP = datetime.max.timestamp()
 MAX_TIMESTAMP_MS: float = MAX_TIMESTAMP * 1000
 MAX_TIMESTAMP_US: float = MAX_TIMESTAMP * 1000000
