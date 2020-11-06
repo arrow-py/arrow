@@ -10,14 +10,18 @@ import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
-from typing import Any, Type, Union
+from typing import TYPE_CHECKING
 
 from dateutil import tz as dateutil_tz
-from dateutil.tz.tz import tzfile, tzlocal
 
 from arrow import parser
 from arrow.arrow import Arrow
 from arrow.util import is_timestamp, iso_to_gregorian
+
+if TYPE_CHECKING:
+    from typing import Any, List, Optional, SupportsFloat, Tuple, Type, Union, overload
+
+    from arrow.arrow import TZ_EXPR
 
 
 class ArrowFactory:
@@ -28,8 +32,70 @@ class ArrowFactory:
 
     """
 
-    def __init__(self, type: Type["Arrow"] = Arrow) -> None:
-        self.type: Type[Arrow] = type
+    type: Type[Arrow]
+
+    def __init__(self, type: Type[Arrow] = Arrow) -> None:
+        self.type = type
+
+    @overload
+    def get(
+        self,
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+        **kwargs: Any,
+    ) -> Arrow:
+        ...
+
+    @overload
+    def get(
+        self,
+        __obj: Union[
+            Arrow,
+            datetime,
+            date,
+            struct_time,
+            dt_tzinfo,
+            int,
+            SupportsFloat,
+            str,
+            Tuple[int, int, int],
+            None,
+        ],
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+        **kwargs: Any,
+    ) -> Arrow:
+        ...
+
+    @overload
+    def get(
+        self,
+        __arg1: Union[datetime, date],
+        __arg2: TZ_EXPR,
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+        **kwargs: Any,
+    ) -> Arrow:
+        ...
+
+    @overload
+    def get(
+        self,
+        __arg1: str,
+        __arg2: Union[str, List[str]],
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+        **kwargs: Any,
+    ) -> Arrow:
+        ...
 
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
@@ -196,7 +262,7 @@ class ArrowFactory:
 
             # (str) -> parse.
             elif isinstance(arg, str):
-                dt_str: datetime = parser.DateTimeParser(locale).parse_iso(
+                dt_str = parser.DateTimeParser(locale).parse_iso(
                     arg, normalize_whitespace
                 )
                 return self.type.fromdatetime(dt_str, tz)
@@ -207,7 +273,7 @@ class ArrowFactory:
 
             # (iso calendar) -> convert then from date
             elif isinstance(arg, tuple) and len(arg) == 3:
-                dt_iso: Union[date, datetime] = iso_to_gregorian(*arg)
+                dt_iso = iso_to_gregorian(*arg)
                 return self.type.fromdate(dt_iso)
 
             else:
@@ -241,7 +307,7 @@ class ArrowFactory:
             elif isinstance(arg_1, str) and (
                 isinstance(arg_2, str) or isinstance(arg_2, list)
             ):
-                dt: Any = parser.DateTimeParser(locale).parse(
+                dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
                 return self.type.fromdatetime(dt, tzinfo=tz)
@@ -267,7 +333,7 @@ class ArrowFactory:
 
         return self.type.utcnow()
 
-    def now(self, tz: Union[tzfile, tzlocal, "dt_tzinfo", None] = None) -> Arrow:
+    def now(self, tz: Optional[TZ_EXPR] = None) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
 
