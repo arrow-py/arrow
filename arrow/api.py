@@ -3,15 +3,82 @@ Provides the default implementation of :class:`ArrowFactory <arrow.factory.Arrow
 methods for use as a module API.
 
 """
-from typing import Any, Type, Union
 
-from dateutil.tz import tzfile, tzlocal
+from typing import TYPE_CHECKING
 
 from arrow.arrow import Arrow
 from arrow.factory import ArrowFactory
 
+if TYPE_CHECKING:
+    from datetime import date, datetime
+    from datetime import tzinfo as dt_tzinfo
+    from time import struct_time
+    from typing import Any, List, Optional, SupportsFloat, Tuple, Type, Union, overload
+
+    from arrow.arrow import TZ_EXPR
+
 # internal default factory.
 _factory = ArrowFactory()
+
+
+@overload
+def get(
+    *,
+    locale: str = "en_us",
+    tzinfo: Optional[TZ_EXPR] = None,
+    normalize_whitespace: bool = False,
+    **kwargs: Any,
+) -> Arrow:
+    ...
+
+
+@overload
+def get(
+    __obj: Union[
+        Arrow,
+        datetime,
+        date,
+        struct_time,
+        dt_tzinfo,
+        int,
+        SupportsFloat,
+        str,
+        Tuple[int, int, int],
+        None,
+    ],
+    *,
+    locale: str = "en_us",
+    tzinfo: Optional[TZ_EXPR] = None,
+    normalize_whitespace: bool = False,
+    **kwargs: Any,
+) -> Arrow:
+    ...
+
+
+@overload
+def get(
+    __arg1: Union[datetime, date],
+    __arg2: TZ_EXPR,
+    *,
+    locale: str = "en_us",
+    tzinfo: Optional[TZ_EXPR] = None,
+    normalize_whitespace: bool = False,
+    **kwargs: Any,
+) -> Arrow:
+    ...
+
+
+@overload
+def get(
+    __arg1: str,
+    __arg2: Union[str, List[str]],
+    *,
+    locale: str = "en_us",
+    tzinfo: Optional[TZ_EXPR] = None,
+    normalize_whitespace: bool = False,
+    **kwargs: Any,
+) -> Arrow:
+    ...
 
 
 def get(*args: Any, **kwargs: Any) -> Arrow:
@@ -32,7 +99,7 @@ def utcnow() -> Arrow:
 utcnow.__doc__ = _factory.utcnow.__doc__
 
 
-def now(tz: Union[tzfile, tzlocal, None] = None) -> Arrow:
+def now(tz: Optional[TZ_EXPR] = None) -> Arrow:
     """Calls the default :class:`ArrowFactory <arrow.factory.ArrowFactory>` ``now`` method."""
 
     return _factory.now(tz)
