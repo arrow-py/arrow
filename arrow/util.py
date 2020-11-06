@@ -1,13 +1,12 @@
 import datetime as dt
-from datetime import date, datetime, timedelta
-from typing import Any, Union
+from typing import Any, Optional, cast
 
 from dateutil.rrule import WEEKLY, rrule
 
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 
-def next_weekday(start_date, weekday):
+def next_weekday(start_date: Optional[dt.date], weekday: int) -> dt.datetime:
     """Get next weekday from the specified start date.
 
     :param start_date: Datetime object representing the start date.
@@ -30,10 +29,13 @@ def next_weekday(start_date, weekday):
     """
     if weekday < 0 or weekday > 6:
         raise ValueError("Weekday must be between 0 (Monday) and 6 (Sunday).")
-    return rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0]
+    return cast(
+        dt.datetime,
+        rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0],
+    )
 
 
-def total_seconds(td: timedelta) -> float:
+def total_seconds(td: dt.timedelta) -> float:
     """Get total seconds for timedelta."""
     return td.total_seconds()
 
@@ -66,9 +68,7 @@ def normalize_timestamp(timestamp: float) -> float:
 
 
 # Credit to https://stackoverflow.com/a/1700069
-def iso_to_gregorian(
-    iso_year: int, iso_week: int, iso_day: int
-) -> Union[date, datetime]:
+def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> dt.date:
     """Converts an ISO week date tuple into a datetime object."""
 
     if not 1 <= iso_week <= 53:
@@ -78,15 +78,15 @@ def iso_to_gregorian(
         raise ValueError("ISO Calendar day value must be between 1-7")
 
     # The first week of the year always contains 4 Jan.
-    fourth_jan: date = dt.date(iso_year, 1, 4)
-    delta: timedelta = dt.timedelta(fourth_jan.isoweekday() - 1)
-    year_start: date = fourth_jan - delta
+    fourth_jan: dt.date = dt.date(iso_year, 1, 4)
+    delta: dt.timedelta = dt.timedelta(fourth_jan.isoweekday() - 1)
+    year_start: dt.date = fourth_jan - delta
     gregorian = year_start + dt.timedelta(days=iso_day - 1, weeks=iso_week - 1)
 
     return gregorian
 
 
-def validate_bounds(bounds: str):
+def validate_bounds(bounds: str) -> None:
     if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
         raise ValueError(
             'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
