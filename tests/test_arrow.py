@@ -909,9 +909,6 @@ class TestArrowShift:
             1995, 1, 1, 12, 30, tzinfo="Pacific/Kiritimati"
         )
 
-    @pytest.mark.skipif(
-        sys.version_info < (3, 6), reason="unsupported before python 3.6"
-    )
     def shift_imaginary_seconds(self):
         # offset has a seconds component
         monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")

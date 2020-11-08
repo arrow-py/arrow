@@ -1,15 +1,11 @@
 import re
 from datetime import datetime, timedelta
+from functools import lru_cache
 
 from dateutil import tz
 
 from arrow import locales
 from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
-
-try:
-    from functools import lru_cache
-except ImportError:  # pragma: no cover
-    from backports.functools_lru_cache import lru_cache  # pragma: no cover
 
 
 class ParserError(ValueError):
@@ -223,8 +219,7 @@ class DateTimeParser:
 
         try:
             fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
-        # TODO: remove pragma when we drop 2.7
-        except re.error as e:  # pragma: no cover
+        except re.error as e:
             raise ParserMatchError(
                 f"Failed to generate regular expression pattern: {e}"
             )
@@ -245,8 +240,7 @@ class DateTimeParser:
             else:
                 value = match.group(token)
 
-            # TODO: remove pragma when we drop 2.7
-            if value is None:  # pragma: no cover
+            if value is None:
                 raise ParserMatchError(
                     "Unable to find a match group for the specified token '{}'.".format(
                         token

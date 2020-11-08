@@ -1,6 +1,5 @@
 import calendar
 import os
-import sys
 import time
 from datetime import datetime
 
@@ -1646,7 +1645,6 @@ class TestDateTimeParserSearchDate:
         ) == datetime(2017, 12, 31, 2, 0)
 
 
-@pytest.mark.skipif(sys.version_info < (3, 5), reason="requires python3.5 or higher")
 @pytest.mark.usefixtures("dt_parser")
 class TestFuzzInput:
     # Regression test for issue #860

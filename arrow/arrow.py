@@ -1465,13 +1465,6 @@ class Arrow:
 
         return self._datetime <= self._get_datetime(other)
 
-    def __cmp__(self, other):
-        if sys.version_info[0] < 3:  # pragma: no cover
-            if not isinstance(other, (Arrow, datetime)):
-                raise TypeError(
-                    "can't compare '{}' to '{}'".format(type(self), type(other))
-                )
-
     # internal methods
 
     @staticmethod

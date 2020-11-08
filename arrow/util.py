@@ -1,5 +1,4 @@
 import datetime
-import numbers
 
 from dateutil.rrule import WEEKLY, rrule
 
@@ -42,9 +41,7 @@ def is_timestamp(value):
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, numbers.Integral)
-        or isinstance(value, float)
-        or isinstance(value, str)
+        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
     ):
         return False
     try:
