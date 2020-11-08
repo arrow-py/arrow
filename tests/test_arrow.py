@@ -1913,6 +1913,7 @@ class TestArrowHumanize:
 
         later = self.now.shift(months=1)
 
+        # TODO this test now returns "4 weeks ago"
         assert self.now.humanize(later) == "a month ago"
         assert later.humanize(self.now) == "in a month"
 
@@ -1997,6 +1998,16 @@ class TestArrowHumanize:
         result = arw.humanize(None)
 
         assert result == "just now"
+
+    def test_week_limit(self):
+        # regression test for issue #848
+        arw = arrow.Arrow.utcnow()
+
+        later = arw.shift(weeks=+1)
+
+        result = arw.humanize(later)
+
+        assert result == "a week ago"
 
     def test_untranslated_granularity(self, mocker):
 

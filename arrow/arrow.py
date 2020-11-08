@@ -17,7 +17,7 @@ from math import trunc
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
-from arrow import constants, formatter, locales, parser, util
+from arrow import formatter, locales, parser, util
 
 if sys.version_info[:2] < (3, 6):  # pragma: no cover
     with warnings.catch_warnings():
@@ -1006,11 +1006,10 @@ class Arrow(object):
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
-        limit = constants.humanize_auto_limits
 
         try:
             if granularity == "auto":
-                if diff < limit["now"]:
+                if diff < 10:
                     return locale.describe("now", only_distance=only_distance)
 
                 if diff < self._SECS_PER_MINUTE:
@@ -1058,10 +1057,10 @@ class Arrow(object):
                         "months", months, only_distance=only_distance
                     )
 
-                elif diff < limit["year"]:
+                elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta / limit["year"], 2))
+                    years = sign * int(max(delta / self._SECS_PER_YEAR, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif util.isstr(granularity):
