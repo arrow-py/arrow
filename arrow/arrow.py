@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Provides the :class:`Arrow <arrow.arrow.Arrow>` class, an enhanced ``datetime``
 replacement.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 import sys
@@ -29,7 +27,7 @@ if sys.version_info[:2] < (3, 6):  # pragma: no cover
         )
 
 
-class Arrow(object):
+class Arrow:
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
 
     Implements the ``datetime`` interface, behaving as an aware ``datetime`` while implementing
@@ -84,7 +82,7 @@ class Arrow(object):
         second=0,
         microsecond=0,
         tzinfo=None,
-        **kwargs
+        **kwargs,
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -96,7 +94,7 @@ class Arrow(object):
             and tzinfo.zone
         ):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         fold = kwargs.get("fold", 0)
@@ -177,7 +175,7 @@ class Arrow(object):
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
@@ -1063,7 +1061,7 @@ class Arrow(object):
                     years = sign * int(max(delta / 31536000, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
-            elif util.isstr(granularity):
+            elif isinstance(granularity, str):
                 if granularity == "second":
                     delta = sign * delta
                     if abs(delta) < 2:

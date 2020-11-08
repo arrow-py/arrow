@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Output of time.mktime(datetime.max.timetuple()) on macOS
 # This value must be hardcoded for compatibility with Windows
 # Platform-independent max timestamps are hard to form

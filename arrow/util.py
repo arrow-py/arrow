@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import datetime
 import numbers
 
@@ -97,19 +94,4 @@ def validate_bounds(bounds):
         )
 
 
-# Python 2.7 / 3.0+ definitions for isstr function.
-
-try:  # pragma: no cover
-    basestring
-
-    def isstr(s):
-        return isinstance(s, basestring)  # noqa: F821
-
-
-except NameError:  # pragma: no cover
-
-    def isstr(s):
-        return isinstance(s, str)
-
-
-__all__ = ["next_weekday", "total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]
+__all__ = ["next_weekday", "total_seconds", "is_timestamp", "iso_to_gregorian"]

@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-import io
-
 from setuptools import setup
 
-with io.open("README.rst", "r", encoding="utf-8") as f:
+with open("README.rst", encoding="utf-8") as f:
     readme = f.read()
 
 about = {}
-with io.open("arrow/_version.py", "r", encoding="utf-8") as f:
+with open("arrow/_version.py", encoding="utf-8") as f:
     exec(f.read(), about)
 
 setup(
@@ -23,9 +20,7 @@ setup(
     packages=["arrow"],
     zip_safe=False,
     python_requires=">=3.6",
-    install_requires=[
-        "python-dateutil>=2.7.0"
-    ],
+    install_requires=["python-dateutil>=2.7.0"],
     classifiers=[
         "Development Status :: 5 - Stable",
         "Intended Audience :: Developers",

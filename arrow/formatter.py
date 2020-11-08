@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division
-
 import calendar
 import re
 
@@ -20,7 +17,7 @@ FORMAT_RSS = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_W3C = "YYYY-MM-DD HH:mm:ssZZ"
 
 
-class DateTimeFormatter(object):
+class DateTimeFormatter:
 
     # This pattern matches characters enclosed in square brackets are matched as
     # an atomic group. For more info on atomic groups and how to they are

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 import re
 from datetime import datetime, timedelta
 
@@ -28,7 +25,7 @@ class ParserMatchError(ParserError):
     pass
 
 
-class DateTimeParser(object):
+class DateTimeParser:
 
     _FORMAT_RE = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
@@ -389,7 +386,7 @@ class DateTimeParser(object):
             # We have the *most significant* digits of an arbitrary-precision integer.
             # We want the six most significant digits as an integer, rounded.
             # IDEA: add nanosecond support somehow? Need datetime support for it first.
-            value = value.ljust(7, str("0"))
+            value = value.ljust(7, "0")
 
             # floating-point (IEEE-754) defaults to half-to-even rounding
             seventh_digit = int(value[6])
@@ -571,7 +568,7 @@ class DateTimeParser(object):
         return re.compile(r"({})".format("|".join(choices)), flags=flags)
 
 
-class TzinfoParser(object):
+class TzinfoParser:
     _TZINFO_RE = re.compile(r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$")
 
     @classmethod
