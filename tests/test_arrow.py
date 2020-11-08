@@ -1772,6 +1772,7 @@ class TestArrowHumanize:
             )
             == "37 months and 4 weeks"
         )
+        # this will change when leap years are implemented
         assert (
             self.now.humanize(
                 later108onlydistance, only_distance=True, granularity=["year", "second"]

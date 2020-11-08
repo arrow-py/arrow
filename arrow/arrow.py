@@ -1031,8 +1031,6 @@ class Arrow(object):
                 elif diff < self._SECS_PER_DAY:
                     hours = sign * int(max(delta / self._SECS_PER_HOUR, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
-
-                # anything less than 48 hours should be 1 day
                 elif diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_WEEK:
@@ -1048,6 +1046,7 @@ class Arrow(object):
                 elif diff < self._SECS_PER_MONTH * 2:
                     return locale.describe("month", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_YEAR:
+                    # TODO revisit for humanization during leap years
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
