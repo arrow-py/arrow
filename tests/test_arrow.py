@@ -1,4 +1,3 @@
-import calendar
 import pickle
 import sys
 import time
@@ -190,7 +189,7 @@ class TestTestArrowRepresentation:
 
         result = self.arrow.__repr__()
 
-        assert result == "<Arrow [{}]>".format(self.arrow._datetime.isoformat())
+        assert result == f"<Arrow [{self.arrow._datetime.isoformat()}]>"
 
     def test_str(self):
 
@@ -206,7 +205,7 @@ class TestTestArrowRepresentation:
 
     def test_format(self):
 
-        result = "{:YYYY-MM-DD}".format(self.arrow)
+        result = f"{self.arrow:YYYY-MM-DD}"
 
         assert result == "2013-02-03"
 
@@ -218,7 +217,7 @@ class TestTestArrowRepresentation:
 
     def test_format_no_format_string(self):
 
-        result = "{}".format(self.arrow)
+        result = f"{self.arrow}"
 
         assert result == str(self.arrow)
 
@@ -277,24 +276,15 @@ class TestArrowAttribute:
 
     def test_timestamp(self):
 
-        assert self.arrow.timestamp == calendar.timegm(
-            self.arrow._datetime.utctimetuple()
-        )
-
-        with pytest.warns(DeprecationWarning):
-            self.arrow.timestamp
+        assert self.arrow.timestamp() == self.arrow._datetime.timestamp()
 
     def test_int_timestamp(self):
 
-        assert self.arrow.int_timestamp == calendar.timegm(
-            self.arrow._datetime.utctimetuple()
-        )
+        assert self.arrow.int_timestamp == int(self.arrow._datetime.timestamp())
 
     def test_float_timestamp(self):
 
-        result = self.arrow.float_timestamp - self.arrow.timestamp
-
-        assert result == self.arrow.microsecond
+        assert self.arrow.float_timestamp == self.arrow._datetime.timestamp()
 
     def test_getattr_fold(self):
 

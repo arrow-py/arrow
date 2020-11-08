@@ -19,8 +19,8 @@ class TestGet:
 
     def test_timestamp_one_arg_no_arg(self):
 
-        no_arg = self.factory.get(1406430900).timestamp
-        one_arg = self.factory.get("1406430900", "X").timestamp
+        no_arg = self.factory.get(1406430900).timestamp()
+        one_arg = self.factory.get("1406430900", "X").timestamp()
 
         assert no_arg == one_arg
 

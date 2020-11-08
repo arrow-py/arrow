@@ -14,7 +14,7 @@ def get_locale(name):
     locale_cls = _locales.get(name.lower())
 
     if locale_cls is None:
-        raise ValueError("Unsupported locale '{}'".format(name))
+        raise ValueError(f"Unsupported locale '{name}'")
 
     return locale_cls()
 
@@ -29,7 +29,7 @@ def get_locale_by_class_name(name):
     locale_cls = globals().get(name)
 
     if locale_cls is None:
-        raise ValueError("Unsupported locale '{}'".format(name))
+        raise ValueError(f"Unsupported locale '{name}'")
 
     return locale_cls()
 
@@ -168,14 +168,14 @@ class Locale:
 
         :param name: the ``int`` year (4-digit)
         """
-        return "{:04d}".format(year)
+        return f"{year:04d}"
 
     def year_abbreviation(self, year):
         """Returns the year for specific locale if available
 
         :param name: the ``int`` year (4-digit)
         """
-        return "{:04d}".format(year)[2:]
+        return f"{year:04d}"[2:]
 
     def meridian(self, hour, token):
         """Returns the meridian indicator for a specified hour and format token.
@@ -197,7 +197,7 @@ class Locale:
         return self._ordinal_number(n)
 
     def _ordinal_number(self, n):
-        return "{}".format(n)
+        return f"{n}"
 
     def _name_to_ordinal(self, lst):
         return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
@@ -305,12 +305,12 @@ class EnglishLocale(Locale):
         if n % 100 not in (11, 12, 13):
             remainder = abs(n) % 10
             if remainder == 1:
-                return "{}st".format(n)
+                return f"{n}st"
             elif remainder == 2:
-                return "{}nd".format(n)
+                return f"{n}nd"
             elif remainder == 3:
-                return "{}rd".format(n)
-        return "{}th".format(n)
+                return f"{n}rd"
+        return f"{n}th"
 
     def describe(self, timeframe, delta=0, only_distance=False):
         """Describes a delta within a timeframe in plain language.
@@ -397,7 +397,7 @@ class ItalianLocale(Locale):
     ordinal_day_re = r"((?P<value>[1-3]?[0-9](?=[ºª]))[ºª])"
 
     def _ordinal_number(self, n):
-        return "{}º".format(n)
+        return f"{n}º"
 
 
 class SpanishLocale(Locale):
@@ -472,7 +472,7 @@ class SpanishLocale(Locale):
     ordinal_day_re = r"((?P<value>[1-3]?[0-9](?=[ºª]))[ºª])"
 
     def _ordinal_number(self, n):
-        return "{}º".format(n)
+        return f"{n}º"
 
 
 class FrenchBaseLocale(Locale):
@@ -533,8 +533,8 @@ class FrenchBaseLocale(Locale):
 
     def _ordinal_number(self, n):
         if abs(n) == 1:
-            return "{}er".format(n)
-        return "{}e".format(n)
+            return f"{n}er"
+        return f"{n}e"
 
 
 class FrenchLocale(FrenchBaseLocale, Locale):
@@ -866,7 +866,7 @@ class FinnishLocale(Locale):
         return direction.format(humanized[which])
 
     def _ordinal_number(self, n):
-        return "{}.".format(n)
+        return f"{n}."
 
 
 class ChineseCNLocale(Locale):
@@ -1125,7 +1125,7 @@ class KoreanLocale(Locale):
         ordinals = ["0", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"]
         if n < len(ordinals):
             return "{}번째".format(ordinals[n])
-        return "{}번째".format(n)
+        return f"{n}번째"
 
     def _format_relative(self, humanized, timeframe, delta):
         if timeframe in ("day", "days"):
@@ -1795,7 +1795,7 @@ class GermanBaseLocale(Locale):
     day_abbreviations = ["", "Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
     def _ordinal_number(self, n):
-        return "{}.".format(n)
+        return f"{n}."
 
     def describe(self, timeframe, delta=0, only_distance=False):
         """Describes a delta within a timeframe in plain language.
@@ -2125,7 +2125,7 @@ class TagalogLocale(Locale):
     meridians = {"am": "nu", "pm": "nh", "AM": "ng umaga", "PM": "ng hapon"}
 
     def _ordinal_number(self, n):
-        return "ika-{}".format(n)
+        return f"ika-{n}"
 
 
 class VietnameseLocale(Locale):
@@ -3181,7 +3181,7 @@ class HebrewLocale(Locale):
 
     def _format_timeframe(self, timeframe, delta):
         """Hebrew couple of <timeframe> aware"""
-        couple = "2-{}".format(timeframe)
+        couple = f"2-{timeframe}"
         single = timeframe.rstrip("s")
         if abs(delta) == 2 and couple in self.timeframes:
             key = couple
@@ -3587,7 +3587,7 @@ class EsperantoLocale(Locale):
     ordinal_day_re = r"((?P<value>[1-3]?[0-9](?=a))a)"
 
     def _ordinal_number(self, n):
-        return "{}a".format(n)
+        return f"{n}a"
 
 
 class ThaiLocale(Locale):
@@ -3654,12 +3654,12 @@ class ThaiLocale(Locale):
     def year_full(self, year):
         """Thai always use Buddhist Era (BE) which is CE + 543"""
         year += self.BE_OFFSET
-        return "{:04d}".format(year)
+        return f"{year:04d}"
 
     def year_abbreviation(self, year):
         """Thai always use Buddhist Era (BE) which is CE + 543"""
         year += self.BE_OFFSET
-        return "{:04d}".format(year)[2:]
+        return f"{year:04d}"[2:]
 
     def _format_relative(self, humanized, timeframe, delta):
         """Thai normally doesn't have any space between words"""
@@ -3741,15 +3741,15 @@ class BengaliLocale(Locale):
 
     def _ordinal_number(self, n):
         if n > 10 or n == 0:
-            return "{}তম".format(n)
+            return f"{n}তম"
         if n in [1, 5, 7, 8, 9, 10]:
-            return "{}ম".format(n)
+            return f"{n}ম"
         if n in [2, 3]:
-            return "{}য়".format(n)
+            return f"{n}য়"
         if n == 4:
-            return "{}র্থ".format(n)
+            return f"{n}র্থ"
         if n == 6:
-            return "{}ষ্ঠ".format(n)
+            return f"{n}ষ্ঠ"
 
 
 class RomanshLocale(Locale):
