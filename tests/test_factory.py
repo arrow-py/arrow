@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import time
 from datetime import date, datetime
 
@@ -20,8 +19,8 @@ class TestGet:
 
     def test_timestamp_one_arg_no_arg(self):
 
-        no_arg = self.factory.get(1406430900).timestamp
-        one_arg = self.factory.get("1406430900", "X").timestamp
+        no_arg = self.factory.get(1406430900).timestamp()
+        one_arg = self.factory.get("1406430900", "X").timestamp()
 
         assert no_arg == one_arg
 
@@ -289,7 +288,7 @@ class TestGet:
 
     def test_two_args_unicode_unicode(self):
 
-        result = self.factory.get(u"2013-01-01", u"YYYY-MM-DD")
+        result = self.factory.get("2013-01-01", "YYYY-MM-DD")
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 

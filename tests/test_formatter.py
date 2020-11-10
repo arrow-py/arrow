@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 
 import pytest
@@ -113,14 +112,13 @@ class TestFormatterFormatToken:
 
     def test_timestamp(self):
 
-        timestamp = 1588437009.8952794
-        dt = datetime.utcfromtimestamp(timestamp)
-        expected = str(int(timestamp))
+        dt = datetime.now(tz=dateutil_tz.UTC)
+        expected = str(dt.timestamp())
         assert self.formatter._format_token(dt, "X") == expected
 
         # Must round because time.time() may return a float with greater
         # than 6 digits of precision
-        expected = str(int(timestamp * 1000000))
+        expected = str(int(dt.timestamp() * 1000000))
         assert self.formatter._format_token(dt, "x") == expected
 
     def test_timezone(self):

@@ -1,15 +1,12 @@
-# -*- coding: utf-8 -*-
 """
 Provides the :class:`Arrow <arrow.arrow.Arrow>` class, an enhanced ``datetime``
 replacement.
 
 """
 
-from __future__ import absolute_import
 
 import calendar
 import sys
-import warnings
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
@@ -19,17 +16,8 @@ from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
 
-if sys.version_info[:2] < (3, 6):  # pragma: no cover
-    with warnings.catch_warnings():
-        warnings.simplefilter("default", DeprecationWarning)
-        warnings.warn(
-            "Arrow will drop support for Python 2.7 and 3.5 in the upcoming v1.0.0 release. Please upgrade to "
-            "Python 3.6+ to continue receiving updates for Arrow.",
-            DeprecationWarning,
-        )
 
-
-class Arrow(object):
+class Arrow:
     """An :class:`Arrow <arrow.arrow.Arrow>` object.
 
     Implements the ``datetime`` interface, behaving as an aware ``datetime`` while implementing
@@ -65,7 +53,7 @@ class Arrow(object):
     resolution = datetime.resolution
 
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
-    _ATTRS_PLURAL = ["{}s".format(a) for a in _ATTRS]
+    _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
     _SECS_PER_MINUTE = float(60)
     _SECS_PER_HOUR = float(60 * 60)
@@ -84,7 +72,7 @@ class Arrow(object):
         second=0,
         microsecond=0,
         tzinfo=None,
-        **kwargs
+        **kwargs,
     ):
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -96,7 +84,7 @@ class Arrow(object):
             and tzinfo.zone
         ):
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         fold = kwargs.get("fold", 0)
@@ -177,13 +165,11 @@ class Arrow(object):
 
         if tzinfo is None:
             tzinfo = dateutil_tz.tzlocal()
-        elif util.isstr(tzinfo):
+        elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = datetime.fromtimestamp(timestamp, tzinfo)
@@ -209,9 +195,7 @@ class Arrow(object):
         """
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(
-                "The provided timestamp '{}' is invalid.".format(timestamp)
-            )
+            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = datetime.utcfromtimestamp(timestamp)
@@ -604,7 +588,7 @@ class Arrow(object):
     # representations
 
     def __repr__(self):
-        return "<{} [{}]>".format(self.__class__.__name__, self.__str__())
+        return f"<{self.__class__.__name__} [{self.__str__()}]>"
 
     def __str__(self):
         return self._datetime.isoformat()
@@ -688,7 +672,6 @@ class Arrow(object):
 
         return self._datetime.replace(tzinfo=None)
 
-    @property
     def timestamp(self):
         """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
@@ -700,13 +683,7 @@ class Arrow(object):
 
         """
 
-        warnings.warn(
-            "For compatibility with the datetime.timestamp() method this property will be replaced with a method in "
-            "the 1.0.0 release, please switch to the .int_timestamp property for identical behaviour as soon as "
-            "possible.",
-            DeprecationWarning,
-        )
-        return calendar.timegm(self._datetime.utctimetuple())
+        return self._datetime.timestamp()
 
     @property
     def int_timestamp(self):
@@ -720,7 +697,7 @@ class Arrow(object):
 
         """
 
-        return calendar.timegm(self._datetime.utctimetuple())
+        return int(self.timestamp())
 
     @property
     def float_timestamp(self):
@@ -734,11 +711,7 @@ class Arrow(object):
 
         """
 
-        # IDEA get rid of this in 1.0.0 and wrap datetime.timestamp()
-        # Or for compatibility retain this but make it call the timestamp method
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            return self.timestamp + float(self.microsecond) / 1000000
+        return self.timestamp()
 
     @property
     def fold(self):
@@ -802,9 +775,9 @@ class Arrow(object):
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
-                raise AttributeError("setting absolute {} is not supported".format(key))
+                raise AttributeError(f"setting absolute {key} is not supported")
             elif key not in ["tzinfo", "fold"]:
-                raise AttributeError('unknown attribute: "{}"'.format(key))
+                raise AttributeError(f'unknown attribute: "{key}"')
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -1062,7 +1035,7 @@ class Arrow(object):
                     years = sign * int(max(delta / self._SECS_PER_YEAR, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
-            elif util.isstr(granularity):
+            elif isinstance(granularity, str):
                 if granularity == "second":
                     delta = sign * delta
                     if abs(delta) < 2:
@@ -1491,13 +1464,6 @@ class Arrow(object):
 
         return self._datetime <= self._get_datetime(other)
 
-    def __cmp__(self, other):
-        if sys.version_info[0] < 3:  # pragma: no cover
-            if not isinstance(other, (Arrow, datetime)):
-                raise TypeError(
-                    "can't compare '{}' to '{}'".format(type(self), type(other))
-                )
-
     # internal methods
 
     @staticmethod
@@ -1511,7 +1477,7 @@ class Arrow(object):
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError("'{}' not recognized as a timezone".format(tz_expr))
+                raise ValueError(f"'{tz_expr}' not recognized as a timezone")
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -1524,15 +1490,13 @@ class Arrow(object):
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
         else:
-            raise ValueError(
-                "'{}' not recognized as a datetime or timestamp.".format(expr)
-            )
+            raise ValueError(f"'{expr}' not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name):
 
         if name in cls._ATTRS:
-            return name, "{}s".format(name), 1
+            return name, f"{name}s", 1
         elif name[-1] == "s" and name[:-1] in cls._ATTRS:
             return name[:-1], name, 1
         elif name in ["week", "weeks"]:

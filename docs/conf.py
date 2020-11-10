@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-
 # -- Path setup --------------------------------------------------------------
 
-import io
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
 about = {}
-with io.open("../arrow/_version.py", "r", encoding="utf-8") as f:
+with open("../arrow/_version.py", encoding="utf-8") as f:
     exec(f.read(), about)
 
 # -- Project information -----------------------------------------------------
 
-project = u"Arrow 🏹"
+project = "Arrow 🏹"
 copyright = "2020, Chris Smith"
 author = "Chris Smith"
 

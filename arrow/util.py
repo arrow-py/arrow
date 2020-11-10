@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import datetime
-import numbers
 
 from dateutil.rrule import WEEKLY, rrule
 
@@ -45,9 +41,7 @@ def is_timestamp(value):
     if isinstance(value, bool):
         return False
     if not (
-        isinstance(value, numbers.Integral)
-        or isinstance(value, float)
-        or isinstance(value, str)
+        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
     ):
         return False
     try:
@@ -65,9 +59,7 @@ def normalize_timestamp(timestamp):
         elif timestamp < MAX_TIMESTAMP_US:
             timestamp /= 1e6
         else:
-            raise ValueError(
-                "The specified timestamp '{}' is too large.".format(timestamp)
-            )
+            raise ValueError(f"The specified timestamp '{timestamp}' is too large.")
     return timestamp
 
 
@@ -97,19 +89,4 @@ def validate_bounds(bounds):
         )
 
 
-# Python 2.7 / 3.0+ definitions for isstr function.
-
-try:  # pragma: no cover
-    basestring
-
-    def isstr(s):
-        return isinstance(s, basestring)  # noqa: F821
-
-
-except NameError:  # pragma: no cover
-
-    def isstr(s):
-        return isinstance(s, str)
-
-
-__all__ = ["next_weekday", "total_seconds", "is_timestamp", "isstr", "iso_to_gregorian"]
+__all__ = ["next_weekday", "total_seconds", "is_timestamp", "iso_to_gregorian"]

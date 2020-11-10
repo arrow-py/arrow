@@ -2,12 +2,12 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v3.3.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: fix-encoding-pragma
-        exclude: ^arrow/_version.py
+        args: [--remove]
       - id: requirements-txt-fixer
       - id: check-ast
       - id: check-yaml
@@ -16,15 +16,16 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.5.4
+    rev: 5.6.4
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.7.2
+    rev: v2.7.3
     hooks:
       - id: pyupgrade
+        args: [--py36-plus]
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.6.0
+    rev: v1.7.0
     hooks:
       - id: python-no-eval
       - id: python-check-blanket-noqa
@@ -33,7 +34,7 @@ repos:
     rev: 20.8b1
     hooks:
       - id: black
-        args: [--safe, --quiet]
+        args: [--safe, --quiet, --target-version=py36]
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.4
     hooks:
