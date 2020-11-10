@@ -22,7 +22,7 @@ setup(
     python_requires=">=3.6",
     install_requires=["python-dateutil>=2.7.0"],
     classifiers=[
-        "Development Status :: 5 - Stable",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
         "Topic :: Software Development :: Libraries :: Python Modules",
