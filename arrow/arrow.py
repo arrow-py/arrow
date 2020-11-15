@@ -588,7 +588,23 @@ class Arrow:
     # representations
 
     def __repr__(self):
-        return f"<{self.__class__.__name__} [{self.__str__()}]>"
+
+        attrs = [
+            self.year,
+            self.month,
+            self.day,
+            self.hour,
+            self.minute,
+            self.second,
+            self.microsecond,
+            f"tzinfo={self.tzinfo}",
+        ]
+        attr_str = ", ".join(map(str, attrs))
+
+        if self.fold:
+            attr_str = attr_str[:-1] + ", fold=1)"
+
+        return f"{self.__class__.__name__}({attr_str})"
 
     def __str__(self):
         return self._datetime.isoformat()
