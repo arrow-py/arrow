@@ -595,16 +595,21 @@ class Arrow:
             self.day,
             self.hour,
             self.minute,
-            self.second,
-            self.microsecond,
-            f"tzinfo={self.tzinfo}",
         ]
-        attr_str = ", ".join(map(str, attrs))
+
+        if any([self.second, self.microsecond]):
+            attrs.append(self.second)
+            attrs.append(self.microsecond)
+
+        attrs.append(f"tzinfo={self.tzinfo}")
 
         if self.fold:
-            attr_str = attr_str[:-1] + ", fold=1)"
+            # only show if fold=1
+            attrs.append(f"fold={self.fold}")
 
-        return f"{self.__class__.__name__}({attr_str})"
+        attr_str = ", ".join(map(str, attrs))
+
+        return f"{__package__}.{self.__class__.__name__}({attr_str})"
 
     def __str__(self):
         return self._datetime.isoformat()

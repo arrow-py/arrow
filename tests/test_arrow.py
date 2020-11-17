@@ -189,7 +189,20 @@ class TestTestArrowRepresentation:
 
         result = self.arrow.__repr__()
 
-        assert result == f"<Arrow [{self.arrow._datetime.isoformat()}]>"
+        assert result == "arrow.Arrow(2013, 2, 3, 12, 30, 45, 1, tzinfo=tzutc())"
+
+    def test_repr_with_fold(self):
+
+        arw_with_fold = arrow.Arrow(
+            2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1
+        )
+
+        result = arw_with_fold.__repr__()
+
+        assert (
+            result
+            == "arrow.Arrow(2017, 10, 29, 2, 0, tzinfo=tzfile('/usr/share/zoneinfo/Europe/Stockholm'), fold=1)"
+        )
 
     def test_str(self):
 
