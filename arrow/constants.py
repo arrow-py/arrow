@@ -5,12 +5,11 @@ from datetime import datetime
 # the highest possible datetime value that can output a timestamp.
 # tl;dr platform-independent max timestamps are hard to form
 # See: https://stackoverflow.com/q/46133223
-MAX_TIMESTAMP = None
 try:
     # Get max timestamp. Works on POSIX-based systems like Linux and macOS,
-    # but will trigger an OverflowError or ValueError on Windows
+    # but will trigger an OverflowError, ValueError, or OSError on Windows
     MAX_TIMESTAMP = datetime.max.timestamp()
-except (OverflowError, ValueError):  # pragma: no cover
+except (OverflowError, ValueError, OSError):  # pragma: no cover
     # Fallback for Windows if initial max timestamp call fails
     # Must get max value of ctime on Windows based on architecture (x32 vs x64)
     # https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/ctime-ctime32-ctime64-wctime-wctime32-wctime64
