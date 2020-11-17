@@ -5,6 +5,7 @@ from datetime import datetime
 # the highest possible datetime value that can output a timestamp.
 # tl;dr platform-independent max timestamps are hard to form
 # See: https://stackoverflow.com/q/46133223
+MAX_TIMESTAMP = None
 try:
     # Get max timestamp. Works on POSIX-based systems like Linux and macOS,
     # but will trigger an OverflowError or ValueError on Windows
