@@ -250,8 +250,8 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse(".1565982019", "X")
 
-    # NOTE: negative timestamps cannot be handled by datetime on Window
-    # Must use timedelta to handle them. ref: https://stackoverflow.com/questions/36179914
+    # NOTE: negative timestamps cannot be handled by datetime on Windows
+    # Must use timedelta to handle them: https://stackoverflow.com/questions/36179914
     @pytest.mark.skipif(
         os.name == "nt", reason="negative timestamps are not supported on Windows"
     )
