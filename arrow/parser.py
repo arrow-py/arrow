@@ -416,7 +416,15 @@ class DateTimeParser:
 
         if weekdate is not None:
             # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
+            
             year, week = int(weekdate[0]), int(weekdate[1])
+
+            print("!!!!!!!")
+            print("------parts: ", parts)
+            print("------weekdate: ", type(weekdate))
+            print("-------year: ", year, "------week: ", week)
+            # year = 
+            # week = 
 
             if weekdate[2] is not None:
                 day = int(weekdate[2])
