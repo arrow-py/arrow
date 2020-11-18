@@ -1,19 +1,21 @@
 import re
+from datetime import datetime, timedelta
+from typing import ClassVar, Optional, Pattern, cast
 
 from dateutil import tz as dateutil_tz
 
 from arrow import locales, util
 
-FORMAT_ATOM = "YYYY-MM-DD HH:mm:ssZZ"
-FORMAT_COOKIE = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
-FORMAT_RFC822 = "ddd, DD MMM YY HH:mm:ss Z"
-FORMAT_RFC850 = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
-FORMAT_RFC1036 = "ddd, DD MMM YY HH:mm:ss Z"
-FORMAT_RFC1123 = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_RFC2822 = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_RFC3339 = "YYYY-MM-DD HH:mm:ssZZ"
-FORMAT_RSS = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_W3C = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_ATOM: str = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_COOKIE: str = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
+FORMAT_RFC822: str = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC850: str = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
+FORMAT_RFC1036: str = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC1123: str = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC2822: str = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC3339: str = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_RSS: str = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_W3C: str = "YYYY-MM-DD HH:mm:ssZZ"
 
 
 class DateTimeFormatter:
@@ -22,19 +24,24 @@ class DateTimeFormatter:
     # an atomic group. For more info on atomic groups and how to they are
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
 
-    _FORMAT_RE = re.compile(
+    _FORMAT_RE: ClassVar[Pattern[str]] = re.compile(
         r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
     )
 
-    def __init__(self, locale="en_us"):
+    locale: locales.Locale
+
+    def __init__(self, locale: str = "en_us") -> None:
 
         self.locale = locales.get_locale(locale)
 
-    def format(cls, dt, fmt):
+    def format(cls, dt: datetime, fmt: str) -> str:
 
-        return cls._FORMAT_RE.sub(lambda m: cls._format_token(dt, m.group(0)), fmt)
+        # FIXME: _format_token() is nullable
+        return cls._FORMAT_RE.sub(
+            lambda m: cast(str, cls._format_token(dt, m.group(0))), fmt
+        )
 
-    def _format_token(self, dt, token):
+    def _format_token(self, dt: datetime, token: Optional[str]) -> Optional[str]:
 
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]
@@ -116,7 +123,10 @@ class DateTimeFormatter:
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
-            total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)
+            # FIXME: utcoffset() is nullable
+            total_minutes = int(
+                util.total_seconds(cast(timedelta, tz.utcoffset(dt))) / 60
+            )
 
             sign = "+" if total_minutes >= 0 else "-"
             total_minutes = abs(total_minutes)

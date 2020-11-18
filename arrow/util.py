@@ -1,11 +1,14 @@
 import datetime
+from typing import Any, Optional, cast
 
 from dateutil.rrule import WEEKLY, rrule
 
 from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
 
 
-def next_weekday(start_date, weekday):
+def next_weekday(
+    start_date: Optional[datetime.date], weekday: int
+) -> datetime.datetime:
     """Get next weekday from the specified start date.
 
     :param start_date: Datetime object representing the start date.
@@ -28,15 +31,18 @@ def next_weekday(start_date, weekday):
     """
     if weekday < 0 or weekday > 6:
         raise ValueError("Weekday must be between 0 (Monday) and 6 (Sunday).")
-    return rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0]
+    return cast(
+        datetime.datetime,
+        rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0],
+    )
 
 
-def total_seconds(td):
+def total_seconds(td: datetime.timedelta) -> float:
     """Get total seconds for timedelta."""
     return td.total_seconds()
 
 
-def is_timestamp(value):
+def is_timestamp(value: Any) -> bool:
     """Check if value is a valid timestamp."""
     if isinstance(value, bool):
         return False
@@ -51,7 +57,7 @@ def is_timestamp(value):
         return False
 
 
-def normalize_timestamp(timestamp):
+def normalize_timestamp(timestamp: float) -> float:
     """Normalize millisecond and microsecond timestamps into normal timestamps."""
     if timestamp > MAX_TIMESTAMP:
         if timestamp < MAX_TIMESTAMP_MS:
@@ -64,7 +70,7 @@ def normalize_timestamp(timestamp):
 
 
 # Credit to https://stackoverflow.com/a/1700069
-def iso_to_gregorian(iso_year, iso_week, iso_day):
+def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.date:
     """Converts an ISO week date tuple into a datetime object."""
 
     if not 1 <= iso_week <= 53:
@@ -82,7 +88,7 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
     return gregorian
 
 
-def validate_bounds(bounds):
+def validate_bounds(bounds: str) -> None:
     if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
         raise ValueError(
             'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
