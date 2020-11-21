@@ -1209,7 +1209,6 @@ class KoreanLocale(Locale):
         delta: Union[float, int],
     ) -> str:
         if timeframe in ("day", "days"):
-            # TODO: comment on github PR
             special = self.special_dayframes.get(int(delta))
             if special:
                 return special
