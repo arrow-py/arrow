@@ -1,6 +1,5 @@
 import inspect
 import sys
-from abc import ABCMeta
 from math import trunc
 from typing import (
     Any,
@@ -84,7 +83,7 @@ def get_locale_by_class_name(name: str) -> "Locale":
 # base locale type.
 
 
-class Locale(metaclass=ABCMeta):
+class Locale:
     """ Represents locale-specific data and functionality. """
 
     names: ClassVar[List[str]] = []
@@ -1294,7 +1293,7 @@ class DutchLocale(Locale):
     day_abbreviations = ["", "ma", "di", "wo", "do", "vr", "za", "zo"]
 
 
-class SlavicBaseLocale(Locale, metaclass=ABCMeta):
+class SlavicBaseLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrames, Union[str, Sequence[str]]]]
 
     def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
@@ -1799,7 +1798,7 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
 
 
-class GermanBaseLocale(Locale, metaclass=ABCMeta):
+class GermanBaseLocale(Locale):
 
     past = "vor {0}"
     future = "in {0}"
