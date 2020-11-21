@@ -1,21 +1,28 @@
 import re
+import sys
 from datetime import datetime, timedelta
-from typing import ClassVar, Optional, Pattern, cast
+from typing import Optional, Pattern, cast
 
 from dateutil import tz as dateutil_tz
 
 from arrow import locales, util
 
-FORMAT_ATOM: str = "YYYY-MM-DD HH:mm:ssZZ"
-FORMAT_COOKIE: str = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
-FORMAT_RFC822: str = "ddd, DD MMM YY HH:mm:ss Z"
-FORMAT_RFC850: str = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
-FORMAT_RFC1036: str = "ddd, DD MMM YY HH:mm:ss Z"
-FORMAT_RFC1123: str = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_RFC2822: str = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_RFC3339: str = "YYYY-MM-DD HH:mm:ssZZ"
-FORMAT_RSS: str = "ddd, DD MMM YYYY HH:mm:ss Z"
-FORMAT_W3C: str = "YYYY-MM-DD HH:mm:ssZZ"
+if sys.version_info < (3, 8):
+    from typing_extensions import Final
+else:
+    from typing import Final
+
+
+FORMAT_ATOM: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_COOKIE: Final[str] = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
+FORMAT_RFC822: Final[str] = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC850: Final[str] = "dddd, DD-MMM-YY HH:mm:ss ZZZ"
+FORMAT_RFC1036: Final[str] = "ddd, DD MMM YY HH:mm:ss Z"
+FORMAT_RFC1123: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC2822: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_RFC3339: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_RSS: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
+FORMAT_W3C: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
 
 
 class DateTimeFormatter:
@@ -24,7 +31,7 @@ class DateTimeFormatter:
     # an atomic group. For more info on atomic groups and how to they are
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
 
-    _FORMAT_RE: ClassVar[Pattern[str]] = re.compile(
+    _FORMAT_RE: Final[Pattern[str]] = re.compile(
         r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
     )
 
