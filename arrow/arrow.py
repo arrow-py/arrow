@@ -1497,13 +1497,20 @@ class Arrow:
 
     # math
 
-    def __add__(self, other: Union[timedelta, relativedelta]) -> "Arrow":
+    @overload
+    def __add__(self, other: timedelta) -> "Arrow":
+        pass
+
+    @overload
+    def __add__(self, other: relativedelta) -> "Arrow":
+        pass
+
+    def __add__(self, other: Any) -> "Arrow":
 
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
-        # FIXME: change to raise
-        return NotImplemented  # type: ignore
+        return NotImplemented
 
     def __radd__(self, other: Union[timedelta, relativedelta]) -> "Arrow":
         return self.__add__(other)
@@ -1516,9 +1523,7 @@ class Arrow:
     def __sub__(self, other: Union[dt_datetime, "Arrow"]) -> timedelta:
         pass
 
-    def __sub__(
-        self, other: Union[timedelta, relativedelta, dt_datetime, "Arrow"]
-    ) -> Union["Arrow", timedelta]:
+    def __sub__(self, other: Any) -> Union[timedelta, "Arrow"]:
 
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
@@ -1529,16 +1534,22 @@ class Arrow:
         elif isinstance(other, Arrow):
             return self._datetime - other._datetime
 
-        # FIXME: change to raise
-        return NotImplemented  # type: ignore
+        return NotImplemented
 
+    @overload
     def __rsub__(self, other: dt_datetime) -> timedelta:
+        pass
+
+    @overload
+    def __rsub__(self, other: Any) -> timedelta:
+        pass
+
+    def __rsub__(self, other: Any) -> timedelta:
 
         if isinstance(other, dt_datetime):
             return other - self._datetime
 
-        # FIXME: change to raise
-        return NotImplemented  # type: ignore
+        return NotImplemented
 
     # comparisons
 
@@ -1556,35 +1567,63 @@ class Arrow:
 
         return not self.__eq__(other)
 
-    def __gt__(self, other: Union["Arrow", dt_datetime]) -> bool:
+    @overload
+    def __gt__(self, other: "Arrow") -> bool:
+        pass
+
+    @overload
+    def __gt__(self, other: dt_datetime) -> bool:
+        pass
+
+    def __gt__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
-            # FIXME: change to raise
-            return NotImplemented  # type: ignore
+            return NotImplemented
 
         return self._datetime > self._get_datetime(other)
 
-    def __ge__(self, other: Union["Arrow", dt_datetime]) -> bool:
+    @overload
+    def __ge__(self, other: "Arrow") -> bool:
+        pass
+
+    @overload
+    def __ge__(self, other: dt_datetime) -> bool:
+        pass
+
+    def __ge__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
-            # FIXME: change to raise
-            return NotImplemented  # type: ignore
+            return NotImplemented
 
         return self._datetime >= self._get_datetime(other)
 
-    def __lt__(self, other: Union["Arrow", dt_datetime]) -> bool:
+    @overload
+    def __lt__(self, other: "Arrow") -> bool:
+        pass
+
+    @overload
+    def __lt__(self, other: dt_datetime) -> bool:
+        pass
+
+    def __lt__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
-            # FIXME: change to raise
-            return NotImplemented  # type: ignore
+            return NotImplemented
 
         return self._datetime < self._get_datetime(other)
 
-    def __le__(self, other: Union["Arrow", dt_datetime]) -> bool:
+    @overload
+    def __le__(self, other: "Arrow") -> bool:
+        pass
+
+    @overload
+    def __le__(self, other: dt_datetime) -> bool:
+        pass
+
+    def __le__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
-            # FIXME: change to raise
-            return NotImplemented  # type: ignore
+            return NotImplemented
 
         return self._datetime <= self._get_datetime(other)
 
