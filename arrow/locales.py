@@ -857,7 +857,7 @@ class FinnishLocale(Locale):
     past = "{0} sitten"
     future = "{0} kuluttua"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, List[str]]] = {
         "now": ["juuri nyt", "juuri nyt"],
         "second": ["sekunti", "sekunti"],
         "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
@@ -1293,13 +1293,13 @@ class DutchLocale(Locale):
 
 
 class SlavicBaseLocale(Locale):
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, Sequence[str]]]]
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]]
 
     def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
 
-        if isinstance(form, Sequence):
+        if isinstance(form, list):
             if delta % 10 == 1 and delta % 100 != 11:
                 form = form[0]
             elif 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
@@ -1317,7 +1317,7 @@ class BelarusianLocale(SlavicBaseLocale):
     past = "{0} таму"
     future = "праз {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, Sequence[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "зараз",
         "second": "секунду",
         "seconds": "{0} некалькі секунд",
@@ -1386,7 +1386,7 @@ class PolishLocale(SlavicBaseLocale):
 
     # The nouns should be in genitive case (Polish: "dopełniacz")
     # in order to correctly form `past` & `future` expressions.
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "teraz",
         "second": "sekundę",
         "seconds": ["{0} sekund", "{0} sekundy", "{0} sekund"],
@@ -1455,7 +1455,7 @@ class RussianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "через {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "сейчас",
         "second": "Второй",
         "seconds": "{0} несколько секунд",
@@ -1591,7 +1591,7 @@ class BulgarianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "напред {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "сега",
         "second": "секунда",
         "seconds": "{0} няколко секунди",
@@ -1658,7 +1658,7 @@ class UkrainianLocale(SlavicBaseLocale):
     past = "{0} тому"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "зараз",
         "second": "секунда",
         "seconds": "{0} кілька секунд",
@@ -1724,7 +1724,7 @@ class MacedonianLocale(SlavicBaseLocale):
     past = "пред {0}"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Sequence[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
         "now": "сега",
         "second": "една секунда",
         "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
@@ -2653,13 +2653,14 @@ class MoroccoArabicLocale(ArabicLocale):
 class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
         form = self.timeframes[timeframe]
-        if isinstance(form, Sequence):
+        if isinstance(form, tuple):
             if delta < 0:
                 form = form[0]
             elif delta > 0:
                 form = form[1]
+            # FIXME: handle when delta is 0
 
-        return form.format(abs(delta))
+        return form.format(abs(delta))  # type: ignore
 
     names = ["is", "is_is"]
 
@@ -2943,7 +2944,7 @@ class CzechLocale(Locale):
     names = ["cs", "cs_cz"]
 
     timeframes: ClassVar[
-        Mapping[TimeFrames, Union[Mapping[str, Union[Sequence[str], str]], str]]
+        Mapping[TimeFrames, Union[Mapping[str, Union[List[str], str]], str]]
     ] = {
         "now": "Teď",
         "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
@@ -3023,9 +3024,9 @@ class CzechLocale(Locale):
             key = "future"
         else:
             key = "past"
-        form: Union[Sequence[str], str] = form[key]
+        form: Union[List[str], str] = form[key]
 
-        if isinstance(form, Sequence):
+        if isinstance(form, list):
             if 2 <= abs_delta % 10 <= 4 and (
                 abs_delta % 100 < 10 or abs_delta % 100 >= 20
             ):
@@ -3040,7 +3041,7 @@ class SlovakLocale(Locale):
     names = ["sk", "sk_sk"]
 
     timeframes: ClassVar[
-        Mapping[TimeFrames, Union[Mapping[str, Union[Sequence[str], str]], str]]
+        Mapping[TimeFrames, Union[Mapping[str, Union[List[str], str]], str]]
     ] = {
         "now": "Teraz",
         "second": {"past": "sekundou", "future": "sekundu", "zero": "{0} sekúnd"},
@@ -3121,9 +3122,9 @@ class SlovakLocale(Locale):
             key = "future"
         else:
             key = "past"
-        form: Union[Sequence[str], str] = form[key]
+        form: Union[List[str], str] = form[key]
 
-        if isinstance(form, Sequence):
+        if isinstance(form, list):
             if 2 <= abs_delta % 10 <= 4 and (
                 abs_delta % 100 < 10 or abs_delta % 100 >= 20
             ):
