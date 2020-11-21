@@ -10,7 +10,7 @@ from arrow import locales
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final
 else:
-    from typing import Final
+    from typing import Final  # pragma: no cover
 
 
 FORMAT_ATOM: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"

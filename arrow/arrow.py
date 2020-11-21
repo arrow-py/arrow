@@ -38,7 +38,7 @@ from arrow.locales import TimeFrames
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final, Literal
 else:
-    from typing import Final, Literal
+    from typing import Final, Literal  # pragma: no cover
 
 
 TZ_EXPR = Union[dt_tzinfo, str]

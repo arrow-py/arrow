@@ -28,7 +28,7 @@ from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Literal, TypedDict
 else:
-    from typing import Literal, TypedDict
+    from typing import Literal, TypedDict  # pragma: no cover
 
 
 class ParserError(ValueError):
