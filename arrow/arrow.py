@@ -131,7 +131,7 @@ class Arrow:
     _SECS_PER_DAY: Final[float] = float(60 * 60 * 24)
     _SECS_PER_WEEK: Final[float] = float(60 * 60 * 24 * 7)
     _SECS_PER_MONTH: Final[float] = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR: Final[float] = float(60 * 60 * 24 * 365.25)
+    _SECS_PER_YEAR: Final[float] = float(60 * 60 * 24 * 365)
 
     _SECS_MAP: Final[Mapping[TimeFrames, float]] = {
         "second": 1.0,
@@ -1184,16 +1184,14 @@ class Arrow:
             else:
                 timeframes: List[Tuple[TimeFrames, float]] = []
 
-                def gather_timeframes(_delta: float, _granularity: TimeFrames) -> float:
-                    if _granularity in granularity:
-                        value = sign * _delta / self._SECS_MAP[_granularity]
-                        _delta %= self._SECS_PER_YEAR
+                def gather_timeframes(_delta: float, frame: TimeFrames) -> float:
+                    if frame in granularity:
+                        value = sign * _delta / self._SECS_MAP[frame]
+                        _delta %= self._SECS_MAP[frame]
                         if trunc(abs(value)) != 1:
-                            timeframes.append(
-                                (cast(TimeFrames, _granularity + "s"), value)
-                            )
+                            timeframes.append((cast(TimeFrames, frame + "s"), value))
                         else:
-                            timeframes.append((_granularity, value))
+                            timeframes.append((frame, value))
                     return _delta
 
                 delta = gather_timeframes(delta, "year")
