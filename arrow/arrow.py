@@ -35,12 +35,13 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 from arrow.locales import TimeFrames
 
-TZ_EXPR = Union[dt_tzinfo, str]
-
 if sys.version_info < (3, 8):
     from typing_extensions import Final, Literal
 else:
     from typing import Final, Literal
+
+
+TZ_EXPR = Union[dt_tzinfo, str]
 
 _T_FRAMES = Literal[
     "year",
@@ -114,7 +115,7 @@ class Arrow:
     min: ClassVar["Arrow"]
     max: ClassVar["Arrow"]
 
-    _ATTRS: Final[ClassVar[List[str]]] = [
+    _ATTRS: Final[List[str]] = [
         "year",
         "month",
         "day",
@@ -123,16 +124,16 @@ class Arrow:
         "second",
         "microsecond",
     ]
-    _ATTRS_PLURAL: Final[ClassVar[List[str]]] = [f"{a}s" for a in _ATTRS]
-    _MONTHS_PER_QUARTER: Final[ClassVar[int]] = 3
-    _SECS_PER_MINUTE: Final[ClassVar[float]] = float(60)
-    _SECS_PER_HOUR: Final[ClassVar[float]] = float(60 * 60)
-    _SECS_PER_DAY: Final[ClassVar[float]] = float(60 * 60 * 24)
-    _SECS_PER_WEEK: Final[ClassVar[float]] = float(60 * 60 * 24 * 7)
-    _SECS_PER_MONTH: Final[ClassVar[float]] = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR: Final[ClassVar[float]] = float(60 * 60 * 24 * 365.25)
+    _ATTRS_PLURAL: Final[List[str]] = [f"{a}s" for a in _ATTRS]
+    _MONTHS_PER_QUARTER: Final[int] = 3
+    _SECS_PER_MINUTE: Final[float] = float(60)
+    _SECS_PER_HOUR: Final[float] = float(60 * 60)
+    _SECS_PER_DAY: Final[float] = float(60 * 60 * 24)
+    _SECS_PER_WEEK: Final[float] = float(60 * 60 * 24 * 7)
+    _SECS_PER_MONTH: Final[float] = float(60 * 60 * 24 * 30.5)
+    _SECS_PER_YEAR: Final[float] = float(60 * 60 * 24 * 365.25)
 
-    _SECS_MAP: Final[ClassVar[Mapping[TimeFrames, float]]] = {
+    _SECS_MAP: Final[Mapping[TimeFrames, float]] = {
         "second": 1.0,
         "minute": _SECS_PER_MINUTE,
         "hour": _SECS_PER_HOUR,
