@@ -220,11 +220,11 @@ class TestDateTimeParserParse:
     def test_parse_timestamp(self):
 
         tz_utc = tz.tzutc()
-        int_timestamp = int(time.time())
+        float_timestamp = time.time()
+        int_timestamp = int(float_timestamp)
         self.expected = datetime.fromtimestamp(int_timestamp, tz=tz_utc)
         assert self.parser.parse(f"{int_timestamp:d}", "X") == self.expected
 
-        float_timestamp = time.time()
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
         assert self.parser.parse(f"{float_timestamp:f}", "X") == self.expected
 
@@ -235,22 +235,6 @@ class TestDateTimeParserParse:
         # test ps timestamp (arrow will round to 6 digits regardless)
         self.expected = datetime.fromtimestamp(float_timestamp, tz=tz_utc)
         assert self.parser.parse(f"{float_timestamp:f}123456", "X") == self.expected
-
-        # NOTE: negative timestamps cannot be handled by datetime on Window
-        # Must use timedelta to handle them. ref: https://stackoverflow.com/questions/36179914
-        if os.name != "nt":
-            # regression test for issue #662
-            negative_int_timestamp = -int_timestamp
-            self.expected = datetime.fromtimestamp(negative_int_timestamp, tz=tz_utc)
-            assert (
-                self.parser.parse(f"{negative_int_timestamp:d}", "X") == self.expected
-            )
-
-            negative_float_timestamp = -float_timestamp
-            self.expected = datetime.fromtimestamp(negative_float_timestamp, tz=tz_utc)
-            assert (
-                self.parser.parse(f"{negative_float_timestamp:f}", "X") == self.expected
-            )
 
         # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
         # break cases like "15 Jul 2000" and a format list (see issue #447)
@@ -266,6 +250,24 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse(".1565982019", "X")
 
+    # NOTE: negative timestamps cannot be handled by datetime on Windows
+    # Must use timedelta to handle them: https://stackoverflow.com/questions/36179914
+    @pytest.mark.skipif(
+        os.name == "nt", reason="negative timestamps are not supported on Windows"
+    )
+    def test_parse_negative_timestamp(self):
+        # regression test for issue #662
+        tz_utc = tz.tzutc()
+        float_timestamp = time.time()
+        int_timestamp = int(float_timestamp)
+        negative_int_timestamp = -int_timestamp
+        self.expected = datetime.fromtimestamp(negative_int_timestamp, tz=tz_utc)
+        assert self.parser.parse(f"{negative_int_timestamp:d}", "X") == self.expected
+
+        negative_float_timestamp = -float_timestamp
+        self.expected = datetime.fromtimestamp(negative_float_timestamp, tz=tz_utc)
+        assert self.parser.parse(f"{negative_float_timestamp:f}", "X") == self.expected
+
     def test_parse_expanded_timestamp(self):
         # test expanded timestamps that include milliseconds
         # and microseconds as multiples rather than decimals
@@ -273,8 +275,8 @@ class TestDateTimeParserParse:
 
         tz_utc = tz.tzutc()
         timestamp = 1569982581.413132
-        timestamp_milli = int(round(timestamp * 1000))
-        timestamp_micro = int(round(timestamp * 1000000))
+        timestamp_milli = int(round(timestamp * 1e3))
+        timestamp_micro = int(round(timestamp * 1e6))
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)
