@@ -25,6 +25,11 @@ from dateutil import tz
 from arrow import locales
 from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
 
+if sys.version_info < (3, 8):  # pragma: no cover
+    from typing_extensions import Literal, TypedDict
+else:
+    from typing import Literal, TypedDict
+
 
 class ParserError(ValueError):
     pass
@@ -40,12 +45,6 @@ class ParserMatchError(ParserError):
 
 
 _WEEKDATE_ELEMENT = Union[str, bytes, SupportsInt, bytearray]
-
-
-if sys.version_info < (3, 8):
-    from typing_extensions import Literal, TypedDict
-else:
-    from typing import Literal, TypedDict
 
 _FORMAT_TYPE = Literal[
     "YYYY",
@@ -454,7 +453,7 @@ class DateTimeParser:
         value: Union[str, bytes, SupportsInt, bytearray],
         parts: _Parts,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -463,7 +462,7 @@ class DateTimeParser:
         value: Union[str, bytes, SupportsFloat, bytearray],
         parts: _Parts,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -472,7 +471,7 @@ class DateTimeParser:
         value: Union[str, bytes, bytearray],
         parts: _Parts,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -481,7 +480,7 @@ class DateTimeParser:
         value: Union[str, bytes],
         parts: _Parts,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -490,7 +489,7 @@ class DateTimeParser:
         value: Tuple[_WEEKDATE_ELEMENT, _WEEKDATE_ELEMENT, Optional[_WEEKDATE_ELEMENT]],
         parts: _Parts,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     def _parse_token(
         self,

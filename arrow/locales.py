@@ -16,7 +16,7 @@ from typing import (
     cast,
 )
 
-if sys.version_info < (3, 8):
+if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Literal
 else:
     from typing import Literal
@@ -2653,11 +2653,10 @@ class MoroccoArabicLocale(ArabicLocale):
 class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
         form = self.timeframes[timeframe]
-        if isinstance(form, tuple):
-            if delta < 0:
-                form = form[0]
-            elif delta > 0:
-                form = form[1]
+        if delta < 0:
+            form = form[0]
+        elif delta > 0:
+            form = form[1]
             # FIXME: handle when delta is 0
 
         return form.format(abs(delta))  # type: ignore

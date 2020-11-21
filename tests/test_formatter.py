@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, tzinfo
 
 import pytest
 import pytz
@@ -130,6 +130,19 @@ class TestFormatterFormatToken:
 
         result = self.formatter._format_token(dt, "Z")
         assert result == "-0700" or result == "-0800"
+
+    def test_incomplete_timezone(self):
+        class IncompleteTzinfo(tzinfo):
+            def utcoffset(self, dt):
+                return None
+
+        dt = datetime.utcnow().replace(tzinfo=IncompleteTzinfo())
+
+        result = self.formatter._format_token(dt, "ZZ")
+        assert result is None
+
+        result = self.formatter._format_token(dt, "Z")
+        assert result is None
 
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_timezone_formatter(self, full_tz_name):

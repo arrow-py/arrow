@@ -26,7 +26,7 @@ def get(
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -47,7 +47,7 @@ def get(
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -59,7 +59,7 @@ def get(
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
-    ...
+    ...  # pragma: no cover
 
 
 @overload
@@ -71,7 +71,7 @@ def get(
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
-    ...
+    ...  # pragma: no cover
 
 
 def get(*args: Any, **kwargs: Any) -> Arrow:

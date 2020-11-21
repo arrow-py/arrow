@@ -40,7 +40,7 @@ class ArrowFactory:
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def get(
@@ -61,7 +61,7 @@ class ArrowFactory:
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def get(
@@ -73,7 +73,7 @@ class ArrowFactory:
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def get(
@@ -85,7 +85,7 @@ class ArrowFactory:
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
-        ...
+        ...  # pragma: no cover
 
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.

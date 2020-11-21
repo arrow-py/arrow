@@ -35,7 +35,7 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 from arrow.locales import TimeFrames
 
-if sys.version_info < (3, 8):
+if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final, Literal
 else:
     from typing import Final, Literal
@@ -1498,11 +1498,11 @@ class Arrow:
 
     @overload
     def __add__(self, other: timedelta) -> "Arrow":
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __add__(self, other: relativedelta) -> "Arrow":
-        pass
+        pass  # pragma: no cover
 
     def __add__(self, other: Any) -> "Arrow":
 
@@ -1516,11 +1516,11 @@ class Arrow:
 
     @overload
     def __sub__(self, other: Union[timedelta, relativedelta]) -> "Arrow":
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __sub__(self, other: Union[dt_datetime, "Arrow"]) -> timedelta:
-        pass
+        pass  # pragma: no cover
 
     def __sub__(self, other: Any) -> Union[timedelta, "Arrow"]:
 
@@ -1537,11 +1537,11 @@ class Arrow:
 
     @overload
     def __rsub__(self, other: dt_datetime) -> timedelta:
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __rsub__(self, other: Any) -> timedelta:
-        pass
+        pass  # pragma: no cover
 
     def __rsub__(self, other: Any) -> timedelta:
 
@@ -1568,11 +1568,11 @@ class Arrow:
 
     @overload
     def __gt__(self, other: "Arrow") -> bool:
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __gt__(self, other: dt_datetime) -> bool:
-        pass
+        pass  # pragma: no cover
 
     def __gt__(self, other: Any) -> bool:
 
@@ -1583,11 +1583,11 @@ class Arrow:
 
     @overload
     def __ge__(self, other: "Arrow") -> bool:
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __ge__(self, other: dt_datetime) -> bool:
-        pass
+        pass  # pragma: no cover
 
     def __ge__(self, other: Any) -> bool:
 
@@ -1598,11 +1598,11 @@ class Arrow:
 
     @overload
     def __lt__(self, other: "Arrow") -> bool:
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __lt__(self, other: dt_datetime) -> bool:
-        pass
+        pass  # pragma: no cover
 
     def __lt__(self, other: Any) -> bool:
 
@@ -1613,11 +1613,11 @@ class Arrow:
 
     @overload
     def __le__(self, other: "Arrow") -> bool:
-        pass
+        pass  # pragma: no cover
 
     @overload
     def __le__(self, other: dt_datetime) -> bool:
-        pass
+        pass  # pragma: no cover
 
     def __le__(self, other: Any) -> bool:
 
