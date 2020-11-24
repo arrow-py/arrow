@@ -1691,9 +1691,7 @@ class Arrow:
         )
 
     @classmethod
-    def _get_iteration_params(
-        cls, end: Any, limit: Union[int, None]
-    ) -> Tuple[Any, int]:
+    def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
 
         if end is None:
 
