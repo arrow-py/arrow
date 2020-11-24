@@ -1183,23 +1183,27 @@ class Arrow:
             else:
                 timeframes: List[Tuple[TimeFrames, float]] = []
 
-                def gather_timeframes(_delta: float, frame: TimeFrames) -> float:
-                    if frame in granularity:
-                        value = sign * _delta / self._SECS_MAP[frame]
-                        _delta %= self._SECS_MAP[frame]
+                def gather_timeframes(_delta: float, _frame: TimeFrames) -> float:
+                    if _frame in granularity:
+                        value = sign * _delta / self._SECS_MAP[_frame]
+                        _delta %= self._SECS_MAP[_frame]
                         if trunc(abs(value)) != 1:
-                            timeframes.append((cast(TimeFrames, frame + "s"), value))
+                            timeframes.append((cast(TimeFrames, _frame + "s"), value))
                         else:
-                            timeframes.append((frame, value))
+                            timeframes.append((_frame, value))
                     return _delta
 
-                delta = gather_timeframes(delta, "year")
-                delta = gather_timeframes(delta, "month")
-                delta = gather_timeframes(delta, "week")
-                delta = gather_timeframes(delta, "day")
-                delta = gather_timeframes(delta, "hour")
-                delta = gather_timeframes(delta, "minute")
-                _ = gather_timeframes(delta, "second")
+                frames: Tuple[TimeFrames, ...] = (
+                    "year",
+                    "month",
+                    "week",
+                    "day",
+                    "hour",
+                    "minute",
+                    "second",
+                )
+                for frame in frames:
+                    delta = gather_timeframes(delta, frame)
 
                 if len(timeframes) < len(granularity):
                     raise AttributeError(
