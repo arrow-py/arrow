@@ -7,7 +7,7 @@ methods for use as a module API.
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
-from typing import Any, List, Optional, SupportsFloat, Tuple, Type, Union, overload
+from typing import Any, List, Optional, Tuple, Type, Union, overload
 
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.factory import ArrowFactory
@@ -37,7 +37,8 @@ def get(
         date,
         struct_time,
         dt_tzinfo,
-        SupportsFloat,
+        int,
+        float,
         str,
         Tuple[int, int, int],
         None,

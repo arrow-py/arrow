@@ -22,7 +22,6 @@ from typing import (
     List,
     Mapping,
     Optional,
-    SupportsFloat,
     Tuple,
     Union,
     cast,
@@ -240,7 +239,7 @@ class Arrow:
     @classmethod
     def fromtimestamp(
         cls,
-        timestamp: Union[SupportsFloat, str],
+        timestamp: Union[int, float, str],
         tzinfo: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
@@ -274,7 +273,7 @@ class Arrow:
         )
 
     @classmethod
-    def utcfromtimestamp(cls, timestamp: Union[SupportsFloat, str]) -> "Arrow":
+    def utcfromtimestamp(cls, timestamp: Union[int, float, str]) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, in UTC time.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
@@ -1643,7 +1642,7 @@ class Arrow:
 
     @classmethod
     def _get_datetime(
-        cls, expr: Union["Arrow", dt_datetime, SupportsFloat, str]
+        cls, expr: Union["Arrow", dt_datetime, int, float, str]
     ) -> dt_datetime:
         """Get datetime object for a specified expression."""
         if isinstance(expr, Arrow):

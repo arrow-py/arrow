@@ -10,7 +10,7 @@ import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
-from typing import Any, List, Optional, SupportsFloat, Tuple, Type, Union, overload
+from typing import Any, List, Optional, Tuple, Type, Union, overload
 
 from dateutil import tz as dateutil_tz
 
@@ -51,7 +51,8 @@ class ArrowFactory:
             date,
             struct_time,
             dt_tzinfo,
-            SupportsFloat,
+            int,
+            float,
             str,
             Tuple[int, int, int],
             None,
