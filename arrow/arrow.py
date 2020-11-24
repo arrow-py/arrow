@@ -1092,10 +1092,9 @@ class Arrow:
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
 
-        delta: Union[int, float] = int(round(util.total_seconds(self._datetime - dt)))
-        sign = -1 if delta < 0 else 1
-        diff = abs(delta)
-        delta = diff
+        _delta = int(round(util.total_seconds(self._datetime - dt)))
+        sign = -1 if _delta < 0 else 1
+        delta_second = diff = abs(_delta)
 
         try:
             if granularity == "auto":
@@ -1103,7 +1102,7 @@ class Arrow:
                     return locale.describe("now", only_distance=only_distance)
 
                 if diff < self._SECS_PER_MINUTE:
-                    seconds = sign * delta
+                    seconds = sign * delta_second
                     return locale.describe(
                         "seconds", seconds, only_distance=only_distance
                     )
@@ -1111,7 +1110,7 @@ class Arrow:
                 elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_HOUR:
-                    minutes = sign * int(max(delta / self._SECS_PER_MINUTE, 2))
+                    minutes = sign * int(max(delta_second / self._SECS_PER_MINUTE, 2))
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
@@ -1119,18 +1118,18 @@ class Arrow:
                 elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY:
-                    hours = sign * int(max(delta / self._SECS_PER_HOUR, 2))
+                    hours = sign * int(max(delta_second / self._SECS_PER_HOUR, 2))
                     return locale.describe("hours", hours, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_WEEK:
-                    days = sign * int(max(delta / self._SECS_PER_DAY, 2))
+                    days = sign * int(max(delta_second / self._SECS_PER_DAY, 2))
                     return locale.describe("days", days, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_MONTH:
-                    weeks = sign * int(max(delta / self._SECS_PER_WEEK, 2))
+                    weeks = sign * int(max(delta_second / self._SECS_PER_WEEK, 2))
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_MONTH * 2:
@@ -1149,28 +1148,28 @@ class Arrow:
                 elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta / self._SECS_PER_YEAR, 2))
+                    years = sign * int(max(delta_second / self._SECS_PER_YEAR, 2))
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
                 granularity = cast(TimeFrames, granularity)  # type: ignore[assignment]
 
                 if granularity == "second":
-                    delta = sign * delta
+                    delta = sign * float(delta_second)
                     if abs(delta) < 2:
                         return locale.describe("now", only_distance=only_distance)
                 elif granularity == "minute":
-                    delta = sign * delta / self._SECS_PER_MINUTE
+                    delta = sign * delta_second / self._SECS_PER_MINUTE
                 elif granularity == "hour":
-                    delta = sign * delta / self._SECS_PER_HOUR
+                    delta = sign * delta_second / self._SECS_PER_HOUR
                 elif granularity == "day":
-                    delta = sign * delta / self._SECS_PER_DAY
+                    delta = sign * delta_second / self._SECS_PER_DAY
                 elif granularity == "week":
-                    delta = sign * delta / self._SECS_PER_WEEK
+                    delta = sign * delta_second / self._SECS_PER_WEEK
                 elif granularity == "month":
-                    delta = sign * delta / self._SECS_PER_MONTH
+                    delta = sign * delta_second / self._SECS_PER_MONTH
                 elif granularity == "year":
-                    delta = sign * delta / self._SECS_PER_YEAR
+                    delta = sign * delta_second / self._SECS_PER_YEAR
                 else:
                     raise AttributeError(
                         "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
@@ -1193,6 +1192,7 @@ class Arrow:
                             timeframes.append((_frame, value))
                     return _delta
 
+                delta = float(delta_second)
                 frames: Tuple[TimeFrames, ...] = (
                     "year",
                     "month",
