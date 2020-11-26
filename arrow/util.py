@@ -31,11 +31,6 @@ def next_weekday(start_date, weekday):
     return rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0]
 
 
-def total_seconds(td):
-    """Get total seconds for timedelta."""
-    return td.total_seconds()
-
-
 def is_timestamp(value):
     """Check if value is a valid timestamp."""
     if isinstance(value, bool):
@@ -85,8 +80,8 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
 def validate_bounds(bounds):
     if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
         raise ValueError(
-            'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
+            "Invalid bounds. Please select between '()', '(]', '[)', or '[]'."
         )
 
 
-__all__ = ["next_weekday", "total_seconds", "is_timestamp", "iso_to_gregorian"]
+__all__ = ["next_weekday", "is_timestamp", "iso_to_gregorian"]

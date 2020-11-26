@@ -2,7 +2,7 @@ import re
 
 from dateutil import tz as dateutil_tz
 
-from arrow import locales, util
+from arrow import locales
 
 FORMAT_ATOM = "YYYY-MM-DD HH:mm:ssZZ"
 FORMAT_COOKIE = "dddd, DD-MMM-YYYY HH:mm:ss ZZZ"
@@ -116,7 +116,7 @@ class DateTimeFormatter:
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
-            total_minutes = int(util.total_seconds(tz.utcoffset(dt)) / 60)
+            total_minutes = int(tz.utcoffset(dt).total_seconds() / 60)
 
             sign = "+" if total_minutes >= 0 else "-"
             total_minutes = abs(total_minutes)

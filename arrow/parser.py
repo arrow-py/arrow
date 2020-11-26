@@ -118,9 +118,8 @@ class DateTimeParser:
         num_spaces = datetime_string.count(" ")
         if has_space_divider and num_spaces != 1 or has_t_divider and num_spaces > 0:
             raise ParserError(
-                "Expected an ISO 8601-like string, but was given '{}'. Try passing in a format string to resolve this.".format(
-                    datetime_string
-                )
+                f"Expected an ISO 8601-like string, but was given '{datetime_string}'. "
+                "Try passing in a format string to resolve this."
             )
 
         has_time = has_space_divider or has_t_divider
@@ -161,7 +160,8 @@ class DateTimeParser:
 
             if time_components is None:
                 raise ParserError(
-                    "Invalid time component provided. Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
+                    "Invalid time component provided. "
+                    "Please specify a format or provide a valid time component in the basic or extended ISO 8601 time format."
                 )
 
             (
@@ -221,14 +221,14 @@ class DateTimeParser:
             fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
         except re.error as e:
             raise ParserMatchError(
-                f"Failed to generate regular expression pattern: {e}"
+                f"Failed to generate regular expression pattern: {e}."
             )
 
         match = fmt_pattern_re.search(datetime_string)
 
         if match is None:
             raise ParserMatchError(
-                f"Failed to match '{fmt}' when parsing '{datetime_string}'"
+                f"Failed to match '{fmt}' when parsing '{datetime_string}'."
             )
 
         parts = {}
@@ -242,9 +242,7 @@ class DateTimeParser:
 
             if value is None:
                 raise ParserMatchError(
-                    "Unable to find a match group for the specified token '{}'.".format(
-                        token
-                    )
+                    f"Unable to find a match group for the specified token '{token}'."
                 )
 
             self._parse_token(token, value, parts)
@@ -279,7 +277,7 @@ class DateTimeParser:
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
-                raise ParserError(f"Unrecognized token '{token}'")
+                raise ParserError(f"Unrecognized token '{token}'.")
             input_pattern = f"(?P<{token}>{input_re.pattern})"
             tokens.append(token)
             # a pattern doesn't have the same length as the token
@@ -548,10 +546,9 @@ class DateTimeParser:
                 pass
 
         if _datetime is None:
+            supported_formats = ", ".join(formats)
             raise ParserError(
-                "Could not match input '{}' to any of the following formats: {}".format(
-                    string, ", ".join(formats)
-                )
+                f"Could not match input '{string}' to any of the following formats: {supported_formats}."
             )
 
         return _datetime
@@ -595,6 +592,6 @@ class TzinfoParser:
                 tzinfo = tz.gettz(tzinfo_string)
 
         if tzinfo is None:
-            raise ParserError(f'Could not parse timezone expression "{tzinfo_string}"')
+            raise ParserError(f"Could not parse timezone expression '{tzinfo_string}'.")
 
         return tzinfo
