@@ -377,7 +377,7 @@ class Arrow:
             if day_is_clipped and not cls._is_last_day_of_month(current):
                 current = current.replace(day=original_day)
 
-    def span(self, frame, count=1, bounds="[)"):
+    def span(self, frame, count=1, bounds="[)", exact=False):
         """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
@@ -387,7 +387,7 @@ class Arrow:
             whether to include or exclude the start and end values in the span. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
-
+        :param exact: (optional) whether to return a timespan that starts exacly at specificed start
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Usage::
@@ -420,20 +420,22 @@ class Arrow:
         else:
             attr = frame_absolute
 
-        index = self._ATTRS.index(attr)
-        frames = self._ATTRS[: index + 1]
+        floor = self
+        if not exact:
+            index = self._ATTRS.index(attr)
+            frames = self._ATTRS[: index + 1]
 
-        values = [getattr(self, f) for f in frames]
+            values = [getattr(self, f) for f in frames]
 
-        for _ in range(3 - len(values)):
-            values.append(1)
+            for _ in range(3 - len(values)):
+                values.append(1)
 
-        floor = self.__class__(*values, tzinfo=self.tzinfo)
+            floor = self.__class__(*values, tzinfo=self.tzinfo)
 
-        if frame_absolute == "week":
-            floor = floor.shift(days=-(self.isoweekday() - 1))
-        elif frame_absolute == "quarter":
-            floor = floor.shift(months=-((self.month - 1) % 3))
+            if frame_absolute == "week":
+                floor = floor.shift(days=-(self.isoweekday() - 1))
+            elif frame_absolute == "quarter":
+                floor = floor.shift(months=-((self.month - 1) % 3))
 
         ceil = floor.shift(**{frame_relative: count * relative_steps})
 
@@ -478,7 +480,9 @@ class Arrow:
         return self.span(frame)[1]
 
     @classmethod
-    def span_range(cls, frame, start, end, tz=None, limit=None, bounds="[)"):
+    def span_range(
+        cls, frame, start, end, tz=None, limit=None, bounds="[)", exact=False
+    ):
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
 
@@ -492,6 +496,9 @@ class Arrow:
             whether to include or exclude the start and end values in each span in the range. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
+        :param exact: (optional) whether to have the first timespan start exactly
+            at the time specified by ``start`` and the final span truncated
+            so as not to extend beyond ``end``.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
@@ -528,12 +535,24 @@ class Arrow:
         """
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdatetime(start, tzinfo).span(frame)[0]
+        start = cls.fromdatetime(start, tzinfo).span(frame, exact=exact)[0]
+        end = cls.fromdatetime(end, tzinfo)
         _range = cls.range(frame, start, end, tz, limit)
-        return (r.span(frame, bounds=bounds) for r in _range)
+        for r in _range:
+            if exact:
+                floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+                if ceil > end:
+                    ceil = end
+                    if bounds[1] == ")":
+                        ceil += relativedelta(microseconds=-1)
+                if floor == end:
+                    break  # TODO: implementation: break OR yield floor, floor IF bounds[1] == ")"
+                yield floor, ceil
+            else:
+                yield r.span(frame, bounds=bounds, exact=exact)
 
     @classmethod
-    def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)"):
+    def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)", exact=False):
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
 
@@ -546,6 +565,9 @@ class Arrow:
             whether to include or exclude the start and end values in the intervals. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
+        :param exact: (optional) whether to have the first timespan start exactly
+            at the time specified by ``start`` and the final interval truncated
+            so as not to extend beyond ``end``.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second
 
@@ -573,14 +595,19 @@ class Arrow:
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:0]>)
         """
         if interval < 1:
-            raise ValueError("Interval must be a positive integer.")
+            raise ValueError("interval has to be a positive integer")
 
-        spanRange = iter(cls.span_range(frame, start, end, tz, bounds=bounds))
+        spanRange = iter(
+            cls.span_range(frame, start, end, tz, bounds=bounds, exact=exact)
+        )
         while True:
             try:
                 intvlStart, intvlEnd = next(spanRange)
                 for _ in range(interval - 1):
-                    _, intvlEnd = next(spanRange)
+                    try:
+                        _, intvlEnd = next(spanRange)
+                    except StopIteration:
+                        continue
                 yield intvlStart, intvlEnd
             except StopIteration:
                 return
