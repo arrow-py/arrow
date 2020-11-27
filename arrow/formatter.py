@@ -1,11 +1,11 @@
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, Pattern, cast
 
 from dateutil import tz as dateutil_tz
 
-from arrow import locales
+from arrow import locales, util
 
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final
@@ -130,11 +130,10 @@ class DateTimeFormatter:
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
-            utcoffset = tz.utcoffset(dt)
-            if utcoffset is None:
-                return None
-
-            total_minutes = int(utcoffset.total_seconds() / 60)
+            # https://github.com/arrow-py/arrow/pull/883#discussion_r529866834
+            total_minutes = int(
+                util.total_seconds(cast(timedelta, tz.utcoffset(dt))) / 60
+            )
 
             sign = "+" if total_minutes >= 0 else "-"
             total_minutes = abs(total_minutes)
