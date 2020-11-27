@@ -659,7 +659,7 @@ class TestArrowPickling:
 class TestArrowReplace:
     def test_not_attr(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             arrow.Arrow.utcnow().replace(abc=1)
 
     def test_replace(self):
@@ -700,12 +700,12 @@ class TestArrowReplace:
 
     def test_replace_week(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             arrow.Arrow.utcnow().replace(week=1)
 
     def test_replace_quarter(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             arrow.Arrow.utcnow().replace(quarter=1)
 
     def test_replace_quarter_and_fold(self):
@@ -726,10 +726,10 @@ class TestArrowShift:
 
         now = arrow.Arrow.utcnow()
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             now.shift(abc=1)
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             now.shift(week=1)
 
     def test_shift(self):
@@ -1119,7 +1119,7 @@ class TestArrowRange:
 
     def test_unsupported(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
 
     def test_range_over_months_ending_on_different_days(self):
@@ -1510,7 +1510,7 @@ class TestArrowInterval:
 class TestArrowSpan:
     def test_span_attribute(self):
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             self.arrow.span("span")
 
     def test_span_year(self):
@@ -1700,7 +1700,7 @@ class TestArrowHumanize:
             == "3 years"
         )
 
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             self.now.humanize(later108, granularity="years")
 
     def test_multiple_granularity(self):
@@ -1740,7 +1740,7 @@ class TestArrowHumanize:
             self.now.humanize(later105, granularity=["hour", "day", "minute"])
             == "a day 3 hours and 46 minutes ago"
         )
-        with pytest.raises(AttributeError):
+        with pytest.raises(ValueError):
             self.now.humanize(later105, granularity=["error", "second"])
 
         later108onlydistance = self.now.shift(seconds=10 ** 8)

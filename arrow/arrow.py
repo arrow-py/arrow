@@ -688,7 +688,7 @@ class Arrow:
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:0]>)
         """
         if interval < 1:
-            raise ValueError("interval has to be a positive integer")
+            raise ValueError("Interval must be a positive integer.")
 
         spanRange = iter(cls.span_range(frame, start, end, tz, bounds=bounds))
         while True:
@@ -888,9 +888,9 @@ class Arrow:
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
-                raise AttributeError(f"setting absolute {key} is not supported")
+                raise ValueError(f"Setting absolute {key} is not supported.")
             elif key not in ["tzinfo", "fold"]:
-                raise AttributeError(f'unknown attribute: "{key}"')
+                raise ValueError(f"Unknown attribute: '{key}'.")
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -946,10 +946,9 @@ class Arrow:
             if key in self._ATTRS_PLURAL or key in additional_attrs:
                 relative_kwargs[key] = value
             else:
-                raise AttributeError(
-                    "Invalid shift time frame. Please select one of the following: {}.".format(
-                        ", ".join(self._ATTRS_PLURAL + additional_attrs)
-                    )
+                supported_attr = ", ".join(self._ATTRS_PLURAL + additional_attrs)
+                raise ValueError(
+                    f"Invalid shift time frame. Please select one of the following: {supported_attr}."
                 )
 
         # core datetime does not support quarters, translate to months.
@@ -1083,16 +1082,14 @@ class Arrow:
 
         else:
             raise TypeError(
-                "Invalid 'other' argument of type '{}'. "
-                "Argument must be of type None, Arrow, or datetime.".format(
-                    type(other).__name__
-                )
+                f"Invalid 'other' argument of type '{type(other).__name__}'. "
+                "Argument must be of type None, Arrow, or datetime."
             )
 
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
 
-        _delta = int(round(util.total_seconds(self._datetime - dt)))
+        _delta = int(round((self._datetime - dt).total_seconds()))
         sign = -1 if _delta < 0 else 1
         delta_second = diff = abs(_delta)
 
@@ -1171,8 +1168,9 @@ class Arrow:
                 elif granularity == "year":
                     delta = sign * delta_second / self._SECS_PER_YEAR
                 else:
-                    raise AttributeError(
-                        "Invalid level of granularity. Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'"
+                    raise ValueError(
+                        "Invalid level of granularity. "
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
                 if trunc(abs(delta)) != 1:
@@ -1206,7 +1204,7 @@ class Arrow:
                     delta = gather_timeframes(delta, frame)
 
                 if len(timeframes) < len(granularity):
-                    raise AttributeError(
+                    raise ValueError(
                         "Invalid level of granularity. "
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
@@ -1215,10 +1213,8 @@ class Arrow:
 
         except KeyError as e:
             raise ValueError(
-                "Humanization of the {} granularity is not currently translated in the '{}' locale. "
-                "Please consider making a contribution to this locale.".format(
-                    e, locale_name
-                )
+                f"Humanization of the {e} granularity is not currently translated in the '{locale_name}' locale. "
+                "Please consider making a contribution to this locale."
             )
 
     # query functions
@@ -1262,13 +1258,11 @@ class Arrow:
 
         if not isinstance(start, Arrow):
             raise TypeError(
-                "Can't parse start date argument type of '{}'".format(type(start))
+                f"Cannot parse start date argument type of '{type(start)}'."
             )
 
         if not isinstance(end, Arrow):
-            raise TypeError(
-                "Can't parse end date argument type of '{}'".format(type(end))
-            )
+            raise TypeError(f"Cannot parse end date argument type of '{type(start)}'.")
 
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
@@ -1642,7 +1636,7 @@ class Arrow:
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError(f"'{tz_expr}' not recognized as a timezone")
+                raise ValueError(f"'{tz_expr}' not recognized as a timezone.")
 
     @classmethod
     def _get_datetime(
@@ -1670,25 +1664,23 @@ class Arrow:
             return "week", "weeks", 1
         elif name in ["quarter", "quarters"]:
             return "quarter", "months", 3
-
-        supported = ", ".join(
-            [
-                "year(s)",
-                "month(s)",
-                "day(s)",
-                "hour(s)",
-                "minute(s)",
-                "second(s)",
-                "microsecond(s)",
-                "week(s)",
-                "quarter(s)",
-            ]
-        )
-        raise AttributeError(
-            "range/span over frame {} not supported. Supported frames: {}".format(
-                name, supported
+        else:
+            supported = ", ".join(
+                [
+                    "year(s)",
+                    "month(s)",
+                    "day(s)",
+                    "hour(s)",
+                    "minute(s)",
+                    "second(s)",
+                    "microsecond(s)",
+                    "week(s)",
+                    "quarter(s)",
+                ]
             )
-        )
+            raise ValueError(
+                f"Range or span over frame {name} not supported. Supported frames: {supported}."
+            )
 
     @classmethod
     def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
@@ -1696,7 +1688,7 @@ class Arrow:
         if end is None:
 
             if limit is None:
-                raise ValueError("one of 'end' or 'limit' is required")
+                raise ValueError("One of 'end' or 'limit' is required.")
 
             return cls.max, limit
 

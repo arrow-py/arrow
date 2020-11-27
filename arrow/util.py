@@ -37,11 +37,6 @@ def next_weekday(
     )
 
 
-def total_seconds(td: datetime.timedelta) -> float:
-    """Get total seconds for timedelta."""
-    return td.total_seconds()
-
-
 def is_timestamp(value: Any) -> bool:
     """Check if value is a valid timestamp."""
     if isinstance(value, bool):
@@ -91,8 +86,8 @@ def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.dat
 def validate_bounds(bounds: str) -> None:
     if bounds != "()" and bounds != "(]" and bounds != "[)" and bounds != "[]":
         raise ValueError(
-            'Invalid bounds. Please select between "()", "(]", "[)", or "[]".'
+            "Invalid bounds. Please select between '()', '(]', '[)', or '[]'."
         )
 
 
-__all__ = ["next_weekday", "total_seconds", "is_timestamp", "iso_to_gregorian"]
+__all__ = ["next_weekday", "is_timestamp", "iso_to_gregorian"]

@@ -60,7 +60,7 @@ def get_locale(name: str) -> "Locale":
     locale_cls = _locales.get(name.lower())
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'")
+        raise ValueError(f"Unsupported locale '{name}'.")
 
     return locale_cls()
 
@@ -75,7 +75,7 @@ def get_locale_by_class_name(name: str) -> "Locale":
     locale_cls: Optional[Type[Locale]] = globals().get(name)
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'")
+        raise ValueError(f"Unsupported locale '{name}'.")
 
     return locale_cls()
 
