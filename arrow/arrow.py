@@ -546,7 +546,9 @@ class Arrow:
                     if bounds[1] == ")":
                         ceil += relativedelta(microseconds=-1)
                 if floor == end:
-                    break  # TODO: implementation: break OR yield floor, floor IF bounds[1] == ")"
+                    break  # TODO: implementation detail: break OR yield floor, floor IF bounds[1] == "]"
+                elif floor + relativedelta(microseconds=-1) == end:
+                    break
                 yield floor, ceil
             else:
                 yield r.span(frame, bounds=bounds, exact=exact)

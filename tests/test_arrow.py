@@ -1493,7 +1493,7 @@ class TestArrowSpanRange:
 
         assert result == expected
 
-    def test_exact_bound_exclude2(self):
+    def test_exact_floor_equals_end(self):
         result = list(
             arrow.Arrow.span_range(
                 "minute",
@@ -1544,10 +1544,58 @@ class TestArrowSpanRange:
                 arrow.Arrow(2013, 5, 5, 12, 39),
                 arrow.Arrow(2013, 5, 5, 12, 39, 59, 999999),
             ),
-            # (
-            #     arrow.Arrow(2013, 5, 5, 12, 40),
-            #     arrow.Arrow(2013, 5, 5, 12, 39, 59, 999999),
-            # ),
+        ]
+
+        assert result == expected
+
+    def test_exact_bound_include(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "hour",
+                datetime(2013, 5, 5, 2, 30),
+                datetime(2013, 5, 5, 6, 00),
+                bounds="(]",
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 2, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 3, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 3, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 4, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 4, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 5, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 5, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 6, 00),
+            ),
+        ]
+
+        assert result == expected
+
+    def test_small_interval_exact_open_bounds(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "minute",
+                datetime(2013, 5, 5, 2, 30),
+                datetime(2013, 5, 5, 2, 31),
+                bounds="()",
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 2, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 2, 30, 59, 999999),
+            ),
         ]
 
         assert result == expected
