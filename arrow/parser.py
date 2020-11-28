@@ -415,16 +415,8 @@ class DateTimeParser:
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
-            # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
             
             year, week = int(weekdate[0]), int(weekdate[1])
-
-            print("!!!!!!!")
-            print("------parts: ", parts)
-            print("------weekdate: ", type(weekdate))
-            print("-------year: ", year, "------week: ", week)
-            # year = 
-            # week = 
 
             if weekdate[2] is not None:
                 day = int(weekdate[2])
@@ -432,7 +424,11 @@ class DateTimeParser:
                 # day not given, default to 1
                 day = 1
 
-            dt = iso_to_gregorian(year, week, day)
+            date_string = f"{year}-{week}-{day}"
+            
+            # %Y: year, %W: week number of the year(Monday as the first day of the week), %w: weekdate
+            dt = datetime.strptime(date_string, "%Y-%W-%w")
+
             parts["year"] = dt.year
             parts["month"] = dt.month
             parts["day"] = dt.day
