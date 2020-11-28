@@ -36,10 +36,6 @@ class TestUtil:
         with pytest.raises(ValueError):
             util.next_weekday(datetime(1970, 1, 1), -1)
 
-    def test_total_seconds(self):
-        td = datetime(2019, 1, 1) - datetime(2018, 1, 1)
-        assert util.total_seconds(td) == td.total_seconds()
-
     def test_is_timestamp(self):
         timestamp_float = time.time()
         timestamp_int = int(timestamp_float)
