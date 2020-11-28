@@ -5,7 +5,7 @@ from functools import lru_cache
 from dateutil import tz
 
 from arrow import locales
-from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
+from arrow.util import next_weekday, normalize_timestamp
 
 
 class ParserError(ValueError):
@@ -415,7 +415,7 @@ class DateTimeParser:
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
-            
+
             year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
@@ -425,7 +425,7 @@ class DateTimeParser:
                 day = 1
 
             date_string = f"{year}-{week}-{day}"
-            
+
             # %Y: year, %W: week number of the year(Monday as the first day of the week), %w: weekdate
             dt = datetime.strptime(date_string, "%Y-%W-%w")
 
