@@ -426,8 +426,8 @@ class DateTimeParser:
 
             date_string = f"{year}-{week}-{day}"
 
-            # %Y: year, %W: week number of the year(Monday as the first day of the week), %w: weekdate
-            dt = datetime.strptime(date_string, "%Y-%W-%w")
+            #  tokens for ISO 8601 weekdates
+            dt = datetime.strptime(date_string, "%G-%V-%u")
 
             parts["year"] = dt.year
             parts["month"] = dt.month
