@@ -1113,9 +1113,8 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
-    # EDIT: added dehumanize function
     def dehumanize(self, timestring):
-        """ Returns an arrow object relative to the humanized difference in time given.
+        """Returns an arrow object relative to the humanized difference in time given.
             Only works with specifically formatted strings for the time being.
         :param timestring: A string in the format returned by humanize by default
             Number must be before unit of time, i.e. (4 hours)
@@ -1184,13 +1183,6 @@ class Arrow:
             months=month,
             years=year,
         )
-
-    # query functions
-
-
-
-
-    # query functions
 
     def is_between(self, start, end, bounds="()"):
         """Returns a boolean denoting whether the specified date and time is between

@@ -1623,7 +1623,7 @@ class TestArrowSpan:
         with pytest.raises(ValueError):
             floor, ceil = self.arrow.span("hour", bounds="][")
 
-# EDIT: added dehumanize test class
+
 class TestArrowDehumanize:
     def test_dehumanize(self):
 
@@ -1681,9 +1681,6 @@ class TestArrowDehumanize:
 
         with pytest.raises(ValueError):
             arw.dehumanize("in 3 lightyears")
-
-
-
 
 
 @pytest.mark.usefixtures("time_2013_01_01")
