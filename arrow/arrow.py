@@ -1113,6 +1113,83 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
+    # EDIT: added dehumanize function
+    def dehumanize(self, timestring):
+        """ Returns an arrow object relative to the humanized difference in time given.
+            Only works with specifically formatted strings for the time being.
+        :param timestring: A string in the format returned by humanize by default
+            Number must be before unit of time, i.e. (4 hours)
+        Usage:
+            >>> arrow.utcnow()
+            <Arrow [2020-04-17T00:57:03+00:00]>
+            >>> arrow.utcnow().dehumanize("4 hours ago")
+            <Arrow [2020-04-17T20:57:03+00:00]>
+            >>> arrow.utcnow().dehumanize("in 4 hours")
+            <Arrow [2020-04-18T04:57:03+00:00]>
+            >>> arrow.utcnow().dehumanize("4 days 7 hours 10 minutes 5 seconds ago")
+            <Arrow [2020-04-12T19:46:58+00:00]>
+        """
+
+        current = self.fromdatetime(self._datetime)
+
+        times = timestring.split(" ")
+
+        if times[-1] == "ago":
+            sign = -1
+            times = times[:-1]
+        elif times[0] == "in":
+            sign = 1
+            times = times[1:]
+        else:
+            raise ValueError("Invalid prefix or suffix")
+
+        if len(times) % 2 != 0:
+            raise ValueError("Invalid time input")
+
+        second = 0
+        minute = 0
+        hour = 0
+        day = 0
+        week = 0
+        month = 0
+        year = 0
+
+        for i in range(0, len(times), 2):
+            val = int(times[i])
+            unit = times[i + 1]
+
+            if unit in ["second", "seconds"]:
+                second = sign * val
+            elif unit in ["minute", "minutes"]:
+                minute = sign * val
+            elif unit in ["hour", "hours"]:
+                hour = sign * val
+            elif unit in ["day", "days"]:
+                day = sign * val
+            elif unit in ["week", "weeks"]:
+                week = sign * val
+            elif unit in ["month", "months"]:
+                month = sign * val
+            elif unit in ["year", "years"]:
+                year = sign * val
+            else:
+                raise ValueError("Invalid unit of time")
+
+        return current.shift(
+            seconds=second,
+            minutes=minute,
+            hours=hour,
+            days=day,
+            weeks=week,
+            months=month,
+            years=year,
+        )
+
+    # query functions
+
+
+
+
     # query functions
 
     def is_between(self, start, end, bounds="()"):
