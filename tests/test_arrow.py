@@ -1624,63 +1624,85 @@ class TestArrowSpan:
             floor, ceil = self.arrow.span("hour", bounds="][")
 
 
+# EDIT: added dehumanize test class
 class TestArrowDehumanize:
     def test_dehumanize(self):
 
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
 
-        assert arw.dehumanize("in 1 second") == arrow.Arrow(2014, 4, 18, 12, 30, 1)
-        assert arw.dehumanize("1 second ago") == arrow.Arrow(2014, 4, 18, 12, 29, 59)
-        assert arw.dehumanize("in 5 seconds") == arrow.Arrow(2014, 4, 18, 12, 30, 5)
-        assert arw.dehumanize("5 seconds ago") == arrow.Arrow(2014, 4, 18, 12, 29, 55)
+        assert arw.dehumanize("in 1 second", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 30, 1
+        )
+        assert arw.dehumanize("1 second ago", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 29, 59
+        )
+        assert arw.dehumanize("in 5 seconds", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 30, 5
+        )
+        assert arw.dehumanize("5 seconds ago", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 29, 55
+        )
 
-        assert arw.dehumanize("in 1 minute") == arrow.Arrow(2014, 4, 18, 12, 31, 0)
-        assert arw.dehumanize("1 minute ago") == arrow.Arrow(2014, 4, 18, 12, 29, 0)
-        assert arw.dehumanize("in 5 minutes") == arrow.Arrow(2014, 4, 18, 12, 35, 0)
-        assert arw.dehumanize("5 minutes ago") == arrow.Arrow(2014, 4, 18, 12, 25, 0)
+        assert arw.dehumanize("in 1 minute", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 31, 0
+        )
+        assert arw.dehumanize("1 minute ago", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 29, 0
+        )
+        assert arw.dehumanize("in 5 minutes", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 35, 0
+        )
+        assert arw.dehumanize("5 minutes ago", "en") == arrow.Arrow(
+            2014, 4, 18, 12, 25, 0
+        )
 
-        assert arw.dehumanize("in 1 hour") == arrow.Arrow(2014, 4, 18, 13, 30, 0)
-        assert arw.dehumanize("1 hour ago") == arrow.Arrow(2014, 4, 18, 11, 30, 0)
-        assert arw.dehumanize("in 5 hours") == arrow.Arrow(2014, 4, 18, 17, 30, 0)
-        assert arw.dehumanize("5 hours ago") == arrow.Arrow(2014, 4, 18, 7, 30, 0)
+        assert arw.dehumanize("in 1 hour", "en") == arrow.Arrow(2014, 4, 18, 13, 30, 0)
+        assert arw.dehumanize("1 hour ago", "en") == arrow.Arrow(2014, 4, 18, 11, 30, 0)
+        assert arw.dehumanize("in 5 hours", "en") == arrow.Arrow(2014, 4, 18, 17, 30, 0)
+        assert arw.dehumanize("5 hours ago", "en") == arrow.Arrow(2014, 4, 18, 7, 30, 0)
 
-        assert arw.dehumanize("in 1 week") == arrow.Arrow(2014, 4, 25, 12, 30, 0)
-        assert arw.dehumanize("1 week ago") == arrow.Arrow(2014, 4, 11, 12, 30, 0)
-        assert arw.dehumanize("in 5 weeks") == arrow.Arrow(2014, 5, 23, 12, 30, 0)
-        assert arw.dehumanize("5 weeks ago") == arrow.Arrow(2014, 3, 14, 12, 30, 0)
+        assert arw.dehumanize("in 1 week", "en") == arrow.Arrow(2014, 4, 25, 12, 30, 0)
+        assert arw.dehumanize("1 week ago", "en") == arrow.Arrow(2014, 4, 11, 12, 30, 0)
+        assert arw.dehumanize("in 5 weeks", "en") == arrow.Arrow(2014, 5, 23, 12, 30, 0)
+        assert arw.dehumanize("5 weeks ago", "en") == arrow.Arrow(
+            2014, 3, 14, 12, 30, 0
+        )
 
-        assert arw.dehumanize("in 1 month") == arrow.Arrow(2014, 5, 18, 12, 30, 0)
-        assert arw.dehumanize("1 month ago") == arrow.Arrow(2014, 3, 18, 12, 30, 0)
-        assert arw.dehumanize("in 5 months") == arrow.Arrow(2014, 9, 18, 12, 30, 0)
-        assert arw.dehumanize("5 months ago") == arrow.Arrow(2013, 11, 18, 12, 30, 0)
+        assert arw.dehumanize("in 1 month", "en") == arrow.Arrow(2014, 5, 18, 12, 30, 0)
+        assert arw.dehumanize("1 month ago", "en") == arrow.Arrow(
+            2014, 3, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("in 5 months", "en") == arrow.Arrow(
+            2014, 9, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("5 months ago", "en") == arrow.Arrow(
+            2013, 11, 18, 12, 30, 0
+        )
 
-        assert arw.dehumanize("in 1 year") == arrow.Arrow(2015, 4, 18, 12, 30, 0)
-        assert arw.dehumanize("1 year ago") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
-        assert arw.dehumanize("in 5 years") == arrow.Arrow(2019, 4, 18, 12, 30, 0)
-        assert arw.dehumanize("5 years ago") == arrow.Arrow(2009, 4, 18, 12, 30, 0)
+        assert arw.dehumanize("in 1 year", "en") == arrow.Arrow(2015, 4, 18, 12, 30, 0)
+        assert arw.dehumanize("1 year ago", "en") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
+        assert arw.dehumanize("in 5 years", "en") == arrow.Arrow(2019, 4, 18, 12, 30, 0)
+        assert arw.dehumanize("5 years ago", "en") == arrow.Arrow(
+            2009, 4, 18, 12, 30, 0
+        )
 
-        assert arw.dehumanize("in 365 days") == arrow.Arrow(2015, 4, 18, 12, 30, 0)
-        assert arw.dehumanize("365 days ago") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
+        assert arw.dehumanize("in 365 days", "en") == arrow.Arrow(
+            2015, 4, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("365 days ago", "en") == arrow.Arrow(
+            2013, 4, 18, 12, 30, 0
+        )
 
-        assert arw.dehumanize("in 5 hours 10 minutes 4 seconds") == arrow.Arrow(
+        assert arw.dehumanize("in 5 hours 10 minutes 4 seconds", "en") == arrow.Arrow(
             2014, 4, 18, 17, 40, 4
         )
-        assert arw.dehumanize("5 hours 10 minutes 4 seconds ago") == arrow.Arrow(
+        assert arw.dehumanize("5 hours 10 minutes 4 seconds ago", "en") == arrow.Arrow(
             2014, 4, 18, 7, 19, 56
         )
 
-    def test_invalid_input(self):
+        # # German
 
-        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
-
-        with pytest.raises(ValueError):
-            arw.dehumanize("4 hours")
-
-        with pytest.raises(ValueError):
-            arw.dehumanize("in 4 hours 3")
-
-        with pytest.raises(ValueError):
-            arw.dehumanize("in 3 lightyears")
+        # assert arw.dehumanize("vor 2 Jahren", "en") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
 
 
 @pytest.mark.usefixtures("time_2013_01_01")

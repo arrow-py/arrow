@@ -1113,11 +1113,12 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
-    def dehumanize(self, timestring):
+    def dehumanize(self, timestring, locale):
         """Returns an arrow object relative to the humanized difference in time given.
             Only works with specifically formatted strings for the time being.
         :param timestring: A string in the format returned by humanize by default
             Number must be before unit of time, i.e. (4 hours)
+        :param locale: A string that represents which language the param timestring is in.
         Usage:
             >>> arrow.utcnow()
             <Arrow [2020-04-17T00:57:03+00:00]>
@@ -1133,18 +1134,6 @@ class Arrow:
 
         times = timestring.split(" ")
 
-        if times[-1] == "ago":
-            sign = -1
-            times = times[:-1]
-        elif times[0] == "in":
-            sign = 1
-            times = times[1:]
-        else:
-            raise ValueError("Invalid prefix or suffix")
-
-        if len(times) % 2 != 0:
-            raise ValueError("Invalid time input")
-
         second = 0
         minute = 0
         hour = 0
@@ -1153,26 +1142,76 @@ class Arrow:
         month = 0
         year = 0
 
-        for i in range(0, len(times), 2):
-            val = int(times[i])
-            unit = times[i + 1]
-
-            if unit in ["second", "seconds"]:
-                second = sign * val
-            elif unit in ["minute", "minutes"]:
-                minute = sign * val
-            elif unit in ["hour", "hours"]:
-                hour = sign * val
-            elif unit in ["day", "days"]:
-                day = sign * val
-            elif unit in ["week", "weeks"]:
-                week = sign * val
-            elif unit in ["month", "months"]:
-                month = sign * val
-            elif unit in ["year", "years"]:
-                year = sign * val
+        if locale == "en":
+            if times[-1] == "ago":
+                sign = -1
+                times = times[:-1]
+            elif times[0] == "in":
+                sign = 1
+                times = times[1:]
             else:
-                raise ValueError("Invalid unit of time")
+                raise ValueError("Invalid prefix or suffix")
+
+            if len(times) % 2 != 0:
+                raise ValueError("Invalid time input")
+
+            for i in range(0, len(times), 2):
+                val = int(times[i])
+                unit = times[i + 1]
+
+                if unit in ["second", "seconds"]:
+                    second = sign * val
+                elif unit in ["minute", "minutes"]:
+                    minute = sign * val
+                elif unit in ["hour", "hours"]:
+                    hour = sign * val
+                elif unit in ["day", "days"]:
+                    day = sign * val
+                elif unit in ["week", "weeks"]:
+                    week = sign * val
+                elif unit in ["month", "months"]:
+                    month = sign * val
+                elif unit in ["year", "years"]:
+                    year = sign * val
+                else:
+                    raise ValueError("Invalid unit of time")
+
+        # WORK IN PROGRESS
+        # # "vor 2 Jahren"
+        # # Jahren 2 vor
+        # elif locale == "de":
+        #     if times[0] == "vor":
+        #         sign = -1
+        #         times = times[:-1]
+        #     elif times[0] == "in":
+        #         sign = 1
+        #         times = times[1:]
+        #     else:
+        #         raise ValueError("Invalid prefix or suffix")
+
+        #     if len(times) % 2 != 0:
+        #         raise ValueError("Invalid time input")
+
+        #     for i in range(0, len(times), 2):
+        #         val = int(times[i])
+        #         unit = times[i + 1]
+
+        #         if unit in ["second", "seconds"]:
+        #             second = sign * val
+        #         elif unit in ["minute", "minutes"]:
+        #             minute = sign * val
+        #         elif unit in ["hour", "hours"]:
+        #             hour = sign * val
+        #         elif unit in ["day", "days"]:
+        #             day = sign * val
+        #         elif unit in ["week", "weeks"]:
+        #             week = sign * val
+        #         elif unit in ["month", "months"]:
+        #             month = sign * val
+        #         elif unit in ["year", "years"]:
+        #             year = sign * val
+        #         else:
+        #             raise ValueError("Invalid unit of time")
 
         return current.shift(
             seconds=second,
