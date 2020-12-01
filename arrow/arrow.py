@@ -387,7 +387,10 @@ class Arrow:
             whether to include or exclude the start and end values in the span. '(' excludes
             the start, '[' includes the start, ')' excludes the end, and ']' includes the end.
             If the bounds are not specified, the default bound '[)' is used.
-        :param exact: (optional) whether to return a timespan that starts exacly at specificed start
+        :param exact: (optional) whether to have the start of the timespan begin exactly
+            at the time specified by ``start`` and the end of the timespan truncated
+            so as not to extend beyond ``end``.
+
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
         Usage::
