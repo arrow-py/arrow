@@ -5,7 +5,7 @@ from functools import lru_cache
 from dateutil import tz
 
 from arrow import locales
-from arrow.util import iso_to_gregorian, next_weekday, normalize_timestamp
+from arrow.util import next_weekday, normalize_timestamp
 
 
 class ParserError(ValueError):
@@ -415,7 +415,7 @@ class DateTimeParser:
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
-            # we can use strptime (%G, %V, %u) in python 3.6 but these tokens aren't available before that
+
             year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
@@ -424,7 +424,11 @@ class DateTimeParser:
                 # day not given, default to 1
                 day = 1
 
-            dt = iso_to_gregorian(year, week, day)
+            date_string = f"{year}-{week}-{day}"
+
+            #  tokens for ISO 8601 weekdates
+            dt = datetime.strptime(date_string, "%G-%V-%u")
+
             parts["year"] = dt.year
             parts["month"] = dt.month
             parts["day"] = dt.day
