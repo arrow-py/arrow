@@ -1296,6 +1296,18 @@ class Arrow:
 
         return self._datetime.toordinal()
 
+    def fromordinal(self):
+        """Returns the date and time corresponding to corresponding to Gregorian Ordinal.
+
+        Usage::
+
+            >>> arrow.fromordinal(737741)
+            <Arrow [2020-11-12T00:00:00+00:00]>
+
+        """
+
+        print("todo")
+
     def weekday(self):
         """Returns the day of the week as an integer (0-6).
 
@@ -1332,7 +1344,7 @@ class Arrow:
 
         return self._datetime.isocalendar()
 
-    def isoformat(self, sep="T"):
+    def isoformat(self, sep="T", timespec="auto"):
         """Returns an ISO 8601 formatted representation of the date and time.
 
         Usage::
@@ -1342,7 +1354,7 @@ class Arrow:
 
         """
 
-        return self._datetime.isoformat(sep)
+        return self._datetime.isoformat(sep, timespec)
 
     def ctime(self):
         """Returns a ctime formatted representation of the date and time.

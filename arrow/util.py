@@ -2,7 +2,13 @@ import datetime
 
 from dateutil.rrule import WEEKLY, rrule
 
-from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
+from arrow.constants import (
+    MAX_ORDINAL,
+    MAX_TIMESTAMP,
+    MAX_TIMESTAMP_MS,
+    MAX_TIMESTAMP_US,
+    MIN_ORDINAL,
+)
 
 
 def next_weekday(start_date, weekday):
@@ -46,6 +52,20 @@ def is_timestamp(value):
         return False
 
 
+def is_ordinal(value):
+    """Check if value is a valid ordinal timestamp."""
+    if isinstance(value, bool):
+        return False
+    if not (isinstance(value, int) or isinstance(value, str)):
+        return False
+    try:
+        if int(value) not in range(MIN_ORDINAL, MAX_ORDINAL):
+            return False
+    except ValueError:
+        return False
+    return True
+
+
 def normalize_timestamp(timestamp):
     """Normalize millisecond and microsecond timestamps into normal timestamps."""
     if timestamp > MAX_TIMESTAMP:
@@ -84,4 +104,4 @@ def validate_bounds(bounds):
         )
 
 
-__all__ = ["next_weekday", "is_timestamp", "iso_to_gregorian"]
+__all__ = ["next_weekday", "is_timestamp", "is_ordinal", "iso_to_gregorian"]

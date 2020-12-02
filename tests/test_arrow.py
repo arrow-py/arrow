@@ -509,6 +509,17 @@ class TestArrowDatetimeInterface:
 
         assert result == self.arrow._datetime.isoformat()
 
+    def test_isoformat_timespec(self):
+
+        result1 = self.arrow.isoformat(timespec="hours")
+        result2 = self.arrow.isoformat(timespec="microseconds")
+        result3 = self.arrow.isoformat(timespec="milliseconds")
+        result4 = self.arrow.isoformat(sep="x", timespec="seconds")
+        assert result1 == self.arrow._datetime.isoformat(timespec="hours")
+        assert result2 == self.arrow._datetime.isoformat()
+        assert result3 == self.arrow._datetime.isoformat(timespec="milliseconds")
+        assert result4 == self.arrow._datetime.isoformat(sep="x", timespec="seconds")
+
     def test_simplejson(self):
 
         result = json.dumps({"v": self.arrow.for_json()}, for_json=True)

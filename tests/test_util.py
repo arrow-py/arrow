@@ -56,6 +56,38 @@ class TestUtil:
         full_datetime = "2019-06-23T13:12:42"
         assert not util.is_timestamp(full_datetime)
 
+    def test_is_ordinal(self):
+        timestamp_float = time.time()
+        timestamp_int = int(timestamp_float)
+        timestamp_str = str(timestamp_int)
+
+        assert not util.is_ordinal(timestamp_float)
+        assert not util.is_ordinal(timestamp_int)
+        assert not util.is_ordinal(-1 * timestamp_int)
+        assert not util.is_ordinal(timestamp_str)
+
+        assert not util.is_ordinal(0)
+        assert not util.is_ordinal(True)
+        assert not util.is_ordinal(False)
+        assert util.is_ordinal(1)
+
+        ordinal = datetime.utcnow().toordinal()
+        ordinal_str = str(ordinal)
+        assert util.is_ordinal(ordinal_str)
+        assert util.is_ordinal(ordinal)
+        assert not util.is_ordinal(-1 * ordinal)
+
+        ordinal_float = float(ordinal) + 0.5
+        assert not util.is_ordinal(ordinal_float)
+
+        full_datetime = "2019-06-23T13:12:42"
+        assert not util.is_ordinal(full_datetime)
+
+        class InvalidOrdinal:
+            pass
+
+        assert not util.is_timestamp(InvalidOrdinal())
+
     def test_normalize_timestamp(self):
         timestamp = 1591161115.194556
         millisecond_timestamp = 1591161115194
