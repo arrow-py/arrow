@@ -53,13 +53,13 @@ def is_timestamp(value):
 
 
 def is_ordinal(value):
-    """Check if value is a valid ordinal timestamp."""
+    """Check if value is a valid ordinal."""
     if isinstance(value, bool):
         return False
     if not (isinstance(value, int) or isinstance(value, str)):
         return False
     try:
-        if int(value) not in range(MIN_ORDINAL, MAX_ORDINAL):
+        if int(value) not in range(MIN_ORDINAL, MAX_ORDINAL + 1):
             return False
     except ValueError:
         return False

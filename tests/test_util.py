@@ -70,6 +70,7 @@ class TestUtil:
         assert not util.is_ordinal(True)
         assert not util.is_ordinal(False)
         assert util.is_ordinal(1)
+        assert util.is_ordinal(datetime.max.toordinal())
 
         ordinal = datetime.utcnow().toordinal()
         ordinal_str = str(ordinal)

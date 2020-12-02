@@ -295,6 +295,35 @@ class Arrow:
             fold=getattr(dt, "fold", 0),
         )
 
+    @classmethod
+    def fromordinal(cls, ordinal):
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object corresponding
+            to the Gregorian Ordinal.
+
+        :param ordinal: an ``int`` or a ``str`` that converts to an ``int``.
+
+        Usage::
+
+            >>> arrow.fromordinal(737741)
+            <Arrow [2020-11-12T00:00:00+00:00]>
+
+        """
+
+        if not util.is_ordinal(ordinal):
+            raise ValueError(f"The provided ordinal '{ordinal}' is invalid.")
+        dt = datetime.fromordinal(int(ordinal))
+        return cls(
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.microsecond,
+            dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
+        )
+
     # factories: ranges and spans
 
     @classmethod
@@ -1295,18 +1324,6 @@ class Arrow:
         """
 
         return self._datetime.toordinal()
-
-    def fromordinal(self):
-        """Returns the date and time corresponding to corresponding to Gregorian Ordinal.
-
-        Usage::
-
-            >>> arrow.fromordinal(737741)
-            <Arrow [2020-11-12T00:00:00+00:00]>
-
-        """
-
-        print("todo")
 
     def weekday(self):
         """Returns the day of the week as an integer (0-6).

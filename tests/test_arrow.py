@@ -182,6 +182,23 @@ class TestTestArrowFactory:
             2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")
         )
 
+    def test_fromordinal(self):
+
+        timestamp = time.time()
+        with pytest.raises(ValueError):
+            arrow.Arrow.fromordinal(timestamp)
+
+        with pytest.raises(ValueError):
+            arrow.Arrow.fromordinal("not_an_int")
+
+        ordinal = arrow.Arrow.utcnow().toordinal()
+        result1 = arrow.Arrow.fromordinal(ordinal)
+        result2 = arrow.Arrow.fromordinal(str(ordinal))
+        dt = datetime.fromordinal(ordinal)
+
+        assert result1.naive == dt
+        assert result2.naive == dt
+
 
 @pytest.mark.usefixtures("time_2013_02_03")
 class TestTestArrowRepresentation:
