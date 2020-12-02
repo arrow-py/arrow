@@ -1129,11 +1129,33 @@ class Arrow:
             >>> arrow.utcnow().dehumanize("4 days 7 hours 10 minutes 5 seconds ago")
             <Arrow [2020-04-12T19:46:58+00:00]>
         """
-
         current = self.fromdatetime(self._datetime)
 
+        if locale != "en":  # translates to english, regardless of language
+            # this currently works for hindi, need to generalize it to work for other similarly structured languages
+            locale_data = locales.get_locale(locale)
+            print(locale_data.timeframes)
+            times = timestring.split(" ")
+            print(times)
+            # instead of hardcoding these and indexing into specific parts of "times" we need to
+            # somehow search the timestring to find a matching past/future, number, timeframe in the dicts from locale
+            # perhaps some sort of loop to check if any substring of the timestring exists in the numbers dict, and so on
+            if times[0] in locale_data.numbers:
+                times[0] = locale_data.numbers[times[0]]
+            temp = "{0} " + times[1]
+            if times[1] in locale_data.reversed_timeframes:
+                print("This is a test,", locale_data.reversed_timeframes[times[1]])
+                times[1] = locale_data.reversed_timeframes[times[1]]
+            elif temp in locale_data.reversed_timeframes:
+                times[1] = locale_data.reversed_timeframes[temp]
+            if times[-1] in locale_data.past:
+                times[-1] = "ago"
+                timestring = str(times[0]) + " " + str(times[1]) + " " + str(times[-1])
+            if times[-1] in locale_data.future:
+                times[-1] = "in"
+                timestring = str(times[-1]) + " " + str(times[0]) + " " + str(times[1])
+        print(times)
         times = timestring.split(" ")
-
         second = 0
         minute = 0
         hour = 0
@@ -1141,44 +1163,42 @@ class Arrow:
         week = 0
         month = 0
         year = 0
+        # if locale == "en":
+        if times[-1] == "ago":
+            sign = -1
+            times = times[:-1]
+        elif times[0] == "in":
+            sign = 1
+            times = times[1:]
+        else:
+            raise ValueError("Invalid prefix or suffix")
 
-        if locale == "en":
-            if times[-1] == "ago":
-                sign = -1
-                times = times[:-1]
-            elif times[0] == "in":
-                sign = 1
-                times = times[1:]
+        if len(times) % 2 != 0:
+            raise ValueError("Invalid time input")
+
+        for i in range(0, len(times), 2):
+            val = int(times[i])
+            unit = times[i + 1]
+
+            if unit in ["second", "seconds"]:
+                second = sign * val
+            elif unit in ["minute", "minutes"]:
+                minute = sign * val
+            elif unit in ["hour", "hours"]:
+                hour = sign * val
+            elif unit in ["day", "days"]:
+                day = sign * val
+            elif unit in ["week", "weeks"]:
+                week = sign * val
+            elif unit in ["month", "months"]:
+                month = sign * val
+            elif unit in ["year", "years"]:
+                year = sign * val
             else:
-                raise ValueError("Invalid prefix or suffix")
-
-            if len(times) % 2 != 0:
-                raise ValueError("Invalid time input")
-
-            for i in range(0, len(times), 2):
-                val = int(times[i])
-                unit = times[i + 1]
-
-                if unit in ["second", "seconds"]:
-                    second = sign * val
-                elif unit in ["minute", "minutes"]:
-                    minute = sign * val
-                elif unit in ["hour", "hours"]:
-                    hour = sign * val
-                elif unit in ["day", "days"]:
-                    day = sign * val
-                elif unit in ["week", "weeks"]:
-                    week = sign * val
-                elif unit in ["month", "months"]:
-                    month = sign * val
-                elif unit in ["year", "years"]:
-                    year = sign * val
-                else:
-                    raise ValueError("Invalid unit of time")
-
+                raise ValueError("Invalid unit of time")
         # WORK IN PROGRESS
-        # # "vor 2 Jahren"
-        # # Jahren 2 vor
+        # "vor 2 Jahren"
+        #  Jahren 2 vor
         # elif locale == "de":
         #     if times[0] == "vor":
         #         sign = -1
@@ -1212,7 +1232,6 @@ class Arrow:
         #             year = sign * val
         #         else:
         #             raise ValueError("Invalid unit of time")
-
         return current.shift(
             seconds=second,
             minutes=minute,
