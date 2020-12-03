@@ -1129,6 +1129,18 @@ class Arrow:
             >>> arrow.utcnow().dehumanize("4 days 7 hours 10 minutes 5 seconds ago")
             <Arrow [2020-04-12T19:46:58+00:00]>
         """
+        # if it's a romance language (French, Spanish, Portuguese, Italian)
+        # Italian:        past = "{0} fa"       future = "tra {0}" # ITALIAN PAST EDGE CASE "it", "it_it"
+        # English         past = "{0} ago"      future = "in {0}"  # ENGLISH PAST EDGE CASE IS SAME
+        # French:         past = "il y a {0}"   future = "dans {0}"
+        # Spanish:        past = "hace {0}"     future = "en {0}"
+        # Portuguese:     past = "há {0}"        future = "em {0}"
+
+        # if a substring of the timestring is contained in the past list for that locale, then set to past and convert it to english
+        # if substring of timestring is a number contained, then convert it to english
+        # if a substring is a timepsan, convert to english
+
+        # loop through dictonary/list for past and do a find
         current = self.fromdatetime(self._datetime)
 
         if locale != "en":  # translates to english, regardless of language
@@ -1140,21 +1152,94 @@ class Arrow:
             # instead of hardcoding these and indexing into specific parts of "times" we need to
             # somehow search the timestring to find a matching past/future, number, timeframe in the dicts from locale
             # perhaps some sort of loop to check if any substring of the timestring exists in the numbers dict, and so on
-            if times[0] in locale_data.numbers:
-                times[0] = locale_data.numbers[times[0]]
-            temp = "{0} " + times[1]
-            if times[1] in locale_data.reversed_timeframes:
-                print("This is a test,", locale_data.reversed_timeframes[times[1]])
-                times[1] = locale_data.reversed_timeframes[times[1]]
-            elif temp in locale_data.reversed_timeframes:
-                times[1] = locale_data.reversed_timeframes[temp]
-            if times[-1] in locale_data.past:
-                times[-1] = "ago"
-                timestring = str(times[0]) + " " + str(times[1]) + " " + str(times[-1])
-            if times[-1] in locale_data.future:
-                times[-1] = "in"
-                timestring = str(times[-1]) + " " + str(times[0]) + " " + str(times[1])
-        print(times)
+
+            counter = 0
+            new_times = {}
+            for time in times:
+                print(time)
+                if time in locale_data.past:
+                    print("past here")
+                    times[counter] = "ago"
+                    new_times["times"] = times[counter]
+                elif time in locale_data.future:
+                    print("future here")
+                    times[counter] = "in"
+                    new_times["times"] = times[counter]
+                elif time in locale_data.numbers:
+                    times[counter] = locale_data.numbers[time]
+                    new_times["number"] = times[counter]
+                elif time in locale_data.reversed_timeframes:
+                    times[counter] = locale_data.reversed_timeframes[time]
+                    new_times["timeframe"] = times[counter]
+                counter = counter + 1
+
+            # restructure times
+            timestring_updated = ""
+            if new_times["times"] == "in":
+                timestring_updated = (
+                    str(new_times["times"])
+                    + " "
+                    + str(new_times["number"])
+                    + " "
+                    + str(new_times["timeframe"])
+                )
+            else:
+                timestring_updated = (
+                    str(new_times["number"])
+                    + " "
+                    + str(new_times["timeframe"])
+                    + " "
+                    + str(new_times["times"])
+                )
+            print(timestring_updated)
+            timestring = timestring_updated
+            # Past tense and number comes first
+            # if (
+            #     locale_data.past.find("{0}") == 0
+            # ):  # English, Hindi, & Ukrainian are examples: {0} ago or "{0} पहले"
+            #     sign = -1
+            #     times = times[:-1]
+
+            # # Past tense and word comes before number
+            # elif (
+            #     times[0] in locale_data.past
+            # ):  # German and Spanish are examples: vor {0} or hace{0}
+            #     sign = -1
+            #     times = times[1:]
+
+            # # future tense and number comes first
+            # elif (
+            #     locale_data.future.find("{0}") == 0
+            # ):  # Finnish & Hindi are examples: "{0} kuluttua" or "{0} बाद"
+            #     sign = 1
+            #     times = times[:-1]
+
+            # # Future tense and word comes before number
+            # elif (
+            #     times[0] in locale_data.future
+            # ):  # German English and Spanish are examples: in {0} or en {0}
+            #     sign = 1
+            #     times = times[1:]
+
+            # # None of the cases worked, edge case?
+            # else:
+            #     pass
+
+        #     if times[0] in locale_data.numbers: # works for hindi language
+        #         times[0] = locale_data.numbers[times[0]]
+        #     temp = "{0} " + times[1]
+        #     if times[1] in locale_data.reversed_timeframes:
+        #         print("This is a test,", locale_data.reversed_timeframes[times[1]])
+        #         times[1] = locale_data.reversed_timeframes[times[1]]
+        #     elif temp in locale_data.reversed_timeframes:
+        #         times[1] = locale_data.reversed_timeframes[temp]
+        #     if times[-1] in locale_data.past:
+        #         times[-1] = "ago"
+        #         timestring = str(times[0]) + " " + str(times[1]) + " " + str(times[-1])
+        #     if times[-1] in locale_data.future:
+        #         times[-1] = "in"
+        #         timestring = str(times[-1]) + " " + str(times[0]) + " " + str(times[1])
+        # print(times)
         times = timestring.split(" ")
         second = 0
         minute = 0

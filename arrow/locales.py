@@ -406,6 +406,10 @@ class SpanishLocale(Locale):
     future = "en {0}"
     and_word = "y"
 
+    numbers = {"uno": 1, "dos": 2}
+
+    reversed_timeframes = {"minutos": "minutes"}
+
     timeframes = {
         "now": "ahora",
         "second": "un segundo",
@@ -2809,17 +2813,17 @@ class HindiLocale(Locale):
     reversed_timeframes = {
         "now": "अभी",
         "second": "एक पल",
-        "{0} सेकंड्": "seconds",
+        "सेकंड्": "second",
         "एक मिनट": "minute",
-        "{0} मिनट": "minutes",
+        "मिनट": "minutes",
         "hour": "एक घंटा",
-        "{0} घंटे": "hours",
+        "घंटे": "hours",
         "day": "एक दिन",
         "days": "{0} दिन",
         "month": "एक माह ",
         "months": "{0} महीने ",
         "year": "एक वर्ष ",
-        "{0} साल": "years",
+        "साल": "years",
     }
 
     timeframes = {
