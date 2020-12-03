@@ -1168,13 +1168,30 @@ class Arrow:
                 elif time in locale_data.numbers:
                     times[counter] = locale_data.numbers[time]
                     new_times["number"] = times[counter]
-                elif time in locale_data.reversed_timeframes:
+                # ADDED HERE
+                # elif time.isdigit():  # isdigit() returns true when it's a positive int
+                #     times[counter] = int(time) # convert the str to an int
+                #     new_times["number"] = times[counter]
+                elif (
+                    time in locale_data.reversed_timeframes
+                ):  # could we access this by doing something like timeframes.values()?
                     times[counter] = locale_data.reversed_timeframes[time]
                     new_times["timeframe"] = times[counter]
                 counter = counter + 1
 
             # restructure times
             timestring_updated = ""
+
+            # ADDED HERE
+            # Comments: Spanish example: in three seconds
+            # before: time frame = "{0} segundos"
+            # after: time frame = tres segundos
+            # this won't work for everything most likely
+
+            # time_frame = locale_data.time_frames["timeframe"]
+            # if time_frame.find("{0}") != -1:
+            #     time_frame.replace("{0}", str(new_times["number"]))
+
             if new_times["times"] == "in":
                 timestring_updated = (
                     str(new_times["times"])
@@ -1183,6 +1200,9 @@ class Arrow:
                     + " "
                     + str(new_times["timeframe"])
                 )
+                # ADDED HERE
+                # timestring_updated = locale_data.future # get the string "en {0}" and replace with our newly formatted time frame string
+                # timestring_updated.replace("{0}", time_frame)
             else:
                 timestring_updated = (
                     str(new_times["number"])
@@ -1191,6 +1211,10 @@ class Arrow:
                     + " "
                     + str(new_times["times"])
                 )
+                # ADDED HERE
+                # timestring_updated = locale_data.past
+                # timestring_updated.replace("{0}", time_frame)
+
             print(timestring_updated)
             timestring = timestring_updated
             # Past tense and number comes first
