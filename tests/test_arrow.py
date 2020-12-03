@@ -1801,6 +1801,34 @@ class TestArrowSpan:
         assert result_floor == expected_floor
         assert result_ceil == expected_ceil
 
+    def test_exact_inclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("minute", bounds="[]", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 3, 42, 22, 8923, tzinfo=tz.tzutc())
+
+    def test_exact_exclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("day", bounds="(]", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 16, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+
+    def test_exact_exclusive_exclusive(self):
+
+        floor, ceil = self.arrow.span("second", bounds="()", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 3, 41, 23, 8922, tzinfo=tz.tzutc())
+
+    def test_all_parameters_specified(self):
+
+        floor, ceil = self.arrow.span("week", bounds="()", exact=True, count=2)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 3, 1, 3, 41, 22, 8922, tzinfo=tz.tzutc())
+
 
 @pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanize:
