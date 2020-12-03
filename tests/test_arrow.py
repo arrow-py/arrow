@@ -1484,6 +1484,150 @@ class TestArrowSpanRange:
             (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 7, 1)),
         ]
 
+    def test_exact_bound_exclude(self):
+
+        result = list(
+            arrow.Arrow.span_range(
+                "hour",
+                datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 17, 15),
+                bounds="[)",
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 12, 30),
+                arrow.Arrow(2013, 5, 5, 13, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 13, 30),
+                arrow.Arrow(2013, 5, 5, 14, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14, 30),
+                arrow.Arrow(2013, 5, 5, 15, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 15, 30),
+                arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16, 30),
+                arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+            ),
+        ]
+
+        assert result == expected
+
+    def test_exact_floor_equals_end(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "minute",
+                datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 12, 40),
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 12, 30),
+                arrow.Arrow(2013, 5, 5, 12, 30, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 31),
+                arrow.Arrow(2013, 5, 5, 12, 31, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 32),
+                arrow.Arrow(2013, 5, 5, 12, 32, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 33),
+                arrow.Arrow(2013, 5, 5, 12, 33, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 34),
+                arrow.Arrow(2013, 5, 5, 12, 34, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 35),
+                arrow.Arrow(2013, 5, 5, 12, 35, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 36),
+                arrow.Arrow(2013, 5, 5, 12, 36, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 37),
+                arrow.Arrow(2013, 5, 5, 12, 37, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 38),
+                arrow.Arrow(2013, 5, 5, 12, 38, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 12, 39),
+                arrow.Arrow(2013, 5, 5, 12, 39, 59, 999999),
+            ),
+        ]
+
+        assert result == expected
+
+    def test_exact_bound_include(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "hour",
+                datetime(2013, 5, 5, 2, 30),
+                datetime(2013, 5, 5, 6, 00),
+                bounds="(]",
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 2, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 3, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 3, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 4, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 4, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 5, 30, 00, 0),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 5, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 6, 00),
+            ),
+        ]
+
+        assert result == expected
+
+    def test_small_interval_exact_open_bounds(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "minute",
+                datetime(2013, 5, 5, 2, 30),
+                datetime(2013, 5, 5, 2, 31),
+                bounds="()",
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 2, 30, 00, 1),
+                arrow.Arrow(2013, 5, 5, 2, 30, 59, 999999),
+            ),
+        ]
+
+        assert result == expected
+
 
 class TestArrowInterval:
     def test_incorrect_input(self):
@@ -1532,6 +1676,30 @@ class TestArrowInterval:
             (arrow.Arrow(2013, 5, 5, 14), arrow.Arrow(2013, 5, 5, 16)),
             (arrow.Arrow(2013, 5, 5, 16), arrow.Arrow(2013, 5, 5, 18)),
         ]
+
+    def test_exact(self):
+        result = list(
+            arrow.Arrow.interval(
+                "hour",
+                datetime(2013, 5, 5, 12, 30),
+                datetime(2013, 5, 5, 17, 15),
+                4,
+                exact=True,
+            )
+        )
+
+        expected = [
+            (
+                arrow.Arrow(2013, 5, 5, 12, 30),
+                arrow.Arrow(2013, 5, 5, 16, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16, 30),
+                arrow.Arrow(2013, 5, 5, 17, 14, 59, 999999),
+            ),
+        ]
+
+        assert result == expected
 
 
 @pytest.mark.usefixtures("time_2013_02_15")
@@ -1650,6 +1818,44 @@ class TestArrowSpan:
 
         with pytest.raises(ValueError):
             floor, ceil = self.arrow.span("hour", bounds="][")
+
+    def test_exact(self):
+
+        result_floor, result_ceil = self.arrow.span("hour", exact=True)
+
+        expected_floor = datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+        expected_ceil = datetime(2013, 2, 15, 4, 41, 22, 8922, tzinfo=tz.tzutc())
+
+        assert result_floor == expected_floor
+        assert result_ceil == expected_ceil
+
+    def test_exact_inclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("minute", bounds="[]", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 3, 42, 22, 8923, tzinfo=tz.tzutc())
+
+    def test_exact_exclusive_inclusive(self):
+
+        floor, ceil = self.arrow.span("day", bounds="(]", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 16, 3, 41, 22, 8923, tzinfo=tz.tzutc())
+
+    def test_exact_exclusive_exclusive(self):
+
+        floor, ceil = self.arrow.span("second", bounds="()", exact=True)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 3, 41, 23, 8922, tzinfo=tz.tzutc())
+
+    def test_all_parameters_specified(self):
+
+        floor, ceil = self.arrow.span("week", bounds="()", exact=True, count=2)
+
+        assert floor == datetime(2013, 2, 15, 3, 41, 22, 8924, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 3, 1, 3, 41, 22, 8922, tzinfo=tz.tzutc())
 
 
 @pytest.mark.usefixtures("time_2013_01_01")
