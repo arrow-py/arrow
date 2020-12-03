@@ -541,20 +541,21 @@ class Arrow:
         start = cls.fromdatetime(start, tzinfo).span(frame, exact=exact)[0]
         end = cls.fromdatetime(end, tzinfo)
         _range = cls.range(frame, start, end, tz, limit)
-        for r in _range:
-            if exact:
-                floor, ceil = r.span(frame, bounds=bounds, exact=exact)
-                if ceil > end:
-                    ceil = end
-                    if bounds[1] == ")":
-                        ceil += relativedelta(microseconds=-1)
-                if floor == end:
-                    break  # TODO: implementation detail: break OR yield floor, floor IF bounds[1] == "]"
-                elif floor + relativedelta(microseconds=-1) == end:
-                    break
-                yield floor, ceil
-            else:
+        if not exact:
+            for r in _range:
                 yield r.span(frame, bounds=bounds, exact=exact)
+
+        for r in _range:
+            floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+            if ceil > end:
+                ceil = end
+                if bounds[1] == ")":
+                    ceil += relativedelta(microseconds=-1)
+            if floor == end:
+                break
+            elif floor + relativedelta(microseconds=-1) == end:
+                break
+            yield floor, ceil
 
     @classmethod
     def interval(cls, frame, start, end, interval=1, tz=None, bounds="[)", exact=False):
