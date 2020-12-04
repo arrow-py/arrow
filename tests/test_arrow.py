@@ -1624,7 +1624,6 @@ class TestArrowSpan:
             floor, ceil = self.arrow.span("hour", bounds="][")
 
 
-# EDIT: added dehumanize test class
 class TestArrowDehumanize:
     def test_dehumanize(self):
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
@@ -1699,6 +1698,9 @@ class TestArrowDehumanize:
             2014, 4, 18, 7, 19, 56
         )
 
+    def test_locale_hindi(self):
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
         assert arw.dehumanize("एक सेकंड् बाद", "hi") == arrow.Arrow(
             2014, 4, 18, 12, 30, 1
         )
@@ -1709,11 +1711,29 @@ class TestArrowDehumanize:
             2014, 4, 18, 13, 29, 0
         )
 
+    def test_locale_spanish(self):
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
         assert arw.dehumanize("hace dos minutos", "es") == arrow.Arrow(
             2014, 4, 18, 12, 28, 0
         )
-        # German
-        # assert arw.dehumanize("vor 2 Jahren", "en") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
+
+    def test_locale_french(self):
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
+        assert arw.dehumanize("il y a deux minutes", "fr") == arrow.Arrow(
+            2014, 4, 18, 12, 28, 0
+        )
+
+    def test_locale_german(self):
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
+        assert arw.dehumanize("vor einer Minute", "de") == arrow.Arrow(
+            2014, 4, 18, 12, 29, 0
+        )
+        assert arw.dehumanize("vor 1 Minute", "de") == arrow.Arrow(
+            2014, 4, 18, 12, 29, 0
+        )
 
 
 @pytest.mark.usefixtures("time_2013_01_01")

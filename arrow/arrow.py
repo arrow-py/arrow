@@ -1129,141 +1129,85 @@ class Arrow:
             >>> arrow.utcnow().dehumanize("4 days 7 hours 10 minutes 5 seconds ago")
             <Arrow [2020-04-12T19:46:58+00:00]>
         """
-        # if it's a romance language (French, Spanish, Portuguese, Italian)
-        # Italian:        past = "{0} fa"       future = "tra {0}" # ITALIAN PAST EDGE CASE "it", "it_it"
-        # English         past = "{0} ago"      future = "in {0}"  # ENGLISH PAST EDGE CASE IS SAME
-        # French:         past = "il y a {0}"   future = "dans {0}"
-        # Spanish:        past = "hace {0}"     future = "en {0}"
-        # Portuguese:     past = "há {0}"        future = "em {0}"
 
-        # if a substring of the timestring is contained in the past list for that locale, then set to past and convert it to english
-        # if substring of timestring is a number contained, then convert it to english
-        # if a substring is a timepsan, convert to english
-
-        # loop through dictonary/list for past and do a find
         current = self.fromdatetime(self._datetime)
 
-        if locale != "en":  # translates to english, regardless of language
-            # this currently works for hindi, need to generalize it to work for other similarly structured languages
-            locale_data = locales.get_locale(locale)
-            print(locale_data.timeframes)
-            times = timestring.split(" ")
-            print(times)
-            # instead of hardcoding these and indexing into specific parts of "times" we need to
-            # somehow search the timestring to find a matching past/future, number, timeframe in the dicts from locale
-            # perhaps some sort of loop to check if any substring of the timestring exists in the numbers dict, and so on
+        # TODO:
+        # - fill in numbers and reversed_timeframe dictionaries for hindi, spanish, french, german and add test cases for these locales
+        # - SEE HINDI locale in locales.py for an example of what dicts to add (both are hindi -> english)
+        # - potentially work on some of these limitations
 
+        # Current limitations:
+        # - dehumanize requires an existing arrow object
+        #  - all strings have to be spelled exactly as dictionary entries
+        # - Doesn't work with:
+        # - past and futures that have {0} in the middle of the string (using in operator like: "time in locale_data.past" wouldn't work)
+        # - languages that don't separate by space
+        # - some languages have cases where "ONE DAY" translates differently than "ONE" + "DAY"
+        # similar to above: sometimes timeframes dict has a singular timeframe including the digit. for example
+        # E.G. hindi  day = एक दिन (one day) but days = दिन . this wouldn't work with current implementation, had to modify reversed timestring to not include the digit
+        # - reversed_timeframe dictionary is a difficult task to create for each locale as many locales have various ways to represent the same word (e.g. Polish uses lists)
+
+        if locale != "en":  # translates timestring to English
+            locale_data = locales.get_locale(locale)
+            times = timestring.split(" ")
+            # print(times)
             counter = 0
-            new_times = {}
+            time_data_dict = {}
             for time in times:
-                print(time)
-                if time in locale_data.past:
-                    print("past here")
+                # print(time)
+                if (
+                    time in locale_data.past
+                ):  # converting language used to represent past into "ago"
+                    # print("past here")
                     times[counter] = "ago"
-                    new_times["times"] = times[counter]
-                elif time in locale_data.future:
-                    print("future here")
-                    times[counter] = "in"
-                    new_times["times"] = times[counter]
-                elif time in locale_data.numbers:
-                    times[counter] = locale_data.numbers[time]
-                    new_times["number"] = times[counter]
-                # ADDED HERE
-                # elif time.isdigit():  # isdigit() returns true when it's a positive int
-                #     times[counter] = int(time) # convert the str to an int
-                #     new_times["number"] = times[counter]
+                    time_data_dict["times"] = times[counter]
                 elif (
+                    time in locale_data.future
+                ):  # converting language used to represent future into "in"
+                    # print("future here")
+                    times[counter] = "in"
+                    time_data_dict["times"] = times[counter]
+                elif (
+                    time in locale_data.numbers
+                ):  # converting locale's given number into English numerals
+                    times[counter] = locale_data.numbers[time]
+                    time_data_dict["number"] = times[counter]
+                elif time.isdigit():  # if English digit specified add to dict
+                    times[counter] = int(time)
+                    time_data_dict["number"] = times[counter]
+                elif (  # convert locale's given timeframe into English
                     time in locale_data.reversed_timeframes
-                ):  # could we access this by doing something like timeframes.values()?
+                ):
                     times[counter] = locale_data.reversed_timeframes[time]
-                    new_times["timeframe"] = times[counter]
+                    time_data_dict["timeframe"] = times[counter]
                 counter = counter + 1
 
-            # restructure times
-            timestring_updated = ""
+            # format translated timestring
+            translated_timestring = ""
 
-            # ADDED HERE
-            # Comments: Spanish example: in three seconds
-            # before: time frame = "{0} segundos"
-            # after: time frame = tres segundos
-            # this won't work for everything most likely
-
-            # time_frame = locale_data.time_frames["timeframe"]
-            # if time_frame.find("{0}") != -1:
-            #     time_frame.replace("{0}", str(new_times["number"]))
-
-            if new_times["times"] == "in":
-                timestring_updated = (
-                    str(new_times["times"])
+            if time_data_dict["times"] == "in":
+                translated_timestring = (
+                    str(time_data_dict["times"])
                     + " "
-                    + str(new_times["number"])
+                    + str(time_data_dict["number"])
                     + " "
-                    + str(new_times["timeframe"])
+                    + str(time_data_dict["timeframe"])
                 )
-                # ADDED HERE
-                # timestring_updated = locale_data.future # get the string "en {0}" and replace with our newly formatted time frame string
-                # timestring_updated.replace("{0}", time_frame)
+
             else:
-                timestring_updated = (
-                    str(new_times["number"])
+                translated_timestring = (
+                    str(time_data_dict["number"])
                     + " "
-                    + str(new_times["timeframe"])
+                    + str(time_data_dict["timeframe"])
                     + " "
-                    + str(new_times["times"])
+                    + str(time_data_dict["times"])
                 )
-                # ADDED HERE
-                # timestring_updated = locale_data.past
-                # timestring_updated.replace("{0}", time_frame)
 
-            print(timestring_updated)
-            timestring = timestring_updated
-            # Past tense and number comes first
-            # if (
-            #     locale_data.past.find("{0}") == 0
-            # ):  # English, Hindi, & Ukrainian are examples: {0} ago or "{0} पहले"
-            #     sign = -1
-            #     times = times[:-1]
+            print(translated_timestring)
+            timestring = translated_timestring
 
-            # # Past tense and word comes before number
-            # elif (
-            #     times[0] in locale_data.past
-            # ):  # German and Spanish are examples: vor {0} or hace{0}
-            #     sign = -1
-            #     times = times[1:]
-
-            # # future tense and number comes first
-            # elif (
-            #     locale_data.future.find("{0}") == 0
-            # ):  # Finnish & Hindi are examples: "{0} kuluttua" or "{0} बाद"
-            #     sign = 1
-            #     times = times[:-1]
-
-            # # Future tense and word comes before number
-            # elif (
-            #     times[0] in locale_data.future
-            # ):  # German English and Spanish are examples: in {0} or en {0}
-            #     sign = 1
-            #     times = times[1:]
-
-            # # None of the cases worked, edge case?
-            # else:
-            #     pass
-
-        #     if times[0] in locale_data.numbers: # works for hindi language
-        #         times[0] = locale_data.numbers[times[0]]
-        #     temp = "{0} " + times[1]
-        #     if times[1] in locale_data.reversed_timeframes:
-        #         print("This is a test,", locale_data.reversed_timeframes[times[1]])
-        #         times[1] = locale_data.reversed_timeframes[times[1]]
-        #     elif temp in locale_data.reversed_timeframes:
-        #         times[1] = locale_data.reversed_timeframes[temp]
-        #     if times[-1] in locale_data.past:
-        #         times[-1] = "ago"
-        #         timestring = str(times[0]) + " " + str(times[1]) + " " + str(times[-1])
-        #     if times[-1] in locale_data.future:
-        #         times[-1] = "in"
-        #         timestring = str(times[-1]) + " " + str(times[0]) + " " + str(times[1])
-        # print(times)
+        # begin dehumanize implementation with English timestring
         times = timestring.split(" ")
         second = 0
         minute = 0
@@ -1272,7 +1216,7 @@ class Arrow:
         week = 0
         month = 0
         year = 0
-        # if locale == "en":
+
         if times[-1] == "ago":
             sign = -1
             times = times[:-1]
@@ -1280,10 +1224,12 @@ class Arrow:
             sign = 1
             times = times[1:]
         else:
-            raise ValueError("Invalid prefix or suffix")
+            raise ValueError(
+                "Invalid prefix or suffix. Please use 'in' to represent a future timestring and 'ago' to represent a past timestring."
+            )
 
         if len(times) % 2 != 0:
-            raise ValueError("Invalid time input")
+            raise ValueError("Invalid time input.")
 
         for i in range(0, len(times), 2):
             val = int(times[i])
@@ -1304,43 +1250,10 @@ class Arrow:
             elif unit in ["year", "years"]:
                 year = sign * val
             else:
-                raise ValueError("Invalid unit of time")
-        # WORK IN PROGRESS
-        # "vor 2 Jahren"
-        #  Jahren 2 vor
-        # elif locale == "de":
-        #     if times[0] == "vor":
-        #         sign = -1
-        #         times = times[:-1]
-        #     elif times[0] == "in":
-        #         sign = 1
-        #         times = times[1:]
-        #     else:
-        #         raise ValueError("Invalid prefix or suffix")
+                raise ValueError(
+                    "Invalid unit of time. Please check supported timeframes on Arrow documentation."
+                )
 
-        #     if len(times) % 2 != 0:
-        #         raise ValueError("Invalid time input")
-
-        #     for i in range(0, len(times), 2):
-        #         val = int(times[i])
-        #         unit = times[i + 1]
-
-        #         if unit in ["second", "seconds"]:
-        #             second = sign * val
-        #         elif unit in ["minute", "minutes"]:
-        #             minute = sign * val
-        #         elif unit in ["hour", "hours"]:
-        #             hour = sign * val
-        #         elif unit in ["day", "days"]:
-        #             day = sign * val
-        #         elif unit in ["week", "weeks"]:
-        #             week = sign * val
-        #         elif unit in ["month", "months"]:
-        #             month = sign * val
-        #         elif unit in ["year", "years"]:
-        #             year = sign * val
-        #         else:
-        #             raise ValueError("Invalid unit of time")
         return current.shift(
             seconds=second,
             minutes=minute,

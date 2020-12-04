@@ -485,6 +485,10 @@ class FrenchBaseLocale(Locale):
     future = "dans {0}"
     and_word = "et"
 
+    numbers = {"une": 1, "deux": 2}
+
+    reversed_timeframes = {"une minute": "minute", "minutes": "minutes"}
+
     timeframes = {
         "now": "maintenant",
         "second": "une seconde",
@@ -1727,6 +1731,10 @@ class GermanBaseLocale(Locale):
     future = "in {0}"
     and_word = "und"
 
+    numbers = {"einer": 1}
+
+    reversed_timeframes = {"Minute": "minute"}
+
     timeframes = {
         "now": "gerade eben",
         "second": "eine Sekunde",
@@ -2796,7 +2804,7 @@ class HindiLocale(Locale):
     past = "{0} पहले"
     future = "{0} बाद"
 
-    numbers = {
+    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
         "एक": 1,
         "दो": 2,
         "तीन": 3,
@@ -2811,18 +2819,18 @@ class HindiLocale(Locale):
     }
 
     reversed_timeframes = {
-        "now": "अभी",
-        "second": "एक पल",
+        "अभी": "now",
+        "पल": "second",
         "सेकंड्": "second",
         "एक मिनट": "minute",
         "मिनट": "minutes",
-        "hour": "एक घंटा",
+        "घंटा": "hour",
         "घंटे": "hours",
-        "day": "एक दिन",
-        "days": "{0} दिन",
-        "month": "एक माह ",
-        "months": "{0} महीने ",
-        "year": "एक वर्ष ",
+        "एक दिन": "day",
+        "दिन": "days",
+        "एक माह": "month",
+        "महीने": "months",
+        "एक वर्ष": "year",
         "साल": "years",
     }
 
