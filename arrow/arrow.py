@@ -300,7 +300,7 @@ class Arrow:
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object corresponding
             to the Gregorian Ordinal.
 
-        :param ordinal: an ``int`` or a ``str`` that converts to an ``int``.
+        :param ordinal: an ``int``.
 
         Usage::
 
@@ -309,9 +309,8 @@ class Arrow:
 
         """
 
-        if not util.is_ordinal(ordinal):
-            raise ValueError(f"The provided ordinal '{ordinal}' is invalid.")
-        dt = datetime.fromordinal(int(ordinal))
+        ordinal = util.is_ordinal(ordinal)
+        dt = datetime.fromordinal(ordinal)
         return cls(
             dt.year,
             dt.month,

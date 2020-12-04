@@ -54,16 +54,11 @@ def is_timestamp(value):
 
 def is_ordinal(value):
     """Check if value is a valid ordinal."""
-    if isinstance(value, bool):
-        return False
-    if not (isinstance(value, int) or isinstance(value, str)):
-        return False
-    try:
-        if MIN_ORDINAL<= value  <= MAX_ORDINAL:
-            return False
-    except ValueError:
-        return False
-    return True
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise TypeError(f"ordinal must be an intger (got type {type(value)})")
+    if not (MIN_ORDINAL <= value <= MAX_ORDINAL):
+        raise ValueError(f"ordinal {value} is out of range.")
+    return value
 
 
 def normalize_timestamp(timestamp):
