@@ -59,7 +59,7 @@ def is_ordinal(value):
     if not (isinstance(value, int) or isinstance(value, str)):
         return False
     try:
-        if int(value) not in range(MIN_ORDINAL, MAX_ORDINAL + 1):
+        if MIN_ORDINAL<= value  <= MAX_ORDINAL:
             return False
     except ValueError:
         return False
