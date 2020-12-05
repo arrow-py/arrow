@@ -1132,10 +1132,7 @@ class Arrow:
 
         current = self.fromdatetime(self._datetime)
 
-        # TODO:
-        # - fill in numbers and reversed_timeframe dictionaries for hindi, spanish, french, german and add test cases for these locales
-        # - SEE HINDI locale in locales.py for an example of what dicts to add (both are hindi -> english)
-        # - potentially work on some of these limitations
+        # TODO: potentially work on some of these limitations
 
         # Current limitations:
         # - dehumanize requires an existing arrow object

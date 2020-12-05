@@ -408,8 +408,6 @@ class SpanishLocale(Locale):
 
     numbers = {"uno": 1, "dos": 2}
 
-    reversed_timeframes = {"minutos": "minutes"}
-
     timeframes = {
         "now": "ahora",
         "second": "un segundo",
@@ -426,6 +424,37 @@ class SpanishLocale(Locale):
         "months": "{0} meses",
         "year": "un año",
         "years": "{0} años",
+    }
+
+    reversed_timeframes = {
+        "ahora": "now",
+        "un segundo": "second",
+        "segundos": "second",
+        "un minuto": "minute",
+        "minutos": "minutes",
+        "una hora": "hour",
+        "horas": "hours",
+        "un día": "day",
+        "días": "days",
+        "una semana": "a week",
+        "semanas": "weeks",
+        "un mes": "month",
+        "meses": "months",
+        "un año": "year",
+        "años": "years",
+    }
+
+    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+        "uno": 1,
+        "dos": 2,
+        "tres": 3,
+        "cuatro": 4,
+        "cinco": 5,
+        "seis": 6,
+        "siete": 7,
+        "ocho": 8,
+        "nueve": 9,
+        "diez": 10,
     }
 
     meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
@@ -487,8 +516,6 @@ class FrenchBaseLocale(Locale):
 
     numbers = {"une": 1, "deux": 2}
 
-    reversed_timeframes = {"une minute": "minute", "minutes": "minutes"}
-
     timeframes = {
         "now": "maintenant",
         "second": "une seconde",
@@ -505,6 +532,37 @@ class FrenchBaseLocale(Locale):
         "months": "{0} mois",
         "year": "un an",
         "years": "{0} ans",
+    }
+
+    reversed_timeframes = {
+        "maintenant": "now",
+        "une seconde": "second",
+        "secondes": "second",
+        "une minute": "minute",
+        "minutes": "minutes",
+        "une heure": "hour",
+        "heures": "hours",
+        "un jour": "day",
+        "jours": "days",
+        "une semaine": "a week",
+        "semaines": "weeks",
+        "un mois": "month",
+        "mois": "months",
+        "un an": "year",
+        "ans": "years",
+    }
+
+    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+        "un": 1,
+        "deux": 2,
+        "trois": 3,
+        "quarte": 4,
+        "cinq": 5,
+        "six": 6,
+        "sept": 7,
+        "huit": 8,
+        "neuf": 9,
+        "dix": 10,
     }
 
     month_names = [
@@ -1731,10 +1789,6 @@ class GermanBaseLocale(Locale):
     future = "in {0}"
     and_word = "und"
 
-    numbers = {"einer": 1}
-
-    reversed_timeframes = {"Minute": "minute"}
-
     timeframes = {
         "now": "gerade eben",
         "second": "eine Sekunde",
@@ -1751,6 +1805,39 @@ class GermanBaseLocale(Locale):
         "months": "{0} Monaten",
         "year": "einem Jahr",
         "years": "{0} Jahren",
+    }
+
+    reversed_timeframes = {
+        "gerade eben": "now",
+        "eine Sekunde": "second",
+        "Sekunden": "second",
+        "einer Minute": "minute",
+        "Minute": "minute",
+        "Minuten": "minutes",
+        "einer Stunde": "hour",
+        "Stunden": "hours",
+        "einem Tag": "day",
+        "Tagen": "days",
+        "einer Woche": "a week",
+        "Wochen": "weeks",
+        "einem Monat": "month",
+        "Monaten": "months",
+        "einem Jahr": "year",
+        "Jahren": "years",
+    }
+
+    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+        "eins": 1,
+        "zwei": 2,
+        "drei": 3,
+        "vier": 4,
+        "fünf": 5,
+        "fuenf": 5,
+        "sechs": 6,
+        "sieben": 7,
+        "acht": 8,
+        "neun": 9,
+        "zehn": 10,
     }
 
     timeframes_only_distance = timeframes.copy()

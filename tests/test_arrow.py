@@ -1717,6 +1717,12 @@ class TestArrowDehumanize:
         assert arw.dehumanize("hace dos minutos", "es") == arrow.Arrow(
             2014, 4, 18, 12, 28, 0
         )
+        assert arw.dehumanize("en cinco meses", "es") == arrow.Arrow(
+            2014, 9, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("hace cinco meses", "es") == arrow.Arrow(
+            2013, 11, 18, 12, 30, 0
+        )
 
     def test_locale_french(self):
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
@@ -1724,15 +1730,27 @@ class TestArrowDehumanize:
         assert arw.dehumanize("il y a deux minutes", "fr") == arrow.Arrow(
             2014, 4, 18, 12, 28, 0
         )
+        assert arw.dehumanize("dans cinq mois", "fr") == arrow.Arrow(
+            2014, 9, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("Il y a cinq mois", "fr") == arrow.Arrow(
+            2013, 11, 18, 12, 30, 0
+        )
 
     def test_locale_german(self):
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
 
-        assert arw.dehumanize("vor einer Minute", "de") == arrow.Arrow(
-            2014, 4, 18, 12, 29, 0
+        assert arw.dehumanize("vor zwei Minuten", "de") == arrow.Arrow(
+            2014, 4, 18, 12, 28, 0
         )
-        assert arw.dehumanize("vor 1 Minute", "de") == arrow.Arrow(
-            2014, 4, 18, 12, 29, 0
+        assert arw.dehumanize("in drei Stunden", "de") == arrow.Arrow(
+            2014, 4, 18, 15, 30, 0
+        )
+        assert arw.dehumanize("in fünf Monaten", "de") == arrow.Arrow(
+            2014, 9, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("vor fünf Monaten", "de") == arrow.Arrow(
+            2013, 11, 18, 12, 30, 0
         )
 
 
