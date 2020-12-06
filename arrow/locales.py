@@ -1828,6 +1828,9 @@ class GermanBaseLocale(Locale):
 
     numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
         "eins": 1,
+        "einem": 1,
+        "einer": 1,
+        "eine": 1,
         "zwei": 2,
         "drei": 3,
         "vier": 4,
