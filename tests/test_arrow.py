@@ -1737,6 +1737,28 @@ class TestArrowDehumanize:
             2013, 11, 18, 12, 30, 0
         )
 
+        assert arw.dehumanize("dans trois heures", "fr") == arrow.Arrow(
+            2014, 4, 18, 15, 30, 0
+        )
+        assert arw.dehumanize("dans cinq mois", "fr") == arrow.Arrow(
+            2014, 9, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("Il y a cinq mois", "fr") == arrow.Arrow(
+            2013, 11, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("dans 365 jours", "fr") == arrow.Arrow(
+            2015, 4, 18, 12, 30, 0
+        )
+        assert arw.dehumanize("il y a 365 jours", "fr") == arrow.Arrow(
+            2013, 4, 18, 12, 30, 0
+        )
+        # assert arw.dehumanize("dans 5 ans", "fr") == arrow.Arrow(
+        #     2019, 4, 18, 12, 30, 0
+        # )
+        # assert arw.dehumanize("Il y a cinq mois", "fr") == arrow.Arrow(
+        #     2009, 4, 18, 12, 30, 0
+        # )
+
     def test_locale_german(self):
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
 
