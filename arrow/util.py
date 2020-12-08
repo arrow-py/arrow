@@ -52,13 +52,12 @@ def is_timestamp(value):
         return False
 
 
-def is_ordinal(value):
-    """Check if value is a valid ordinal."""
+def validate_ordinal(value):
+    """Raise the corresponding exception if `value` is an invalid Gregorian ordinal."""
     if isinstance(value, bool) or not isinstance(value, int):
         raise TypeError(f"ordinal must be an intger (got type {type(value)})")
     if not (MIN_ORDINAL <= value <= MAX_ORDINAL):
         raise ValueError(f"ordinal {value} is out of range.")
-    return value
 
 
 def normalize_timestamp(timestamp):
@@ -99,4 +98,4 @@ def validate_bounds(bounds):
         )
 
 
-__all__ = ["next_weekday", "is_timestamp", "is_ordinal", "iso_to_gregorian"]
+__all__ = ["next_weekday", "is_timestamp", "validate_ordinal", "iso_to_gregorian"]
