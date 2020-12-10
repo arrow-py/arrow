@@ -2135,7 +2135,7 @@ class TestArrowHumanize:
 
         for month in range(1, 12):
             earlier_30days = arrow.Arrow.fromdatetime(datetime(2020, month, 3))
-            later_30days = arrow.Arrow.fromdatetime(datetime(2020, month+1, 3))
+            later_30days = arrow.Arrow.fromdatetime(datetime(2020, month + 1, 3))
             assert earlier_30days.humanize(later_30days) == "a month ago"
             assert later_30days.humanize(earlier_30days) == "in a month"
 
@@ -2144,7 +2144,6 @@ class TestArrowHumanize:
         later_30days = arrow.Arrow.fromdatetime(datetime(2021, 1, 3))
         assert earlier_30days.humanize(later_30days) == "a month ago"
         assert later_30days.humanize(earlier_30days) == "in a month"
-
 
     def test_year(self):
 
