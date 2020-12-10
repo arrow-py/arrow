@@ -2131,6 +2131,21 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 months"
         assert later.humanize(self.now, only_distance=True) == "2 months"
 
+    def test_edgecase_months(self):
+
+        for month in range(1, 12):
+            earlier_30days = arrow.Arrow.fromdatetime(datetime(2020, month, 3))
+            later_30days = arrow.Arrow.fromdatetime(datetime(2020, month+1, 3))
+            assert earlier_30days.humanize(later_30days) == "a month ago"
+            assert later_30days.humanize(earlier_30days) == "in a month"
+
+        # test Dec && Jan
+        earlier_30days = arrow.Arrow.fromdatetime(datetime(2020, 12, 3))
+        later_30days = arrow.Arrow.fromdatetime(datetime(2021, 1, 3))
+        assert earlier_30days.humanize(later_30days) == "a month ago"
+        assert later_30days.humanize(earlier_30days) == "in a month"
+
+
     def test_year(self):
 
         later = self.now.shift(years=1)

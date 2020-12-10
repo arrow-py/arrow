@@ -1044,6 +1044,8 @@ class Arrow:
                     return locale.describe("week", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_MONTH:
                     weeks = sign * int(max(delta / self._SECS_PER_WEEK, 2))
+                    if abs(weeks) == 4:
+                        return locale.describe("month", sign, only_distance=only_distance)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_MONTH * 2:
