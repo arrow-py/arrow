@@ -406,8 +406,6 @@ class SpanishLocale(Locale):
     future = "en {0}"
     and_word = "y"
 
-    numbers = {"uno": 1, "dos": 2}
-
     timeframes = {
         "now": "ahora",
         "second": "un segundo",
@@ -444,7 +442,7 @@ class SpanishLocale(Locale):
         "años": "years",
     }
 
-    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+    numbers = {
         "uno": 1,
         "dos": 2,
         "tres": 3,
@@ -514,8 +512,6 @@ class FrenchBaseLocale(Locale):
     future = "dans {0}"
     and_word = "et"
 
-    numbers = {"une": 1, "deux": 2}
-
     timeframes = {
         "now": "maintenant",
         "second": "une seconde",
@@ -552,7 +548,7 @@ class FrenchBaseLocale(Locale):
         "ans": "years",
     }
 
-    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+    numbers = {
         "un": 1,
         "deux": 2,
         "trois": 3,
@@ -1826,7 +1822,7 @@ class GermanBaseLocale(Locale):
         "Jahren": "years",
     }
 
-    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+    numbers = {
         "eins": 1,
         "einem": 1,
         "einer": 1,
@@ -2894,7 +2890,7 @@ class HindiLocale(Locale):
     past = "{0} पहले"
     future = "{0} बाद"
 
-    numbers = {  # TODO: I'll ADD NUMBERS UNTIL 59 (copied from google translate)
+    numbers = {
         "एक": 1,
         "दो": 2,
         "तीन": 3,

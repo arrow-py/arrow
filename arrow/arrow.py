@@ -1132,37 +1132,20 @@ class Arrow:
 
         current = self.fromdatetime(self._datetime)
 
-        # TODO: potentially work on some of these limitations
-
-        # Current limitations:
-        # - dehumanize requires an existing arrow object
-        #  - all strings have to be spelled exactly as dictionary entries
-        # - Doesn't work with:
-        # - past and futures that have {0} in the middle of the string (using in operator like: "time in locale_data.past" wouldn't work)
-        # - languages that don't separate by space
-        # - some languages have cases where "ONE DAY" translates differently than "ONE" + "DAY"
-        # similar to above: sometimes timeframes dict has a singular timeframe including the digit. for example
-        # E.G. hindi  day = एक दिन (one day) but days = दिन . this wouldn't work with current implementation, had to modify reversed timestring to not include the digit
-        # - reversed_timeframe dictionary is a difficult task to create for each locale as many locales have various ways to represent the same word (e.g. Polish uses lists)
-
         if locale != "en":  # translates timestring to English
             locale_data = locales.get_locale(locale)
             times = timestring.split(" ")
-            # print(times)
             counter = 0
             time_data_dict = {}
             for time in times:
-                # print(time)
                 if (
                     time in locale_data.past
                 ):  # converting language used to represent past into "ago"
-                    # print("past here")
                     times[counter] = "ago"
                     time_data_dict["times"] = times[counter]
                 elif (
                     time in locale_data.future
                 ):  # converting language used to represent future into "in"
-                    # print("future here")
                     times[counter] = "in"
                     time_data_dict["times"] = times[counter]
                 elif (
@@ -1170,7 +1153,7 @@ class Arrow:
                 ):  # converting locale's given number into English numerals
                     times[counter] = locale_data.numbers[time]
                     time_data_dict["number"] = times[counter]
-                elif time.isdigit():  # if English digit specified add to dict
+                elif time.isdigit():  # if an English digit specified
                     times[counter] = int(time)
                     time_data_dict["number"] = times[counter]
                 elif (  # convert locale's given timeframe into English
@@ -1201,7 +1184,6 @@ class Arrow:
                     + str(time_data_dict["times"])
                 )
 
-            print(translated_timestring)
             timestring = translated_timestring
 
         # begin dehumanize implementation with English timestring
