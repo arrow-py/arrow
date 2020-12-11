@@ -1714,28 +1714,6 @@ class TestArrowDehumanize:
         assert arw.dehumanize("दो मिनट पहले", "hi") == arrow.Arrow(
             2014, 4, 18, 12, 28, 0
         )
-        # assert arw.dehumanize("पांच महीने में", "hi") == arrow.Arrow(
-        #     2014, 9, 18, 12, 30, 0
-        # )
-        # assert arw.dehumanize("पांच महीने पहले", "hi") == arrow.Arrow(
-        #     2013, 11, 18, 12, 30, 0
-        # )
-
-        # assert arw.dehumanize("दो मिनट पहले", "hi") == arrow.Arrow(
-        #     2014, 4, 18, 12, 28, 0
-        # )
-        # assert arw.dehumanize("तीन घंटे में", "hi") == arrow.Arrow(
-        #     2014, 4, 18, 15, 30, 0
-        # )
-        # assert arw.dehumanize("पांच महीने में", "hi") == arrow.Arrow(
-        #     2014, 9, 18, 12, 30, 0
-        # )
-        # assert arw.dehumanize("365 दिनों में", "hi") == arrow.Arrow(
-        #     2015, 4, 18, 12, 30, 0
-        # )
-        # assert arw.dehumanize("365 दिन पहले", "hi") == arrow.Arrow(
-        #     2013, 4, 18, 12, 30, 0
-        # )
 
     def test_locale_spanish(self):
         arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
@@ -1822,14 +1800,6 @@ class TestArrowDehumanize:
         assert arw.dehumanize("vor 365 Tagen", "de") == arrow.Arrow(
             2013, 4, 18, 12, 30, 0
         )
-
-        # assert arw.dehumanize("in 5 Stunden 10 Minuten 4 Sekunden", "de") == arrow.Arrow(
-        #     2014, 4, 18, 17, 40, 4
-        # )
-        # assert arw.dehumanize("vor 5 Stunden 10 Minuten 4 Sekunden", "de") == arrow.Arrow(
-        #     2014, 4, 18, 7, 19, 56)
-        # assert arw.dehumanize("in einem Jahr", "de") == arrow.Arrow(2015, 4, 18, 12, 30, 0)
-        # assert arw.dehumanize("vor einem Jahr", "de") == arrow.Arrow(2013, 4, 18, 12, 30, 0)
 
 
 @pytest.mark.usefixtures("time_2013_01_01")
