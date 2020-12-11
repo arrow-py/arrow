@@ -80,12 +80,12 @@ class TestUtil:
         try:
             util.validate_ordinal(1)
         except (ValueError, TypeError) as exp:
-            pytest.fail(f"Exception raised when shouldn't have ({type(exp)})")
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
 
         try:
             util.validate_ordinal(datetime.max.toordinal())
         except (ValueError, TypeError) as exp:
-            pytest.fail(f"Exception raised when shouldn't have ({type(exp)})")
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
 
         ordinal = datetime.utcnow().toordinal()
         ordinal_str = str(ordinal)
@@ -101,7 +101,7 @@ class TestUtil:
         try:
             util.validate_ordinal(ordinal)
         except (ValueError, TypeError) as exp:
-            pytest.fail(f"Exception raised when shouldn't have ({type(exp)})")
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
 
         full_datetime = "2019-06-23T13:12:42"
 

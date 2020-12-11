@@ -195,10 +195,10 @@ class TestTestArrowFactory:
         with pytest.raises(TypeError):
             arrow.Arrow.fromordinal(str(ordinal))
 
-        result1 = arrow.Arrow.fromordinal(ordinal)
+        result = arrow.Arrow.fromordinal(ordinal)
         dt = datetime.fromordinal(ordinal)
 
-        assert result1.naive == dt
+        assert result.naive == dt
 
 
 @pytest.mark.usefixtures("time_2013_02_03")
@@ -529,14 +529,17 @@ class TestArrowDatetimeInterface:
 
     def test_isoformat_timespec(self):
 
-        result1 = self.arrow.isoformat(timespec="hours")
-        result2 = self.arrow.isoformat(timespec="microseconds")
-        result3 = self.arrow.isoformat(timespec="milliseconds")
-        result4 = self.arrow.isoformat(sep="x", timespec="seconds")
-        assert result1 == self.arrow._datetime.isoformat(timespec="hours")
-        assert result2 == self.arrow._datetime.isoformat()
-        assert result3 == self.arrow._datetime.isoformat(timespec="milliseconds")
-        assert result4 == self.arrow._datetime.isoformat(sep="x", timespec="seconds")
+        result = self.arrow.isoformat(timespec="hours")
+        assert result == self.arrow._datetime.isoformat(timespec="hours")
+
+        result = self.arrow.isoformat(timespec="microseconds")
+        assert result == self.arrow._datetime.isoformat()
+
+        result = self.arrow.isoformat(timespec="milliseconds")
+        assert result == self.arrow._datetime.isoformat(timespec="milliseconds")
+
+        result = self.arrow.isoformat(sep="x", timespec="seconds")
+        assert result == self.arrow._datetime.isoformat(sep="x", timespec="seconds")
 
     def test_simplejson(self):
 

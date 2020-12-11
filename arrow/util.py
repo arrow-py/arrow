@@ -53,11 +53,11 @@ def is_timestamp(value):
 
 
 def validate_ordinal(value):
-    """Raise the corresponding exception if `value` is an invalid Gregorian ordinal."""
+    """Raise the corresponding exception if value is an invalid Gregorian ordinal."""
     if isinstance(value, bool) or not isinstance(value, int):
-        raise TypeError(f"ordinal must be an intger (got type {type(value)})")
+        raise TypeError(f"Ordinal must be an integer (got type {type(value)}).")
     if not (MIN_ORDINAL <= value <= MAX_ORDINAL):
-        raise ValueError(f"ordinal {value} is out of range.")
+        raise ValueError(f"Ordinal {value} is out of range.")
 
 
 def normalize_timestamp(timestamp):
