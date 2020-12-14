@@ -182,6 +182,24 @@ class TestTestArrowFactory:
             2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")
         )
 
+    def test_fromordinal(self):
+
+        timestamp = 1607066909.937968
+        with pytest.raises(TypeError):
+            arrow.Arrow.fromordinal(timestamp)
+        with pytest.raises(ValueError):
+            arrow.Arrow.fromordinal(int(timestamp))
+
+        ordinal = arrow.Arrow.utcnow().toordinal()
+
+        with pytest.raises(TypeError):
+            arrow.Arrow.fromordinal(str(ordinal))
+
+        result = arrow.Arrow.fromordinal(ordinal)
+        dt = datetime.fromordinal(ordinal)
+
+        assert result.naive == dt
+
 
 @pytest.mark.usefixtures("time_2013_02_03")
 class TestTestArrowRepresentation:
@@ -508,6 +526,20 @@ class TestArrowDatetimeInterface:
         result = self.arrow.isoformat()
 
         assert result == self.arrow._datetime.isoformat()
+
+    def test_isoformat_timespec(self):
+
+        result = self.arrow.isoformat(timespec="hours")
+        assert result == self.arrow._datetime.isoformat(timespec="hours")
+
+        result = self.arrow.isoformat(timespec="microseconds")
+        assert result == self.arrow._datetime.isoformat()
+
+        result = self.arrow.isoformat(timespec="milliseconds")
+        assert result == self.arrow._datetime.isoformat(timespec="milliseconds")
+
+        result = self.arrow.isoformat(sep="x", timespec="seconds")
+        assert result == self.arrow._datetime.isoformat(sep="x", timespec="seconds")
 
     def test_simplejson(self):
 

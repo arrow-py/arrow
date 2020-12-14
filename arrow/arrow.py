@@ -295,6 +295,34 @@ class Arrow:
             fold=getattr(dt, "fold", 0),
         )
 
+    @classmethod
+    def fromordinal(cls, ordinal):
+        """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object corresponding
+            to the Gregorian Ordinal.
+
+        :param ordinal: an ``int`` corresponding to a Gregorian Ordinal.
+
+        Usage::
+
+            >>> arrow.fromordinal(737741)
+            <Arrow [2020-11-12T00:00:00+00:00]>
+
+        """
+
+        util.validate_ordinal(ordinal)
+        dt = datetime.fromordinal(ordinal)
+        return cls(
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.microsecond,
+            dt.tzinfo,
+            fold=getattr(dt, "fold", 0),
+        )
+
     # factories: ranges and spans
 
     @classmethod
@@ -1365,7 +1393,7 @@ class Arrow:
 
         return self._datetime.isocalendar()
 
-    def isoformat(self, sep="T"):
+    def isoformat(self, sep="T", timespec="auto"):
         """Returns an ISO 8601 formatted representation of the date and time.
 
         Usage::
@@ -1375,7 +1403,7 @@ class Arrow:
 
         """
 
-        return self._datetime.isoformat(sep)
+        return self._datetime.isoformat(sep, timespec)
 
     def ctime(self):
         """Returns a ctime formatted representation of the date and time.

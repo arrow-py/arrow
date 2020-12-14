@@ -22,3 +22,6 @@ except (OverflowError, ValueError, OSError):  # pragma: no cover
 
 MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1e3
 MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1e6
+
+MAX_ORDINAL = datetime.max.toordinal()
+MIN_ORDINAL = 1
