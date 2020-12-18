@@ -47,7 +47,8 @@ jobs:
       - name: Test with tox
         run: tox
 
-      # Upload coverage report
+      # Upload coverage reports
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
@@ -58,3 +59,10 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage.xml
+
+      - name: Code Climate Coverage Action
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_API_TOKEN }}
+        with:
+          coverageLocations: coverage.xml
