@@ -65,4 +65,4 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_API_TOKEN }}
         with:
-          coverageLocations: coverage.xml
+          coverageLocations: coverage.xml:cobertura
