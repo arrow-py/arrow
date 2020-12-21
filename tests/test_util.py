@@ -56,6 +56,63 @@ class TestUtil:
         full_datetime = "2019-06-23T13:12:42"
         assert not util.is_timestamp(full_datetime)
 
+    def test_validate_ordinal(self):
+        timestamp_float = 1607066816.815537
+        timestamp_int = int(timestamp_float)
+        timestamp_str = str(timestamp_int)
+
+        with pytest.raises(TypeError):
+            util.validate_ordinal(timestamp_float)
+        with pytest.raises(TypeError):
+            util.validate_ordinal(timestamp_str)
+        with pytest.raises(TypeError):
+            util.validate_ordinal(True)
+        with pytest.raises(TypeError):
+            util.validate_ordinal(False)
+
+        with pytest.raises(ValueError):
+            util.validate_ordinal(timestamp_int)
+        with pytest.raises(ValueError):
+            util.validate_ordinal(-1 * timestamp_int)
+        with pytest.raises(ValueError):
+            util.validate_ordinal(0)
+
+        try:
+            util.validate_ordinal(1)
+        except (ValueError, TypeError) as exp:
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
+
+        try:
+            util.validate_ordinal(datetime.max.toordinal())
+        except (ValueError, TypeError) as exp:
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
+
+        ordinal = datetime.utcnow().toordinal()
+        ordinal_str = str(ordinal)
+        ordinal_float = float(ordinal) + 0.5
+
+        with pytest.raises(TypeError):
+            util.validate_ordinal(ordinal_str)
+        with pytest.raises(TypeError):
+            util.validate_ordinal(ordinal_float)
+        with pytest.raises(ValueError):
+            util.validate_ordinal(-1 * ordinal)
+
+        try:
+            util.validate_ordinal(ordinal)
+        except (ValueError, TypeError) as exp:
+            pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
+
+        full_datetime = "2019-06-23T13:12:42"
+
+        class InvalidOrdinal:
+            pass
+
+        with pytest.raises(TypeError):
+            util.validate_ordinal(InvalidOrdinal())
+        with pytest.raises(TypeError):
+            util.validate_ordinal(full_datetime)
+
     def test_normalize_timestamp(self):
         timestamp = 1591161115.194556
         millisecond_timestamp = 1591161115194
