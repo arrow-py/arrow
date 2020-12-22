@@ -5,7 +5,7 @@ from math import trunc
 
 def get_locale(name):
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
-    corresponding to an inpute locale name.
+    corresponding to an input locale name.
 
     :param name: the name of the locale.
 
