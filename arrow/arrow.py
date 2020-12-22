@@ -696,12 +696,6 @@ class Arrow:
 
         return self._datetime.tzinfo
 
-    @tzinfo.setter
-    def tzinfo(self, tzinfo):
-        """ Sets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. """
-
-        self._datetime = self._datetime.replace(tzinfo=tzinfo)
-
     @property
     def datetime(self):
         """Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.

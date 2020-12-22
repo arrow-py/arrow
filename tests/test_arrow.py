@@ -285,8 +285,7 @@ class TestArrowAttribute:
 
     def test_tzinfo(self):
 
-        self.arrow.tzinfo = tz.gettz("PST")
-        assert self.arrow.tzinfo == tz.gettz("PST")
+        assert self.arrow.tzinfo == tz.tzutc()
 
     def test_naive(self):
 
