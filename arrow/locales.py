@@ -99,16 +99,15 @@ class Locale:
         :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = ""
-        for index, (timeframe, delta) in enumerate(timeframes):
-            humanized += self._format_timeframe(timeframe, delta)
-            if index == len(timeframes) - 2 and self.and_word:
-                humanized += " " + self.and_word + " "
-            elif index < len(timeframes) - 1:
-                humanized += " "
+        parts = [
+            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+        ]
+        if self.and_word:
+            parts.insert(-1, self.and_word)
+        humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, delta)
+            humanized = self._format_relative(humanized, *timeframes[-1])
 
         return humanized
 
