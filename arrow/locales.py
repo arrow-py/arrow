@@ -2421,7 +2421,7 @@ class ArabicLocale(Locale):
         if isinstance(form, dict):
             if delta == 2:
                 form = form["double"]
-            elif delta > 2 and delta <= 10:
+            elif 2 < delta <= 10:
                 form = form["ten"]
             else:
                 form = form["higher"]

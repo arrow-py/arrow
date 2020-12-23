@@ -1219,27 +1219,15 @@ class Arrow:
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
 
-        target_timestamp = self.float_timestamp
-        start_timestamp = start.float_timestamp
-        end_timestamp = end.float_timestamp
+        target_ts = self.float_timestamp
+        start_ts = start.float_timestamp
+        end_ts = end.float_timestamp
 
-        if include_start and include_end:
-            return (
-                target_timestamp >= start_timestamp
-                and target_timestamp <= end_timestamp
-            )
-        elif include_start and not include_end:
-            return (
-                target_timestamp >= start_timestamp and target_timestamp < end_timestamp
-            )
-        elif not include_start and include_end:
-            return (
-                target_timestamp > start_timestamp and target_timestamp <= end_timestamp
-            )
-        else:
-            return (
-                target_timestamp > start_timestamp and target_timestamp < end_timestamp
-            )
+        return (
+            (start_ts <= target_ts <= end_ts)
+            and (include_start or start_ts < target_ts)
+            and (include_end or target_ts < end_ts)
+        )
 
     # datetime methods
 
