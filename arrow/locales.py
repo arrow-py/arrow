@@ -200,7 +200,7 @@ class Locale:
         return f"{n}"
 
     def _name_to_ordinal(self, lst):
-        return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
+        return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
     def _format_timeframe(self, timeframe, delta):
         return self.timeframes[timeframe].format(trunc(abs(delta)))
