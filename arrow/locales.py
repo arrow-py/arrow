@@ -166,14 +166,14 @@ class Locale:
     def year_full(self, year):
         """Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"
 
     def year_abbreviation(self, year):
         """Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"[2:]
 

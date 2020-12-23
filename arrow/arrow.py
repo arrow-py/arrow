@@ -965,6 +965,7 @@ class Arrow:
         formatted according to a format string.
 
         :param fmt: the format string.
+        :param locale: the locale to format.
 
         Usage::
 
