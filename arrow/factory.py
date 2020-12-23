@@ -216,7 +216,7 @@ class ArrowFactory:
             if isinstance(arg_1, datetime):
 
                 # (datetime, tzinfo/str) -> fromdatetime replace tzinfo.
-                if isinstance(arg_2, dt_tzinfo) or isinstance(arg_2, str):
+                if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
                     raise TypeError(
@@ -226,7 +226,7 @@ class ArrowFactory:
             elif isinstance(arg_1, date):
 
                 # (date, tzinfo/str) -> fromdate replace tzinfo.
-                if isinstance(arg_2, dt_tzinfo) or isinstance(arg_2, str):
+                if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
                 else:
                     raise TypeError(
@@ -234,9 +234,7 @@ class ArrowFactory:
                     )
 
             # (str, format) -> parse.
-            elif isinstance(arg_1, str) and (
-                isinstance(arg_2, str) or isinstance(arg_2, list)
-            ):
+            elif isinstance(arg_1, str) and isinstance(arg_2, (str, list)):
                 dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
