@@ -169,7 +169,7 @@ class Arrow:
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
+            raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = datetime.fromtimestamp(timestamp, tzinfo)
@@ -195,7 +195,7 @@ class Arrow:
         """
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
+            raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = datetime.utcfromtimestamp(timestamp)
@@ -838,7 +838,7 @@ class Arrow:
             elif key in ["week", "quarter"]:
                 raise ValueError(f"Setting absolute {key} is not supported.")
             elif key not in ["tzinfo", "fold"]:
-                raise ValueError(f"Unknown attribute: '{key}'.")
+                raise ValueError(f"Unknown attribute: {key!r}.")
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -1027,7 +1027,7 @@ class Arrow:
 
         else:
             raise TypeError(
-                f"Invalid 'other' argument of type '{type(other).__name__}'. "
+                f"Invalid 'other' argument of type {type(other).__name__!r}. "
                 "Argument must be of type None, Arrow, or datetime."
             )
 
@@ -1171,7 +1171,7 @@ class Arrow:
 
         except KeyError as e:
             raise ValueError(
-                f"Humanization of the {e} granularity is not currently translated in the '{locale_name}' locale. "
+                f"Humanization of the {e} granularity is not currently translated in the {locale_name!r} locale. "
                 "Please consider making a contribution to this locale."
             )
 
@@ -1211,11 +1211,11 @@ class Arrow:
 
         if not isinstance(start, Arrow):
             raise TypeError(
-                f"Cannot parse start date argument type of '{type(start)}'."
+                f"Cannot parse start date argument type of {type(start)!r}."
             )
 
         if not isinstance(end, Arrow):
-            raise TypeError(f"Cannot parse end date argument type of '{type(start)}'.")
+            raise TypeError(f"Cannot parse end date argument type of {type(start)!r}.")
 
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
@@ -1521,7 +1521,7 @@ class Arrow:
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError(f"'{tz_expr}' not recognized as a timezone.")
+                raise ValueError(f"{tz_expr!r} not recognized as a timezone.")
 
     @classmethod
     def _get_datetime(cls, expr):
@@ -1534,7 +1534,7 @@ class Arrow:
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
         else:
-            raise ValueError(f"'{expr}' not recognized as a datetime or timestamp.")
+            raise ValueError(f"{expr!r} not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name):
