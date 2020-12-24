@@ -207,7 +207,7 @@ class ArrowFactory:
                 return self.type.fromdate(dt)
 
             else:
-                raise TypeError(f"Cannot parse single argument of type '{type(arg)}'.")
+                raise TypeError(f"Cannot parse single argument of type {type(arg)!r}.")
 
         elif arg_count == 2:
 
@@ -216,27 +216,25 @@ class ArrowFactory:
             if isinstance(arg_1, datetime):
 
                 # (datetime, tzinfo/str) -> fromdatetime replace tzinfo.
-                if isinstance(arg_2, dt_tzinfo) or isinstance(arg_2, str):
+                if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdatetime(arg_1, arg_2)
                 else:
                     raise TypeError(
-                        f"Cannot parse two arguments of types 'datetime', '{type(arg_2)}'."
+                        f"Cannot parse two arguments of types 'datetime', {type(arg_2)!r}."
                     )
 
             elif isinstance(arg_1, date):
 
                 # (date, tzinfo/str) -> fromdate replace tzinfo.
-                if isinstance(arg_2, dt_tzinfo) or isinstance(arg_2, str):
+                if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
                 else:
                     raise TypeError(
-                        f"Cannot parse two arguments of types 'date', '{type(arg_2)}'."
+                        f"Cannot parse two arguments of types 'date', {type(arg_2)!r}."
                     )
 
             # (str, format) -> parse.
-            elif isinstance(arg_1, str) and (
-                isinstance(arg_2, str) or isinstance(arg_2, list)
-            ):
+            elif isinstance(arg_1, str) and isinstance(arg_2, (str, list)):
                 dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
@@ -244,7 +242,7 @@ class ArrowFactory:
 
             else:
                 raise TypeError(
-                    f"Cannot parse two arguments of types '{type(arg_1)}' and '{type(arg_2)}'."
+                    f"Cannot parse two arguments of types {type(arg_1)!r} and {type(arg_2)!r}."
                 )
 
         # 3+ args -> datetime-like via constructor.

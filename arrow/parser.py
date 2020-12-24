@@ -118,7 +118,7 @@ class DateTimeParser:
         num_spaces = datetime_string.count(" ")
         if has_space_divider and num_spaces != 1 or has_t_divider and num_spaces > 0:
             raise ParserError(
-                f"Expected an ISO 8601-like string, but was given '{datetime_string}'. "
+                f"Expected an ISO 8601-like string, but was given {datetime_string!r}. "
                 "Try passing in a format string to resolve this."
             )
 
@@ -228,7 +228,7 @@ class DateTimeParser:
 
         if match is None:
             raise ParserMatchError(
-                f"Failed to match '{fmt}' when parsing '{datetime_string}'."
+                f"Failed to match {fmt!r} when parsing {datetime_string!r}."
             )
 
         parts = {}
@@ -242,7 +242,7 @@ class DateTimeParser:
 
             if value is None:
                 raise ParserMatchError(
-                    f"Unable to find a match group for the specified token '{token}'."
+                    f"Unable to find a match group for the specified token {token!r}."
                 )
 
             self._parse_token(token, value, parts)
@@ -277,7 +277,7 @@ class DateTimeParser:
             try:
                 input_re = self._input_re_map[token]
             except KeyError:
-                raise ParserError(f"Unrecognized token '{token}'.")
+                raise ParserError(f"Unrecognized token {token!r}.")
             input_pattern = f"(?P<{token}>{input_re.pattern})"
             tokens.append(token)
             # a pattern doesn't have the same length as the token
@@ -466,7 +466,7 @@ class DateTimeParser:
                 dt = datetime.strptime(date_string, "%Y-%j")
             except ValueError:
                 raise ParserError(
-                    f"The provided day of year '{day_of_year}' is invalid."
+                    f"The provided day of year {day_of_year!r} is invalid."
                 )
 
             parts["year"] = dt.year
@@ -552,7 +552,7 @@ class DateTimeParser:
         if _datetime is None:
             supported_formats = ", ".join(formats)
             raise ParserError(
-                f"Could not match input '{string}' to any of the following formats: {supported_formats}."
+                f"Could not match input {string!r} to any of the following formats: {supported_formats}."
             )
 
         return _datetime
@@ -596,6 +596,6 @@ class TzinfoParser:
                 tzinfo = tz.gettz(tzinfo_string)
 
         if tzinfo is None:
-            raise ParserError(f"Could not parse timezone expression '{tzinfo_string}'.")
+            raise ParserError(f"Could not parse timezone expression {tzinfo_string!r}.")
 
         return tzinfo
