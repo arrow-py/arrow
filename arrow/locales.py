@@ -14,7 +14,7 @@ def get_locale(name):
     locale_cls = _locales.get(name.lower())
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'.")
+        raise ValueError(f"Unsupported locale {name!r}.")
 
     return locale_cls()
 
@@ -29,7 +29,7 @@ def get_locale_by_class_name(name):
     locale_cls = globals().get(name)
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'.")
+        raise ValueError(f"Unsupported locale {name!r}.")
 
     return locale_cls()
 
@@ -99,16 +99,15 @@ class Locale:
         :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = ""
-        for index, (timeframe, delta) in enumerate(timeframes):
-            humanized += self._format_timeframe(timeframe, delta)
-            if index == len(timeframes) - 2 and self.and_word:
-                humanized += " " + self.and_word + " "
-            elif index < len(timeframes) - 1:
-                humanized += " "
+        parts = [
+            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+        ]
+        if self.and_word:
+            parts.insert(-1, self.and_word)
+        humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, delta)
+            humanized = self._format_relative(humanized, *timeframes[-1])
 
         return humanized
 
@@ -166,14 +165,14 @@ class Locale:
     def year_full(self, year):
         """Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"
 
     def year_abbreviation(self, year):
         """Returns the year for specific locale if available
 
-        :param name: the ``int`` year (4-digit)
+        :param year: the ``int`` year (4-digit)
         """
         return f"{year:04d}"[2:]
 
@@ -200,7 +199,7 @@ class Locale:
         return f"{n}"
 
     def _name_to_ordinal(self, lst):
-        return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
+        return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
     def _format_timeframe(self, timeframe, delta):
         return self.timeframes[timeframe].format(trunc(abs(delta)))
@@ -2421,7 +2420,7 @@ class ArabicLocale(Locale):
         if isinstance(form, dict):
             if delta == 2:
                 form = form["double"]
-            elif delta > 2 and delta <= 10:
+            elif 2 < delta <= 10:
                 form = form["ten"]
             else:
                 form = form["higher"]
