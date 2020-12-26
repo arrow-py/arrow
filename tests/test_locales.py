@@ -8,7 +8,24 @@ class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""
 
     def test_locale_validation(self):
-
+        timeframe_test = [
+            "now",
+            "second",
+            "seconds",
+            "minute",
+            "minutes",
+            "hour",
+            "hours",
+            "day",
+            "days",
+            "week",
+            "weeks",
+            "month",
+            "months",
+            "year",
+            "years",
+        ]
+        meridian_test = ["am", "pm", "AM", "PM"]
         for _, locale_cls in self.locales.items():
             # 7 days + 1 spacer to allow for 1-indexing of months
             assert len(locale_cls.day_names) == 8
@@ -32,6 +49,15 @@ class TestLocaleValidation:
             assert len(locale_cls.names) > 0
             assert locale_cls.past is not None
             assert locale_cls.future is not None
+            assert locale_cls.and_word is not None
+
+            for timeframe in timeframe_test:
+                assert timeframe in locale_cls.timeframes
+                assert locale_cls.timeframes[timeframe] != ""
+
+            for meridian in meridian_test:
+                assert meridian in locale_cls.meridians
+                assert locale_cls.meridians[meridian] != ""
 
 
 class TestModule:
