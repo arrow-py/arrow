@@ -168,7 +168,7 @@ class ArrowFactory:
             # (None) -> now, @ utc.
             if arg is None:
                 raise NameError
-                return self.type.utcnow()
+                # return self.type.utcnow()
 
             # try (int, float) -> from timestamp with tz
             elif not isinstance(arg, str) and is_timestamp(arg):
