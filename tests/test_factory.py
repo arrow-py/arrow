@@ -1,5 +1,4 @@
 import time
-import unittest
 from datetime import date, datetime
 
 import pytest
@@ -11,7 +10,7 @@ from .utils import assert_datetime_equality
 
 
 @pytest.mark.usefixtures("arrow_factory")
-class TestGet(unittest.TestCase):
+class TestGet:
     def test_no_args(self):
 
         assert_datetime_equality(
@@ -26,7 +25,8 @@ class TestGet(unittest.TestCase):
         assert no_arg == one_arg
 
     def test_one_arg_none(self):
-        self.assertRaises(NameError, self.factory.get, None)
+        with pytest.raises(ValueError):
+            self.factory.get(None)
 
     def test_struct_time(self):
 
