@@ -25,7 +25,7 @@ class TestGet:
         assert no_arg == one_arg
 
     def test_one_arg_none(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(TypeError):
             self.factory.get(None)
 
     def test_struct_time(self):
