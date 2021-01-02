@@ -8,6 +8,11 @@ from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
 
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo
+
 
 @pytest.mark.usefixtures("arrow_factory")
 class TestGet:
@@ -82,9 +87,9 @@ class TestGet:
 
         timestamp = time.time()
         timestamp_dt = datetime.fromtimestamp(timestamp, tz=tz.tzutc()).astimezone(
-            tz.gettz("US/Pacific")
+            ZoneInfo("US/Pacific")
         )
-        timezone = tz.gettz("US/Pacific")
+        timezone = ZoneInfo("US/Pacific")
 
         assert_datetime_equality(
             self.factory.get(timestamp, tzinfo=timezone), timestamp_dt
@@ -115,11 +120,11 @@ class TestGet:
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(
-            self.factory.get(tz.gettz("US/Pacific")), self.expected
+            self.factory.get(ZoneInfo("US/Pacific")), self.expected
         )
 
     # regression test for issue #658
@@ -136,11 +141,11 @@ class TestGet:
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(
-            self.factory.get(tzinfo=tz.gettz("US/Pacific")), self.expected
+            self.factory.get(tzinfo=ZoneInfo("US/Pacific")), self.expected
         )
 
     def test_kwarg_tzinfo_string(self):
@@ -148,7 +153,7 @@ class TestGet:
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(self.factory.get(tzinfo="US/Pacific"), self.expected)
@@ -226,27 +231,27 @@ class TestGet:
 
     def test_two_args_datetime_tzinfo(self):
 
-        result = self.factory.get(datetime(2013, 1, 1), tz.gettz("US/Pacific"))
+        result = self.factory.get(datetime(2013, 1, 1), ZoneInfo("US/Pacific"))
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_datetime_tz_str(self):
 
         result = self.factory.get(datetime(2013, 1, 1), "US/Pacific")
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_date_tzinfo(self):
 
-        result = self.factory.get(date(2013, 1, 1), tz.gettz("US/Pacific"))
+        result = self.factory.get(date(2013, 1, 1), ZoneInfo("US/Pacific"))
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_date_tz_str(self):
 
         result = self.factory.get(date(2013, 1, 1), "US/Pacific")
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_datetime_other(self):
 
@@ -266,10 +271,10 @@ class TestGet:
 
     def test_two_args_str_tzinfo(self):
 
-        result = self.factory.get("2013-01-01", tzinfo=tz.gettz("US/Pacific"))
+        result = self.factory.get("2013-01-01", tzinfo=ZoneInfo("US/Pacific"))
 
         assert_datetime_equality(
-            result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+            result._datetime, datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
         )
 
     def test_two_args_twitter_format(self):
@@ -358,8 +363,8 @@ class TestGet:
         assert res.tzinfo == tz.tzutc()
 
     def test_locale_with_tzinfo(self):
-        res = self.factory.get(locale="ja", tzinfo=tz.gettz("Asia/Tokyo"))
-        assert res.tzinfo == tz.gettz("Asia/Tokyo")
+        res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
+        assert res.tzinfo == ZoneInfo("Asia/Tokyo")
 
 
 @pytest.mark.usefixtures("arrow_factory")
@@ -381,9 +386,9 @@ class TestNow:
     def test_tzinfo(self):
 
         assert_datetime_equality(
-            self.factory.now(tz.gettz("EST")), datetime.now(tz.gettz("EST"))
+            self.factory.now(ZoneInfo("EST")), datetime.now(ZoneInfo("EST"))
         )
 
     def test_tz_str(self):
 
-        assert_datetime_equality(self.factory.now("EST"), datetime.now(tz.gettz("EST")))
+        assert_datetime_equality(self.factory.now("EST"), datetime.now(ZoneInfo("EST")))

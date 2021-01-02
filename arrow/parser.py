@@ -5,7 +5,12 @@ from functools import lru_cache
 from dateutil import tz
 
 from arrow import locales
-from arrow.util import next_weekday, normalize_timestamp
+from arrow.util import next_weekday, normalize_timestamp, tzoffset
+
+try:
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+except ImportError:  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 
 class ParserError(ValueError):
@@ -590,10 +595,13 @@ class TzinfoParser:
                 if sign == "-":
                     seconds *= -1
 
-                tzinfo = tz.tzoffset(None, seconds)
+                tzinfo = tzoffset(seconds)
 
             else:
-                tzinfo = tz.gettz(tzinfo_string)
+                try:
+                    tzinfo = ZoneInfo(tzinfo_string)
+                except ZoneInfoNotFoundError:
+                    tzinfo = None
 
         if tzinfo is None:
             raise ParserError(f"Could not parse timezone expression {tzinfo_string!r}.")

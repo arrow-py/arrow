@@ -47,10 +47,10 @@ Use a naive or timezone-aware datetime, or flexibly specify a timezone:
     <Arrow [2013-05-05T00:00:00-07:00]>
 
     >>> from dateutil import tz
-    >>> arrow.get(datetime(2013, 5, 5), tz.gettz('US/Pacific'))
+    >>> arrow.get(datetime(2013, 5, 5), ZoneInfo('US/Pacific'))
     <Arrow [2013-05-05T00:00:00-07:00]>
 
-    >>> arrow.get(datetime.now(tz.gettz('US/Pacific')))
+    >>> arrow.get(datetime.now(ZoneInfo('US/Pacific')))
     <Arrow [2013-05-06T21:24:49.552236-07:00]>
 
 Parse from a string:
@@ -185,7 +185,7 @@ Convert from UTC to other timezones by name or tzinfo:
     >>> utc.to('US/Pacific')
     <Arrow [2013-05-06T22:24:11.823627-07:00]>
 
-    >>> utc.to(tz.gettz('US/Pacific'))
+    >>> utc.to(ZoneInfo('US/Pacific'))
     <Arrow [2013-05-06T22:24:11.823627-07:00]>
 
 Or using shorthand:

@@ -1,9 +1,13 @@
 from datetime import datetime
 
 import pytest
-from dateutil import tz as dateutil_tz
 
 from arrow import arrow, factory, formatter, locales, parser
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo
 
 
 @pytest.fixture(scope="class")
@@ -32,7 +36,7 @@ def time_2013_02_15(request):
 @pytest.fixture(scope="class")
 def time_1975_12_25(request):
     request.cls.datetime = datetime(
-        1975, 12, 25, 14, 15, 16, tzinfo=dateutil_tz.gettz("America/New_York")
+        1975, 12, 25, 14, 15, 16, tzinfo=ZoneInfo("America/New_York")
     )
     request.cls.arrow = arrow.Arrow.fromdatetime(request.cls.datetime)
 

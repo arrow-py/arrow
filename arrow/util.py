@@ -1,4 +1,4 @@
-import datetime
+from datetime import date, timedelta, timezone
 
 from dateutil.rrule import WEEKLY, rrule
 
@@ -9,6 +9,10 @@ from arrow.constants import (
     MAX_TIMESTAMP_US,
     MIN_ORDINAL,
 )
+
+
+def tzoffset(offset):
+    return timezone(timedelta(seconds=offset))
 
 
 def next_weekday(start_date, weekday):
@@ -81,10 +85,10 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
         raise ValueError("ISO Calendar day value must be between 1-7")
 
     # The first week of the year always contains 4 Jan.
-    fourth_jan = datetime.date(iso_year, 1, 4)
-    delta = datetime.timedelta(fourth_jan.isoweekday() - 1)
+    fourth_jan = date(iso_year, 1, 4)
+    delta = timedelta(fourth_jan.isoweekday() - 1)
     year_start = fourth_jan - delta
-    gregorian = year_start + datetime.timedelta(days=iso_day - 1, weeks=iso_week - 1)
+    gregorian = year_start + timedelta(days=iso_day - 1, weeks=iso_week - 1)
 
     return gregorian
 

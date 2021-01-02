@@ -10,6 +10,7 @@ import arrow
 from arrow import formatter, parser
 from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
+from arrow.util import tzoffset
 
 try:
     from zoneinfo import ZoneInfo, available_timezones
@@ -326,13 +327,13 @@ class TestDateTimeParserParse:
 
     def test_parse_tz_hours_only(self):
 
-        self.expected = datetime(2025, 10, 17, 5, 30, 10, tzinfo=tz.tzoffset(None, 0))
+        self.expected = datetime(2025, 10, 17, 5, 30, 10, tzinfo=tzoffset(0))
         parsed = self.parser.parse("2025-10-17 05:30:10+00", "YYYY-MM-DD HH:mm:ssZ")
         assert parsed == self.expected
 
     def test_parse_tz_zz(self):
 
-        self.expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
+        self.expected = datetime(2013, 1, 1, tzinfo=tzoffset(-7 * 3600))
         assert self.parser.parse("2013-01-01 -07:00", "YYYY-MM-DD ZZ") == self.expected
 
     @pytest.mark.parametrize("full_tz_name", available_timezones())
@@ -628,7 +629,7 @@ class TestDateTimeParserParse:
         assert fr_parser.parse("mardi 02", "dddd MM") == expected
 
         # Times remain intact
-        expected = datetime(2020, 2, 4, 10, 25, 54, 123456, tz.tzoffset(None, -3600))
+        expected = datetime(2020, 2, 4, 10, 25, 54, 123456, tzoffset(-3600))
         assert (
             self.parser.parse(
                 "Tue 02 2020 10:25:54.123456-01:00", "ddd MM YYYY HH:mm:ss.SZZ"
@@ -983,7 +984,7 @@ class TestDateTimeParserISO:
     def test_YYYY_DDDD_HH_mm_ssZ(self):
 
         assert self.parser.parse_iso("2013-036 04:05:06+01:00") == datetime(
-            2013, 2, 5, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 5, 4, 5, 6, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-036 04:05:06Z") == datetime(
@@ -1011,7 +1012,7 @@ class TestDateTimeParserISO:
     def test_YYYY_MM_DDTHH_mmZ(self):
 
         assert self.parser.parse_iso("2013-02-03T04:05+01:00") == datetime(
-            2013, 2, 3, 4, 5, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, tzinfo=tzoffset(3600)
         )
 
     def test_YYYY_MM_DDTHH_mm(self):
@@ -1025,13 +1026,13 @@ class TestDateTimeParserISO:
     def test_YYYY_MM_DDTHHZ(self):
 
         assert self.parser.parse_iso("2013-02-03T04+01:00") == datetime(
-            2013, 2, 3, 4, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, tzinfo=tzoffset(3600)
         )
 
     def test_YYYY_MM_DDTHH_mm_ssZ(self):
 
         assert self.parser.parse_iso("2013-02-03T04:05:06+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, tzinfo=tzoffset(3600)
         )
 
     def test_YYYY_MM_DDTHH_mm_ss(self):
@@ -1043,7 +1044,7 @@ class TestDateTimeParserISO:
     def test_YYYY_MM_DD_HH_mmZ(self):
 
         assert self.parser.parse_iso("2013-02-03 04:05+01:00") == datetime(
-            2013, 2, 3, 4, 5, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, tzinfo=tzoffset(3600)
         )
 
     def test_YYYY_MM_DD_HH_mm(self):
@@ -1068,7 +1069,7 @@ class TestDateTimeParserISO:
     def test_YYYY_MM_DD_HH_mm_ssZ(self):
 
         assert self.parser.parse_iso("2013-02-03 04:05:06+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, tzinfo=tzoffset(3600)
         )
 
     def test_YYYY_MM_DD_HH_mm_ss(self):
@@ -1115,23 +1116,23 @@ class TestDateTimeParserISO:
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
 
         assert self.parser.parse_iso("2013-02-03T04:05:06.7+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, 700000, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, 700000, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-02-03T04:05:06.78+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, 780000, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, 780000, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-02-03T04:05:06.789+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, 789000, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, 789000, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-02-03T04:05:06.7891+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, 789100, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, 789100, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-02-03T04:05:06.78912+01:00") == datetime(
-            2013, 2, 3, 4, 5, 6, 789120, tzinfo=tz.tzoffset(None, 3600)
+            2013, 2, 3, 4, 5, 6, 789120, tzinfo=tzoffset(3600)
         )
 
         assert self.parser.parse_iso("2013-02-03 04:05:06.78912Z") == datetime(
@@ -1202,12 +1203,12 @@ class TestDateTimeParserISO:
         """Regression tests for parsing output from GNU date."""
         # date -Ins
         assert self.parser.parse_iso("2016-11-16T09:46:30,895636557-0800") == datetime(
-            2016, 11, 16, 9, 46, 30, 895636, tzinfo=tz.tzoffset(None, -3600 * 8)
+            2016, 11, 16, 9, 46, 30, 895636, tzinfo=tzoffset(-3600 * 8)
         )
 
         # date --rfc-3339=ns
         assert self.parser.parse_iso("2016-11-16 09:51:14.682141526-08:00") == datetime(
-            2016, 11, 16, 9, 51, 14, 682142, tzinfo=tz.tzoffset(None, -3600 * 8)
+            2016, 11, 16, 9, 51, 14, 682142, tzinfo=tzoffset(-3600 * 8)
         )
 
     def test_isoformat(self):
@@ -1307,15 +1308,15 @@ class TestDateTimeParserISO:
         )
 
         assert self.parser.parse_iso("20180517T105513.843456-0700") == datetime(
-            2018, 5, 17, 10, 55, 13, 843456, tzinfo=tz.tzoffset(None, -25200)
+            2018, 5, 17, 10, 55, 13, 843456, tzinfo=tzoffset(-25200)
         )
 
         assert self.parser.parse_iso("20180517T105513-0700") == datetime(
-            2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)
+            2018, 5, 17, 10, 55, 13, tzinfo=tzoffset(-25200)
         )
 
         assert self.parser.parse_iso("20180517T105513-07") == datetime(
-            2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)
+            2018, 5, 17, 10, 55, 13, tzinfo=tzoffset(-25200)
         )
 
         # ordinal in basic format: YYYYDDDD
@@ -1382,22 +1383,22 @@ class TestTzinfoParser:
 
     def test_parse_iso(self):
 
-        assert self.parser.parse("01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("11:35") == tz.tzoffset(None, 11 * 3600 + 2100)
-        assert self.parser.parse("+01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-01:00") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("01:00") == tzoffset(3600)
+        assert self.parser.parse("11:35") == tzoffset(11 * 3600 + 2100)
+        assert self.parser.parse("+01:00") == tzoffset(3600)
+        assert self.parser.parse("-01:00") == tzoffset(-3600)
 
-        assert self.parser.parse("0100") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("+0100") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-0100") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("0100") == tzoffset(3600)
+        assert self.parser.parse("+0100") == tzoffset(3600)
+        assert self.parser.parse("-0100") == tzoffset(-3600)
 
-        assert self.parser.parse("01") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("+01") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-01") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("01") == tzoffset(3600)
+        assert self.parser.parse("+01") == tzoffset(3600)
+        assert self.parser.parse("-01") == tzoffset(-3600)
 
     def test_parse_str(self):
 
-        assert self.parser.parse("US/Pacific") == tz.gettz("US/Pacific")
+        assert self.parser.parse("US/Pacific") == ZoneInfo("US/Pacific")
 
     def test_parse_fails(self):
 

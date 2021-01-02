@@ -125,7 +125,7 @@ class TestFormatterFormatToken:
 
     def test_timezone(self):
 
-        dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
+        dt = datetime.utcnow().replace(tzinfo=ZoneInfo("US/Pacific"))
 
         result = self.formatter._format_token(dt, "ZZ")
         assert result == "-07:00" or result == "-08:00"
