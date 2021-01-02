@@ -11,7 +11,10 @@ from arrow import formatter, parser
 from arrow.constants import MAX_TIMESTAMP_US
 from arrow.parser import DateTimeParser, ParserError, ParserMatchError
 
-from .utils import make_full_tz_list
+try:
+    from zoneinfo import ZoneInfo, available_timezones
+except ImportError:  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo, available_timezones
 
 
 @pytest.mark.usefixtures("dt_parser")
@@ -332,10 +335,10 @@ class TestDateTimeParserParse:
         self.expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
         assert self.parser.parse("2013-01-01 -07:00", "YYYY-MM-DD ZZ") == self.expected
 
-    @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
+    @pytest.mark.parametrize("full_tz_name", available_timezones())
     def test_parse_tz_name_zzz(self, full_tz_name):
 
-        self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
+        self.expected = datetime(2013, 1, 1, tzinfo=ZoneInfo(full_tz_name))
         assert (
             self.parser.parse(f"2013-01-01 {full_tz_name}", "YYYY-MM-DD ZZZ")
             == self.expected

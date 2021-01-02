@@ -1,9 +1,11 @@
+backports.zoneinfo; python_version < "3.9"
 dateparser==1.0.*
 pre-commit==2.9.*
 pytest==6.2.*
 pytest-cov==2.10.*
 pytest-mock==3.4.*
 python-dateutil==2.8.*
-pytz==2019.*
+pytz==2020.*
 simplejson==3.17.*
 sphinx==3.4.*
+tzdata==2020.*

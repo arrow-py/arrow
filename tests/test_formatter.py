@@ -1,8 +1,12 @@
 from datetime import datetime
 
 import pytest
-import pytz
 from dateutil import tz as dateutil_tz
+
+try:
+    from zoneinfo import ZoneInfo, available_timezones
+except ImportError:  # pragma: no cover
+    from backports.zoneinfo import ZoneInfo, available_timezones
 
 from arrow import (
     FORMAT_ATOM,
@@ -16,8 +20,6 @@ from arrow import (
     FORMAT_RSS,
     FORMAT_W3C,
 )
-
-from .utils import make_full_tz_list
 
 
 @pytest.mark.usefixtures("arrow_formatter")
@@ -131,13 +133,10 @@ class TestFormatterFormatToken:
         result = self.formatter._format_token(dt, "Z")
         assert result == "-0700" or result == "-0800"
 
-    @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
+    @pytest.mark.parametrize("full_tz_name", available_timezones())
     def test_timezone_formatter(self, full_tz_name):
 
-        # This test will fail if we use "now" as date as soon as we change from/to DST
-        dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
-            tzinfo=dateutil_tz.gettz(full_tz_name)
-        )
+        dt = datetime.now(tz=dateutil_tz.UTC).replace(tzinfo=ZoneInfo(full_tz_name))
         abbreviation = dt.tzname()
 
         result = self.formatter._format_token(dt, "ZZZ")
