@@ -55,12 +55,12 @@ class Arrow:
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
     _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
-    _SECS_PER_MINUTE = float(60)
-    _SECS_PER_HOUR = float(60 * 60)
-    _SECS_PER_DAY = float(60 * 60 * 24)
-    _SECS_PER_WEEK = float(60 * 60 * 24 * 7)
-    _SECS_PER_MONTH = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR = float(60 * 60 * 24 * 365)
+    _SECS_PER_MINUTE = 60
+    _SECS_PER_HOUR = 60 * 60
+    _SECS_PER_DAY = 60 * 60 * 24
+    _SECS_PER_WEEK = 60 * 60 * 24 * 7
+    _SECS_PER_MONTH = 60 * 60 * 24 * 30.5
+    _SECS_PER_YEAR = 60 * 60 * 24 * 365
 
     def __init__(
         self,
