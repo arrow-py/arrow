@@ -20,8 +20,8 @@ except (OverflowError, ValueError, OSError):  # pragma: no cover
         else datetime(2038, 1, 18, 23, 59, 59, 999999).timestamp()
     )
 
-MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1e3
-MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1e6
+MAX_TIMESTAMP_MS = MAX_TIMESTAMP * 1000
+MAX_TIMESTAMP_US = MAX_TIMESTAMP * 1_000_000
 
 MAX_ORDINAL = datetime.max.toordinal()
 MIN_ORDINAL = 1
