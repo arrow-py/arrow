@@ -167,7 +167,7 @@ class ArrowFactory:
 
             # (None) -> raises an exception
             if arg is None:
-                raise TypeError("Cannot parse None.")
+                raise TypeError("Cannot parse argument of type None.")
 
             # try (int, float) -> from timestamp with tz
             elif not isinstance(arg, str) and is_timestamp(arg):
