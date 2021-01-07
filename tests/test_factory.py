@@ -25,10 +25,8 @@ class TestGet:
         assert no_arg == one_arg
 
     def test_one_arg_none(self):
-
-        assert_datetime_equality(
-            self.factory.get(None), datetime.utcnow().replace(tzinfo=tz.tzutc())
-        )
+        with pytest.raises(TypeError):
+            self.factory.get(None)
 
     def test_struct_time(self):
 

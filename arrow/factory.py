@@ -165,9 +165,9 @@ class ArrowFactory:
         if arg_count == 1:
             arg = args[0]
 
-            # (None) -> now, @ utc.
+            # (None) -> raises an exception
             if arg is None:
-                return self.type.utcnow()
+                raise TypeError("Cannot parse argument of type None.")
 
             # try (int, float) -> from timestamp with tz
             elif not isinstance(arg, str) and is_timestamp(arg):
