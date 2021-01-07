@@ -275,8 +275,8 @@ class TestDateTimeParserParse:
 
         tz_utc = tz.tzutc()
         timestamp = 1569982581.413132
-        timestamp_milli = int(round(timestamp * 1e3))
-        timestamp_micro = int(round(timestamp * 1e6))
+        timestamp_milli = round(timestamp * 1000)
+        timestamp_micro = round(timestamp * 1_000_000)
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)

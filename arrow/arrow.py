@@ -55,12 +55,12 @@ class Arrow:
     _ATTRS = ["year", "month", "day", "hour", "minute", "second", "microsecond"]
     _ATTRS_PLURAL = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER = 3
-    _SECS_PER_MINUTE = float(60)
-    _SECS_PER_HOUR = float(60 * 60)
-    _SECS_PER_DAY = float(60 * 60 * 24)
-    _SECS_PER_WEEK = float(60 * 60 * 24 * 7)
-    _SECS_PER_MONTH = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR = float(60 * 60 * 24 * 365)
+    _SECS_PER_MINUTE = 60
+    _SECS_PER_HOUR = 60 * 60
+    _SECS_PER_DAY = 60 * 60 * 24
+    _SECS_PER_WEEK = 60 * 60 * 24 * 7
+    _SECS_PER_MONTH = 60 * 60 * 24 * 30.5
+    _SECS_PER_YEAR = 60 * 60 * 24 * 365
 
     def __init__(
         self,
@@ -1028,7 +1028,7 @@ class Arrow:
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
 
-        delta = int(round((self._datetime - dt).total_seconds()))
+        delta = round((self._datetime - dt).total_seconds())
         sign = -1 if delta < 0 else 1
         diff = abs(delta)
         delta = diff
@@ -1047,7 +1047,7 @@ class Arrow:
                 elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_HOUR:
-                    minutes = sign * int(max(delta / self._SECS_PER_MINUTE, 2))
+                    minutes = sign * max(delta // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
@@ -1055,18 +1055,18 @@ class Arrow:
                 elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY:
-                    hours = sign * int(max(delta / self._SECS_PER_HOUR, 2))
+                    hours = sign * max(delta // self._SECS_PER_HOUR, 2)
                     return locale.describe("hours", hours, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_WEEK:
-                    days = sign * int(max(delta / self._SECS_PER_DAY, 2))
+                    days = sign * max(delta // self._SECS_PER_DAY, 2)
                     return locale.describe("days", days, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_MONTH:
-                    weeks = sign * int(max(delta / self._SECS_PER_WEEK, 2))
+                    weeks = sign * max(delta // self._SECS_PER_WEEK, 2)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_MONTH * 2:
@@ -1076,7 +1076,7 @@ class Arrow:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
-                    months = sign * int(max(abs(other_months - self_months), 2))
+                    months = sign * max(abs(other_months - self_months), 2)
 
                     return locale.describe(
                         "months", months, only_distance=only_distance
@@ -1085,7 +1085,7 @@ class Arrow:
                 elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta / self._SECS_PER_YEAR, 2))
+                    years = sign * max(delta // self._SECS_PER_YEAR, 2)
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
