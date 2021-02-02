@@ -1853,8 +1853,8 @@ class NorwegianLocale(Locale):
 
     timeframes = {
         "now": "nå nettopp",
-        "second": "et sekund",
-        "seconds": "{0} noen sekunder",
+        "second": "ett sekund",
+        "seconds": "{0} sekunder",
         "minute": "ett minutt",
         "minutes": "{0} minutter",
         "hour": "en time",
@@ -1920,9 +1920,9 @@ class NewNorwegianLocale(Locale):
 
     timeframes = {
         "now": "no nettopp",
-        "second": "et sekund",
-        "seconds": "{0} nokre sekund",
-        "minute": "ett minutt",
+        "second": "eitt sekund",
+        "seconds": "{0} sekund",
+        "minute": "eitt minutt",
         "minutes": "{0} minutt",
         "hour": "ein time",
         "hours": "{0} timar",
@@ -1930,7 +1930,7 @@ class NewNorwegianLocale(Locale):
         "days": "{0} dagar",
         "month": "en månad",
         "months": "{0} månader",
-        "year": "eit år",
+        "year": "eitt år",
         "years": "{0} år",
     }
 
