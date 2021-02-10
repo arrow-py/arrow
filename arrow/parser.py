@@ -308,9 +308,9 @@ class DateTimeParser:
             return self._parse_multiformat(datetime_string, fmt)
 
         try:
-            fmt_tokens, fmt_pattern_re = self._generate_pattern_re(
-                fmt
-            )  # type: List[_FORMAT_TYPE], Pattern[str]
+            fmt_tokens: List[_FORMAT_TYPE]
+            fmt_pattern_re: Pattern[str]
+            fmt_tokens, fmt_pattern_re = self._generate_pattern_re(fmt)
         except re.error as e:
             raise ParserMatchError(
                 f"Failed to generate regular expression pattern: {e}."
