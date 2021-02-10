@@ -20,7 +20,7 @@ if sys.version_info < (3, 8):  # pragma: no cover
 else:
     from typing import Literal  # pragma: no cover
 
-TimeFrames = Literal[
+TimeFrameLiteral = Literal[
     "now",
     "second",
     "seconds",
@@ -87,7 +87,7 @@ class Locale:
 
     names: ClassVar[List[str]] = []
 
-    timeframes: ClassVar[Mapping[TimeFrames, _TimeFrameElements]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, _TimeFrameElements]] = {
         "now": "",
         "second": "",
         "seconds": "",
@@ -127,7 +127,7 @@ class Locale:
 
     def describe(
         self,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[float, int] = 0,
         only_distance: bool = False,
     ) -> str:
@@ -146,7 +146,7 @@ class Locale:
 
     def describe_multi(
         self,
-        timeframes: Sequence[Tuple[TimeFrames, Union[int, float]]],
+        timeframes: Sequence[Tuple[TimeFrameLiteral, Union[int, float]]],
         only_distance: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
@@ -258,14 +258,16 @@ class Locale:
     def _name_to_ordinal(self, lst: Sequence[str]) -> Dict[str, int]:
         return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         # TODO: remove cast
         return cast(str, self.timeframes[timeframe]).format(trunc(abs(delta)))
 
     def _format_relative(
         self,
         humanized: str,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[float, int],
     ) -> str:
 
@@ -376,7 +378,7 @@ class EnglishLocale(Locale):
 
     def describe(
         self,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[int, float] = 0,
         only_distance: bool = False,
     ) -> str:
@@ -855,7 +857,7 @@ class FinnishLocale(Locale):
     past = "{0} sitten"
     future = "{0} kuluttua"
 
-    timeframes: ClassVar[Mapping[TimeFrames, List[str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, List[str]]] = {
         "now": ["juuri nyt", "juuri nyt"],
         "second": ["sekunti", "sekunti"],
         "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
@@ -918,7 +920,7 @@ class FinnishLocale(Locale):
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
     # TODO: Fix return type
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
         return (
             self.timeframes[timeframe][0].format(abs(delta)),
             self.timeframes[timeframe][1].format(abs(delta)),
@@ -927,7 +929,7 @@ class FinnishLocale(Locale):
     def _format_relative(
         self,
         humanized: str,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[float, int],
     ) -> str:
         if timeframe == "now":
@@ -1203,7 +1205,7 @@ class KoreanLocale(Locale):
     def _format_relative(
         self,
         humanized: str,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[float, int],
     ) -> str:
         if timeframe in ("day", "days"):
@@ -1291,9 +1293,11 @@ class DutchLocale(Locale):
 
 
 class SlavicBaseLocale(Locale):
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]]
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
 
@@ -1315,7 +1319,7 @@ class BelarusianLocale(SlavicBaseLocale):
     past = "{0} таму"
     future = "праз {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "зараз",
         "second": "секунду",
         "seconds": "{0} некалькі секунд",
@@ -1384,7 +1388,7 @@ class PolishLocale(SlavicBaseLocale):
 
     # The nouns should be in genitive case (Polish: "dopełniacz")
     # in order to correctly form `past` & `future` expressions.
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "teraz",
         "second": "sekundę",
         "seconds": ["{0} sekund", "{0} sekundy", "{0} sekund"],
@@ -1453,7 +1457,7 @@ class RussianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "через {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "сейчас",
         "second": "Второй",
         "seconds": "{0} несколько секунд",
@@ -1589,7 +1593,7 @@ class BulgarianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "напред {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "сега",
         "second": "секунда",
         "seconds": "{0} няколко секунди",
@@ -1656,7 +1660,7 @@ class UkrainianLocale(SlavicBaseLocale):
     past = "{0} тому"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "зараз",
         "second": "секунда",
         "seconds": "{0} кілька секунд",
@@ -1722,7 +1726,7 @@ class MacedonianLocale(SlavicBaseLocale):
     past = "пред {0}"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
         "now": "сега",
         "second": "една секунда",
         "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
@@ -1877,7 +1881,7 @@ class GermanBaseLocale(Locale):
 
     def describe(
         self,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[int, float] = 0,
         only_distance: bool = False,
     ) -> str:
@@ -2439,7 +2443,7 @@ class ArabicLocale(Locale):
     past = "منذ {0}"
     future = "خلال {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, Mapping[str, str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "الآن",
         "second": "ثانية",
         "seconds": {"double": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
@@ -2498,7 +2502,9 @@ class ArabicLocale(Locale):
     ]
     day_abbreviations = ["", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت", "أحد"]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -2649,7 +2655,9 @@ class MoroccoArabicLocale(ArabicLocale):
 
 
 class IcelandicLocale(Locale):
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         form = self.timeframes[timeframe]
         if delta < 0:
             form = form[0]
@@ -2664,7 +2672,7 @@ class IcelandicLocale(Locale):
     past = "fyrir {0} síðan"
     future = "eftir {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[Tuple[str, str], str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Tuple[str, str], str]]] = {
         "now": "rétt í þessu",
         "second": ("sekúndu", "sekúndu"),
         "seconds": ("{0} nokkrum sekúndum", "nokkrar sekúndur"),
@@ -2941,7 +2949,7 @@ class CzechLocale(Locale):
     names = ["cs", "cs_cz"]
 
     timeframes: ClassVar[
-        Mapping[TimeFrames, Union[Mapping[str, Union[List[str], str]], str]]
+        Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
     ] = {
         "now": "Teď",
         "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
@@ -3006,7 +3014,9 @@ class CzechLocale(Locale):
     ]
     day_abbreviations = ["", "po", "út", "st", "čt", "pá", "so", "ne"]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         """Czech aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3038,7 +3048,7 @@ class SlovakLocale(Locale):
     names = ["sk", "sk_sk"]
 
     timeframes: ClassVar[
-        Mapping[TimeFrames, Union[Mapping[str, Union[List[str], str]], str]]
+        Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
     ] = {
         "now": "Teraz",
         "second": {"past": "sekundou", "future": "sekundu", "zero": "{0} sekúnd"},
@@ -3104,7 +3114,9 @@ class SlovakLocale(Locale):
     ]
     day_abbreviations = ["", "po", "ut", "st", "št", "pi", "so", "ne"]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         """Slovak aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3278,7 +3290,9 @@ class HebrewLocale(Locale):
     day_names = ["", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת", "ראשון"]
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         """Hebrew couple of <timeframe> aware"""
         couple = f"2-{timeframe}"
         single = timeframe.rstrip("s")
@@ -3293,7 +3307,7 @@ class HebrewLocale(Locale):
 
     def describe_multi(
         self,
-        timeframes: Sequence[Tuple[TimeFrames, Union[int, float]]],
+        timeframes: Sequence[Tuple[TimeFrameLiteral, Union[int, float]]],
         only_distance: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
@@ -3548,7 +3562,7 @@ class HungarianLocale(Locale):
     past = "{0} ezelőtt"
     future = "{0} múlva"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Union[str, Mapping[str, str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "éppen most",
         "second": {"past": "egy második", "future": "egy második"},
         "seconds": {"past": "{0} másodpercekkel", "future": "{0} pár másodperc"},
@@ -3609,7 +3623,9 @@ class HungarianLocale(Locale):
 
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         form = self.timeframes[timeframe]
 
         if isinstance(form, Mapping):
@@ -3767,7 +3783,7 @@ class ThaiLocale(Locale):
     def _format_relative(
         self,
         humanized: str,
-        timeframe: TimeFrames,
+        timeframe: TimeFrameLiteral,
         delta: Union[float, int],
     ) -> str:
         """Thai normally doesn't have any space between words"""
@@ -4215,7 +4231,7 @@ class EstonianLocale(Locale):
     future = "{0} pärast"
     and_word = "ja"
 
-    timeframes: ClassVar[Mapping[TimeFrames, Mapping[str, str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Mapping[str, str]]] = {
         "now": {"past": "just nüüd", "future": "just nüüd"},
         "second": {"past": "üks sekund", "future": "ühe sekundi"},
         "seconds": {"past": "{0} sekundit", "future": "{0} sekundi"},
@@ -4274,7 +4290,9 @@ class EstonianLocale(Locale):
     ]
     day_abbreviations = ["", "Esm", "Teis", "Kolm", "Nelj", "Re", "Lau", "Püh"]
 
-    def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         form = self.timeframes[timeframe]
         if delta > 0:
             _form = form["future"]

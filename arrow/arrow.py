@@ -32,7 +32,7 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
-from arrow.locales import TimeFrames
+from arrow.locales import TimeFrameLiteral
 
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final, Literal
@@ -132,7 +132,7 @@ class Arrow:
     _SECS_PER_MONTH: Final[float] = 60 * 60 * 24 * 30.5
     _SECS_PER_YEAR: Final[int] = 60 * 60 * 24 * 365
 
-    _SECS_MAP: Final[Mapping[TimeFrames, float]] = {
+    _SECS_MAP: Final[Mapping[TimeFrameLiteral, float]] = {
         "second": 1.0,
         "minute": _SECS_PER_MINUTE,
         "hour": _SECS_PER_HOUR,
@@ -1210,7 +1210,7 @@ class Arrow:
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
-                granularity = cast(TimeFrames, granularity)  # type: ignore[assignment]
+                granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
 
                 if granularity == "second":
                     delta = sign * float(delta_second)
@@ -1239,20 +1239,22 @@ class Arrow:
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
             else:
-                timeframes: List[Tuple[TimeFrames, float]] = []
+                timeframes: List[Tuple[TimeFrameLiteral, float]] = []
 
-                def gather_timeframes(_delta: float, _frame: TimeFrames) -> float:
+                def gather_timeframes(_delta: float, _frame: TimeFrameLiteral) -> float:
                     if _frame in granularity:
                         value = sign * _delta / self._SECS_MAP[_frame]
                         _delta %= self._SECS_MAP[_frame]
                         if trunc(abs(value)) != 1:
-                            timeframes.append((cast(TimeFrames, _frame + "s"), value))
+                            timeframes.append(
+                                (cast(TimeFrameLiteral, _frame + "s"), value)
+                            )
                         else:
                             timeframes.append((_frame, value))
                     return _delta
 
                 delta = float(delta_second)
-                frames: Tuple[TimeFrames, ...] = (
+                frames: Tuple[TimeFrameLiteral, ...] = (
                     "year",
                     "month",
                     "week",
