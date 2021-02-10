@@ -65,16 +65,16 @@ class DateTimeFormatter:
         if token == "MM":
             return f"{dt.month:02d}"
         if token == "M":
-            return str(dt.month)
+            return f"{dt.month}"
 
         if token == "DDDD":
             return f"{dt.timetuple().tm_yday:03d}"
         if token == "DDD":
-            return str(dt.timetuple().tm_yday)
+            return f"{dt.timetuple().tm_yday}"
         if token == "DD":
             return f"{dt.day:02d}"
         if token == "D":
-            return str(dt.day)
+            return f"{dt.day}"
 
         if token == "Do":
             return self.locale.ordinal_number(dt.day)
@@ -84,45 +84,45 @@ class DateTimeFormatter:
         if token == "ddd":
             return self.locale.day_abbreviation(dt.isoweekday())
         if token == "d":
-            return str(dt.isoweekday())
+            return f"{dt.isoweekday()}"
 
         if token == "HH":
             return f"{dt.hour:02d}"
         if token == "H":
-            return str(dt.hour)
+            return f"{dt.hour}"
         if token == "hh":
-            return "{:02d}".format(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
+            return f"{dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12):02d}"
         if token == "h":
-            return str(dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12))
+            return f"{dt.hour if 0 < dt.hour < 13 else abs(dt.hour - 12)}"
 
         if token == "mm":
             return f"{dt.minute:02d}"
         if token == "m":
-            return str(dt.minute)
+            return f"{dt.minute}"
 
         if token == "ss":
             return f"{dt.second:02d}"
         if token == "s":
-            return str(dt.second)
+            return f"{dt.second}"
 
         if token == "SSSSSS":
-            return str("{:06d}".format(int(dt.microsecond)))
+            return f"{dt.microsecond:06d}"
         if token == "SSSSS":
-            return str("{:05d}".format(int(dt.microsecond / 10)))
+            return f"{dt.microsecond // 10:05d}"
         if token == "SSSS":
-            return str("{:04d}".format(int(dt.microsecond / 100)))
+            return f"{dt.microsecond // 100:04d}"
         if token == "SSS":
-            return str("{:03d}".format(int(dt.microsecond / 1000)))
+            return f"{dt.microsecond // 1000:03d}"
         if token == "SS":
-            return str("{:02d}".format(int(dt.microsecond / 10000)))
+            return f"{dt.microsecond // 10000:02d}"
         if token == "S":
-            return str(int(dt.microsecond / 100000))
+            return f"{dt.microsecond // 100000}"
 
         if token == "X":
-            return str(dt.timestamp())
+            return f"{dt.timestamp()}"
 
         if token == "x":
-            return str(int(dt.timestamp() * 1000000))
+            return f"{dt.timestamp() * 1_000_000:.0f}"
 
         if token == "ZZZ":
             return dt.tzname()

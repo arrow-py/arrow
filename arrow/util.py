@@ -47,9 +47,7 @@ def is_timestamp(value: Any) -> bool:
     """Check if value is a valid timestamp."""
     if isinstance(value, bool):
         return False
-    if not (
-        isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
-    ):
+    if not isinstance(value, (int, float, str)):
         return False
     try:
         float(value)
@@ -70,11 +68,11 @@ def normalize_timestamp(timestamp: float) -> float:
     """Normalize millisecond and microsecond timestamps into normal timestamps."""
     if timestamp > MAX_TIMESTAMP:
         if timestamp < MAX_TIMESTAMP_MS:
-            timestamp /= 1e3
+            timestamp /= 1000
         elif timestamp < MAX_TIMESTAMP_US:
-            timestamp /= 1e6
+            timestamp /= 1_000_000
         else:
-            raise ValueError(f"The specified timestamp '{timestamp}' is too large.")
+            raise ValueError(f"The specified timestamp {timestamp!r} is too large.")
     return timestamp
 
 

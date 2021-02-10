@@ -125,12 +125,12 @@ class Arrow:
     ]
     _ATTRS_PLURAL: Final[List[str]] = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER: Final[int] = 3
-    _SECS_PER_MINUTE: Final[float] = float(60)
-    _SECS_PER_HOUR: Final[float] = float(60 * 60)
-    _SECS_PER_DAY: Final[float] = float(60 * 60 * 24)
-    _SECS_PER_WEEK: Final[float] = float(60 * 60 * 24 * 7)
-    _SECS_PER_MONTH: Final[float] = float(60 * 60 * 24 * 30.5)
-    _SECS_PER_YEAR: Final[float] = float(60 * 60 * 24 * 365)
+    _SECS_PER_MINUTE: Final[int] = 60
+    _SECS_PER_HOUR: Final[int] = 60 * 60
+    _SECS_PER_DAY: Final[int] = 60 * 60 * 24
+    _SECS_PER_WEEK: Final[int] = 60 * 60 * 24 * 7
+    _SECS_PER_MONTH: Final[float] = 60 * 60 * 24 * 30.5
+    _SECS_PER_YEAR: Final[int] = 60 * 60 * 24 * 365
 
     _SECS_MAP: Final[Mapping[TimeFrames, float]] = {
         "second": 1.0,
@@ -255,7 +255,7 @@ class Arrow:
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
+            raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = dt_datetime.fromtimestamp(timestamp, tzinfo)
@@ -281,7 +281,7 @@ class Arrow:
         """
 
         if not util.is_timestamp(timestamp):
-            raise ValueError(f"The provided timestamp '{timestamp}' is invalid.")
+            raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = dt_datetime.utcfromtimestamp(timestamp)
@@ -815,12 +815,6 @@ class Arrow:
 
         return self._datetime.tzinfo
 
-    @tzinfo.setter
-    def tzinfo(self, tzinfo: Optional[dt_tzinfo]) -> None:
-        """ Sets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object. """
-
-        self._datetime = self._datetime.replace(tzinfo=tzinfo)
-
     @property
     def datetime(self) -> dt_datetime:
         """Returns a datetime representation of the :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -955,7 +949,7 @@ class Arrow:
             elif key in ["week", "quarter"]:
                 raise ValueError(f"Setting absolute {key} is not supported.")
             elif key not in ["tzinfo", "fold"]:
-                raise ValueError(f"Unknown attribute: '{key}'.")
+                raise ValueError(f"Unknown attribute: {key!r}.")
 
         current = self._datetime.replace(**absolute_kwargs)
 
@@ -1082,6 +1076,7 @@ class Arrow:
         formatted according to a format string.
 
         :param fmt: the format string.
+        :param locale: the locale to format.
 
         Usage::
 
@@ -1147,7 +1142,7 @@ class Arrow:
 
         else:
             raise TypeError(
-                f"Invalid 'other' argument of type '{type(other).__name__}'. "
+                f"Invalid 'other' argument of type {type(other).__name__!r}. "
                 "Argument must be of type None, Arrow, or datetime."
             )
 
@@ -1172,7 +1167,7 @@ class Arrow:
                 elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_HOUR:
-                    minutes = sign * int(max(delta_second / self._SECS_PER_MINUTE, 2))
+                    minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
@@ -1180,18 +1175,18 @@ class Arrow:
                 elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY:
-                    hours = sign * int(max(delta_second / self._SECS_PER_HOUR, 2))
+                    hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
                     return locale.describe("hours", hours, only_distance=only_distance)
                 elif diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_WEEK:
-                    days = sign * int(max(delta_second / self._SECS_PER_DAY, 2))
+                    days = sign * max(delta_second // self._SECS_PER_DAY, 2)
                     return locale.describe("days", days, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_MONTH:
-                    weeks = sign * int(max(delta_second / self._SECS_PER_WEEK, 2))
+                    weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
                 elif diff < self._SECS_PER_MONTH * 2:
@@ -1201,7 +1196,7 @@ class Arrow:
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
 
-                    months = sign * int(max(abs(other_months - self_months), 2))
+                    months = sign * max(abs(other_months - self_months), 2)
 
                     return locale.describe(
                         "months", months, only_distance=only_distance
@@ -1210,7 +1205,7 @@ class Arrow:
                 elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
                 else:
-                    years = sign * int(max(delta_second / self._SECS_PER_YEAR, 2))
+                    years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
                     return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
@@ -1278,7 +1273,7 @@ class Arrow:
 
         except KeyError as e:
             raise ValueError(
-                f"Humanization of the {e} granularity is not currently translated in the '{locale_name}' locale. "
+                f"Humanization of the {e} granularity is not currently translated in the {locale_name!r} locale. "
                 "Please consider making a contribution to this locale."
             )
 
@@ -1323,36 +1318,24 @@ class Arrow:
 
         if not isinstance(start, Arrow):
             raise TypeError(
-                f"Cannot parse start date argument type of '{type(start)}'."
+                f"Cannot parse start date argument type of {type(start)!r}."
             )
 
         if not isinstance(end, Arrow):
-            raise TypeError(f"Cannot parse end date argument type of '{type(start)}'.")
+            raise TypeError(f"Cannot parse end date argument type of {type(start)!r}.")
 
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
 
-        target_timestamp = self.float_timestamp
-        start_timestamp = start.float_timestamp
-        end_timestamp = end.float_timestamp
+        target_ts = self.float_timestamp
+        start_ts = start.float_timestamp
+        end_ts = end.float_timestamp
 
-        if include_start and include_end:
-            return (
-                target_timestamp >= start_timestamp
-                and target_timestamp <= end_timestamp
-            )
-        elif include_start and not include_end:
-            return (
-                target_timestamp >= start_timestamp and target_timestamp < end_timestamp
-            )
-        elif not include_start and include_end:
-            return (
-                target_timestamp > start_timestamp and target_timestamp <= end_timestamp
-            )
-        else:
-            return (
-                target_timestamp > start_timestamp and target_timestamp < end_timestamp
-            )
+        return (
+            (start_ts <= target_ts <= end_ts)
+            and (include_start or start_ts < target_ts)
+            and (include_end or target_ts < end_ts)
+        )
 
     # datetime methods
 
@@ -1701,7 +1684,7 @@ class Arrow:
             try:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
-                raise ValueError(f"'{tz_expr}' not recognized as a timezone.")
+                raise ValueError(f"{tz_expr!r} not recognized as a timezone.")
 
     @classmethod
     def _get_datetime(
@@ -1716,7 +1699,7 @@ class Arrow:
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
         else:
-            raise ValueError(f"'{expr}' not recognized as a datetime or timestamp.")
+            raise ValueError(f"{expr!r} not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:

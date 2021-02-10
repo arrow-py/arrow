@@ -4,7 +4,6 @@ from math import trunc
 from typing import (
     Any,
     ClassVar,
-    Collection,
     Dict,
     List,
     Mapping,
@@ -60,7 +59,7 @@ def get_locale(name: str) -> "Locale":
     locale_cls = _locales.get(name.lower())
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'.")
+        raise ValueError(f"Unsupported locale {name!r}.")
 
     return locale_cls()
 
@@ -75,7 +74,7 @@ def get_locale_by_class_name(name: str) -> "Locale":
     locale_cls: Optional[Type[Locale]] = globals().get(name)
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale '{name}'.")
+        raise ValueError(f"Unsupported locale {name!r}.")
 
     return locale_cls()
 
@@ -147,7 +146,7 @@ class Locale:
 
     def describe_multi(
         self,
-        timeframes: Collection[Tuple[TimeFrames, Union[int, float]]],
+        timeframes: Sequence[Tuple[TimeFrames, Union[int, float]]],
         only_distance: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
@@ -156,16 +155,15 @@ class Locale:
         :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = ""
-        for index, (timeframe, delta) in enumerate(timeframes):
-            humanized += self._format_timeframe(timeframe, delta)
-            if index == len(timeframes) - 2 and self.and_word:
-                humanized += " " + self.and_word + " "
-            elif index < len(timeframes) - 1:
-                humanized += " "
+        parts = [
+            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+        ]
+        if self.and_word:
+            parts.insert(-1, self.and_word)
+        humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, delta)
+            humanized = self._format_relative(humanized, *timeframes[-1])
 
         return humanized
 
@@ -258,7 +256,7 @@ class Locale:
         return f"{n}"
 
     def _name_to_ordinal(self, lst: Sequence[str]) -> Dict[str, int]:
-        return dict(map(lambda i: (i[1].lower(), i[0] + 1), enumerate(lst[1:])))
+        return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
     def _format_timeframe(self, timeframe: TimeFrames, delta: Union[float, int]) -> str:
         # TODO: remove cast
@@ -1939,8 +1937,8 @@ class NorwegianLocale(Locale):
 
     timeframes = {
         "now": "nå nettopp",
-        "second": "et sekund",
-        "seconds": "{0} noen sekunder",
+        "second": "ett sekund",
+        "seconds": "{0} sekunder",
         "minute": "ett minutt",
         "minutes": "{0} minutter",
         "hour": "en time",
@@ -2006,9 +2004,9 @@ class NewNorwegianLocale(Locale):
 
     timeframes = {
         "now": "no nettopp",
-        "second": "et sekund",
-        "seconds": "{0} nokre sekund",
-        "minute": "ett minutt",
+        "second": "eitt sekund",
+        "seconds": "{0} sekund",
+        "minute": "eitt minutt",
         "minutes": "{0} minutt",
         "hour": "ein time",
         "hours": "{0} timar",
@@ -2016,7 +2014,7 @@ class NewNorwegianLocale(Locale):
         "days": "{0} dagar",
         "month": "en månad",
         "months": "{0} månader",
-        "year": "eit år",
+        "year": "eitt år",
         "years": "{0} år",
     }
 
@@ -2506,7 +2504,7 @@ class ArabicLocale(Locale):
         if isinstance(form, Mapping):
             if delta == 2:
                 form = form["double"]
-            elif delta > 2 and delta <= 10:
+            elif 2 < delta <= 10:
                 form = form["ten"]
             else:
                 form = form["higher"]
@@ -3295,7 +3293,7 @@ class HebrewLocale(Locale):
 
     def describe_multi(
         self,
-        timeframes: Collection[Tuple[TimeFrames, Union[int, float]]],
+        timeframes: Sequence[Tuple[TimeFrames, Union[int, float]]],
         only_distance: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
