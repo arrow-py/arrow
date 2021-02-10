@@ -130,7 +130,9 @@ class DateTimeFormatter:
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
             tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
+            # `dt` must be aware object. Otherwise, this line will raise AttributeError
             # https://github.com/arrow-py/arrow/pull/883#discussion_r529866834
+            # datetime awareness: https://docs.python.org/3/library/datetime.html#aware-and-naive-objects
             total_minutes = int(cast(timedelta, tz.utcoffset(dt)).total_seconds() / 60)
 
             sign = "+" if total_minutes >= 0 else "-"
