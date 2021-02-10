@@ -29,5 +29,5 @@ MAX_TIMESTAMP: Final[float] = _MAX_TIMESTAMP
 MAX_TIMESTAMP_MS: Final[float] = MAX_TIMESTAMP * 1000
 MAX_TIMESTAMP_US: Final[float] = MAX_TIMESTAMP * 1_000_000
 
-MAX_ORDINAL = datetime.max.toordinal()
-MIN_ORDINAL = 1
+MAX_ORDINAL: Final[int] = datetime.max.toordinal()
+MIN_ORDINAL: Final[int] = 1
