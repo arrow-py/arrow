@@ -55,7 +55,6 @@ class ArrowFactory:
             float,
             str,
             Tuple[int, int, int],
-            None,
         ],
         *,
         locale: str = "en_us",

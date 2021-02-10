@@ -41,7 +41,6 @@ def get(
         float,
         str,
         Tuple[int, int, int],
-        None,
     ],
     *,
     locale: str = "en_us",
