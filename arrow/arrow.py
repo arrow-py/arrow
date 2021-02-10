@@ -802,7 +802,7 @@ class Arrow:
         return cast(int, object.__getattribute__(self, name))
 
     @property
-    def tzinfo(self) -> Optional[dt_tzinfo]:
+    def tzinfo(self) -> dt_tzinfo:
         """Gets the ``tzinfo`` of the :class:`Arrow <arrow.arrow.Arrow>` object.
 
         Usage::
@@ -813,7 +813,8 @@ class Arrow:
 
         """
 
-        return self._datetime.tzinfo
+        # In Arrow, `_datetime` cannot be naive.
+        return cast(dt_tzinfo, self._datetime.tzinfo)
 
     @property
     def datetime(self) -> dt_datetime:
