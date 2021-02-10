@@ -324,7 +324,7 @@ class DateTimeParser:
             )
 
         parts: _Parts = {}
-        for token in fmt_tokens:  # type: _FORMAT_TYPE
+        for token in fmt_tokens:
             value: Union[Tuple[str, str, str], str]
             if token == "Do":
                 value = match.group("value")
