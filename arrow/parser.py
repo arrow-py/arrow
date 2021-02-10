@@ -493,7 +493,7 @@ class DateTimeParser:
         self,
         token: Any,
         value: Any,
-        parts: Any,
+        parts: _Parts,
     ) -> None:
 
         if token == "YYYY":
@@ -505,7 +505,7 @@ class DateTimeParser:
 
         elif token in ["MMMM", "MMM"]:
             # FIXME: month_number() is nullable
-            parts["month"] = self.locale.month_number(value.lower())
+            parts["month"] = self.locale.month_number(value.lower())  # type: ignore
 
         elif token in ["MM", "M"]:
             parts["month"] = int(value)
