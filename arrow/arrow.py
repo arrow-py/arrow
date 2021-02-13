@@ -299,9 +299,7 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(
-        cls, dt: Union[dt_datetime, "Arrow"], tzinfo: Optional[TZ_EXPR] = None
-    ) -> "Arrow":
+    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
