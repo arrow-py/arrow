@@ -753,16 +753,11 @@ class TzinfoParser:
             iso_match = cls._TZINFO_RE.match(tzinfo_string)
 
             if iso_match:
-                (
-                    sign,
-                    hours,
-                    minutes,
-                ) = (
-                    iso_match.groups()
-                )  # type: Optional[str], str, Union[str, int, None]
-                if minutes is None:
-                    minutes = 0
-                seconds = int(hours) * 3600 + int(minutes) * 60
+                sign: Optional[str]
+                hours: str
+                minutes: Union[str, int, None]
+                sign, hours, minutes = iso_match.groups()
+                seconds = int(hours) * 3600 + int(minutes or 0) * 60
 
                 if sign == "-":
                     seconds *= -1

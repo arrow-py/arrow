@@ -299,9 +299,7 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(
-        cls, dt: Union[dt_datetime, "Arrow"], tzinfo: Optional[TZ_EXPR] = None
-    ) -> "Arrow":
+    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -1544,14 +1542,6 @@ class Arrow:
 
     # math
 
-    @overload
-    def __add__(self, other: timedelta) -> "Arrow":
-        pass  # pragma: no cover
-
-    @overload
-    def __add__(self, other: relativedelta) -> "Arrow":
-        pass  # pragma: no cover
-
     def __add__(self, other: Any) -> "Arrow":
 
         if isinstance(other, (timedelta, relativedelta)):
@@ -1583,14 +1573,6 @@ class Arrow:
 
         return NotImplemented
 
-    @overload
-    def __rsub__(self, other: dt_datetime) -> timedelta:
-        pass  # pragma: no cover
-
-    @overload
-    def __rsub__(self, other: Any) -> timedelta:
-        pass  # pragma: no cover
-
     def __rsub__(self, other: Any) -> timedelta:
 
         if isinstance(other, dt_datetime):
@@ -1614,28 +1596,12 @@ class Arrow:
 
         return not self.__eq__(other)
 
-    @overload
-    def __gt__(self, other: "Arrow") -> bool:
-        pass  # pragma: no cover
-
-    @overload
-    def __gt__(self, other: dt_datetime) -> bool:
-        pass  # pragma: no cover
-
     def __gt__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
         return self._datetime > self._get_datetime(other)
-
-    @overload
-    def __ge__(self, other: "Arrow") -> bool:
-        pass  # pragma: no cover
-
-    @overload
-    def __ge__(self, other: dt_datetime) -> bool:
-        pass  # pragma: no cover
 
     def __ge__(self, other: Any) -> bool:
 
@@ -1644,28 +1610,12 @@ class Arrow:
 
         return self._datetime >= self._get_datetime(other)
 
-    @overload
-    def __lt__(self, other: "Arrow") -> bool:
-        pass  # pragma: no cover
-
-    @overload
-    def __lt__(self, other: dt_datetime) -> bool:
-        pass  # pragma: no cover
-
     def __lt__(self, other: Any) -> bool:
 
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
         return self._datetime < self._get_datetime(other)
-
-    @overload
-    def __le__(self, other: "Arrow") -> bool:
-        pass  # pragma: no cover
-
-    @overload
-    def __le__(self, other: dt_datetime) -> bool:
-        pass  # pragma: no cover
 
     def __le__(self, other: Any) -> bool:
 
