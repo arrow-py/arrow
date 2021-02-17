@@ -10,11 +10,12 @@ import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
 from time import struct_time
+from typing import Any, List, Optional, Tuple, Type, Union, overload
 
 from dateutil import tz as dateutil_tz
 
 from arrow import parser
-from arrow.arrow import Arrow
+from arrow.arrow import TZ_EXPR, Arrow
 from arrow.util import is_timestamp, iso_to_gregorian
 
 
@@ -26,10 +27,67 @@ class ArrowFactory:
 
     """
 
-    def __init__(self, type=Arrow):
+    type: Type[Arrow]
+
+    def __init__(self, type: Type[Arrow] = Arrow) -> None:
         self.type = type
 
-    def get(self, *args, **kwargs):
+    @overload
+    def get(
+        self,
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+    ) -> Arrow:
+        ...  # pragma: no cover
+
+    @overload
+    def get(
+        self,
+        __obj: Union[
+            Arrow,
+            datetime,
+            date,
+            struct_time,
+            dt_tzinfo,
+            int,
+            float,
+            str,
+            Tuple[int, int, int],
+        ],
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+    ) -> Arrow:
+        ...  # pragma: no cover
+
+    @overload
+    def get(
+        self,
+        __arg1: Union[datetime, date],
+        __arg2: TZ_EXPR,
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+    ) -> Arrow:
+        ...  # pragma: no cover
+
+    @overload
+    def get(
+        self,
+        __arg1: str,
+        __arg2: Union[str, List[str]],
+        *,
+        locale: str = "en_us",
+        tzinfo: Optional[TZ_EXPR] = None,
+        normalize_whitespace: bool = False,
+    ) -> Arrow:
+        ...  # pragma: no cover
+
+    def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en_us'.
@@ -203,8 +261,8 @@ class ArrowFactory:
 
             # (iso calendar) -> convert then from date
             elif isinstance(arg, tuple) and len(arg) == 3:
-                dt = iso_to_gregorian(*arg)
-                return self.type.fromdate(dt)
+                d = iso_to_gregorian(*arg)
+                return self.type.fromdate(d)
 
             else:
                 raise TypeError(f"Cannot parse single argument of type {type(arg)!r}.")
@@ -249,7 +307,7 @@ class ArrowFactory:
         else:
             return self.type(*args, **kwargs)
 
-    def utcnow(self):
+    def utcnow(self) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC time.
 
         Usage::
@@ -261,7 +319,7 @@ class ArrowFactory:
 
         return self.type.utcnow()
 
-    def now(self, tz=None):
+    def now(self, tz: Optional[TZ_EXPR] = None) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
 
