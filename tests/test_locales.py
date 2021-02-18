@@ -43,7 +43,7 @@ class TestModule:
         with pytest.raises(ValueError):
             arrow.locales.get_locale("locale_name")
 
-        cls_dict = arrow.locales._locales
+        cls_dict = arrow.locales._locale_map
         mocker.patch.dict(cls_dict, {"locale_name": mock_locale_cls})
 
         result = arrow.locales.get_locale("locale_name")
@@ -68,7 +68,7 @@ class TestModule:
 
     def test_locales(self):
 
-        assert len(locales._locales) > 0
+        assert len(locales._locale_map) > 0
 
 
 @pytest.mark.usefixtures("lang_locale")

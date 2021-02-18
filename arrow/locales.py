@@ -1,4 +1,3 @@
-import inspect
 import sys
 from math import trunc
 from typing import (
@@ -48,6 +47,9 @@ _TimeFrameElements = Union[
 ]
 
 
+_locale_map: Dict[str, Type["Locale"]] = dict()
+
+
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
     corresponding to an input locale name.
@@ -56,7 +58,7 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-    locale_cls = _locales.get(name.lower())
+    locale_cls = _locale_map.get(name.lower())
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {name!r}.")
@@ -120,6 +122,13 @@ class Locale:
     ordinal_day_re: ClassVar[str] = r"(\d+)"
 
     _month_name_to_ordinal: Optional[Dict[str, int]]
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        for locale_name in cls.names:
+            if locale_name in _locale_map:
+                raise LookupError(f"Duplicated locale name: {locale_name}")
+
+            _locale_map[locale_name] = cls
 
     def __init__(self) -> None:
 
@@ -3405,18 +3414,6 @@ class MarathiLocale(Locale):
     day_abbreviations = ["", "सोम", "मंगळ", "बुध", "गुरु", "शुक्र", "शनि", "रवि"]
 
 
-def _map_locales() -> Dict[str, Type[Locale]]:
-
-    locales: Dict[str, Type[Locale]] = {}
-
-    for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):  # pragma: no branch
-            for name in cls.names:
-                locales[name.lower()] = cls
-
-    return locales
-
-
 class CatalanLocale(Locale):
     names = ["ca", "ca_es", "ca_ad", "ca_fr", "ca_it"]
     past = "Fa {0}"
@@ -4384,6 +4381,3 @@ class SwahiliLocale(Locale):
         "Jumamosi",
         "Jumapili",
     ]
-
-
-_locales: Dict[str, Type[Locale]] = _map_locales()
