@@ -33,6 +33,12 @@ class TestLocaleValidation:
             assert locale_cls.past is not None
             assert locale_cls.future is not None
 
+    def test_duplicated_locale_name(self):
+        with pytest.raises(LookupError):
+
+            class Locale1(locales.Locale):
+                names = ["en_us"]
+
 
 class TestModule:
     def test_get_locale(self, mocker):
