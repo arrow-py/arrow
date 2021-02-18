@@ -13,14 +13,14 @@ with open("../arrow/_version.py", encoding="utf-8") as f:
 # -- Project information -----------------------------------------------------
 
 project = "Arrow 🏹"
-copyright = "2020, Chris Smith"
+copyright = "2021, Chris Smith"
 author = "Chris Smith"
 
 release = about["__version__"]
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ["sphinx.ext.autodoc"]
+extensions = ["sphinx.ext.autodoc", "sphinx_autodoc_typehints"]
 
 templates_path = []
 
