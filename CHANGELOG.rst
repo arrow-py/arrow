@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0.0 (2021-02-xx)
+------------------
+
+- [CHANGE] Arrow has **dropped support** for Python 2.7 and 3.5.
+- [CHANGE] There are multiple breaking changes with this release, please see the `migration guide <https://github.com/arrow-py/arrow/issues/832>`_ [] for a complete overview.
+- [CHANGE] Made humanize() granularity="auto" limits more accurate to reduce strange results.
+- [NEW] Added support for Python 3.9.
+- [FIX] Corrections to French, Japanese and Norwegian locales.
+- [INTERNAL] Added type annotations throughout the codebase.
+- [INTERNAL] Raise more appropriate errors when string parsing fails to match.
+
 0.17.0 (2020-10-2)
 -------------------
 
