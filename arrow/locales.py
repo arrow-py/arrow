@@ -1807,7 +1807,7 @@ class GermanBaseLocale(Locale):
 
     timeframes = {
         "now": "gerade eben",
-        "second": "eine Sekunde",
+        "second": "einer Sekunde",
         "seconds": "{0} Sekunden",
         "minute": "einer Minute",
         "minutes": "{0} Minuten",
@@ -1824,12 +1824,16 @@ class GermanBaseLocale(Locale):
     }
 
     timeframes_only_distance = timeframes.copy()
+    timeframes_only_distance["second"] = "eine Sekunde"
     timeframes_only_distance["minute"] = "eine Minute"
     timeframes_only_distance["hour"] = "eine Stunde"
     timeframes_only_distance["day"] = "ein Tag"
+    timeframes_only_distance["days"] = "{0} Tage"
     timeframes_only_distance["week"] = "eine Woche"
     timeframes_only_distance["month"] = "ein Monat"
+    timeframes_only_distance["months"] = "{0} Monate"
     timeframes_only_distance["year"] = "ein Jahr"
+    timeframes_only_distance["years"] = "{0} Jahre"
 
     month_names = [
         "",
