@@ -19,6 +19,7 @@ setup(
     author_email="crsmithdev@gmail.com",
     license="Apache 2.0",
     packages=["arrow"],
+    package_data={"arrow": ["py.typed"]},
     zip_safe=False,
     python_requires=">=3.6",
     install_requires=[
