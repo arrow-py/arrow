@@ -58,6 +58,7 @@ Features
 - Generates time spans, ranges, floors and ceilings for time frames ranging from microsecond to year
 - Humanize dates and times with a growing list of contributed locales
 - Extensible for your own Arrow-derived types
+- Full support for PEP 484-style type hints
 
 Quick Start
 -----------
