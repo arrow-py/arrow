@@ -1,7 +1,12 @@
 Changelog
 =========
 
-1.0.0 (2021-02-24)
+1.0.1 (2021-02-27)
+------------------
+
+- [FIXED] A ``py.typed`` file is now bundled with the Arrow package to conform to PEP 561.
+
+1.0.0 (2021-02-26)
 ------------------
 
 After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python community for helping make Arrow the amazing package it is today!
@@ -13,7 +18,8 @@ After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python 
 - [NEW] Added support for Python 3.9.
 - [NEW] Added a new keyword argument "exact" to ``span``, ``span_range`` and ``interval`` methods. This makes timespans begin at the start time given and not extend beyond the end time given, for example:
 
-..code-block:: python
+.. code-block:: python
+
     >>> start = Arrow(2021, 2, 5, 12, 30)
     >>> end = Arrow(2021, 2, 5, 17, 15)
     >>> for r in arrow.Arrow.span_range('hour', start, end, exact=True):
@@ -36,12 +42,14 @@ After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python 
 - [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the upcoming 1.0.0 release. This is the last major release to support Python 2.7 and Python 3.5.
 - [NEW] Arrow now properly handles imaginary datetimes during DST shifts. For example:
 
-..code-block:: python
+.. code-block:: python
+
     >>> just_before = arrow.get(2013, 3, 31, 1, 55, tzinfo="Europe/Paris")
     >>> just_before.shift(minutes=+10)
     <Arrow [2013-03-31T03:05:00+02:00]>
 
-..code-block:: python
+.. code-block:: python
+
     >>> before = arrow.get("2018-03-10 23:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
     >>> after = arrow.get("2018-03-11 04:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
     >>> result=[(t, t.to("utc")) for t in arrow.Arrow.range("hour", before, after)]
