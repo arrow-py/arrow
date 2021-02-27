@@ -93,9 +93,6 @@ Get a datetime or timestamp representation:
     >>> a.datetime
     datetime.datetime(2013, 5, 7, 4, 38, 15, 447644, tzinfo=tzutc())
 
-    >>> a.timestamp
-    1367901495
-
 Get a naive datetime, and tzinfo:
 
 .. code-block:: python
