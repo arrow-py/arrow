@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.2 (2021-02-28)
+------------------
+
+- [FIXED] Fixed an ``OverflowError`` that could occur when running Arrow on a 32-bit OS.
+
 1.0.1 (2021-02-27)
 ------------------
 
