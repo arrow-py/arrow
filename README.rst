@@ -93,8 +93,8 @@ Example Usage
     >>> local
     <Arrow [2013-05-11T13:23:58.970460-07:00]>
 
-    >>> local.timestamp
-    1368303838
+    >>> local.timestamp()
+    1368303838.970460
 
     >>> local.format()
     '2013-05-11 13:23:58 -07:00'
