@@ -15,14 +15,15 @@ try:
     # but will trigger an OverflowError, ValueError, or OSError on Windows
     _MAX_TIMESTAMP = datetime.max.timestamp()
 except (OverflowError, ValueError, OSError):  # pragma: no cover
-    # Fallback for Windows if initial max timestamp call fails
+    # Fallback for Windows and 32-bit systems if initial max timestamp call fails
     # Must get max value of ctime on Windows based on architecture (x32 vs x64)
     # https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/ctime-ctime32-ctime64-wctime-wctime32-wctime64
+    # Note: this may occur on both 32-bit Linux systems (issue #930) along with Windows systems
     is_64bits = sys.maxsize > 2 ** 32
     _MAX_TIMESTAMP = (
-        datetime(3000, 12, 31, 23, 59, 59, 999999).timestamp()
+        datetime(3000, 1, 1, 23, 59, 59, 999999).timestamp()
         if is_64bits
-        else datetime(2038, 1, 18, 23, 59, 59, 999999).timestamp()
+        else datetime(2038, 1, 1, 23, 59, 59, 999999).timestamp()
     )
 
 MAX_TIMESTAMP: Final[float] = _MAX_TIMESTAMP
