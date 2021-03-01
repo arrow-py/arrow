@@ -504,7 +504,7 @@ class Arrow:
         count: int = 1,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
-        weekday: int = 0
+        weekday: int = 1
     ) -> Tuple["Arrow", "Arrow"]:
         """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
