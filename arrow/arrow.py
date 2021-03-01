@@ -504,6 +504,7 @@ class Arrow:
         count: int = 1,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
+        weekday: int = 0
     ) -> Tuple["Arrow", "Arrow"]:
         """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
@@ -517,6 +518,8 @@ class Arrow:
         :param exact: (optional) whether to have the start of the timespan begin exactly
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
+        :param weekday: (optional) only in combination with frame == "week". Conform with self.isoweekday(), 1 = Monday,
+            2 = Tuesday, ..., 7 = Sunday.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -537,6 +540,8 @@ class Arrow:
             >>> arrow.utcnow().span('day', bounds='[]')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
 
+            >>> arrow.utcnow().span('week', weekday=6)
+            (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
         """
 
         util.validate_bounds(bounds)
@@ -563,7 +568,11 @@ class Arrow:
             floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
 
             if frame_absolute == "week":
-                floor = floor.shift(days=-(self.isoweekday() - 1))
+                delta = 0
+                # if weekday is greater than self.isoweekday() go back one week by setting delta = 7
+                if weekday > self.isoweekday():
+                    delta = 7
+                floor = floor.shift(days=-(self.isoweekday() - weekday) - delta)
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
