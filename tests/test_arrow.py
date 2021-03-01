@@ -1754,6 +1754,11 @@ class TestArrowSpan:
         assert floor == datetime(2013, 2, 11, tzinfo=tz.tzutc())
         assert ceil == datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc())
 
+        floor, ceil = self.arrow.span("week", weekday=6)
+
+        assert floor == datetime(2013, 2, 9, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+
     def test_span_day(self):
 
         floor, ceil = self.arrow.span("day")
