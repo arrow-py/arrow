@@ -1368,6 +1368,7 @@ class TestJapaneseLocale:
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
 
+
 @pytest.mark.usefixtures("lang_locale")
 class TestSwedishLocale:
     def test_plurals(self):
