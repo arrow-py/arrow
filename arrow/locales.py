@@ -788,7 +788,7 @@ class SwedishLocale(Locale):
     timeframes = {
         "now": "just nu",
         "second": "en sekund",
-        "seconds": "{0} några sekunder",
+        "seconds": "{0} sekunder",
         "minute": "en minut",
         "minutes": "{0} minuter",
         "hour": "en timme",

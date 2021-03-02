@@ -1367,3 +1367,23 @@ class TestJapaneseLocale:
         assert self.locale._format_timeframe("months", 11) == "11ヶ月"
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestSwedishLocale:
+    def test_plurals(self):
+        assert self.locale._format_timeframe("now", 0) == "just nu"
+        assert self.locale._format_timeframe("second", 1) == "en sekund"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekunder"
+        assert self.locale._format_timeframe("minute", 1) == "en minut"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minuter"
+        assert self.locale._format_timeframe("hour", 1) == "en timme"
+        assert self.locale._format_timeframe("hours", 23) == "23 timmar"
+        assert self.locale._format_timeframe("day", 1) == "en dag"
+        assert self.locale._format_timeframe("days", 12) == "12 dagar"
+        assert self.locale._format_timeframe("week", 1) == "en vecka"
+        assert self.locale._format_timeframe("weeks", 38) == "38 veckor"
+        assert self.locale._format_timeframe("month", 1) == "en månad"
+        assert self.locale._format_timeframe("months", 11) == "11 månader"
+        assert self.locale._format_timeframe("year", 1) == "ett år"
+        assert self.locale._format_timeframe("years", 12) == "12 år"
