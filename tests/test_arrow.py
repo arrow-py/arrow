@@ -2138,6 +2138,11 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "a month"
         assert later.humanize(self.now, only_distance=True) == "a month"
 
+        # TODO temporary fix for coverage issues on L1192-1197 in arrow.py
+        # force failure to avoid problem with short months
+        later_2m6d = self.now.shift(months=2, days=6)
+        assert later_2m6d.humanize(self.now) == "in a month"
+
     def test_month_plus_4_days(self):
 
         # TODO needed for coverage, remove when month limits are fixed
@@ -2157,6 +2162,11 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "2 months"
         assert later.humanize(self.now, only_distance=True) == "2 months"
+
+        # TODO temporary fix for coverage issues on L1192-1197 in arrow.py
+        # force failure to avoid problem with short months
+        later_2m6d = self.now.shift(months=2, days=6)
+        assert later_2m6d.humanize(self.now) == "in a month"
 
     def test_year(self):
 
