@@ -91,7 +91,7 @@ class Arrow:
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
-    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
+    :param fold: (optional) 0 or 1, used to disambiguate repeated wall times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -245,6 +245,7 @@ class Arrow:
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
+
         """
 
         if tzinfo is None:
@@ -305,13 +306,6 @@ class Arrow:
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to ``dt``'s
             timezone, or UTC if naive.
 
-        If you only want to replace the timezone of naive datetimes::
-
-            >>> dt
-            datetime.datetime(2013, 5, 5, 0, 0, tzinfo=tzutc())
-            >>> arrow.Arrow.fromdatetime(dt, dt.tzinfo or 'US/Pacific')
-            <Arrow [2013-05-05T00:00:00+00:00]>
-
         """
 
         if tzinfo is None:
@@ -335,10 +329,11 @@ class Arrow:
     @classmethod
     def fromdate(cls, date: date, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
-        replacement timezone.  Time values are set to 0.
+        replacement timezone.  All time values are set to 0.
 
         :param date: the ``date``
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
+
         """
 
         if tzinfo is None:
@@ -354,7 +349,7 @@ class Arrow:
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
 
         :param date_str: the date string.
-        :param fmt: the format string.
+        :param fmt: the format string using datetime format codes.
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to the parsed
             timezone if ``fmt`` contains a timezone directive, otherwise UTC.
 
@@ -438,7 +433,7 @@ class Arrow:
         iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
         same timezone and no ``tz``.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+        Supported frame values: year, quarter, month, week, day, hour, minute, second, microsecond.
 
         Recognized datetime expressions:
 
@@ -505,7 +500,7 @@ class Arrow:
         bounds: _BOUNDS = "[)",
         exact: bool = False,
     ) -> Tuple["Arrow", "Arrow"]:
-        """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
+        """Returns a tuple of two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -589,6 +584,7 @@ class Arrow:
 
             >>> arrow.utcnow().floor('hour')
             <Arrow [2013-05-09T03:00:00+00:00]>
+
         """
 
         return self.span(frame)[0]
@@ -605,10 +601,12 @@ class Arrow:
 
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
+
         """
 
         return self.span(frame)[1]
 
+    # NOTE progress marker
     @classmethod
     def span_range(
         cls,
