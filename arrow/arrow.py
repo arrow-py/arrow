@@ -518,7 +518,7 @@ class Arrow:
         :param exact: (optional) whether to have the start of the timespan begin exactly
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
-        :param weekday: (optional) only in combination with frame == "week". Conform with self.isoweekday(), 1 = Monday,
+        :param week_start: (optional) only used in combination with frame == "week". Follows  isoweekday() where Monday is 1 and Sunday is 7
             2 = Tuesday, ..., 7 = Sunday.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
