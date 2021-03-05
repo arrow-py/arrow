@@ -540,6 +540,12 @@ class Arrow:
             >>> arrow.utcnow().span('day', bounds='[]')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
 
+            >>> arrow.utcnow().span('week')
+            (<Arrow [2021-02-22T00:00:00+00:00]>, <Arrow [2021-02-28T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('week', week_start=1)
+            (<Arrow [2021-02-22T00:00:00+00:00]>, <Arrow [2021-02-28T23:59:59.999999+00:00]>)
+
             >>> arrow.utcnow().span('week', week_start=6)
             (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
         """
