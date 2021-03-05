@@ -17,7 +17,7 @@ from .formatter import (
 from .parser import ParserError
 
 # https://mypy.readthedocs.io/en/stable/command_line.html#cmdoption-mypy-no-implicit-reexport
-# Mypy with --strict or --no-implicit-reexport requires an explizit reexport.
+# Mypy with --strict or --no-implicit-reexport requires an explicit reexport.
 __all__ = [
     "__version__",
     "get",
