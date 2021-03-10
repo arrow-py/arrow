@@ -31,10 +31,7 @@ def get(
 
 @overload
 def get(
-    __arg1: int,
-    __arg2: int,
-    __arg3: int,
-    *,
+    *args: int,
     locale: str = "en_us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
