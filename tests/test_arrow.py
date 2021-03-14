@@ -2352,6 +2352,8 @@ class TestArrowIsBetween:
             target.is_between(start, end, "[")
         with pytest.raises(ValueError):
             target.is_between(start, end, "hello")
+        with pytest.raises(ValueError):
+            target.span("week", week_start=55)
 
 
 class TestArrowUtil:
