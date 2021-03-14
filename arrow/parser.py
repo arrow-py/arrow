@@ -1,3 +1,8 @@
+"""
+Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better parsing for datetime strings.
+
+"""
+
 import re
 import sys
 from datetime import datetime, timedelta

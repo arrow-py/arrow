@@ -1,3 +1,7 @@
+"""
+Constants that vary between operating systems.
+"""
+
 import sys
 from datetime import datetime
 

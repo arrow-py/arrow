@@ -1,5 +1,5 @@
 """
-Helpful functions used internally within Arrow.
+Helpful functions used internally within arrow.
 
 """
 
@@ -85,6 +85,7 @@ def normalize_timestamp(timestamp: float) -> float:
     return timestamp
 
 
+# NOTE finish the params
 # Credit to https://stackoverflow.com/a/1700069
 def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.date:
     """Converts an ISO week date into a datetime object.

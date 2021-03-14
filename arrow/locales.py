@@ -1,3 +1,8 @@
+"""
+Provides internationalization for arrow in over 60 languages and dialects.
+
+"""
+
 import inspect
 import sys
 from math import trunc
