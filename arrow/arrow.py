@@ -574,7 +574,7 @@ class Arrow:
 
             if frame_absolute == "week":
                 delta = 0
-                # if weekday is greater than self.isoweekday() go back one week by setting delta = 7
+                # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
                 if week_start > self.isoweekday():
                     delta = 7
                 floor = floor.shift(days=-(self.isoweekday() - week_start) - delta)
