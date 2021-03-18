@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.3 (2021-03-05)
+------------------
+
+- [FIX] Updated internals to avoid issues when running ``mypy --strict``.
+- [FIX] Corrections to Swedish locale.
+- [INTERNAL] Lowered required coverage limit until ``humanize`` month tests are fixed.
+
 1.0.2 (2021-02-28)
 ------------------
 
