@@ -518,8 +518,8 @@ class Arrow:
         :param exact: (optional) whether to have the start of the timespan begin exactly
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
-        :param week_start: (optional) only used in combination with frame == "week". Follows isoweekday() where Monday
-            is 1 and Sunday is 7.
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+        Monday is 1 and Sunday is 7.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -547,7 +547,7 @@ class Arrow:
             (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
         """
         if not 1 <= week_start <= 7:
-            raise ValueError("condition 1 <= week_start <= 7 not met")
+            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
@@ -573,10 +573,8 @@ class Arrow:
             floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
 
             if frame_absolute == "week":
-                delta = 0
                 # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
-                if week_start > self.isoweekday():
-                    delta = 7
+                delta = 7 if week_start > self.isoweekday() else 0
                 floor = floor.shift(days=-(self.isoweekday() - week_start) - delta)
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
