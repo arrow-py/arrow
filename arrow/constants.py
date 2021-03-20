@@ -1,5 +1,6 @@
 """
-Constants that vary between operating systems.
+Constants used internally in arrow..
+
 """
 
 import sys

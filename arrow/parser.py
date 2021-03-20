@@ -1,5 +1,5 @@
 """
-Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better parsing for datetime strings.
+Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better way to parse datetime strings.
 
 """
 

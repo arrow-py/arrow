@@ -91,7 +91,7 @@ def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.dat
     """Converts an ISO week date into a datetime object.
 
     :param iso_year: the year
-    :param iso_week: the week number
+    :param iso_week: the week number, each year has either 52 or 53 weeks
     :param iso_day: the day numbered 1 through 7, beginning with Monday
 
     """
