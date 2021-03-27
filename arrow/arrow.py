@@ -606,7 +606,6 @@ class Arrow:
 
         return self.span(frame)[1]
 
-    # NOTE progress marker
     @classmethod
     def span_range(
         cls,
@@ -643,7 +642,7 @@ class Arrow:
         iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
         same timezone and no ``tz``.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+        Supported frame values: year, quarter, month, week, day, hour, minute, second, microsecond.
 
         Recognized datetime expressions:
 
@@ -847,8 +846,8 @@ class Arrow:
 
         Usage::
 
-            >>> arrow.utcnow().timestamp
-            1548260567
+            >>> arrow.utcnow().timestamp()
+            1616882340.256501
 
         """
 
@@ -856,7 +855,7 @@ class Arrow:
 
     @property
     def int_timestamp(self) -> int:
-        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        """Returns a integer timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
 
         Usage::
@@ -870,7 +869,7 @@ class Arrow:
 
     @property
     def float_timestamp(self) -> float:
-        """Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a floating-point timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object, in UTC time.
 
         Usage::
@@ -890,7 +889,10 @@ class Arrow:
 
     @property
     def ambiguous(self) -> bool:
-        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous."""
+        """Indicates whether the :class:`Arrow <arrow.arrow.Arrow>` object is a repeated wall time in the current
+        timezone.
+
+        """
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
@@ -1067,7 +1069,7 @@ class Arrow:
 
     def format(self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = "en_us") -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
-        formatted according to a format string.
+        formatted according to the provided format string.
 
         :param fmt: the format string.
         :param locale: the locale to format.
@@ -1281,8 +1283,8 @@ class Arrow:
         end: "Arrow",
         bounds: _BOUNDS = "()",
     ) -> bool:
-        """Returns a boolean denoting whether the specified date and time is between
-        the start and end dates and times.
+        """Returns a boolean denoting whether the :class:`Arrow <arrow.arrow.Arrow>` object is between
+        the start and end limits.
 
         :param start: an :class:`Arrow <arrow.arrow.Arrow>` object.
         :param end: an :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -1620,7 +1622,7 @@ class Arrow:
         return self._datetime <= self._get_datetime(other)
 
     # internal methods
-
+    # Progress marker
     @staticmethod
     def _get_tzinfo(tz_expr: Optional[TZ_EXPR]) -> dt_tzinfo:
 
