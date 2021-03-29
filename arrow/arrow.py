@@ -1622,10 +1622,9 @@ class Arrow:
         return self._datetime <= self._get_datetime(other)
 
     # internal methods
-    # Progress marker
     @staticmethod
     def _get_tzinfo(tz_expr: Optional[TZ_EXPR]) -> dt_tzinfo:
-
+        """Get normalized tzinfo object from various inputs."""
         if tz_expr is None:
             return dateutil_tz.tzutc()
         if isinstance(tz_expr, dt_tzinfo):
@@ -1640,7 +1639,7 @@ class Arrow:
     def _get_datetime(
         cls, expr: Union["Arrow", dt_datetime, int, float, str]
     ) -> dt_datetime:
-        """Get datetime object for a specified expression."""
+        """Get datetime object from a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime
         elif isinstance(expr, dt_datetime):
@@ -1653,7 +1652,11 @@ class Arrow:
 
     @classmethod
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:
+        """Finds relevant timeframe and steps for use in range and span methods.
 
+        Returns a 3 element tuple in the form ("day", "days", 1.)
+
+        """
         if name in cls._ATTRS:
             return name, f"{name}s", 1
         elif name[-1] == "s" and name[:-1] in cls._ATTRS:
@@ -1682,7 +1685,7 @@ class Arrow:
 
     @classmethod
     def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
-
+        """Sets default end and limit values for range method."""
         if end is None:
 
             if limit is None:
@@ -1697,6 +1700,7 @@ class Arrow:
 
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:
+        """Returns a boolean indicating whether the datetime is the last day of the month."""
         return date.day == calendar.monthrange(date.year, date.month)[1]
 
 
