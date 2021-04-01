@@ -1298,6 +1298,15 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
+    def dehumanize(self, timestring: str, locale: str = "en_us") -> str:
+        """Returns an arrow object that represents the
+        date/time represented by a humanzied arrow time string.
+        """
+
+        # Create a locale object based off given local
+        locale_obj = locales.get_locale(locale)
+        return locale_obj.past
+
     # query functions
 
     def is_between(

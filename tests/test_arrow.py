@@ -2293,6 +2293,13 @@ class TestArrowHumanizeTestsWithLocale:
         assert result == "год назад"
 
 
+class TestArrowDehumanize:
+    def test_now(self):
+        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
+
+        assert arw.dehumanize("hello", locale="it") == "{0} ago"
+
+
 class TestArrowIsBetween:
     def test_start_before_end(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
