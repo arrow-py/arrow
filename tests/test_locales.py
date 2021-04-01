@@ -1115,6 +1115,33 @@ class TestTagalogLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestCroatianLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "upravo sad"
+        assert self.locale._format_timeframe("second", 1) == "sekundu"
+        assert self.locale._format_timeframe("seconds", 3) == "3 sekunde"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekundi"
+        assert self.locale._format_timeframe("minute", 1) == "minutu"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minute"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minuta"
+        assert self.locale._format_timeframe("hour", 1) == "sat"
+        assert self.locale._format_timeframe("hours", 23) == "23 sati"
+        assert self.locale._format_timeframe("day", 1) == "jedan dan"
+        assert self.locale._format_timeframe("days", 12) == "12 dana"
+        assert self.locale._format_timeframe("month", 1) == "mjesec"
+        assert self.locale._format_timeframe("months", 2) == "2 mjeseca"
+        assert self.locale._format_timeframe("months", 11) == "11 mjeseci"
+        assert self.locale._format_timeframe("year", 1) == "godinu"
+        assert self.locale._format_timeframe("years", 2) == "2 godine"
+        assert self.locale._format_timeframe("years", 12) == "12 godina"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "subota"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "su"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
