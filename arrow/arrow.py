@@ -6,6 +6,7 @@ replacement.
 
 
 import calendar
+import re
 import sys
 from datetime import date
 from datetime import datetime as dt_datetime
@@ -1298,14 +1299,117 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
-    def dehumanize(self, timestring: str, locale: str = "en_us") -> str:
+    def dehumanize(self, timestring: str, locale: str = "en_us") -> "Arrow":
         """Returns an arrow object that represents the
         date/time represented by a humanzied arrow time string.
         """
 
+        # Create current time object
+        current_time = self.fromdatetime(self._datetime)
+
+        # Create an object containing the relative time info
+        time_object_info = {
+            "now": False,
+            "seconds": 0,
+            "minutes": 0,
+            "hours": 0,
+            "days": 0,
+            "weeks": 0,
+            "months": 0,
+            "years": 0,
+        }
+
         # Create a locale object based off given local
         locale_obj = locales.get_locale(locale)
-        return locale_obj.past
+
+        # Sign logic
+        sign_val = 0
+
+        future_string = locale_obj.future
+        future_string = future_string.replace("{0}", ".*")
+        future_pattern = re.compile(fr"{future_string}")
+        future_pattern_match = future_pattern.findall(timestring)
+
+        past_string = locale_obj.past
+        past_string = past_string.replace("{0}", ".*")
+        past_pattern = re.compile(fr"{past_string}")
+        past_pattern_match = past_pattern.findall(timestring)
+
+        if past_pattern_match:
+            sign_val = -1
+
+        elif future_pattern_match:
+            sign_val = 1
+
+        else:
+            raise ValueError("Invalid String")
+
+        # Create a regex pattern object for numbers
+        num_pattern = re.compile(r"[0-9]+")
+
+        # Search timestring for each time unit within locale
+        for unit in locale_obj.timeframes:
+
+            # Numeric unit of change
+            change_value = 0
+
+            # Replace {0} with regex [0-9]
+            search_string = str(locale_obj.timeframes[unit])
+            search_string = search_string.replace("{0}", "[0-9]+")
+
+            # Create search pattern and find within string
+            pattern = re.compile(fr"{search_string}")
+            matches = pattern.findall(timestring)
+
+            # If there is a match (most likely one, if multiple ignore)
+            if not matches:
+                continue
+
+            match_string = matches[0]
+            num_match = num_pattern.findall(match_string)
+
+            # If no number matches set change value to be one
+            if not num_match:
+                change_value = 1
+
+            else:
+                change_value = int(num_match[0])
+
+            # Set the units within the time object to be the change unit
+            if unit == "now":
+                time_object_info["now"] = True
+
+            elif unit == "second" or unit == "seconds":
+                time_object_info["seconds"] = change_value
+
+            elif unit == "minute" or unit == "minutes":
+                time_object_info["minutes"] = change_value
+
+            elif unit == "hour" or unit == "hours":
+                time_object_info["hours"] = change_value
+
+            elif unit == "day" or unit == "days":
+                time_object_info["days"] = change_value
+
+            elif unit == "week" or unit == "weeks":
+                time_object_info["weeks"] = change_value
+
+            elif unit == "month" or unit == "months":
+                time_object_info["months"] = change_value
+
+            elif unit == "year" or unit == "years":
+                time_object_info["years"] = change_value
+
+        print(time_object_info)
+        return current_time.shift(
+            seconds=sign_val * time_object_info["seconds"],
+            minutes=sign_val * time_object_info["minutes"],
+            hours=sign_val * time_object_info["hours"],
+            days=sign_val * time_object_info["days"],
+            weeks=sign_val * time_object_info["weeks"],
+            months=sign_val * time_object_info["months"],
+            years=sign_val * time_object_info["years"],
+        )
 
     # query functions
 
