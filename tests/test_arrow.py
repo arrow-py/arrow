@@ -2275,10 +2275,175 @@ class TestArrowHumanizeTestsWithLocale:
 
 
 class TestArrowDehumanize:
-    def test_now(self):
-        arw = arrow.Arrow(2014, 4, 18, 12, 30, 0)
 
-        assert arw.dehumanize("hello", locale="it") == "{0} ago"
+    # Tests for individual granulaitries
+    def test_seconds(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+            second_ago = arw.shift(seconds=-5)
+            second_future = arw.shift(seconds=5)
+
+            second_ago_string = second_ago.humanize(
+                arw, locale=lang, granularity=["second"]
+            )
+            second_future_string = second_future.humanize(
+                arw, locale=lang, granularity=["second"]
+            )
+
+            assert arw.dehumanize(second_ago_string, locale=lang) == second_ago
+            assert arw.dehumanize(second_future_string, locale=lang) == second_future
+
+    def test_minute(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+            minute_ago = arw.shift(minutes=-1)
+            minute_future = arw.shift(minutes=1)
+
+            minute_ago_string = minute_ago.humanize(
+                arw, locale=lang, granularity=["minute"]
+            )
+            minute_future_string = minute_future.humanize(
+                arw, locale=lang, granularity=["minute"]
+            )
+
+            assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
+            assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
+
+    def test_minutes(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2007, 1, 10, 5, 55, 0)
+            minute_ago = arw.shift(minutes=-5)
+            minute_future = arw.shift(minutes=5)
+
+            minute_ago_string = minute_ago.humanize(
+                arw, locale=lang, granularity=["minute"]
+            )
+            minute_future_string = minute_future.humanize(
+                arw, locale=lang, granularity=["minute"]
+            )
+
+            assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
+            assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
+
+    def test_hour(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2009, 4, 20, 5, 55, 0)
+            hour_ago = arw.shift(hours=-1)
+            hour_future = arw.shift(hours=1)
+
+            hour_ago_string = hour_ago.humanize(arw, locale=lang, granularity=["hour"])
+            hour_future_string = hour_future.humanize(
+                arw, locale=lang, granularity=["hour"]
+            )
+
+            assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
+            assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
+
+    def test_hours(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2010, 2, 16, 7, 55, 0)
+            hour_ago = arw.shift(hours=-3)
+            hour_future = arw.shift(hours=3)
+
+            hour_ago_string = hour_ago.humanize(arw, locale=lang, granularity=["hour"])
+            hour_future_string = hour_future.humanize(
+                arw, locale=lang, granularity=["hour"]
+            )
+
+            assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
+            assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
+
+    def test_week(self):
+
+        tested_langs = ["en", "fr", "it", "es", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2012, 2, 18, 1, 52, 0)
+            week_ago = arw.shift(weeks=-1)
+            week_future = arw.shift(weeks=1)
+
+            week_ago_string = week_ago.humanize(arw, locale=lang, granularity=["week"])
+            week_future_string = week_future.humanize(
+                arw, locale=lang, granularity=["week"]
+            )
+
+            assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
+            assert arw.dehumanize(week_future_string, locale=lang) == week_future
+
+    def test_weeks(self):
+
+        tested_langs = ["en", "fr", "it", "es", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2020, 3, 18, 5, 3, 0)
+            week_ago = arw.shift(weeks=-7)
+            week_future = arw.shift(weeks=7)
+
+            week_ago_string = week_ago.humanize(arw, locale=lang, granularity=["week"])
+            week_future_string = week_future.humanize(
+                arw, locale=lang, granularity=["week"]
+            )
+
+            assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
+            assert arw.dehumanize(week_future_string, locale=lang) == week_future
+
+    def test_year(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            year_ago = arw.shift(years=-1)
+            year_future = arw.shift(years=1)
+
+            year_ago_string = year_ago.humanize(arw, locale=lang, granularity=["year"])
+            year_future_string = year_future.humanize(
+                arw, locale=lang, granularity=["year"]
+            )
+
+            assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
+
+    def test_years(self):
+
+        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+
+        for lang in tested_langs:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            year_ago = arw.shift(years=-10)
+            year_future = arw.shift(years=10)
+
+            year_ago_string = year_ago.humanize(arw, locale=lang, granularity=["year"])
+            year_future_string = year_future.humanize(
+                arw, locale=lang, granularity=["year"]
+            )
+
+            assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
 
 class TestArrowIsBetween:
