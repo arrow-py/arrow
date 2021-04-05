@@ -2298,7 +2298,43 @@ class TestArrowDehumanize:
     # Tests for individual granulaitries
     def test_seconds(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2318,7 +2354,43 @@ class TestArrowDehumanize:
 
     def test_minute(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2338,7 +2410,43 @@ class TestArrowDehumanize:
 
     def test_minutes(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2358,7 +2466,43 @@ class TestArrowDehumanize:
 
     def test_hour(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2376,7 +2520,43 @@ class TestArrowDehumanize:
 
     def test_hours(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2430,7 +2610,43 @@ class TestArrowDehumanize:
 
     def test_year(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "ne",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
@@ -2448,7 +2664,42 @@ class TestArrowDehumanize:
 
     def test_years(self):
 
-        tested_langs = ["en", "fr", "it", "es", "el", "ja", "sv", "zh", "zh_tw"]
+        tested_langs = [
+            "en",
+            "fr",
+            "it",
+            "es",
+            "el",
+            "ja",
+            "sv",
+            "zh",
+            "zh_tw",
+            "zh_hk",
+            "nl",
+            "af",
+            "de",
+            "nb",
+            "nn",
+            "pt",
+            "pt_br",
+            "tl",
+            "vi",
+            "tr",
+            "az",
+            "da",
+            "ml",
+            "hi",
+            "fa",
+            "mr",
+            "ca",
+            "eo",
+            "bn",
+            "rm",
+            "ro",
+            "sl",
+            "id",
+            "sw",
+        ]
 
         for lang in tested_langs:
 
