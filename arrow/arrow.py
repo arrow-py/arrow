@@ -1377,7 +1377,6 @@ class Arrow:
             elif unit == "year" or unit == "years":
                 time_object_info["years"] = change_value
 
-        print(time_object_info)
         return current_time.shift(
             seconds=sign_val * time_object_info["seconds"],
             minutes=sign_val * time_object_info["minutes"],
