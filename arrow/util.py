@@ -62,7 +62,7 @@ def is_timestamp(value: Any) -> bool:
 
 
 def validate_ordinal(value: Any) -> None:
-    """Raise an  exception if value is an invalid Gregorian ordinal.
+    """Raise an exception if value is an invalid Gregorian ordinal.
 
     :param value: the input to be checked
 

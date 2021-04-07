@@ -855,7 +855,7 @@ class Arrow:
 
     @property
     def int_timestamp(self) -> int:
-        """Returns a integer timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        """Returns an integer timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
 
         Usage::
@@ -1654,7 +1654,7 @@ class Arrow:
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:
         """Finds relevant timeframe and steps for use in range and span methods.
 
-        Returns a 3 element tuple in the form ("day", "days", 1.)
+        Returns a 3 element tuple in the form (frame, plural frame, step), for example ("day", "days", 1)
 
         """
         if name in cls._ATTRS:

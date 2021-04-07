@@ -1,7 +1,4 @@
-"""
-Constants used internally in arrow..
-
-"""
+"""Constants used internally in arrow."""
 
 import sys
 from datetime import datetime

@@ -1,7 +1,4 @@
-"""
-Provides the :class:`Arrow <arrow.formatter.DateTimeFormatter>` class, an improved formatter for datetimes.
-
-"""
+"""Provides the :class:`Arrow <arrow.formatter.DateTimeFormatter>` class, an improved formatter for datetimes."""
 
 import re
 import sys
