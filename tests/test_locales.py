@@ -1230,6 +1230,33 @@ class TestPortugueseLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestLatvianLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "tagad"
+        assert self.locale._format_timeframe("second", 1) == "sekundes"
+        assert self.locale._format_timeframe("seconds", 3) == "3 sekundēm"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekundēm"
+        assert self.locale._format_timeframe("minute", 1) == "minūtes"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minūtēm"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minūtēm"
+        assert self.locale._format_timeframe("hour", 1) == "stundas"
+        assert self.locale._format_timeframe("hours", 23) == "23 stundām"
+        assert self.locale._format_timeframe("day", 1) == "dienas"
+        assert self.locale._format_timeframe("days", 12) == "12 dienām"
+        assert self.locale._format_timeframe("month", 1) == "mēneša"
+        assert self.locale._format_timeframe("months", 2) == "2 mēnešiem"
+        assert self.locale._format_timeframe("months", 11) == "11 mēnešiem"
+        assert self.locale._format_timeframe("year", 1) == "gada"
+        assert self.locale._format_timeframe("years", 2) == "2 gadiem"
+        assert self.locale._format_timeframe("years", 12) == "12 gadiem"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "sestdiena"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "se"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestBrazilianPortugueseLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "agora"
