@@ -849,7 +849,7 @@ class Arrow:
 
         Usage::
 
-            >>> arrow.utcnow().timestamp
+            >>> arrow.utcnow().timestamp()
             1548260567
 
         """
