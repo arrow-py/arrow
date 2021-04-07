@@ -33,6 +33,17 @@ class TestLocaleValidation:
             assert locale_cls.past is not None
             assert locale_cls.future is not None
 
+    def test_locale_name_validation(self):
+
+        for _, locale_cls in self.locales.items():
+
+            for locale_name in locale_cls.names:
+                assert locale_name.islower()
+                # Not a two-letter code
+                if len(locale_name) > 2:
+                    assert "-" in locale_name
+                    assert locale_name.count("-") == 1
+
 
 class TestModule:
     def test_get_locale(self, mocker):

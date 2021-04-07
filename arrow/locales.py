@@ -56,7 +56,7 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-    locale_cls = _locales.get(name.lower())
+    locale_cls = _locales.get(name.lower().replace("_", "-"))
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {name!r}.")
