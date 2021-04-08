@@ -49,7 +49,7 @@ def arrow_factory(request):
 
 @pytest.fixture(scope="class")
 def lang_locales(request):
-    request.cls.locales = locales._locales
+    request.cls.locales = locales._locale_map
 
 
 @pytest.fixture(scope="class")

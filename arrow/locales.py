@@ -1,4 +1,3 @@
-import inspect
 import sys
 from math import trunc
 from typing import (
@@ -48,6 +47,9 @@ _TimeFrameElements = Union[
 ]
 
 
+_locale_map: Dict[str, Type["Locale"]] = dict()
+
+
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
     corresponding to an input locale name.
@@ -56,7 +58,7 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-    locale_cls = _locales.get(name.lower().replace("_", "-"))
+    locale_cls = _locale_map.get(name.lower().replace("_", "-"))
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {name!r}.")
@@ -120,6 +122,13 @@ class Locale:
     ordinal_day_re: ClassVar[str] = r"(\d+)"
 
     _month_name_to_ordinal: Optional[Dict[str, int]]
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        for locale_name in cls.names:
+            if locale_name in _locale_map:
+                raise LookupError(f"Duplicated locale name: {locale_name}")
+
+            _locale_map[locale_name.lower().replace("_", "-")] = cls
 
     def __init__(self) -> None:
 
@@ -3409,18 +3418,6 @@ class MarathiLocale(Locale):
     day_abbreviations = ["", "सोम", "मंगळ", "बुध", "गुरु", "शुक्र", "शनि", "रवि"]
 
 
-def _map_locales() -> Dict[str, Type[Locale]]:
-
-    locales: Dict[str, Type[Locale]] = {}
-
-    for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):  # pragma: no branch
-            for name in cls.names:
-                locales[name.lower()] = cls
-
-    return locales
-
-
 class CatalanLocale(Locale):
     names = ["ca", "ca-es", "ca-ad", "ca-fr", "ca-it"]
     past = "Fa {0}"
@@ -4305,6 +4302,87 @@ class EstonianLocale(Locale):
         return _form.format(abs(delta))
 
 
+class LatvianLocale(Locale):
+
+    names = ["lv", "lv-lv"]
+
+    past = "pirms {0}"
+    future = "pēc {0}"
+    and_word = "un"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "tagad",
+        "second": "sekundes",
+        "seconds": "{0} sekundēm",
+        "minute": "minūtes",
+        "minutes": "{0} minūtēm",
+        "hour": "stundas",
+        "hours": "{0} stundām",
+        "day": "dienas",
+        "days": "{0} dienām",
+        "week": "nedēļas",
+        "weeks": "{0} nedēļām",
+        "month": "mēneša",
+        "months": "{0} mēnešiem",
+        "year": "gada",
+        "years": "{0} gadiem",
+    }
+
+    month_names = [
+        "",
+        "janvāris",
+        "februāris",
+        "marts",
+        "aprīlis",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "augusts",
+        "septembris",
+        "oktobris",
+        "novembris",
+        "decembris",
+    ]
+
+    month_abbreviations = [
+        "",
+        "jan",
+        "feb",
+        "marts",
+        "apr",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dec",
+    ]
+
+    day_names = [
+        "",
+        "pirmdiena",
+        "otrdiena",
+        "trešdiena",
+        "ceturtdiena",
+        "piektdiena",
+        "sestdiena",
+        "svētdiena",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "ot",
+        "tr",
+        "ce",
+        "pi",
+        "se",
+        "sv",
+    ]
+
+
 class SwahiliLocale(Locale):
 
     names = [
@@ -4484,4 +4562,82 @@ class CroatianLocale(Locale):
         return form.format(delta)
 
 
-_locales: Dict[str, Type[Locale]] = _map_locales()
+class LithuanianLocale(Locale):
+
+    names = ["lt", "lt-lt"]
+
+    past = "prieš {0}"
+    future = "po {0}"
+    and_word = "ir"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "dabar",
+        "second": "sekundės",
+        "seconds": "{0} sekundžių",
+        "minute": "minutės",
+        "minutes": "{0} minučių",
+        "hour": "valandos",
+        "hours": "{0} valandų",
+        "day": "dieną",
+        "days": "{0} dienų",
+        "week": "savaitės",
+        "weeks": "{0} savaičių",
+        "month": "mėnesio",
+        "months": "{0} mėnesių",
+        "year": "metų",
+        "years": "{0} metų",
+    }
+
+    month_names = [
+        "",
+        "sausis",
+        "vasaris",
+        "kovas",
+        "balandis",
+        "gegužė",
+        "birželis",
+        "liepa",
+        "rugpjūtis",
+        "rugsėjis",
+        "spalis",
+        "lapkritis",
+        "gruodis",
+    ]
+
+    month_abbreviations = [
+        "",
+        "saus",
+        "vas",
+        "kovas",
+        "bal",
+        "geg",
+        "birž",
+        "liepa",
+        "rugp",
+        "rugs",
+        "spalis",
+        "lapkr",
+        "gr",
+    ]
+
+    day_names = [
+        "",
+        "pirmadienis",
+        "antradienis",
+        "trečiadienis",
+        "ketvirtadienis",
+        "penktadienis",
+        "šeštadienis",
+        "sekmadienis",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "an",
+        "tr",
+        "ke",
+        "pe",
+        "še",
+        "se",
+    ]
