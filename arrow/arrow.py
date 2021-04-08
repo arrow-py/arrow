@@ -306,6 +306,13 @@ class Arrow:
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to ``dt``'s
             timezone, or UTC if naive.
 
+        Usage::
+
+            >>> dt
+            datetime.datetime(2021, 4, 7, 13, 48)
+            >>> arrow.Arrow.fromdatetime(dt)
+            <Arrow [2021-04-07T13:48:00+00:00]>
+
         """
 
         if tzinfo is None:
