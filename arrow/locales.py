@@ -797,7 +797,7 @@ class SwedishLocale(Locale):
     timeframes = {
         "now": "just nu",
         "second": "en sekund",
-        "seconds": "{0} några sekunder",
+        "seconds": "{0} sekunder",
         "minute": "en minut",
         "minutes": "{0} minuter",
         "hour": "en timme",
@@ -1816,7 +1816,7 @@ class GermanBaseLocale(Locale):
 
     timeframes = {
         "now": "gerade eben",
-        "second": "eine Sekunde",
+        "second": "einer Sekunde",
         "seconds": "{0} Sekunden",
         "minute": "einer Minute",
         "minutes": "{0} Minuten",
@@ -1833,12 +1833,16 @@ class GermanBaseLocale(Locale):
     }
 
     timeframes_only_distance = timeframes.copy()
+    timeframes_only_distance["second"] = "eine Sekunde"
     timeframes_only_distance["minute"] = "eine Minute"
     timeframes_only_distance["hour"] = "eine Stunde"
     timeframes_only_distance["day"] = "ein Tag"
+    timeframes_only_distance["days"] = "{0} Tage"
     timeframes_only_distance["week"] = "eine Woche"
     timeframes_only_distance["month"] = "ein Monat"
+    timeframes_only_distance["months"] = "{0} Monate"
     timeframes_only_distance["year"] = "ein Jahr"
+    timeframes_only_distance["years"] = "{0} Jahre"
 
     month_names = [
         "",
@@ -4298,6 +4302,87 @@ class EstonianLocale(Locale):
         return _form.format(abs(delta))
 
 
+class LatvianLocale(Locale):
+
+    names = ["lv", "lv-lv"]
+
+    past = "pirms {0}"
+    future = "pēc {0}"
+    and_word = "un"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "tagad",
+        "second": "sekundes",
+        "seconds": "{0} sekundēm",
+        "minute": "minūtes",
+        "minutes": "{0} minūtēm",
+        "hour": "stundas",
+        "hours": "{0} stundām",
+        "day": "dienas",
+        "days": "{0} dienām",
+        "week": "nedēļas",
+        "weeks": "{0} nedēļām",
+        "month": "mēneša",
+        "months": "{0} mēnešiem",
+        "year": "gada",
+        "years": "{0} gadiem",
+    }
+
+    month_names = [
+        "",
+        "janvāris",
+        "februāris",
+        "marts",
+        "aprīlis",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "augusts",
+        "septembris",
+        "oktobris",
+        "novembris",
+        "decembris",
+    ]
+
+    month_abbreviations = [
+        "",
+        "jan",
+        "feb",
+        "marts",
+        "apr",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dec",
+    ]
+
+    day_names = [
+        "",
+        "pirmdiena",
+        "otrdiena",
+        "trešdiena",
+        "ceturtdiena",
+        "piektdiena",
+        "sestdiena",
+        "svētdiena",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "ot",
+        "tr",
+        "ce",
+        "pi",
+        "se",
+        "sv",
+    ]
+
+
 class SwahiliLocale(Locale):
 
     names = [
@@ -4380,4 +4465,179 @@ class SwahiliLocale(Locale):
         "Ijumaa",
         "Jumamosi",
         "Jumapili",
+    ]
+
+
+class CroatianLocale(Locale):
+
+    names = ["hr", "hr-hr"]
+
+    past = "prije {0}"
+    future = "za {0}"
+    and_word = "i"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "upravo sad",
+        "second": "sekundu",
+        "seconds": {"double": "{0} sekunde", "higher": "{0} sekundi"},
+        "minute": "minutu",
+        "minutes": {"double": "{0} minute", "higher": "{0} minuta"},
+        "hour": "sat",
+        "hours": {"double": "{0} sata", "higher": "{0} sati"},
+        "day": "jedan dan",
+        "days": {"double": "{0} dana", "higher": "{0} dana"},
+        "week": "tjedan",
+        "weeks": {"double": "{0} tjedna", "higher": "{0} tjedana"},
+        "month": "mjesec",
+        "months": {"double": "{0} mjeseca", "higher": "{0} mjeseci"},
+        "year": "godinu",
+        "years": {"double": "{0} godine", "higher": "{0} godina"},
+    }
+
+    month_names = [
+        "",
+        "siječanj",
+        "veljača",
+        "ožujak",
+        "travanj",
+        "svibanj",
+        "lipanj",
+        "srpanj",
+        "kolovoz",
+        "rujan",
+        "listopad",
+        "studeni",
+        "prosinac",
+    ]
+
+    month_abbreviations = [
+        "",
+        "siječ",
+        "velj",
+        "ožuj",
+        "trav",
+        "svib",
+        "lip",
+        "srp",
+        "kol",
+        "ruj",
+        "list",
+        "stud",
+        "pros",
+    ]
+
+    day_names = [
+        "",
+        "ponedjeljak",
+        "utorak",
+        "srijeda",
+        "četvrtak",
+        "petak",
+        "subota",
+        "nedjelja",
+    ]
+
+    day_abbreviations = [
+        "",
+        "po",
+        "ut",
+        "sr",
+        "če",
+        "pe",
+        "su",
+        "ne",
+    ]
+
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+        if isinstance(form, Mapping):
+            if 1 < delta <= 4:
+                form = form["double"]
+            else:
+                form = form["higher"]
+
+        return form.format(delta)
+
+
+class LithuanianLocale(Locale):
+
+    names = ["lt", "lt-lt"]
+
+    past = "prieš {0}"
+    future = "po {0}"
+    and_word = "ir"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "dabar",
+        "second": "sekundės",
+        "seconds": "{0} sekundžių",
+        "minute": "minutės",
+        "minutes": "{0} minučių",
+        "hour": "valandos",
+        "hours": "{0} valandų",
+        "day": "dieną",
+        "days": "{0} dienų",
+        "week": "savaitės",
+        "weeks": "{0} savaičių",
+        "month": "mėnesio",
+        "months": "{0} mėnesių",
+        "year": "metų",
+        "years": "{0} metų",
+    }
+
+    month_names = [
+        "",
+        "sausis",
+        "vasaris",
+        "kovas",
+        "balandis",
+        "gegužė",
+        "birželis",
+        "liepa",
+        "rugpjūtis",
+        "rugsėjis",
+        "spalis",
+        "lapkritis",
+        "gruodis",
+    ]
+
+    month_abbreviations = [
+        "",
+        "saus",
+        "vas",
+        "kovas",
+        "bal",
+        "geg",
+        "birž",
+        "liepa",
+        "rugp",
+        "rugs",
+        "spalis",
+        "lapkr",
+        "gr",
+    ]
+
+    day_names = [
+        "",
+        "pirmadienis",
+        "antradienis",
+        "trečiadienis",
+        "ketvirtadienis",
+        "penktadienis",
+        "šeštadienis",
+        "sekmadienis",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "an",
+        "tr",
+        "ke",
+        "pe",
+        "še",
+        "se",
     ]

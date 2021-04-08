@@ -1,9 +1,10 @@
 dateparser==1.0.*
-pre-commit==2.9.*
+pre-commit==2.10.*
 pytest==6.2.*
-pytest-cov==2.10.*
-pytest-mock==3.4.*
+pytest-cov==2.11.*
+pytest-mock==3.5.*
 python-dateutil==2.8.*
 pytz==2019.*
 simplejson==3.17.*
-sphinx==3.4.*
+sphinx==3.5.*
+sphinx-autodoc-typehints==1.11.*

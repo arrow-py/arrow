@@ -1,18 +1,67 @@
 Changelog
 =========
 
+1.0.3 (2021-03-05)
+------------------
+
+- [FIX] Updated internals to avoid issues when running ``mypy --strict``.
+- [FIX] Corrections to Swedish locale.
+- [INTERNAL] Lowered required coverage limit until ``humanize`` month tests are fixed.
+
+1.0.2 (2021-02-28)
+------------------
+
+- [FIXED] Fixed an ``OverflowError`` that could occur when running Arrow on a 32-bit OS.
+
+1.0.1 (2021-02-27)
+------------------
+
+- [FIXED] A ``py.typed`` file is now bundled with the Arrow package to conform to PEP 561.
+
+1.0.0 (2021-02-26)
+------------------
+
+After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python community for helping make Arrow the amazing package it is today!
+
+- [CHANGE] Arrow has **dropped support** for Python 2.7 and 3.5.
+- [CHANGE] There are multiple **breaking changes** with this release, please see the `migration guide <https://github.com/arrow-py/arrow/issues/832>`_ for a complete overview.
+- [CHANGE] Arrow is now following `semantic versioning <https://semver.org/>`_.
+- [CHANGE] Made ``humanize`` granularity="auto" limits more accurate to reduce strange results.
+- [NEW] Added support for Python 3.9.
+- [NEW] Added a new keyword argument "exact" to ``span``, ``span_range`` and ``interval`` methods. This makes timespans begin at the start time given and not extend beyond the end time given, for example:
+
+.. code-block:: python
+
+    >>> start = Arrow(2021, 2, 5, 12, 30)
+    >>> end = Arrow(2021, 2, 5, 17, 15)
+    >>> for r in arrow.Arrow.span_range('hour', start, end, exact=True):
+    ...     print(r)
+    ...
+    (<Arrow [2021-02-05T12:30:00+00:00]>, <Arrow [2021-02-05T13:29:59.999999+00:00]>)
+    (<Arrow [2021-02-05T13:30:00+00:00]>, <Arrow [2021-02-05T14:29:59.999999+00:00]>)
+    (<Arrow [2021-02-05T14:30:00+00:00]>, <Arrow [2021-02-05T15:29:59.999999+00:00]>)
+    (<Arrow [2021-02-05T15:30:00+00:00]>, <Arrow [2021-02-05T16:29:59.999999+00:00]>)
+    (<Arrow [2021-02-05T16:30:00+00:00]>, <Arrow [2021-02-05T17:14:59.999999+00:00]>)
+
+- [NEW] Arrow now natively supports PEP 484-style type annotations.
+- [FIX] Fixed handling of maximum permitted timestamp on Windows systems.
+- [FIX] Corrections to French, German, Japanese and Norwegian locales.
+- [INTERNAL] Raise more appropriate errors when string parsing fails to match.
+
 0.17.0 (2020-10-2)
 -------------------
 
 - [WARN] Arrow will **drop support** for Python 2.7 and 3.5 in the upcoming 1.0.0 release. This is the last major release to support Python 2.7 and Python 3.5.
 - [NEW] Arrow now properly handles imaginary datetimes during DST shifts. For example:
 
-..code-block:: python
+.. code-block:: python
+
     >>> just_before = arrow.get(2013, 3, 31, 1, 55, tzinfo="Europe/Paris")
     >>> just_before.shift(minutes=+10)
     <Arrow [2013-03-31T03:05:00+02:00]>
 
-..code-block:: python
+.. code-block:: python
+
     >>> before = arrow.get("2018-03-10 23:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
     >>> after = arrow.get("2018-03-11 04:00:00", "YYYY-MM-DD HH:mm:ss", tzinfo="US/Pacific")
     >>> result=[(t, t.to("utc")) for t in arrow.Arrow.range("hour", before, after)]
