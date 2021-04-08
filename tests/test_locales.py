@@ -94,6 +94,21 @@ class TestModule:
         assert len(locales._locale_map) > 0
 
 
+class TestCustomLocale:
+    def test_custom_locale_subclass(self):
+        class CustomLocale1(locales.Locale):
+            names = ["foo", "foo-BAR"]
+
+        assert locales.get_locale("foo") is not None
+        assert locales.get_locale("foo-BAR") is not None
+        assert locales.get_locale("foo_bar") is not None
+
+        class CustomLocale2(locales.Locale):
+            names = ["underscores_ok"]
+
+        assert locales.get_locale("underscores_ok") is not None
+
+
 @pytest.mark.usefixtures("lang_locale")
 class TestEnglishLocale:
     def test_describe(self):
