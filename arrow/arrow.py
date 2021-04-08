@@ -519,7 +519,7 @@ class Arrow:
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
         :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
-        Monday is 1 and Sunday is 7.
+            Monday is 1 and Sunday is 7.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
