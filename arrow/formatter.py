@@ -37,7 +37,7 @@ class DateTimeFormatter:
 
     locale: locales.Locale
 
-    def __init__(self, locale: str = "en_us") -> None:
+    def __init__(self, locale: str = "en-us") -> None:
 
         self.locale = locales.get_locale(locale)
 

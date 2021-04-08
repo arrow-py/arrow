@@ -861,7 +861,7 @@ class TestDateTimeParserRegex:
         assert escape_regex.findall("2018-03-09 8 [h] 40 [hello]") == ["[h]", "[hello]"]
 
     def test_month_names(self):
-        p = parser.DateTimeParser("en_us")
+        p = parser.DateTimeParser("en-us")
 
         text = "_".join(calendar.month_name[1:])
 
@@ -870,7 +870,7 @@ class TestDateTimeParserRegex:
         assert result == calendar.month_name[1:]
 
     def test_month_abbreviations(self):
-        p = parser.DateTimeParser("en_us")
+        p = parser.DateTimeParser("en-us")
 
         text = "_".join(calendar.month_abbr[1:])
 
@@ -1509,7 +1509,7 @@ class TestDateTimeParserMeridians:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthOrdinalDay:
     def test_english(self):
-        parser_ = parser.DateTimeParser("en_us")
+        parser_ = parser.DateTimeParser("en-us")
 
         assert parser_.parse("January 1st, 2013", "MMMM Do, YYYY") == datetime(
             2013, 1, 1

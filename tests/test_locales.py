@@ -9,7 +9,7 @@ class TestLocaleValidation:
 
     def test_locale_validation(self):
 
-        for _, locale_cls in self.locales.items():
+        for locale_cls in self.locales.values():
             # 7 days + 1 spacer to allow for 1-indexing of months
             assert len(locale_cls.day_names) == 8
             assert locale_cls.day_names[0] == ""
@@ -35,9 +35,9 @@ class TestLocaleValidation:
 
     def test_locale_name_validation(self):
 
-        for _, locale_cls in self.locales.items():
-
+        for locale_cls in self.locales.values():
             for locale_name in locale_cls.names:
+                assert len(locale_name) == 2 or len(locale_name) == 5
                 assert locale_name.islower()
                 # Not a two-letter code
                 if len(locale_name) > 2:
@@ -52,13 +52,19 @@ class TestModule:
         mock_locale_cls.return_value = mock_locale
 
         with pytest.raises(ValueError):
-            arrow.locales.get_locale("locale_name")
+            arrow.locales.get_locale("locale-name")
 
         cls_dict = arrow.locales._locales
-        mocker.patch.dict(cls_dict, {"locale_name": mock_locale_cls})
+        mocker.patch.dict(cls_dict, {"locale-name": mock_locale_cls})
 
         result = arrow.locales.get_locale("locale_name")
+        assert result == mock_locale
 
+        # Capitalization and hyphenation should still yield the same locale
+        result = arrow.locales.get_locale("locale-name")
+        assert result == mock_locale
+
+        result = arrow.locales.get_locale("locale-NAME")
         assert result == mock_locale
 
     def test_get_locale_by_class_name(self, mocker):

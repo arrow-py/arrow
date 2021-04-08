@@ -286,14 +286,14 @@ class EnglishLocale(Locale):
 
     names = [
         "en",
-        "en_us",
-        "en_gb",
-        "en_au",
-        "en_be",
-        "en_jp",
-        "en_za",
-        "en_ca",
-        "en_ph",
+        "en-us",
+        "en-gb",
+        "en-au",
+        "en-be",
+        "en-jp",
+        "en-za",
+        "en-ca",
+        "en-ph",
     ]
 
     past = "{0} ago"
@@ -397,7 +397,7 @@ class EnglishLocale(Locale):
 
 
 class ItalianLocale(Locale):
-    names = ["it", "it_it"]
+    names = ["it", "it-it"]
     past = "{0} fa"
     future = "tra {0}"
     and_word = "e"
@@ -470,7 +470,7 @@ class ItalianLocale(Locale):
 
 
 class SpanishLocale(Locale):
-    names = ["es", "es_es"]
+    names = ["es", "es-es"]
     past = "hace {0}"
     future = "en {0}"
     and_word = "y"
@@ -608,7 +608,7 @@ class FrenchBaseLocale(Locale):
 
 class FrenchLocale(FrenchBaseLocale, Locale):
 
-    names = ["fr", "fr_fr"]
+    names = ["fr", "fr-fr"]
 
     month_abbreviations = [
         "",
@@ -629,7 +629,7 @@ class FrenchLocale(FrenchBaseLocale, Locale):
 
 class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 
-    names = ["fr_ca"]
+    names = ["fr-ca"]
 
     month_abbreviations = [
         "",
@@ -650,7 +650,7 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 
 class GreekLocale(Locale):
 
-    names = ["el", "el_gr"]
+    names = ["el", "el-gr"]
 
     past = "{0} πριν"
     future = "σε {0}"
@@ -718,7 +718,7 @@ class GreekLocale(Locale):
 
 class JapaneseLocale(Locale):
 
-    names = ["ja", "ja_jp"]
+    names = ["ja", "ja-jp"]
 
     past = "{0}前"
     future = "{0}後"
@@ -779,7 +779,7 @@ class JapaneseLocale(Locale):
 
 class SwedishLocale(Locale):
 
-    names = ["sv", "sv_se"]
+    names = ["sv", "sv-se"]
 
     past = "för {0} sen"
     future = "om {0}"
@@ -849,7 +849,7 @@ class SwedishLocale(Locale):
 
 class FinnishLocale(Locale):
 
-    names = ["fi", "fi_fi"]
+    names = ["fi", "fi-fi"]
 
     # The finnish grammar is very complex, and its hard to convert
     # 1-to-1 to something like English.
@@ -946,7 +946,7 @@ class FinnishLocale(Locale):
 
 class ChineseCNLocale(Locale):
 
-    names = ["zh", "zh_cn"]
+    names = ["zh", "zh-cn"]
 
     past = "{0}前"
     future = "{0}后"
@@ -1006,7 +1006,7 @@ class ChineseCNLocale(Locale):
 
 class ChineseTWLocale(Locale):
 
-    names = ["zh_tw"]
+    names = ["zh-tw"]
 
     past = "{0}前"
     future = "{0}後"
@@ -1067,7 +1067,7 @@ class ChineseTWLocale(Locale):
 
 class HongKongLocale(Locale):
 
-    names = ["zh_hk"]
+    names = ["zh-hk"]
 
     past = "{0}前"
     future = "{0}後"
@@ -1127,7 +1127,7 @@ class HongKongLocale(Locale):
 
 class KoreanLocale(Locale):
 
-    names = ["ko", "ko_kr"]
+    names = ["ko", "ko-kr"]
 
     past = "{0} 전"
     future = "{0} 후"
@@ -1223,7 +1223,7 @@ class KoreanLocale(Locale):
 # derived locale types & implementations.
 class DutchLocale(Locale):
 
-    names = ["nl", "nl_nl"]
+    names = ["nl", "nl-nl"]
 
     past = "{0} geleden"
     future = "over {0}"
@@ -1314,7 +1314,7 @@ class SlavicBaseLocale(Locale):
 
 class BelarusianLocale(SlavicBaseLocale):
 
-    names = ["be", "be_by"]
+    names = ["be", "be-by"]
 
     past = "{0} таму"
     future = "праз {0}"
@@ -1381,7 +1381,7 @@ class BelarusianLocale(SlavicBaseLocale):
 
 class PolishLocale(SlavicBaseLocale):
 
-    names = ["pl", "pl_pl"]
+    names = ["pl", "pl-pl"]
 
     past = "{0} temu"
     future = "za {0}"
@@ -1452,7 +1452,7 @@ class PolishLocale(SlavicBaseLocale):
 
 class RussianLocale(SlavicBaseLocale):
 
-    names = ["ru", "ru_ru"]
+    names = ["ru", "ru-ru"]
 
     past = "{0} назад"
     future = "через {0}"
@@ -1521,7 +1521,7 @@ class RussianLocale(SlavicBaseLocale):
 
 class AfrikaansLocale(Locale):
 
-    names = ["af", "af_nl"]
+    names = ["af", "af-nl"]
 
     past = "{0} gelede"
     future = "in {0}"
@@ -1588,7 +1588,7 @@ class AfrikaansLocale(Locale):
 
 class BulgarianLocale(SlavicBaseLocale):
 
-    names = ["bg", "bg_BG"]
+    names = ["bg", "bg-bg"]
 
     past = "{0} назад"
     future = "напред {0}"
@@ -1655,7 +1655,7 @@ class BulgarianLocale(SlavicBaseLocale):
 
 class UkrainianLocale(SlavicBaseLocale):
 
-    names = ["ua", "uk_ua"]
+    names = ["ua", "uk-ua"]
 
     past = "{0} тому"
     future = "за {0}"
@@ -1721,7 +1721,7 @@ class UkrainianLocale(SlavicBaseLocale):
 
 
 class MacedonianLocale(SlavicBaseLocale):
-    names = ["mk", "mk_mk"]
+    names = ["mk", "mk-mk"]
 
     past = "пред {0}"
     future = "за {0}"
@@ -1907,17 +1907,17 @@ class GermanBaseLocale(Locale):
 
 class GermanLocale(GermanBaseLocale, Locale):
 
-    names = ["de", "de_de"]
+    names = ["de", "de-de"]
 
 
 class SwissLocale(GermanBaseLocale, Locale):
 
-    names = ["de_ch"]
+    names = ["de-ch"]
 
 
 class AustrianLocale(GermanBaseLocale, Locale):
 
-    names = ["de_at"]
+    names = ["de-at"]
 
     month_names = [
         "",
@@ -1938,7 +1938,7 @@ class AustrianLocale(GermanBaseLocale, Locale):
 
 class NorwegianLocale(Locale):
 
-    names = ["nb", "nb_no"]
+    names = ["nb", "nb-no"]
 
     past = "for {0} siden"
     future = "om {0}"
@@ -2005,7 +2005,7 @@ class NorwegianLocale(Locale):
 
 class NewNorwegianLocale(Locale):
 
-    names = ["nn", "nn_no"]
+    names = ["nn", "nn-no"]
 
     past = "for {0} sidan"
     future = "om {0}"
@@ -2071,7 +2071,7 @@ class NewNorwegianLocale(Locale):
 
 
 class PortugueseLocale(Locale):
-    names = ["pt", "pt_pt"]
+    names = ["pt", "pt-pt"]
 
     past = "há {0}"
     future = "em {0}"
@@ -2140,14 +2140,14 @@ class PortugueseLocale(Locale):
 
 
 class BrazilianPortugueseLocale(PortugueseLocale):
-    names = ["pt_br"]
+    names = ["pt-br"]
 
     past = "faz {0}"
 
 
 class TagalogLocale(Locale):
 
-    names = ["tl", "tl_ph"]
+    names = ["tl", "tl-ph"]
 
     past = "nakaraang {0}"
     future = "{0} mula ngayon"
@@ -2221,7 +2221,7 @@ class TagalogLocale(Locale):
 
 class VietnameseLocale(Locale):
 
-    names = ["vi", "vi_vn"]
+    names = ["vi", "vi-vn"]
 
     past = "{0} trước"
     future = "{0} nữa"
@@ -2290,7 +2290,7 @@ class VietnameseLocale(Locale):
 
 class TurkishLocale(Locale):
 
-    names = ["tr", "tr_tr"]
+    names = ["tr", "tr-tr"]
 
     past = "{0} önce"
     future = "{0} sonra"
@@ -2357,7 +2357,7 @@ class TurkishLocale(Locale):
 
 class AzerbaijaniLocale(Locale):
 
-    names = ["az", "az_az"]
+    names = ["az", "az-az"]
 
     past = "{0} əvvəl"
     future = "{0} sonra"
@@ -2425,23 +2425,23 @@ class AzerbaijaniLocale(Locale):
 class ArabicLocale(Locale):
     names = [
         "ar",
-        "ar_ae",
-        "ar_bh",
-        "ar_dj",
-        "ar_eg",
-        "ar_eh",
-        "ar_er",
-        "ar_km",
-        "ar_kw",
-        "ar_ly",
-        "ar_om",
-        "ar_qa",
-        "ar_sa",
-        "ar_sd",
-        "ar_so",
-        "ar_ss",
-        "ar_td",
-        "ar_ye",
+        "ar-ae",
+        "ar-bh",
+        "ar-dj",
+        "ar-eg",
+        "ar-eh",
+        "ar-er",
+        "ar-km",
+        "ar-kw",
+        "ar-ly",
+        "ar-om",
+        "ar-qa",
+        "ar-sa",
+        "ar-sd",
+        "ar-so",
+        "ar-ss",
+        "ar-td",
+        "ar-ye",
     ]
 
     past = "منذ {0}"
@@ -2523,7 +2523,7 @@ class ArabicLocale(Locale):
 
 
 class LevantArabicLocale(ArabicLocale):
-    names = ["ar_iq", "ar_jo", "ar_lb", "ar_ps", "ar_sy"]
+    names = ["ar-iq", "ar-jo", "ar-lb", "ar-ps", "ar-sy"]
     month_names = [
         "",
         "كانون الثاني",
@@ -2557,7 +2557,7 @@ class LevantArabicLocale(ArabicLocale):
 
 
 class AlgeriaTunisiaArabicLocale(ArabicLocale):
-    names = ["ar_tn", "ar_dz"]
+    names = ["ar-tn", "ar-dz"]
     month_names = [
         "",
         "جانفي",
@@ -2591,7 +2591,7 @@ class AlgeriaTunisiaArabicLocale(ArabicLocale):
 
 
 class MauritaniaArabicLocale(ArabicLocale):
-    names = ["ar_mr"]
+    names = ["ar-mr"]
     month_names = [
         "",
         "يناير",
@@ -2625,7 +2625,7 @@ class MauritaniaArabicLocale(ArabicLocale):
 
 
 class MoroccoArabicLocale(ArabicLocale):
-    names = ["ar_ma"]
+    names = ["ar-ma"]
     month_names = [
         "",
         "يناير",
@@ -2671,7 +2671,7 @@ class IcelandicLocale(Locale):
 
         return form.format(abs(delta))  # type: ignore
 
-    names = ["is", "is_is"]
+    names = ["is", "is-is"]
 
     past = "fyrir {0} síðan"
     future = "eftir {0}"
@@ -2740,7 +2740,7 @@ class IcelandicLocale(Locale):
 
 class DanishLocale(Locale):
 
-    names = ["da", "da_dk"]
+    names = ["da", "da-dk"]
 
     past = "for {0} siden"
     future = "efter {0}"
@@ -2950,7 +2950,7 @@ class HindiLocale(Locale):
 
 
 class CzechLocale(Locale):
-    names = ["cs", "cs_cz"]
+    names = ["cs", "cs-cz"]
 
     timeframes: ClassVar[
         Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
@@ -3049,7 +3049,7 @@ class CzechLocale(Locale):
 
 
 class SlovakLocale(Locale):
-    names = ["sk", "sk_sk"]
+    names = ["sk", "sk-sk"]
 
     timeframes: ClassVar[
         Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
@@ -3150,7 +3150,7 @@ class SlovakLocale(Locale):
 
 class FarsiLocale(Locale):
 
-    names = ["fa", "fa_ir"]
+    names = ["fa", "fa-ir"]
 
     past = "{0} قبل"
     future = "در {0}"
@@ -3224,7 +3224,7 @@ class FarsiLocale(Locale):
 
 class HebrewLocale(Locale):
 
-    names = ["he", "he_IL"]
+    names = ["he", "he-il"]
 
     past = "לפני {0}"
     future = "בעוד {0}"
@@ -3422,7 +3422,7 @@ def _map_locales() -> Dict[str, Type[Locale]]:
 
 
 class CatalanLocale(Locale):
-    names = ["ca", "ca_es", "ca_ad", "ca_fr", "ca_it"]
+    names = ["ca", "ca-es", "ca-ad", "ca-fr", "ca-it"]
     past = "Fa {0}"
     future = "En {0}"
     and_word = "i"
@@ -3496,7 +3496,7 @@ class CatalanLocale(Locale):
 
 
 class BasqueLocale(Locale):
-    names = ["eu", "eu_eu"]
+    names = ["eu", "eu-eu"]
     past = "duela {0}"
     future = "{0}"  # I don't know what's the right phrase in Basque for the future.
 
@@ -3561,7 +3561,7 @@ class BasqueLocale(Locale):
 
 class HungarianLocale(Locale):
 
-    names = ["hu", "hu_hu"]
+    names = ["hu", "hu-hu"]
 
     past = "{0} ezelőtt"
     future = "{0} múlva"
@@ -3642,7 +3642,7 @@ class HungarianLocale(Locale):
 
 
 class EsperantoLocale(Locale):
-    names = ["eo", "eo_xx"]
+    names = ["eo", "eo-xx"]
     past = "antaŭ {0}"
     future = "post {0}"
 
@@ -3715,7 +3715,7 @@ class EsperantoLocale(Locale):
 
 class ThaiLocale(Locale):
 
-    names = ["th", "th_th"]
+    names = ["th", "th-th"]
 
     past = "{0}{1}ที่ผ่านมา"
     future = "ในอีก{1}{0}"
@@ -3801,7 +3801,7 @@ class ThaiLocale(Locale):
 
 class BengaliLocale(Locale):
 
-    names = ["bn", "bn_bd", "bn_in"]
+    names = ["bn", "bn-bd", "bn-in"]
 
     past = "{0} আগে"
     future = "{0} পরে"
@@ -3882,7 +3882,7 @@ class BengaliLocale(Locale):
 
 class RomanshLocale(Locale):
 
-    names = ["rm", "rm_ch"]
+    names = ["rm", "rm-ch"]
 
     past = "avant {0}"
     future = "en {0}"
@@ -3950,7 +3950,7 @@ class RomanshLocale(Locale):
 
 
 class RomanianLocale(Locale):
-    names = ["ro", "ro_ro"]
+    names = ["ro", "ro-ro"]
 
     past = "{0} în urmă"
     future = "peste {0}"
@@ -4017,7 +4017,7 @@ class RomanianLocale(Locale):
 
 
 class SlovenianLocale(Locale):
-    names = ["sl", "sl_si"]
+    names = ["sl", "sl-si"]
 
     past = "pred {0}"
     future = "čez {0}"
@@ -4089,7 +4089,7 @@ class SlovenianLocale(Locale):
 
 class IndonesianLocale(Locale):
 
-    names = ["id", "id_id"]
+    names = ["id", "id-id"]
 
     past = "{0} yang lalu"
     future = "dalam {0}"
@@ -4160,7 +4160,7 @@ class IndonesianLocale(Locale):
 
 
 class NepaliLocale(Locale):
-    names = ["ne", "ne_np"]
+    names = ["ne", "ne-np"]
 
     past = "{0} पहिले"
     future = "{0} पछी"
@@ -4309,8 +4309,8 @@ class SwahiliLocale(Locale):
 
     names = [
         "sw",
-        "sw_ke",
-        "sw_tz",
+        "sw-ke",
+        "sw-tz",
     ]
 
     past = "{0} iliyopita"

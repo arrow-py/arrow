@@ -155,7 +155,7 @@ class DateTimeParser:
     locale: locales.Locale
     _input_re_map: Dict[_FORMAT_TYPE, Pattern[str]]
 
-    def __init__(self, locale: str = "en_us", cache_size: int = 0) -> None:
+    def __init__(self, locale: str = "en-us", cache_size: int = 0) -> None:
 
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()

@@ -22,7 +22,7 @@ _factory = ArrowFactory()
 @overload
 def get(
     *,
-    locale: str = "en_us",
+    locale: str = "en-us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -32,7 +32,7 @@ def get(
 @overload
 def get(
     *args: int,
-    locale: str = "en_us",
+    locale: str = "en-us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -53,7 +53,7 @@ def get(
         Tuple[int, int, int],
     ],
     *,
-    locale: str = "en_us",
+    locale: str = "en-us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -65,7 +65,7 @@ def get(
     __arg1: Union[datetime, date],
     __arg2: TZ_EXPR,
     *,
-    locale: str = "en_us",
+    locale: str = "en-us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -77,7 +77,7 @@ def get(
     __arg1: str,
     __arg2: Union[str, List[str]],
     *,
-    locale: str = "en_us",
+    locale: str = "en-us",
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
