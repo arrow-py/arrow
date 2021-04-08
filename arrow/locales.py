@@ -1,9 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
 =======
 import inspect
 >>>>>>> Added more langauge test cases and simplified code
+=======
+>>>>>>> fixed merge issue with locales.py
 import sys
 from math import trunc
 from typing import (
@@ -52,6 +55,12 @@ _TimeFrameElements = Union[
     str, Sequence[str], Mapping[str, str], Mapping[str, Sequence[str]]
 ]
 
+<<<<<<< HEAD
+=======
+
+_locale_map: Dict[str, Type["Locale"]] = dict()
+
+>>>>>>> fixed merge issue with locales.py
 
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
@@ -129,15 +138,23 @@ class Locale:
     _month_name_to_ordinal: Optional[Dict[str, int]]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fixed merge issue with locales.py
     def __init_subclass__(cls, **kwargs: Any) -> None:
         for locale_name in cls.names:
             if locale_name in _locale_map:
                 raise LookupError(f"Duplicated locale name: {locale_name}")
 
+<<<<<<< HEAD
             _locale_map[locale_name.lower().replace("_", "-")] = cls
 
 =======
 >>>>>>> Added more langauge test cases and simplified code
+=======
+            _locale_map[locale_name] = cls
+
+>>>>>>> fixed merge issue with locales.py
     def __init__(self) -> None:
 
         self._month_name_to_ordinal = None
@@ -3423,18 +3440,6 @@ class MarathiLocale(Locale):
     day_abbreviations = ["", "सोम", "मंगळ", "बुध", "गुरु", "शुक्र", "शनि", "रवि"]
 
 
-def _map_locales() -> Dict[str, Type[Locale]]:
-
-    locales: Dict[str, Type[Locale]] = {}
-
-    for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
-        if issubclass(cls, Locale):  # pragma: no branch
-            for name in cls.names:
-                locales[name.lower()] = cls
-
-    return locales
-
-
 class CatalanLocale(Locale):
     names = ["ca", "ca-es", "ca-ad", "ca-fr", "ca-it"]
     past = "Fa {0}"
@@ -4317,6 +4322,87 @@ class EstonianLocale(Locale):
         else:
             _form = form["past"]
         return _form.format(abs(delta))
+
+
+class LatvianLocale(Locale):
+
+    names = ["lv", "lv-lv"]
+
+    past = "pirms {0}"
+    future = "pēc {0}"
+    and_word = "un"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "tagad",
+        "second": "sekundes",
+        "seconds": "{0} sekundēm",
+        "minute": "minūtes",
+        "minutes": "{0} minūtēm",
+        "hour": "stundas",
+        "hours": "{0} stundām",
+        "day": "dienas",
+        "days": "{0} dienām",
+        "week": "nedēļas",
+        "weeks": "{0} nedēļām",
+        "month": "mēneša",
+        "months": "{0} mēnešiem",
+        "year": "gada",
+        "years": "{0} gadiem",
+    }
+
+    month_names = [
+        "",
+        "janvāris",
+        "februāris",
+        "marts",
+        "aprīlis",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "augusts",
+        "septembris",
+        "oktobris",
+        "novembris",
+        "decembris",
+    ]
+
+    month_abbreviations = [
+        "",
+        "jan",
+        "feb",
+        "marts",
+        "apr",
+        "maijs",
+        "jūnijs",
+        "jūlijs",
+        "aug",
+        "sept",
+        "okt",
+        "nov",
+        "dec",
+    ]
+
+    day_names = [
+        "",
+        "pirmdiena",
+        "otrdiena",
+        "trešdiena",
+        "ceturtdiena",
+        "piektdiena",
+        "sestdiena",
+        "svētdiena",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "ot",
+        "tr",
+        "ce",
+        "pi",
+        "se",
+        "sv",
+    ]
 
 
 class SwahiliLocale(Locale):
