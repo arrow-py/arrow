@@ -2274,50 +2274,76 @@ class TestArrowHumanizeTestsWithLocale:
         assert result == "год назад"
 
 
+# Fixtures for Dehumanize
+@pytest.fixture(scope="class")
+def locale_list_no_weeks():
+    tested_langs = [
+        "en",
+        "fr",
+        "it",
+        "es",
+        "el",
+        "ja",
+        "sv",
+        "zh",
+        "zh_tw",
+        "zh_hk",
+        "nl",
+        "af",
+        "de",
+        "nb",
+        "nn",
+        "pt",
+        "pt_br",
+        "tl",
+        "vi",
+        "tr",
+        "az",
+        "da",
+        "ml",
+        "hi",
+        "fa",
+        "mr",
+        "ca",
+        "eo",
+        "bn",
+        "rm",
+        "ro",
+        "sl",
+        "id",
+        "sw",
+    ]
+
+    return tested_langs
+
+
+@pytest.fixture(scope="class")
+def locale_list_with_weeks():
+    tested_langs = [
+        "en",
+        "fr",
+        "it",
+        "es",
+        "ja",
+        "sv",
+        "zh",
+        "zh_tw",
+        "nl",
+        "de",
+        "pt",
+        "tl",
+        "vi",
+        "sw",
+    ]
+
+    return tested_langs
+
+
 class TestArrowDehumanize:
+    @pytest.fixture(scope="class", autouse=True)
+    def test_seconds(self, locale_list_no_weeks):
 
-    # Tests for individual granulaitries
-    def test_seconds(self):
-
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
             second_ago = arw.shift(seconds=-5)
@@ -2333,47 +2359,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(second_ago_string, locale=lang) == second_ago
             assert arw.dehumanize(second_future_string, locale=lang) == second_future
 
-    def test_minute(self):
+    def test_minute(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
             minute_ago = arw.shift(minutes=-1)
@@ -2389,47 +2377,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
             assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
 
-    def test_minutes(self):
+    def test_minutes(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2007, 1, 10, 5, 55, 0)
             minute_ago = arw.shift(minutes=-5)
@@ -2445,47 +2395,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
             assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
 
-    def test_hour(self):
+    def test_hour(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2009, 4, 20, 5, 55, 0)
             hour_ago = arw.shift(hours=-1)
@@ -2499,47 +2411,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
             assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
 
-    def test_hours(self):
+    def test_hours(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2010, 2, 16, 7, 55, 0)
             hour_ago = arw.shift(hours=-3)
@@ -2553,11 +2427,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
             assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
 
-    def test_week(self):
+    def test_week(self, locale_list_with_weeks):
 
-        tested_langs = ["en", "fr", "it", "es", "ja", "sv", "zh", "zh_tw"]
-
-        for lang in tested_langs:
+        for lang in locale_list_with_weeks:
 
             arw = arrow.Arrow(2012, 2, 18, 1, 52, 0)
             week_ago = arw.shift(weeks=-1)
@@ -2571,11 +2443,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
             assert arw.dehumanize(week_future_string, locale=lang) == week_future
 
-    def test_weeks(self):
+    def test_weeks(self, locale_list_with_weeks):
 
-        tested_langs = ["en", "fr", "it", "es", "ja", "sv", "zh", "zh_tw"]
-
-        for lang in tested_langs:
+        for lang in locale_list_with_weeks:
 
             arw = arrow.Arrow(2020, 3, 18, 5, 3, 0)
             week_ago = arw.shift(weeks=-7)
@@ -2589,47 +2459,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
             assert arw.dehumanize(week_future_string, locale=lang) == week_future
 
-    def test_year(self):
+    def test_year(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "ne",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
             year_ago = arw.shift(years=-1)
@@ -2643,46 +2475,9 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
-    def test_years(self):
+    def test_years(self, locale_list_no_weeks):
 
-        tested_langs = [
-            "en",
-            "fr",
-            "it",
-            "es",
-            "el",
-            "ja",
-            "sv",
-            "zh",
-            "zh_tw",
-            "zh_hk",
-            "nl",
-            "af",
-            "de",
-            "nb",
-            "nn",
-            "pt",
-            "pt_br",
-            "tl",
-            "vi",
-            "tr",
-            "az",
-            "da",
-            "ml",
-            "hi",
-            "fa",
-            "mr",
-            "ca",
-            "eo",
-            "bn",
-            "rm",
-            "ro",
-            "sl",
-            "id",
-            "sw",
-        ]
-
-        for lang in tested_langs:
+        for lang in locale_list_no_weeks:
 
             arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
             year_ago = arw.shift(years=-10)
@@ -2695,6 +2490,99 @@ class TestArrowDehumanize:
 
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
+
+    # Test Multiple/mixed Granularities
+    def test_mixed_granularity(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            past = arw.shift(hours=-1, minutes=-1, seconds=-1)
+            future = arw.shift(hours=1, minutes=1, seconds=1)
+
+            past_string = past.humanize(
+                arw, locale=lang, granularity=["hour", "minute", "second"]
+            )
+            future_string = future.humanize(
+                arw, locale=lang, granularity=["hour", "minute", "second"]
+            )
+
+            assert arw.dehumanize(past_string, locale=lang) == past
+            assert arw.dehumanize(future_string, locale=lang) == future
+
+    def test_mixed_granularity_hours(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            past = arw.shift(hours=-3, minutes=-1, seconds=-15)
+            future = arw.shift(hours=3, minutes=1, seconds=15)
+
+            past_string = past.humanize(
+                arw, locale=lang, granularity=["hour", "minute", "second"]
+            )
+            future_string = future.humanize(
+                arw, locale=lang, granularity=["hour", "minute", "second"]
+            )
+
+            assert arw.dehumanize(past_string, locale=lang) == past
+            assert arw.dehumanize(future_string, locale=lang) == future
+
+    def test_mixed_granularity_day(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            past = arw.shift(days=-3, minutes=-1, seconds=-15)
+            future = arw.shift(days=3, minutes=1, seconds=15)
+
+            past_string = past.humanize(
+                arw, locale=lang, granularity=["day", "minute", "second"]
+            )
+            future_string = future.humanize(
+                arw, locale=lang, granularity=["day", "minute", "second"]
+            )
+
+            assert arw.dehumanize(past_string, locale=lang) == past
+            assert arw.dehumanize(future_string, locale=lang) == future
+
+    def test_mixed_granularity_day_hour(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            past = arw.shift(days=-3, hours=-23, seconds=-15)
+            future = arw.shift(days=3, hours=23, seconds=15)
+
+            past_string = past.humanize(
+                arw, locale=lang, granularity=["day", "hour", "second"]
+            )
+            future_string = future.humanize(
+                arw, locale=lang, granularity=["day", "hour", "second"]
+            )
+
+            assert arw.dehumanize(past_string, locale=lang) == past
+            assert arw.dehumanize(future_string, locale=lang) == future
+
+    # Errors with humanize cause this test case to fail (issue reported)
+    """ def test_mixed_granularity_month(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            past = arw.shift(months=-3, days=-23, seconds=-1)
+            future = arw.shift(months=3, days=23, seconds=1)
+
+            past_string = past.humanize(arw, locale=lang, granularity=["month","day","second"])
+            future_string = future.humanize(
+                arw, locale=lang, granularity=["month","day","second"]
+            )
+
+            print(future_string)
+            print(past_string)
+
+            assert arw.dehumanize(past_string, locale=lang) == past
+            assert arw.dehumanize(future_string, locale=lang) == future """
 
 
 class TestArrowIsBetween:
