@@ -2312,6 +2312,9 @@ def locale_list_no_weeks():
         "sl",
         "id",
         "sw",
+        "la",
+        "lv",
+        "lt",
     ]
 
     return tested_langs
@@ -2334,6 +2337,9 @@ def locale_list_with_weeks():
         "tl",
         "vi",
         "sw",
+        "la",
+        "lv",
+        "lt",
     ]
 
     return tested_langs
