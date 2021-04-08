@@ -33,6 +33,12 @@ class TestLocaleValidation:
             assert locale_cls.past is not None
             assert locale_cls.future is not None
 
+    def test_duplicated_locale_name(self):
+        with pytest.raises(LookupError):
+
+            class Locale1(locales.Locale):
+                names = ["en_us"]
+
 
 class TestModule:
     def test_get_locale(self, mocker):
@@ -43,7 +49,7 @@ class TestModule:
         with pytest.raises(ValueError):
             arrow.locales.get_locale("locale_name")
 
-        cls_dict = arrow.locales._locales
+        cls_dict = arrow.locales._locale_map
         mocker.patch.dict(cls_dict, {"locale_name": mock_locale_cls})
 
         result = arrow.locales.get_locale("locale_name")
@@ -68,7 +74,7 @@ class TestModule:
 
     def test_locales(self):
 
-        assert len(locales._locales) > 0
+        assert len(locales._locale_map) > 0
 
 
 @pytest.mark.usefixtures("lang_locale")
