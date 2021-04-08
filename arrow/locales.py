@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
+=======
+import inspect
+>>>>>>> Added more langauge test cases and simplified code
 import sys
 from math import trunc
 from typing import (
@@ -49,9 +53,6 @@ _TimeFrameElements = Union[
 ]
 
 
-_locale_map: Dict[str, Type["Locale"]] = dict()
-
-
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
     corresponding to an input locale name.
@@ -60,8 +61,12 @@ def get_locale(name: str) -> "Locale":
 
     """
 
+<<<<<<< HEAD
     normalized_locale_name = name.lower().replace("_", "-")
     locale_cls = _locale_map.get(normalized_locale_name)
+=======
+    locale_cls = _locales.get(name.lower())
+>>>>>>> Added more langauge test cases and simplified code
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {normalized_locale_name!r}.")
@@ -123,6 +128,7 @@ class Locale:
 
     _month_name_to_ordinal: Optional[Dict[str, int]]
 
+<<<<<<< HEAD
     def __init_subclass__(cls, **kwargs: Any) -> None:
         for locale_name in cls.names:
             if locale_name in _locale_map:
@@ -130,6 +136,8 @@ class Locale:
 
             _locale_map[locale_name.lower().replace("_", "-")] = cls
 
+=======
+>>>>>>> Added more langauge test cases and simplified code
     def __init__(self) -> None:
 
         self._month_name_to_ordinal = None
@@ -3415,6 +3423,18 @@ class MarathiLocale(Locale):
     day_abbreviations = ["", "सोम", "मंगळ", "बुध", "गुरु", "शुक्र", "शनि", "रवि"]
 
 
+def _map_locales() -> Dict[str, Type[Locale]]:
+
+    locales: Dict[str, Type[Locale]] = {}
+
+    for _, cls in inspect.getmembers(sys.modules[__name__], inspect.isclass):
+        if issubclass(cls, Locale):  # pragma: no branch
+            for name in cls.names:
+                locales[name.lower()] = cls
+
+    return locales
+
+
 class CatalanLocale(Locale):
     names = ["ca", "ca-es", "ca-ad", "ca-fr", "ca-it"]
     past = "Fa {0}"
@@ -4299,87 +4319,6 @@ class EstonianLocale(Locale):
         return _form.format(abs(delta))
 
 
-class LatvianLocale(Locale):
-
-    names = ["lv", "lv-lv"]
-
-    past = "pirms {0}"
-    future = "pēc {0}"
-    and_word = "un"
-
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
-        "now": "tagad",
-        "second": "sekundes",
-        "seconds": "{0} sekundēm",
-        "minute": "minūtes",
-        "minutes": "{0} minūtēm",
-        "hour": "stundas",
-        "hours": "{0} stundām",
-        "day": "dienas",
-        "days": "{0} dienām",
-        "week": "nedēļas",
-        "weeks": "{0} nedēļām",
-        "month": "mēneša",
-        "months": "{0} mēnešiem",
-        "year": "gada",
-        "years": "{0} gadiem",
-    }
-
-    month_names = [
-        "",
-        "janvāris",
-        "februāris",
-        "marts",
-        "aprīlis",
-        "maijs",
-        "jūnijs",
-        "jūlijs",
-        "augusts",
-        "septembris",
-        "oktobris",
-        "novembris",
-        "decembris",
-    ]
-
-    month_abbreviations = [
-        "",
-        "jan",
-        "feb",
-        "marts",
-        "apr",
-        "maijs",
-        "jūnijs",
-        "jūlijs",
-        "aug",
-        "sept",
-        "okt",
-        "nov",
-        "dec",
-    ]
-
-    day_names = [
-        "",
-        "pirmdiena",
-        "otrdiena",
-        "trešdiena",
-        "ceturtdiena",
-        "piektdiena",
-        "sestdiena",
-        "svētdiena",
-    ]
-
-    day_abbreviations = [
-        "",
-        "pi",
-        "ot",
-        "tr",
-        "ce",
-        "pi",
-        "se",
-        "sv",
-    ]
-
-
 class SwahiliLocale(Locale):
 
     names = [
@@ -4465,6 +4404,7 @@ class SwahiliLocale(Locale):
     ]
 
 
+<<<<<<< HEAD
 class CroatianLocale(Locale):
 
     names = ["hr", "hr-hr"]
@@ -4800,3 +4740,6 @@ class MalayLocale(Locale):
         "Sabtu",
         "Ahad ",
     ]
+=======
+_locales: Dict[str, Type[Locale]] = _map_locales()
+>>>>>>> Added more langauge test cases and simplified code
