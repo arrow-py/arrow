@@ -48,7 +48,7 @@ class TestLocaleValidation:
         with pytest.raises(LookupError):
 
             class Locale1(locales.Locale):
-                names = ["en_us"]
+                names = ["en-us"]
 
 
 class TestModule:
