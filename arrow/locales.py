@@ -47,6 +47,8 @@ _TimeFrameElements = Union[
     str, Sequence[str], Mapping[str, str], Mapping[str, Sequence[str]]
 ]
 
+_locale_map: Dict[str, Type["Locale"]] = dict()
+
 
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
@@ -56,7 +58,7 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-    locale_cls = _locales.get(name.lower())
+    locale_cls = _locale_map.get(name.lower())
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {name!r}.")
@@ -4390,4 +4392,257 @@ class SwahiliLocale(Locale):
     ]
 
 
-_locales: Dict[str, Type[Locale]] = _map_locales()
+class CroatianLocale(Locale):
+
+    names = ["hr", "hr-hr"]
+
+    past = "prije {0}"
+    future = "za {0}"
+    and_word = "i"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "upravo sad",
+        "second": "sekundu",
+        "seconds": {"double": "{0} sekunde", "higher": "{0} sekundi"},
+        "minute": "minutu",
+        "minutes": {"double": "{0} minute", "higher": "{0} minuta"},
+        "hour": "sat",
+        "hours": {"double": "{0} sata", "higher": "{0} sati"},
+        "day": "jedan dan",
+        "days": {"double": "{0} dana", "higher": "{0} dana"},
+        "week": "tjedan",
+        "weeks": {"double": "{0} tjedna", "higher": "{0} tjedana"},
+        "month": "mjesec",
+        "months": {"double": "{0} mjeseca", "higher": "{0} mjeseci"},
+        "year": "godinu",
+        "years": {"double": "{0} godine", "higher": "{0} godina"},
+    }
+
+    month_names = [
+        "",
+        "siječanj",
+        "veljača",
+        "ožujak",
+        "travanj",
+        "svibanj",
+        "lipanj",
+        "srpanj",
+        "kolovoz",
+        "rujan",
+        "listopad",
+        "studeni",
+        "prosinac",
+    ]
+
+    month_abbreviations = [
+        "",
+        "siječ",
+        "velj",
+        "ožuj",
+        "trav",
+        "svib",
+        "lip",
+        "srp",
+        "kol",
+        "ruj",
+        "list",
+        "stud",
+        "pros",
+    ]
+
+    day_names = [
+        "",
+        "ponedjeljak",
+        "utorak",
+        "srijeda",
+        "četvrtak",
+        "petak",
+        "subota",
+        "nedjelja",
+    ]
+
+    day_abbreviations = [
+        "",
+        "po",
+        "ut",
+        "sr",
+        "če",
+        "pe",
+        "su",
+        "ne",
+    ]
+
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+        if isinstance(form, Mapping):
+            if 1 < delta <= 4:
+                form = form["double"]
+            else:
+                form = form["higher"]
+
+        return form.format(delta)
+
+
+class LatinLocale(Locale):
+
+    names = ["la", "la-va"]
+
+    past = "ante {0}"
+    future = "in {0}"
+    and_word = "et"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "nunc",
+        "second": "secundum",
+        "seconds": "{0} secundis",
+        "minute": "minutam",
+        "minutes": "{0} minutis",
+        "hour": "horam",
+        "hours": "{0} horas",
+        "day": "diem",
+        "days": "{0} dies",
+        "week": "hebdomadem",
+        "weeks": "{0} hebdomades",
+        "month": "mensem",
+        "months": "{0} mensis",
+        "year": "annum",
+        "years": "{0} annos",
+    }
+
+    month_names = [
+        "",
+        "Ianuarius",
+        "Februarius",
+        "Martius",
+        "Aprilis",
+        "Maius",
+        "Iunius",
+        "Iulius",
+        "Augustus",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+
+    month_abbreviations = [
+        "",
+        "Ian",
+        "Febr",
+        "Mart",
+        "Apr",
+        "Mai",
+        "Iun",
+        "Iul",
+        "Aug",
+        "Sept",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
+
+    day_names = [
+        "",
+        "dies Lunae",
+        "dies Martis",
+        "dies Mercurii",
+        "dies Iovis",
+        "dies Veneris",
+        "dies Saturni",
+        "dies Solis",
+    ]
+
+    day_abbreviations = [
+        "",
+        "dies Lunae",
+        "dies Martis",
+        "dies Mercurii",
+        "dies Iovis",
+        "dies Veneris",
+        "dies Saturni",
+        "dies Solis",
+    ]
+
+
+class LithuanianLocale(Locale):
+
+    names = ["lt", "lt-lt"]
+
+    past = "prieš {0}"
+    future = "po {0}"
+    and_word = "ir"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "dabar",
+        "second": "sekundės",
+        "seconds": "{0} sekundžių",
+        "minute": "minutės",
+        "minutes": "{0} minučių",
+        "hour": "valandos",
+        "hours": "{0} valandų",
+        "day": "dieną",
+        "days": "{0} dienų",
+        "week": "savaitės",
+        "weeks": "{0} savaičių",
+        "month": "mėnesio",
+        "months": "{0} mėnesių",
+        "year": "metų",
+        "years": "{0} metų",
+    }
+
+    month_names = [
+        "",
+        "sausis",
+        "vasaris",
+        "kovas",
+        "balandis",
+        "gegužė",
+        "birželis",
+        "liepa",
+        "rugpjūtis",
+        "rugsėjis",
+        "spalis",
+        "lapkritis",
+        "gruodis",
+    ]
+
+    month_abbreviations = [
+        "",
+        "saus",
+        "vas",
+        "kovas",
+        "bal",
+        "geg",
+        "birž",
+        "liepa",
+        "rugp",
+        "rugs",
+        "spalis",
+        "lapkr",
+        "gr",
+    ]
+
+    day_names = [
+        "",
+        "pirmadienis",
+        "antradienis",
+        "trečiadienis",
+        "ketvirtadienis",
+        "penktadienis",
+        "šeštadienis",
+        "sekmadienis",
+    ]
+
+    day_abbreviations = [
+        "",
+        "pi",
+        "an",
+        "tr",
+        "ke",
+        "pe",
+        "še",
+        "se",
+    ]
