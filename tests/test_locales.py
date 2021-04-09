@@ -33,6 +33,12 @@ class TestLocaleValidation:
             assert locale_cls.past is not None
             assert locale_cls.future is not None
 
+    def test_duplicated_locale_name(self):
+        with pytest.raises(LookupError):
+
+            class Locale1(locales.Locale):
+                names = ["en_us"]
+
 
 class TestModule:
     def test_get_locale(self, mocker):
@@ -43,7 +49,7 @@ class TestModule:
         with pytest.raises(ValueError):
             arrow.locales.get_locale("locale_name")
 
-        cls_dict = arrow.locales._locales
+        cls_dict = arrow.locales._locale_map
         mocker.patch.dict(cls_dict, {"locale_name": mock_locale_cls})
 
         result = arrow.locales.get_locale("locale_name")
@@ -68,7 +74,7 @@ class TestModule:
 
     def test_locales(self):
 
-        assert len(locales._locales) > 0
+        assert len(locales._locale_map) > 0
 
 
 @pytest.mark.usefixtures("lang_locale")
@@ -1142,6 +1148,54 @@ class TestCroatianLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestLatinLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "nunc"
+        assert self.locale._format_timeframe("second", 1) == "secundum"
+        assert self.locale._format_timeframe("seconds", 3) == "3 secundis"
+        assert self.locale._format_timeframe("minute", 1) == "minutam"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minutis"
+        assert self.locale._format_timeframe("hour", 1) == "horam"
+        assert self.locale._format_timeframe("hours", 23) == "23 horas"
+        assert self.locale._format_timeframe("day", 1) == "diem"
+        assert self.locale._format_timeframe("days", 12) == "12 dies"
+        assert self.locale._format_timeframe("month", 1) == "mensem"
+        assert self.locale._format_timeframe("months", 11) == "11 mensis"
+        assert self.locale._format_timeframe("year", 1) == "annum"
+        assert self.locale._format_timeframe("years", 2) == "2 annos"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "dies Saturni"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLithuanianLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "dabar"
+        assert self.locale._format_timeframe("second", 1) == "sekundės"
+        assert self.locale._format_timeframe("seconds", 3) == "3 sekundžių"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekundžių"
+        assert self.locale._format_timeframe("minute", 1) == "minutės"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minučių"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minučių"
+        assert self.locale._format_timeframe("hour", 1) == "valandos"
+        assert self.locale._format_timeframe("hours", 23) == "23 valandų"
+        assert self.locale._format_timeframe("day", 1) == "dieną"
+        assert self.locale._format_timeframe("days", 12) == "12 dienų"
+        assert self.locale._format_timeframe("month", 1) == "mėnesio"
+        assert self.locale._format_timeframe("months", 2) == "2 mėnesių"
+        assert self.locale._format_timeframe("months", 11) == "11 mėnesių"
+        assert self.locale._format_timeframe("year", 1) == "metų"
+        assert self.locale._format_timeframe("years", 2) == "2 metų"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "šeštadienis"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "še"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
@@ -1201,6 +1255,33 @@ class TestPortugueseLocale:
         assert self.locale._format_timeframe("months", 11) == "11 meses"
         assert self.locale._format_timeframe("year", 1) == "um ano"
         assert self.locale._format_timeframe("years", 12) == "12 anos"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLatvianLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "tagad"
+        assert self.locale._format_timeframe("second", 1) == "sekundes"
+        assert self.locale._format_timeframe("seconds", 3) == "3 sekundēm"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekundēm"
+        assert self.locale._format_timeframe("minute", 1) == "minūtes"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minūtēm"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minūtēm"
+        assert self.locale._format_timeframe("hour", 1) == "stundas"
+        assert self.locale._format_timeframe("hours", 23) == "23 stundām"
+        assert self.locale._format_timeframe("day", 1) == "dienas"
+        assert self.locale._format_timeframe("days", 12) == "12 dienām"
+        assert self.locale._format_timeframe("month", 1) == "mēneša"
+        assert self.locale._format_timeframe("months", 2) == "2 mēnešiem"
+        assert self.locale._format_timeframe("months", 11) == "11 mēnešiem"
+        assert self.locale._format_timeframe("year", 1) == "gada"
+        assert self.locale._format_timeframe("years", 2) == "2 gadiem"
+        assert self.locale._format_timeframe("years", 12) == "12 gadiem"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "sestdiena"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "se"
 
 
 @pytest.mark.usefixtures("lang_locale")
