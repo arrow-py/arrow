@@ -309,9 +309,9 @@ class Arrow:
         Usage::
 
             >>> dt
-            datetime.datetime(2021, 4, 7, 13, 48)
+            datetime.datetime(2021, 4, 7, 13, 48, tzinfo=tzfile('/usr/share/zoneinfo/US/Pacific'))
             >>> arrow.Arrow.fromdatetime(dt)
-            <Arrow [2021-04-07T13:48:00+00:00]>
+            <Arrow [2021-04-07T13:48:00-07:00]>
 
         """
 

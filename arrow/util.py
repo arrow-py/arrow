@@ -1,7 +1,4 @@
-"""
-Helpful functions used internally within arrow.
-
-"""
+"""Helpful functions used internally within arrow."""
 
 import datetime
 from typing import Any, Optional, cast
