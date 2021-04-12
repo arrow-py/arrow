@@ -107,11 +107,6 @@ class ArrowFactory:
             >>> arrow.get()
             <Arrow [2013-05-08T05:51:43.316458+00:00]>
 
-        **None** to also get current UTC time::
-
-            >>> arrow.get(None)
-            <Arrow [2013-05-08T05:51:49.016458+00:00]>
-
         **One** :class:`Arrow <arrow.arrow.Arrow>` object, to get a copy.
 
             >>> arw = arrow.utcnow()
@@ -189,7 +184,7 @@ class ArrowFactory:
             >>> arrow.get('2013-05-05 12:30:45', ['MM/DD/YYYY', 'YYYY-MM-DD HH:mm:ss'])
             <Arrow [2013-05-05T12:30:45+00:00]>
 
-        **Three or more** arguments, as for the constructor of a ``datetime``::
+        **Three or more** arguments, as for the direct constructor of an ``Arrow`` object::
 
             >>> arrow.get(2013, 5, 5, 12, 30, 45)
             <Arrow [2013-05-05T12:30:45+00:00]>
