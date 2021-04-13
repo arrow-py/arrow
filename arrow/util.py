@@ -1,3 +1,5 @@
+"""Helpful functions used internally within arrow."""
+
 import datetime
 from typing import Any, Optional, cast
 
@@ -57,7 +59,11 @@ def is_timestamp(value: Any) -> bool:
 
 
 def validate_ordinal(value: Any) -> None:
-    """Raise the corresponding exception if value is an invalid Gregorian ordinal."""
+    """Raise an exception if value is an invalid Gregorian ordinal.
+
+    :param value: the input to be checked
+
+    """
     if isinstance(value, bool) or not isinstance(value, int):
         raise TypeError(f"Ordinal must be an integer (got type {type(value)}).")
     if not (MIN_ORDINAL <= value <= MAX_ORDINAL):
@@ -78,7 +84,13 @@ def normalize_timestamp(timestamp: float) -> float:
 
 # Credit to https://stackoverflow.com/a/1700069
 def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.date:
-    """Converts an ISO week date tuple into a datetime object."""
+    """Converts an ISO week date into a datetime object.
+
+    :param iso_year: the year
+    :param iso_week: the week number, each year has either 52 or 53 weeks
+    :param iso_day: the day numbered 1 through 7, beginning with Monday
+
+    """
 
     if not 1 <= iso_week <= 53:
         raise ValueError("ISO Calendar week value must be between 1-53.")
