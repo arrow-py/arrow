@@ -25,6 +25,7 @@ from typing import (
 from dateutil import tz
 
 from arrow import locales
+from arrow.constants import DEFAULT_LOCALE
 from arrow.util import next_weekday, normalize_timestamp
 
 if sys.version_info < (3, 8):  # pragma: no cover
@@ -157,7 +158,7 @@ class DateTimeParser:
     locale: locales.Locale
     _input_re_map: Dict[_FORMAT_TYPE, Pattern[str]]
 
-    def __init__(self, locale: str = "en-us", cache_size: int = 0) -> None:
+    def __init__(self, locale: str = DEFAULT_LOCALE, cache_size: int = 0) -> None:
 
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
