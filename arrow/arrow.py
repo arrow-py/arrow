@@ -506,6 +506,7 @@ class Arrow:
         count: int = 1,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
+        week_start: int = 1,
     ) -> Tuple["Arrow", "Arrow"]:
         """Returns a tuple of two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
@@ -519,6 +520,8 @@ class Arrow:
         :param exact: (optional) whether to have the start of the timespan begin exactly
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -539,7 +542,15 @@ class Arrow:
             >>> arrow.utcnow().span('day', bounds='[]')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
 
+            >>> arrow.utcnow().span('week')
+            (<Arrow [2021-02-22T00:00:00+00:00]>, <Arrow [2021-02-28T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('week', week_start=6)
+            (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
+
         """
+        if not 1 <= week_start <= 7:
+            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
@@ -565,7 +576,9 @@ class Arrow:
             floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
 
             if frame_absolute == "week":
-                floor = floor.shift(days=-(self.isoweekday() - 1))
+                # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
+                delta = 7 if week_start > self.isoweekday() else 0
+                floor = floor.shift(days=-(self.isoweekday() - week_start) - delta)
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
