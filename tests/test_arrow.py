@@ -1748,11 +1748,30 @@ class TestArrowSpan:
         assert ceil == datetime(2013, 2, 28, 23, 59, 59, 999999, tzinfo=tz.tzutc())
 
     def test_span_week(self):
-
+        """
+        >>> self.arrow.format("YYYY-MM-DD") == "2013-02-15"
+        >>> self.arrow.isoweekday() == 5  # a Friday
+        """
+        # span week from Monday to Sunday
         floor, ceil = self.arrow.span("week")
 
         assert floor == datetime(2013, 2, 11, tzinfo=tz.tzutc())
         assert ceil == datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+        # span week from Tuesday to Monday
+        floor, ceil = self.arrow.span("week", week_start=2)
+
+        assert floor == datetime(2013, 2, 12, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 18, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+        # span week from Saturday to Friday
+        floor, ceil = self.arrow.span("week", week_start=6)
+
+        assert floor == datetime(2013, 2, 9, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 15, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+        # span week from Sunday to Saturday
+        floor, ceil = self.arrow.span("week", week_start=7)
+
+        assert floor == datetime(2013, 2, 10, tzinfo=tz.tzutc())
+        assert ceil == datetime(2013, 2, 16, 23, 59, 59, 999999, tzinfo=tz.tzutc())
 
     def test_span_day(self):
 
@@ -2347,6 +2366,8 @@ class TestArrowIsBetween:
             target.is_between(start, end, "[")
         with pytest.raises(ValueError):
             target.is_between(start, end, "hello")
+        with pytest.raises(ValueError):
+            target.span("week", week_start=55)
 
 
 class TestArrowUtil:

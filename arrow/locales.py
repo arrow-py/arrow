@@ -1,3 +1,5 @@
+"""Provides internationalization for arrow in over 60 languages and dialects."""
+
 import sys
 from math import trunc
 from typing import (

@@ -91,7 +91,7 @@ class Arrow:
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults to 0.
     :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
-    :param fold: (optional) 0 or 1, used to disambiguate repeated times. Defaults to 0.
+    :param fold: (optional) 0 or 1, used to disambiguate repeated wall times. Defaults to 0.
 
     .. _tz-expr:
 
@@ -245,6 +245,7 @@ class Arrow:
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
+
         """
 
         if tzinfo is None:
@@ -305,12 +306,12 @@ class Arrow:
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to ``dt``'s
             timezone, or UTC if naive.
 
-        If you only want to replace the timezone of naive datetimes::
+        Usage::
 
             >>> dt
-            datetime.datetime(2013, 5, 5, 0, 0, tzinfo=tzutc())
-            >>> arrow.Arrow.fromdatetime(dt, dt.tzinfo or 'US/Pacific')
-            <Arrow [2013-05-05T00:00:00+00:00]>
+            datetime.datetime(2021, 4, 7, 13, 48, tzinfo=tzfile('/usr/share/zoneinfo/US/Pacific'))
+            >>> arrow.Arrow.fromdatetime(dt)
+            <Arrow [2021-04-07T13:48:00-07:00]>
 
         """
 
@@ -335,10 +336,11 @@ class Arrow:
     @classmethod
     def fromdate(cls, date: date, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
-        replacement timezone.  Time values are set to 0.
+        replacement timezone.  All time values are set to 0.
 
         :param date: the ``date``
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
+
         """
 
         if tzinfo is None:
@@ -354,7 +356,7 @@ class Arrow:
         in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
 
         :param date_str: the date string.
-        :param fmt: the format string.
+        :param fmt: the format string using datetime format codes.
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to the parsed
             timezone if ``fmt`` contains a timezone directive, otherwise UTC.
 
@@ -438,7 +440,7 @@ class Arrow:
         iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
         same timezone and no ``tz``.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+        Supported frame values: year, quarter, month, week, day, hour, minute, second, microsecond.
 
         Recognized datetime expressions:
 
@@ -504,8 +506,9 @@ class Arrow:
         count: int = 1,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
+        week_start: int = 1,
     ) -> Tuple["Arrow", "Arrow"]:
-        """Returns two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
+        """Returns a tuple of two new :class:`Arrow <arrow.arrow.Arrow>` objects, representing the timespan
         of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
@@ -517,6 +520,8 @@ class Arrow:
         :param exact: (optional) whether to have the start of the timespan begin exactly
             at the time specified by ``start`` and the end of the timespan truncated
             so as not to extend beyond ``end``.
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second.
 
@@ -537,7 +542,15 @@ class Arrow:
             >>> arrow.utcnow().span('day', bounds='[]')
             (<Arrow [2013-05-09T00:00:00+00:00]>, <Arrow [2013-05-10T00:00:00+00:00]>)
 
+            >>> arrow.utcnow().span('week')
+            (<Arrow [2021-02-22T00:00:00+00:00]>, <Arrow [2021-02-28T23:59:59.999999+00:00]>)
+
+            >>> arrow.utcnow().span('week', week_start=6)
+            (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
+
         """
+        if not 1 <= week_start <= 7:
+            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
@@ -563,7 +576,9 @@ class Arrow:
             floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
 
             if frame_absolute == "week":
-                floor = floor.shift(days=-(self.isoweekday() - 1))
+                # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
+                delta = 7 if week_start > self.isoweekday() else 0
+                floor = floor.shift(days=-(self.isoweekday() - week_start) - delta)
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
@@ -589,6 +604,7 @@ class Arrow:
 
             >>> arrow.utcnow().floor('hour')
             <Arrow [2013-05-09T03:00:00+00:00]>
+
         """
 
         return self.span(frame)[0]
@@ -605,6 +621,7 @@ class Arrow:
 
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
+
         """
 
         return self.span(frame)[1]
@@ -645,7 +662,7 @@ class Arrow:
         iterating.  As such, either call with naive objects and ``tz``, or aware objects from the
         same timezone and no ``tz``.
 
-        Supported frame values: year, quarter, month, week, day, hour, minute, second.
+        Supported frame values: year, quarter, month, week, day, hour, minute, second, microsecond.
 
         Recognized datetime expressions:
 
@@ -849,8 +866,8 @@ class Arrow:
 
         Usage::
 
-            >>> arrow.utcnow().timestamp
-            1548260567
+            >>> arrow.utcnow().timestamp()
+            1616882340.256501
 
         """
 
@@ -858,7 +875,7 @@ class Arrow:
 
     @property
     def int_timestamp(self) -> int:
-        """Returns a timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
+        """Returns an integer timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>` object, in
         UTC time.
 
         Usage::
@@ -872,7 +889,7 @@ class Arrow:
 
     @property
     def float_timestamp(self) -> float:
-        """Returns a floating-point representation of the :class:`Arrow <arrow.arrow.Arrow>`
+        """Returns a floating-point timestamp representation of the :class:`Arrow <arrow.arrow.Arrow>`
         object, in UTC time.
 
         Usage::
@@ -892,7 +909,10 @@ class Arrow:
 
     @property
     def ambiguous(self) -> bool:
-        """ Returns a boolean indicating whether the :class:`Arrow <arrow.arrow.Arrow>` object is ambiguous."""
+        """Indicates whether the :class:`Arrow <arrow.arrow.Arrow>` object is a repeated wall time in the current
+        timezone.
+
+        """
 
         return dateutil_tz.datetime_ambiguous(self._datetime)
 
@@ -1069,7 +1089,7 @@ class Arrow:
 
     def format(self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = "en-us") -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
-        formatted according to a format string.
+        formatted according to the provided format string.
 
         :param fmt: the format string.
         :param locale: the locale to format.
@@ -1283,8 +1303,8 @@ class Arrow:
         end: "Arrow",
         bounds: _BOUNDS = "()",
     ) -> bool:
-        """Returns a boolean denoting whether the specified date and time is between
-        the start and end dates and times.
+        """Returns a boolean denoting whether the :class:`Arrow <arrow.arrow.Arrow>` object is between
+        the start and end limits.
 
         :param start: an :class:`Arrow <arrow.arrow.Arrow>` object.
         :param end: an :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -1622,10 +1642,9 @@ class Arrow:
         return self._datetime <= self._get_datetime(other)
 
     # internal methods
-
     @staticmethod
     def _get_tzinfo(tz_expr: Optional[TZ_EXPR]) -> dt_tzinfo:
-
+        """Get normalized tzinfo object from various inputs."""
         if tz_expr is None:
             return dateutil_tz.tzutc()
         if isinstance(tz_expr, dt_tzinfo):
@@ -1640,7 +1659,7 @@ class Arrow:
     def _get_datetime(
         cls, expr: Union["Arrow", dt_datetime, int, float, str]
     ) -> dt_datetime:
-        """Get datetime object for a specified expression."""
+        """Get datetime object from a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime
         elif isinstance(expr, dt_datetime):
@@ -1653,7 +1672,11 @@ class Arrow:
 
     @classmethod
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:
+        """Finds relevant timeframe and steps for use in range and span methods.
 
+        Returns a 3 element tuple in the form (frame, plural frame, step), for example ("day", "days", 1)
+
+        """
         if name in cls._ATTRS:
             return name, f"{name}s", 1
         elif name[-1] == "s" and name[:-1] in cls._ATTRS:
@@ -1682,7 +1705,7 @@ class Arrow:
 
     @classmethod
     def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
-
+        """Sets default end and limit values for range method."""
         if end is None:
 
             if limit is None:
@@ -1697,6 +1720,7 @@ class Arrow:
 
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:
+        """Returns a boolean indicating whether the datetime is the last day of the month."""
         return date.day == calendar.monthrange(date.year, date.month)[1]
 
 
