@@ -4724,3 +4724,84 @@ class LithuanianLocale(Locale):
         "še",
         "se",
     ]
+
+
+class MalayLocale(Locale):
+
+    names = ["ms", "ms-my", "ms-bn"]
+
+    past = "{0} yang lalu"
+    future = "dalam {0}"
+    and_word = "dan"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "sekarang",
+        "second": "saat",
+        "seconds": "{0} saat",
+        "minute": "minit",
+        "minutes": "{0} minit",
+        "hour": "jam",
+        "hours": "{0} jam",
+        "day": "hari",
+        "days": "{0} hari",
+        "week": "minggu",
+        "weeks": "{0} minggu",
+        "month": "bulan",
+        "months": "{0} bulan",
+        "year": "tahun",
+        "years": "{0} tahun",
+    }
+
+    month_names = [
+        "",
+        "Januari",
+        "Februari",
+        "Mac",
+        "April",
+        "Mei",
+        "Jun",
+        "Julai",
+        "Ogos",
+        "September",
+        "Oktober",
+        "November",
+        "Disember",
+    ]
+
+    month_abbreviations = [
+        "",
+        "Jan.",
+        "Feb.",
+        "Mac",
+        "Apr.",
+        "Mei",
+        "Jun",
+        "Julai",
+        "Og.",
+        "Sept.",
+        "Okt.",
+        "Nov.",
+        "Dis.",
+    ]
+
+    day_names = [
+        "",
+        "Isnin",
+        "Selasa",
+        "Rabu",
+        "Khamis",
+        "Jumaat",
+        "Sabtu",
+        "Ahad ",
+    ]
+
+    day_abbreviations = [
+        "",
+        "Isnin",
+        "Selasa",
+        "Rabu",
+        "Khamis",
+        "Jumaat",
+        "Sabtu",
+        "Ahad ",
+    ]
