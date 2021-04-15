@@ -84,9 +84,6 @@ def get_locale_by_class_name(name: str) -> "Locale":
     return locale_cls()
 
 
-# base locale type.
-
-
 class Locale:
     """ Represents locale-specific data and functionality. """
 
@@ -289,9 +286,6 @@ class Locale:
         direction = self.past if delta < 0 else self.future
 
         return direction.format(humanized)
-
-
-# base locale type implementations.
 
 
 class EnglishLocale(Locale):
