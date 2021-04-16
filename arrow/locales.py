@@ -60,11 +60,11 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-    normalize_locale_name = name.lower().replace("_", "-")
-    locale_cls = _locale_map.get(normalize_locale_name)
+    normalized_locale_name = name.lower().replace("_", "-")
+    locale_cls = _locale_map.get(normalized_locale_name)
 
     if locale_cls is None:
-        raise ValueError(f"Unsupported locale {normalize_locale_name!r}.")
+        raise ValueError(f"Unsupported locale {normalized_locale_name!r}.")
 
     return locale_cls()
 
