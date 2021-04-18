@@ -32,6 +32,7 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
+from arrow.constants import DEFAULT_LOCALE
 from arrow.locales import TimeFrameLiteral
 
 if sys.version_info < (3, 8):  # pragma: no cover
@@ -1087,7 +1088,9 @@ class Arrow:
 
     # string output and formatting
 
-    def format(self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = "en_us") -> str:
+    def format(
+        self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = DEFAULT_LOCALE
+    ) -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
         formatted according to the provided format string.
 
@@ -1115,7 +1118,7 @@ class Arrow:
     def humanize(
         self,
         other: Union["Arrow", dt_datetime, None] = None,
-        locale: str = "en_us",
+        locale: str = DEFAULT_LOCALE,
         only_distance: bool = False,
         granularity: Union[_GRANULARITY, List[_GRANULARITY]] = "auto",
     ) -> str:
@@ -1123,7 +1126,7 @@ class Arrow:
 
         :param other: (optional) an :class:`Arrow <arrow.arrow.Arrow>` or ``datetime`` object.
             Defaults to now in the current :class:`Arrow <arrow.arrow.Arrow>` object's timezone.
-        :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en_us'.
+        :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en-us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute',
                            'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings

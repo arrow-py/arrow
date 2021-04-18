@@ -10,6 +10,7 @@ from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
 from arrow.arrow import TZ_EXPR, Arrow
+from arrow.constants import DEFAULT_LOCALE
 from arrow.factory import ArrowFactory
 
 # internal default factory.
@@ -22,7 +23,7 @@ _factory = ArrowFactory()
 @overload
 def get(
     *,
-    locale: str = "en_us",
+    locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -32,7 +33,7 @@ def get(
 @overload
 def get(
     *args: int,
-    locale: str = "en_us",
+    locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -53,7 +54,7 @@ def get(
         Tuple[int, int, int],
     ],
     *,
-    locale: str = "en_us",
+    locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -65,7 +66,7 @@ def get(
     __arg1: Union[datetime, date],
     __arg2: TZ_EXPR,
     *,
-    locale: str = "en_us",
+    locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:
@@ -77,7 +78,7 @@ def get(
     __arg1: str,
     __arg2: Union[str, List[str]],
     *,
-    locale: str = "en_us",
+    locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
 ) -> Arrow:

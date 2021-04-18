@@ -16,6 +16,7 @@ from dateutil import tz as dateutil_tz
 
 from arrow import parser
 from arrow.arrow import TZ_EXPR, Arrow
+from arrow.constants import DEFAULT_LOCALE
 from arrow.util import is_timestamp, iso_to_gregorian
 
 
@@ -36,7 +37,7 @@ class ArrowFactory:
     def get(
         self,
         *,
-        locale: str = "en_us",
+        locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
@@ -57,7 +58,7 @@ class ArrowFactory:
             Tuple[int, int, int],
         ],
         *,
-        locale: str = "en_us",
+        locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
@@ -69,7 +70,7 @@ class ArrowFactory:
         __arg1: Union[datetime, date],
         __arg2: TZ_EXPR,
         *,
-        locale: str = "en_us",
+        locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
@@ -81,7 +82,7 @@ class ArrowFactory:
         __arg1: str,
         __arg2: Union[str, List[str]],
         *,
-        locale: str = "en_us",
+        locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
@@ -90,7 +91,7 @@ class ArrowFactory:
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
-        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en_us'.
+        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en-us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
             the timezone in a positional argument. Defaults to UTC.
@@ -192,7 +193,7 @@ class ArrowFactory:
         """
 
         arg_count = len(args)
-        locale = kwargs.pop("locale", "en_us")
+        locale = kwargs.pop("locale", DEFAULT_LOCALE)
         tz = kwargs.get("tzinfo", None)
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 

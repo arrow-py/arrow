@@ -105,8 +105,8 @@ Example Usage
     >>> local.humanize()
     'an hour ago'
 
-    >>> local.humanize(locale='ko_kr')
-    '1시간 전'
+    >>> local.humanize(locale='ko-kr')
+    '한시간 전'
 
 .. end-inclusion-marker-do-not-remove
 

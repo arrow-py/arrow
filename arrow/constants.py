@@ -34,3 +34,5 @@ MAX_TIMESTAMP_US: Final[float] = MAX_TIMESTAMP * 1_000_000
 
 MAX_ORDINAL: Final[int] = datetime.max.toordinal()
 MIN_ORDINAL: Final[int] = 1
+
+DEFAULT_LOCALE: Final[str] = "en-us"
