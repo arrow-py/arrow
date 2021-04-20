@@ -333,6 +333,10 @@ class DateTimeParser:
                 value = match.group("value")
             elif token == "W":
                 value = (match.group("year"), match.group("week"), match.group("day"))
+            elif token == "hh":
+                value = match.group(token)
+                if not 0 <= int(value) <= 12:
+                    raise ParserError(f"When using token {token!r} an hour between 00 and 12 is expected.")
             else:
                 value = match.group(token)
 
@@ -574,9 +578,12 @@ class DateTimeParser:
         elif token in ["a", "A"]:
             if value in (self.locale.meridians["am"], self.locale.meridians["AM"]):
                 parts["am_pm"] = "am"
+                if "hour" in parts and not 0 <= parts["hour"] <= 12:
+                    # Question: What do you guys think?
+                    # I feel like a ParserMatchError would fit here, but there is no access to fmt and datetime_string
+                    raise ParserMatchError("Failed to match {fmt} when parsing {datetime_string}.")
             elif value in (self.locale.meridians["pm"], self.locale.meridians["PM"]):
                 parts["am_pm"] = "pm"
-
         elif token == "W":
             parts["weekdate"] = value
 
