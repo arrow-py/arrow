@@ -834,7 +834,7 @@ class TestBengaliLocale:
     def test_ordinal_number(self):
         assert self.locale._ordinal_number(0) == "0তম"
         assert self.locale._ordinal_number(1) == "1ম"
-        assert self.locale._ordinal_number(3) == "3য়"
+        assert self.locale._ordinal_number(3) == "3য়"
         assert self.locale._ordinal_number(4) == "4র্থ"
         assert self.locale._ordinal_number(5) == "5ম"
         assert self.locale._ordinal_number(6) == "6ষ্ঠ"
