@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
-=======
-import inspect
->>>>>>> Added more langauge test cases and simplified code
-=======
->>>>>>> fixed merge issue with locales.py
 import sys
 from math import trunc
 from typing import (
@@ -55,12 +48,9 @@ _TimeFrameElements = Union[
     str, Sequence[str], Mapping[str, str], Mapping[str, Sequence[str]]
 ]
 
-<<<<<<< HEAD
-=======
 
 _locale_map: Dict[str, Type["Locale"]] = dict()
 
->>>>>>> fixed merge issue with locales.py
 
 def get_locale(name: str) -> "Locale":
     """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
@@ -70,12 +60,8 @@ def get_locale(name: str) -> "Locale":
 
     """
 
-<<<<<<< HEAD
     normalized_locale_name = name.lower().replace("_", "-")
     locale_cls = _locale_map.get(normalized_locale_name)
-=======
-    locale_cls = _locales.get(name.lower())
->>>>>>> Added more langauge test cases and simplified code
 
     if locale_cls is None:
         raise ValueError(f"Unsupported locale {normalized_locale_name!r}.")
@@ -137,24 +123,13 @@ class Locale:
 
     _month_name_to_ordinal: Optional[Dict[str, int]]
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> fixed merge issue with locales.py
     def __init_subclass__(cls, **kwargs: Any) -> None:
         for locale_name in cls.names:
             if locale_name in _locale_map:
                 raise LookupError(f"Duplicated locale name: {locale_name}")
 
-<<<<<<< HEAD
             _locale_map[locale_name.lower().replace("_", "-")] = cls
 
-=======
->>>>>>> Added more langauge test cases and simplified code
-=======
-            _locale_map[locale_name] = cls
-
->>>>>>> fixed merge issue with locales.py
     def __init__(self) -> None:
 
         self._month_name_to_ordinal = None
@@ -2954,7 +2929,7 @@ class HindiLocale(Locale):
     month_abbreviations = [
         "",
         "जन",
-        "फ़र",
+        "फ़र",
         "मार्च",
         "अप्रै",
         "मई",
@@ -3846,7 +3821,7 @@ class BengaliLocale(Locale):
     month_names = [
         "",
         "জানুয়ারি",
-        "ফেব্রুয়ারি",
+        "ফেব্রুয়ারি",
         "মার্চ",
         "এপ্রিল",
         "মে",
@@ -3892,7 +3867,7 @@ class BengaliLocale(Locale):
         if n in [1, 5, 7, 8, 9, 10]:
             return f"{n}ম"
         if n in [2, 3]:
-            return f"{n}য়"
+            return f"{n}য়"
         if n == 4:
             return f"{n}র্থ"
         if n == 6:
@@ -4490,7 +4465,6 @@ class SwahiliLocale(Locale):
     ]
 
 
-<<<<<<< HEAD
 class CroatianLocale(Locale):
 
     names = ["hr", "hr-hr"]
@@ -4826,6 +4800,3 @@ class MalayLocale(Locale):
         "Sabtu",
         "Ahad ",
     ]
-=======
-_locales: Dict[str, Type[Locale]] = _map_locales()
->>>>>>> Added more langauge test cases and simplified code

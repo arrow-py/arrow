@@ -10,7 +10,7 @@ import simplejson as json
 from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
 
-from arrow import arrow
+from arrow import arrow, locales
 
 from .utils import assert_datetime_equality
 
@@ -2298,42 +2298,88 @@ class TestArrowHumanizeTestsWithLocale:
 def locale_list_no_weeks():
     tested_langs = [
         "en",
+        "en-us",
+        "en-gb",
+        "en-au",
+        "en-be",
+        "en-jp",
+        "en-za",
+        "en-ca",
+        "en-ph",
         "fr",
+        "fr-fr",
+        "fr-ca",
         "it",
+        "it-it",
         "es",
+        "es-es",
         "el",
+        "el-gr",
         "ja",
+        "ja-jp",
         "sv",
+        "sv-se",
         "zh",
-        "zh_tw",
-        "zh_hk",
+        "zh-cn",
+        "zh-tw",
+        "zh-hk",
         "nl",
+        "nl-nl",
         "af",
         "de",
+        "de-de",
+        "de-ch",
+        "de-at",
         "nb",
+        "nb-no",
         "nn",
+        "nn-no",
         "pt",
+        "pt-pt",
         "pt_br",
         "tl",
+        "tl-ph",
         "vi",
+        "vi-vn",
         "tr",
+        "tr-tr",
         "az",
+        "az-az",
         "da",
+        "da-dk",
         "ml",
         "hi",
         "fa",
+        "fa-ir",
         "mr",
         "ca",
+        "ca-es",
+        "ca-ad",
+        "ca-fr",
+        "ca-it",
         "eo",
+        "eo-xx",
         "bn",
+        "bn-bd",
+        "bn-in",
         "rm",
+        "rm-ch",
         "ro",
+        "ro-ro",
         "sl",
+        "sl-si",
         "id",
+        "id-id",
         "sw",
+        "sw-ke",
+        "sw-tz",
         "la",
-        "lv",
+        "la-va",
         "lt",
+        "lt-lt",
+        "ms",
+        "ms-my",
+        "ms-bn",
     ]
 
     return tested_langs
@@ -2343,29 +2389,76 @@ def locale_list_no_weeks():
 def locale_list_with_weeks():
     tested_langs = [
         "en",
+        "en-us",
+        "en-gb",
+        "en-au",
+        "en-be",
+        "en-jp",
+        "en-za",
+        "en-ca",
+        "en-ph",
         "fr",
+        "fr-fr",
+        "fr-ca",
         "it",
+        "it-it",
         "es",
+        "es-es",
         "ja",
+        "ja-jp",
         "sv",
+        "sv-se",
         "zh",
-        "zh_tw",
+        "zh-cn",
+        "zh-tw",
+        "zh-hk",
         "nl",
+        "nl-nl",
         "de",
+        "de-de",
+        "de-ch",
+        "de-at",
         "pt",
+        "pt-pt",
+        "pt-br",
         "tl",
+        "tl-ph",
         "vi",
+        "vi-vn",
         "sw",
+        "sw-ke",
+        "sw-tz",
         "la",
-        "lv",
+        "la-va",
         "lt",
+        "lt-lt",
+        "ms",
+        "ms-my",
+        "ms-bn",
     ]
 
     return tested_langs
 
 
 class TestArrowDehumanize:
-    @pytest.fixture(scope="class", autouse=True)
+    def test_now(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+            second_ago = arw.shift(seconds=-1)
+            second_future = arw.shift(seconds=1)
+
+            second_ago_string = second_ago.humanize(
+                arw, locale=lang, granularity=["second"]
+            )
+            second_future_string = second_future.humanize(
+                arw, locale=lang, granularity=["second"]
+            )
+
+            assert arw.dehumanize(second_ago_string, locale=lang) == arw
+            assert arw.dehumanize(second_future_string, locale=lang) == arw
+
     def test_seconds(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
@@ -2516,7 +2609,6 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
-    # Test Multiple/mixed Granularities
     def test_mixed_granularity(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
@@ -2589,25 +2681,111 @@ class TestArrowDehumanize:
             assert arw.dehumanize(past_string, locale=lang) == past
             assert arw.dehumanize(future_string, locale=lang) == future
 
-    # Errors with humanize cause this test case to fail (issue reported)
-    """ def test_mixed_granularity_month(self, locale_list_no_weeks):
+    # Test to make sure unsupported locales error out
+    def test_unsupported_locale(self):
+
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        second_ago = arw.shift(seconds=-5)
+        second_future = arw.shift(seconds=5)
+
+        second_ago_string = second_ago.humanize(
+            arw, locale="fi", granularity=["second"]
+        )
+        second_future_string = second_future.humanize(
+            arw, locale="fi", granularity=["second"]
+        )
+
+        # fi is an example of many unsupported locales currently
+        with pytest.raises(ValueError):
+            arw.dehumanize(second_ago_string, locale="fi")
+
+        with pytest.raises(ValueError):
+            arw.dehumanize(second_future_string, locale="fi")
+
+    # Test to ensure old style locale strings are supported
+    def test_normalized_locale(self):
+
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        second_ago = arw.shift(seconds=-5)
+        second_future = arw.shift(seconds=5)
+
+        second_ago_string = second_ago.humanize(
+            arw, locale="zh_hk", granularity=["second"]
+        )
+        second_future_string = second_future.humanize(
+            arw, locale="zh_hk", granularity=["second"]
+        )
+
+        assert arw.dehumanize(second_ago_string, locale="zh_hk") == second_ago
+        assert arw.dehumanize(second_future_string, locale="zh_hk") == second_future
+
+    # Ensures relative units are required in string
+    def test_require_relative_unit(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
 
-            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
-            past = arw.shift(months=-3, days=-23, seconds=-1)
-            future = arw.shift(months=3, days=23, seconds=1)
+            arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+            second_ago = arw.shift(seconds=-5)
+            second_future = arw.shift(seconds=5)
 
-            past_string = past.humanize(arw, locale=lang, granularity=["month","day","second"])
-            future_string = future.humanize(
-                arw, locale=lang, granularity=["month","day","second"]
+            second_ago_string = second_ago.humanize(
+                arw, locale=lang, granularity=["second"], only_distance=True
+            )
+            second_future_string = second_future.humanize(
+                arw, locale=lang, granularity=["second"], only_distance=True
             )
 
-            print(future_string)
-            print(past_string)
+            with pytest.raises(ValueError):
+                arw.dehumanize(second_ago_string, locale=lang)
 
-            assert arw.dehumanize(past_string, locale=lang) == past
-            assert arw.dehumanize(future_string, locale=lang) == future """
+            with pytest.raises(ValueError):
+                arw.dehumanize(second_future_string, locale=lang)
+
+    # Test for scrambled input
+    def test_scrambled_input(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+            second_ago = arw.shift(seconds=-5)
+            second_future = arw.shift(seconds=5)
+
+            second_ago_string = second_ago.humanize(
+                arw, locale=lang, granularity=["second"], only_distance=True
+            )
+            second_future_string = second_future.humanize(
+                arw, locale=lang, granularity=["second"], only_distance=True
+            )
+
+            # Scrambles input by sorting strings
+            second_ago_presort = sorted(second_ago_string)
+            second_ago_string = "".join(second_ago_presort)
+
+            second_future_presort = sorted(second_future_string)
+            second_future_string = "".join(second_future_presort)
+
+            with pytest.raises(ValueError):
+                arw.dehumanize(second_ago_string, locale=lang)
+
+            with pytest.raises(ValueError):
+                arw.dehumanize(second_future_string, locale=lang)
+
+    def test_no_units_modified(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+            # Ensures we pass the first stage of checking whether relative units exist
+            locale_obj = locales.get_locale(lang)
+            empty_past_string = locale_obj.past
+            empty_future_string = locale_obj.future
+
+            with pytest.raises(ValueError):
+                arw.dehumanize(empty_past_string, locale=lang)
+
+            with pytest.raises(ValueError):
+                arw.dehumanize(empty_future_string, locale=lang)
 
 
 class TestArrowIsBetween:
