@@ -1320,7 +1320,7 @@ class Arrow:
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
                 >>> later = arw.dehumanize("in 1 month")
-                >>> earlier
+                >>> later
                 <Arrow [2021-05-18T22:27:34.787885+00:00]>
 
         """

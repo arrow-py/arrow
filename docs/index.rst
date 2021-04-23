@@ -252,6 +252,41 @@ Support for a growing number of locales (see ``locales.py`` for supported langua
     >>> future.humanize(a, locale='ru')
     'через 2 час(а,ов)'
 
+Dehumanize
+~~~~~~~~
+
+Dehumanize a string representing a past time:
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw
+    <Arrow [2021-04-20T22:27:34.787885+00:00]>
+    >>> earlier = arw.dehumanize("two days ago")
+    >>> earlier
+    <Arrow [2021-04-18T22:27:34.787885+00:00]>
+
+Or a future time:
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw
+    <Arrow [2021-04-20T22:27:34.787885+00:00]>
+    >>> later = arw.dehumanize("in 1 month")
+    >>> later
+    <Arrow [2021-05-18T22:27:34.787885+00:00]>
+
+Support for a growing number of locales (see ``constants.py`` for supported languages):
+
+.. code-block:: python
+
+    >>> arw = arrow.utcnow()
+    >>> arw
+    <Arrow [2021-04-20T22:27:34.787885+00:00]>
+    >>> later = arw.dehumanize("एक माह बाद", locale="hi")
+    >>> later
+    <Arrow [2021-05-18T22:27:34.787885+00:00]>
 
 Ranges & Spans
 ~~~~~~~~~~~~~~
