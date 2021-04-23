@@ -1324,6 +1324,7 @@ class Arrow:
                 <Arrow [2021-05-18T22:27:34.787885+00:00]>
 
         """
+
         # Create a locale object based off given local
         locale_obj = locales.get_locale(locale)
 
@@ -1331,9 +1332,10 @@ class Arrow:
         normalized_locale_name = locale.lower().replace("_", "-")
 
         if normalized_locale_name not in DEHUMANIZE_LOCALES:
-            raise ValueError(f"Dehumanize does not currently support locale {locale}.")
+            raise ValueError(
+                f"Dehumanize does not currently support the {locale} locale, please consider making a contribution to add support for this locale."
+            )
 
-        # Create current time object
         current_time = self.fromdatetime(self._datetime)
 
         # Create an object containing the relative time info
@@ -1382,7 +1384,7 @@ class Arrow:
                 unit_visited[unit] = True
                 continue
 
-            # Add change value to the correct unit (incorporates the plualirty that exists within timeframe i.e second v.s seconds)
+            # Add change value to the correct unit (incorporates the plurality that exists within timeframe i.e second v.s seconds)
             time_unit_to_change = str(unit)
             time_unit_to_change += "s" if (str(time_unit_to_change)[-1] != "s") else ""
             time_object_info[time_unit_to_change] = change_value
@@ -1392,7 +1394,7 @@ class Arrow:
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
                 """Input string not valid. Note: Some locales do not support the week granulairty in Arrow.
-                 If you are attempting to use the week granulairty on an unsupported locale, this could be the cause of this error."""
+                 If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."""
             )
 
         # Sign logic
