@@ -255,7 +255,7 @@ Support for a growing number of locales (see ``locales.py`` for supported langua
 Dehumanize
 ~~~~~~~~
 
-Dehumanize a string representing a past time:
+Take a human readable string and use it to shift into a past time:
 
 .. code-block:: python
 
@@ -266,7 +266,7 @@ Dehumanize a string representing a past time:
     >>> earlier
     <Arrow [2021-04-18T22:27:34.787885+00:00]>
 
-Or a future time:
+Or use it to shift into a future time:
 
 .. code-block:: python
 
