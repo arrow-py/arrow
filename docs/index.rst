@@ -253,7 +253,7 @@ Support for a growing number of locales (see ``locales.py`` for supported langua
     'через 2 час(а,ов)'
 
 Dehumanize
-~~~~~~~~
+~~~~~~~~~~
 
 Take a human readable string and use it to shift into a past time:
 
