@@ -6,6 +6,7 @@ replacement.
 
 
 import calendar
+import re
 import sys
 from datetime import date
 from datetime import datetime as dt_datetime
@@ -32,7 +33,7 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
-from arrow.constants import DEFAULT_LOCALE
+from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
 
 if sys.version_info < (3, 8):  # pragma: no cover
@@ -1297,6 +1298,134 @@ class Arrow:
                 f"Humanization of the {e} granularity is not currently translated in the {locale_name!r} locale. "
                 "Please consider making a contribution to this locale."
             )
+
+    def dehumanize(self, timestring: str, locale: str = "en_us") -> "Arrow":
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
+        the time difference relative to the attrbiutes of the
+        :class:`Arrow <arrow.arrow.Arrow>` object.
+
+        :param timestring: a ``str`` representing a humanized relative time.
+        :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en-us'.
+
+        Usage::
+
+                >>> arw = arrow.utcnow()
+                >>> arw
+                <Arrow [2021-04-20T22:27:34.787885+00:00]>
+                >>> earlier = arw.dehumanize("two days ago")
+                >>> earlier
+                <Arrow [2021-04-18T22:27:34.787885+00:00]>
+
+                >>> arw = arrow.utcnow()
+                >>> arw
+                <Arrow [2021-04-20T22:27:34.787885+00:00]>
+                >>> later = arw.dehumanize("in 1 month")
+                >>> later
+                <Arrow [2021-05-18T22:27:34.787885+00:00]>
+
+        """
+
+        # Create a locale object based off given local
+        locale_obj = locales.get_locale(locale)
+
+        # Check to see if locale is supported
+        normalized_locale_name = locale.lower().replace("_", "-")
+
+        if normalized_locale_name not in DEHUMANIZE_LOCALES:
+            raise ValueError(
+                f"Dehumanize does not currently support the {locale} locale, please consider making a contribution to add support for this locale."
+            )
+
+        current_time = self.fromdatetime(self._datetime)
+
+        # Create an object containing the relative time info
+        time_object_info = dict.fromkeys(
+            ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
+        )
+
+        # Create an object representing if unit has been seen
+        unit_visited = dict.fromkeys(
+            ["now", "seconds", "minutes", "hours", "days", "weeks", "months", "years"],
+            False,
+        )
+
+        # Create a regex pattern object for numbers
+        num_pattern = re.compile(r"\d+")
+
+        # Search timestring for each time unit within locale
+        for unit in locale_obj.timeframes:
+
+            # Numeric unit of change
+            change_value = 0
+
+            # Replace {0} with regex \d representing digits
+            search_string = str(locale_obj.timeframes[unit])
+            search_string = search_string.format(r"\d+")
+
+            # Create search pattern and find within string
+            pattern = re.compile(fr"{search_string}")
+            match = pattern.search(timestring)
+
+            # If there is no match continue to next iteration
+            if not match:
+                continue
+
+            match_string = match.group()
+            num_match = num_pattern.search(match_string)
+
+            # If no number matches set change value to be one
+            if not num_match:
+                change_value = 1
+            else:
+                change_value = int(num_match.group())
+
+            # No time to update if now is the unit
+            if unit == "now":
+                unit_visited[unit] = True
+                continue
+
+            # Add change value to the correct unit (incorporates the plurality that exists within timeframe i.e second v.s seconds)
+            time_unit_to_change = str(unit)
+            time_unit_to_change += "s" if (str(time_unit_to_change)[-1] != "s") else ""
+            time_object_info[time_unit_to_change] = change_value
+            unit_visited[time_unit_to_change] = True
+
+        # Assert error if string does not modify any units
+        if not any([True for k, v in unit_visited.items() if v]):
+            raise ValueError(
+                """Input string not valid. Note: Some locales do not support the week granulairty in Arrow.
+                 If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."""
+            )
+
+        # Sign logic
+        future_string = locale_obj.future
+        future_string = future_string.format(".*")
+        future_pattern = re.compile(fr"^{future_string}$")
+        future_pattern_match = future_pattern.findall(timestring)
+
+        past_string = locale_obj.past
+        past_string = past_string.format(".*")
+        past_pattern = re.compile(fr"^{past_string}$")
+        past_pattern_match = past_pattern.findall(timestring)
+
+        # If a string contains the now unit, there will be no relative units, hence the need to check if the now unit
+        # was visited before raising a ValueError
+        if past_pattern_match:
+            sign_val = -1
+        elif future_pattern_match:
+            sign_val = 1
+        elif unit_visited["now"]:
+            sign_val = 0
+        else:
+            raise ValueError(
+                """Invalid input String. String does not contain any relative time information.
+                String should either represent a time in the future or a time in the past.
+                Ex: "in 5 seconds" or "5 seconds ago". """
+            )
+
+        time_changes = {k: sign_val * v for k, v in time_object_info.items()}
+
+        return current_time.shift(**time_changes)
 
     # query functions
 
