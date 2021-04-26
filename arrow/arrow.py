@@ -211,6 +211,22 @@ class Arrow:
         )
 
     @classmethod
+    def set_locale_default(name: str) -> "Locale":
+    
+    """Returns an appropriate :class:`Locale <arrow.locales.Locale>`
+    corresponding to an input locale name.
+    Set a default locale for entire arrow library
+
+    """
+
+    normalized_locale_name = name.lower().replace("_", "-")
+    locale_cls = _locale_map.get(normalized_locale_name)
+    if locale_cls is None:
+        raise ValueError(f"Unsupported locale {normalized_locale_name!r}.")
+    locale = locales.get_locale(name)
+    humanize(self,name)
+ 
+    @classmethod
     def utcnow(cls) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in UTC
         time.
