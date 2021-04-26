@@ -9,6 +9,8 @@ from datetime import tzinfo as dt_tzinfo
 from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
+from dateutil import tz as dateutil_tz
+
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.constants import DEFAULT_LOCALE
 from arrow.factory import ArrowFactory
@@ -112,6 +114,10 @@ def now(tz: Optional[TZ_EXPR] = None) -> Arrow:
 now.__doc__ = _factory.now.__doc__
 
 
+def zone(zone_name: str) -> dateutil_tz:
+    return _factory.zone(zone_name)
+
+
 def factory(type: Type[Arrow]) -> ArrowFactory:
     """Returns an :class:`.ArrowFactory` for the specified :class:`Arrow <arrow.arrow.Arrow>`
     or derived type.
@@ -123,4 +129,4 @@ def factory(type: Type[Arrow]) -> ArrowFactory:
     return ArrowFactory(type)
 
 
-__all__ = ["get", "utcnow", "now", "factory"]
+__all__ = ["get", "utcnow", "now", "factory", "zone"]

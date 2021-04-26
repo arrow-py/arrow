@@ -346,3 +346,10 @@ class ArrowFactory:
             tz = parser.TzinfoParser.parse(tz)
 
         return self.type.now(tz)
+
+    @staticmethod
+    def zone(zone_name: str) -> dateutil_tz:
+        """docstring here"""
+        zone = parser.TzinfoParser.parse(zone_name)
+
+        return zone
