@@ -1,6 +1,37 @@
 Changelog
 =========
 
+1.1.0 (2021-04-26)
+------------------
+
+- [NEW] Implemented the ``dehumanize`` method for ``Arrow`` objects. This takes human readable input and uses it to perform relative time shifts, for example:
+
+.. code-block:: python
+
+    >>> arw
+    <Arrow [2021-04-26T21:06:14.256803+00:00]>
+    >>> arw.dehumanize("8 hours ago")
+    <Arrow [2021-04-26T13:06:14.256803+00:00]>
+
+
+- [NEW] Made the start of the week adjustable when using ``span("week")``, for example:
+
+.. code-block:: python
+
+    >>> arw
+    <Arrow [2021-04-26T21:06:14.256803+00:00]>
+    >>> arw.isoweekday()
+    1 # Monday
+    >>> arw.span("week")
+    (<Arrow [2021-04-26T00:00:00+00:00]>, <Arrow [2021-05-02T23:59:59.999999+00:00]>)
+    >>> arw.span("week", week_start=4)
+    (<Arrow [2021-04-22T00:00:00+00:00]>, <Arrow [2021-04-28T23:59:59.999999+00:00]>)
+
+- [NEW] Added Croatian, Latin, Latvian, Lithuanian and Malay locales.
+- [FIX] Internally standardize locales and improve locale validation.
+- [FIX] Correct type checking for ``arrow.get(2021, 3, 9)`` construction and internal locale mapping.
+- [FIX] Audited all docstrings for style, typos and outdated info.
+
 1.0.3 (2021-03-05)
 ------------------
 
