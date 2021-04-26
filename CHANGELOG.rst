@@ -12,7 +12,12 @@ Changelog
     <Arrow [2021-04-26T21:06:14.256803+00:00]>
     >>> arw.dehumanize("8 hours ago")
     <Arrow [2021-04-26T13:06:14.256803+00:00]>
-
+    >>> arw.dehumanize("in 4 days")
+    <Arrow [2021-04-30T21:06:14.256803+00:00]>
+    >>> arw.dehumanize("in an hour 34 minutes 10 seconds")
+    <Arrow [2021-04-26T22:40:24.256803+00:00]>
+    >>> arw.dehumanize("hace 2 años", locale="es")
+    <Arrow [2019-04-26T21:06:14.256803+00:00]>
 
 - [NEW] Made the start of the week adjustable when using ``span("week")``, for example:
 
@@ -28,8 +33,19 @@ Changelog
     (<Arrow [2021-04-22T00:00:00+00:00]>, <Arrow [2021-04-28T23:59:59.999999+00:00]>)
 
 - [NEW] Added Croatian, Latin, Latvian, Lithuanian and Malay locales.
-- [FIX] Internally standardize locales and improve locale validation.
-- [FIX] Correct type checking for ``arrow.get(2021, 3, 9)`` construction and internal locale mapping.
+- [FIX] Internally standardize locales and improve locale validation. Locales should now use the ISO notation of a dash (``"en-gb"``) rather than an underscore (``"en_gb"``) however this change is backward compatible.
+- [FIX] Correct type checking for ``arrow.get(2021, 3, 9)`` construction and internal locale mapping. This now allows subclassing of locales, for example:
+
+.. code-block:: python
+
+    >>> from arrow.locales import EnglishLocale
+    >>> class Klingon(EnglishLocale):
+    ...     names = ["tlh"]
+    ...
+    >>> from arrow import locales
+    >>> locales.get_locale("tlh")
+    <__main__.Klingon object at 0x7f7cd1effd30>
+
 - [FIX] Audited all docstrings for style, typos and outdated info.
 
 1.0.3 (2021-03-05)
