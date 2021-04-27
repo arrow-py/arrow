@@ -1312,14 +1312,14 @@ class Arrow:
                 >>> arw = arrow.utcnow()
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
-                >>> earlier = arw.dehumanize("two days ago")
+                >>> earlier = arw.dehumanize("3 days ago")
                 >>> earlier
                 <Arrow [2021-04-18T22:27:34.787885+00:00]>
 
                 >>> arw = arrow.utcnow()
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
-                >>> later = arw.dehumanize("in 1 month")
+                >>> later = arw.dehumanize("in a month")
                 >>> later
                 <Arrow [2021-05-18T22:27:34.787885+00:00]>
 
@@ -1393,8 +1393,8 @@ class Arrow:
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
-                """Input string not valid. Note: Some locales do not support the week granulairty in Arrow.
-                 If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."""
+                "Input string not valid. Note: Some locales do not support the week granulairty in Arrow."
+                "If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."
             )
 
         # Sign logic
@@ -1418,9 +1418,9 @@ class Arrow:
             sign_val = 0
         else:
             raise ValueError(
-                """Invalid input String. String does not contain any relative time information.
-                String should either represent a time in the future or a time in the past.
-                Ex: "in 5 seconds" or "5 seconds ago". """
+                "Invalid input String. String does not contain any relative time information."
+                "String should either represent a time in the future or a time in the past."
+                "Ex: 'in 5 seconds' or '5 seconds ago'. "
             )
 
         time_changes = {k: sign_val * v for k, v in time_object_info.items()}
