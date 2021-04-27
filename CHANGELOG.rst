@@ -34,7 +34,7 @@ Changelog
 
 - [NEW] Added Croatian, Latin, Latvian, Lithuanian and Malay locales.
 - [FIX] Internally standardize locales and improve locale validation. Locales should now use the ISO notation of a dash (``"en-gb"``) rather than an underscore (``"en_gb"``) however this change is backward compatible.
-- [FIX] Correct type checking for ``arrow.get(2021, 3, 9)`` construction and internal locale mapping. This now allows subclassing of locales, for example:
+- [FIX] Correct type checking for internal locale mapping by using ``_init_subclass``. This now allows subclassing of locales, for example:
 
 .. code-block:: python
 
@@ -46,6 +46,7 @@ Changelog
     >>> locales.get_locale("tlh")
     <__main__.Klingon object at 0x7f7cd1effd30>
 
+- [FIX] Correct type checking for ``arrow.get(2021, 3, 9)`` construction.
 - [FIX] Audited all docstrings for style, typos and outdated info.
 
 1.0.3 (2021-03-05)
