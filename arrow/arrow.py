@@ -1312,7 +1312,7 @@ class Arrow:
                 >>> arw = arrow.utcnow()
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
-                >>> earlier = arw.dehumanize("3 days ago")
+                >>> earlier = arw.dehumanize("2 days ago")
                 >>> earlier
                 <Arrow [2021-04-18T22:27:34.787885+00:00]>
 
