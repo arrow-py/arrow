@@ -123,5 +123,5 @@ DEHUMANIZE_LOCALES = {
     "ms-my",
     "ms-bn",
     "or",
-    "or-in"
+    "or-in",
 }
