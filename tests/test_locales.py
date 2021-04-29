@@ -1549,3 +1549,38 @@ class TestSwedishLocale:
         assert self.locale._format_timeframe("months", 11) == "11 månader"
         assert self.locale._format_timeframe("year", 1) == "ett år"
         assert self.locale._format_timeframe("years", 12) == "12 år"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestOdiaLocale:
+    def test_ordinal_number(self):
+        assert self.locale._ordinal_number(0) == "0ତମ"
+        assert self.locale._ordinal_number(1) == "1ମ"
+        assert self.locale._ordinal_number(3) == "3ୟ"
+        assert self.locale._ordinal_number(4) == "4ର୍ଥ"
+        assert self.locale._ordinal_number(5) == "5ମ"
+        assert self.locale._ordinal_number(6) == "6ଷ୍ଠ"
+        assert self.locale._ordinal_number(10) == "10ମ"
+        assert self.locale._ordinal_number(11) == "11ତମ"
+        assert self.locale._ordinal_number(42) == "42ତମ"
+        assert self.locale._ordinal_number(-1) == ""
+
+    def test_format_timeframe(self):
+
+        assert self.locale._format_timeframe("hours", 2) == "2 ଘଣ୍ଟା"
+        assert self.locale._format_timeframe("hour", 0) == "ଏକ ଘଣ୍ଟା"
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative("ବର୍ତ୍ତମାନ", "now", 0)
+        assert result == "ବର୍ତ୍ତମାନ"
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("ଏକ ଘଣ୍ଟା", "hour", 1)
+        assert result == "ଏକ ଘଣ୍ଟା ପରେ"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("ଏକ ଘଣ୍ଟା", "hour", -1)
+        assert result == "ଏକ ଘଣ୍ଟା ପୂର୍ବେ"
