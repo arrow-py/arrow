@@ -236,7 +236,7 @@ class ArrowFactory:
 
             # (datetime) -> from datetime.
             elif isinstance(arg, datetime):
-                return self.type.fromdatetime(arg)
+                return self.type.fromdatetime(arg, tzinfo=tz)
 
             # (date) -> from date.
             elif isinstance(arg, date):

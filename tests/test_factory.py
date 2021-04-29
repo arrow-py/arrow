@@ -172,6 +172,17 @@ class TestGet:
             2013, 5, 5, 12, 30, 45, 123456, tzinfo=tz.tzutc()
         )
 
+    # regression test for #944
+    def test_one_arg_datetime_tzinfo_kwarg(self):
+
+        dt = datetime(2021, 4, 29, 6)
+
+        result = self.factory.get(dt, tzinfo="America/Chicago")
+
+        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+
+        assert_datetime_equality(result._datetime, expected)
+
     def test_one_arg_iso_str(self):
 
         dt = datetime.utcnow()
