@@ -4,6 +4,7 @@ from datetime import date, datetime
 import pytest
 from dateutil import tz
 
+from arrow import Arrow
 from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
@@ -178,6 +179,16 @@ class TestGet:
         dt = datetime(2021, 4, 29, 6)
 
         result = self.factory.get(dt, tzinfo="America/Chicago")
+
+        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+
+        assert_datetime_equality(result._datetime, expected)
+
+    def test_one_arg_arrow_tzinfo_kwarg(self):
+
+        arw = Arrow(2021, 4, 29, 6)
+
+        result = self.factory.get(arw, tzinfo="America/Chicago")
 
         expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
 
