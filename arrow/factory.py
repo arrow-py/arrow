@@ -240,7 +240,7 @@ class ArrowFactory:
 
             # (date) -> from date.
             elif isinstance(arg, date):
-                return self.type.fromdate(arg)
+                return self.type.fromdate(arg, tzinfo=tz)
 
             # (tzinfo) -> now, @ tzinfo.
             elif isinstance(arg, dt_tzinfo):
