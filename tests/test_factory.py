@@ -205,6 +205,14 @@ class TestGet:
         assert result.date() == expected.date()
         assert result.tzinfo == expected.tzinfo
 
+    def test_one_arg_iso_calendar_tzinfo_kwarg(self):
+
+        result = self.factory.get((2004, 1, 7), tzinfo="America/Chicago")
+
+        expected = Arrow(2004, 1, 4, tzinfo="America/Chicago")
+
+        assert_datetime_equality(result, expected)
+
     def test_one_arg_iso_str(self):
 
         dt = datetime.utcnow()

@@ -258,7 +258,7 @@ class ArrowFactory:
             # (iso calendar) -> convert then from date
             elif isinstance(arg, tuple) and len(arg) == 3:
                 d = iso_to_gregorian(*arg)
-                return self.type.fromdate(d)
+                return self.type.fromdate(d, tzinfo=tz)
 
             else:
                 raise TypeError(f"Cannot parse single argument of type {type(arg)!r}.")
