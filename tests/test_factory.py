@@ -434,3 +434,15 @@ class TestNow:
     def test_tz_str(self):
 
         assert_datetime_equality(self.factory.now("EST"), datetime.now(tz.gettz("EST")))
+
+
+@pytest.mark.usefixtures("arrow_factory")
+class TestTimezone:
+    def test_timezone(self):
+
+        assert self.factory.timezone("Australia/Darwin") == tz.gettz("Australia/Darwin")
+
+    def test_bad_input(self):
+
+        with pytest.raises(ParserError):
+            self.factory.timezone("absolute garbage#!?")

@@ -348,7 +348,7 @@ class ArrowFactory:
         return self.type.now(tz)
 
     @staticmethod
-    def zone(zone_name: str) -> dateutil_tz:
+    def timezone(zone_name: str) -> dt_tzinfo:
         """docstring here"""
         zone = parser.TzinfoParser.parse(zone_name)
 
