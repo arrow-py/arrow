@@ -11,6 +11,7 @@ from dateutil import tz
 from dateutil.relativedelta import FR, MO, SA, SU, TH, TU, WE
 
 from arrow import arrow, locales
+from arrow.constants import DEHUMANIZE_LOCALES
 
 from .utils import assert_datetime_equality
 
@@ -2296,95 +2297,7 @@ class TestArrowHumanizeTestsWithLocale:
 # Fixtures for Dehumanize
 @pytest.fixture(scope="class")
 def locale_list_no_weeks():
-    tested_langs = [
-        "en",
-        "en-us",
-        "en-gb",
-        "en-au",
-        "en-be",
-        "en-jp",
-        "en-za",
-        "en-ca",
-        "en-ph",
-        "fr",
-        "fr-fr",
-        "fr-ca",
-        "it",
-        "it-it",
-        "es",
-        "es-es",
-        "el",
-        "el-gr",
-        "ja",
-        "ja-jp",
-        "sv",
-        "sv-se",
-        "zh",
-        "zh-cn",
-        "zh-tw",
-        "zh-hk",
-        "nl",
-        "nl-nl",
-        "af",
-        "de",
-        "de-de",
-        "de-ch",
-        "de-at",
-        "nb",
-        "nb-no",
-        "nn",
-        "nn-no",
-        "pt",
-        "pt-pt",
-        "pt_br",
-        "tl",
-        "tl-ph",
-        "vi",
-        "vi-vn",
-        "tr",
-        "tr-tr",
-        "az",
-        "az-az",
-        "da",
-        "da-dk",
-        "ml",
-        "hi",
-        "fa",
-        "fa-ir",
-        "mr",
-        "ca",
-        "ca-es",
-        "ca-ad",
-        "ca-fr",
-        "ca-it",
-        "eo",
-        "eo-xx",
-        "bn",
-        "bn-bd",
-        "bn-in",
-        "rm",
-        "rm-ch",
-        "ro",
-        "ro-ro",
-        "sl",
-        "sl-si",
-        "id",
-        "id-id",
-        "sw",
-        "sw-ke",
-        "sw-tz",
-        "la",
-        "la-va",
-        "lt",
-        "lt-lt",
-        "ms",
-        "ms-my",
-        "ms-bn",
-        "or",
-        "or-in",
-    ]
-
-    return tested_langs
+    return DEHUMANIZE_LOCALES
 
 
 @pytest.fixture(scope="class")
@@ -2437,6 +2350,7 @@ def locale_list_with_weeks():
         "ms",
         "ms-my",
         "ms-bn",
+        "he",
     ]
 
     return tested_langs
@@ -2788,6 +2702,127 @@ class TestArrowDehumanize:
 
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
+
+
+# Specific Dehumanize tests for special locales
+class TestDehumanizeArabic:
+    def test_double(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        minute_ago = arw.shift(minutes=-2)
+        minute_future = arw.shift(minutes=2)
+
+        minute_ago_string = minute_ago.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+        minute_future_string = minute_future.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+
+        assert arw.dehumanize(minute_ago_string, locale="ar") == minute_ago
+        assert arw.dehumanize(minute_future_string, locale="ar") == minute_future
+
+    def test_ten(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        minute_ago = arw.shift(minutes=-9)
+        minute_future = arw.shift(minutes=9)
+
+        minute_ago_string = minute_ago.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+        minute_future_string = minute_future.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+
+        assert arw.dehumanize(minute_ago_string, locale="ar") == minute_ago
+        assert arw.dehumanize(minute_future_string, locale="ar") == minute_future
+
+    def test_higher(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        minute_ago = arw.shift(minutes=-13)
+        minute_future = arw.shift(minutes=13)
+
+        minute_ago_string = minute_ago.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+        minute_future_string = minute_future.humanize(
+            arw, locale="ar", granularity=["minute"]
+        )
+
+        assert arw.dehumanize(minute_ago_string, locale="ar") == minute_ago
+        assert arw.dehumanize(minute_future_string, locale="ar") == minute_future
+
+
+class TestDehumanizeHebrew:
+    def test_double_hours(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        hour_ago = arw.shift(hours=-2)
+        hour_future = arw.shift(hours=2)
+
+        hour_ago_string = hour_ago.humanize(arw, locale="he", granularity=["hour"])
+        hour_future_string = hour_future.humanize(
+            arw, locale="he", granularity=["hour"]
+        )
+
+        assert arw.dehumanize(hour_ago_string, locale="he") == hour_ago
+        assert arw.dehumanize(hour_future_string, locale="he") == hour_future
+
+    def test_double_days(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        day_ago = arw.shift(days=-2)
+        day_future = arw.shift(days=2)
+
+        day_ago_string = day_ago.humanize(arw, locale="he", granularity=["day"])
+        day_future_string = day_future.humanize(arw, locale="he", granularity=["day"])
+
+        assert arw.dehumanize(day_ago_string, locale="he") == day_ago
+        assert arw.dehumanize(day_future_string, locale="he") == day_future
+
+    def test_double_weeks(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        week_ago = arw.shift(weeks=-2)
+        week_future = arw.shift(weeks=2)
+
+        week_ago_string = week_ago.humanize(arw, locale="he", granularity=["week"])
+        week_future_string = week_future.humanize(
+            arw, locale="he", granularity=["week"]
+        )
+
+        assert arw.dehumanize(week_ago_string, locale="he") == week_ago
+        assert arw.dehumanize(week_future_string, locale="he") == week_future
+
+    def test_double_months(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        month_ago = arw.shift(months=-2)
+        month_future = arw.shift(months=2)
+
+        month_ago_string = month_ago.humanize(arw, locale="he", granularity=["month"])
+        month_future_string = month_future.humanize(
+            arw, locale="he", granularity=["month"]
+        )
+
+        assert arw.dehumanize(month_ago_string, locale="he") == month_ago
+        assert arw.dehumanize(month_future_string, locale="he") == month_future
+
+    def test_double_years(self):
+
+        arw = arrow.Arrow(2001, 6, 18, 5, 55, 0)
+        year_ago = arw.shift(years=-2)
+        year_future = arw.shift(years=2)
+
+        year_ago_string = year_ago.humanize(arw, locale="he", granularity=["year"])
+        year_future_string = year_future.humanize(
+            arw, locale="he", granularity=["year"]
+        )
+
+        assert arw.dehumanize(year_ago_string, locale="he") == year_ago
+        assert arw.dehumanize(year_future_string, locale="he") == year_future
 
 
 class TestArrowIsBetween:
