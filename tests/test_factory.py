@@ -4,6 +4,7 @@ from datetime import date, datetime
 import pytest
 from dateutil import tz
 
+from arrow import Arrow
 from arrow.parser import ParserError
 
 from .utils import assert_datetime_equality
@@ -171,6 +172,46 @@ class TestGet:
         assert result._datetime == datetime(
             2013, 5, 5, 12, 30, 45, 123456, tzinfo=tz.tzutc()
         )
+
+    # regression test for #944
+    def test_one_arg_datetime_tzinfo_kwarg(self):
+
+        dt = datetime(2021, 4, 29, 6)
+
+        result = self.factory.get(dt, tzinfo="America/Chicago")
+
+        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+
+        assert_datetime_equality(result._datetime, expected)
+
+    def test_one_arg_arrow_tzinfo_kwarg(self):
+
+        arw = Arrow(2021, 4, 29, 6)
+
+        result = self.factory.get(arw, tzinfo="America/Chicago")
+
+        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+
+        assert_datetime_equality(result._datetime, expected)
+
+    def test_one_arg_date_tzinfo_kwarg(self):
+
+        da = date(2021, 4, 29)
+
+        result = self.factory.get(da, tzinfo="America/Chicago")
+
+        expected = Arrow(2021, 4, 29, tzinfo=tz.gettz("America/Chicago"))
+
+        assert result.date() == expected.date()
+        assert result.tzinfo == expected.tzinfo
+
+    def test_one_arg_iso_calendar_tzinfo_kwarg(self):
+
+        result = self.factory.get((2004, 1, 7), tzinfo="America/Chicago")
+
+        expected = Arrow(2004, 1, 4, tzinfo="America/Chicago")
+
+        assert_datetime_equality(result, expected)
 
     def test_one_arg_iso_str(self):
 
