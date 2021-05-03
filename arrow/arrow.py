@@ -1361,11 +1361,9 @@ class Arrow:
             else:
                 strings_to_search = {unit: str(unit_object)}
 
-            """ Search for any matches that exist for that locale's unit.
-                Needs to cycle all through strings as some locales have strings that
-                could overlap in a regex match, since input validation isn't being
-                performed.
-            """
+            # Search for any matches that exist for that locale's unit.
+            # Needs to cycle all through strings as some locales have strings that
+            # could overlap in a regex match, since input validation isn't being performed.
             for time_delta, time_string in strings_to_search.items():
 
                 # Replace {0} with regex \d representing digits
