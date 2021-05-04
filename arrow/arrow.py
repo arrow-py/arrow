@@ -144,6 +144,21 @@ class Arrow:
         "year": _SECS_PER_YEAR,
     }
 
+    _AUTO_HUMANIZE_LIMITS: Final[List[Tuple[str, Union[int, float]]]] = [
+        ("now", 10),
+        ("seconds", _SECS_PER_MINUTE),
+        ("minute", _SECS_PER_MINUTE * 2),
+        ("minutes", _SECS_PER_HOUR),
+        ("hour", _SECS_PER_HOUR * 2),
+        ("hours", _SECS_PER_DAY),
+        ("day", _SECS_PER_DAY * 2),
+        ("days", _SECS_PER_WEEK),
+        ("week", _SECS_PER_WEEK * 2),
+        ("weeks", _SECS_PER_MONTH),
+        ("month", _SECS_PER_MONTH * 2),
+        ("months", _SECS_PER_YEAR),
+        ("year", _SECS_PER_YEAR * 2),
+    ]
     _datetime: dt_datetime
 
     def __init__(
@@ -1175,87 +1190,61 @@ class Arrow:
 
         try:
             if granularity == "auto":
-                if diff < 10:
-                    return locale.describe("now", only_distance=only_distance)
 
-                if diff < self._SECS_PER_MINUTE:
-                    seconds = sign * delta_second
-                    return locale.describe(
-                        "seconds", seconds, only_distance=only_distance
-                    )
+                for (frame_name, frame_limit) in self._AUTO_HUMANIZE_LIMITS:
 
-                elif diff < self._SECS_PER_MINUTE * 2:
-                    return locale.describe("minute", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_HOUR:
-                    minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
-                    return locale.describe(
-                        "minutes", minutes, only_distance=only_distance
-                    )
+                    frame_name = cast(TimeFrameLiteral, frame_name)
 
-                elif diff < self._SECS_PER_HOUR * 2:
-                    return locale.describe("hour", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY:
-                    hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
-                    return locale.describe("hours", hours, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY * 2:
-                    return locale.describe("day", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_WEEK:
-                    days = sign * max(delta_second // self._SECS_PER_DAY, 2)
-                    return locale.describe("days", days, only_distance=only_distance)
-
-                elif diff < self._SECS_PER_WEEK * 2:
-                    return locale.describe("week", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_MONTH:
-                    weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
-                    return locale.describe("weeks", weeks, only_distance=only_distance)
-
-                elif diff < self._SECS_PER_MONTH * 2:
-                    return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_YEAR:
-                    # TODO revisit for humanization during leap years
-                    self_months = self._datetime.year * 12 + self._datetime.month
-                    other_months = dt.year * 12 + dt.month
-
-                    months = sign * max(abs(other_months - self_months), 2)
+                    if diff >= frame_limit:
+                        continue
+                    if frame_name == "now":
+                        description_delta = 0
+                    elif frame_name == "seconds":
+                        description_delta = sign * delta_second
+                    elif frame_name == "months":
+                        self_months = self._datetime.year * 12 + self._datetime.month
+                        other_months = dt.year * 12 + dt.month
+                        description_delta = sign * max(
+                            abs(other_months - self_months), 2
+                        )
+                    # Singular Frame names only use the sign
+                    elif frame_name[-1] != "s":
+                        description_delta = sign
+                    else:
+                        # _SECS_MAP only accepts frame in singular form
+                        map_frame_name = cast(TimeFrameLiteral, frame_name[0:-1])
+                        description_delta = int(
+                            sign
+                            * max(delta_second // self._SECS_MAP[map_frame_name], 2)
+                        )
 
                     return locale.describe(
-                        "months", months, only_distance=only_distance
+                        frame_name, description_delta, only_distance=only_distance
                     )
 
-                elif diff < self._SECS_PER_YEAR * 2:
-                    return locale.describe("year", sign, only_distance=only_distance)
-                else:
-                    years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
-                    return locale.describe("years", years, only_distance=only_distance)
+                # For the case of years
+                years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
+                return locale.describe("years", years, only_distance=only_distance)
 
             elif isinstance(granularity, str):
-                granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
 
-                if granularity == "second":
-                    delta = sign * float(delta_second)
-                    if abs(delta) < 2:
-                        return locale.describe("now", only_distance=only_distance)
-                elif granularity == "minute":
-                    delta = sign * delta_second / self._SECS_PER_MINUTE
-                elif granularity == "hour":
-                    delta = sign * delta_second / self._SECS_PER_HOUR
-                elif granularity == "day":
-                    delta = sign * delta_second / self._SECS_PER_DAY
-                elif granularity == "week":
-                    delta = sign * delta_second / self._SECS_PER_WEEK
-                elif granularity == "month":
-                    delta = sign * delta_second / self._SECS_PER_MONTH
-                elif granularity == "year":
-                    delta = sign * delta_second / self._SECS_PER_YEAR
-                else:
+                if granularity not in self._SECS_MAP:
                     raise ValueError(
                         "Invalid level of granularity. "
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
                     )
 
+                # Special Case for second
+                if granularity == "second":
+                    delta = sign * float(delta_second)
+                    if abs(delta) < 2:
+                        return locale.describe("now", only_distance=only_distance)
+                else:
+                    delta = sign * delta_second / self._SECS_MAP[granularity]  # type: ignore
+
                 if trunc(abs(delta)) != 1:
                     granularity += "s"  # type: ignore
-                return locale.describe(granularity, delta, only_distance=only_distance)
+                return locale.describe(granularity, delta, only_distance=only_distance)  # type: ignore
 
             else:
                 timeframes: List[Tuple[TimeFrameLiteral, float]] = []
