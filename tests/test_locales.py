@@ -363,6 +363,33 @@ class TestMalayalamLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestMalteseLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "issa"
+        assert self.locale._format_timeframe("second", 1) == "sekonda"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekondi"
+        assert self.locale._format_timeframe("minute", 1) == "minuta"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minuti"
+        assert self.locale._format_timeframe("hour", 1) == "siegħa"
+        assert self.locale._format_timeframe("hours", 2) == "2 sagħtejn"
+        assert self.locale._format_timeframe("hours", 4) == "4 sigħat"
+        assert self.locale._format_timeframe("day", 1) == "jum"
+        assert self.locale._format_timeframe("days", 2) == "2 jumejn"
+        assert self.locale._format_timeframe("days", 5) == "5 ijiem"
+        assert self.locale._format_timeframe("month", 1) == "xahar"
+        assert self.locale._format_timeframe("months", 2) == "2 xahrejn"
+        assert self.locale._format_timeframe("months", 7) == "7 xhur"
+        assert self.locale._format_timeframe("year", 1) == "sena"
+        assert self.locale._format_timeframe("years", 2) == "2 sentejn"
+        assert self.locale._format_timeframe("years", 8) == "8 snin"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Is-Sibt"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "S"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestHindiLocale:
     def test_format_timeframe(self):
 
