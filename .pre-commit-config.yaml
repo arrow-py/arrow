@@ -16,16 +16,16 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.7.0
+    rev: 5.8.0
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.10.0
+    rev: v2.15.0
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.7.1
+    rev: v1.8.0
     hooks:
       - id: python-no-eval
       - id: python-check-blanket-noqa
@@ -34,16 +34,16 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
   - repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 21.5b0
     hooks:
       - id: black
         args: [--safe, --quiet, --target-version=py36]
   - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.8.4
+    rev: 3.9.2
     hooks:
       - id: flake8
         additional_dependencies: [flake8-bugbear]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v0.800'
+    rev: 'v0.812'
     hooks:
       - id: mypy

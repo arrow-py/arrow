@@ -280,7 +280,7 @@ class TestDateTimeParserParse:
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)
-        assert self.parser.parse("{:d}".format(int(timestamp)), "x") == self.expected
+        assert self.parser.parse(f"{int(timestamp):d}", "x") == self.expected
 
         self.expected = datetime.fromtimestamp(round(timestamp, 3), tz=tz_utc)
         assert self.parser.parse(f"{timestamp_milli:d}", "x") == self.expected
@@ -290,7 +290,7 @@ class TestDateTimeParserParse:
 
         # anything above max µs timestamp should fail
         with pytest.raises(ValueError):
-            self.parser.parse("{:d}".format(int(MAX_TIMESTAMP_US) + 1), "x")
+            self.parser.parse(f"{int(MAX_TIMESTAMP_US) + 1:d}", "x")
 
         # floats are not allowed with the "x" token
         with pytest.raises(ParserMatchError):

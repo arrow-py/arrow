@@ -905,7 +905,7 @@ class Arrow:
 
     @property
     def fold(self) -> int:
-        """ Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object. """
+        """Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object."""
 
         return self._datetime.fold
 

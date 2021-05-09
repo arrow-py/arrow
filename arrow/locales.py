@@ -85,7 +85,7 @@ def get_locale_by_class_name(name: str) -> "Locale":
 
 
 class Locale:
-    """ Represents locale-specific data and functionality. """
+    """Represents locale-specific data and functionality."""
 
     names: ClassVar[List[str]] = []
 
