@@ -1,6 +1,6 @@
 .PHONY: auto test docs clean
 
-auto: build38
+auto: build39
 
 build36: PYTHON_VER = python3.6
 build37: PYTHON_VER = python3.7
@@ -11,7 +11,7 @@ build36 build37 build38 build39: clean
 	$(PYTHON_VER) -m venv venv
 	. venv/bin/activate; \
 	pip install -U pip setuptools wheel; \
-	pip install -r requirements.txt; \
+	pip install -r requirements-dev.txt; \
 	pre-commit install
 
 test:
