@@ -5023,8 +5023,8 @@ class SerbianLocale(Locale):
         "juni",  # јун
         "juli",  # јул
         "avgust",  # август
-        "septembar",  # октобар
-        "oktobar",  # септембар
+        "septembar",  # септембар
+        "oktobar",  # октобар
         "novembar",  # новембар
         "decembar",  # децембар
     ]
