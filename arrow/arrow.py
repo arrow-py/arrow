@@ -32,6 +32,7 @@ from typing import (
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
+import arrow
 from arrow import formatter, locales, parser, util
 from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
@@ -1786,6 +1787,42 @@ class Arrow:
                 return parser.TzinfoParser.parse(tz_expr)
             except parser.ParserError:
                 raise ValueError(f"{tz_expr!r} not recognized as a timezone.")
+
+    @classmethod
+    def excel_date(
+        cls, delta: Union[int, float], default_windows_date: bool = True
+    ) -> "Arrow":
+        """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
+        the date of an Excel Serial formatted date.
+
+        :param delta: a ``int`` or ``float`` representing an Excel Serial Date.
+        :param default_windows_date: (optional) a ``bool`` specifying whether a user
+        wants to use the Windows or macOS date system.  Defaults to 'True' for Windows
+        date system.
+
+        Usage::
+
+                >>> arw = Arrow.excel_date(34519)
+                >>> arw
+                <Arrow [1994-07-04T00:00:00+00:00]>
+                >>> arw = Arrow.excel_date(34519, default_windows_date = False)
+                >>> arw
+                <Arrow [1998-07-05T00:00:00+00:00]>
+
+        """
+
+        if default_windows_date:
+            # Need to have this clause as Excel incorrectly considers 1900 a leap year
+            if delta < 60:
+                start_date = arrow.get("1899-12-31")
+            else:
+                start_date = arrow.get("1899-12-30")
+        else:
+            start_date = arrow.get("1904-01-01")
+
+        shifted_time = start_date.shift(days=delta)
+
+        return shifted_time
 
     @classmethod
     def _get_datetime(

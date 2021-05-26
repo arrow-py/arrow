@@ -82,6 +82,18 @@ Arrow objects can be instantiated directly too, with the same arguments as a dat
     >>> arrow.Arrow(2013, 5, 5)
     <Arrow [2013-05-05T00:00:00+00:00]>
 
+Arrow objects can be instantiated using the Excel Serial Date format. Both Windows and macOS date systems supported:
+
+    .. code-block:: python
+
+        >>> arw = Arrow.excel_date(34519)
+        >>> arw
+        <Arrow [1994-07-04T00:00:00+00:00]>
+
+        >>> arw = Arrow.excel_date(34519, default_windows_date = False)
+        >>> arw
+        <Arrow [1998-07-05T00:00:00+00:00]>
+
 Properties
 ~~~~~~~~~~
 
