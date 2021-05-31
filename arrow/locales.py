@@ -2312,11 +2312,11 @@ class TurkishLocale(Locale):
         "hours": "{0} saat",
         "day": "bir gün",
         "days": "{0} gün",
-        "week": "hafta",
+        "week": "bir hafta",
         "weeks": "{0} hafta",
         "month": "bir ay",
         "months": "{0} ay",
-        "year": "yıl",
+        "year": "bir yıl",
         "years": "{0} yıl",
     }
 
