@@ -1648,10 +1648,18 @@ class TestTurkishLocale:
 
     def test_relative_mk(self):
         assert self.locale._format_relative("şimdi", "now", 0) == "şimdi"
-        assert self.locale._format_relative("1 saniye", "seconds", 1) == "1 saniye sonra"
-        assert self.locale._format_relative("1 saniye", "seconds", -1) == "1 saniye önce"
-        assert self.locale._format_relative("1 dakika", "minutes", 1) == "1 dakika sonra"
-        assert self.locale._format_relative("1 dakika", "minutes", -1) == "1 dakika önce"
+        assert (
+            self.locale._format_relative("1 saniye", "seconds", 1) == "1 saniye sonra"
+        )
+        assert (
+            self.locale._format_relative("1 saniye", "seconds", -1) == "1 saniye önce"
+        )
+        assert (
+            self.locale._format_relative("1 dakika", "minutes", 1) == "1 dakika sonra"
+        )
+        assert (
+            self.locale._format_relative("1 dakika", "minutes", -1) == "1 dakika önce"
+        )
         assert self.locale._format_relative("1 saat", "hours", 1) == "1 saat sonra"
         assert self.locale._format_relative("1 saat", "hours", -1) == "1 saat önce"
         assert self.locale._format_relative("1 gün", "days", 1) == "1 gün sonra"
@@ -1661,7 +1669,7 @@ class TestTurkishLocale:
         assert self.locale._format_relative("1 ay", "months", 1) == "1 ay sonra"
         assert self.locale._format_relative("1 ay", "months", -1) == "1 ay önce"
         assert self.locale._format_relative("1 yıl", "years", 1) == "1 yıl sonra"
-        assert self.locale._format_relative("1 yıl", "years", -1) == "1 yıl önce"        
+        assert self.locale._format_relative("1 yıl", "years", -1) == "1 yıl önce"
 
     def test_plurals_mk(self):
         assert self.locale._format_timeframe("now", 0) == "şimdi"
