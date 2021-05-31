@@ -2300,6 +2300,7 @@ class TurkishLocale(Locale):
 
     past = "{0} önce"
     future = "{0} sonra"
+    and_word = "ve"
 
     timeframes = {
         "now": "şimdi",
@@ -2311,11 +2312,15 @@ class TurkishLocale(Locale):
         "hours": "{0} saat",
         "day": "bir gün",
         "days": "{0} gün",
+        "week": "bir hafta",
+        "weeks": "{0} hafta",
         "month": "bir ay",
         "months": "{0} ay",
-        "year": "yıl",
+        "year": "bir yıl",
         "years": "{0} yıl",
     }
+
+    meridians = {"am": "öö", "pm": "ös", "AM": "ÖÖ", "PM": "ÖS"}
 
     month_names = [
         "",

@@ -1611,3 +1611,79 @@ class TestOdiaLocale:
 
         result = self.locale._format_relative("ଏକ ଘଣ୍ଟା", "hour", -1)
         assert result == "ଏକ ଘଣ୍ଟା ପୂର୍ବେ"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestTurkishLocale:
+    def test_singles_mk(self):
+        assert self.locale._format_timeframe("second", 1) == "bir saniye"
+        assert self.locale._format_timeframe("minute", 1) == "bir dakika"
+        assert self.locale._format_timeframe("hour", 1) == "bir saat"
+        assert self.locale._format_timeframe("day", 1) == "bir gün"
+        assert self.locale._format_timeframe("week", 1) == "bir hafta"
+        assert self.locale._format_timeframe("month", 1) == "bir ay"
+        assert self.locale._format_timeframe("year", 1) == "bir yıl"
+
+    def test_meridians_mk(self):
+        assert self.locale.meridian(7, "A") == "ÖÖ"
+        assert self.locale.meridian(18, "A") == "ÖS"
+        assert self.locale.meridian(10, "a") == "öö"
+        assert self.locale.meridian(22, "a") == "ös"
+
+    def test_describe_mk(self):
+        assert self.locale.describe("second", only_distance=True) == "bir saniye"
+        assert self.locale.describe("second", only_distance=False) == "bir saniye sonra"
+        assert self.locale.describe("minute", only_distance=True) == "bir dakika"
+        assert self.locale.describe("minute", only_distance=False) == "bir dakika sonra"
+        assert self.locale.describe("hour", only_distance=True) == "bir saat"
+        assert self.locale.describe("hour", only_distance=False) == "bir saat sonra"
+        assert self.locale.describe("day", only_distance=True) == "bir gün"
+        assert self.locale.describe("day", only_distance=False) == "bir gün sonra"
+        assert self.locale.describe("week", only_distance=True) == "bir hafta"
+        assert self.locale.describe("week", only_distance=False) == "bir hafta sonra"
+        assert self.locale.describe("month", only_distance=True) == "bir ay"
+        assert self.locale.describe("month", only_distance=False) == "bir ay sonra"
+        assert self.locale.describe("year", only_distance=True) == "bir yıl"
+        assert self.locale.describe("year", only_distance=False) == "bir yıl sonra"
+
+    def test_relative_mk(self):
+        assert self.locale._format_relative("şimdi", "now", 0) == "şimdi"
+        assert (
+            self.locale._format_relative("1 saniye", "seconds", 1) == "1 saniye sonra"
+        )
+        assert (
+            self.locale._format_relative("1 saniye", "seconds", -1) == "1 saniye önce"
+        )
+        assert (
+            self.locale._format_relative("1 dakika", "minutes", 1) == "1 dakika sonra"
+        )
+        assert (
+            self.locale._format_relative("1 dakika", "minutes", -1) == "1 dakika önce"
+        )
+        assert self.locale._format_relative("1 saat", "hours", 1) == "1 saat sonra"
+        assert self.locale._format_relative("1 saat", "hours", -1) == "1 saat önce"
+        assert self.locale._format_relative("1 gün", "days", 1) == "1 gün sonra"
+        assert self.locale._format_relative("1 gün", "days", -1) == "1 gün önce"
+        assert self.locale._format_relative("1 hafta", "weeks", 1) == "1 hafta sonra"
+        assert self.locale._format_relative("1 hafta", "weeks", -1) == "1 hafta önce"
+        assert self.locale._format_relative("1 ay", "months", 1) == "1 ay sonra"
+        assert self.locale._format_relative("1 ay", "months", -1) == "1 ay önce"
+        assert self.locale._format_relative("1 yıl", "years", 1) == "1 yıl sonra"
+        assert self.locale._format_relative("1 yıl", "years", -1) == "1 yıl önce"
+
+    def test_plurals_mk(self):
+        assert self.locale._format_timeframe("now", 0) == "şimdi"
+        assert self.locale._format_timeframe("second", 1) == "bir saniye"
+        assert self.locale._format_timeframe("seconds", 30) == "30 saniye"
+        assert self.locale._format_timeframe("minute", 1) == "bir dakika"
+        assert self.locale._format_timeframe("minutes", 40) == "40 dakika"
+        assert self.locale._format_timeframe("hour", 1) == "bir saat"
+        assert self.locale._format_timeframe("hours", 23) == "23 saat"
+        assert self.locale._format_timeframe("day", 1) == "bir gün"
+        assert self.locale._format_timeframe("days", 12) == "12 gün"
+        assert self.locale._format_timeframe("week", 1) == "bir hafta"
+        assert self.locale._format_timeframe("weeks", 38) == "38 hafta"
+        assert self.locale._format_timeframe("month", 1) == "bir ay"
+        assert self.locale._format_timeframe("months", 11) == "11 ay"
+        assert self.locale._format_timeframe("year", 1) == "bir yıl"
+        assert self.locale._format_timeframe("years", 12) == "12 yıl"
