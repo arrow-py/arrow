@@ -2266,6 +2266,27 @@ class TestArrowHumanize:
         with pytest.raises(ValueError):
             arw.humanize(later, granularity="week")
 
+    # Bulgarian is an example of a language that overrides _format_timeframe
+    # Applicabale to all time frame. Note: Contributors need to make sure
+    # that if they override describe or describe_mutli, that delta
+    # is truncated on call
+
+    def test_no_floats(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=55000)
+        humanize_string = arw.humanize(later, locale="bg", granularity="minute")
+        print(humanize_string)
+        assert 1 == 1
+
+    def test_no_floats_multi_gran(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=55000)
+        humanize_string = arw.humanize(
+            later, locale="bg", granularity=["second", "minute"]
+        )
+        print(humanize_string)
+        assert 1 == 1
+
 
 @pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanizeTestsWithLocale:

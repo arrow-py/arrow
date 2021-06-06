@@ -147,7 +147,7 @@ class Locale:
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = self._format_timeframe(timeframe, delta)
+        humanized = self._format_timeframe(timeframe, trunc(delta))
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
 
@@ -165,7 +165,8 @@ class Locale:
         """
 
         parts = [
-            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+            self._format_timeframe(timeframe, trunc(delta))
+            for timeframe, delta in timeframes
         ]
         if self.and_word:
             parts.insert(-1, self.and_word)
@@ -928,8 +929,8 @@ class FinnishLocale(Locale):
     # TODO: Fix return type
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
         return (
-            self.timeframes[timeframe][0].format(trunc(abs(delta))),
-            self.timeframes[timeframe][1].format(trunc(abs(delta))),
+            self.timeframes[timeframe][0].format(abs(delta)),
+            self.timeframes[timeframe][1].format(abs(delta)),
         )
 
     def _format_relative(
@@ -1315,7 +1316,7 @@ class SlavicBaseLocale(Locale):
             else:
                 form = form[2]
 
-        return form.format(trunc(delta))
+        return form.format(delta)
 
 
 class BelarusianLocale(SlavicBaseLocale):
@@ -2530,7 +2531,7 @@ class ArabicLocale(Locale):
             else:
                 form = form["higher"]
 
-        return form.format(trunc(delta))
+        return form.format(delta)
 
 
 class LevantArabicLocale(ArabicLocale):
@@ -2680,7 +2681,7 @@ class IcelandicLocale(Locale):
             form = form[1]
             # FIXME: handle when delta is 0
 
-        return form.format(trunc(abs(delta)))  # type: ignore
+        return form.format(abs(delta))  # type: ignore
 
     names = ["is", "is-is"]
 
@@ -3038,7 +3039,7 @@ class CzechLocale(Locale):
         form = self.timeframes[timeframe]
 
         if isinstance(form, str):
-            return form.format(trunc(abs_delta))
+            return form.format(abs_delta)
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
@@ -3056,7 +3057,7 @@ class CzechLocale(Locale):
             else:
                 form = form[1]
 
-        return form.format(trunc(abs_delta))
+        return form.format(abs_delta)
 
 
 class SlovakLocale(Locale):
@@ -3138,7 +3139,7 @@ class SlovakLocale(Locale):
         form = self.timeframes[timeframe]
 
         if isinstance(form, str):
-            return form.format(trunc(abs_delta))
+            return form.format(abs_delta)
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
@@ -3156,7 +3157,7 @@ class SlovakLocale(Locale):
             else:
                 form = form[1]
 
-        return form.format(trunc(abs_delta))
+        return form.format(abs_delta)
 
 
 class FarsiLocale(Locale):
@@ -3318,7 +3319,7 @@ class HebrewLocale(Locale):
         else:
             key = timeframe
 
-        return self.timeframes[key].format(trunc(abs(delta)))
+        return self.timeframes[key].format(abs(delta))
 
     def describe_multi(
         self,
@@ -3334,7 +3335,7 @@ class HebrewLocale(Locale):
 
         humanized = ""
         for index, (timeframe, delta) in enumerate(timeframes):
-            last_humanized = self._format_timeframe(timeframe, delta)
+            last_humanized = self._format_timeframe(timeframe, trunc(delta))
             if index == 0:
                 humanized = last_humanized
             elif index == len(timeframes) - 1:  # Must have at least 2 items
@@ -3637,7 +3638,7 @@ class HungarianLocale(Locale):
             else:
                 form = form["past"]
 
-        return form.format(trunc(abs(delta)))
+        return form.format(abs(delta))
 
 
 class EsperantoLocale(Locale):
@@ -4301,7 +4302,7 @@ class EstonianLocale(Locale):
             _form = form["future"]
         else:
             _form = form["past"]
-        return _form.format(trunc(abs(delta)))
+        return _form.format(abs(delta))
 
 
 class LatvianLocale(Locale):
@@ -4561,7 +4562,7 @@ class CroatianLocale(Locale):
             else:
                 form = form["higher"]
 
-        return form.format(trunc(delta))
+        return form.format(delta)
 
 
 class LatinLocale(Locale):
@@ -4898,7 +4899,7 @@ class MalteseLocale(Locale):
             else:
                 form = form["plural"]
 
-        return form.format(trunc(delta))
+        return form.format(delta)
 
 
 class OdiaLocale(Locale):
