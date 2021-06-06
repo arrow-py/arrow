@@ -928,8 +928,8 @@ class FinnishLocale(Locale):
     # TODO: Fix return type
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
         return (
-            self.timeframes[timeframe][0].format(abs(delta)),
-            self.timeframes[timeframe][1].format(abs(delta)),
+            self.timeframes[timeframe][0].format(trunc(abs(delta))),
+            self.timeframes[timeframe][1].format(trunc(abs(delta))),
         )
 
     def _format_relative(
@@ -1315,7 +1315,7 @@ class SlavicBaseLocale(Locale):
             else:
                 form = form[2]
 
-        return form.format(delta)
+        return form.format(trunc(delta))
 
 
 class BelarusianLocale(SlavicBaseLocale):
@@ -2530,7 +2530,7 @@ class ArabicLocale(Locale):
             else:
                 form = form["higher"]
 
-        return form.format(delta)
+        return form.format(trunc(delta))
 
 
 class LevantArabicLocale(ArabicLocale):
@@ -2680,7 +2680,7 @@ class IcelandicLocale(Locale):
             form = form[1]
             # FIXME: handle when delta is 0
 
-        return form.format(abs(delta))  # type: ignore
+        return form.format(trunc(abs(delta)))  # type: ignore
 
     names = ["is", "is-is"]
 
@@ -3038,7 +3038,7 @@ class CzechLocale(Locale):
         form = self.timeframes[timeframe]
 
         if isinstance(form, str):
-            return form.format(abs_delta)
+            return form.format(trunc(abs_delta))
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
@@ -3056,7 +3056,7 @@ class CzechLocale(Locale):
             else:
                 form = form[1]
 
-        return form.format(abs_delta)
+        return form.format(trunc(abs_delta))
 
 
 class SlovakLocale(Locale):
@@ -3138,7 +3138,7 @@ class SlovakLocale(Locale):
         form = self.timeframes[timeframe]
 
         if isinstance(form, str):
-            return form.format(abs_delta)
+            return form.format(trunc(abs_delta))
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
@@ -3156,7 +3156,7 @@ class SlovakLocale(Locale):
             else:
                 form = form[1]
 
-        return form.format(abs_delta)
+        return form.format(trunc(abs_delta))
 
 
 class FarsiLocale(Locale):
@@ -3637,7 +3637,7 @@ class HungarianLocale(Locale):
             else:
                 form = form["past"]
 
-        return form.format(abs(delta))
+        return form.format(trunc(abs(delta)))
 
 
 class EsperantoLocale(Locale):
@@ -4301,7 +4301,7 @@ class EstonianLocale(Locale):
             _form = form["future"]
         else:
             _form = form["past"]
-        return _form.format(abs(delta))
+        return _form.format(trunc(abs(delta)))
 
 
 class LatvianLocale(Locale):
@@ -4561,7 +4561,7 @@ class CroatianLocale(Locale):
             else:
                 form = form["higher"]
 
-        return form.format(delta)
+        return form.format(trunc(delta))
 
 
 class LatinLocale(Locale):
@@ -4898,7 +4898,7 @@ class MalteseLocale(Locale):
             else:
                 form = form["plural"]
 
-        return form.format(delta)
+        return form.format(trunc(delta))
 
 
 class OdiaLocale(Locale):
