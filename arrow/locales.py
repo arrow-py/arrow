@@ -5070,3 +5070,97 @@ class OdiaLocale(Locale):
         if n == 6:
             return f"{n}ଷ୍ଠ"
         return ""
+
+
+class SerbianLocale(Locale):
+
+    names = ["sr", "sr-sp"]
+
+    past = "pre {0}"
+    future = "za {0}"
+    and_word = "i"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "sada",
+        "second": "sekundu",
+        "seconds": {"double": "{0} sekunde", "higher": "{0} sekundi"},
+        "minute": "minutu",
+        "minutes": {"double": "{0} minute", "higher": "{0} minuta"},
+        "hour": "sat",
+        "hours": {"double": "{0} sata", "higher": "{0} sati"},
+        "day": "dan",
+        "days": {"double": "{0} dana", "higher": "{0} dana"},
+        "week": "nedelju",
+        "weeks": {"double": "{0} nedelje", "higher": "{0} nedelja"},
+        "month": "mesec",
+        "months": {"double": "{0} meseca", "higher": "{0} meseci"},
+        "year": "godinu",
+        "years": {"double": "{0} godine", "higher": "{0} godina"},
+    }
+
+    month_names = [
+        "",
+        "januar",  # Јануар
+        "februar",  # фебруар
+        "mart",  # март
+        "april",  # април
+        "maj",  # мај
+        "juni",  # јун
+        "juli",  # јул
+        "avgust",  # август
+        "septembar",  # септембар
+        "oktobar",  # октобар
+        "novembar",  # новембар
+        "decembar",  # децембар
+    ]
+
+    month_abbreviations = [
+        "",
+        "jan.",
+        "febr.",
+        "mart",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "avg.",
+        "sept.",
+        "okt.",
+        "nov.",
+        "dec.",
+    ]
+
+    day_names = [
+        "",
+        "ponedeljak",  # понедељак
+        "utorak",  # уторак
+        "sreda",  # среда
+        "četvrtak",  # четвртак
+        "petak",  # петак
+        "subota",  # субота
+        "nedelja",  # недеља
+    ]
+
+    day_abbreviations = [
+        "",
+        "po",  # по
+        "ut",  # ут
+        "sr",  # ср
+        "če",  # че
+        "pe",  # пе
+        "su",  # су
+        "ne",  # не
+    ]
+
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+        if isinstance(form, Mapping):
+            if 1 < delta <= 4:
+                form = form["double"]
+            else:
+                form = form["higher"]
+
+        return form.format(delta)
