@@ -1277,6 +1277,28 @@ class TestMalayLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestSamiLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "dál"
+        assert self.locale._format_timeframe("second", 1) == "sekunda"
+        assert self.locale._format_timeframe("seconds", 3) == "3 sekundda"
+        assert self.locale._format_timeframe("minute", 1) == "minuhta"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minuhta"
+        assert self.locale._format_timeframe("hour", 1) == "diimmu"
+        assert self.locale._format_timeframe("hours", 23) == "23 diimmu"
+        assert self.locale._format_timeframe("day", 1) == "beaivvi"
+        assert self.locale._format_timeframe("days", 12) == "12 beaivvi"
+        assert self.locale._format_timeframe("month", 1) == "mánu"
+        assert self.locale._format_timeframe("months", 2) == "2 mánu"
+        assert self.locale._format_timeframe("year", 1) == "jagi"
+        assert self.locale._format_timeframe("years", 2) == "2 jagi"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Lávvordat"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
