@@ -2382,6 +2382,10 @@ def locale_list_no_weeks():
         "ms-bn",
         "or",
         "or-in",
+        "se",
+        "se-fi",
+        "se-no",
+        "se-se",
     ]
 
     return tested_langs

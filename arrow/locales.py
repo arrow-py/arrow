@@ -4906,7 +4906,7 @@ class SamiLocale(Locale):
     names = ["se", "se-fi", "se-no", "se-se"]
 
     past = "{0} dassái"
-    future = "{0}"  # ? couldn't find preposition for Sami here
+    future = "{0} "  # NOTE: couldn't find preposition for Sami here, none needed?
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "dál",
