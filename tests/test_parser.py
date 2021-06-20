@@ -280,7 +280,7 @@ class TestDateTimeParserParse:
 
         # "x" token should parse integer timestamps below MAX_TIMESTAMP normally
         self.expected = datetime.fromtimestamp(int(timestamp), tz=tz_utc)
-        assert self.parser.parse("{:d}".format(int(timestamp)), "x") == self.expected
+        assert self.parser.parse(f"{int(timestamp):d}", "x") == self.expected
 
         self.expected = datetime.fromtimestamp(round(timestamp, 3), tz=tz_utc)
         assert self.parser.parse(f"{timestamp_milli:d}", "x") == self.expected
@@ -290,7 +290,7 @@ class TestDateTimeParserParse:
 
         # anything above max µs timestamp should fail
         with pytest.raises(ValueError):
-            self.parser.parse("{:d}".format(int(MAX_TIMESTAMP_US) + 1), "x")
+            self.parser.parse(f"{int(MAX_TIMESTAMP_US) + 1:d}", "x")
 
         # floats are not allowed with the "x" token
         with pytest.raises(ParserMatchError):
@@ -861,7 +861,7 @@ class TestDateTimeParserRegex:
         assert escape_regex.findall("2018-03-09 8 [h] 40 [hello]") == ["[h]", "[hello]"]
 
     def test_month_names(self):
-        p = parser.DateTimeParser("en_us")
+        p = parser.DateTimeParser("en-us")
 
         text = "_".join(calendar.month_name[1:])
 
@@ -870,7 +870,7 @@ class TestDateTimeParserRegex:
         assert result == calendar.month_name[1:]
 
     def test_month_abbreviations(self):
-        p = parser.DateTimeParser("en_us")
+        p = parser.DateTimeParser("en-us")
 
         text = "_".join(calendar.month_abbr[1:])
 
@@ -1435,12 +1435,12 @@ class TestDateTimeParserMonthName:
         )
 
     def test_localized_month_name(self):
-        parser_ = parser.DateTimeParser("fr_fr")
+        parser_ = parser.DateTimeParser("fr-fr")
 
         assert parser_.parse("2013-Janvier-01", "YYYY-MMMM-DD") == datetime(2013, 1, 1)
 
     def test_localized_month_abbreviation(self):
-        parser_ = parser.DateTimeParser("it_it")
+        parser_ = parser.DateTimeParser("it-it")
 
         assert parser_.parse("2013-Gen-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
@@ -1466,7 +1466,7 @@ class TestDateTimeParserMeridians:
         )
 
     def test_localized_meridians_lowercase(self):
-        parser_ = parser.DateTimeParser("hu_hu")
+        parser_ = parser.DateTimeParser("hu-hu")
         assert parser_.parse("2013-01-01 5 de", "YYYY-MM-DD h a") == datetime(
             2013, 1, 1, 5
         )
@@ -1476,7 +1476,7 @@ class TestDateTimeParserMeridians:
         )
 
     def test_localized_meridians_capitalized(self):
-        parser_ = parser.DateTimeParser("hu_hu")
+        parser_ = parser.DateTimeParser("hu-hu")
         assert parser_.parse("2013-01-01 5 DE", "YYYY-MM-DD h A") == datetime(
             2013, 1, 1, 5
         )
@@ -1509,7 +1509,7 @@ class TestDateTimeParserMeridians:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthOrdinalDay:
     def test_english(self):
-        parser_ = parser.DateTimeParser("en_us")
+        parser_ = parser.DateTimeParser("en-us")
 
         assert parser_.parse("January 1st, 2013", "MMMM Do, YYYY") == datetime(
             2013, 1, 1
@@ -1546,19 +1546,19 @@ class TestDateTimeParserMonthOrdinalDay:
             parser_.parse("January 11st, 2013", "MMMM Do, YYYY")
 
     def test_italian(self):
-        parser_ = parser.DateTimeParser("it_it")
+        parser_ = parser.DateTimeParser("it-it")
 
         assert parser_.parse("Gennaio 1º, 2013", "MMMM Do, YYYY") == datetime(
             2013, 1, 1
         )
 
     def test_spanish(self):
-        parser_ = parser.DateTimeParser("es_es")
+        parser_ = parser.DateTimeParser("es-es")
 
         assert parser_.parse("Enero 1º, 2013", "MMMM Do, YYYY") == datetime(2013, 1, 1)
 
     def test_french(self):
-        parser_ = parser.DateTimeParser("fr_fr")
+        parser_ = parser.DateTimeParser("fr-fr")
 
         assert parser_.parse("Janvier 1er, 2013", "MMMM Do, YYYY") == datetime(
             2013, 1, 1
@@ -1598,7 +1598,7 @@ class TestDateTimeParserSearchDate:
         )
 
     def test_parse_search_locale_with_names(self):
-        p = parser.DateTimeParser("sv_se")
+        p = parser.DateTimeParser("sv-se")
 
         assert p.parse("Jan föddes den 31 Dec 1980", "DD MMM YYYY") == datetime(
             1980, 12, 31
