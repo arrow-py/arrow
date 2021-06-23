@@ -2386,6 +2386,8 @@ def locale_list_no_weeks():
         "se-fi",
         "se-no",
         "se-se",
+        "lb",
+        "lb-lu",
     ]
 
     return tested_langs
@@ -2441,6 +2443,8 @@ def locale_list_with_weeks():
         "ms",
         "ms-my",
         "ms-bn",
+        "lb",
+        "lb-lu",
     ]
 
     return tested_langs
