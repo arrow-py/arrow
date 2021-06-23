@@ -1740,3 +1740,28 @@ class TestTurkishLocale:
         assert self.locale._format_timeframe("months", 11) == "11 ay"
         assert self.locale._format_timeframe("year", 1) == "bir yıl"
         assert self.locale._format_timeframe("years", 12) == "12 yıl"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLuxembourgishLocale:
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(1) == "1."
+
+    def test_define(self):
+        assert self.locale.describe("minute", only_distance=True) == "eng Minutt"
+        assert self.locale.describe("minute", only_distance=False) == "an enger Minutt"
+        assert self.locale.describe("hour", only_distance=True) == "eng Stonn"
+        assert self.locale.describe("hour", only_distance=False) == "an enger Stonn"
+        assert self.locale.describe("day", only_distance=True) == "een Dag"
+        assert self.locale.describe("day", only_distance=False) == "an engem Dag"
+        assert self.locale.describe("week", only_distance=True) == "eng Woch"
+        assert self.locale.describe("week", only_distance=False) == "an enger Woch"
+        assert self.locale.describe("month", only_distance=True) == "ee Mount"
+        assert self.locale.describe("month", only_distance=False) == "an engem Mount"
+        assert self.locale.describe("year", only_distance=True) == "ee Joer"
+        assert self.locale.describe("year", only_distance=False) == "an engem Joer"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Samschdeg"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sam"
