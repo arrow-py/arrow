@@ -147,7 +147,7 @@ class Locale:
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = self._format_timeframe(timeframe, delta)
+        humanized = self._format_timeframe(timeframe, trunc(delta))
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
 
@@ -165,7 +165,8 @@ class Locale:
         """
 
         parts = [
-            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+            self._format_timeframe(timeframe, trunc(delta))
+            for timeframe, delta in timeframes
         ]
         if self.and_word:
             parts.insert(-1, self.and_word)
@@ -3318,7 +3319,7 @@ class HebrewLocale(Locale):
         else:
             key = timeframe
 
-        return self.timeframes[key].format(trunc(abs(delta)))
+        return self.timeframes[key].format(abs(delta))
 
     def describe_multi(
         self,
@@ -3334,7 +3335,7 @@ class HebrewLocale(Locale):
 
         humanized = ""
         for index, (timeframe, delta) in enumerate(timeframes):
-            last_humanized = self._format_timeframe(timeframe, delta)
+            last_humanized = self._format_timeframe(timeframe, trunc(delta))
             if index == 0:
                 humanized = last_humanized
             elif index == len(timeframes) - 1:  # Must have at least 2 items
