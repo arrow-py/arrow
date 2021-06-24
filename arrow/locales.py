@@ -268,9 +268,7 @@ class Locale:
     def _name_to_ordinal(self, lst: Sequence[str]) -> Dict[str, int]:
         return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         # TODO: remove cast
         return cast(str, self.timeframes[timeframe]).format(trunc(abs(delta)))
 
@@ -927,7 +925,7 @@ class FinnishLocale(Locale):
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
     # TODO: Fix return type
-    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> Tuple[str, str]:  # type: ignore
         return (
             self.timeframes[timeframe][0].format(abs(delta)),
             self.timeframes[timeframe][1].format(abs(delta)),
@@ -1302,9 +1300,7 @@ class DutchLocale(Locale):
 class SlavicBaseLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
 
@@ -2518,9 +2514,7 @@ class ArabicLocale(Locale):
     ]
     day_abbreviations = ["", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت", "أحد"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -2671,9 +2665,7 @@ class MoroccoArabicLocale(ArabicLocale):
 
 
 class IcelandicLocale(Locale):
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         if delta < 0:
             form = form[0]
@@ -3030,9 +3022,7 @@ class CzechLocale(Locale):
     ]
     day_abbreviations = ["", "po", "út", "st", "čt", "pá", "so", "ne"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Czech aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3130,9 +3120,7 @@ class SlovakLocale(Locale):
     ]
     day_abbreviations = ["", "po", "ut", "st", "št", "pi", "so", "ne"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Slovak aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3306,9 +3294,7 @@ class HebrewLocale(Locale):
     day_names = ["", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת", "ראשון"]
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Hebrew couple of <timeframe> aware"""
         couple = f"2-{timeframe}"
         single = timeframe.rstrip("s")
@@ -3627,9 +3613,7 @@ class HungarianLocale(Locale):
 
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
 
         if isinstance(form, Mapping):
@@ -4294,9 +4278,7 @@ class EstonianLocale(Locale):
     ]
     day_abbreviations = ["", "Esm", "Teis", "Kolm", "Nelj", "Re", "Lau", "Püh"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         if delta > 0:
             _form = form["future"]
@@ -4551,9 +4533,7 @@ class CroatianLocale(Locale):
         "ne",
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -4888,9 +4868,7 @@ class MalteseLocale(Locale):
         "Ħ",
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -5153,9 +5131,7 @@ class SerbianLocale(Locale):
         "ne",  # не
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
