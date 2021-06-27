@@ -173,7 +173,17 @@ class Locale:
         humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, *timeframes[-1])
+
+            # Needed to determine the correct relative string to use
+            timeframe_value = 0
+
+            for _unit_name, unit_value in timeframes:
+                if trunc(unit_value) != 0:
+                    timeframe_value = trunc(unit_value)
+                    break
+
+            # Note it doesn't matter the timeframe unit we use on the call, only the value
+            humanized = self._format_relative(humanized, "seconds", timeframe_value)
 
         return humanized
 
@@ -3320,8 +3330,15 @@ class HebrewLocale(Locale):
         """
 
         humanized = ""
+        relative_delta = 0
+
         for index, (timeframe, delta) in enumerate(timeframes):
             last_humanized = self._format_timeframe(timeframe, trunc(delta))
+
+            # A check for the relative timeframe unit
+            if trunc(delta) != 0:
+                relative_delta = trunc(delta)
+
             if index == 0:
                 humanized = last_humanized
             elif index == len(timeframes) - 1:  # Must have at least 2 items
@@ -3333,7 +3350,7 @@ class HebrewLocale(Locale):
                 humanized += ", " + last_humanized
 
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, delta)
+            humanized = self._format_relative(humanized, timeframe, relative_delta)
 
         return humanized
 

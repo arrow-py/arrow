@@ -2285,6 +2285,26 @@ class TestArrowHumanize:
         )
         assert humanize_string == "916 минути 40 няколко секунди назад"
 
+    # Dynamic Humanize Tests
+
+    def test_dynamic_on(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=3630)
+        humanize_string = arw.humanize(
+            later, granularity=["second", "hour", "day", "month", "year"], dynamic=True
+        )
+
+        assert humanize_string == "an hour and 30 seconds ago"
+
+    def test_dynamic_off(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=3600)
+        humanize_string = arw.humanize(
+            later,
+            granularity=["second", "hour", "day", "month", "year"],
+        )
+        assert humanize_string == "0 years 0 months 0 days an hour and 0 seconds ago"
+
 
 @pytest.mark.usefixtures("time_2013_01_01")
 class TestArrowHumanizeTestsWithLocale:
