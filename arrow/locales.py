@@ -2886,7 +2886,7 @@ class MalayalamLocale(Locale):
 
 class HindiLocale(Locale):
 
-    names = ["hi"]
+    names = ["hi", "hi-in"]
 
     past = "{0} पहले"
     future = "{0} बाद"
@@ -4790,7 +4790,7 @@ class MalayLocale(Locale):
 
 class MalteseLocale(Locale):
 
-    names = ["mt"]
+    names = ["mt", "mt-mt"]
 
     past = "{0} ilu"
     future = "fi {0}"
@@ -5053,7 +5053,7 @@ class OdiaLocale(Locale):
 
 class SerbianLocale(Locale):
 
-    names = ["sr", "sr-sp"]
+    names = ["sr", "sr-rs", "sr-sp"]
 
     past = "pre {0}"
     future = "za {0}"
