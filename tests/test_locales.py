@@ -1330,6 +1330,29 @@ class TestSamiLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestZuluLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "manje"
+        assert self.locale._format_timeframe("second", -1) == "umzuzwana"
+        assert self.locale._format_timeframe("second", 1) == "ngomzuzwana"
+        assert self.locale._format_timeframe("seconds", -3) == "3 imizuzwana"
+        assert self.locale._format_timeframe("minute", -1) == "umzuzu"
+        assert self.locale._format_timeframe("minutes", -4) == "4 imizuzu"
+        assert self.locale._format_timeframe("hour", -1) == "ihora"
+        assert self.locale._format_timeframe("hours", -23) == "23 amahora"
+        assert self.locale._format_timeframe("day", -1) == "usuku"
+        assert self.locale._format_timeframe("days", -12) == "12 izinsuku"
+        assert self.locale._format_timeframe("month", -1) == "inyanga"
+        assert self.locale._format_timeframe("months", -2) == "2 izinyanga"
+        assert self.locale._format_timeframe("year", -1) == "unyaka"
+        assert self.locale._format_timeframe("years", -2) == "2 iminyaka"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "uMgqibelo"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
