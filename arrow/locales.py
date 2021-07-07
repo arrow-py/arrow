@@ -1812,7 +1812,7 @@ class GermanBaseLocale(Locale):
     and_word = "und"
 
     timeframes = {
-        "now": "gerSamiLocaleade eben",
+        "now": "gerade eben",
         "second": "einer Sekunde",
         "seconds": "{0} Sekunden",
         "minute": "einer Minute",
@@ -4904,6 +4904,7 @@ class MalteseLocale(Locale):
 class SamiLocale(Locale):
 
     names = ["se", "se-fi", "se-no", "se-se"]
+
     past = "{0} dassái"
     future = "{0} "  # NOTE: couldn't find preposition for Sami here, none needed?
 
@@ -4981,6 +4982,7 @@ class SamiLocale(Locale):
 
 
 class OdiaLocale(Locale):
+
     names = ["or", "or-in"]
 
     past = "{0} ପୂର୍ବେ"
