@@ -1812,7 +1812,7 @@ class GermanBaseLocale(Locale):
     and_word = "und"
 
     timeframes = {
-        "now": "gerade eben",
+        "now": "gerSamiLocaleade eben",
         "second": "einer Sekunde",
         "seconds": "{0} Sekunden",
         "minute": "einer Minute",
@@ -4904,7 +4904,6 @@ class MalteseLocale(Locale):
 class SamiLocale(Locale):
 
     names = ["se", "se-fi", "se-no", "se-se"]
-
     past = "{0} dassái"
     future = "{0} "  # NOTE: couldn't find preposition for Sami here, none needed?
 
@@ -4982,7 +4981,6 @@ class SamiLocale(Locale):
 
 
 class OdiaLocale(Locale):
-
     names = ["or", "or-in"]
 
     past = "{0} ପୂର୍ବେ"
@@ -5164,3 +5162,89 @@ class SerbianLocale(Locale):
                 form = form["higher"]
 
         return form.format(delta)
+
+
+class TamilLocale(Locale):
+
+    names = ["ta", "ta-in", "ta-lk"]
+
+    past = "{0} நேரத்திற்கு முன்பு"
+    future = "இல் {0}"
+
+    timeframes = {
+        "now": "இப்போது",
+        "second": "இரண்டாவது",
+        "seconds": "{0} விநாடிகள்",
+        "minute": "நிமிடம்",
+        "minutes": "{0} நிமிடங்கள்",
+        "hour": "மணி",
+        "hours": "{0} மணிநேரம்",
+        "day": "நாள்",
+        "days": "{0} நாட்கள்",
+        "week": "வாரம்",
+        "weeks": "{0} வாரங்கள்",
+        "month": "மாதம்",
+        "months": "{0} மாதங்கள்",
+        "year": "ஆண்டு",
+        "years": "{0} ஆண்டுகள்",
+    }
+
+    month_names = [
+        "",
+        "சித்திரை",
+        "வைகாசி",
+        "ஆனி",
+        "ஆடி",
+        "ஆவணி",
+        "புரட்டாசி",
+        "ஐப்பசி",
+        "கார்த்திகை",
+        "மார்கழி",
+        "தை",
+        "மாசி",
+        "பங்குனி",
+    ]
+
+    month_abbreviations = [
+        "",
+        "ஜன",
+        "பிப்",
+        "மார்",
+        "ஏப்",
+        "மே",
+        "ஜூன்",
+        "ஜூலை",
+        "ஆக",
+        "செப்",
+        "அக்",
+        "நவ",
+        "டிச",
+    ]
+
+    day_names = [
+        "",
+        "திங்கட்கிழமை",
+        "செவ்வாய்க்கிழமை",
+        "புதன்கிழமை",
+        "வியாழக்கிழமை",
+        "வெள்ளிக்கிழமை",
+        "சனிக்கிழமை",
+        "ஞாயிற்றுக்கிழமை",
+    ]
+
+    day_abbreviations = [
+        "",
+        "திங்கட்",
+        "செவ்வாய்",
+        "புதன்",
+        "வியாழன்",
+        "வெள்ளி",
+        "சனி",
+        "ஞாயிறு",
+    ]
+
+    def _ordinal_number(self, n: int) -> str:
+        if n >= 0:
+            return f"{n}வது"
+        else:
+            return ""
