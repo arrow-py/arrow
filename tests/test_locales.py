@@ -1762,9 +1762,10 @@ class TestTamilLocale:
         assert self.locale._format_timeframe("years", 2) == "2 ஆண்டுகள்"
 
     def test_ordinal_number(self):
-        assert self.locale._ordinal_number(0) == "0வது"
-        assert self.locale._ordinal_number(3) == "3வது"
-        assert self.locale._ordinal_number(11) == "11வது"
+        assert self.locale._ordinal_number(0) == "0ஆம்"
+        assert self.locale._ordinal_number(1) == "1வது"
+        assert self.locale._ordinal_number(3) == "3ஆம்"
+        assert self.locale._ordinal_number(11) == "11ஆம்"
         assert self.locale._ordinal_number(-1) == ""
 
     def test_format_relative_now(self):
