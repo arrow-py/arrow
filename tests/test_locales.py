@@ -1794,19 +1794,19 @@ class TestLuxembourgishLocale:
 class TestTamilLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "இப்போது"
-        assert self.locale._format_timeframe("second", 1) == "இரண்டாவது"
+        assert self.locale._format_timeframe("second", 1) == "ஒரு இரண்டாவது"
         assert self.locale._format_timeframe("seconds", 3) == "3 விநாடிகள்"
-        assert self.locale._format_timeframe("minute", 1) == "நிமிடம்"
+        assert self.locale._format_timeframe("minute", 1) == "ஒரு நிமிடம்"
         assert self.locale._format_timeframe("minutes", 4) == "4 நிமிடங்கள்"
-        assert self.locale._format_timeframe("hour", 1) == "மணி"
+        assert self.locale._format_timeframe("hour", 1) == "ஒரு மணி"
         assert self.locale._format_timeframe("hours", 23) == "23 மணிநேரம்"
-        assert self.locale._format_timeframe("day", 1) == "நாள்"
+        assert self.locale._format_timeframe("day", 1) == "ஒரு நாள்"
         assert self.locale._format_timeframe("days", 12) == "12 நாட்கள்"
-        assert self.locale._format_timeframe("week", 1) == "வாரம்"
+        assert self.locale._format_timeframe("week", 1) == "ஒரு வாரம்"
         assert self.locale._format_timeframe("weeks", 12) == "12 வாரங்கள்"
-        assert self.locale._format_timeframe("month", 1) == "மாதம்"
+        assert self.locale._format_timeframe("month", 1) == "ஒரு மாதம்"
         assert self.locale._format_timeframe("months", 2) == "2 மாதங்கள்"
-        assert self.locale._format_timeframe("year", 1) == "ஆண்டு"
+        assert self.locale._format_timeframe("year", 1) == "ஒரு ஆண்டு"
         assert self.locale._format_timeframe("years", 2) == "2 ஆண்டுகள்"
 
     def test_ordinal_number(self):
@@ -1821,12 +1821,12 @@ class TestTamilLocale:
         assert result == "இப்போது"
 
     def test_format_relative_past(self):
-        result = self.locale._format_relative("மணி", "hour", 1)
-        assert result == "இல் மணி"
+        result = self.locale._format_relative("ஒரு மணி", "hour", 1)
+        assert result == "இல் ஒரு மணி"
 
     def test_format_relative_future(self):
-        result = self.locale._format_relative("மணி", "hour", -1)
-        assert result == "மணி நேரத்திற்கு முன்பு"
+        result = self.locale._format_relative("ஒரு மணி", "hour", -1)
+        assert result == "ஒரு மணி நேரத்திற்கு முன்பு"
 
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
