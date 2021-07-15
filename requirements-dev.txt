@@ -3,8 +3,9 @@ pre-commit==2.*
 pytest==6.*
 pytest-cov==2.*
 pytest-mock==3.*
-python-dateutil==2.*
-pytz==2019.*
+python-dateutil>=2.8.2
+pytz==2021.*
 simplejson==3.*
 sphinx==4.*
 sphinx-autodoc-typehints==1.*
+typing_extensions; python_version < '3.8'
