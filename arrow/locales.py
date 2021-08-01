@@ -3701,8 +3701,8 @@ class ThaiLocale(Locale):
 
     names = ["th", "th-th"]
 
-    past = "{0}{1}ที่ผ่านมา"
-    future = "ในอีก{1}{0}"
+    past = "{0} ที่ผ่านมา"
+    future = "ในอีก {0}"
 
     timeframes = {
         "now": "ขณะนี้",
@@ -3777,10 +3777,14 @@ class ThaiLocale(Locale):
         """Thai normally doesn't have any space between words"""
         if timeframe == "now":
             return humanized
-        space = "" if timeframe == "seconds" else " "
-        direction = self.past if delta < 0 else self.future
 
-        return direction.format(humanized, space)
+        direction = self.past if delta < 0 else self.future
+        relative_string = direction.format(humanized)
+
+        if timeframe == "seconds":
+            relative_string = relative_string.replace(" ", "")
+
+        return relative_string
 
 
 class BengaliLocale(Locale):
