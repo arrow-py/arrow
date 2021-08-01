@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.1.1 (2021-06-24)
+------------------
+
+- [NEW] Added Odia, Maltese, Serbian, Sami, and Luxembourgish locales.
+- [FIXED] All calls to ``arrow.get()`` should now properly pass the ``tzinfo`` argument to the Arrow constructor. See PR `#968 <https://github.com/arrow-py/arrow/pull/968/>`_ for more info.
+- [FIXED] Humanize output is now properly truncated when a locale class overrides ``_format_timeframe()``.
+- [CHANGED] Renamed ``requirements.txt`` to ``requirements-dev.txt`` to prevent confusion with the dependencies in ``setup.py``.
+- [CHANGED] Updated Turkish locale and added tests.
+
 1.1.0 (2021-04-26)
 ------------------
 
