@@ -1330,6 +1330,29 @@ class TestSamiLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestZuluLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "manje"
+        assert self.locale._format_timeframe("second", -1) == "umzuzwana"
+        assert self.locale._format_timeframe("second", 1) == "ngomzuzwana"
+        assert self.locale._format_timeframe("seconds", -3) == "3 imizuzwana"
+        assert self.locale._format_timeframe("minute", -1) == "umzuzu"
+        assert self.locale._format_timeframe("minutes", -4) == "4 imizuzu"
+        assert self.locale._format_timeframe("hour", -1) == "ihora"
+        assert self.locale._format_timeframe("hours", -23) == "23 amahora"
+        assert self.locale._format_timeframe("day", -1) == "usuku"
+        assert self.locale._format_timeframe("days", -12) == "12 izinsuku"
+        assert self.locale._format_timeframe("month", -1) == "inyanga"
+        assert self.locale._format_timeframe("months", -2) == "2 izinyanga"
+        assert self.locale._format_timeframe("year", -1) == "unyaka"
+        assert self.locale._format_timeframe("years", -2) == "2 iminyaka"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "uMgqibelo"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
@@ -1740,3 +1763,72 @@ class TestTurkishLocale:
         assert self.locale._format_timeframe("months", 11) == "11 ay"
         assert self.locale._format_timeframe("year", 1) == "bir yıl"
         assert self.locale._format_timeframe("years", 12) == "12 yıl"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLuxembourgishLocale:
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(1) == "1."
+
+    def test_define(self):
+        assert self.locale.describe("minute", only_distance=True) == "eng Minutt"
+        assert self.locale.describe("minute", only_distance=False) == "an enger Minutt"
+        assert self.locale.describe("hour", only_distance=True) == "eng Stonn"
+        assert self.locale.describe("hour", only_distance=False) == "an enger Stonn"
+        assert self.locale.describe("day", only_distance=True) == "een Dag"
+        assert self.locale.describe("day", only_distance=False) == "an engem Dag"
+        assert self.locale.describe("week", only_distance=True) == "eng Woch"
+        assert self.locale.describe("week", only_distance=False) == "an enger Woch"
+        assert self.locale.describe("month", only_distance=True) == "ee Mount"
+        assert self.locale.describe("month", only_distance=False) == "an engem Mount"
+        assert self.locale.describe("year", only_distance=True) == "ee Joer"
+        assert self.locale.describe("year", only_distance=False) == "an engem Joer"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Samschdeg"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sam"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestTamilLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "இப்போது"
+        assert self.locale._format_timeframe("second", 1) == "ஒரு இரண்டாவது"
+        assert self.locale._format_timeframe("seconds", 3) == "3 விநாடிகள்"
+        assert self.locale._format_timeframe("minute", 1) == "ஒரு நிமிடம்"
+        assert self.locale._format_timeframe("minutes", 4) == "4 நிமிடங்கள்"
+        assert self.locale._format_timeframe("hour", 1) == "ஒரு மணி"
+        assert self.locale._format_timeframe("hours", 23) == "23 மணிநேரம்"
+        assert self.locale._format_timeframe("day", 1) == "ஒரு நாள்"
+        assert self.locale._format_timeframe("days", 12) == "12 நாட்கள்"
+        assert self.locale._format_timeframe("week", 1) == "ஒரு வாரம்"
+        assert self.locale._format_timeframe("weeks", 12) == "12 வாரங்கள்"
+        assert self.locale._format_timeframe("month", 1) == "ஒரு மாதம்"
+        assert self.locale._format_timeframe("months", 2) == "2 மாதங்கள்"
+        assert self.locale._format_timeframe("year", 1) == "ஒரு ஆண்டு"
+        assert self.locale._format_timeframe("years", 2) == "2 ஆண்டுகள்"
+
+    def test_ordinal_number(self):
+        assert self.locale._ordinal_number(0) == "0ஆம்"
+        assert self.locale._ordinal_number(1) == "1வது"
+        assert self.locale._ordinal_number(3) == "3ஆம்"
+        assert self.locale._ordinal_number(11) == "11ஆம்"
+        assert self.locale._ordinal_number(-1) == ""
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("இப்போது", "now", 0)
+        assert result == "இப்போது"
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative("ஒரு மணி", "hour", 1)
+        assert result == "இல் ஒரு மணி"
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("ஒரு மணி", "hour", -1)
+        assert result == "ஒரு மணி நேரத்திற்கு முன்பு"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "சனிக்கிழமை"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "சனி"

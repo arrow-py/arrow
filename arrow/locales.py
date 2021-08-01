@@ -147,7 +147,7 @@ class Locale:
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
         """
 
-        humanized = self._format_timeframe(timeframe, delta)
+        humanized = self._format_timeframe(timeframe, trunc(delta))
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
 
@@ -165,7 +165,8 @@ class Locale:
         """
 
         parts = [
-            self._format_timeframe(timeframe, delta) for timeframe, delta in timeframes
+            self._format_timeframe(timeframe, trunc(delta))
+            for timeframe, delta in timeframes
         ]
         if self.and_word:
             parts.insert(-1, self.and_word)
@@ -267,9 +268,7 @@ class Locale:
     def _name_to_ordinal(self, lst: Sequence[str]) -> Dict[str, int]:
         return {elem.lower(): i for i, elem in enumerate(lst[1:], 1)}
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         # TODO: remove cast
         return cast(str, self.timeframes[timeframe]).format(trunc(abs(delta)))
 
@@ -926,7 +925,7 @@ class FinnishLocale(Locale):
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
     # TODO: Fix return type
-    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: Union[float, int]) -> Tuple[str, str]:  # type: ignore
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> Tuple[str, str]:  # type: ignore
         return (
             self.timeframes[timeframe][0].format(abs(delta)),
             self.timeframes[timeframe][1].format(abs(delta)),
@@ -1301,9 +1300,7 @@ class DutchLocale(Locale):
 class SlavicBaseLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
 
@@ -2605,9 +2602,7 @@ class ArabicLocale(Locale):
     ]
     day_abbreviations = ["", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت", "أحد"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -2758,9 +2753,7 @@ class MoroccoArabicLocale(ArabicLocale):
 
 
 class IcelandicLocale(Locale):
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         if delta < 0:
             form = form[0]
@@ -2981,7 +2974,7 @@ class MalayalamLocale(Locale):
 
 class HindiLocale(Locale):
 
-    names = ["hi"]
+    names = ["hi", "hi-in"]
 
     past = "{0} पहले"
     future = "{0} बाद"
@@ -3117,9 +3110,7 @@ class CzechLocale(Locale):
     ]
     day_abbreviations = ["", "po", "út", "st", "čt", "pá", "so", "ne"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Czech aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3217,9 +3208,7 @@ class SlovakLocale(Locale):
     ]
     day_abbreviations = ["", "po", "ut", "st", "št", "pi", "so", "ne"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Slovak aware time frame format function, takes into account
         the differences between past and future forms."""
         abs_delta = abs(delta)
@@ -3393,9 +3382,7 @@ class HebrewLocale(Locale):
     day_names = ["", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת", "ראשון"]
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         """Hebrew couple of <timeframe> aware"""
         couple = f"2-{timeframe}"
         single = timeframe.rstrip("s")
@@ -3406,7 +3393,7 @@ class HebrewLocale(Locale):
         else:
             key = timeframe
 
-        return self.timeframes[key].format(trunc(abs(delta)))
+        return self.timeframes[key].format(abs(delta))
 
     def describe_multi(
         self,
@@ -3422,7 +3409,7 @@ class HebrewLocale(Locale):
 
         humanized = ""
         for index, (timeframe, delta) in enumerate(timeframes):
-            last_humanized = self._format_timeframe(timeframe, delta)
+            last_humanized = self._format_timeframe(timeframe, trunc(delta))
             if index == 0:
                 humanized = last_humanized
             elif index == len(timeframes) - 1:  # Must have at least 2 items
@@ -3714,9 +3701,7 @@ class HungarianLocale(Locale):
 
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
 
         if isinstance(form, Mapping):
@@ -3804,8 +3789,8 @@ class ThaiLocale(Locale):
 
     names = ["th", "th-th"]
 
-    past = "{0}{1}ที่ผ่านมา"
-    future = "ในอีก{1}{0}"
+    past = "{0} ที่ผ่านมา"
+    future = "ในอีก {0}"
 
     timeframes = {
         "now": "ขณะนี้",
@@ -3880,10 +3865,14 @@ class ThaiLocale(Locale):
         """Thai normally doesn't have any space between words"""
         if timeframe == "now":
             return humanized
-        space = "" if timeframe == "seconds" else " "
-        direction = self.past if delta < 0 else self.future
 
-        return direction.format(humanized, space)
+        direction = self.past if delta < 0 else self.future
+        relative_string = direction.format(humanized)
+
+        if timeframe == "seconds":
+            relative_string = relative_string.replace(" ", "")
+
+        return relative_string
 
 
 class BengaliLocale(Locale):
@@ -4381,9 +4370,7 @@ class EstonianLocale(Locale):
     ]
     day_abbreviations = ["", "Esm", "Teis", "Kolm", "Nelj", "Re", "Lau", "Püh"]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         if delta > 0:
             _form = form["future"]
@@ -4638,9 +4625,7 @@ class CroatianLocale(Locale):
         "ne",
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -4897,7 +4882,7 @@ class MalayLocale(Locale):
 
 class MalteseLocale(Locale):
 
-    names = ["mt"]
+    names = ["mt", "mt-mt"]
 
     past = "{0} ilu"
     future = "fi {0}"
@@ -4975,9 +4960,7 @@ class MalteseLocale(Locale):
         "Ħ",
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -5162,7 +5145,7 @@ class OdiaLocale(Locale):
 
 class SerbianLocale(Locale):
 
-    names = ["sr", "sr-sp"]
+    names = ["sr", "sr-rs", "sr-sp"]
 
     past = "pre {0}"
     future = "za {0}"
@@ -5240,9 +5223,7 @@ class SerbianLocale(Locale):
         "ne",  # не
     ]
 
-    def _format_timeframe(
-        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
-    ) -> str:
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
@@ -5252,3 +5233,291 @@ class SerbianLocale(Locale):
                 form = form["higher"]
 
         return form.format(delta)
+
+
+class LuxembourgishLocale(Locale):
+
+    names = ["lb", "lb-lu"]
+
+    past = "virun {0}"
+    future = "an {0}"
+    and_word = "an"
+
+    timeframes = {
+        "now": "just elo",
+        "second": "enger Sekonn",
+        "seconds": "{0} Sekonnen",
+        "minute": "enger Minutt",
+        "minutes": "{0} Minutten",
+        "hour": "enger Stonn",
+        "hours": "{0} Stonnen",
+        "day": "engem Dag",
+        "days": "{0} Deeg",
+        "week": "enger Woch",
+        "weeks": "{0} Wochen",
+        "month": "engem Mount",
+        "months": "{0} Méint",
+        "year": "engem Joer",
+        "years": "{0} Jahren",
+    }
+
+    timeframes_only_distance = timeframes.copy()
+    timeframes_only_distance["second"] = "eng Sekonn"
+    timeframes_only_distance["minute"] = "eng Minutt"
+    timeframes_only_distance["hour"] = "eng Stonn"
+    timeframes_only_distance["day"] = "een Dag"
+    timeframes_only_distance["days"] = "{0} Deeg"
+    timeframes_only_distance["week"] = "eng Woch"
+    timeframes_only_distance["month"] = "ee Mount"
+    timeframes_only_distance["months"] = "{0} Méint"
+    timeframes_only_distance["year"] = "ee Joer"
+    timeframes_only_distance["years"] = "{0} Joer"
+
+    month_names = [
+        "",
+        "Januar",
+        "Februar",
+        "Mäerz",
+        "Abrëll",
+        "Mee",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktouber",
+        "November",
+        "Dezember",
+    ]
+
+    month_abbreviations = [
+        "",
+        "Jan",
+        "Feb",
+        "Mäe",
+        "Abr",
+        "Mee",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    ]
+
+    day_names = [
+        "",
+        "Méindeg",
+        "Dënschdeg",
+        "Mëttwoch",
+        "Donneschdeg",
+        "Freideg",
+        "Samschdeg",
+        "Sonndeg",
+    ]
+
+    day_abbreviations = ["", "Méi", "Dën", "Mët", "Don", "Fre", "Sam", "Son"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
+
+    def describe(
+        self,
+        timeframe: TimeFrameLiteral,
+        delta: Union[int, float] = 0,
+        only_distance: bool = False,
+    ) -> str:
+
+        if not only_distance:
+            return super().describe(timeframe, delta, only_distance)
+
+        # Luxembourgish uses a different case without 'in' or 'ago'
+        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+
+        return humanized
+
+
+class ZuluLocale(Locale):
+
+    names = ["zu", "zu-za"]
+
+    past = "{0} edlule"
+    future = "{0} "
+    and_word = "futhi"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Mapping[str, str], str]]] = {
+        "now": "manje",
+        "second": {"past": "umzuzwana", "future": "ngomzuzwana"},
+        "seconds": {"past": "{0} imizuzwana", "future": "{0} ngemizuzwana"},
+        "minute": {"past": "umzuzu", "future": "ngomzuzu"},
+        "minutes": {"past": "{0} imizuzu", "future": "{0} ngemizuzu"},
+        "hour": {"past": "ihora", "future": "ngehora"},
+        "hours": {"past": "{0} amahora", "future": "{0} emahoreni"},
+        "day": {"past": "usuku", "future": "ngosuku"},
+        "days": {"past": "{0} izinsuku", "future": "{0} ezinsukwini"},
+        "week": {"past": "isonto", "future": "ngesonto"},
+        "weeks": {"past": "{0} amasonto", "future": "{0} emasontweni"},
+        "month": {"past": "inyanga", "future": "ngenyanga"},
+        "months": {"past": "{0} izinyanga", "future": "{0} ezinyangeni"},
+        "year": {"past": "unyaka", "future": "ngonyak"},
+        "years": {"past": "{0} iminyaka", "future": "{0} eminyakeni"},
+    }
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        """Zulu aware time frame format function, takes into account
+        the differences between past and future forms."""
+        abs_delta = abs(delta)
+        form = self.timeframes[timeframe]
+
+        if isinstance(form, str):
+            return form.format(abs_delta)
+
+        if delta > 0:
+            key = "future"
+        else:
+            key = "past"
+        form = form[key]
+
+        return form.format(abs_delta)
+
+    month_names = [
+        "",
+        "uMasingane",
+        "uNhlolanja",
+        "uNdasa",
+        "UMbasa",
+        "UNhlaba",
+        "UNhlangulana",
+        "uNtulikazi",
+        "UNcwaba",
+        "uMandulo",
+        "uMfumfu",
+        "uLwezi",
+        "uZibandlela",
+    ]
+
+    month_abbreviations = [
+        "",
+        "uMasingane",
+        "uNhlolanja",
+        "uNdasa",
+        "UMbasa",
+        "UNhlaba",
+        "UNhlangulana",
+        "uNtulikazi",
+        "UNcwaba",
+        "uMandulo",
+        "uMfumfu",
+        "uLwezi",
+        "uZibandlela",
+    ]
+
+    day_names = [
+        "",
+        "uMsombuluko",
+        "uLwesibili",
+        "uLwesithathu",
+        "uLwesine",
+        "uLwesihlanu",
+        "uMgqibelo",
+        "iSonto",
+    ]
+
+    day_abbreviations = [
+        "",
+        "uMsombuluko",
+        "uLwesibili",
+        "uLwesithathu",
+        "uLwesine",
+        "uLwesihlanu",
+        "uMgqibelo",
+        "iSonto",
+    ]
+
+
+class TamilLocale(Locale):
+
+    names = ["ta", "ta-in", "ta-lk"]
+
+    past = "{0} நேரத்திற்கு முன்பு"
+    future = "இல் {0}"
+
+    timeframes = {
+        "now": "இப்போது",
+        "second": "ஒரு இரண்டாவது",
+        "seconds": "{0} விநாடிகள்",
+        "minute": "ஒரு நிமிடம்",
+        "minutes": "{0} நிமிடங்கள்",
+        "hour": "ஒரு மணி",
+        "hours": "{0} மணிநேரம்",
+        "day": "ஒரு நாள்",
+        "days": "{0} நாட்கள்",
+        "week": "ஒரு வாரம்",
+        "weeks": "{0} வாரங்கள்",
+        "month": "ஒரு மாதம்",
+        "months": "{0} மாதங்கள்",
+        "year": "ஒரு ஆண்டு",
+        "years": "{0} ஆண்டுகள்",
+    }
+
+    month_names = [
+        "",
+        "சித்திரை",
+        "வைகாசி",
+        "ஆனி",
+        "ஆடி",
+        "ஆவணி",
+        "புரட்டாசி",
+        "ஐப்பசி",
+        "கார்த்திகை",
+        "மார்கழி",
+        "தை",
+        "மாசி",
+        "பங்குனி",
+    ]
+
+    month_abbreviations = [
+        "",
+        "ஜன",
+        "பிப்",
+        "மார்",
+        "ஏப்",
+        "மே",
+        "ஜூன்",
+        "ஜூலை",
+        "ஆக",
+        "செப்",
+        "அக்",
+        "நவ",
+        "டிச",
+    ]
+
+    day_names = [
+        "",
+        "திங்கட்கிழமை",
+        "செவ்வாய்க்கிழமை",
+        "புதன்கிழமை",
+        "வியாழக்கிழமை",
+        "வெள்ளிக்கிழமை",
+        "சனிக்கிழமை",
+        "ஞாயிற்றுக்கிழமை",
+    ]
+
+    day_abbreviations = [
+        "",
+        "திங்கட்",
+        "செவ்வாய்",
+        "புதன்",
+        "வியாழன்",
+        "வெள்ளி",
+        "சனி",
+        "ஞாயிறு",
+    ]
+
+    def _ordinal_number(self, n: int) -> str:
+        if n == 1:
+            return f"{n}வது"
+        elif n >= 0:
+            return f"{n}ஆம்"
+        else:
+            return ""

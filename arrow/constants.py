@@ -128,4 +128,9 @@ DEHUMANIZE_LOCALES = {
     "ms-bn",
     "or",
     "or-in",
+    "lb",
+    "lb-lu",
+    "ta",
+    "ta-in",
+    "ta-lk",
 }

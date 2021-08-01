@@ -210,6 +210,11 @@ class TestDateTimeParserParse:
             == self.expected
         )
 
+    def test_parse_am(self):
+
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("2021-01-30 14:00:00 AM", "YYYY-MM-DD HH:mm:ss A")
+
     def test_parse_year_two_digit(self):
 
         self.expected = datetime(1979, 1, 1, 12, 5, 10)
