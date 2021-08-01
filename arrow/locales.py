@@ -1298,19 +1298,19 @@ class DutchLocale(Locale):
 
 
 class SlavicBaseLocale(Locale):
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]]
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]]
 
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
         delta = abs(delta)
 
-        if isinstance(form, list):
+        if isinstance(form, Mapping):
             if delta % 10 == 1 and delta % 100 != 11:
-                form = form[0]
+                form = form["singular"]
             elif 2 <= delta % 10 <= 4 and (delta % 100 < 10 or delta % 100 >= 20):
-                form = form[1]
+                form = form["dual"]
             else:
-                form = form[2]
+                form = form["plural"]
 
         return form.format(delta)
 
@@ -1322,20 +1322,32 @@ class BelarusianLocale(SlavicBaseLocale):
     past = "{0} таму"
     future = "праз {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "зараз",
         "second": "секунду",
         "seconds": "{0} некалькі секунд",
         "minute": "хвіліну",
-        "minutes": ["{0} хвіліну", "{0} хвіліны", "{0} хвілін"],
+        "minutes": {
+            "singular": "{0} хвіліну",
+            "dual": "{0} хвіліны",
+            "plural": "{0} хвілін",
+        },
         "hour": "гадзіну",
-        "hours": ["{0} гадзіну", "{0} гадзіны", "{0} гадзін"],
+        "hours": {
+            "singular": "{0} гадзіну",
+            "dual": "{0} гадзіны",
+            "plural": "{0} гадзін",
+        },
         "day": "дзень",
-        "days": ["{0} дзень", "{0} дні", "{0} дзён"],
+        "days": {"singular": "{0} дзень", "dual": "{0} дні", "plural": "{0} дзён"},
         "month": "месяц",
-        "months": ["{0} месяц", "{0} месяцы", "{0} месяцаў"],
+        "months": {
+            "singular": "{0} месяц",
+            "dual": "{0} месяцы",
+            "plural": "{0} месяцаў",
+        },
         "year": "год",
-        "years": ["{0} год", "{0} гады", "{0} гадоў"],
+        "years": {"singular": "{0} год", "dual": "{0} гады", "plural": "{0} гадоў"},
     }
 
     month_names = [
@@ -1391,22 +1403,42 @@ class PolishLocale(SlavicBaseLocale):
 
     # The nouns should be in genitive case (Polish: "dopełniacz")
     # in order to correctly form `past` & `future` expressions.
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "teraz",
         "second": "sekundę",
-        "seconds": ["{0} sekund", "{0} sekundy", "{0} sekund"],
+        "seconds": {
+            "singular": "{0} sekund",
+            "dual": "{0} sekundy",
+            "plural": "{0} sekund",
+        },
         "minute": "minutę",
-        "minutes": ["{0} minut", "{0} minuty", "{0} minut"],
+        "minutes": {
+            "singular": "{0} minut",
+            "dual": "{0} minuty",
+            "plural": "{0} minut",
+        },
         "hour": "godzinę",
-        "hours": ["{0} godzin", "{0} godziny", "{0} godzin"],
+        "hours": {
+            "singular": "{0} godzin",
+            "dual": "{0} godziny",
+            "plural": "{0} godzin",
+        },
         "day": "dzień",
         "days": "{0} dni",
         "week": "tydzień",
-        "weeks": ["{0} tygodni", "{0} tygodnie", "{0} tygodni"],
+        "weeks": {
+            "singular": "{0} tygodni",
+            "dual": "{0} tygodnie",
+            "plural": "{0} tygodni",
+        },
         "month": "miesiąc",
-        "months": ["{0} miesięcy", "{0} miesiące", "{0} miesięcy"],
+        "months": {
+            "singular": "{0} miesięcy",
+            "dual": "{0} miesiące",
+            "plural": "{0} miesięcy",
+        },
         "year": "rok",
-        "years": ["{0} lat", "{0} lata", "{0} lat"],
+        "years": {"singular": "{0} lat", "dual": "{0} lata", "plural": "{0} lat"},
     }
 
     month_names = [
@@ -1460,22 +1492,34 @@ class RussianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "через {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сейчас",
         "second": "Второй",
         "seconds": "{0} несколько секунд",
         "minute": "минуту",
-        "minutes": ["{0} минуту", "{0} минуты", "{0} минут"],
+        "minutes": {
+            "singular": "{0} минуту",
+            "dual": "{0} минуты",
+            "plural": "{0} минут",
+        },
         "hour": "час",
-        "hours": ["{0} час", "{0} часа", "{0} часов"],
+        "hours": {"singular": "{0} час", "dual": "{0} часа", "plural": "{0} часов"},
         "day": "день",
-        "days": ["{0} день", "{0} дня", "{0} дней"],
+        "days": {"singular": "{0} день", "dual": "{0} дня", "plural": "{0} дней"},
         "week": "неделю",
-        "weeks": ["{0} неделю", "{0} недели", "{0} недель"],
+        "weeks": {
+            "singular": "{0} неделю",
+            "dual": "{0} недели",
+            "plural": "{0} недель",
+        },
         "month": "месяц",
-        "months": ["{0} месяц", "{0} месяца", "{0} месяцев"],
+        "months": {
+            "singular": "{0} месяц",
+            "dual": "{0} месяца",
+            "plural": "{0} месяцев",
+        },
         "year": "год",
-        "years": ["{0} год", "{0} года", "{0} лет"],
+        "years": {"singular": "{0} год", "dual": "{0} года", "plural": "{0} лет"},
     }
 
     month_names = [
@@ -1596,20 +1640,32 @@ class BulgarianLocale(SlavicBaseLocale):
     past = "{0} назад"
     future = "напред {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сега",
         "second": "секунда",
         "seconds": "{0} няколко секунди",
         "minute": "минута",
-        "minutes": ["{0} минута", "{0} минути", "{0} минути"],
+        "minutes": {
+            "singular": "{0} минута",
+            "dual": "{0} минути",
+            "plural": "{0} минути",
+        },
         "hour": "час",
-        "hours": ["{0} час", "{0} часа", "{0} часа"],
+        "hours": {"singular": "{0} час", "dual": "{0} часа", "plural": "{0} часа"},
         "day": "ден",
-        "days": ["{0} ден", "{0} дни", "{0} дни"],
+        "days": {"singular": "{0} ден", "dual": "{0} дни", "plural": "{0} дни"},
         "month": "месец",
-        "months": ["{0} месец", "{0} месеца", "{0} месеца"],
+        "months": {
+            "singular": "{0} месец",
+            "dual": "{0} месеца",
+            "plural": "{0} месеца",
+        },
         "year": "година",
-        "years": ["{0} година", "{0} години", "{0} години"],
+        "years": {
+            "singular": "{0} година",
+            "dual": "{0} години",
+            "plural": "{0} години",
+        },
     }
 
     month_names = [
@@ -1663,20 +1719,32 @@ class UkrainianLocale(SlavicBaseLocale):
     past = "{0} тому"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "зараз",
         "second": "секунда",
         "seconds": "{0} кілька секунд",
         "minute": "хвилину",
-        "minutes": ["{0} хвилину", "{0} хвилини", "{0} хвилин"],
+        "minutes": {
+            "singular": "{0} хвилину",
+            "dual": "{0} хвилини",
+            "plural": "{0} хвилин",
+        },
         "hour": "годину",
-        "hours": ["{0} годину", "{0} години", "{0} годин"],
+        "hours": {
+            "singular": "{0} годину",
+            "dual": "{0} години",
+            "plural": "{0} годин",
+        },
         "day": "день",
-        "days": ["{0} день", "{0} дні", "{0} днів"],
+        "days": {"singular": "{0} день", "dual": "{0} дні", "plural": "{0} днів"},
         "month": "місяць",
-        "months": ["{0} місяць", "{0} місяці", "{0} місяців"],
+        "months": {
+            "singular": "{0} місяць",
+            "dual": "{0} місяці",
+            "plural": "{0} місяців",
+        },
         "year": "рік",
-        "years": ["{0} рік", "{0} роки", "{0} років"],
+        "years": {"singular": "{0} рік", "dual": "{0} роки", "plural": "{0} років"},
     }
 
     month_names = [
@@ -1729,22 +1797,42 @@ class MacedonianLocale(SlavicBaseLocale):
     past = "пред {0}"
     future = "за {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, List[str]]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сега",
         "second": "една секунда",
-        "seconds": ["{0} секунда", "{0} секунди", "{0} секунди"],
+        "seconds": {
+            "singular": "{0} секунда",
+            "dual": "{0} секунди",
+            "plural": "{0} секунди",
+        },
         "minute": "една минута",
-        "minutes": ["{0} минута", "{0} минути", "{0} минути"],
+        "minutes": {
+            "singular": "{0} минута",
+            "dual": "{0} минути",
+            "plural": "{0} минути",
+        },
         "hour": "еден саат",
-        "hours": ["{0} саат", "{0} саати", "{0} саати"],
+        "hours": {"singular": "{0} саат", "dual": "{0} саати", "plural": "{0} саати"},
         "day": "еден ден",
-        "days": ["{0} ден", "{0} дена", "{0} дена"],
+        "days": {"singular": "{0} ден", "dual": "{0} дена", "plural": "{0} дена"},
         "week": "една недела",
-        "weeks": ["{0} недела", "{0} недели", "{0} недели"],
+        "weeks": {
+            "singular": "{0} недела",
+            "dual": "{0} недели",
+            "plural": "{0} недели",
+        },
         "month": "еден месец",
-        "months": ["{0} месец", "{0} месеци", "{0} месеци"],
+        "months": {
+            "singular": "{0} месец",
+            "dual": "{0} месеци",
+            "plural": "{0} месеци",
+        },
         "year": "една година",
-        "years": ["{0} година", "{0} години", "{0} години"],
+        "years": {
+            "singular": "{0} година",
+            "dual": "{0} години",
+            "plural": "{0} години",
+        },
     }
 
     meridians = {"am": "дп", "pm": "пп", "AM": "претпладне", "PM": "попладне"}
