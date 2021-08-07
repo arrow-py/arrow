@@ -2297,10 +2297,12 @@ class TestArrowHumanize:
 
     def test_dynamic_on_one_granularity(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
-        later = arw.shift(seconds=0)
-        humanize_string = arw.humanize(later, granularity=["hour"], dynamic=True)
+        later = arw.shift(seconds=3600)
+        humanize_string = arw.humanize(
+            later, granularity=["hour", "second"], dynamic=True
+        )
 
-        assert humanize_string == "in 0 hours"
+        assert humanize_string == "in an hour"
 
     def test_dynamic_on_zero_output(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
