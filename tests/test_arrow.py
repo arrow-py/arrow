@@ -2266,6 +2266,13 @@ class TestArrowHumanize:
         with pytest.raises(ValueError):
             arw.humanize(later, granularity="week")
 
+    def test_empty_granularity_list(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=55000)
+
+        with pytest.raises(ValueError):
+            arw.humanize(later, granularity=[])
+
     # Bulgarian is an example of a language that overrides _format_timeframe
     # Applicabale to all locales. Note: Contributors need to make sure
     # that if they override describe or describe_mutli, that delta

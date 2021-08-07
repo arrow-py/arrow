@@ -1258,6 +1258,13 @@ class Arrow:
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
             else:
+
+                if not granularity:
+                    raise ValueError(
+                        "Empty granularity list provided. "
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
+                    )
+
                 timeframes: List[Tuple[TimeFrameLiteral, float]] = []
 
                 def gather_timeframes(_delta: float, _frame: TimeFrameLiteral) -> float:
