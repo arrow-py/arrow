@@ -335,6 +335,8 @@ class TestIcelandicLocale:
 
         assert self.locale._format_timeframe("hours", -2) == "2 tímum"
         assert self.locale._format_timeframe("hours", 2) == "2 tíma"
+        assert self.locale._format_timeframe("hours", 0) == "0 tíma"
+
         assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
 
 
