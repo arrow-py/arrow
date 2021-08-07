@@ -1278,6 +1278,7 @@ class Arrow:
                     return _delta
 
                 delta = float(delta_second)
+
                 frames: Tuple[TimeFrameLiteral, ...] = (
                     "year",
                     "month",
@@ -1294,6 +1295,13 @@ class Arrow:
                     raise ValueError(
                         "Invalid level of granularity. "
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
+                    )
+
+                # Needed to see if there are no units output an error
+                if not timeframes and dynamic:
+                    raise ValueError(
+                        "All provided granulairty values produced an output of zero. "
+                        "Consider using smaller granularities, or set the dynamic flag to False. "
                     )
 
                 # Needed for the case of dynamic usage (could end up with only one frame unit)

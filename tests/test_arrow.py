@@ -2286,7 +2286,6 @@ class TestArrowHumanize:
         assert humanize_string == "916 минути 40 няколко секунди назад"
 
     # Dynamic Humanize Tests
-
     def test_dynamic_on(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
         later = arw.shift(seconds=3630)
@@ -2295,6 +2294,20 @@ class TestArrowHumanize:
         )
 
         assert humanize_string == "an hour and 30 seconds ago"
+
+    def test_dynamic_on_one_granularity(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=0)
+        humanize_string = arw.humanize(later, granularity=["hour"], dynamic=True)
+
+        assert humanize_string == "in 0 hours"
+
+    def test_dynamic_on_zero_output(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=0)
+
+        with pytest.raises(ValueError):
+            arw.humanize(later, granularity=["hour", "second"], dynamic=True)
 
     def test_dynamic_off(self):
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
