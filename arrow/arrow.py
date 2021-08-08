@@ -69,6 +69,7 @@ _BOUNDS = Literal["[)", "()", "(]", "[]"]
 
 _GRANULARITY = Literal[
     "auto",
+    "all",
     "second",
     "minute",
     "hour",
@@ -1130,7 +1131,8 @@ class Arrow:
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en-us'.
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute',
-                           'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings
+                           'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings.
+                           Set it to 'all' to include all possible units in the granularity.
 
         Usage::
 
@@ -1228,7 +1230,7 @@ class Arrow:
                     years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
                     return locale.describe("years", years, only_distance=only_distance)
 
-            elif isinstance(granularity, str):
+            elif isinstance(granularity, str) and granularity != "all":
                 granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
 
                 if granularity == "second":
@@ -1282,6 +1284,10 @@ class Arrow:
                     "minute",
                     "second",
                 )
+
+                if granularity == "all":
+                    granularity = cast(List[_GRANULARITY], frames)
+
                 for frame in frames:
                     delta = gather_timeframes(delta, frame)
 

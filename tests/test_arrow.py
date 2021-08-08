@@ -2032,6 +2032,49 @@ class TestArrowHumanize:
             == "a minute and 2 seconds ago"
         )
 
+    def test_all_granularity(self):
+        assert (
+            self.now.humanize(granularity="all")
+            == "in 0 years 0 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
+        )  # TODO: this should be "ago"; change this when #997 is merged
+
+        later105 = self.now.shift(seconds=10 ** 5)
+        assert (
+            self.now.humanize(later105, granularity="all")
+            == "0 years 0 months 0 weeks a day 3 hours 46 minutes and 40 seconds ago"
+        )
+        assert (
+            later105.humanize(self.now, granularity="all")
+            == "in 0 years 0 months 0 weeks a day 3 hours 46 minutes and 40 seconds"
+        )
+
+        later108 = self.now.shift(seconds=10 ** 8)
+        assert (
+            self.now.humanize(later108, granularity="all")
+            == "3 years 2 months 0 weeks a day 9 hours 46 minutes and 40 seconds ago"
+        )
+        assert (
+            later108.humanize(self.now, granularity="all")
+            == "in 3 years 2 months 0 weeks a day 9 hours 46 minutes and 40 seconds"
+        )
+        assert (
+            self.now.humanize(later108, granularity="all", only_distance=True)
+            == "3 years 2 months 0 weeks a day 9 hours 46 minutes and 40 seconds"
+        )
+
+        later_two_months = self.now.shift(months=2)
+        assert (
+            self.now.humanize(later_two_months, granularity="all")
+            == "in 0 years 2 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
+        )  # TODO: this should be "ago"; change this when #997 is merged
+        assert (
+            later_two_months.humanize(self.now, granularity="all")
+            == "in 0 years 2 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
+        )
+
+        with pytest.raises(ValueError):
+            self.now.humanize(later108, granularity=["all", "year"])
+
     def test_seconds(self):
 
         later = self.now.shift(seconds=10)
