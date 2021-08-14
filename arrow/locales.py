@@ -2759,7 +2759,7 @@ class IcelandicLocale(Locale):
         if isinstance(form, Mapping):
             if delta < 0:
                 form = form["past"]
-            elif delta >= 0:
+            elif delta > 0:
                 form = form["future"]
                 # FIXME: handle when delta is 0
 
