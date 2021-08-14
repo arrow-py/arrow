@@ -1300,7 +1300,7 @@ class Arrow:
                 # Needed to see if there are no units output an error
                 if not timeframes and dynamic:
                     raise ValueError(
-                        "All provided granulairty values produced an output of zero. "
+                        "All provided granularity values produced an output of zero. "
                         "Consider using smaller granularities, or set the dynamic flag to False. "
                     )
 
