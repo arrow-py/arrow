@@ -1262,7 +1262,7 @@ class Arrow:
                 if not granularity:
                     raise ValueError(
                         "Empty granularity list provided. "
-                        "Please select one or more from ['second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year']."
+                        "Please select one or more from 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'."
                     )
 
                 timeframes: List[Tuple[TimeFrameLiteral, float]] = []
