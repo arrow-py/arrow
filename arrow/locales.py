@@ -3044,24 +3044,50 @@ class HindiLocale(Locale):
 class CzechLocale(Locale):
     names = ["cs", "cs-cz"]
 
-    timeframes: ClassVar[
-        Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
-    ] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "Teď",
         "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
-        "seconds": {"past": "{0} sekundami", "future": ["{0} sekundy", "{0} sekund"]},
+        "seconds": {
+            "past": "{0} sekundami",
+            "future-singular": "{0} sekundy",
+            "future-paucal": "{0} sekund",
+        },
         "minute": {"past": "minutou", "future": "minutu", "zero": "{0} minut"},
-        "minutes": {"past": "{0} minutami", "future": ["{0} minuty", "{0} minut"]},
+        "minutes": {
+            "past": "{0} minutami",
+            "future-singular": "{0} minuty",
+            "future-paucal": "{0} minut",
+        },
         "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodin"},
-        "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodin"]},
+        "hours": {
+            "past": "{0} hodinami",
+            "future-singular": "{0} hodiny",
+            "future-paucal": "{0} hodin",
+        },
         "day": {"past": "dnem", "future": "den", "zero": "{0} dnů"},
-        "days": {"past": "{0} dny", "future": ["{0} dny", "{0} dnů"]},
+        "days": {
+            "past": "{0} dny",
+            "future-singular": "{0} dny",
+            "future-paucal": "{0} dnů",
+        },
         "week": {"past": "týdnem", "future": "týden", "zero": "{0} týdnů"},
-        "weeks": {"past": "{0} týdny", "future": ["{0} týdny", "{0} týdnů"]},
+        "weeks": {
+            "past": "{0} týdny",
+            "future-singular": "{0} týdny",
+            "future-paucal": "{0} týdnů",
+        },
         "month": {"past": "měsícem", "future": "měsíc", "zero": "{0} měsíců"},
-        "months": {"past": "{0} měsíci", "future": ["{0} měsíce", "{0} měsíců"]},
+        "months": {
+            "past": "{0} měsíci",
+            "future-singular": "{0} měsíce",
+            "future-paucal": "{0} měsíců",
+        },
         "year": {"past": "rokem", "future": "rok", "zero": "{0} let"},
-        "years": {"past": "{0} lety", "future": ["{0} roky", "{0} let"]},
+        "years": {
+            "past": "{0} lety",
+            "future-singular": "{0} roky",
+            "future-paucal": "{0} let",
+        },
     }
 
     past = "Před {0}"
@@ -3121,20 +3147,20 @@ class CzechLocale(Locale):
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
-        elif delta > 0:
-            key = "future"
-        else:
+        elif delta < 0:
             key = "past"
-        form: Union[List[str], str] = form[key]
-
-        if isinstance(form, list):
-            if 2 <= abs_delta % 10 <= 4 and (
+        else:
+            # Needed since both regular future and future-singular and future-paucal cases
+            if "future-singular" not in form:
+                key = "future"
+            elif 2 <= abs_delta % 10 <= 4 and (
                 abs_delta % 100 < 10 or abs_delta % 100 >= 20
             ):
-                form = form[0]
+                key = "future-singular"
             else:
-                form = form[1]
+                key = "future-paucal"
 
+        form: str = form[key]
         return form.format(abs_delta)
 
 
