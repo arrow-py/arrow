@@ -421,6 +421,8 @@ class TestCzechLocale:
         assert self.locale._format_timeframe("hour", 0) == "0 hodin"
         assert self.locale._format_timeframe("hours", -2) == "2 hodinami"
         assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
+        assert self.locale._format_timeframe("hour", 1) == "hodinu"
+
         assert self.locale._format_timeframe("now", 0) == "Teď"
 
         assert self.locale._format_timeframe("weeks", 2) == "2 týdny"
