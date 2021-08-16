@@ -4254,7 +4254,7 @@ class NepaliLocale(Locale):
         "month": "एक महिना",
         "months": "{0} महिना",
         "year": "एक बर्ष",
-        "years": "बर्ष",
+        "years": "{0} बर्ष",
     }
 
     meridians = {"am": "पूर्वाह्न", "pm": "अपरान्ह", "AM": "पूर्वाह्न", "PM": "अपरान्ह"}
