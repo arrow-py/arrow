@@ -2759,11 +2759,11 @@ class IcelandicLocale(Locale):
         if isinstance(form, Mapping):
             if delta < 0:
                 form = form["past"]
-            elif delta > 0:
+            else:
                 form = form["future"]
                 # FIXME: handle when delta is 0
 
-        return form.format(abs(delta))  # type: ignore
+        return form.format(abs(delta))
 
     names = ["is", "is-is"]
 
