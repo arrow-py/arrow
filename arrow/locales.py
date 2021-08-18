@@ -1714,7 +1714,7 @@ class BulgarianLocale(SlavicBaseLocale):
 
 class UkrainianLocale(SlavicBaseLocale):
 
-    names = ["ua", "uk-ua"]
+    names = ["ua", "uk", "uk-ua"]
 
     past = "{0} тому"
     future = "за {0}"
