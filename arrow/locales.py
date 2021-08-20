@@ -3505,7 +3505,7 @@ class CatalanLocale(Locale):
         "now": "Ara mateix",
         "second": "un segon",
         "seconds": "{0} segons",
-        "minute": "1 minut",
+        "minute": "un minut",
         "minutes": "{0} minuts",
         "hour": "una hora",
         "hours": "{0} hores",
