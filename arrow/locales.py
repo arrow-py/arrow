@@ -1714,7 +1714,7 @@ class BulgarianLocale(SlavicBaseLocale):
 
 class UkrainianLocale(SlavicBaseLocale):
 
-    names = ["ua", "uk-ua"]
+    names = ["ua", "uk", "uk-ua"]
 
     past = "{0} тому"
     future = "за {0}"
@@ -3530,7 +3530,7 @@ class CatalanLocale(Locale):
         "now": "Ara mateix",
         "second": "un segon",
         "seconds": "{0} segons",
-        "minute": "1 minut",
+        "minute": "un minut",
         "minutes": "{0} minuts",
         "hour": "una hora",
         "hours": "{0} hores",
@@ -4279,7 +4279,7 @@ class NepaliLocale(Locale):
         "month": "एक महिना",
         "months": "{0} महिना",
         "year": "एक बर्ष",
-        "years": "बर्ष",
+        "years": "{0} बर्ष",
     }
 
     meridians = {"am": "पूर्वाह्न", "pm": "अपरान्ह", "AM": "पूर्वाह्न", "PM": "अपरान्ह"}
