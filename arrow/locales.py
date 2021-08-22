@@ -2546,17 +2546,17 @@ class ArabicLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "الآن",
         "second": "ثانية",
-        "seconds": {"double": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
+        "seconds": {"2": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
         "minute": "دقيقة",
-        "minutes": {"double": "دقيقتين", "ten": "{0} دقائق", "higher": "{0} دقيقة"},
+        "minutes": {"2": "دقيقتين", "ten": "{0} دقائق", "higher": "{0} دقيقة"},
         "hour": "ساعة",
-        "hours": {"double": "ساعتين", "ten": "{0} ساعات", "higher": "{0} ساعة"},
+        "hours": {"2": "ساعتين", "ten": "{0} ساعات", "higher": "{0} ساعة"},
         "day": "يوم",
-        "days": {"double": "يومين", "ten": "{0} أيام", "higher": "{0} يوم"},
+        "days": {"2": "يومين", "ten": "{0} أيام", "higher": "{0} يوم"},
         "month": "شهر",
-        "months": {"double": "شهرين", "ten": "{0} أشهر", "higher": "{0} شهر"},
+        "months": {"2": "شهرين", "ten": "{0} أشهر", "higher": "{0} شهر"},
         "year": "سنة",
-        "years": {"double": "سنتين", "ten": "{0} سنوات", "higher": "{0} سنة"},
+        "years": {"2": "سنتين", "ten": "{0} سنوات", "higher": "{0} سنة"},
     }
 
     month_names = [
@@ -2607,7 +2607,7 @@ class ArabicLocale(Locale):
         delta = abs(delta)
         if isinstance(form, Mapping):
             if delta == 2:
-                form = form["double"]
+                form = form["2"]
             elif 2 < delta <= 10:
                 form = form["ten"]
             else:
