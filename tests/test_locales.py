@@ -365,6 +365,9 @@ class TestIcelandicLocale:
         assert self.locale._format_timeframe("years", -2) == "2 árum"
         assert self.locale._format_timeframe("years", 2) == "2 ár"
 
+        with pytest.raises(ValueError):
+            self.locale._format_timeframe("years", 0)
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestMalayalamLocale:

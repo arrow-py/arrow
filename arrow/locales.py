@@ -2759,8 +2759,13 @@ class IcelandicLocale(Locale):
         if isinstance(form, Mapping):
             if delta < 0:
                 form = form["past"]
-            else:
+            elif delta > 0:
                 form = form["future"]
+            else:
+                raise ValueError(
+                    "Icelandic Locale does not support units with a delta of zero. "
+                    "Please consider making a contribution to fix this issue."
+                )
                 # FIXME: handle when delta is 0
 
         return form.format(abs(delta))
