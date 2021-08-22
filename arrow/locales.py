@@ -37,11 +37,6 @@ TimeFrameLiteral = Literal[
     "months",
     "year",
     "years",
-    "2-hours",
-    "2-days",
-    "2-weeks",
-    "2-months",
-    "2-years",
 ]
 
 _TimeFrameElements = Union[
@@ -3318,27 +3313,22 @@ class HebrewLocale(Locale):
     future = "בעוד {0}"
     and_word = "ו"
 
-    timeframes = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "הרגע",
         "second": "שנייה",
         "seconds": "{0} שניות",
         "minute": "דקה",
         "minutes": "{0} דקות",
         "hour": "שעה",
-        "hours": "{0} שעות",
-        "2-hours": "שעתיים",
+        "hours": {"2": "שעתיים", "general": "{0} שעות"},
         "day": "יום",
-        "days": "{0} ימים",
-        "2-days": "יומיים",
+        "days": {"2": "יומיים", "general": "{0} ימים"},
         "week": "שבוע",
-        "weeks": "{0} שבועות",
-        "2-weeks": "שבועיים",
+        "weeks": {"2": "שבועיים", "general": "{0} שבועות"},
         "month": "חודש",
-        "months": "{0} חודשים",
-        "2-months": "חודשיים",
+        "months": {"2": "חודשיים", "general": "{0} חודשים"},
         "year": "שנה",
-        "years": "{0} שנים",
-        "2-years": "שנתיים",
+        "years": {"2": "שנתיים", "general": "{0} שנים"},
     }
 
     meridians = {
@@ -3382,18 +3372,20 @@ class HebrewLocale(Locale):
     day_names = ["", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת", "ראשון"]
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
-    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+    def _format_timeframe(
+        self, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
         """Hebrew couple of <timeframe> aware"""
-        couple = f"2-{timeframe}"
-        single = timeframe.rstrip("s")
-        if abs(delta) == 2 and couple in self.timeframes:
-            key = couple
-        elif abs(delta) == 1 and single in self.timeframes:
-            key = single
-        else:
-            key = timeframe
+        form = self.timeframes[timeframe]
+        delta = abs(trunc(delta))
 
-        return self.timeframes[key].format(abs(delta))
+        if isinstance(form, Mapping):
+            if delta == 2:
+                form = form["2"]
+            else:
+                form = form["general"]
+
+        return form.format(delta)
 
     def describe_multi(
         self,
@@ -3421,7 +3413,7 @@ class HebrewLocale(Locale):
                 humanized += ", " + last_humanized
 
         if not only_distance:
-            humanized = self._format_relative(humanized, timeframe, delta)
+            humanized = self._format_relative(humanized, timeframe, trunc(delta))
 
         return humanized
 
