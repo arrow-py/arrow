@@ -2755,33 +2755,40 @@ class MoroccoArabicLocale(ArabicLocale):
 class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
-        if delta < 0:
-            form = form[0]
-        elif delta > 0:
-            form = form[1]
-            # FIXME: handle when delta is 0
 
-        return form.format(abs(delta))  # type: ignore
+        if isinstance(form, Mapping):
+            if delta < 0:
+                form = form["past"]
+            elif delta > 0:
+                form = form["future"]
+            else:
+                raise ValueError(
+                    "Icelandic Locale does not support units with a delta of zero. "
+                    "Please consider making a contribution to fix this issue."
+                )
+                # FIXME: handle when delta is 0
+
+        return form.format(abs(delta))
 
     names = ["is", "is-is"]
 
     past = "fyrir {0} síðan"
     future = "eftir {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Tuple[str, str], str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "rétt í þessu",
-        "second": ("sekúndu", "sekúndu"),
-        "seconds": ("{0} nokkrum sekúndum", "nokkrar sekúndur"),
-        "minute": ("einni mínútu", "eina mínútu"),
-        "minutes": ("{0} mínútum", "{0} mínútur"),
-        "hour": ("einum tíma", "einn tíma"),
-        "hours": ("{0} tímum", "{0} tíma"),
-        "day": ("einum degi", "einn dag"),
-        "days": ("{0} dögum", "{0} daga"),
-        "month": ("einum mánuði", "einn mánuð"),
-        "months": ("{0} mánuðum", "{0} mánuði"),
-        "year": ("einu ári", "eitt ár"),
-        "years": ("{0} árum", "{0} ár"),
+        "second": {"past": "sekúndu", "future": "sekúndu"},
+        "seconds": {"past": "{0} nokkrum sekúndum", "future": "nokkrar sekúndur"},
+        "minute": {"past": "einni mínútu", "future": "eina mínútu"},
+        "minutes": {"past": "{0} mínútum", "future": "{0} mínútur"},
+        "hour": {"past": "einum tíma", "future": "einn tíma"},
+        "hours": {"past": "{0} tímum", "future": "{0} tíma"},
+        "day": {"past": "einum degi", "future": "einn dag"},
+        "days": {"past": "{0} dögum", "future": "{0} daga"},
+        "month": {"past": "einum mánuði", "future": "einn mánuð"},
+        "months": {"past": "{0} mánuðum", "future": "{0} mánuði"},
+        "year": {"past": "einu ári", "future": "eitt ár"},
+        "years": {"past": "{0} árum", "future": "{0} ár"},
     }
 
     meridians = {"am": "f.h.", "pm": "e.h.", "AM": "f.h.", "PM": "e.h."}
