@@ -330,12 +330,43 @@ class TestPolishLocale:
 class TestIcelandicLocale:
     def test_format_timeframe(self):
 
+        assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
+
+        assert self.locale._format_timeframe("second", -1) == "sekúndu"
+        assert self.locale._format_timeframe("second", 1) == "sekúndu"
+
         assert self.locale._format_timeframe("minute", -1) == "einni mínútu"
         assert self.locale._format_timeframe("minute", 1) == "eina mínútu"
 
+        assert self.locale._format_timeframe("minutes", -2) == "2 mínútum"
+        assert self.locale._format_timeframe("minutes", 2) == "2 mínútur"
+
+        assert self.locale._format_timeframe("hour", -1) == "einum tíma"
+        assert self.locale._format_timeframe("hour", 1) == "einn tíma"
+
         assert self.locale._format_timeframe("hours", -2) == "2 tímum"
         assert self.locale._format_timeframe("hours", 2) == "2 tíma"
-        assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
+
+        assert self.locale._format_timeframe("day", -1) == "einum degi"
+        assert self.locale._format_timeframe("day", 1) == "einn dag"
+
+        assert self.locale._format_timeframe("days", -2) == "2 dögum"
+        assert self.locale._format_timeframe("days", 2) == "2 daga"
+
+        assert self.locale._format_timeframe("month", -1) == "einum mánuði"
+        assert self.locale._format_timeframe("month", 1) == "einn mánuð"
+
+        assert self.locale._format_timeframe("months", -2) == "2 mánuðum"
+        assert self.locale._format_timeframe("months", 2) == "2 mánuði"
+
+        assert self.locale._format_timeframe("year", -1) == "einu ári"
+        assert self.locale._format_timeframe("year", 1) == "eitt ár"
+
+        assert self.locale._format_timeframe("years", -2) == "2 árum"
+        assert self.locale._format_timeframe("years", 2) == "2 ár"
+
+        with pytest.raises(ValueError):
+            self.locale._format_timeframe("years", 0)
 
 
 @pytest.mark.usefixtures("lang_locale")
@@ -1350,6 +1381,36 @@ class TestZuluLocale:
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "uMgqibelo"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAlbanianLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "tani"
+        assert self.locale._format_timeframe("second", -1) == "sekondë"
+        assert self.locale._format_timeframe("second", 1) == "sekondë"
+        assert self.locale._format_timeframe("seconds", -3) == "3 sekonda"
+        assert self.locale._format_timeframe("minute", 1) == "minutë"
+        assert self.locale._format_timeframe("minutes", -4) == "4 minuta"
+        assert self.locale._format_timeframe("hour", 1) == "orë"
+        assert self.locale._format_timeframe("hours", -23) == "23 orë"
+        assert self.locale._format_timeframe("day", 1) == "ditë"
+        assert self.locale._format_timeframe("days", -12) == "12 ditë"
+        assert self.locale._format_timeframe("week", 1) == "javë"
+        assert self.locale._format_timeframe("weeks", -12) == "12 javë"
+        assert self.locale._format_timeframe("month", 1) == "muaj"
+        assert self.locale._format_timeframe("months", -2) == "2 muaj"
+        assert self.locale._format_timeframe("year", 1) == "vit"
+        assert self.locale._format_timeframe("years", -2) == "2 vjet"
+
+    def test_weekday_and_month(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        # Saturday
+        assert self.locale.day_name(dt.isoweekday()) == "e shtunë"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "sht"
+        # June
+        assert self.locale.month_name(dt.isoweekday()) == "qershor"
+        assert self.locale.month_abbreviation(dt.isoweekday()) == "qer"
 
 
 @pytest.mark.usefixtures("lang_locale")
