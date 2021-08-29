@@ -2414,6 +2414,8 @@ def locale_list_no_weeks():
         "se-se",
         "lb",
         "lb-lu",
+        "sq",
+        "sq-al",
         "ta",
         "ta-in",
         "ta-lk",
