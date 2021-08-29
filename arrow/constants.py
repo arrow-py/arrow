@@ -130,6 +130,8 @@ DEHUMANIZE_LOCALES = {
     "or-in",
     "lb",
     "lb-lu",
+    "sq",
+    "sq-al",
     "ta",
     "ta-in",
     "ta-lk",
