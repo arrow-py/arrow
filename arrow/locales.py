@@ -857,20 +857,20 @@ class FinnishLocale(Locale):
     past = "{0} sitten"
     future = "{0} kuluttua"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, List[str]]] = {
-        "now": ["juuri nyt", "juuri nyt"],
-        "second": ["sekunti", "sekunti"],
-        "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
-        "minute": ["minuutti", "minuutin"],
-        "minutes": ["{0} minuuttia", "{0} minuutin"],
-        "hour": ["tunti", "tunnin"],
-        "hours": ["{0} tuntia", "{0} tunnin"],
-        "day": ["päivä", "päivä"],
-        "days": ["{0} päivää", "{0} päivän"],
-        "month": ["kuukausi", "kuukauden"],
-        "months": ["{0} kuukautta", "{0} kuukauden"],
-        "year": ["vuosi", "vuoden"],
-        "years": ["{0} vuotta", "{0} vuoden"],
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "juuri nyt",
+        "second": "sekunti",
+        "seconds": {"past": "{0} muutama sekunti", "future": "{0} muutaman sekunnin"},
+        "minute": {"past": "minuutti", "future": "minuutin"},
+        "minutes": {"past": "{0} minuuttia", "future": "{0} minuutin"},
+        "hour": {"past": "tunti", "future": "tunnin"},
+        "hours": {"past": "{0} tuntia", "future": "{0} tunnin"},
+        "day": "päivä",
+        "days": {"past": "{0} päivää", "future": "{0} päivän"},
+        "month": {"past": "kuukausi", "future": "kuukauden"},
+        "months": {"past": "{0} kuukautta", "future": "{0} kuukauden"},
+        "year": {"past": "vuosi", "future": "vuoden"},
+        "years": {"past": "{0} vuotta", "future": "{0} vuoden"},
     }
 
     # Months and days are lowercase in Finnish
@@ -919,26 +919,16 @@ class FinnishLocale(Locale):
 
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
-    # TODO: Fix return type
-    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> Tuple[str, str]:  # type: ignore
-        return (
-            self.timeframes[timeframe][0].format(abs(delta)),
-            self.timeframes[timeframe][1].format(abs(delta)),
-        )
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        form = self.timeframes[timeframe]
 
-    def _format_relative(
-        self,
-        humanized: str,
-        timeframe: TimeFrameLiteral,
-        delta: Union[float, int],
-    ) -> str:
-        if timeframe == "now":
-            return humanized[0]
+        if isinstance(form, Mapping):
+            if delta < 0:
+                form = form["past"]
+            else:
+                form = form["future"]
 
-        direction = self.past if delta < 0 else self.future
-        which = 0 if delta < 0 else 1
-
-        return direction.format(humanized[which])
+        return form.format(abs(delta))
 
     def _ordinal_number(self, n: int) -> str:
         return f"{n}."
