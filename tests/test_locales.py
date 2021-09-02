@@ -805,6 +805,8 @@ class TestFinnishLocale:
         assert self.locale._format_timeframe("hour", -1) == "tunti"
         assert self.locale._format_timeframe("hour", 1) == "tunnin"
 
+        assert self.locale._format_timeframe("now", 1) == "juuri nyt"
+
     def test_format_relative_now(self):
         result = self.locale._format_relative("juuri nyt", "now", 0)
         assert result == "juuri nyt"
