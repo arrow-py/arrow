@@ -799,19 +799,24 @@ class TestMarathiLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestFinnishLocale:
     def test_format_timeframe(self):
-        assert self.locale._format_timeframe("hours", 2) == ("2 tuntia", "2 tunnin")
-        assert self.locale._format_timeframe("hour", 0) == ("tunti", "tunnin")
+        assert self.locale._format_timeframe("hours", -2) == "2 tuntia"
+        assert self.locale._format_timeframe("hours", 2) == "2 tunnin"
+
+        assert self.locale._format_timeframe("hour", -1) == "tunti"
+        assert self.locale._format_timeframe("hour", 1) == "tunnin"
+
+        assert self.locale._format_timeframe("now", 1) == "juuri nyt"
 
     def test_format_relative_now(self):
-        result = self.locale._format_relative(["juuri nyt", "juuri nyt"], "now", 0)
+        result = self.locale._format_relative("juuri nyt", "now", 0)
         assert result == "juuri nyt"
 
     def test_format_relative_past(self):
-        result = self.locale._format_relative(["tunti", "tunnin"], "hour", 1)
+        result = self.locale._format_relative("tunnin", "hour", 1)
         assert result == "tunnin kuluttua"
 
     def test_format_relative_future(self):
-        result = self.locale._format_relative(["tunti", "tunnin"], "hour", -1)
+        result = self.locale._format_relative("tunti", "hour", -1)
         assert result == "tunti sitten"
 
     def test_ordinal_number(self):
