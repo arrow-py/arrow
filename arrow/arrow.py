@@ -246,12 +246,12 @@ class Arrow:
         the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
+        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to UTC time.
 
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dateutil_tz.tzutc()
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
