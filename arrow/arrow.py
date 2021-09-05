@@ -1122,6 +1122,7 @@ class Arrow:
         locale: str = DEFAULT_LOCALE,
         only_distance: bool = False,
         granularity: Union[_GRANULARITY, List[_GRANULARITY]] = "auto",
+        dynamic: bool = False,
     ) -> str:
         """Returns a localized, humanized representation of a relative difference in time.
 
@@ -1264,7 +1265,11 @@ class Arrow:
                     if _frame in granularity:
                         value = sign * _delta / self._SECS_MAP[_frame]
                         _delta %= self._SECS_MAP[_frame]
-                        if trunc(abs(value)) != 1:
+
+                        # If user chooses dynamic and the display value is 0 don't subtract
+                        if dynamic and trunc(abs(value)) == 0:
+                            pass
+                        elif trunc(abs(value)) != 1:
                             timeframes.append(
                                 (cast(TimeFrameLiteral, _frame + "s"), value)
                             )
@@ -1273,6 +1278,7 @@ class Arrow:
                     return _delta
 
                 delta = float(delta_second)
+
                 frames: Tuple[TimeFrameLiteral, ...] = (
                     "year",
                     "month",
@@ -1285,10 +1291,23 @@ class Arrow:
                 for frame in frames:
                     delta = gather_timeframes(delta, frame)
 
-                if len(timeframes) < len(granularity):
+                if len(timeframes) < len(granularity) and not dynamic:
                     raise ValueError(
                         "Invalid level of granularity. "
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
+                    )
+
+                # Needed to see if there are no units output an error
+                if not timeframes and dynamic:
+                    raise ValueError(
+                        "All provided granularity values produced an output of zero. "
+                        "Consider using smaller granularities, or set the dynamic flag to False. "
+                    )
+
+                # Needed for the case of dynamic usage (could end up with only one frame unit)
+                if len(timeframes) == 1:
+                    return locale.describe(
+                        timeframes[0][0], delta, only_distance=only_distance
                     )
 
                 return locale.describe_multi(timeframes, only_distance=only_distance)
