@@ -9,6 +9,7 @@ construction scenarios.
 import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
+from decimal import Decimal
 from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
@@ -218,6 +219,8 @@ class ArrowFactory:
 
         if arg_count == 1:
             arg = args[0]
+            if isinstance(arg, Decimal):
+                arg = float(arg)
 
             # (None) -> raises an exception
             if arg is None:
