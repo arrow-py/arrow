@@ -102,10 +102,11 @@ class TestTestArrowFactory:
 
     def test_fromtimestamp(self):
 
-        timestamp = datetime.utcnow().timestamp()
-        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.tzutc())
+        timestamp = time.time()
+
+        result = arrow.Arrow.fromtimestamp(timestamp)
         assert_datetime_equality(
-            result._datetime, datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
         )
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
