@@ -2338,6 +2338,8 @@ def locale_list_no_weeks():
         "ja-jp",
         "sv",
         "sv-se",
+        "fi",
+        "fi-fi",
         "zh",
         "zh-cn",
         "zh-tw",
@@ -2389,6 +2391,10 @@ def locale_list_no_weeks():
         "sl-si",
         "id",
         "id-id",
+        "ne",
+        "ne-np",
+        "ee",
+        "et",
         "sw",
         "sw-ke",
         "sw-tz",
@@ -2407,6 +2413,8 @@ def locale_list_no_weeks():
         "se-se",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
         "sq",
         "sq-al",
         "ta",
@@ -2469,6 +2477,8 @@ def locale_list_with_weeks():
         "ms-bn",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
         "ta",
         "ta-in",
         "ta-lk",
@@ -2726,18 +2736,18 @@ class TestArrowDehumanize:
         second_future = arw.shift(seconds=5)
 
         second_ago_string = second_ago.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
         second_future_string = second_future.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
 
-        # fi is an example of many unsupported locales currently
+        # ko is an example of many unsupported locales currently
         with pytest.raises(ValueError):
-            arw.dehumanize(second_ago_string, locale="fi")
+            arw.dehumanize(second_ago_string, locale="ko")
 
         with pytest.raises(ValueError):
-            arw.dehumanize(second_future_string, locale="fi")
+            arw.dehumanize(second_future_string, locale="ko")
 
     # Test to ensure old style locale strings are supported
     def test_normalized_locale(self):
