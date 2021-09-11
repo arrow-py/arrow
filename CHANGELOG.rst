@@ -6,9 +6,9 @@ Changelog
 
 - [NEW] Added Albanian, Tamil and Zulu locales.
 - [NEW] Added support for ``Decimal`` as input to ``arrow.get()``.
-- [FIX] The Arabic, Czech, Finnish, Hebrew, Icelandic, Slavic, Slovak and Thai locales now support ``dehumanize``.
+- [FIX] The Estonian, Finnish, Nepali and Zulu locales now support ``dehumanize``.
 - [FIX] Improved validation checks when using parser tokens ``A`` and ``hh``.
-- [FIX] Minor bug fixes to Catalan, Cantonese and Nepali locales.
+- [FIX] Minor bug fixes to Catalan, Cantonese, Greek and Nepali locales.
 - [INTERNAL] Updated ``dateutil`` requirement in ``setup.py`` to ``>=2.8.2``.
 
 1.1.1 (2021-06-24)
