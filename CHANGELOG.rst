@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.0 (2021-09-06)
+1.2.0 (2021-09-12)
 ------------------
 
 - [NEW] Added Albanian, Tamil and Zulu locales.
@@ -9,7 +9,6 @@ Changelog
 - [FIX] The Estonian, Finnish, Nepali and Zulu locales now support ``dehumanize``.
 - [FIX] Improved validation checks when using parser tokens ``A`` and ``hh``.
 - [FIX] Minor bug fixes to Catalan, Cantonese, Greek and Nepali locales.
-- [INTERNAL] Updated ``dateutil`` requirement in ``setup.py`` to ``>=2.8.2``.
 
 1.1.1 (2021-06-24)
 ------------------
