@@ -3372,13 +3372,13 @@ class HebrewLocale(Locale):
         "hour": "שעה",
         "hours": {"2": "שעתיים", "general": "{0} שעות"},
         "day": "יום",
-        "days": {"2": "יומיים", "general": "{0} ימים"},
+        "days": {"2": "יומיים", "ten": "{0} ימים", "higher": "{0} יום"},
         "week": "שבוע",
         "weeks": {"2": "שבועיים", "general": "{0} שבועות"},
         "month": "חודש",
         "months": {"2": "חודשיים", "general": "{0} חודשים"},
         "year": "שנה",
-        "years": {"2": "שנתיים", "general": "{0} שנים"},
+        "years": {"2": "שנתיים", "ten": "{0} שנים", "higher": "{0} שנה"}       
     }
 
     meridians = {
