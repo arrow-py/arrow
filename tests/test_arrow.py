@@ -2311,7 +2311,6 @@ class TestArrowHumanizeTestsWithLocale:
 
         assert result == "год назад"
 
-
 # Fixtures for Dehumanize
 @pytest.fixture(scope="class")
 def locale_list_no_weeks():
