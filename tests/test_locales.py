@@ -747,7 +747,6 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
         assert self.locale._format_timeframe("years", 15) == "15 שנה"
 
-
     def test_describe_multi(self):
         describe = self.locale.describe_multi
 

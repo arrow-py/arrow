@@ -2311,6 +2311,7 @@ class TestArrowHumanizeTestsWithLocale:
 
         assert result == "год назад"
 
+
 # Fixtures for Dehumanize
 @pytest.fixture(scope="class")
 def locale_list_no_weeks():
@@ -2654,7 +2655,7 @@ class TestArrowDehumanize:
 
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
-            
+
     def test_gt_than_10_years(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
@@ -2669,7 +2670,7 @@ class TestArrowDehumanize:
             )
 
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
-            assert arw.dehumanize(year_future_string, locale=lang) == year_future        
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
     def test_mixed_granularity(self, locale_list_no_weeks):
 

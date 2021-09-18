@@ -3378,7 +3378,7 @@ class HebrewLocale(Locale):
         "month": "חודש",
         "months": {"2": "חודשיים", "ten": "{0} חודשים", "higher": "{0} חודשים"},
         "year": "שנה",
-        "years": {"2": "שנתיים", "ten": "{0} שנים", "higher": "{0} שנה"}       
+        "years": {"2": "שנתיים", "ten": "{0} שנים", "higher": "{0} שנה"},
     }
 
     meridians = {
@@ -3428,13 +3428,12 @@ class HebrewLocale(Locale):
         if isinstance(form, Mapping):
             if delta == 2:
                 form = form["2"]
-            elif delta ==0 or 2 < delta <= 10:
+            elif delta == 0 or 2 < delta <= 10:
                 form = form["ten"]
             else:
                 form = form["higher"]
 
         return form.format(delta)
-    
 
     def describe_multi(
         self,
