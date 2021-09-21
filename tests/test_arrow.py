@@ -2656,6 +2656,22 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
+    def test_gt_than_10_years(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            year_ago = arw.shift(years=-25)
+            year_future = arw.shift(years=25)
+
+            year_ago_string = year_ago.humanize(arw, locale=lang, granularity=["year"])
+            year_future_string = year_future.humanize(
+                arw, locale=lang, granularity=["year"]
+            )
+
+            assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
+
     def test_mixed_granularity(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
