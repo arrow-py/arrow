@@ -1920,3 +1920,77 @@ class TestTamilLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "சனிக்கிழமை"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "சனி"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestSinhalaLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "දැන්"
+        assert self.locale._format_timeframe("second", -1) == "තත්පරයක"
+        assert self.locale._format_timeframe("second", 1) == "තත්පරයකින්"
+        assert self.locale._format_timeframe("seconds", -30) == "තත්පර 30 ක"
+
+        assert self.locale._format_timeframe("minute", -1) == "විනාඩියක"
+        assert self.locale._format_timeframe("minutes", 4) == "මිනිත්තු 4 කින්"
+
+        assert self.locale._format_timeframe("hour", -1) == "පැයක"
+        assert self.locale._format_timeframe("hours", 23) == "පැය 23 කින්"
+
+        assert self.locale._format_timeframe("day", 1) == "දිනකට"
+        assert self.locale._format_timeframe("days", -12) == "දින 12 ක"
+
+        assert self.locale._format_timeframe("week", -1) == "සතියක"
+        assert self.locale._format_timeframe("weeks", -10) == "සති 10 ක"
+
+        assert self.locale._format_timeframe("month", -1) == "මාසයක"
+        assert self.locale._format_timeframe("months", -2) == "මාස 2 ක"
+
+        assert self.locale._format_timeframe("year", 1) == "වසරක් තුළ"
+        assert self.locale._format_timeframe("years", -21) == "අවුරුදු 21 ක"
+
+    def test_describe_si(self):
+        assert self.locale.describe("second", only_distance=True) == "තත්පරයක්"
+        assert (
+            self.locale.describe("second", only_distance=False) == "තත්පරයකින්"
+        )  # (in) a second
+
+        assert self.locale.describe("minute", only_distance=True) == "මිනිත්තුවක්"
+        assert (
+            self.locale.describe("minute", only_distance=False) == "විනාඩියකින්"
+        )  # (in) a minute
+
+        assert self.locale.describe("hour", only_distance=True) == "පැයක්"
+        assert self.locale.describe("hour", only_distance=False) == "පැයකින්"
+
+        assert self.locale.describe("day", only_distance=True) == "දවසක්"
+        assert self.locale.describe("day", only_distance=False) == "දිනකට"
+
+        assert self.locale.describe("week", only_distance=True) == "සතියක්"
+        assert self.locale.describe("week", only_distance=False) == "සතියකින්"
+
+        assert self.locale.describe("month", only_distance=True) == "මාසයක්"
+        assert self.locale.describe("month", only_distance=False) == "එය මාසය තුළ"
+
+        assert self.locale.describe("year", only_distance=True) == "අවුරුද්දක්"
+        assert self.locale.describe("year", only_distance=False) == "වසරක් තුළ"
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("දැන්", "now", 0)
+        assert result == "දැන්"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("පැයකින්", "පැය", 1)
+
+        assert result == "පැයකින්"  # (in) one hour
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("පැයක", "පැය", -1)
+
+        assert result == "පැයකට පෙර"  # an hour ago
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "සෙනසුරාදා"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "අ"
