@@ -1299,7 +1299,7 @@ class Arrow:
                 "Please consider making a contribution to this locale."
             )
 
-    def dehumanize(self, timestring: str, locale: str = "en_us") -> "Arrow":
+    def dehumanize(self, input_string: str, locale: str = "en_us") -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
         the time difference relative to the attrbiutes of the
         :class:`Arrow <arrow.arrow.Arrow>` object.
@@ -1352,43 +1352,56 @@ class Arrow:
         # Create a regex pattern object for numbers
         num_pattern = re.compile(r"\d+")
 
-        # Search timestring for each time unit within locale
-        for unit in locale_obj.timeframes:
+        # Search input string for each time unit within locale
+        for unit, unit_object in locale_obj.timeframes.items():
 
-            # Numeric unit of change
-            change_value = 0
-
-            # Replace {0} with regex \d representing digits
-            search_string = str(locale_obj.timeframes[unit])
-            search_string = search_string.format(r"\d+")
-
-            # Create search pattern and find within string
-            pattern = re.compile(fr"{search_string}")
-            match = pattern.search(timestring)
-
-            # If there is no match continue to next iteration
-            if not match:
-                continue
-
-            match_string = match.group()
-            num_match = num_pattern.search(match_string)
-
-            # If no number matches set change value to be one
-            if not num_match:
-                change_value = 1
+            # Need to check the type of unit_object to create the correct dictionary
+            if isinstance(unit_object, Mapping):
+                strings_to_search = unit_object
             else:
-                change_value = int(num_match.group())
+                strings_to_search = {unit: str(unit_object)}
 
-            # No time to update if now is the unit
-            if unit == "now":
-                unit_visited[unit] = True
-                continue
+            # Search for any matches that exist for that locale's unit.
+            # Needs to cycle all through strings as some locales have strings that
+            # could overlap in a regex match, since input validation isn't being performed.
+            for time_delta, time_string in strings_to_search.items():
 
-            # Add change value to the correct unit (incorporates the plurality that exists within timeframe i.e second v.s seconds)
-            time_unit_to_change = str(unit)
-            time_unit_to_change += "s" if (str(time_unit_to_change)[-1] != "s") else ""
-            time_object_info[time_unit_to_change] = change_value
-            unit_visited[time_unit_to_change] = True
+                # Replace {0} with regex \d representing digits
+                search_string = str(time_string)
+                search_string = search_string.format(r"\d+")
+
+                # Create search pattern and find within string
+                pattern = re.compile(fr"{search_string}")
+                match = pattern.search(input_string)
+
+                # If there is no match continue to next iteration
+                if not match:
+                    continue
+
+                match_string = match.group()
+                num_match = num_pattern.search(match_string)
+
+                # If no number matches
+                # Need for absolute value as some locales have signs included in their objects
+                if not num_match:
+                    change_value = (
+                        1 if not time_delta.isnumeric() else abs(int(time_delta))
+                    )
+                else:
+                    change_value = int(num_match.group())
+
+                # No time to update if now is the unit
+                if unit == "now":
+                    unit_visited[unit] = True
+                    continue
+
+                # Add change value to the correct unit (incorporates the plurality that exists within timeframe i.e second v.s seconds)
+                time_unit_to_change = str(unit)
+                time_unit_to_change += (
+                    "s" if (str(time_unit_to_change)[-1] != "s") else ""
+                )
+                time_object_info[time_unit_to_change] = change_value
+                unit_visited[time_unit_to_change] = True
 
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
@@ -1401,12 +1414,12 @@ class Arrow:
         future_string = locale_obj.future
         future_string = future_string.format(".*")
         future_pattern = re.compile(fr"^{future_string}$")
-        future_pattern_match = future_pattern.findall(timestring)
+        future_pattern_match = future_pattern.findall(input_string)
 
         past_string = locale_obj.past
         past_string = past_string.format(".*")
         past_pattern = re.compile(fr"^{past_string}$")
-        past_pattern_match = past_pattern.findall(timestring)
+        past_pattern_match = past_pattern.findall(input_string)
 
         # If a string contains the now unit, there will be no relative units, hence the need to check if the now unit
         # was visited before raising a ValueError

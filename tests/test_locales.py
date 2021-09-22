@@ -728,6 +728,7 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("day", 1) == "יום"
         assert self.locale._format_timeframe("days", 2) == "יומיים"
         assert self.locale._format_timeframe("days", 3) == "3 ימים"
+        assert self.locale._format_timeframe("days", 80) == "80 יום"
 
         assert self.locale._format_timeframe("hour", 1) == "שעה"
         assert self.locale._format_timeframe("hours", 2) == "שעתיים"
@@ -744,6 +745,7 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("year", 1) == "שנה"
         assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
+        assert self.locale._format_timeframe("years", 15) == "15 שנה"
 
     def test_describe_multi(self):
         describe = self.locale.describe_multi
