@@ -4,7 +4,7 @@ pytest==6.*
 pytest-cov==2.*
 pytest-mock==3.*
 python-dateutil>=2.7.0
-pytz==2021.*
+pytz==2021.1
 simplejson==3.*
 sphinx==4.*
 sphinx-autodoc-typehints==1.*
