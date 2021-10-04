@@ -1423,6 +1423,36 @@ class TestAlbanianLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestUrduLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "ابھی"
+        assert self.locale._format_timeframe("second", -1) == "ایک سیکنڈ"
+        assert self.locale._format_timeframe("second", 1) == "ایک سیکنڈ"
+        assert self.locale._format_timeframe("seconds", -3) == "3 سیکنڈ"
+        assert self.locale._format_timeframe("minute", 1) == "ایک منٹ"
+        assert self.locale._format_timeframe("minutes", -4) == "4 منٹ"
+        assert self.locale._format_timeframe("hour", 1) == "ایک گھنٹے"
+        assert self.locale._format_timeframe("hours", -23) == "23 گھنٹے"
+        assert self.locale._format_timeframe("day", 1) == "ایک دن"
+        assert self.locale._format_timeframe("days", -12) == "12 دن"
+        assert self.locale._format_timeframe("week", 1) == "ایک ہفتے"
+        assert self.locale._format_timeframe("weeks", -12) == "12 ہفتے"
+        assert self.locale._format_timeframe("month", 1) == "ایک مہینہ"
+        assert self.locale._format_timeframe("months", -2) == "2 ماہ"
+        assert self.locale._format_timeframe("year", 1) == "ایک سال"
+        assert self.locale._format_timeframe("years", -2) == "2 سال"
+
+    def test_weekday_and_month(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        # Saturday
+        assert self.locale.day_name(dt.isoweekday()) == "ہفتہ"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "ہفتہ"
+        # June
+        assert self.locale.month_name(dt.isoweekday()) == "جون"
+        assert self.locale.month_abbreviation(dt.isoweekday()) == "جون"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestEstonianLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "just nüüd"
