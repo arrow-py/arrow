@@ -2420,6 +2420,8 @@ def locale_list_no_weeks():
         "ta",
         "ta-in",
         "ta-lk",
+        "ur",
+        "ur-pk",
     ]
 
     return tested_langs
