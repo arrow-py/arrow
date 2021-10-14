@@ -1935,6 +1935,8 @@ class TestArrowHumanize:
         assert later506.humanize(self.now, granularity="week") == "in 82 weeks"
         assert self.now.humanize(later506, granularity="month") == "18 months ago"
         assert later506.humanize(self.now, granularity="month") == "in 18 months"
+        assert self.now.humanize(later506, granularity="quarter") == "6 quarters ago"
+        assert later506.humanize(self.now, granularity="quarter") == "in 6 quarters"
         assert self.now.humanize(later506, granularity="year") == "a year ago"
         assert later506.humanize(self.now, granularity="year") == "in a year"
 
