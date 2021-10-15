@@ -2345,6 +2345,8 @@ def locale_list_no_weeks():
         "ja-jp",
         "sv",
         "sv-se",
+        "fi",
+        "fi-fi",
         "zh",
         "zh-cn",
         "zh-tw",
@@ -2396,6 +2398,10 @@ def locale_list_no_weeks():
         "sl-si",
         "id",
         "id-id",
+        "ne",
+        "ne-np",
+        "ee",
+        "et",
         "sw",
         "sw-ke",
         "sw-tz",
@@ -2414,11 +2420,15 @@ def locale_list_no_weeks():
         "se-se",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
         "sq",
         "sq-al",
         "ta",
         "ta-in",
         "ta-lk",
+        "ur",
+        "ur-pk",
     ]
 
     return tested_langs
@@ -2476,6 +2486,8 @@ def locale_list_with_weeks():
         "ms-bn",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
         "ta",
         "ta-in",
         "ta-lk",
@@ -2653,6 +2665,22 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
+    def test_gt_than_10_years(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            year_ago = arw.shift(years=-25)
+            year_future = arw.shift(years=25)
+
+            year_ago_string = year_ago.humanize(arw, locale=lang, granularity=["year"])
+            year_future_string = year_future.humanize(
+                arw, locale=lang, granularity=["year"]
+            )
+
+            assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
+
     def test_mixed_granularity(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
@@ -2733,18 +2761,18 @@ class TestArrowDehumanize:
         second_future = arw.shift(seconds=5)
 
         second_ago_string = second_ago.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
         second_future_string = second_future.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
 
-        # fi is an example of many unsupported locales currently
+        # ko is an example of many unsupported locales currently
         with pytest.raises(ValueError):
-            arw.dehumanize(second_ago_string, locale="fi")
+            arw.dehumanize(second_ago_string, locale="ko")
 
         with pytest.raises(ValueError):
-            arw.dehumanize(second_future_string, locale="fi")
+            arw.dehumanize(second_future_string, locale="ko")
 
     # Test to ensure old style locale strings are supported
     def test_normalized_locale(self):
