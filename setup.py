@@ -23,7 +23,7 @@ setup(
     zip_safe=False,
     python_requires=">=3.6",
     install_requires=[
-        "python-dateutil>=2.8.2",
+        "python-dateutil>=2.7.0",
         "typing_extensions; python_version<'3.8'",
     ],
     classifiers=[

@@ -1,5 +1,6 @@
 import time
 from datetime import date, datetime
+from decimal import Decimal
 
 import pytest
 from dateutil import tz
@@ -262,6 +263,13 @@ class TestGet:
 
         with pytest.raises(TypeError):
             self.factory.get(True)
+
+    def test_one_arg_decimal(self):
+        result = self.factory.get(Decimal(1577836800.26843))
+
+        assert result._datetime == datetime(
+            2020, 1, 1, 0, 0, 0, 268430, tzinfo=tz.tzutc()
+        )
 
     def test_two_args_datetime_tzinfo(self):
 
