@@ -38,8 +38,8 @@ repos:
     hooks:
       - id: black
         args: [--safe, --quiet, --target-version=py36]
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
+  - repo: https://github.com/pycqa/flake8
+    rev: 4.0.1
     hooks:
       - id: flake8
         additional_dependencies: [flake8-bugbear]
