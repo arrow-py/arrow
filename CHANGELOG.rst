@@ -358,7 +358,7 @@ The following will work in v0.15.0:
 -------------------
 
 - [NEW] Added support for ``week`` granularity in ``Arrow.humanize()``. For example, ``arrow.utcnow().shift(weeks=-1).humanize(granularity="week")`` outputs "a week ago". This change introduced two new untranslated words, ``week`` and ``weeks``, to all locale dictionaries, so locale contributions are welcome!
-- [NEW] Fully translated the Brazilian Portugese locale.
+- [NEW] Fully translated the Brazilian Portuguese locale.
 - [CHANGE] Updated the Macedonian locale to inherit from a Slavic base.
 - [FIX] Fixed a bug that caused ``arrow.get()`` to ignore tzinfo arguments of type string (e.g. ``arrow.get(tzinfo="Europe/Paris")``).
 - [FIX] Fixed a bug that occurred when ``arrow.Arrow()`` was instantiated with a ``pytz`` tzinfo object.
