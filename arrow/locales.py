@@ -5217,13 +5217,13 @@ class SerbianLocale(Locale):
 
     month_names = [
         "",
-        "januar",  # Јануар
+        "januar",  # јануар
         "februar",  # фебруар
         "mart",  # март
         "april",  # април
         "maj",  # мај
-        "juni",  # јун
-        "juli",  # јул
+        "jun",  # јун
+        "jul",  # јул
         "avgust",  # август
         "septembar",  # септембар
         "oktobar",  # октобар
@@ -5233,18 +5233,18 @@ class SerbianLocale(Locale):
 
     month_abbreviations = [
         "",
-        "jan.",
-        "febr.",
-        "mart",
-        "april",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
         "maj",
-        "juni",
-        "juli",
-        "avg.",
-        "sept.",
-        "okt.",
-        "nov.",
-        "dec.",
+        "jun",
+        "jul",
+        "avg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
     ]
 
     day_names = [

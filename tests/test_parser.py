@@ -1323,7 +1323,7 @@ class TestDateTimeParserISO:
         # ordinal in basic format: YYYYDDDD
         assert self.parser.parse_iso("1998136") == datetime(1998, 5, 16)
 
-        # timezone requires +- seperator
+        # timezone requires +- separator
         with pytest.raises(ParserError):
             self.parser.parse_iso("20180517T1055130700")
 
