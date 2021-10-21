@@ -2447,7 +2447,7 @@ class AzerbaijaniLocale(Locale):
 
     timeframes = {
         "now": "indi",
-        "second": "saniyə",
+        "second": "bir saniyə",
         "seconds": "{0} saniyə",
         "minute": "bir dəqiqə",
         "minutes": "{0} dəqiqə",
@@ -2455,6 +2455,8 @@ class AzerbaijaniLocale(Locale):
         "hours": "{0} saat",
         "day": "bir gün",
         "days": "{0} gün",
+        "week": "bir həftə",
+        "weeks": "{0} həftə",
         "month": "bir ay",
         "months": "{0} ay",
         "year": "il",
