@@ -777,11 +777,11 @@ class TestAzerbaijaniLocale:
         assert self.locale._format_timeframe("day", 1) == "bir gün"
         assert self.locale._format_timeframe("week", 1) == "bir həftə"
         assert self.locale._format_timeframe("month", 1) == "bir ay"
-        assert self.locale._format_timeframe("year", 1) == "bir ıl"
+        assert self.locale._format_timeframe("year", 1) == "bir il"
 
     def test_describe_mk(self):
-        assert self.locale.describe("second", only_distance=True) == "bir saniye"
-        assert self.locale.describe("second", only_distance=False) == "bir saniye sonra"
+        assert self.locale.describe("second", only_distance=True) == "bir saniyə"
+        assert self.locale.describe("second", only_distance=False) == "bir saniyə sonra"
         assert self.locale.describe("minute", only_distance=True) == "bir dəqiqə"
         assert self.locale.describe("minute", only_distance=False) == "bir dəqiqə sonra"
         assert self.locale.describe("hour", only_distance=True) == "bir saat"
@@ -792,16 +792,16 @@ class TestAzerbaijaniLocale:
         assert self.locale.describe("week", only_distance=False) == "bir həftə sonra"
         assert self.locale.describe("month", only_distance=True) == "bir ay"
         assert self.locale.describe("month", only_distance=False) == "bir ay sonra"
-        assert self.locale.describe("year", only_distance=True) == "bir ıl"
-        assert self.locale.describe("year", only_distance=False) == "bir ıl sonra"
+        assert self.locale.describe("year", only_distance=True) == "bir il"
+        assert self.locale.describe("year", only_distance=False) == "bir il sonra"
 
     def test_relative_mk(self):
         assert self.locale._format_relative("indi", "now", 0) == "indi"
         assert (
-            self.locale._format_relative("1 saniye", "seconds", 1) == "1 saniye sonra"
+            self.locale._format_relative("1 saniyə", "seconds", 1) == "1 saniyə sonra"
         )
         assert (
-            self.locale._format_relative("1 saniye", "seconds", -1) == "1 saniye əvvəl"
+            self.locale._format_relative("1 saniyə", "seconds", -1) == "1 saniyə əvvəl"
         )
         assert (
             self.locale._format_relative("1 dəqiqə", "minutes", 1) == "1 dəqiqə sonra"
@@ -817,13 +817,13 @@ class TestAzerbaijaniLocale:
         assert self.locale._format_relative("1 hafta", "weeks", -1) == "1 hafta əvvəl"
         assert self.locale._format_relative("1 ay", "months", 1) == "1 ay sonra"
         assert self.locale._format_relative("1 ay", "months", -1) == "1 ay əvvəl"
-        assert self.locale._format_relative("1 ıl", "years", 1) == "1 yıl sonra"
-        assert self.locale._format_relative("1 ıl", "years", -1) == "1 yıl əvvəl"
+        assert self.locale._format_relative("1 il", "years", 1) == "1 il sonra"
+        assert self.locale._format_relative("1 il", "years", -1) == "1 il əvvəl"
 
     def test_plurals_mk(self):
         assert self.locale._format_timeframe("now", 0) == "indi"
-        assert self.locale._format_timeframe("second", 1) == "bir saniye"
-        assert self.locale._format_timeframe("seconds", 30) == "30 saniye"
+        assert self.locale._format_timeframe("second", 1) == "bir saniyə"
+        assert self.locale._format_timeframe("seconds", 30) == "30 saniyə"
         assert self.locale._format_timeframe("minute", 1) == "bir dəqiqə"
         assert self.locale._format_timeframe("minutes", 40) == "40 dəqiqə"
         assert self.locale._format_timeframe("hour", 1) == "bir saat"
@@ -834,8 +834,8 @@ class TestAzerbaijaniLocale:
         assert self.locale._format_timeframe("weeks", 38) == "38 həftə"
         assert self.locale._format_timeframe("month", 1) == "bir ay"
         assert self.locale._format_timeframe("months", 11) == "11 ay"
-        assert self.locale._format_timeframe("year", 1) == "bir ıl"
-        assert self.locale._format_timeframe("years", 12) == "12 ıl"
+        assert self.locale._format_timeframe("year", 1) == "bir il"
+        assert self.locale._format_timeframe("years", 12) == "12 il"
 
 
 @pytest.mark.usefixtures("lang_locale")
