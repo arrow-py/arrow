@@ -2459,7 +2459,7 @@ class AzerbaijaniLocale(Locale):
         "weeks": "{0} həftə",
         "month": "bir ay",
         "months": "{0} ay",
-        "year": " bir il",
+        "year": "bir il",
         "years": "{0} il",
     }
 
