@@ -1940,6 +1940,24 @@ class TestArrowHumanize:
         assert self.now.humanize(later506, granularity="year") == "a year ago"
         assert later506.humanize(self.now, granularity="year") == "in a year"
 
+        assert self.now.humanize(later1, granularity="quarter") == "0 quarters ago"
+        assert later1.humanize(self.now, granularity="quarter") == "in 0 quarters"
+        later107 = self.now.shift(seconds=10 ** 7)
+        assert self.now.humanize(later107, granularity="quarter") == "a quarter ago"
+        assert later107.humanize(self.now, granularity="quarter") == "in a quarter"
+        later207 = self.now.shift(seconds=2 * 10 ** 7)
+        assert self.now.humanize(later207, granularity="quarter") == "2 quarters ago"
+        assert later207.humanize(self.now, granularity="quarter") == "in 2 quarters"
+        later307 = self.now.shift(seconds=3 * 10 ** 7)
+        assert self.now.humanize(later307, granularity="quarter") == "3 quarters ago"
+        assert later307.humanize(self.now, granularity="quarter") == "in 3 quarters"
+        later377 = self.now.shift(seconds=3.7 * 10 ** 7)
+        assert self.now.humanize(later377, granularity="quarter") == "4 quarters ago"
+        assert later377.humanize(self.now, granularity="quarter") == "in 4 quarters"
+        later407 = self.now.shift(seconds=4 * 10 ** 7)
+        assert self.now.humanize(later407, granularity="quarter") == "5 quarters ago"
+        assert later407.humanize(self.now, granularity="quarter") == "in 5 quarters"
+
         later108 = self.now.shift(seconds=10 ** 8)
         assert self.now.humanize(later108, granularity="year") == "3 years ago"
         assert later108.humanize(self.now, granularity="year") == "in 3 years"
