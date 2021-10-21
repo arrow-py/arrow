@@ -1,7 +1,7 @@
 dateparser==1.*
 pre-commit==2.*
 pytest==6.*
-pytest-cov==2.*
+pytest-cov==3.*
 pytest-mock==3.*
 python-dateutil>=2.7.0
 pytz==2021.1
