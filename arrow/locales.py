@@ -35,6 +35,8 @@ TimeFrameLiteral = Literal[
     "weeks",
     "month",
     "months",
+    "quarter",
+    "quarters",
     "year",
     "years",
 ]
@@ -98,6 +100,8 @@ class Locale:
         "weeks": "",
         "month": "",
         "months": "",
+        "quarter": "",
+        "quarters": "",
         "year": "",
         "years": "",
     }
@@ -314,6 +318,8 @@ class EnglishLocale(Locale):
         "weeks": "{0} weeks",
         "month": "a month",
         "months": "{0} months",
+        "quarter": "a quarter",
+        "quarters": "{0} quarters",
         "year": "a year",
         "years": "{0} years",
     }

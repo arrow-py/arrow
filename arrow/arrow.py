@@ -75,6 +75,7 @@ _GRANULARITY = Literal[
     "day",
     "week",
     "month",
+    "quarter",
     "year",
 ]
 
@@ -132,6 +133,7 @@ class Arrow:
     _SECS_PER_DAY: Final[int] = 60 * 60 * 24
     _SECS_PER_WEEK: Final[int] = 60 * 60 * 24 * 7
     _SECS_PER_MONTH: Final[float] = 60 * 60 * 24 * 30.5
+    _SECS_PER_QUARTER: Final[float] = 60 * 60 * 24 * 30.5 * 3
     _SECS_PER_YEAR: Final[int] = 60 * 60 * 24 * 365
 
     _SECS_MAP: Final[Mapping[TimeFrameLiteral, float]] = {
@@ -141,6 +143,7 @@ class Arrow:
         "day": _SECS_PER_DAY,
         "week": _SECS_PER_WEEK,
         "month": _SECS_PER_MONTH,
+        "quarter": _SECS_PER_QUARTER,
         "year": _SECS_PER_YEAR,
     }
 
@@ -1245,12 +1248,14 @@ class Arrow:
                     delta = sign * delta_second / self._SECS_PER_WEEK
                 elif granularity == "month":
                     delta = sign * delta_second / self._SECS_PER_MONTH
+                elif granularity == "quarter":
+                    delta = sign * delta_second / self._SECS_PER_QUARTER
                 elif granularity == "year":
                     delta = sign * delta_second / self._SECS_PER_YEAR
                 else:
                     raise ValueError(
                         "Invalid level of granularity. "
-                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
                     )
 
                 if trunc(abs(delta)) != 1:
@@ -1275,6 +1280,7 @@ class Arrow:
                 delta = float(delta_second)
                 frames: Tuple[TimeFrameLiteral, ...] = (
                     "year",
+                    "quarter",
                     "month",
                     "week",
                     "day",
@@ -1288,7 +1294,7 @@ class Arrow:
                 if len(timeframes) < len(granularity):
                     raise ValueError(
                         "Invalid level of granularity. "
-                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month' or 'year'."
+                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
                     )
 
                 return locale.describe_multi(timeframes, only_distance=only_distance)
