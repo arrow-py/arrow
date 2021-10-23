@@ -23,7 +23,7 @@ Changelog
 
 - [NEW] Added Sinhala and Urdu locales.
 - [NEW] Added official support for Python 3.10.
-- [CHANGED] Updated Azerbaijani, Hewbrew, and Serbian locales and added tests.
+- [CHANGED] Updated Azerbaijani, Hebrew, and Serbian locales and added tests.
 
 1.2.0 (2021-09-12)
 ------------------
