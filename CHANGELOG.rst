@@ -1,6 +1,30 @@
 Changelog
 =========
 
+1.2.1 (2021-10-24)
+------------------
+
+- [NEW] Added quarter granularity to humanize, for example:
+
+.. code-block:: python
+
+    >>> import arrow
+    >>> now = arrow.now()
+    >>> shifted = now.shift(months=4)
+    >>> now.humanize(shifted, granularity="quarter")
+    'a quarter ago'
+    >>> shifted.humanize(now, granularity="quarter")
+    'in a quarter'
+    >>> shifted = now.shift(months=13)
+    >>> shifted.humanize(now, granularity="quarter")
+    'in 4 quarters'
+    >>> now.humanize(shifted, granularity="quarter")
+    '4 quarters ago'
+
+- [NEW] Added Sinhala and Urdu locales.
+- [NEW] Added official support for Python 3.10.
+- [CHANGED] Updated Azerbaijani, Hewbrew, and Serbian locales and added tests.
+
 1.2.0 (2021-09-12)
 ------------------
 
