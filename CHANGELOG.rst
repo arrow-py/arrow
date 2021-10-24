@@ -10,15 +10,15 @@ Changelog
 
     >>> import arrow
     >>> now = arrow.now()
-    >>> shifted = now.shift(months=4)
-    >>> now.humanize(shifted, granularity="quarter")
+    >>> four_month_shift = now.shift(months=4)
+    >>> now.humanize(four_month_shift, granularity="quarter")
     'a quarter ago'
-    >>> shifted.humanize(now, granularity="quarter")
+    >>> four_month_shift.humanize(now, granularity="quarter")
     'in a quarter'
-    >>> shifted = now.shift(months=13)
-    >>> shifted.humanize(now, granularity="quarter")
+    >>> thirteen_month_shift = now.shift(months=13)
+    >>> thirteen_month_shift.humanize(now, granularity="quarter")
     'in 4 quarters'
-    >>> now.humanize(shifted, granularity="quarter")
+    >>> now.humanize(thirteen_month_shift, granularity="quarter")
     '4 quarters ago'
 
 - [NEW] Added Sinhala and Urdu locales.
