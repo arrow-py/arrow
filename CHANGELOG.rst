@@ -1,6 +1,31 @@
 Changelog
 =========
 
+1.2.1 (2021-10-24)
+------------------
+
+- [NEW] Added quarter granularity to humanize, for example:
+
+.. code-block:: python
+
+    >>> import arrow
+    >>> now = arrow.now()
+    >>> four_month_shift = now.shift(months=4)
+    >>> now.humanize(four_month_shift, granularity="quarter")
+    'a quarter ago'
+    >>> four_month_shift.humanize(now, granularity="quarter")
+    'in a quarter'
+    >>> thirteen_month_shift = now.shift(months=13)
+    >>> thirteen_month_shift.humanize(now, granularity="quarter")
+    'in 4 quarters'
+    >>> now.humanize(thirteen_month_shift, granularity="quarter")
+    '4 quarters ago'
+
+- [NEW] Added Sinhala and Urdu locales.
+- [NEW] Added official support for Python 3.10.
+- [CHANGED] Updated Azerbaijani, Hebrew, and Serbian locales and added tests.
+- [CHANGED] Passing an empty granularity list to ``humanize`` now raises a ``ValueError``.
+
 1.2.0 (2021-09-12)
 ------------------
 
