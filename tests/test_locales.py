@@ -1674,7 +1674,7 @@ class TestChineseTWLocale:
 class TestChineseCNLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("now", 0) == "刚才"
-        assert self.locale._format_timeframe("second", 1) == "一秒"
+        assert self.locale._format_timeframe("second", 1) == "1秒"
         assert self.locale._format_timeframe("seconds", 30) == "30秒"
         assert self.locale._format_timeframe("minute", 1) == "1分钟"
         assert self.locale._format_timeframe("minutes", 40) == "40分钟"
@@ -1682,7 +1682,7 @@ class TestChineseCNLocale:
         assert self.locale._format_timeframe("hours", 23) == "23小时"
         assert self.locale._format_timeframe("day", 1) == "1天"
         assert self.locale._format_timeframe("days", 12) == "12天"
-        assert self.locale._format_timeframe("week", 1) == "一周"
+        assert self.locale._format_timeframe("week", 1) == "1周"
         assert self.locale._format_timeframe("weeks", 38) == "38周"
         assert self.locale._format_timeframe("month", 1) == "1个月"
         assert self.locale._format_timeframe("months", 11) == "11个月"
