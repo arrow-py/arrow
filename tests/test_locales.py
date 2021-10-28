@@ -1082,6 +1082,9 @@ class TestIndonesianLocale:
         assert self.locale._format_timeframe("days", 3) == "3 hari"
         assert self.locale._format_timeframe("years", 5) == "5 tahun"
 
+        assert self.locale._format_timeframe("weeks", 2) == "2 minggu"
+        assert self.locale._format_timeframe("quarters", 3) == "3 kuartal"
+
     def test_format_relative_now(self):
         assert self.locale._format_relative("baru saja", "now", 0) == "baru saja"
 

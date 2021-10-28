@@ -4229,8 +4229,12 @@ class IndonesianLocale(Locale):
         "hours": "{0} jam",
         "day": "1 hari",
         "days": "{0} hari",
+        "week": "1 minggu",
+        "weeks": "{0} minggu",
         "month": "1 bulan",
         "months": "{0} bulan",
+        "quarter": "1 kuartal",
+        "quarters": "{0} kuartal",
         "year": "1 tahun",
         "years": "{0} tahun",
     }
