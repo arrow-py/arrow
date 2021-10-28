@@ -1,4 +1,5 @@
 dateparser==1.*
+flake8-annotations==2.*
 pre-commit==2.*
 pytest==6.*
 pytest-cov==3.*
