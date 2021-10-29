@@ -1487,8 +1487,12 @@ class RussianLocale(SlavicBaseLocale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сейчас",
-        "second": "Второй",
-        "seconds": "{0} несколько секунд",
+        "second": "секунда",
+        "seconds": {
+            "singular": "{0} секунду",
+            "dual": "{0} секунды",
+            "plural": "{0} секунд",
+        },
         "minute": "минуту",
         "minutes": {
             "singular": "{0} минуту",
