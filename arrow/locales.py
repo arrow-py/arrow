@@ -35,13 +35,10 @@ TimeFrameLiteral = Literal[
     "weeks",
     "month",
     "months",
+    "quarter",
+    "quarters",
     "year",
     "years",
-    "2-hours",
-    "2-days",
-    "2-weeks",
-    "2-months",
-    "2-years",
 ]
 
 _TimeFrameElements = Union[
@@ -103,6 +100,8 @@ class Locale:
         "weeks": "",
         "month": "",
         "months": "",
+        "quarter": "",
+        "quarters": "",
         "year": "",
         "years": "",
     }
@@ -329,6 +328,8 @@ class EnglishLocale(Locale):
         "weeks": "{0} weeks",
         "month": "a month",
         "months": "{0} months",
+        "quarter": "a quarter",
+        "quarters": "{0} quarters",
         "year": "a year",
         "years": "{0} years",
     }
@@ -681,6 +682,8 @@ class GreekLocale(Locale):
         "hours": "{0} ώρες",
         "day": "μία μέρα",
         "days": "{0} μέρες",
+        "week": "μία εβδομάδα",
+        "weeks": "{0} εβδομάδες",
         "month": "ένα μήνα",
         "months": "{0} μήνες",
         "year": "ένα χρόνο",
@@ -872,20 +875,20 @@ class FinnishLocale(Locale):
     past = "{0} sitten"
     future = "{0} kuluttua"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, List[str]]] = {
-        "now": ["juuri nyt", "juuri nyt"],
-        "second": ["sekunti", "sekunti"],
-        "seconds": ["{0} muutama sekunti", "{0} muutaman sekunnin"],
-        "minute": ["minuutti", "minuutin"],
-        "minutes": ["{0} minuuttia", "{0} minuutin"],
-        "hour": ["tunti", "tunnin"],
-        "hours": ["{0} tuntia", "{0} tunnin"],
-        "day": ["päivä", "päivä"],
-        "days": ["{0} päivää", "{0} päivän"],
-        "month": ["kuukausi", "kuukauden"],
-        "months": ["{0} kuukautta", "{0} kuukauden"],
-        "year": ["vuosi", "vuoden"],
-        "years": ["{0} vuotta", "{0} vuoden"],
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "juuri nyt",
+        "second": "sekunti",
+        "seconds": {"past": "{0} muutama sekunti", "future": "{0} muutaman sekunnin"},
+        "minute": {"past": "minuutti", "future": "minuutin"},
+        "minutes": {"past": "{0} minuuttia", "future": "{0} minuutin"},
+        "hour": {"past": "tunti", "future": "tunnin"},
+        "hours": {"past": "{0} tuntia", "future": "{0} tunnin"},
+        "day": "päivä",
+        "days": {"past": "{0} päivää", "future": "{0} päivän"},
+        "month": {"past": "kuukausi", "future": "kuukauden"},
+        "months": {"past": "{0} kuukautta", "future": "{0} kuukauden"},
+        "year": {"past": "vuosi", "future": "vuoden"},
+        "years": {"past": "{0} vuotta", "future": "{0} vuoden"},
     }
 
     # Months and days are lowercase in Finnish
@@ -934,26 +937,16 @@ class FinnishLocale(Locale):
 
     day_abbreviations = ["", "ma", "ti", "ke", "to", "pe", "la", "su"]
 
-    # TODO: Fix return type
-    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> Tuple[str, str]:  # type: ignore
-        return (
-            self.timeframes[timeframe][0].format(abs(delta)),
-            self.timeframes[timeframe][1].format(abs(delta)),
-        )
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        form = self.timeframes[timeframe]
 
-    def _format_relative(
-        self,
-        humanized: str,
-        timeframe: TimeFrameLiteral,
-        delta: Union[float, int],
-    ) -> str:
-        if timeframe == "now":
-            return humanized[0]
+        if isinstance(form, Mapping):
+            if delta < 0:
+                form = form["past"]
+            else:
+                form = form["future"]
 
-        direction = self.past if delta < 0 else self.future
-        which = 0 if delta < 0 else 1
-
-        return direction.format(humanized[which])
+        return form.format(abs(delta))
 
     def _ordinal_number(self, n: int) -> str:
         return f"{n}."
@@ -1504,8 +1497,12 @@ class RussianLocale(SlavicBaseLocale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сейчас",
-        "second": "Второй",
-        "seconds": "{0} несколько секунд",
+        "second": "секунда",
+        "seconds": {
+            "singular": "{0} секунду",
+            "dual": "{0} секунды",
+            "plural": "{0} секунд",
+        },
         "minute": "минуту",
         "minutes": {
             "singular": "{0} минуту",
@@ -2470,7 +2467,7 @@ class AzerbaijaniLocale(Locale):
 
     timeframes = {
         "now": "indi",
-        "second": "saniyə",
+        "second": "bir saniyə",
         "seconds": "{0} saniyə",
         "minute": "bir dəqiqə",
         "minutes": "{0} dəqiqə",
@@ -2478,9 +2475,11 @@ class AzerbaijaniLocale(Locale):
         "hours": "{0} saat",
         "day": "bir gün",
         "days": "{0} gün",
+        "week": "bir həftə",
+        "weeks": "{0} həftə",
         "month": "bir ay",
         "months": "{0} ay",
-        "year": "il",
+        "year": "bir il",
         "years": "{0} il",
     }
 
@@ -2556,17 +2555,17 @@ class ArabicLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "الآن",
         "second": "ثانية",
-        "seconds": {"double": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
+        "seconds": {"2": "ثانيتين", "ten": "{0} ثوان", "higher": "{0} ثانية"},
         "minute": "دقيقة",
-        "minutes": {"double": "دقيقتين", "ten": "{0} دقائق", "higher": "{0} دقيقة"},
+        "minutes": {"2": "دقيقتين", "ten": "{0} دقائق", "higher": "{0} دقيقة"},
         "hour": "ساعة",
-        "hours": {"double": "ساعتين", "ten": "{0} ساعات", "higher": "{0} ساعة"},
+        "hours": {"2": "ساعتين", "ten": "{0} ساعات", "higher": "{0} ساعة"},
         "day": "يوم",
-        "days": {"double": "يومين", "ten": "{0} أيام", "higher": "{0} يوم"},
+        "days": {"2": "يومين", "ten": "{0} أيام", "higher": "{0} يوم"},
         "month": "شهر",
-        "months": {"double": "شهرين", "ten": "{0} أشهر", "higher": "{0} شهر"},
+        "months": {"2": "شهرين", "ten": "{0} أشهر", "higher": "{0} شهر"},
         "year": "سنة",
-        "years": {"double": "سنتين", "ten": "{0} سنوات", "higher": "{0} سنة"},
+        "years": {"2": "سنتين", "ten": "{0} سنوات", "higher": "{0} سنة"},
     }
 
     month_names = [
@@ -2617,7 +2616,7 @@ class ArabicLocale(Locale):
         delta = abs(delta)
         if isinstance(form, Mapping):
             if delta == 2:
-                form = form["double"]
+                form = form["2"]
             elif 2 < delta <= 10:
                 form = form["ten"]
             else:
@@ -2765,33 +2764,40 @@ class MoroccoArabicLocale(ArabicLocale):
 class IcelandicLocale(Locale):
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
-        if delta < 0:
-            form = form[0]
-        elif delta > 0:
-            form = form[1]
-            # FIXME: handle when delta is 0
 
-        return form.format(abs(delta))  # type: ignore
+        if isinstance(form, Mapping):
+            if delta < 0:
+                form = form["past"]
+            elif delta > 0:
+                form = form["future"]
+            else:
+                raise ValueError(
+                    "Icelandic Locale does not support units with a delta of zero. "
+                    "Please consider making a contribution to fix this issue."
+                )
+                # FIXME: handle when delta is 0
+
+        return form.format(abs(delta))
 
     names = ["is", "is-is"]
 
     past = "fyrir {0} síðan"
     future = "eftir {0}"
 
-    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Tuple[str, str], str]]] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "rétt í þessu",
-        "second": ("sekúndu", "sekúndu"),
-        "seconds": ("{0} nokkrum sekúndum", "nokkrar sekúndur"),
-        "minute": ("einni mínútu", "eina mínútu"),
-        "minutes": ("{0} mínútum", "{0} mínútur"),
-        "hour": ("einum tíma", "einn tíma"),
-        "hours": ("{0} tímum", "{0} tíma"),
-        "day": ("einum degi", "einn dag"),
-        "days": ("{0} dögum", "{0} daga"),
-        "month": ("einum mánuði", "einn mánuð"),
-        "months": ("{0} mánuðum", "{0} mánuði"),
-        "year": ("einu ári", "eitt ár"),
-        "years": ("{0} árum", "{0} ár"),
+        "second": {"past": "sekúndu", "future": "sekúndu"},
+        "seconds": {"past": "{0} nokkrum sekúndum", "future": "nokkrar sekúndur"},
+        "minute": {"past": "einni mínútu", "future": "eina mínútu"},
+        "minutes": {"past": "{0} mínútum", "future": "{0} mínútur"},
+        "hour": {"past": "einum tíma", "future": "einn tíma"},
+        "hours": {"past": "{0} tímum", "future": "{0} tíma"},
+        "day": {"past": "einum degi", "future": "einn dag"},
+        "days": {"past": "{0} dögum", "future": "{0} daga"},
+        "month": {"past": "einum mánuði", "future": "einn mánuð"},
+        "months": {"past": "{0} mánuðum", "future": "{0} mánuði"},
+        "year": {"past": "einu ári", "future": "eitt ár"},
+        "years": {"past": "{0} árum", "future": "{0} ár"},
     }
 
     meridians = {"am": "f.h.", "pm": "e.h.", "AM": "f.h.", "PM": "e.h."}
@@ -3054,24 +3060,50 @@ class HindiLocale(Locale):
 class CzechLocale(Locale):
     names = ["cs", "cs-cz"]
 
-    timeframes: ClassVar[
-        Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
-    ] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "Teď",
         "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
-        "seconds": {"past": "{0} sekundami", "future": ["{0} sekundy", "{0} sekund"]},
+        "seconds": {
+            "past": "{0} sekundami",
+            "future-singular": "{0} sekundy",
+            "future-paucal": "{0} sekund",
+        },
         "minute": {"past": "minutou", "future": "minutu", "zero": "{0} minut"},
-        "minutes": {"past": "{0} minutami", "future": ["{0} minuty", "{0} minut"]},
+        "minutes": {
+            "past": "{0} minutami",
+            "future-singular": "{0} minuty",
+            "future-paucal": "{0} minut",
+        },
         "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodin"},
-        "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodin"]},
+        "hours": {
+            "past": "{0} hodinami",
+            "future-singular": "{0} hodiny",
+            "future-paucal": "{0} hodin",
+        },
         "day": {"past": "dnem", "future": "den", "zero": "{0} dnů"},
-        "days": {"past": "{0} dny", "future": ["{0} dny", "{0} dnů"]},
+        "days": {
+            "past": "{0} dny",
+            "future-singular": "{0} dny",
+            "future-paucal": "{0} dnů",
+        },
         "week": {"past": "týdnem", "future": "týden", "zero": "{0} týdnů"},
-        "weeks": {"past": "{0} týdny", "future": ["{0} týdny", "{0} týdnů"]},
+        "weeks": {
+            "past": "{0} týdny",
+            "future-singular": "{0} týdny",
+            "future-paucal": "{0} týdnů",
+        },
         "month": {"past": "měsícem", "future": "měsíc", "zero": "{0} měsíců"},
-        "months": {"past": "{0} měsíci", "future": ["{0} měsíce", "{0} měsíců"]},
+        "months": {
+            "past": "{0} měsíci",
+            "future-singular": "{0} měsíce",
+            "future-paucal": "{0} měsíců",
+        },
         "year": {"past": "rokem", "future": "rok", "zero": "{0} let"},
-        "years": {"past": "{0} lety", "future": ["{0} roky", "{0} let"]},
+        "years": {
+            "past": "{0} lety",
+            "future-singular": "{0} roky",
+            "future-paucal": "{0} let",
+        },
     }
 
     past = "Před {0}"
@@ -3131,44 +3163,70 @@ class CzechLocale(Locale):
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
-        elif delta > 0:
-            key = "future"
-        else:
+        elif delta < 0:
             key = "past"
-        form: Union[List[str], str] = form[key]
-
-        if isinstance(form, list):
-            if 2 <= abs_delta % 10 <= 4 and (
+        else:
+            # Needed since both regular future and future-singular and future-paucal cases
+            if "future-singular" not in form:
+                key = "future"
+            elif 2 <= abs_delta % 10 <= 4 and (
                 abs_delta % 100 < 10 or abs_delta % 100 >= 20
             ):
-                form = form[0]
+                key = "future-singular"
             else:
-                form = form[1]
+                key = "future-paucal"
 
+        form: str = form[key]
         return form.format(abs_delta)
 
 
 class SlovakLocale(Locale):
     names = ["sk", "sk-sk"]
 
-    timeframes: ClassVar[
-        Mapping[TimeFrameLiteral, Union[Mapping[str, Union[List[str], str]], str]]
-    ] = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "Teraz",
         "second": {"past": "sekundou", "future": "sekundu", "zero": "{0} sekúnd"},
-        "seconds": {"past": "{0} sekundami", "future": ["{0} sekundy", "{0} sekúnd"]},
+        "seconds": {
+            "past": "{0} sekundami",
+            "future-singular": "{0} sekundy",
+            "future-paucal": "{0} sekúnd",
+        },
         "minute": {"past": "minútou", "future": "minútu", "zero": "{0} minút"},
-        "minutes": {"past": "{0} minútami", "future": ["{0} minúty", "{0} minút"]},
+        "minutes": {
+            "past": "{0} minútami",
+            "future-singular": "{0} minúty",
+            "future-paucal": "{0} minút",
+        },
         "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodín"},
-        "hours": {"past": "{0} hodinami", "future": ["{0} hodiny", "{0} hodín"]},
+        "hours": {
+            "past": "{0} hodinami",
+            "future-singular": "{0} hodiny",
+            "future-paucal": "{0} hodín",
+        },
         "day": {"past": "dňom", "future": "deň", "zero": "{0} dní"},
-        "days": {"past": "{0} dňami", "future": ["{0} dni", "{0} dní"]},
+        "days": {
+            "past": "{0} dňami",
+            "future-singular": "{0} dni",
+            "future-paucal": "{0} dní",
+        },
         "week": {"past": "týždňom", "future": "týždeň", "zero": "{0} týždňov"},
-        "weeks": {"past": "{0} týždňami", "future": ["{0} týždne", "{0} týždňov"]},
+        "weeks": {
+            "past": "{0} týždňami",
+            "future-singular": "{0} týždne",
+            "future-paucal": "{0} týždňov",
+        },
         "month": {"past": "mesiacom", "future": "mesiac", "zero": "{0} mesiacov"},
-        "months": {"past": "{0} mesiacmi", "future": ["{0} mesiace", "{0} mesiacov"]},
+        "months": {
+            "past": "{0} mesiacmi",
+            "future-singular": "{0} mesiace",
+            "future-paucal": "{0} mesiacov",
+        },
         "year": {"past": "rokom", "future": "rok", "zero": "{0} rokov"},
-        "years": {"past": "{0} rokmi", "future": ["{0} roky", "{0} rokov"]},
+        "years": {
+            "past": "{0} rokmi",
+            "future-singular": "{0} roky",
+            "future-paucal": "{0} rokov",
+        },
     }
 
     past = "Pred {0}"
@@ -3229,20 +3287,19 @@ class SlovakLocale(Locale):
 
         if delta == 0:
             key = "zero"  # And *never* use 0 in the singular!
-        elif delta > 0:
-            key = "future"
-        else:
+        elif delta < 0:
             key = "past"
-        form: Union[List[str], str] = form[key]
-
-        if isinstance(form, list):
-            if 2 <= abs_delta % 10 <= 4 and (
+        else:
+            if "future-singular" not in form:
+                key = "future"
+            elif 2 <= abs_delta % 10 <= 4 and (
                 abs_delta % 100 < 10 or abs_delta % 100 >= 20
             ):
-                form = form[0]
+                key = "future-singular"
             else:
-                form = form[1]
+                key = "future-paucal"
 
+        form: str = form[key]
         return form.format(abs_delta)
 
 
@@ -3328,27 +3385,22 @@ class HebrewLocale(Locale):
     future = "בעוד {0}"
     and_word = "ו"
 
-    timeframes = {
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "הרגע",
         "second": "שנייה",
         "seconds": "{0} שניות",
         "minute": "דקה",
         "minutes": "{0} דקות",
         "hour": "שעה",
-        "hours": "{0} שעות",
-        "2-hours": "שעתיים",
+        "hours": {"2": "שעתיים", "ten": "{0} שעות", "higher": "{0} שעות"},
         "day": "יום",
-        "days": "{0} ימים",
-        "2-days": "יומיים",
+        "days": {"2": "יומיים", "ten": "{0} ימים", "higher": "{0} יום"},
         "week": "שבוע",
-        "weeks": "{0} שבועות",
-        "2-weeks": "שבועיים",
+        "weeks": {"2": "שבועיים", "ten": "{0} שבועות", "higher": "{0} שבועות"},
         "month": "חודש",
-        "months": "{0} חודשים",
-        "2-months": "חודשיים",
+        "months": {"2": "חודשיים", "ten": "{0} חודשים", "higher": "{0} חודשים"},
         "year": "שנה",
-        "years": "{0} שנים",
-        "2-years": "שנתיים",
+        "years": {"2": "שנתיים", "ten": "{0} שנים", "higher": "{0} שנה"},
     }
 
     meridians = {
@@ -3393,17 +3445,17 @@ class HebrewLocale(Locale):
     day_abbreviations = ["", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳", "א׳"]
 
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
-        """Hebrew couple of <timeframe> aware"""
-        couple = f"2-{timeframe}"
-        single = timeframe.rstrip("s")
-        if abs(delta) == 2 and couple in self.timeframes:
-            key = couple
-        elif abs(delta) == 1 and single in self.timeframes:
-            key = single
-        else:
-            key = timeframe
+        form = self.timeframes[timeframe]
+        delta = abs(delta)
+        if isinstance(form, Mapping):
+            if delta == 2:
+                form = form["2"]
+            elif delta == 0 or 2 < delta <= 10:
+                form = form["ten"]
+            else:
+                form = form["higher"]
 
-        return self.timeframes[key].format(abs(delta))
+        return form.format(delta)
 
     def describe_multi(
         self,
@@ -5188,13 +5240,13 @@ class SerbianLocale(Locale):
 
     month_names = [
         "",
-        "januar",  # Јануар
+        "januar",  # јануар
         "februar",  # фебруар
         "mart",  # март
         "april",  # април
         "maj",  # мај
-        "juni",  # јун
-        "juli",  # јул
+        "jun",  # јун
+        "jul",  # јул
         "avgust",  # август
         "septembar",  # септембар
         "oktobar",  # октобар
@@ -5204,18 +5256,18 @@ class SerbianLocale(Locale):
 
     month_abbreviations = [
         "",
-        "jan.",
-        "febr.",
-        "mart",
-        "april",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
         "maj",
-        "juni",
-        "juli",
-        "avg.",
-        "sept.",
-        "okt.",
-        "nov.",
-        "dec.",
+        "jun",
+        "jul",
+        "avg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
     ]
 
     day_names = [
@@ -5538,3 +5590,329 @@ class TamilLocale(Locale):
             return f"{n}ஆம்"
         else:
             return ""
+
+
+class AlbanianLocale(Locale):
+
+    names = ["sq", "sq-al"]
+
+    past = "{0} më parë"
+    future = "në {0}"
+    and_word = "dhe"
+
+    timeframes = {
+        "now": "tani",
+        "second": "sekondë",
+        "seconds": "{0} sekonda",
+        "minute": "minutë",
+        "minutes": "{0} minuta",
+        "hour": "orë",
+        "hours": "{0} orë",
+        "day": "ditë",
+        "days": "{0} ditë",
+        "week": "javë",
+        "weeks": "{0} javë",
+        "month": "muaj",
+        "months": "{0} muaj",
+        "year": "vit",
+        "years": "{0} vjet",
+    }
+
+    month_names = [
+        "",
+        "janar",
+        "shkurt",
+        "mars",
+        "prill",
+        "maj",
+        "qershor",
+        "korrik",
+        "gusht",
+        "shtator",
+        "tetor",
+        "nëntor",
+        "dhjetor",
+    ]
+
+    month_abbreviations = [
+        "",
+        "jan",
+        "shk",
+        "mar",
+        "pri",
+        "maj",
+        "qer",
+        "korr",
+        "gush",
+        "sht",
+        "tet",
+        "nën",
+        "dhj",
+    ]
+
+    day_names = [
+        "",
+        "e hënë",
+        "e martë",
+        "e mërkurë",
+        "e enjte",
+        "e premte",
+        "e shtunë",
+        "e diel",
+    ]
+
+    day_abbreviations = [
+        "",
+        "hën",
+        "mar",
+        "mër",
+        "enj",
+        "pre",
+        "sht",
+        "die",
+    ]
+
+
+class SinhalaLocale(Locale):
+
+    names = ["si", "si-lk"]
+
+    past = "{0}ට පෙර"
+    future = "{0}"
+    and_word = "සහ"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Mapping[str, str], str]]] = {
+        "now": "දැන්",
+        "second": {
+            "past": "තත්පරයක",
+            "future": "තත්පරයකින්",
+        },  # ක් is the article
+        "seconds": {
+            "past": "තත්පර {0} ක",
+            "future": "තත්පර {0} කින්",
+        },
+        "minute": {
+            "past": "විනාඩියක",
+            "future": "විනාඩියකින්",
+        },
+        "minutes": {
+            "past": "විනාඩි {0} ක",
+            "future": "මිනිත්තු {0} කින්",
+        },
+        "hour": {"past": "පැයක", "future": "පැයකින්"},
+        "hours": {
+            "past": "පැය {0} ක",
+            "future": "පැය {0} කින්",
+        },
+        "day": {"past": "දිනක", "future": "දිනකට"},
+        "days": {
+            "past": "දින {0} ක",
+            "future": "දින {0} කින්",
+        },
+        "week": {"past": "සතියක", "future": "සතියකින්"},
+        "weeks": {
+            "past": "සති {0} ක",
+            "future": "සති {0} කින්",
+        },
+        "month": {"past": "මාසයක", "future": "එය මාසය තුළ"},
+        "months": {
+            "past": "මාස {0} ක",
+            "future": "මාස {0} කින්",
+        },
+        "year": {"past": "වසරක", "future": "වසරක් තුළ"},
+        "years": {
+            "past": "අවුරුදු {0} ක",
+            "future": "අවුරුදු {0} තුළ",
+        },
+    }
+    # Sinhala: the general format to describe timeframe is different from past and future,
+    # so we do not copy the original timeframes dictionary
+    timeframes_only_distance = dict()
+    timeframes_only_distance["second"] = "තත්පරයක්"
+    timeframes_only_distance["seconds"] = "තත්පර {0}"
+    timeframes_only_distance["minute"] = "මිනිත්තුවක්"
+    timeframes_only_distance["minutes"] = "විනාඩි {0}"
+    timeframes_only_distance["hour"] = "පැයක්"
+    timeframes_only_distance["hours"] = "පැය {0}"
+    timeframes_only_distance["day"] = "දවසක්"
+    timeframes_only_distance["days"] = "දවස් {0}"
+    timeframes_only_distance["week"] = "සතියක්"
+    timeframes_only_distance["weeks"] = "සති {0}"
+    timeframes_only_distance["month"] = "මාසයක්"
+    timeframes_only_distance["months"] = "මාස {0}"
+    timeframes_only_distance["year"] = "අවුරුද්දක්"
+    timeframes_only_distance["years"] = "අවුරුදු {0}"
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        """
+        Sinhala awares time frame format function, takes into account
+        the differences between general, past, and future forms (three different suffixes).
+        """
+        abs_delta = abs(delta)
+        form = self.timeframes[timeframe]
+
+        if isinstance(form, str):
+            return form.format(abs_delta)
+
+        if delta > 0:
+            key = "future"
+        else:
+            key = "past"
+        form = form[key]
+
+        return form.format(abs_delta)
+
+    def describe(
+        self,
+        timeframe: TimeFrameLiteral,
+        delta: Union[float, int] = 1,  # key is always future when only_distance=False
+        only_distance: bool = False,
+    ) -> str:
+        """Describes a delta within a timeframe in plain language.
+
+        :param timeframe: a string representing a timeframe.
+        :param delta: a quantity representing a delta in a timeframe.
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        """
+
+        if not only_distance:
+            return super().describe(timeframe, delta, only_distance)
+        # Sinhala uses a different case without 'in' or 'ago'
+        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+
+        return humanized
+
+    month_names = [
+        "",
+        "ජනවාරි",
+        "පෙබරවාරි",
+        "මාර්තු",
+        "අප්‍රේල්",
+        "මැයි",
+        "ජූනි",
+        "ජූලි",
+        "අගෝස්තු",
+        "සැප්තැම්බර්",
+        "ඔක්තෝබර්",
+        "නොවැම්බර්",
+        "දෙසැම්බර්",
+    ]
+
+    month_abbreviations = [
+        "",
+        "ජන",
+        "පෙබ",
+        "මාර්",
+        "අප්‍රේ",
+        "මැයි",
+        "ජුනි",
+        "ජූලි",
+        "අගෝ",
+        "සැප්",
+        "ඔක්",
+        "නොවැ",
+        "දෙසැ",
+    ]
+
+    day_names = [
+        "",
+        "සදුදා",
+        "අඟහරැවදා",
+        "බදාදා",
+        "බ්‍රහස්‍පතින්‍දා",
+        "සිකුරාදා",
+        "සෙනසුරාදා",
+        "ඉරිදා",
+    ]
+
+    day_abbreviations = [
+        "",
+        "සදුද",
+        "බදා",
+        "බදා",
+        "සිකු",
+        "සෙන",
+        "අ",
+        "ඉරිදා",
+    ]
+
+
+class UrduLocale(Locale):
+
+    names = ["ur", "ur-pk"]
+
+    past = "پہلے {0}"
+    future = "میں {0}"
+    and_word = "اور"
+
+    timeframes = {
+        "now": "ابھی",
+        "second": "ایک سیکنڈ",
+        "seconds": "{0} سیکنڈ",
+        "minute": "ایک منٹ",
+        "minutes": "{0} منٹ",
+        "hour": "ایک گھنٹے",
+        "hours": "{0} گھنٹے",
+        "day": "ایک دن",
+        "days": "{0} دن",
+        "week": "ایک ہفتے",
+        "weeks": "{0} ہفتے",
+        "month": "ایک مہینہ",
+        "months": "{0} ماہ",
+        "year": "ایک سال",
+        "years": "{0} سال",
+    }
+
+    month_names = [
+        "",
+        "جنوری",
+        "فروری",
+        "مارچ",
+        "اپریل",
+        "مئی",
+        "جون",
+        "جولائی",
+        "اگست",
+        "ستمبر",
+        "اکتوبر",
+        "نومبر",
+        "دسمبر",
+    ]
+
+    month_abbreviations = [
+        "",
+        "جنوری",
+        "فروری",
+        "مارچ",
+        "اپریل",
+        "مئی",
+        "جون",
+        "جولائی",
+        "اگست",
+        "ستمبر",
+        "اکتوبر",
+        "نومبر",
+        "دسمبر",
+    ]
+
+    day_names = [
+        "",
+        "سوموار",
+        "منگل",
+        "بدھ",
+        "جمعرات",
+        "جمعہ",
+        "ہفتہ",
+        "اتوار",
+    ]
+
+    day_abbreviations = [
+        "",
+        "سوموار",
+        "منگل",
+        "بدھ",
+        "جمعرات",
+        "جمعہ",
+        "ہفتہ",
+        "اتوار",
+    ]

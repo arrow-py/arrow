@@ -1935,8 +1935,28 @@ class TestArrowHumanize:
         assert later506.humanize(self.now, granularity="week") == "in 82 weeks"
         assert self.now.humanize(later506, granularity="month") == "18 months ago"
         assert later506.humanize(self.now, granularity="month") == "in 18 months"
+        assert self.now.humanize(later506, granularity="quarter") == "6 quarters ago"
+        assert later506.humanize(self.now, granularity="quarter") == "in 6 quarters"
         assert self.now.humanize(later506, granularity="year") == "a year ago"
         assert later506.humanize(self.now, granularity="year") == "in a year"
+
+        assert self.now.humanize(later1, granularity="quarter") == "0 quarters ago"
+        assert later1.humanize(self.now, granularity="quarter") == "in 0 quarters"
+        later107 = self.now.shift(seconds=10 ** 7)
+        assert self.now.humanize(later107, granularity="quarter") == "a quarter ago"
+        assert later107.humanize(self.now, granularity="quarter") == "in a quarter"
+        later207 = self.now.shift(seconds=2 * 10 ** 7)
+        assert self.now.humanize(later207, granularity="quarter") == "2 quarters ago"
+        assert later207.humanize(self.now, granularity="quarter") == "in 2 quarters"
+        later307 = self.now.shift(seconds=3 * 10 ** 7)
+        assert self.now.humanize(later307, granularity="quarter") == "3 quarters ago"
+        assert later307.humanize(self.now, granularity="quarter") == "in 3 quarters"
+        later377 = self.now.shift(seconds=3.7 * 10 ** 7)
+        assert self.now.humanize(later377, granularity="quarter") == "4 quarters ago"
+        assert later377.humanize(self.now, granularity="quarter") == "in 4 quarters"
+        later407 = self.now.shift(seconds=4 * 10 ** 7)
+        assert self.now.humanize(later407, granularity="quarter") == "5 quarters ago"
+        assert later407.humanize(self.now, granularity="quarter") == "in 5 quarters"
 
         later108 = self.now.shift(seconds=10 ** 8)
         assert self.now.humanize(later108, granularity="year") == "3 years ago"
@@ -2266,6 +2286,13 @@ class TestArrowHumanize:
         with pytest.raises(ValueError):
             arw.humanize(later, granularity="week")
 
+    def test_empty_granularity_list(self):
+        arw = arrow.Arrow(2013, 1, 1, 0, 0, 0)
+        later = arw.shift(seconds=55000)
+
+        with pytest.raises(ValueError):
+            arw.humanize(later, granularity=[])
+
     # Bulgarian is an example of a language that overrides _format_timeframe
     # Applicabale to all locales. Note: Contributors need to make sure
     # that if they override describe or describe_mutli, that delta
@@ -2335,8 +2362,7 @@ class TestArrowHumanizeTestsWithLocale:
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
 
         result = arw.humanize(self.datetime, locale="ru")
-
-        assert result == "через 44 несколько секунд"
+        assert result == "через 44 секунды"
 
     def test_years(self):
 
@@ -2373,6 +2399,8 @@ def locale_list_no_weeks():
         "ja-jp",
         "sv",
         "sv-se",
+        "fi",
+        "fi-fi",
         "zh",
         "zh-cn",
         "zh-tw",
@@ -2424,6 +2452,10 @@ def locale_list_no_weeks():
         "sl-si",
         "id",
         "id-id",
+        "ne",
+        "ne-np",
+        "ee",
+        "et",
         "sw",
         "sw-ke",
         "sw-tz",
@@ -2442,9 +2474,15 @@ def locale_list_no_weeks():
         "se-se",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
+        "sq",
+        "sq-al",
         "ta",
         "ta-in",
         "ta-lk",
+        "ur",
+        "ur-pk",
     ]
 
     return tested_langs
@@ -2502,6 +2540,8 @@ def locale_list_with_weeks():
         "ms-bn",
         "lb",
         "lb-lu",
+        "zu",
+        "zu-za",
         "ta",
         "ta-in",
         "ta-lk",
@@ -2679,6 +2719,22 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
+    def test_gt_than_10_years(self, locale_list_no_weeks):
+
+        for lang in locale_list_no_weeks:
+
+            arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
+            year_ago = arw.shift(years=-25)
+            year_future = arw.shift(years=25)
+
+            year_ago_string = year_ago.humanize(arw, locale=lang, granularity=["year"])
+            year_future_string = year_future.humanize(
+                arw, locale=lang, granularity=["year"]
+            )
+
+            assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
+            assert arw.dehumanize(year_future_string, locale=lang) == year_future
+
     def test_mixed_granularity(self, locale_list_no_weeks):
 
         for lang in locale_list_no_weeks:
@@ -2759,18 +2815,18 @@ class TestArrowDehumanize:
         second_future = arw.shift(seconds=5)
 
         second_ago_string = second_ago.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
         second_future_string = second_future.humanize(
-            arw, locale="fi", granularity=["second"]
+            arw, locale="ko", granularity=["second"]
         )
 
-        # fi is an example of many unsupported locales currently
+        # ko is an example of many unsupported locales currently
         with pytest.raises(ValueError):
-            arw.dehumanize(second_ago_string, locale="fi")
+            arw.dehumanize(second_ago_string, locale="ko")
 
         with pytest.raises(ValueError):
-            arw.dehumanize(second_future_string, locale="fi")
+            arw.dehumanize(second_future_string, locale="ko")
 
     # Test to ensure old style locale strings are supported
     def test_normalized_locale(self):
