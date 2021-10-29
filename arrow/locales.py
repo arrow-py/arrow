@@ -1515,6 +1515,12 @@ class RussianLocale(SlavicBaseLocale):
             "dual": "{0} месяца",
             "plural": "{0} месяцев",
         },
+        "quarter": "квартал",
+        "quarters": {
+            "singular": "{0} квартал",
+            "dual": "{0} квартала",
+            "plural": "{0} кварталов",
+        },
         "year": "год",
         "years": {"singular": "{0} год", "dual": "{0} года", "plural": "{0} лет"},
     }
