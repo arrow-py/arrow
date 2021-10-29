@@ -252,6 +252,89 @@ class TestFrenchCanadianLocale:
 
 @pytest.mark.usefixtures("lang_locale")
 class TestRussianLocale:
+    def test_singles_timeframe(self):
+        # Second
+        result = self.locale._format_timeframe("second", 1)
+        assert result == "секунда"
+
+        result = self.locale._format_timeframe("second", -1)
+        assert result == "секунда"
+
+    def test_singles_relative(self):
+        # Second in the future
+        result = self.locale._format_relative("секунду", "second", 1)
+        assert result == "через секунду"
+
+        # Second in the past
+        result = self.locale._format_relative("секунду", "second", -1)
+        assert result == "секунду назад"
+
+    def test_plurals_timeframe(self):
+        # Seconds in the future
+        result = self.locale._format_timeframe("seconds", 2)
+        assert result == "2 секунды"
+
+        result = self.locale._format_timeframe("seconds", 5)
+        assert result == "5 секунд"
+
+        result = self.locale._format_timeframe("seconds", 21)
+        assert result == "21 секунду"
+
+        result = self.locale._format_timeframe("seconds", 22)
+        assert result == "22 секунды"
+
+        result = self.locale._format_timeframe("seconds", 25)
+        assert result == "25 секунд"
+
+        # Seconds in the past
+        result = self.locale._format_timeframe("seconds", -2)
+        assert result == "2 секунды"
+
+        result = self.locale._format_timeframe("seconds", -5)
+        assert result == "5 секунд"
+
+        result = self.locale._format_timeframe("seconds", -21)
+        assert result == "21 секунду"
+
+        result = self.locale._format_timeframe("seconds", -22)
+        assert result == "22 секунды"
+
+        result = self.locale._format_timeframe("seconds", -25)
+        assert result == "25 секунд"
+
+    def test_plurals_relative(self):
+        # Seconds in the future
+        result = self.locale._format_relative("1 секунду", "seconds", 1)
+        assert result == "через 1 секунду"
+
+        result = self.locale._format_relative("2 секунды", "seconds", 2)
+        assert result == "через 2 секунды"
+
+        result = self.locale._format_relative("5 секунд", "seconds", 5)
+        assert result == "через 5 секунд"
+
+        result = self.locale._format_relative("21 секунду", "seconds", 21)
+        assert result == "через 21 секунду"
+
+        result = self.locale._format_relative("25 секунд", "seconds", 25)
+        assert result == "через 25 секунд"
+
+        # Seconds in the past
+        result = self.locale._format_relative("1 секунду", "seconds", -1)
+        assert result == "1 секунду назад"
+
+        result = self.locale._format_relative("2 секунды", "seconds", -2)
+        assert result == "2 секунды назад"
+
+        result = self.locale._format_relative("5 секунд", "seconds", -5)
+        assert result == "5 секунд назад"
+
+        result = self.locale._format_relative("21 секунда", "seconds", -21)
+        assert result == "21 секунда назад"
+
+        result = self.locale._format_relative("25 секунд", "seconds", -25)
+        assert result == "25 секунд назад"
+
     def test_plurals2(self):
         assert self.locale._format_timeframe("hours", 0) == "0 часов"
         assert self.locale._format_timeframe("hours", 1) == "1 час"
