@@ -35,6 +35,8 @@ TimeFrameLiteral = Literal[
     "weeks",
     "month",
     "months",
+    "quarter",
+    "quarters",
     "year",
     "years",
 ]
@@ -98,6 +100,8 @@ class Locale:
         "weeks": "",
         "month": "",
         "months": "",
+        "quarter": "",
+        "quarters": "",
         "year": "",
         "years": "",
     }
@@ -314,6 +318,8 @@ class EnglishLocale(Locale):
         "weeks": "{0} weeks",
         "month": "a month",
         "months": "{0} months",
+        "quarter": "a quarter",
+        "quarters": "{0} quarters",
         "year": "a year",
         "years": "{0} years",
     }
@@ -1481,8 +1487,12 @@ class RussianLocale(SlavicBaseLocale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сейчас",
-        "second": "Второй",
-        "seconds": "{0} несколько секунд",
+        "second": "секунда",
+        "seconds": {
+            "singular": "{0} секунду",
+            "dual": "{0} секунды",
+            "plural": "{0} секунд",
+        },
         "minute": "минуту",
         "minutes": {
             "singular": "{0} минуту",
@@ -2447,7 +2457,7 @@ class AzerbaijaniLocale(Locale):
 
     timeframes = {
         "now": "indi",
-        "second": "saniyə",
+        "second": "bir saniyə",
         "seconds": "{0} saniyə",
         "minute": "bir dəqiqə",
         "minutes": "{0} dəqiqə",
@@ -2455,9 +2465,11 @@ class AzerbaijaniLocale(Locale):
         "hours": "{0} saat",
         "day": "bir gün",
         "days": "{0} gün",
+        "week": "bir həftə",
+        "weeks": "{0} həftə",
         "month": "bir ay",
         "months": "{0} ay",
-        "year": "il",
+        "year": "bir il",
         "years": "{0} il",
     }
 
@@ -4221,8 +4233,12 @@ class IndonesianLocale(Locale):
         "hours": "{0} jam",
         "day": "1 hari",
         "days": "{0} hari",
+        "week": "1 minggu",
+        "weeks": "{0} minggu",
         "month": "1 bulan",
         "months": "{0} bulan",
+        "quarter": "1 kuartal",
+        "quarters": "{0} kuartal",
         "year": "1 tahun",
         "years": "{0} tahun",
     }
@@ -5211,13 +5227,13 @@ class SerbianLocale(Locale):
 
     month_names = [
         "",
-        "januar",  # Јануар
+        "januar",  # јануар
         "februar",  # фебруар
         "mart",  # март
         "april",  # април
         "maj",  # мај
-        "juni",  # јун
-        "juli",  # јул
+        "jun",  # јун
+        "jul",  # јул
         "avgust",  # август
         "septembar",  # септембар
         "oktobar",  # октобар
@@ -5227,18 +5243,18 @@ class SerbianLocale(Locale):
 
     month_abbreviations = [
         "",
-        "jan.",
-        "febr.",
-        "mart",
-        "april",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
         "maj",
-        "juni",
-        "juli",
-        "avg.",
-        "sept.",
-        "okt.",
-        "nov.",
-        "dec.",
+        "jun",
+        "jul",
+        "avg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
     ]
 
     day_names = [

@@ -1,6 +1,31 @@
 Changelog
 =========
 
+1.2.1 (2021-10-24)
+------------------
+
+- [NEW] Added quarter granularity to humanize, for example:
+
+.. code-block:: python
+
+    >>> import arrow
+    >>> now = arrow.now()
+    >>> four_month_shift = now.shift(months=4)
+    >>> now.humanize(four_month_shift, granularity="quarter")
+    'a quarter ago'
+    >>> four_month_shift.humanize(now, granularity="quarter")
+    'in a quarter'
+    >>> thirteen_month_shift = now.shift(months=13)
+    >>> thirteen_month_shift.humanize(now, granularity="quarter")
+    'in 4 quarters'
+    >>> now.humanize(thirteen_month_shift, granularity="quarter")
+    '4 quarters ago'
+
+- [NEW] Added Sinhala and Urdu locales.
+- [NEW] Added official support for Python 3.10.
+- [CHANGED] Updated Azerbaijani, Hebrew, and Serbian locales and added tests.
+- [CHANGED] Passing an empty granularity list to ``humanize`` now raises a ``ValueError``.
+
 1.2.0 (2021-09-12)
 ------------------
 
@@ -358,7 +383,7 @@ The following will work in v0.15.0:
 -------------------
 
 - [NEW] Added support for ``week`` granularity in ``Arrow.humanize()``. For example, ``arrow.utcnow().shift(weeks=-1).humanize(granularity="week")`` outputs "a week ago". This change introduced two new untranslated words, ``week`` and ``weeks``, to all locale dictionaries, so locale contributions are welcome!
-- [NEW] Fully translated the Brazilian Portugese locale.
+- [NEW] Fully translated the Brazilian Portuguese locale.
 - [CHANGE] Updated the Macedonian locale to inherit from a Slavic base.
 - [FIX] Fixed a bug that caused ``arrow.get()`` to ignore tzinfo arguments of type string (e.g. ``arrow.get(tzinfo="Europe/Paris")``).
 - [FIX] Fixed a bug that occurred when ``arrow.Arrow()`` was instantiated with a ``pytz`` tzinfo object.
