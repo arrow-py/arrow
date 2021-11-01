@@ -2328,8 +2328,7 @@ class TestArrowHumanizeTestsWithLocale:
         arw = arrow.Arrow(2013, 1, 1, 0, 0, 44)
 
         result = arw.humanize(self.datetime, locale="ru")
-
-        assert result == "через 44 несколько секунд"
+        assert result == "через 44 секунды"
 
     def test_years(self):
 
