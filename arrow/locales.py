@@ -951,7 +951,7 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         "now": "刚才",
-        "second": "一秒",
+        "second": "1秒",
         "seconds": "{0}秒",
         "minute": "1分钟",
         "minutes": "{0}分钟",
@@ -959,7 +959,7 @@ class ChineseCNLocale(Locale):
         "hours": "{0}小时",
         "day": "1天",
         "days": "{0}天",
-        "week": "一周",
+        "week": "1周",
         "weeks": "{0}周",
         "month": "1个月",
         "months": "{0}个月",
