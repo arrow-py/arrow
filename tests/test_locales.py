@@ -252,6 +252,168 @@ class TestFrenchCanadianLocale:
 
 @pytest.mark.usefixtures("lang_locale")
 class TestRussianLocale:
+    def test_singles_timeframe(self):
+        # Second
+        result = self.locale._format_timeframe("second", 1)
+        assert result == "секунда"
+
+        result = self.locale._format_timeframe("second", -1)
+        assert result == "секунда"
+
+        # Quarter
+        result = self.locale._format_timeframe("quarter", 1)
+        assert result == "квартал"
+
+        result = self.locale._format_timeframe("quarter", -1)
+        assert result == "квартал"
+
+    def test_singles_relative(self):
+        # Second in the future
+        result = self.locale._format_relative("секунду", "second", 1)
+        assert result == "через секунду"
+
+        # Second in the past
+        result = self.locale._format_relative("секунду", "second", -1)
+        assert result == "секунду назад"
+
+        # Quarter in the future
+        result = self.locale._format_relative("квартал", "quarter", 1)
+        assert result == "через квартал"
+
+        # Quarter in the past
+        result = self.locale._format_relative("квартал", "quarter", -1)
+        assert result == "квартал назад"
+
+    def test_plurals_timeframe(self):
+        # Seconds in the future
+        result = self.locale._format_timeframe("seconds", 2)
+        assert result == "2 секунды"
+
+        result = self.locale._format_timeframe("seconds", 5)
+        assert result == "5 секунд"
+
+        result = self.locale._format_timeframe("seconds", 21)
+        assert result == "21 секунду"
+
+        result = self.locale._format_timeframe("seconds", 22)
+        assert result == "22 секунды"
+
+        result = self.locale._format_timeframe("seconds", 25)
+        assert result == "25 секунд"
+
+        # Seconds in the past
+        result = self.locale._format_timeframe("seconds", -2)
+        assert result == "2 секунды"
+
+        result = self.locale._format_timeframe("seconds", -5)
+        assert result == "5 секунд"
+
+        result = self.locale._format_timeframe("seconds", -21)
+        assert result == "21 секунду"
+
+        result = self.locale._format_timeframe("seconds", -22)
+        assert result == "22 секунды"
+
+        result = self.locale._format_timeframe("seconds", -25)
+        assert result == "25 секунд"
+
+        # Quarters in the future
+        result = self.locale._format_timeframe("quarters", 2)
+        assert result == "2 квартала"
+
+        result = self.locale._format_timeframe("quarters", 5)
+        assert result == "5 кварталов"
+
+        result = self.locale._format_timeframe("quarters", 21)
+        assert result == "21 квартал"
+
+        result = self.locale._format_timeframe("quarters", 22)
+        assert result == "22 квартала"
+
+        result = self.locale._format_timeframe("quarters", 25)
+        assert result == "25 кварталов"
+
+        # Quarters in the past
+        result = self.locale._format_timeframe("quarters", -2)
+        assert result == "2 квартала"
+
+        result = self.locale._format_timeframe("quarters", -5)
+        assert result == "5 кварталов"
+
+        result = self.locale._format_timeframe("quarters", -21)
+        assert result == "21 квартал"
+
+        result = self.locale._format_timeframe("quarters", -22)
+        assert result == "22 квартала"
+
+        result = self.locale._format_timeframe("quarters", -25)
+        assert result == "25 кварталов"
+
+    def test_plurals_relative(self):
+        # Seconds in the future
+        result = self.locale._format_relative("1 секунду", "seconds", 1)
+        assert result == "через 1 секунду"
+
+        result = self.locale._format_relative("2 секунды", "seconds", 2)
+        assert result == "через 2 секунды"
+
+        result = self.locale._format_relative("5 секунд", "seconds", 5)
+        assert result == "через 5 секунд"
+
+        result = self.locale._format_relative("21 секунду", "seconds", 21)
+        assert result == "через 21 секунду"
+
+        result = self.locale._format_relative("25 секунд", "seconds", 25)
+        assert result == "через 25 секунд"
+
+        # Seconds in the past
+        result = self.locale._format_relative("1 секунду", "seconds", -1)
+        assert result == "1 секунду назад"
+
+        result = self.locale._format_relative("2 секунды", "seconds", -2)
+        assert result == "2 секунды назад"
+
+        result = self.locale._format_relative("5 секунд", "seconds", -5)
+        assert result == "5 секунд назад"
+
+        result = self.locale._format_relative("21 секунда", "seconds", -21)
+        assert result == "21 секунда назад"
+
+        result = self.locale._format_relative("25 секунд", "seconds", -25)
+        assert result == "25 секунд назад"
+
+        # Quarters in the future
+        result = self.locale._format_relative("1 квартал", "quarters", 1)
+        assert result == "через 1 квартал"
+
+        result = self.locale._format_relative("2 квартала", "quarters", 2)
+        assert result == "через 2 квартала"
+
+        result = self.locale._format_relative("5 кварталов", "quarters", 5)
+        assert result == "через 5 кварталов"
+
+        result = self.locale._format_relative("21 квартал", "quarters", 21)
+        assert result == "через 21 квартал"
+
+        result = self.locale._format_relative("25 кварталов", "quarters", 25)
+        assert result == "через 25 кварталов"
+
+        # Quarters in the past
+        result = self.locale._format_relative("1 квартал", "quarters", -1)
+        assert result == "1 квартал назад"
+
+        result = self.locale._format_relative("2 квартала", "quarters", -2)
+        assert result == "2 квартала назад"
+
+        result = self.locale._format_relative("5 кварталов", "quarters", -5)
+        assert result == "5 кварталов назад"
+
+        result = self.locale._format_relative("21 квартал", "quarters", -21)
+        assert result == "21 квартал назад"
+
+        result = self.locale._format_relative("25 кварталов", "quarters", -25)
+        assert result == "25 кварталов назад"
+
     def test_plurals2(self):
         assert self.locale._format_timeframe("hours", 0) == "0 часов"
         assert self.locale._format_timeframe("hours", 1) == "1 час"
@@ -1081,6 +1243,9 @@ class TestIndonesianLocale:
         assert self.locale._format_timeframe("months", 4) == "4 bulan"
         assert self.locale._format_timeframe("days", 3) == "3 hari"
         assert self.locale._format_timeframe("years", 5) == "5 tahun"
+
+        assert self.locale._format_timeframe("weeks", 2) == "2 minggu"
+        assert self.locale._format_timeframe("quarters", 3) == "3 kuartal"
 
     def test_format_relative_now(self):
         assert self.locale._format_relative("baru saja", "now", 0) == "baru saja"

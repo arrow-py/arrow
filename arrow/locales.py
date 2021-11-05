@@ -1487,8 +1487,12 @@ class RussianLocale(SlavicBaseLocale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "сейчас",
-        "second": "Второй",
-        "seconds": "{0} несколько секунд",
+        "second": "секунда",
+        "seconds": {
+            "singular": "{0} секунду",
+            "dual": "{0} секунды",
+            "plural": "{0} секунд",
+        },
         "minute": "минуту",
         "minutes": {
             "singular": "{0} минуту",
@@ -1510,6 +1514,12 @@ class RussianLocale(SlavicBaseLocale):
             "singular": "{0} месяц",
             "dual": "{0} месяца",
             "plural": "{0} месяцев",
+        },
+        "quarter": "квартал",
+        "quarters": {
+            "singular": "{0} квартал",
+            "dual": "{0} квартала",
+            "plural": "{0} кварталов",
         },
         "year": "год",
         "years": {"singular": "{0} год", "dual": "{0} года", "plural": "{0} лет"},
@@ -4229,8 +4239,12 @@ class IndonesianLocale(Locale):
         "hours": "{0} jam",
         "day": "1 hari",
         "days": "{0} hari",
+        "week": "1 minggu",
+        "weeks": "{0} minggu",
         "month": "1 bulan",
         "months": "{0} bulan",
+        "quarter": "1 kuartal",
+        "quarters": "{0} kuartal",
         "year": "1 tahun",
         "years": "{0} tahun",
     }
