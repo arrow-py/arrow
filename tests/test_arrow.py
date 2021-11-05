@@ -2,6 +2,7 @@ import pickle
 import sys
 import time
 from datetime import date, datetime, timedelta
+from typing import List
 
 import dateutil
 import pytest
@@ -2340,7 +2341,7 @@ class TestArrowHumanizeTestsWithLocale:
 
 # Fixtures for Dehumanize
 @pytest.fixture(scope="class")
-def locale_list_no_weeks():
+def locale_list_no_weeks() -> List[str]:
     tested_langs = [
         "en",
         "en-us",
@@ -2454,7 +2455,7 @@ def locale_list_no_weeks():
 
 
 @pytest.fixture(scope="class")
-def locale_list_with_weeks():
+def locale_list_with_weeks() -> List[str]:
     tested_langs = [
         "en",
         "en-us",
@@ -2516,7 +2517,7 @@ def locale_list_with_weeks():
 
 
 class TestArrowDehumanize:
-    def test_now(self, locale_list_no_weeks):
+    def test_now(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2534,7 +2535,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(second_ago_string, locale=lang) == arw
             assert arw.dehumanize(second_future_string, locale=lang) == arw
 
-    def test_seconds(self, locale_list_no_weeks):
+    def test_seconds(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2552,7 +2553,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(second_ago_string, locale=lang) == second_ago
             assert arw.dehumanize(second_future_string, locale=lang) == second_future
 
-    def test_minute(self, locale_list_no_weeks):
+    def test_minute(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2570,7 +2571,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
             assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
 
-    def test_minutes(self, locale_list_no_weeks):
+    def test_minutes(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2588,7 +2589,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(minute_ago_string, locale=lang) == minute_ago
             assert arw.dehumanize(minute_future_string, locale=lang) == minute_future
 
-    def test_hour(self, locale_list_no_weeks):
+    def test_hour(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2604,7 +2605,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
             assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
 
-    def test_hours(self, locale_list_no_weeks):
+    def test_hours(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2620,7 +2621,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(hour_ago_string, locale=lang) == hour_ago
             assert arw.dehumanize(hour_future_string, locale=lang) == hour_future
 
-    def test_week(self, locale_list_with_weeks):
+    def test_week(self, locale_list_with_weeks: List[str]):
 
         for lang in locale_list_with_weeks:
 
@@ -2636,7 +2637,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
             assert arw.dehumanize(week_future_string, locale=lang) == week_future
 
-    def test_weeks(self, locale_list_with_weeks):
+    def test_weeks(self, locale_list_with_weeks: List[str]):
 
         for lang in locale_list_with_weeks:
 
@@ -2652,7 +2653,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(week_ago_string, locale=lang) == week_ago
             assert arw.dehumanize(week_future_string, locale=lang) == week_future
 
-    def test_year(self, locale_list_no_weeks):
+    def test_year(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2668,7 +2669,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
-    def test_years(self, locale_list_no_weeks):
+    def test_years(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2684,7 +2685,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
-    def test_gt_than_10_years(self, locale_list_no_weeks):
+    def test_gt_than_10_years(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2700,7 +2701,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
-    def test_mixed_granularity(self, locale_list_no_weeks):
+    def test_mixed_granularity(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2718,7 +2719,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(past_string, locale=lang) == past
             assert arw.dehumanize(future_string, locale=lang) == future
 
-    def test_mixed_granularity_hours(self, locale_list_no_weeks):
+    def test_mixed_granularity_hours(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2736,7 +2737,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(past_string, locale=lang) == past
             assert arw.dehumanize(future_string, locale=lang) == future
 
-    def test_mixed_granularity_day(self, locale_list_no_weeks):
+    def test_mixed_granularity_day(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2754,7 +2755,7 @@ class TestArrowDehumanize:
             assert arw.dehumanize(past_string, locale=lang) == past
             assert arw.dehumanize(future_string, locale=lang) == future
 
-    def test_mixed_granularity_day_hour(self, locale_list_no_weeks):
+    def test_mixed_granularity_day_hour(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2811,7 +2812,7 @@ class TestArrowDehumanize:
         assert arw.dehumanize(second_future_string, locale="zh_hk") == second_future
 
     # Ensures relative units are required in string
-    def test_require_relative_unit(self, locale_list_no_weeks):
+    def test_require_relative_unit(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2833,7 +2834,7 @@ class TestArrowDehumanize:
                 arw.dehumanize(second_future_string, locale=lang)
 
     # Test for scrambled input
-    def test_scrambled_input(self, locale_list_no_weeks):
+    def test_scrambled_input(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
@@ -2861,7 +2862,7 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(second_future_string, locale=lang)
 
-    def test_no_units_modified(self, locale_list_no_weeks):
+    def test_no_units_modified(self, locale_list_no_weeks: List[str]):
 
         for lang in locale_list_no_weeks:
 
