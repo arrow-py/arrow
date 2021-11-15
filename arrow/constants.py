@@ -145,4 +145,6 @@ DEHUMANIZE_LOCALES = {
     "ta-lk",
     "ur",
     "ur-pk",
+    "kk",
+    "kk-kz",
 }
