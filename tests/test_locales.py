@@ -2290,27 +2290,27 @@ class TestKazakhLocale:
         assert self.locale.describe("year", only_distance=False) == "бір жыл кейін"
 
     def test_relative_mk(self):
-        assert self.locale._format_relative("şimdi", "now", 0) == "қазір"
+        assert self.locale._format_relative("қазір", "now", 0) == "қазір"
         assert (
-            self.locale._format_relative("1 saniye", "seconds", 1) == "1 секунд кейін"
+            self.locale._format_relative("1 секунд", "seconds", 1) == "1 секунд кейін"
         )
         assert (
-            self.locale._format_relative("1 saniye", "seconds", -1) == "1 секунд бұрын"
+            self.locale._format_relative("1 секунд", "seconds", -1) == "1 секунд бұрын"
         )
-        assert self.locale._format_relative("1 dakika", "minutes", 1) == "1 минут кейін"
+        assert self.locale._format_relative("1 минут", "minutes", 1) == "1 минут кейін"
         assert (
-            self.locale._format_relative("1 dakika", "minutes", -1) == "1 минут бұрын"
+            self.locale._format_relative("1 минут", "minutes", -1) == "1 минут бұрын"
         )
-        assert self.locale._format_relative("1 saat", "hours", 1) == "1 сағат кейін"
-        assert self.locale._format_relative("1 saat", "hours", -1) == "1 сағат бұрын"
-        assert self.locale._format_relative("1 gün", "days", 1) == "1 күн кейін"
-        assert self.locale._format_relative("1 gün", "days", -1) == "1 күн бұрын"
-        assert self.locale._format_relative("1 hafta", "weeks", 1) == "1 апта кейін"
-        assert self.locale._format_relative("1 hafta", "weeks", -1) == "1 апта бұрын"
-        assert self.locale._format_relative("1 ay", "months", 1) == "1 ай кейін"
-        assert self.locale._format_relative("1 ay", "months", -1) == "1 ай бұрын"
-        assert self.locale._format_relative("1 yıl", "years", 1) == "1 жыл кейін"
-        assert self.locale._format_relative("1 yıl", "years", -1) == "1 жыл бұрын"
+        assert self.locale._format_relative("1 сағат", "hours", 1) == "1 сағат кейін"
+        assert self.locale._format_relative("1 сағат", "hours", -1) == "1 сағат бұрын"
+        assert self.locale._format_relative("1 күн", "days", 1) == "1 күн кейін"
+        assert self.locale._format_relative("1 күн", "days", -1) == "1 күн бұрын"
+        assert self.locale._format_relative("1 апта", "weeks", 1) == "1 апта кейін"
+        assert self.locale._format_relative("1 апта", "weeks", -1) == "1 апта бұрын"
+        assert self.locale._format_relative("1 ай", "months", 1) == "1 ай кейін"
+        assert self.locale._format_relative("1 ай", "months", -1) == "1 ай бұрын"
+        assert self.locale._format_relative("1 жыл", "years", 1) == "1 жыл кейін"
+        assert self.locale._format_relative("1 жыл", "years", -1) == "1 жыл бұрын"
 
     def test_plurals_mk(self):
         assert self.locale._format_timeframe("now", 0) == "қазір"
