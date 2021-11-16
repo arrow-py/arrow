@@ -2313,7 +2313,7 @@ class TestKazakhLocale:
         assert self.locale._format_relative("1 yıl", "years", -1) == "1 жыл бұрын"
 
     def test_plurals_mk(self):
-        assert self.locale._format_timeframe("now", 0) == "қазыр"
+        assert self.locale._format_timeframe("now", 0) == "қазір"
         assert self.locale._format_timeframe("second", 1) == "бір секунд"
         assert self.locale._format_timeframe("seconds", 30) == "30 секунд"
         assert self.locale._format_timeframe("minute", 1) == "бір минут"
