@@ -5911,11 +5911,11 @@ class UrduLocale(Locale):
     ]
 class KazakhLocale(Locale):
 
-        names = ["kk", "kk-kz"]
+    names = ["kk", "kk-kz"]
 
-        past = "{0} бұрын"
-        future = "{0} кейін"
-        timeframes = {
+    past = "{0} бұрын"
+    future = "{0} кейін"
+    timeframes = {
             "now": "қазір",
             "second": "бір секунд",
             "seconds": "{0} секунд",
