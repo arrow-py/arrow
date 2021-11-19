@@ -2262,6 +2262,7 @@ class TestSinhalaLocale:
         assert self.locale.day_name(dt.isoweekday()) == "සෙනසුරාදා"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "අ"
 
+
 @pytest.mark.usefixtures("lang_locale")
 class TestKazakhLocale:
     def test_singles_mk(self):
@@ -2298,9 +2299,7 @@ class TestKazakhLocale:
             self.locale._format_relative("1 секунд", "seconds", -1) == "1 секунд бұрын"
         )
         assert self.locale._format_relative("1 минут", "minutes", 1) == "1 минут кейін"
-        assert (
-            self.locale._format_relative("1 минут", "minutes", -1) == "1 минут бұрын"
-        )
+        assert self.locale._format_relative("1 минут", "minutes", -1) == "1 минут бұрын"
         assert self.locale._format_relative("1 сағат", "hours", 1) == "1 сағат кейін"
         assert self.locale._format_relative("1 сағат", "hours", -1) == "1 сағат бұрын"
         assert self.locale._format_relative("1 күн", "days", 1) == "1 күн кейін"

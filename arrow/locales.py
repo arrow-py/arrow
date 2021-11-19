@@ -5909,6 +5909,8 @@ class UrduLocale(Locale):
         "ہفتہ",
         "اتوار",
     ]
+
+
 class KazakhLocale(Locale):
 
     names = ["kk", "kk-kz"]
@@ -5916,22 +5918,22 @@ class KazakhLocale(Locale):
     past = "{0} бұрын"
     future = "{0} кейін"
     timeframes = {
-            "now": "қазір",
-            "second": "бір секунд",
-            "seconds": "{0} секунд",
-            "minute": "бір минут",
-            "minutes": "{0} минут",
-            "hour": "бір сағат",
-            "hours": "{0} сағат",
-            "day": "бір күн",
-            "days": "{0} күн",
-            "week": "бір апта",
-            "weeks": "{0} апта",
-            "month": "бір ай",
-            "months": "{0} ай",
-            "year": "бір жыл",
-            "years": "{0} жыл",
-        }
+        "now": "қазір",
+        "second": "бір секунд",
+        "seconds": "{0} секунд",
+        "minute": "бір минут",
+        "minutes": "{0} минут",
+        "hour": "бір сағат",
+        "hours": "{0} сағат",
+        "day": "бір күн",
+        "days": "{0} күн",
+        "week": "бір апта",
+        "weeks": "{0} апта",
+        "month": "бір ай",
+        "months": "{0} ай",
+        "year": "бір жыл",
+        "years": "{0} жыл",
+    }
 
     month_names = [
         "",
