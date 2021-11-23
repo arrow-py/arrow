@@ -2261,3 +2261,68 @@ class TestSinhalaLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "සෙනසුරාදා"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "අ"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestKazakhLocale:
+    def test_singles_mk(self):
+        assert self.locale._format_timeframe("second", 1) == "бір секунд"
+        assert self.locale._format_timeframe("minute", 1) == "бір минут"
+        assert self.locale._format_timeframe("hour", 1) == "бір сағат"
+        assert self.locale._format_timeframe("day", 1) == "бір күн"
+        assert self.locale._format_timeframe("week", 1) == "бір апта"
+        assert self.locale._format_timeframe("month", 1) == "бір ай"
+        assert self.locale._format_timeframe("year", 1) == "бір жыл"
+
+    def test_describe_mk(self):
+        assert self.locale.describe("second", only_distance=True) == "бір секунд"
+        assert self.locale.describe("second", only_distance=False) == "бір секунд кейін"
+        assert self.locale.describe("minute", only_distance=True) == "бір минут"
+        assert self.locale.describe("minute", only_distance=False) == "бір минут кейін"
+        assert self.locale.describe("hour", only_distance=True) == "бір сағат"
+        assert self.locale.describe("hour", only_distance=False) == "бір сағат кейін"
+        assert self.locale.describe("day", only_distance=True) == "бір күн"
+        assert self.locale.describe("day", only_distance=False) == "бір күн кейін"
+        assert self.locale.describe("week", only_distance=True) == "бір апта"
+        assert self.locale.describe("week", only_distance=False) == "бір апта кейін"
+        assert self.locale.describe("month", only_distance=True) == "бір ай"
+        assert self.locale.describe("month", only_distance=False) == "бір ай кейін"
+        assert self.locale.describe("year", only_distance=True) == "бір жыл"
+        assert self.locale.describe("year", only_distance=False) == "бір жыл кейін"
+
+    def test_relative_mk(self):
+        assert self.locale._format_relative("қазір", "now", 0) == "қазір"
+        assert (
+            self.locale._format_relative("1 секунд", "seconds", 1) == "1 секунд кейін"
+        )
+        assert (
+            self.locale._format_relative("1 секунд", "seconds", -1) == "1 секунд бұрын"
+        )
+        assert self.locale._format_relative("1 минут", "minutes", 1) == "1 минут кейін"
+        assert self.locale._format_relative("1 минут", "minutes", -1) == "1 минут бұрын"
+        assert self.locale._format_relative("1 сағат", "hours", 1) == "1 сағат кейін"
+        assert self.locale._format_relative("1 сағат", "hours", -1) == "1 сағат бұрын"
+        assert self.locale._format_relative("1 күн", "days", 1) == "1 күн кейін"
+        assert self.locale._format_relative("1 күн", "days", -1) == "1 күн бұрын"
+        assert self.locale._format_relative("1 апта", "weeks", 1) == "1 апта кейін"
+        assert self.locale._format_relative("1 апта", "weeks", -1) == "1 апта бұрын"
+        assert self.locale._format_relative("1 ай", "months", 1) == "1 ай кейін"
+        assert self.locale._format_relative("1 ай", "months", -1) == "1 ай бұрын"
+        assert self.locale._format_relative("1 жыл", "years", 1) == "1 жыл кейін"
+        assert self.locale._format_relative("1 жыл", "years", -1) == "1 жыл бұрын"
+
+    def test_plurals_mk(self):
+        assert self.locale._format_timeframe("now", 0) == "қазір"
+        assert self.locale._format_timeframe("second", 1) == "бір секунд"
+        assert self.locale._format_timeframe("seconds", 30) == "30 секунд"
+        assert self.locale._format_timeframe("minute", 1) == "бір минут"
+        assert self.locale._format_timeframe("minutes", 40) == "40 минут"
+        assert self.locale._format_timeframe("hour", 1) == "бір сағат"
+        assert self.locale._format_timeframe("hours", 23) == "23 сағат"
+        assert self.locale._format_timeframe("days", 12) == "12 күн"
+        assert self.locale._format_timeframe("week", 1) == "бір апта"
+        assert self.locale._format_timeframe("weeks", 38) == "38 апта"
+        assert self.locale._format_timeframe("month", 1) == "бір ай"
+        assert self.locale._format_timeframe("months", 11) == "11 ай"
+        assert self.locale._format_timeframe("year", 1) == "бір жыл"
+        assert self.locale._format_timeframe("years", 12) == "12 жыл"
