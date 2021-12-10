@@ -1166,10 +1166,44 @@ class TestGermanLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestHungarianLocale:
     def test_format_timeframe(self):
-        assert self.locale._format_timeframe("hours", 2) == "2 óra"
-        assert self.locale._format_timeframe("hour", 0) == "egy órával"
-        assert self.locale._format_timeframe("hours", -2) == "2 órával"
+        # Now
         assert self.locale._format_timeframe("now", 0) == "éppen most"
+
+        # Second(s)
+        assert self.locale._format_timeframe("second", -1) == "egy második"
+        assert self.locale._format_timeframe("second", 1) == "egy második"
+        assert self.locale._format_timeframe("seconds", -2) == "2 másodpercekkel"
+        assert self.locale._format_timeframe("seconds", 2) == "2 pár másodperc"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", -1) == "egy perccel"
+        assert self.locale._format_timeframe("minute", 1) == "egy perc"
+        assert self.locale._format_timeframe("minutes", -2) == "2 perccel"
+        assert self.locale._format_timeframe("minutes", 2) == "2 perc"
+
+        # Hour(s)
+        assert self.locale._format_timeframe("hour", -1) == "egy órával"
+        assert self.locale._format_timeframe("hour", 1) == "egy óra"
+        assert self.locale._format_timeframe("hours", -2) == "2 órával"
+        assert self.locale._format_timeframe("hours", 2) == "2 óra"
+
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "egy nappal"
+        assert self.locale._format_timeframe("day", 1) == "egy nap"
+        assert self.locale._format_timeframe("days", -2) == "2 nappal"
+        assert self.locale._format_timeframe("days", 2) == "2 nap"
+
+        # Month(s)
+        assert self.locale._format_timeframe("month", -1) == "egy hónappal"
+        assert self.locale._format_timeframe("month", 1) == "egy hónap"
+        assert self.locale._format_timeframe("months", -2) == "2 hónappal"
+        assert self.locale._format_timeframe("months", 2) == "2 hónap"
+
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "egy évvel"
+        assert self.locale._format_timeframe("year", 1) == "egy év"
+        assert self.locale._format_timeframe("years", -2) == "2 évvel"
+        assert self.locale._format_timeframe("years", 2) == "2 év"
 
 
 @pytest.mark.usefixtures("lang_locale")
