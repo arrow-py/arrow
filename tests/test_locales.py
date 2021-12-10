@@ -1033,13 +1033,44 @@ class TestMarathiLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestFinnishLocale:
     def test_format_timeframe(self):
+        # Now
+        assert self.locale._format_timeframe("now", 1) == "juuri nyt"
+
+        # Second(s)
+        assert self.locale._format_timeframe("second", -1) == "sekunti"
+        assert self.locale._format_timeframe("second", 1) == "sekunti"
+        assert self.locale._format_timeframe("seconds", -2) == "2 muutama sekunti"
+        assert self.locale._format_timeframe("seconds", 2) == "2 muutaman sekunnin"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", -1) == "minuutti"
+        assert self.locale._format_timeframe("minute", 1) == "minuutin"
+        assert self.locale._format_timeframe("minutes", -2) == "2 minuuttia"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minuutin"
+
+        # Hour(s)
+        assert self.locale._format_timeframe("hour", -1) == "tunti"
+        assert self.locale._format_timeframe("hour", 1) == "tunnin"
         assert self.locale._format_timeframe("hours", -2) == "2 tuntia"
         assert self.locale._format_timeframe("hours", 2) == "2 tunnin"
 
-        assert self.locale._format_timeframe("hour", -1) == "tunti"
-        assert self.locale._format_timeframe("hour", 1) == "tunnin"
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "päivä"
+        assert self.locale._format_timeframe("day", 1) == "päivä"
+        assert self.locale._format_timeframe("days", -2) == "2 päivää"
+        assert self.locale._format_timeframe("days", 2) == "2 päivän"
 
-        assert self.locale._format_timeframe("now", 1) == "juuri nyt"
+        # Month(s)
+        assert self.locale._format_timeframe("month", -1) == "kuukausi"
+        assert self.locale._format_timeframe("month", 1) == "kuukauden"
+        assert self.locale._format_timeframe("months", -2) == "2 kuukautta"
+        assert self.locale._format_timeframe("months", 2) == "2 kuukauden"
+
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "vuosi"
+        assert self.locale._format_timeframe("year", 1) == "vuoden"
+        assert self.locale._format_timeframe("years", -2) == "2 vuotta"
+        assert self.locale._format_timeframe("years", 2) == "2 vuoden"
 
     def test_format_relative_now(self):
         result = self.locale._format_relative("juuri nyt", "now", 0)
