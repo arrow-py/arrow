@@ -937,23 +937,45 @@ class TestMacedonianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestHebrewLocale:
     def test_couple_of_timeframe(self):
+        # Now
+        assert self.locale._format_timeframe("now", 0) == "הרגע"
+
+        # Second(s)
+        assert self.locale._format_timeframe("second", 1) == "שנייה"
+        assert self.locale._format_timeframe("seconds", 2) == "2 שניות"
+        assert self.locale._format_timeframe("seconds", 10) == "10 שניות"
+        assert self.locale._format_timeframe("seconds", 11) == "11 שניות"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", 1) == "דקה"
+        assert self.locale._format_timeframe("minutes", 2) == "2 דקות"
+        assert self.locale._format_timeframe("minutes", 10) == "10 דקות"
+        assert self.locale._format_timeframe("minutes", 11) == "11 דקות"
+
+        # Day(s)
         assert self.locale._format_timeframe("day", 1) == "יום"
         assert self.locale._format_timeframe("days", 2) == "יומיים"
         assert self.locale._format_timeframe("days", 3) == "3 ימים"
         assert self.locale._format_timeframe("days", 80) == "80 יום"
 
+        # Hour(s)
         assert self.locale._format_timeframe("hour", 1) == "שעה"
         assert self.locale._format_timeframe("hours", 2) == "שעתיים"
         assert self.locale._format_timeframe("hours", 3) == "3 שעות"
+        assert self.locale._format_timeframe("hours", 11) == "11 שעות"
 
+        # Week(s)
         assert self.locale._format_timeframe("week", 1) == "שבוע"
         assert self.locale._format_timeframe("weeks", 2) == "שבועיים"
         assert self.locale._format_timeframe("weeks", 3) == "3 שבועות"
+        assert self.locale._format_timeframe("weeks", 11) == "11 שבועות"
 
+        # Month(s)
         assert self.locale._format_timeframe("month", 1) == "חודש"
         assert self.locale._format_timeframe("months", 2) == "חודשיים"
         assert self.locale._format_timeframe("months", 4) == "4 חודשים"
 
+        # Year(s)
         assert self.locale._format_timeframe("year", 1) == "שנה"
         assert self.locale._format_timeframe("years", 2) == "שנתיים"
         assert self.locale._format_timeframe("years", 5) == "5 שנים"
