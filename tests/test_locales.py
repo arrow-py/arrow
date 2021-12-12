@@ -974,6 +974,7 @@ class TestHebrewLocale:
         assert self.locale._format_timeframe("month", 1) == "חודש"
         assert self.locale._format_timeframe("months", 2) == "חודשיים"
         assert self.locale._format_timeframe("months", 4) == "4 חודשים"
+        assert self.locale._format_timeframe("months", 11) == "11 חודשים"
 
         # Year(s)
         assert self.locale._format_timeframe("year", 1) == "שנה"
@@ -2329,28 +2330,50 @@ class TestTamilLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestSinhalaLocale:
     def test_format_timeframe(self):
+        # Now
         assert self.locale._format_timeframe("now", 0) == "දැන්"
+
+        # Second(s)
         assert self.locale._format_timeframe("second", -1) == "තත්පරයක"
         assert self.locale._format_timeframe("second", 1) == "තත්පරයකින්"
         assert self.locale._format_timeframe("seconds", -30) == "තත්පර 30 ක"
+        assert self.locale._format_timeframe("seconds", 30) == "තත්පර 30 කින්"
 
+        # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "විනාඩියක"
+        assert self.locale._format_timeframe("minute", 1) == "විනාඩියකින්"
+        assert self.locale._format_timeframe("minutes", -4) == "විනාඩි 4 ක"
         assert self.locale._format_timeframe("minutes", 4) == "මිනිත්තු 4 කින්"
 
+        # Hour(s)
         assert self.locale._format_timeframe("hour", -1) == "පැයක"
+        assert self.locale._format_timeframe("hour", 1) == "පැයකින්"
+        assert self.locale._format_timeframe("hours", -23) == "පැය 23 ක"
         assert self.locale._format_timeframe("hours", 23) == "පැය 23 කින්"
 
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "දිනක"
         assert self.locale._format_timeframe("day", 1) == "දිනකට"
         assert self.locale._format_timeframe("days", -12) == "දින 12 ක"
+        assert self.locale._format_timeframe("days", 12) == "දින 12 කින්"
 
+        # Week(s)
         assert self.locale._format_timeframe("week", -1) == "සතියක"
+        assert self.locale._format_timeframe("week", 1) == "සතියකින්"
         assert self.locale._format_timeframe("weeks", -10) == "සති 10 ක"
+        assert self.locale._format_timeframe("weeks", 10) == "සති 10 කින්"
 
+        # Month(s)
         assert self.locale._format_timeframe("month", -1) == "මාසයක"
+        assert self.locale._format_timeframe("month", 1) == "එය මාසය තුළ"
         assert self.locale._format_timeframe("months", -2) == "මාස 2 ක"
+        assert self.locale._format_timeframe("months", 2) == "මාස 2 කින්"
 
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "වසරක"
         assert self.locale._format_timeframe("year", 1) == "වසරක් තුළ"
         assert self.locale._format_timeframe("years", -21) == "අවුරුදු 21 ක"
+        assert self.locale._format_timeframe("years", 21) == "අවුරුදු 21 තුළ"
 
     def test_describe_si(self):
         assert self.locale.describe("second", only_distance=True) == "තත්පරයක්"
