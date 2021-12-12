@@ -1002,6 +1002,9 @@ class TestHebrewLocale:
         assert describe(seconds60) == "בעוד דקה"
         assert describe(seconds60, only_distance=True) == "דקה"
 
+        fulltestend0 = [("years", 5), ("weeks", 1), ("hours", 1), ("minutes", 0)]
+        assert describe(fulltestend0) == "בעוד 5 שנים, שבוע, שעה ו־0 דקות"
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestAzerbaijaniLocale:
