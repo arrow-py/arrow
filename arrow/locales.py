@@ -2056,6 +2056,8 @@ class NorwegianLocale(Locale):
         "hours": "{0} timer",
         "day": "en dag",
         "days": "{0} dager",
+        "week": "en uke",
+        "weeks": "{0} uker",
         "month": "en måned",
         "months": "{0} måneder",
         "year": "ett år",
@@ -2105,6 +2107,9 @@ class NorwegianLocale(Locale):
     ]
     day_abbreviations = ["", "ma", "ti", "on", "to", "fr", "lø", "sø"]
 
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
+
 
 class NewNorwegianLocale(Locale):
 
@@ -2123,7 +2128,9 @@ class NewNorwegianLocale(Locale):
         "hours": "{0} timar",
         "day": "ein dag",
         "days": "{0} dagar",
-        "month": "en månad",
+        "week": "ei veke",
+        "weeks": "{0} veker",
+        "month": "ein månad",
         "months": "{0} månader",
         "year": "eitt år",
         "years": "{0} år",
@@ -2171,6 +2178,9 @@ class NewNorwegianLocale(Locale):
         "sundag",
     ]
     day_abbreviations = ["", "må", "ty", "on", "to", "fr", "la", "su"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
 
 
 class PortugueseLocale(Locale):

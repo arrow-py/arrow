@@ -2702,3 +2702,115 @@ class TestKazakhLocale:
         assert self.locale._format_timeframe("months", 11) == "11 ай"
         assert self.locale._format_timeframe("year", 1) == "бір жыл"
         assert self.locale._format_timeframe("years", 12) == "12 жыл"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestNorwegianLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "nå nettopp"
+        assert self.locale.describe("now", only_distance=False) == "nå nettopp"
+
+    def test_plurals(self):
+        assert self.locale._format_timeframe("now", 0) == "nå nettopp"
+        assert self.locale._format_timeframe("second", 1) == "ett sekund"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekunder"
+        assert self.locale._format_timeframe("minute", 1) == "ett minutt"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minutter"
+        assert self.locale._format_timeframe("hour", 1) == "en time"
+        assert self.locale._format_timeframe("hours", 23) == "23 timer"
+        assert self.locale._format_timeframe("day", 1) == "en dag"
+        assert self.locale._format_timeframe("days", 12) == "12 dager"
+        assert self.locale._format_timeframe("week", 1) == "en uke"
+        assert self.locale._format_timeframe("weeks", 38) == "38 uker"
+        assert self.locale._format_timeframe("month", 1) == "en måned"
+        assert self.locale._format_timeframe("months", 11) == "11 måneder"
+        assert self.locale._format_timeframe("year", 1) == "ett år"
+        assert self.locale._format_timeframe("years", 12) == "12 år"
+
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(0) == "0."
+        assert self.locale.ordinal_number(1) == "1."
+
+    def test_format_timeframe(self):
+
+        assert self.locale._format_timeframe("hours", 2) == "2 timer"
+        assert self.locale._format_timeframe("hour", 0) == "en time"
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative("nå nettopp", "now", 0)
+
+        assert result == "nå nettopp"
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("en time", "hour", 1)
+
+        assert result == "om en time"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("en time", "hour", -1)
+
+        assert result == "for en time siden"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "lørdag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "lø"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestNewNorwegianLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "no nettopp"
+        assert self.locale.describe("now", only_distance=False) == "no nettopp"
+
+    def test_plurals(self):
+        assert self.locale._format_timeframe("now", 0) == "no nettopp"
+        assert self.locale._format_timeframe("second", 1) == "eitt sekund"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekund"
+        assert self.locale._format_timeframe("minute", 1) == "eitt minutt"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minutt"
+        assert self.locale._format_timeframe("hour", 1) == "ein time"
+        assert self.locale._format_timeframe("hours", 23) == "23 timar"
+        assert self.locale._format_timeframe("day", 1) == "ein dag"
+        assert self.locale._format_timeframe("days", 12) == "12 dagar"
+        assert self.locale._format_timeframe("week", 1) == "ei veke"
+        assert self.locale._format_timeframe("weeks", 38) == "38 veker"
+        assert self.locale._format_timeframe("month", 1) == "ein månad"
+        assert self.locale._format_timeframe("months", 11) == "11 månader"
+        assert self.locale._format_timeframe("year", 1) == "eitt år"
+        assert self.locale._format_timeframe("years", 12) == "12 år"
+
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(0) == "0."
+        assert self.locale.ordinal_number(1) == "1."
+
+    def test_format_timeframe(self):
+
+        assert self.locale._format_timeframe("hours", 2) == "2 timar"
+        assert self.locale._format_timeframe("hour", 0) == "ein time"
+
+    def test_format_relative_now(self):
+
+        result = self.locale._format_relative("no nettopp", "now", 0)
+
+        assert result == "no nettopp"
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("ein time", "hour", 1)
+
+        assert result == "om ein time"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("ein time", "hour", -1)
+
+        assert result == "for ein time sidan"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "laurdag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "la"
