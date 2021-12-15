@@ -1125,6 +1125,7 @@ class Arrow:
         locale: str = DEFAULT_LOCALE,
         only_distance: bool = False,
         granularity: Union[_GRANULARITY, List[_GRANULARITY]] = "auto",
+        brief: bool = False,
     ) -> str:
         """Returns a localized, humanized representation of a relative difference in time.
 
@@ -1134,6 +1135,7 @@ class Arrow:
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute',
                            'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings
+        :param brief: (optional) return shortened form of only the time distance eg: "11s" without "in", "ago", or "seconds"
 
         Usage::
 
@@ -1179,41 +1181,59 @@ class Arrow:
         try:
             if granularity == "auto":
                 if diff < 10:
-                    return locale.describe("now", only_distance=only_distance)
+                    return locale.describe(
+                        "now", only_distance=only_distance, brief=brief
+                    )
 
                 if diff < self._SECS_PER_MINUTE:
                     seconds = sign * delta_second
                     return locale.describe(
-                        "seconds", seconds, only_distance=only_distance
+                        "seconds", seconds, only_distance=only_distance, brief=brief
                     )
 
                 elif diff < self._SECS_PER_MINUTE * 2:
-                    return locale.describe("minute", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "minute", sign, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_HOUR:
                     minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
-                        "minutes", minutes, only_distance=only_distance
+                        "minutes", minutes, only_distance=only_distance, brief=brief
                     )
 
                 elif diff < self._SECS_PER_HOUR * 2:
-                    return locale.describe("hour", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "hour", sign, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_DAY:
                     hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
-                    return locale.describe("hours", hours, only_distance=only_distance)
+                    return locale.describe(
+                        "hours", hours, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_DAY * 2:
-                    return locale.describe("day", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "day", sign, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_WEEK:
                     days = sign * max(delta_second // self._SECS_PER_DAY, 2)
-                    return locale.describe("days", days, only_distance=only_distance)
+                    return locale.describe(
+                        "days", days, only_distance=only_distance, brief=brief
+                    )
 
                 elif diff < self._SECS_PER_WEEK * 2:
-                    return locale.describe("week", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "week", sign, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_MONTH:
                     weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
-                    return locale.describe("weeks", weeks, only_distance=only_distance)
+                    return locale.describe(
+                        "weeks", weeks, only_distance=only_distance, brief=brief
+                    )
 
                 elif diff < self._SECS_PER_MONTH * 2:
-                    return locale.describe("month", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "month", sign, only_distance=only_distance, brief=brief
+                    )
                 elif diff < self._SECS_PER_YEAR:
                     # TODO revisit for humanization during leap years
                     self_months = self._datetime.year * 12 + self._datetime.month
@@ -1222,14 +1242,18 @@ class Arrow:
                     months = sign * max(abs(other_months - self_months), 2)
 
                     return locale.describe(
-                        "months", months, only_distance=only_distance
+                        "months", months, only_distance=only_distance, brief=brief
                     )
 
                 elif diff < self._SECS_PER_YEAR * 2:
-                    return locale.describe("year", sign, only_distance=only_distance)
+                    return locale.describe(
+                        "year", sign, only_distance=only_distance, brief=brief
+                    )
                 else:
                     years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
-                    return locale.describe("years", years, only_distance=only_distance)
+                    return locale.describe(
+                        "years", years, only_distance=only_distance, brief=brief
+                    )
 
             elif isinstance(granularity, str):
                 granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
@@ -1237,7 +1261,9 @@ class Arrow:
                 if granularity == "second":
                     delta = sign * float(delta_second)
                     if abs(delta) < 2:
-                        return locale.describe("now", only_distance=only_distance)
+                        return locale.describe(
+                            "now", only_distance=only_distance, brief=brief
+                        )
                 elif granularity == "minute":
                     delta = sign * delta_second / self._SECS_PER_MINUTE
                 elif granularity == "hour":
@@ -1260,7 +1286,9 @@ class Arrow:
 
                 if trunc(abs(delta)) != 1:
                     granularity += "s"  # type: ignore
-                return locale.describe(granularity, delta, only_distance=only_distance)
+                return locale.describe(
+                    granularity, delta, only_distance=only_distance, brief=brief
+                )
 
             else:
 
@@ -1304,7 +1332,9 @@ class Arrow:
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
                     )
 
-                return locale.describe_multi(timeframes, only_distance=only_distance)
+                return locale.describe_multi(
+                    timeframes, only_distance=only_distance, brief=brief
+                )
 
         except KeyError as e:
             raise ValueError(

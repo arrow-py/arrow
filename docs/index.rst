@@ -227,7 +227,6 @@ Indicate time as relative or include only the distance
     >>> future.humanize(present, only_distance=True)
     '2 hours'
 
-
 Indicate a specific time granularity (or multiple):
 
 .. code-block:: python
@@ -242,6 +241,20 @@ Indicate a specific time granularity (or multiple):
     'an hour and 6 minutes ago'
     >>> future.humanize(present, only_distance=True, granularity=["hour", "minute"])
     'an hour and 6 minutes'
+
+Indicate shortened time:
+
+.. code-block:: python
+
+    >>> present = arrow.utcnow()
+    >>> future = present.shift(hours=2)
+    >>> future.humanize(present)
+    'in 2 hours'
+    >>> future.humanize(present, brief=True)
+    '2h'
+    >>> future = present.shift(minutes=66)
+    >>> present.humanize(future, granularity=["hour", "minute"], brief=True)
+    'h 6m'
 
 Support for a growing number of locales (see ``locales.py`` for supported languages):
 

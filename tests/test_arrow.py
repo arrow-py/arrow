@@ -2004,6 +2004,10 @@ class TestArrowHumanize:
             == "an hour and 6 minutes"
         )
         assert (
+            later4000.humanize(self.now, granularity=["hour", "minute"], brief=True)
+            == "h 6m"
+        )
+        assert (
             later4000.humanize(self.now, granularity=["day", "hour", "minute"])
             == "in 0 days an hour and 6 minutes"
         )
@@ -2032,6 +2036,15 @@ class TestArrowHumanize:
                 later108onlydistance, only_distance=True, granularity=["month", "week"]
             )
             == "37 months and 4 weeks"
+        )
+        assert (
+            self.now.humanize(
+                later108onlydistance,
+                only_distance=True,
+                granularity=["month", "week"],
+                brief=True,
+            )
+            == "37m 4w"
         )
         # this will change when leap years are implemented
         assert (
@@ -2064,6 +2077,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "10 seconds"
         assert later.humanize(self.now, only_distance=True) == "10 seconds"
 
+        assert self.now.humanize(later, brief=True) == "10s"
+        assert later.humanize(self.now, brief=True) == "10s"
+
     def test_minute(self):
 
         later = self.now.shift(minutes=1)
@@ -2073,6 +2089,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "a minute"
         assert later.humanize(self.now, only_distance=True) == "a minute"
+
+        assert self.now.humanize(later, brief=True) == "m"
+        assert later.humanize(self.now, brief=True) == "m"
 
     def test_minutes(self):
 
@@ -2084,6 +2103,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 minutes"
         assert later.humanize(self.now, only_distance=True) == "2 minutes"
 
+        assert self.now.humanize(later, brief=True) == "2m"
+        assert later.humanize(self.now, brief=True) == "2m"
+
     def test_hour(self):
 
         later = self.now.shift(hours=1)
@@ -2094,6 +2116,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "an hour"
         assert later.humanize(self.now, only_distance=True) == "an hour"
 
+        assert self.now.humanize(later, brief=True) == "h"
+        assert later.humanize(self.now, brief=True) == "h"
+
     def test_hours(self):
 
         later = self.now.shift(hours=2)
@@ -2103,6 +2128,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "2 hours"
         assert later.humanize(self.now, only_distance=True) == "2 hours"
+
+        assert self.now.humanize(later, brief=True) == "2h"
+        assert later.humanize(self.now, brief=True) == "2h"
 
     def test_day(self):
 
@@ -2126,6 +2154,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "a day"
         assert later.humanize(self.now, only_distance=True) == "a day"
 
+        assert self.now.humanize(later, brief=True) == "d"
+        assert later.humanize(self.now, brief=True) == "d"
+
     def test_days(self):
 
         later = self.now.shift(days=2)
@@ -2135,6 +2166,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "2 days"
         assert later.humanize(self.now, only_distance=True) == "2 days"
+
+        assert self.now.humanize(later, brief=True) == "2d"
+        assert later.humanize(self.now, brief=True) == "2d"
 
         # Regression tests for humanize bug referenced in issue 541
         later = self.now.shift(days=3)
@@ -2156,6 +2190,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "a week"
         assert later.humanize(self.now, only_distance=True) == "a week"
 
+        assert self.now.humanize(later, brief=True) == "w"
+        assert later.humanize(self.now, brief=True) == "w"
+
     def test_weeks(self):
 
         later = self.now.shift(weeks=2)
@@ -2165,6 +2202,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "2 weeks"
         assert later.humanize(self.now, only_distance=True) == "2 weeks"
+
+        assert self.now.humanize(later, brief=True) == "2w"
+        assert later.humanize(self.now, brief=True) == "2w"
 
     @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_month(self):
@@ -2177,6 +2217,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "a month"
         assert later.humanize(self.now, only_distance=True) == "a month"
+
+        assert self.now.humanize(later, brief=True) == "m"
+        assert later.humanize(self.now, brief=True) == "m"
 
     def test_month_plus_4_days(self):
 
@@ -2198,6 +2241,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 months"
         assert later.humanize(self.now, only_distance=True) == "2 months"
 
+        assert self.now.humanize(later, brief=True) == "2m"
+        assert later.humanize(self.now, brief=True) == "2m"
+
     def test_year(self):
 
         later = self.now.shift(years=1)
@@ -2208,6 +2254,9 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "a year"
         assert later.humanize(self.now, only_distance=True) == "a year"
 
+        assert self.now.humanize(later, brief=True) == "y"
+        assert later.humanize(self.now, brief=True) == "y"
+
     def test_years(self):
 
         later = self.now.shift(years=2)
@@ -2217,6 +2266,9 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later, only_distance=True) == "2 years"
         assert later.humanize(self.now, only_distance=True) == "2 years"
+
+        assert self.now.humanize(later, brief=True) == "2y"
+        assert later.humanize(self.now, brief=True) == "2y"
 
         arw = arrow.Arrow(2014, 7, 2)
 

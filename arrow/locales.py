@@ -138,17 +138,22 @@ class Locale:
         timeframe: TimeFrameLiteral,
         delta: Union[float, int] = 0,
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        :param brief: return shortened string eg: "11s"
         """
 
         humanized = self._format_timeframe(timeframe, trunc(delta))
         if not only_distance:
             humanized = self._format_relative(humanized, timeframe, delta)
+        if brief:
+            humanized = self._format_timeframe(timeframe, trunc(delta))
+            humanized = self._format_brief(humanized)
 
         return humanized
 
@@ -156,23 +161,28 @@ class Locale:
         self,
         timeframes: Sequence[Tuple[TimeFrameLiteral, Union[int, float]]],
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
 
         :param timeframes: a list of string, quantity pairs each representing a timeframe and delta.
         :param only_distance: return only distance eg: "2 hours and 11 seconds" without "in" or "ago" keywords
+        :param brief: returns shortened distance eg: "2h 11s" without and keywords
         """
 
         parts = [
             self._format_timeframe(timeframe, trunc(delta))
             for timeframe, delta in timeframes
         ]
-        if self.and_word:
+        if self.and_word and not brief:
             parts.insert(-1, self.and_word)
         humanized = " ".join(parts)
 
         if not only_distance:
             humanized = self._format_relative(humanized, *timeframes[-1])
+        if brief:
+            parts = [self._format_brief(part) for part in parts]
+            humanized = " ".join(parts)
 
         return humanized
 
@@ -285,6 +295,18 @@ class Locale:
 
         return direction.format(humanized)
 
+    def _format_brief(
+        self,
+        humanized: str,
+    ) -> str:
+
+        parts = humanized.split()
+
+        if parts[0].isnumeric():
+            return parts[0] + parts[1][0]
+
+        return parts[1][0]
+
 
 class EnglishLocale(Locale):
 
@@ -387,15 +409,17 @@ class EnglishLocale(Locale):
         timeframe: TimeFrameLiteral,
         delta: Union[int, float] = 0,
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within a timeframe in plain language.
 
         :param timeframe: a string representing a timeframe.
         :param delta: a quantity representing a delta in a timeframe.
         :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        :param brief: return shortened string eg: "11s"
         """
 
-        humanized = super().describe(timeframe, delta, only_distance)
+        humanized = super().describe(timeframe, delta, only_distance, brief)
         if only_distance and timeframe == "now":
             humanized = "instantly"
 
@@ -1982,6 +2006,7 @@ class GermanBaseLocale(Locale):
         timeframe: TimeFrameLiteral,
         delta: Union[int, float] = 0,
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within a timeframe in plain language.
 
@@ -3457,6 +3482,7 @@ class HebrewLocale(Locale):
         self,
         timeframes: Sequence[Tuple[TimeFrameLiteral, Union[int, float]]],
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within multiple timeframes in plain language.
         In Hebrew, the and word behaves a bit differently.
@@ -5388,6 +5414,7 @@ class LuxembourgishLocale(Locale):
         timeframe: TimeFrameLiteral,
         delta: Union[int, float] = 0,
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
 
         if not only_distance:
@@ -5760,6 +5787,7 @@ class SinhalaLocale(Locale):
         timeframe: TimeFrameLiteral,
         delta: Union[float, int] = 1,  # key is always future when only_distance=False
         only_distance: bool = False,
+        brief: bool = False,
     ) -> str:
         """Describes a delta within a timeframe in plain language.
 
