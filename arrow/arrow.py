@@ -1385,8 +1385,6 @@ class Arrow:
 
                 # Create search pattern and find within string
                 pattern = re.compile(fr"(^|\b|\d){search_string}")
-                print(pattern)
-                print(input_string)
                 match = pattern.search(input_string)
 
                 # If there is no match continue to next iteration
@@ -1452,7 +1450,6 @@ class Arrow:
             )
 
         time_changes = {k: sign_val * v for k, v in time_object_info.items()}
-        print(time_changes)
 
         return current_time.shift(**time_changes)
 
