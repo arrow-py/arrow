@@ -2055,7 +2055,7 @@ class TestArrowHumanize:
 
     def test_all_granularity(self):
         assert (
-            self.now.humanize(granularity="all")
+            self.now.humanize(self.now, granularity="all")
             == "in 0 years 0 quarters 0 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
         )
 
