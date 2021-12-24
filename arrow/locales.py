@@ -172,7 +172,16 @@ class Locale:
         humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, *timeframes[-1])
+            # Needed to determine the correct relative string to use
+            timeframe_value = 0
+
+            for _unit_name, unit_value in timeframes:
+                if trunc(unit_value) != 0:
+                    timeframe_value = trunc(unit_value)
+                    break
+
+            # Note it doesn't matter the timeframe unit we use on the call, only the value
+            humanized = self._format_relative(humanized, "seconds", timeframe_value)
 
         return humanized
 
@@ -951,7 +960,7 @@ class ChineseCNLocale(Locale):
 
     timeframes = {
         "now": "刚才",
-        "second": "一秒",
+        "second": "1秒",
         "seconds": "{0}秒",
         "minute": "1分钟",
         "minutes": "{0}分钟",
@@ -959,7 +968,7 @@ class ChineseCNLocale(Locale):
         "hours": "{0}小时",
         "day": "1天",
         "days": "{0}天",
-        "week": "一周",
+        "week": "1周",
         "weeks": "{0}周",
         "month": "1个月",
         "months": "{0}个月",
@@ -1514,6 +1523,12 @@ class RussianLocale(SlavicBaseLocale):
             "singular": "{0} месяц",
             "dual": "{0} месяца",
             "plural": "{0} месяцев",
+        },
+        "quarter": "квартал",
+        "quarters": {
+            "singular": "{0} квартал",
+            "dual": "{0} квартала",
+            "plural": "{0} кварталов",
         },
         "year": "год",
         "years": {"singular": "{0} год", "dual": "{0} года", "plural": "{0} лет"},
@@ -5903,3 +5918,71 @@ class UrduLocale(Locale):
         "ہفتہ",
         "اتوار",
     ]
+
+
+class KazakhLocale(Locale):
+
+    names = ["kk", "kk-kz"]
+
+    past = "{0} бұрын"
+    future = "{0} кейін"
+    timeframes = {
+        "now": "қазір",
+        "second": "бір секунд",
+        "seconds": "{0} секунд",
+        "minute": "бір минут",
+        "minutes": "{0} минут",
+        "hour": "бір сағат",
+        "hours": "{0} сағат",
+        "day": "бір күн",
+        "days": "{0} күн",
+        "week": "бір апта",
+        "weeks": "{0} апта",
+        "month": "бір ай",
+        "months": "{0} ай",
+        "year": "бір жыл",
+        "years": "{0} жыл",
+    }
+
+    month_names = [
+        "",
+        "Қаңтар",
+        "Ақпан",
+        "Наурыз",
+        "Сәуір",
+        "Мамыр",
+        "Маусым",
+        "Шілде",
+        "Тамыз",
+        "Қыркүйек",
+        "Қазан",
+        "Қараша",
+        "Желтоқсан",
+    ]
+    month_abbreviations = [
+        "",
+        "Қан",
+        "Ақп",
+        "Нау",
+        "Сәу",
+        "Мам",
+        "Мау",
+        "Шіл",
+        "Там",
+        "Қыр",
+        "Қаз",
+        "Қар",
+        "Жел",
+    ]
+
+    day_names = [
+        "",
+        "Дүйсембі",
+        "Сейсенбі",
+        "Сәрсенбі",
+        "Бейсенбі",
+        "Жұма",
+        "Сенбі",
+        "Жексенбі",
+    ]
+    day_abbreviations = ["", "Дс", "Сс", "Ср", "Бс", "Жм", "Сб", "Жс"]
