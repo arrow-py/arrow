@@ -2057,7 +2057,7 @@ class TestArrowHumanize:
         assert (
             self.now.humanize(granularity="all")
             == "in 0 years 0 quarters 0 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
-        )  # TODO: this should be "ago"; change this when #997 is merged
+        )
 
         later105 = self.arrow.shift(seconds=10 ** 5)
         assert (
@@ -2086,8 +2086,8 @@ class TestArrowHumanize:
         later_two_months = self.arrow.shift(days=61)
         assert (
             self.arrow.humanize(later_two_months, granularity="all")
-            == "in 0 years 0 quarters 2 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
-        )  # TODO: this should be "ago"; change this when #997 is merged
+            == "0 years 0 quarters 2 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds ago"
+        )
         assert (
             later_two_months.humanize(self.arrow, granularity="all")
             == "in 0 years 0 quarters 2 months 0 weeks 0 days 0 hours 0 minutes and 0 seconds"
