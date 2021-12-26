@@ -172,7 +172,16 @@ class Locale:
         humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, *timeframes[-1])
+            # Needed to determine the correct relative string to use
+            timeframe_value = 0
+
+            for _unit_name, unit_value in timeframes:
+                if trunc(unit_value) != 0:
+                    timeframe_value = trunc(unit_value)
+                    break
+
+            # Note it doesn't matter the timeframe unit we use on the call, only the value
+            humanized = self._format_relative(humanized, "seconds", timeframe_value)
 
         return humanized
 
@@ -5909,3 +5918,71 @@ class UrduLocale(Locale):
         "ہفتہ",
         "اتوار",
     ]
+
+
+class KazakhLocale(Locale):
+
+    names = ["kk", "kk-kz"]
+
+    past = "{0} бұрын"
+    future = "{0} кейін"
+    timeframes = {
+        "now": "қазір",
+        "second": "бір секунд",
+        "seconds": "{0} секунд",
+        "minute": "бір минут",
+        "minutes": "{0} минут",
+        "hour": "бір сағат",
+        "hours": "{0} сағат",
+        "day": "бір күн",
+        "days": "{0} күн",
+        "week": "бір апта",
+        "weeks": "{0} апта",
+        "month": "бір ай",
+        "months": "{0} ай",
+        "year": "бір жыл",
+        "years": "{0} жыл",
+    }
+
+    month_names = [
+        "",
+        "Қаңтар",
+        "Ақпан",
+        "Наурыз",
+        "Сәуір",
+        "Мамыр",
+        "Маусым",
+        "Шілде",
+        "Тамыз",
+        "Қыркүйек",
+        "Қазан",
+        "Қараша",
+        "Желтоқсан",
+    ]
+    month_abbreviations = [
+        "",
+        "Қан",
+        "Ақп",
+        "Нау",
+        "Сәу",
+        "Мам",
+        "Мау",
+        "Шіл",
+        "Там",
+        "Қыр",
+        "Қаз",
+        "Қар",
+        "Жел",
+    ]
+
+    day_names = [
+        "",
+        "Дүйсембі",
+        "Сейсенбі",
+        "Сәрсенбі",
+        "Бейсенбі",
+        "Жұма",
+        "Сенбі",
+        "Жексенбі",
+    ]
+    day_abbreviations = ["", "Дс", "Сс", "Ср", "Бс", "Жм", "Сб", "Жс"]
