@@ -1241,6 +1241,7 @@ class Arrow:
                 elif granularity == "minute":
                     delta = sign * delta_second / self._SECS_PER_MINUTE
                 elif granularity == "hour":
+                    print("here lol")
                     delta = sign * delta_second / self._SECS_PER_HOUR
                 elif granularity == "day":
                     delta = sign * delta_second / self._SECS_PER_DAY
