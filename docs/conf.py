@@ -58,3 +58,7 @@ html_theme_options = {
 html_sidebars = {
     "**": ["about.html", "localtoc.html", "relations.html", "searchbox.html"]
 }
+
+# Generate PDFs with unicode characters
+# https://docs.readthedocs.io/en/stable/guides/pdf-non-ascii-languages.html
+latex_engine = "xelatex"
