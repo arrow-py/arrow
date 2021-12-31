@@ -46,7 +46,7 @@ _TimeFrameElements = Union[
 ]
 
 
-_locale_map: Dict[str, Type["Locale"]] = dict()
+_locale_map: Dict[str, Type["Locale"]] = {}
 
 
 def get_locale(name: str) -> "Locale":
@@ -5743,7 +5743,7 @@ class SinhalaLocale(Locale):
     }
     # Sinhala: the general format to describe timeframe is different from past and future,
     # so we do not copy the original timeframes dictionary
-    timeframes_only_distance = dict()
+    timeframes_only_distance = {}
     timeframes_only_distance["second"] = "තත්පරයක්"
     timeframes_only_distance["seconds"] = "තත්පර {0}"
     timeframes_only_distance["minute"] = "මිනිත්තුවක්"
