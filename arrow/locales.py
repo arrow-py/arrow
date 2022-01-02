@@ -976,6 +976,15 @@ class ChineseCNLocale(Locale):
         "years": "{0}年",
     }
 
+    special_dayframes = {
+        -2: "前天",
+        -1: "昨天",
+        1: "明天",
+        2: "后天",
+    }
+
+    special_yearframes = {-2: "前年", -1: "去年", 1: "明年", 2: "后年"}
+
     month_names = [
         "",
         "一月",
@@ -1009,6 +1018,20 @@ class ChineseCNLocale(Locale):
 
     day_names = ["", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
     day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
+
+    def _format_relative(
+        self, humanized: str, timeframe: TimeFrameLiteral, delta: Union[float, int]
+    ) -> str:
+        if timeframe in ("day", "days"):
+            special = self.special_dayframes.get(int(delta))
+            if special:
+                return special
+        elif timeframe in ("year", "years"):
+            special = self.special_yearframes.get(int(delta))
+            if special:
+                return special
+
+        return super()._format_relative(humanized, timeframe, delta)
 
 
 class ChineseTWLocale(Locale):
