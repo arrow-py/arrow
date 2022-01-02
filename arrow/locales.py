@@ -46,7 +46,7 @@ _TimeFrameElements = Union[
 ]
 
 
-_locale_map: Dict[str, Type["Locale"]] = dict()
+_locale_map: Dict[str, Type["Locale"]] = {}
 
 
 def get_locale(name: str) -> "Locale":
@@ -172,7 +172,16 @@ class Locale:
         humanized = " ".join(parts)
 
         if not only_distance:
-            humanized = self._format_relative(humanized, *timeframes[-1])
+            # Needed to determine the correct relative string to use
+            timeframe_value = 0
+
+            for _unit_name, unit_value in timeframes:
+                if trunc(unit_value) != 0:
+                    timeframe_value = trunc(unit_value)
+                    break
+
+            # Note it doesn't matter the timeframe unit we use on the call, only the value
+            humanized = self._format_relative(humanized, "seconds", timeframe_value)
 
         return humanized
 
@@ -3058,44 +3067,51 @@ class CzechLocale(Locale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "Teď",
-        "second": {"past": "vteřina", "future": "vteřina", "zero": "vteřina"},
+        "second": {"past": "vteřina", "future": "vteřina"},
         "seconds": {
+            "zero": "vteřina",
             "past": "{0} sekundami",
             "future-singular": "{0} sekundy",
             "future-paucal": "{0} sekund",
         },
-        "minute": {"past": "minutou", "future": "minutu", "zero": "{0} minut"},
+        "minute": {"past": "minutou", "future": "minutu"},
         "minutes": {
+            "zero": "{0} minut",
             "past": "{0} minutami",
             "future-singular": "{0} minuty",
             "future-paucal": "{0} minut",
         },
-        "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodin"},
+        "hour": {"past": "hodinou", "future": "hodinu"},
         "hours": {
+            "zero": "{0} hodin",
             "past": "{0} hodinami",
             "future-singular": "{0} hodiny",
             "future-paucal": "{0} hodin",
         },
-        "day": {"past": "dnem", "future": "den", "zero": "{0} dnů"},
+        "day": {"past": "dnem", "future": "den"},
         "days": {
+            "zero": "{0} dnů",
             "past": "{0} dny",
             "future-singular": "{0} dny",
             "future-paucal": "{0} dnů",
         },
-        "week": {"past": "týdnem", "future": "týden", "zero": "{0} týdnů"},
+        "week": {"past": "týdnem", "future": "týden"},
         "weeks": {
+            "zero": "{0} týdnů",
             "past": "{0} týdny",
             "future-singular": "{0} týdny",
             "future-paucal": "{0} týdnů",
         },
-        "month": {"past": "měsícem", "future": "měsíc", "zero": "{0} měsíců"},
+        "month": {"past": "měsícem", "future": "měsíc"},
         "months": {
+            "zero": "{0} měsíců",
             "past": "{0} měsíci",
             "future-singular": "{0} měsíce",
             "future-paucal": "{0} měsíců",
         },
-        "year": {"past": "rokem", "future": "rok", "zero": "{0} let"},
+        "year": {"past": "rokem", "future": "rok"},
         "years": {
+            "zero": "{0} let",
             "past": "{0} lety",
             "future-singular": "{0} roky",
             "future-paucal": "{0} let",
@@ -3181,44 +3197,51 @@ class SlovakLocale(Locale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "Teraz",
-        "second": {"past": "sekundou", "future": "sekundu", "zero": "{0} sekúnd"},
+        "second": {"past": "sekundou", "future": "sekundu"},
         "seconds": {
+            "zero": "{0} sekúnd",
             "past": "{0} sekundami",
             "future-singular": "{0} sekundy",
             "future-paucal": "{0} sekúnd",
         },
-        "minute": {"past": "minútou", "future": "minútu", "zero": "{0} minút"},
+        "minute": {"past": "minútou", "future": "minútu"},
         "minutes": {
+            "zero": "{0} minút",
             "past": "{0} minútami",
             "future-singular": "{0} minúty",
             "future-paucal": "{0} minút",
         },
-        "hour": {"past": "hodinou", "future": "hodinu", "zero": "{0} hodín"},
+        "hour": {"past": "hodinou", "future": "hodinu"},
         "hours": {
+            "zero": "{0} hodín",
             "past": "{0} hodinami",
             "future-singular": "{0} hodiny",
             "future-paucal": "{0} hodín",
         },
-        "day": {"past": "dňom", "future": "deň", "zero": "{0} dní"},
+        "day": {"past": "dňom", "future": "deň"},
         "days": {
+            "zero": "{0} dní",
             "past": "{0} dňami",
             "future-singular": "{0} dni",
             "future-paucal": "{0} dní",
         },
-        "week": {"past": "týždňom", "future": "týždeň", "zero": "{0} týždňov"},
+        "week": {"past": "týždňom", "future": "týždeň"},
         "weeks": {
+            "zero": "{0} týždňov",
             "past": "{0} týždňami",
             "future-singular": "{0} týždne",
             "future-paucal": "{0} týždňov",
         },
-        "month": {"past": "mesiacom", "future": "mesiac", "zero": "{0} mesiacov"},
+        "month": {"past": "mesiacom", "future": "mesiac"},
         "months": {
+            "zero": "{0} mesiacov",
             "past": "{0} mesiacmi",
             "future-singular": "{0} mesiace",
             "future-paucal": "{0} mesiacov",
         },
-        "year": {"past": "rokom", "future": "rok", "zero": "{0} rokov"},
+        "year": {"past": "rokom", "future": "rok"},
         "years": {
+            "zero": "{0} rokov",
             "past": "{0} rokmi",
             "future-singular": "{0} roky",
             "future-paucal": "{0} rokov",
@@ -5720,7 +5743,7 @@ class SinhalaLocale(Locale):
     }
     # Sinhala: the general format to describe timeframe is different from past and future,
     # so we do not copy the original timeframes dictionary
-    timeframes_only_distance = dict()
+    timeframes_only_distance = {}
     timeframes_only_distance["second"] = "තත්පරයක්"
     timeframes_only_distance["seconds"] = "තත්පර {0}"
     timeframes_only_distance["minute"] = "මිනිත්තුවක්"

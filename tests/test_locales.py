@@ -613,8 +613,8 @@ class TestCzechLocale:
 
         # Second(s)
         assert self.locale._format_timeframe("second", -1) == "vteřina"
-        assert self.locale._format_timeframe("second", 0) == "vteřina"
         assert self.locale._format_timeframe("second", 1) == "vteřina"
+        assert self.locale._format_timeframe("seconds", 0) == "vteřina"
         assert self.locale._format_timeframe("seconds", -2) == "2 sekundami"
         assert self.locale._format_timeframe("seconds", -5) == "5 sekundami"
         assert self.locale._format_timeframe("seconds", 2) == "2 sekundy"
@@ -622,8 +622,8 @@ class TestCzechLocale:
 
         # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "minutou"
-        assert self.locale._format_timeframe("minute", 0) == "0 minut"
         assert self.locale._format_timeframe("minute", 1) == "minutu"
+        assert self.locale._format_timeframe("minutes", 0) == "0 minut"
         assert self.locale._format_timeframe("minutes", -2) == "2 minutami"
         assert self.locale._format_timeframe("minutes", -5) == "5 minutami"
         assert self.locale._format_timeframe("minutes", 2) == "2 minuty"
@@ -631,8 +631,8 @@ class TestCzechLocale:
 
         # Hour(s)
         assert self.locale._format_timeframe("hour", -1) == "hodinou"
-        assert self.locale._format_timeframe("hour", 0) == "0 hodin"
         assert self.locale._format_timeframe("hour", 1) == "hodinu"
+        assert self.locale._format_timeframe("hours", 0) == "0 hodin"
         assert self.locale._format_timeframe("hours", -2) == "2 hodinami"
         assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
         assert self.locale._format_timeframe("hours", 2) == "2 hodiny"
@@ -640,8 +640,8 @@ class TestCzechLocale:
 
         # Day(s)
         assert self.locale._format_timeframe("day", -1) == "dnem"
-        assert self.locale._format_timeframe("day", 0) == "0 dnů"
         assert self.locale._format_timeframe("day", 1) == "den"
+        assert self.locale._format_timeframe("days", 0) == "0 dnů"
         assert self.locale._format_timeframe("days", -2) == "2 dny"
         assert self.locale._format_timeframe("days", -5) == "5 dny"
         assert self.locale._format_timeframe("days", 2) == "2 dny"
@@ -649,8 +649,8 @@ class TestCzechLocale:
 
         # Weeks(s)
         assert self.locale._format_timeframe("week", -1) == "týdnem"
-        assert self.locale._format_timeframe("week", 0) == "0 týdnů"
         assert self.locale._format_timeframe("week", 1) == "týden"
+        assert self.locale._format_timeframe("weeks", 0) == "0 týdnů"
         assert self.locale._format_timeframe("weeks", -2) == "2 týdny"
         assert self.locale._format_timeframe("weeks", -5) == "5 týdny"
         assert self.locale._format_timeframe("weeks", 2) == "2 týdny"
@@ -658,8 +658,8 @@ class TestCzechLocale:
 
         # Month(s)
         assert self.locale._format_timeframe("month", -1) == "měsícem"
-        assert self.locale._format_timeframe("month", 0) == "0 měsíců"
         assert self.locale._format_timeframe("month", 1) == "měsíc"
+        assert self.locale._format_timeframe("months", 0) == "0 měsíců"
         assert self.locale._format_timeframe("months", -2) == "2 měsíci"
         assert self.locale._format_timeframe("months", -5) == "5 měsíci"
         assert self.locale._format_timeframe("months", 2) == "2 měsíce"
@@ -667,8 +667,8 @@ class TestCzechLocale:
 
         # Year(s)
         assert self.locale._format_timeframe("year", -1) == "rokem"
-        assert self.locale._format_timeframe("year", 0) == "0 let"
         assert self.locale._format_timeframe("year", 1) == "rok"
+        assert self.locale._format_timeframe("years", 0) == "0 let"
         assert self.locale._format_timeframe("years", -2) == "2 lety"
         assert self.locale._format_timeframe("years", -5) == "5 lety"
         assert self.locale._format_timeframe("years", 2) == "2 roky"
@@ -697,7 +697,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("seconds", -5) == "5 sekundami"
         assert self.locale._format_timeframe("seconds", -2) == "2 sekundami"
         assert self.locale._format_timeframe("second", -1) == "sekundou"
-        assert self.locale._format_timeframe("second", 0) == "0 sekúnd"
+        assert self.locale._format_timeframe("seconds", 0) == "0 sekúnd"
         assert self.locale._format_timeframe("second", 1) == "sekundu"
         assert self.locale._format_timeframe("seconds", 2) == "2 sekundy"
         assert self.locale._format_timeframe("seconds", 5) == "5 sekúnd"
@@ -705,7 +705,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("minutes", -5) == "5 minútami"
         assert self.locale._format_timeframe("minutes", -2) == "2 minútami"
         assert self.locale._format_timeframe("minute", -1) == "minútou"
-        assert self.locale._format_timeframe("minute", 0) == "0 minút"
+        assert self.locale._format_timeframe("minutes", 0) == "0 minút"
         assert self.locale._format_timeframe("minute", 1) == "minútu"
         assert self.locale._format_timeframe("minutes", 2) == "2 minúty"
         assert self.locale._format_timeframe("minutes", 5) == "5 minút"
@@ -713,7 +713,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("hours", -5) == "5 hodinami"
         assert self.locale._format_timeframe("hours", -2) == "2 hodinami"
         assert self.locale._format_timeframe("hour", -1) == "hodinou"
-        assert self.locale._format_timeframe("hour", 0) == "0 hodín"
+        assert self.locale._format_timeframe("hours", 0) == "0 hodín"
         assert self.locale._format_timeframe("hour", 1) == "hodinu"
         assert self.locale._format_timeframe("hours", 2) == "2 hodiny"
         assert self.locale._format_timeframe("hours", 5) == "5 hodín"
@@ -721,7 +721,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("days", -5) == "5 dňami"
         assert self.locale._format_timeframe("days", -2) == "2 dňami"
         assert self.locale._format_timeframe("day", -1) == "dňom"
-        assert self.locale._format_timeframe("day", 0) == "0 dní"
+        assert self.locale._format_timeframe("days", 0) == "0 dní"
         assert self.locale._format_timeframe("day", 1) == "deň"
         assert self.locale._format_timeframe("days", 2) == "2 dni"
         assert self.locale._format_timeframe("days", 5) == "5 dní"
@@ -729,7 +729,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("weeks", -5) == "5 týždňami"
         assert self.locale._format_timeframe("weeks", -2) == "2 týždňami"
         assert self.locale._format_timeframe("week", -1) == "týždňom"
-        assert self.locale._format_timeframe("week", 0) == "0 týždňov"
+        assert self.locale._format_timeframe("weeks", 0) == "0 týždňov"
         assert self.locale._format_timeframe("week", 1) == "týždeň"
         assert self.locale._format_timeframe("weeks", 2) == "2 týždne"
         assert self.locale._format_timeframe("weeks", 5) == "5 týždňov"
@@ -737,7 +737,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("months", -5) == "5 mesiacmi"
         assert self.locale._format_timeframe("months", -2) == "2 mesiacmi"
         assert self.locale._format_timeframe("month", -1) == "mesiacom"
-        assert self.locale._format_timeframe("month", 0) == "0 mesiacov"
+        assert self.locale._format_timeframe("months", 0) == "0 mesiacov"
         assert self.locale._format_timeframe("month", 1) == "mesiac"
         assert self.locale._format_timeframe("months", 2) == "2 mesiace"
         assert self.locale._format_timeframe("months", 5) == "5 mesiacov"
@@ -745,7 +745,7 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("years", -5) == "5 rokmi"
         assert self.locale._format_timeframe("years", -2) == "2 rokmi"
         assert self.locale._format_timeframe("year", -1) == "rokom"
-        assert self.locale._format_timeframe("year", 0) == "0 rokov"
+        assert self.locale._format_timeframe("years", 0) == "0 rokov"
         assert self.locale._format_timeframe("year", 1) == "rok"
         assert self.locale._format_timeframe("years", 2) == "2 roky"
         assert self.locale._format_timeframe("years", 5) == "5 rokov"

@@ -1,3 +1,4 @@
-include LICENSE CHANGELOG.rst README.rst Makefile requirements-dev.txt tox.ini
+include LICENSE CHANGELOG.rst README.rst Makefile tox.ini
+recursive-include requirements *.txt
 recursive-include tests *.py
 recursive-include docs *.py *.rst *.bat Makefile
