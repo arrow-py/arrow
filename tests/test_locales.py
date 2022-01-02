@@ -2018,6 +2018,56 @@ class TestHongKongLocale:
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
 
+        assert self.locale._format_timeframe("second", -1) == "1秒"
+        assert self.locale._format_timeframe("seconds", -30) == "30秒"
+        assert self.locale._format_timeframe("minute", -1) == "1分鐘"
+        assert self.locale._format_timeframe("minutes", -40) == "40分鐘"
+        assert self.locale._format_timeframe("hour", -1) == "1小時"
+        assert self.locale._format_timeframe("hours", -23) == "23小時"
+        assert self.locale._format_timeframe("day", -1) == "1天"
+        assert self.locale._format_timeframe("days", -12) == "12天"
+        assert self.locale._format_timeframe("week", -1) == "1星期"
+        assert self.locale._format_timeframe("weeks", -38) == "38星期"
+        assert self.locale._format_timeframe("month", -1) == "1個月"
+        assert self.locale._format_timeframe("months", -11) == "11個月"
+        assert self.locale._format_timeframe("year", -1) == "1年"
+        assert self.locale._format_timeframe("years", -12) == "12年"
+
+    def test_format_relative_now(self):
+        assert self.locale._format_relative("剛才", "now", 0) == "剛才"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("1秒", "second", 1) == "1秒後"
+        assert self.locale._format_relative("2秒", "seconds", 2) == "2秒後"
+        assert self.locale._format_relative("1分鐘", "minute", 1) == "1分鐘後"
+        assert self.locale._format_relative("2分鐘", "minutes", 2) == "2分鐘後"
+        assert self.locale._format_relative("1小時", "hour", 1) == "1小時後"
+        assert self.locale._format_relative("2小時", "hours", 2) == "2小時後"
+        assert self.locale._format_relative("1天", "day", 1) == "1天後"
+        assert self.locale._format_relative("2天", "days", 2) == "2天後"
+        assert self.locale._format_relative("1星期", "week", 1) == "1星期後"
+        assert self.locale._format_relative("2星期", "weeks", 2) == "2星期後"
+        assert self.locale._format_relative("1個月", "month", 1) == "1個月後"
+        assert self.locale._format_relative("2個月", "months", 2) == "2個月後"
+        assert self.locale._format_relative("1年", "year", 1) == "1年後"
+        assert self.locale._format_relative("2年", "years", 2) == "2年後"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("1秒", "second", -1) == "1秒前"
+        assert self.locale._format_relative("2秒", "seconds", -2) == "2秒前"
+        assert self.locale._format_relative("1分鐘", "minute", -1) == "1分鐘前"
+        assert self.locale._format_relative("2分鐘", "minutes", -2) == "2分鐘前"
+        assert self.locale._format_relative("1小時", "hour", -1) == "1小時前"
+        assert self.locale._format_relative("2小時", "hours", -2) == "2小時前"
+        assert self.locale._format_relative("1天", "day", -1) == "1天前"
+        assert self.locale._format_relative("2天", "days", -2) == "2天前"
+        assert self.locale._format_relative("1星期", "week", -1) == "1星期前"
+        assert self.locale._format_relative("2星期", "weeks", -2) == "2星期前"
+        assert self.locale._format_relative("1個月", "month", -1) == "1個月前"
+        assert self.locale._format_relative("2個月", "months", -2) == "2個月前"
+        assert self.locale._format_relative("1年", "year", -1) == "1年前"
+        assert self.locale._format_relative("2年", "years", -2) == "2年前"
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestChineseTWLocale:
@@ -2038,6 +2088,56 @@ class TestChineseTWLocale:
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
 
+        assert self.locale._format_timeframe("second", -1) == "1秒"
+        assert self.locale._format_timeframe("seconds", -30) == "30秒"
+        assert self.locale._format_timeframe("minute", -1) == "1分鐘"
+        assert self.locale._format_timeframe("minutes", -40) == "40分鐘"
+        assert self.locale._format_timeframe("hour", -1) == "1小時"
+        assert self.locale._format_timeframe("hours", -23) == "23小時"
+        assert self.locale._format_timeframe("day", -1) == "1天"
+        assert self.locale._format_timeframe("days", -12) == "12天"
+        assert self.locale._format_timeframe("week", -1) == "1週"
+        assert self.locale._format_timeframe("weeks", -38) == "38週"
+        assert self.locale._format_timeframe("month", -1) == "1個月"
+        assert self.locale._format_timeframe("months", -11) == "11個月"
+        assert self.locale._format_timeframe("year", -1) == "1年"
+        assert self.locale._format_timeframe("years", -12) == "12年"
+
+    def test_format_relative_now(self):
+        assert self.locale._format_relative("剛才", "now", 0) == "剛才"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("1秒", "second", 1) == "1秒後"
+        assert self.locale._format_relative("2秒", "seconds", 2) == "2秒後"
+        assert self.locale._format_relative("1分鐘", "minute", 1) == "1分鐘後"
+        assert self.locale._format_relative("2分鐘", "minutes", 2) == "2分鐘後"
+        assert self.locale._format_relative("1小時", "hour", 1) == "1小時後"
+        assert self.locale._format_relative("2小時", "hours", 2) == "2小時後"
+        assert self.locale._format_relative("1天", "day", 1) == "1天後"
+        assert self.locale._format_relative("2天", "days", 2) == "2天後"
+        assert self.locale._format_relative("1週", "week", 1) == "1週後"
+        assert self.locale._format_relative("2週", "weeks", 2) == "2週後"
+        assert self.locale._format_relative("1個月", "month", 1) == "1個月後"
+        assert self.locale._format_relative("2個月", "months", 2) == "2個月後"
+        assert self.locale._format_relative("1年", "year", 1) == "1年後"
+        assert self.locale._format_relative("2年", "years", 2) == "2年後"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("1秒", "second", -1) == "1秒前"
+        assert self.locale._format_relative("2秒", "seconds", -2) == "2秒前"
+        assert self.locale._format_relative("1分鐘", "minute", -1) == "1分鐘前"
+        assert self.locale._format_relative("2分鐘", "minutes", -2) == "2分鐘前"
+        assert self.locale._format_relative("1小時", "hour", -1) == "1小時前"
+        assert self.locale._format_relative("2小時", "hours", -2) == "2小時前"
+        assert self.locale._format_relative("1天", "day", -1) == "1天前"
+        assert self.locale._format_relative("2天", "days", -2) == "2天前"
+        assert self.locale._format_relative("1週", "week", -1) == "1週前"
+        assert self.locale._format_relative("2週", "weeks", -2) == "2週前"
+        assert self.locale._format_relative("1個月", "month", -1) == "1個月前"
+        assert self.locale._format_relative("2個月", "months", -2) == "2個月前"
+        assert self.locale._format_relative("1年", "year", -1) == "1年前"
+        assert self.locale._format_relative("2年", "years", -2) == "2年前"
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestChineseCNLocale:
@@ -2057,6 +2157,56 @@ class TestChineseCNLocale:
         assert self.locale._format_timeframe("months", 11) == "11个月"
         assert self.locale._format_timeframe("year", 1) == "1年"
         assert self.locale._format_timeframe("years", 12) == "12年"
+
+        assert self.locale._format_timeframe("second", -1) == "1秒"
+        assert self.locale._format_timeframe("seconds", -30) == "30秒"
+        assert self.locale._format_timeframe("minute", -1) == "1分钟"
+        assert self.locale._format_timeframe("minutes", -40) == "40分钟"
+        assert self.locale._format_timeframe("hour", -1) == "1小时"
+        assert self.locale._format_timeframe("hours", -23) == "23小时"
+        assert self.locale._format_timeframe("day", -1) == "1天"
+        assert self.locale._format_timeframe("days", -12) == "12天"
+        assert self.locale._format_timeframe("week", -1) == "1周"
+        assert self.locale._format_timeframe("weeks", -38) == "38周"
+        assert self.locale._format_timeframe("month", -1) == "1个月"
+        assert self.locale._format_timeframe("months", -11) == "11个月"
+        assert self.locale._format_timeframe("year", -1) == "1年"
+        assert self.locale._format_timeframe("years", -12) == "12年"
+
+    def test_format_relative_now(self):
+        assert self.locale._format_relative("刚才", "now", 0) == "刚才"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("1秒", "second", 1) == "1秒后"
+        assert self.locale._format_relative("2秒", "seconds", 2) == "2秒后"
+        assert self.locale._format_relative("1分钟", "minute", 1) == "1分钟后"
+        assert self.locale._format_relative("2分钟", "minutes", 2) == "2分钟后"
+        assert self.locale._format_relative("1小时", "hour", 1) == "1小时后"
+        assert self.locale._format_relative("2小时", "hours", 2) == "2小时后"
+        assert self.locale._format_relative("1天", "day", 1) == "1天后"
+        assert self.locale._format_relative("2天", "days", 2) == "2天后"
+        assert self.locale._format_relative("1周", "week", 1) == "1周后"
+        assert self.locale._format_relative("2周", "weeks", 2) == "2周后"
+        assert self.locale._format_relative("1个月", "month", 1) == "1个月后"
+        assert self.locale._format_relative("2个月", "months", 2) == "2个月后"
+        assert self.locale._format_relative("1年", "year", 1) == "1年后"
+        assert self.locale._format_relative("2年", "years", 2) == "2年后"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("1秒", "second", -1) == "1秒前"
+        assert self.locale._format_relative("2秒", "seconds", -2) == "2秒前"
+        assert self.locale._format_relative("1分钟", "minute", -1) == "1分钟前"
+        assert self.locale._format_relative("2分钟", "minutes", -2) == "2分钟前"
+        assert self.locale._format_relative("1小时", "hour", -1) == "1小时前"
+        assert self.locale._format_relative("2小时", "hours", -2) == "2小时前"
+        assert self.locale._format_relative("1天", "day", -1) == "1天前"
+        assert self.locale._format_relative("2天", "days", -2) == "2天前"
+        assert self.locale._format_relative("1周", "week", -1) == "1周前"
+        assert self.locale._format_relative("2周", "weeks", -2) == "2周前"
+        assert self.locale._format_relative("1个月", "month", -1) == "1个月前"
+        assert self.locale._format_relative("2个月", "months", -2) == "2个月前"
+        assert self.locale._format_relative("1年", "year", -1) == "1年前"
+        assert self.locale._format_relative("2年", "years", -2) == "2年前"
 
 
 @pytest.mark.usefixtures("lang_locale")
