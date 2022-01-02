@@ -1,0 +1,5 @@
+-r requirements.txt
+doc8
+sphinx
+sphinx-autobuild
+sphinx-autodoc-typehints

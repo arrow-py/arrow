@@ -2373,7 +2373,20 @@ def locale_list_no_weeks() -> List[str]:
         "zh-hk",
         "nl",
         "nl-nl",
+        "be",
+        "be-by",
+        "pl",
+        "pl-pl",
+        "ru",
+        "ru-ru",
         "af",
+        "bg",
+        "bg-bg",
+        "ua",
+        "uk",
+        "uk-ua",
+        "mk",
+        "mk-mk",
         "de",
         "de-de",
         "de-ch",
@@ -2397,6 +2410,10 @@ def locale_list_no_weeks() -> List[str]:
         "da-dk",
         "ml",
         "hi",
+        "cs",
+        "cs-cz",
+        "sk",
+        "sk-sk",
         "fa",
         "fa-ir",
         "mr",
@@ -2449,6 +2466,8 @@ def locale_list_no_weeks() -> List[str]:
         "ta-lk",
         "ur",
         "ur-pk",
+        "kk",
+        "kk-kz",
     ]
 
     return tested_langs
@@ -2483,6 +2502,12 @@ def locale_list_with_weeks() -> List[str]:
         "zh-hk",
         "nl",
         "nl-nl",
+        "pl",
+        "pl-pl",
+        "ru",
+        "ru-ru",
+        "mk",
+        "mk-mk",
         "de",
         "de-de",
         "de-ch",
@@ -2490,6 +2515,10 @@ def locale_list_with_weeks() -> List[str]:
         "pt",
         "pt-pt",
         "pt-br",
+        "cs",
+        "cs-cz",
+        "sk",
+        "sk-sk",
         "tl",
         "tl-ph",
         "vi",
@@ -2511,6 +2540,29 @@ def locale_list_with_weeks() -> List[str]:
         "ta",
         "ta-in",
         "ta-lk",
+        "kk",
+        "kk-kz",
+    ]
+
+    return tested_langs
+
+
+@pytest.fixture(scope="class")
+def slavic_locales() -> List[str]:
+    tested_langs = [
+        "be",
+        "be-by",
+        "pl",
+        "pl-pl",
+        "ru",
+        "ru-ru",
+        "bg",
+        "bg-bg",
+        "ua",
+        "uk",
+        "uk-ua",
+        "mk",
+        "mk-mk",
     ]
 
     return tested_langs
@@ -2878,6 +2930,65 @@ class TestArrowDehumanize:
 
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
+
+    def test_slavic_locales(self, slavic_locales: List[str]):
+
+        # Relevant units for Slavic locale plural logic
+        units = [
+            0,
+            1,
+            2,
+            5,
+            21,
+            22,
+            25,
+        ]
+
+        # Only need to test on seconds as logic holds for all slavic plural units
+        for lang in slavic_locales:
+            for unit in units:
+                arw = arrow.Arrow(2000, 2, 18, 1, 50, 30)
+
+                past = arw.shift(minutes=-1 * unit, days=-1)
+                future = arw.shift(minutes=unit, days=1)
+
+                past_string = past.humanize(
+                    arw, locale=lang, granularity=["minute", "day"]
+                )
+                future_string = future.humanize(
+                    arw, locale=lang, granularity=["minute", "day"]
+                )
+
+                assert arw.dehumanize(past_string, locale=lang) == past
+                assert arw.dehumanize(future_string, locale=lang) == future
+
+    def test_czech_slovak(self):
+
+        # Relevant units for Slavic locale plural logic
+        units = [
+            0,
+            1,
+            2,
+            5,
+        ]
+
+        # Only need to test on seconds as logic holds for all slavic plural units
+        for lang in ["cs"]:
+            for unit in units:
+                arw = arrow.Arrow(2000, 2, 18, 1, 50, 30)
+
+                past = arw.shift(minutes=-1 * unit, days=-1)
+                future = arw.shift(minutes=unit, days=1)
+
+                past_string = past.humanize(
+                    arw, locale=lang, granularity=["minute", "day"]
+                )
+                future_string = future.humanize(
+                    arw, locale=lang, granularity=["minute", "day"]
+                )
+
+                assert arw.dehumanize(past_string, locale=lang) == past
+                assert arw.dehumanize(future_string, locale=lang) == future
 
 
 class TestArrowIsBetween:

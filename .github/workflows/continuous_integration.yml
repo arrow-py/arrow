@@ -12,7 +12,6 @@ jobs:
   test:
     name: ${{ matrix.os }} (${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
       matrix:
@@ -22,56 +21,31 @@ jobs:
           # pypy3 randomly fails on Windows builds
           - os: windows-latest
             python-version: "pypy-3.7"
-
+        include:
+          - os: ubuntu-latest
+            path: ~/.cache/pip
+          - os: macos-latest
+            path: ~/Library/Caches/pip
+          - os: windows-latest
+            path: ~\AppData\Local\pip\Cache
     steps:
-      # Check out latest code
       - uses: actions/checkout@v2
-
-      # Configure pip cache
-      - name: Cache pip (Linux)
+      - name: Cache pip
         uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache pip (macOS)
-        uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
-        with:
-          path: ~/Library/Caches/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache pip (Windows)
-        uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows')
-        with:
-          path: ~\AppData\Local\pip\Cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      # Set up Python
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-
-      # Install dependencies
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
           pip install -U tox tox-gh-actions
-
-      # Run tests
       - name: Test with tox
         run: tox
-
-      # Upload coverage report
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -79,45 +53,29 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-
     steps:
-      # Check out latest code
       - uses: actions/checkout@v2
-
-      # Set up Python
       - name: Set up Python 3.10
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
-
-      # Configure pip cache
       - name: Cache pip
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      # Configure pre-commit cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
       - name: Cache pre-commit
         uses: actions/cache@v2
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pre-commit-
-
-      # Install dependencies
+          restore-keys: ${{ runner.os }}-pre-commit-
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
           pip install -U tox
-
-      # Lint code
       - name: Lint code
-        run: tox -e lint
-
-      # Lint docs
+        run: tox -e lint -- --show-diff-on-failure
       - name: Lint docs
         run: tox -e docs
