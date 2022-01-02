@@ -2138,6 +2138,7 @@ class TestChineseTWLocale:
         assert self.locale._format_relative("1年", "year", -1) == "1年前"
         assert self.locale._format_relative("2年", "years", -2) == "2年前"
 
+
 @pytest.mark.usefixtures("lang_locale")
 class TestChineseCNLocale:
     def test_format_timeframe(self):
