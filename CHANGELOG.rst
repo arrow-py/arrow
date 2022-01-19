@@ -5,7 +5,7 @@ Changelog
 ------------------
 
 - [NEW] Added Kazakh locale.
-- [FIX] The Czech, Slavic and Slovak locales now support ``dehumanize``.
+- [FIX] The Belarusian, Bulgarian, Czech, Macedonian, Polish, Russian, Slovak and Ukrainian locales now support ``dehumanize``.
 - [FIX] Minor bug fixes and improvements to ChineseCN, Indonesian, Norwegian, and Russian locales.
 - [FIX] Expanded testing for multiple locales.
 - [INTERNAL] Started using ``xelatex`` for pdf generation in documentation.
