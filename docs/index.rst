@@ -315,7 +315,7 @@ You can also get a range of time spans:
     >>> start = datetime(2013, 5, 5, 12, 30)
     >>> end = datetime(2013, 5, 5, 17, 15)
     >>> for r in arrow.Arrow.span_range('hour', start, end):
-    ...     print r
+    ...     print(r)
     ...
     (<Arrow [2013-05-05T12:00:00+00:00]>, <Arrow [2013-05-05T12:59:59.999999+00:00]>)
     (<Arrow [2013-05-05T13:00:00+00:00]>, <Arrow [2013-05-05T13:59:59.999999+00:00]>)
@@ -330,7 +330,7 @@ Or just iterate over a range of time:
     >>> start = datetime(2013, 5, 5, 12, 30)
     >>> end = datetime(2013, 5, 5, 17, 15)
     >>> for r in arrow.Arrow.range('hour', start, end):
-    ...     print repr(r)
+    ...     print(repr(r))
     ...
     <Arrow [2013-05-05T12:30:00+00:00]>
     <Arrow [2013-05-05T13:30:00+00:00]>
