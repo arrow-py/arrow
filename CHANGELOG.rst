@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.2.2 (2022-01-19)
+------------------
+
+- [NEW] Added Kazakh locale.
+- [FIX] The Czech, Slavic and Slovak locales now support ``dehumanize``.
+- [FIX] Minor bug fixes and improvements to ChineseCN, Indonesian, Norwegian, and Russian locales.
+- [FIX] Expanded testing for multiple locales.
+- [INTERNAL] Started using ``xelatex`` for pdf generation in documentation.
+- [INTERNAL] Split requirements file into ``requirements.txt``, ``requirements-docs.txt`` and ``requirements-tests.txt``.
+- [INTERNAL] Added ``flake8-annotations`` package for type linting in ``pre-commit``.
+
 1.2.1 (2021-10-24)
 ------------------
 
