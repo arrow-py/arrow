@@ -5699,6 +5699,91 @@ class AlbanianLocale(Locale):
     ]
 
 
+class GeorgianLocale(Locale):
+
+    names = ["ka", "ka-ge"]
+
+    past = "{0} წინ"  # ts’in
+    future = "{0} შემდეგ"  # shemdeg
+    and_word = "და"  # da
+
+    timeframes = {
+        "now": "ახლა",  # akhla
+        # When a cardinal qualifies a noun, it stands in the singular
+        "second": "წამის",  # ts’amis
+        "seconds": "{0} წამის",
+        "minute": "წუთის",  # ts’utis
+        "minutes": "{0} წუთის",
+        "hour": "საათის",  # saatis
+        "hours": "{0} საათის",
+        "day": "დღის",  # dghis
+        "days": "{0} დღის",
+        "week": "კვირის",  # k’viris
+        "weeks": "{0} კვირის",
+        "month": "თვის",  # tvis
+        "months": "{0} თვის",
+        "year": "წლის",  # ts’lis
+        "years": "{0} წლის",
+    }
+
+    month_names = [
+        # modern month names
+        "",
+        "იანვარი",  # Ianvari
+        "თებერვალი",  # Tebervali
+        "მარტი",  # Mart'i
+        "აპრილი",  # Ap'rili
+        "მაისი",  # Maisi
+        "ივნისი",  # Ivnisi
+        "ივლისი",  # Ivlisi
+        "აგვისტო",  # Agvist'o
+        "სექტემბერი",  # Sekt'emberi
+        "ოქტომბერი",  # Okt'omberi
+        "ნოემბერი",  # Noemberi
+        "დეკემბერი",  # Dek'emberi
+    ]
+
+    month_abbreviations = [
+        # no abbr. found yet
+        "",
+        "იანვარი",  # Ianvari
+        "თებერვალი",  # Tebervali
+        "მარტი",  # Mart'i
+        "აპრილი",  # Ap'rili
+        "მაისი",  # Maisi
+        "ივნისი",  # Ivnisi
+        "ივლისი",  # Ivlisi
+        "აგვისტო",  # Agvist'o
+        "სექტემბერი",  # Sekt'emberi
+        "ოქტომბერი",  # Okt'omberi
+        "ნოემბერი",  # Noemberi
+        "დეკემბერი",  # Dek'emberi
+    ]
+
+    day_names = [
+        "",
+        "ორშაბათი",  # orshabati
+        "სამშაბათი",  # samshabati
+        "ოთხშაბათი",  # otkhshabati
+        "ხუთშაბათი",  # khutshabati
+        "პარასკევი",  # p’arask’evi
+        "შაბათი",  # shabati
+        # "k’vira" also serves as week; to avoid confusion "k’vira-dge" can be used for Sunday
+        "კვირა",  # k’vira
+    ]
+
+    day_abbreviations = [
+        "",
+        "ორშაბათი",  # orshabati
+        "სამშაბათი",  # samshabati
+        "ოთხშაბათი",  # otkhshabati
+        "ხუთშაბათი",  # khutshabati
+        "პარასკევი",  # p’arask’evi
+        "შაბათი",  # shabati
+        "კვირა",  # k’vira
+    ]
+
+
 class SinhalaLocale(Locale):
 
     names = ["si", "si-lk"]
