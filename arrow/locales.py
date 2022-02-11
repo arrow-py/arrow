@@ -2866,19 +2866,21 @@ class DanishLocale(Locale):
     names = ["da", "da-dk"]
 
     past = "for {0} siden"
-    future = "efter {0}"
+    future = "om {0}"
     and_word = "og"
 
     timeframes = {
         "now": "lige nu",
         "second": "et sekund",
-        "seconds": "{0} et par sekunder",
+        "seconds": "{0} sekunder",
         "minute": "et minut",
         "minutes": "{0} minutter",
         "hour": "en time",
         "hours": "{0} timer",
         "day": "en dag",
         "days": "{0} dage",
+        "week": "en uge",
+        "weeks": "{0} uger",
         "month": "en måned",
         "months": "{0} måneder",
         "year": "et år",
@@ -2927,6 +2929,9 @@ class DanishLocale(Locale):
         "søndag",
     ]
     day_abbreviations = ["", "man", "tir", "ons", "tor", "fre", "lør", "søn"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
 
 
 class MalayalamLocale(Locale):
