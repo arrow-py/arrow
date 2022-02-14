@@ -2466,6 +2466,8 @@ def locale_list_no_weeks() -> List[str]:
         "ta-lk",
         "ur",
         "ur-pk",
+        "ka",
+        "ka-ge",
         "kk",
         "kk-kz",
     ]

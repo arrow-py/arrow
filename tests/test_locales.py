@@ -1162,6 +1162,59 @@ class TestFinnishLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestGeorgianLocale:
+    def test_format_timeframe(self):
+        # Now
+        assert self.locale._format_timeframe("now", 0) == "ახლა"
+
+        # Second(s)
+        assert self.locale._format_timeframe("second", -1) == "წამის"
+        assert self.locale._format_timeframe("second", 1) == "წამის"
+        assert self.locale._format_timeframe("seconds", -3) == "3 წამის"
+        assert self.locale._format_timeframe("seconds", 3) == "3 წამის"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", -1) == "წუთის"
+        assert self.locale._format_timeframe("minute", 1) == "წუთის"
+        assert self.locale._format_timeframe("minutes", -4) == "4 წუთის"
+        assert self.locale._format_timeframe("minutes", 4) == "4 წუთის"
+
+        # Hour(s)
+        assert self.locale._format_timeframe("hour", -1) == "საათის"
+        assert self.locale._format_timeframe("hour", 1) == "საათის"
+        assert self.locale._format_timeframe("hours", -23) == "23 საათის"
+        assert self.locale._format_timeframe("hours", 23) == "23 საათის"
+
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "დღის"
+        assert self.locale._format_timeframe("day", 1) == "დღის"
+        assert self.locale._format_timeframe("days", -12) == "12 დღის"
+        assert self.locale._format_timeframe("days", 12) == "12 დღის"
+
+        # Day(s)
+        assert self.locale._format_timeframe("week", -1) == "კვირის"
+        assert self.locale._format_timeframe("week", 1) == "კვირის"
+        assert self.locale._format_timeframe("weeks", -12) == "12 კვირის"
+        assert self.locale._format_timeframe("weeks", 12) == "12 კვირის"
+
+        # Month(s)
+        assert self.locale._format_timeframe("month", -1) == "თვის"
+        assert self.locale._format_timeframe("month", 1) == "თვის"
+        assert self.locale._format_timeframe("months", -2) == "2 თვის"
+        assert self.locale._format_timeframe("months", 2) == "2 თვის"
+
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "წლის"
+        assert self.locale._format_timeframe("year", 1) == "წლის"
+        assert self.locale._format_timeframe("years", -2) == "2 წლის"
+        assert self.locale._format_timeframe("years", 2) == "2 წლის"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "შაბათი"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestGermanLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1."
