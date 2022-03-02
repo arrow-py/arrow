@@ -168,4 +168,6 @@ DEHUMANIZE_LOCALES = {
     "kk-kz",
     "am",
     "am-et",
+    "hy-am",
+    "hy",
 }
