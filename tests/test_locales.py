@@ -3003,20 +3003,11 @@ class TestArmenianLocale:
         assert self.locale.describe("now", only_distance=True) == "հիմա"
         assert self.locale.describe("now", only_distance=False) == "հիմա"
 
-    def test_plurals(self):
-        assert self.locale._format_timeframe("now", 0) == "հիմա"
-        assert self.locale._format_timeframe("second", 1) == "վայրկյան"
-        assert self.locale._format_timeframe("seconds", 30) == "30 վայրկյան"
-        assert self.locale._format_timeframe("minute", 1) == "րոպե"
-        assert self.locale._format_timeframe("minutes", 40) == "40 րոպե"
-        assert self.locale._format_timeframe("hour", 1) == "ժամ"
-        assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
-        assert self.locale._format_timeframe("day", 1) == "օր"
-        assert self.locale._format_timeframe("days", 12) == "12 օր"
-        assert self.locale._format_timeframe("month", 1) == "ամիս"
-        assert self.locale._format_timeframe("months", 11) == "11 ամիս"
-        assert self.locale._format_timeframe("year", 1) == "տարին"
-        assert self.locale._format_timeframe("years", 12) == "12 տարին"
+    def test_meridians_hy(self):
+        assert self.locale.meridian(7, "A") == "Ամ"
+        assert self.locale.meridian(18, "A") == "պ.մ."
+        assert self.locale.meridian(10, "a") == "Ամ"
+        assert self.locale.meridian(22, "a") == "պ.մ."
 
     def test_format_timeframe(self):
         # Second(s)
