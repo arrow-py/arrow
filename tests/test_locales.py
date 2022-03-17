@@ -3015,17 +3015,20 @@ class TestArmenianLocale:
         assert self.locale._format_timeframe("second", 1) == "վայրկյան"
         assert self.locale._format_timeframe("seconds", -3) == "3 վայրկյան"
         assert self.locale._format_timeframe("seconds", 3) == "3 վայրկյան"
+        assert self.locale._format_timeframe("seconds", 30) == "30 վայրկյան"
 
         # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "րոպե"
         assert self.locale._format_timeframe("minute", 1) == "րոպե"
         assert self.locale._format_timeframe("minutes", -4) == "4 րոպե"
         assert self.locale._format_timeframe("minutes", 4) == "4 րոպե"
+        assert self.locale._format_timeframe("minutes", 40) == "40 րոպե"
 
         # Hour(s)
         assert self.locale._format_timeframe("hour", -1) == "ժամ"
         assert self.locale._format_timeframe("hour", 1) == "ժամ"
         assert self.locale._format_timeframe("hours", -23) == "23 ժամ"
+        assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
         assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
 
         # Day(s)
@@ -3033,18 +3036,21 @@ class TestArmenianLocale:
         assert self.locale._format_timeframe("day", 1) == "օր"
         assert self.locale._format_timeframe("days", -12) == "12 օր"
         assert self.locale._format_timeframe("days", 12) == "12 օր"
+        assert self.locale._format_timeframe("days", 12) == "12 օր"
 
         # Month(s)
         assert self.locale._format_timeframe("month", -1) == "ամիս"
         assert self.locale._format_timeframe("month", 1) == "ամիս"
         assert self.locale._format_timeframe("months", -2) == "2 ամիս"
         assert self.locale._format_timeframe("months", 2) == "2 ամիս"
+        assert self.locale._format_timeframe("months", 11) == "11 ամիս"
 
         # Year(s)
         assert self.locale._format_timeframe("year", -1) == "տարին"
         assert self.locale._format_timeframe("year", 1) == "տարին"
         assert self.locale._format_timeframe("years", -2) == "2 տարին"
         assert self.locale._format_timeframe("years", 2) == "2 տարին"
+        assert self.locale._format_timeframe("years", 12) == "12 տարին"
 
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
