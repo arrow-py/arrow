@@ -3029,13 +3029,11 @@ class TestArmenianLocale:
         assert self.locale._format_timeframe("hour", 1) == "ժամ"
         assert self.locale._format_timeframe("hours", -23) == "23 ժամ"
         assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
-        assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
 
         # Day(s)
         assert self.locale._format_timeframe("day", -1) == "օր"
         assert self.locale._format_timeframe("day", 1) == "օր"
         assert self.locale._format_timeframe("days", -12) == "12 օր"
-        assert self.locale._format_timeframe("days", 12) == "12 օր"
         assert self.locale._format_timeframe("days", 12) == "12 օր"
 
         # Month(s)
