@@ -1382,6 +1382,14 @@ class TestTzinfoParser:
         assert self.parser.parse("utc") == tz.tzutc()
         assert self.parser.parse("UTC") == tz.tzutc()
 
+    def test_parse_utc_withoffset(self):
+        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse("(UTC-01:00") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse(
+            "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
+        ) == tz.tzoffset(None, 3600)
+
     def test_parse_iso(self):
 
         assert self.parser.parse("01:00") == tz.tzoffset(None, 3600)
