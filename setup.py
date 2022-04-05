@@ -24,6 +24,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "python-dateutil>=2.7.0",
+        "types-python-dateutil>=2.8.10",
         "typing_extensions; python_version<'3.8'",
     ],
     classifiers=[
