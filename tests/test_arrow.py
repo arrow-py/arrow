@@ -3080,6 +3080,28 @@ class TestArrowIsBetween:
             target.span("week", week_start=55)
 
 
+class TestIanaTimeZone:
+    def test_acdt(self):
+        sample_string = "Austrailian Central Daylight Time"
+        test_string = arrow.Arrow.iana_timezone("ACDT")
+        assert sample_string == test_string
+
+    def test_acst(self):
+        sample_string = "Australian Central Standard Time"
+        test_string = arrow.Arrow.iana_timezone("ACST")
+        assert sample_string == test_string
+
+    def test_adt(self):
+        sample_string = "Atlantic Daylight Time"
+        test_string = arrow.Arrow.iana_timezone("ADT")
+        assert sample_string == test_string
+
+    def test_aedt(self):
+        sample_string = "Australian Eastern Daylight Time"
+        test_string = arrow.Arrow.iana_timezone("AEDT")
+        assert sample_string == test_string
+
+
 class TestArrowUtil:
     def test_get_datetime(self):
 
