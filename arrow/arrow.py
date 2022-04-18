@@ -4,7 +4,6 @@ replacement.
 
 """
 
-
 import calendar
 import re
 import sys
@@ -1827,6 +1826,32 @@ class Arrow:
             return cls.utcfromtimestamp(timestamp).datetime
         else:
             raise ValueError(f"{expr!r} not recognized as a datetime or timestamp.")
+
+    @classmethod
+    def iana_timezone(cls, time_zone: str) -> str:
+        iana_time_zone_map = {
+            "ACDT": "Austrailian Central Daylight Time",
+            "ACST": "Australian Central Standard Time",
+            "ADT": "Atlantic Daylight Time",
+            "AEDT": "Australian Eastern Daylight Time",
+            "AEST": "Australian Eastern Standard Time",
+            "AHDT": "Alaska-Hawaii Daylight Time",
+            "AHST": "Alaska-Hawaii Standard Time",
+            "AKDT": "Alaska Daylight Time",
+            "AKST": "Alaska Standard Time",
+            "AMT": "Armenia Time",
+            "AST": "Atlantic Standard Time",
+            "AWDT": "Australian Western Daylight Time",
+            "AWST": "Australian Western Standard Time",
+            "AWT": "Australian Western Standard Time",
+            "BDST": "British Double Summer Time",
+            "BDT": "Brunei Time",
+            "BMT": "Biel Mean Time",
+            "BST": "British Summer Time",
+        }
+        if iana_time_zone_map.get(time_zone) == None:
+            raise ValueError(f"not a recognized iana timezone!")
+        return iana_time_zone_map[time_zone]
 
     @classmethod
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:
