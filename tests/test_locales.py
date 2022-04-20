@@ -1295,6 +1295,63 @@ class TestEsperantoLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestLaotianLocale:
+    def test_year_full(self):
+        assert self.locale.year_full(2015) == "2558"
+
+    def test_year_abbreviation(self):
+        assert self.locale.year_abbreviation(2015) == "58"
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("ດຽວນີ້", "now", 0)
+        assert result == "ດຽວນີ້"
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative("1 ຊົ່ວໂມງ", "hour", 1)
+        assert result == "ໃນ 1 ຊົ່ວໂມງ"
+        result = self.locale._format_relative("{0} ຊົ່ວໂມງ", "hours", 2)
+        assert result == "ໃນ {0} ຊົ່ວໂມງ"
+        result = self.locale._format_relative("ວິນາທີ", "seconds", 42)
+        assert result == "ໃນວິນາທີ"
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("1 ຊົ່ວໂມງ", "hour", -1)
+        assert result == "1 ຊົ່ວໂມງ ກ່ອນຫນ້ານີ້"
+
+    def test_format_timeframe(self):
+        # minute(s)
+        assert self.locale._format_timeframe("minute", 1) == "ນາທີ"
+        assert self.locale._format_timeframe("minute", -1) == "ນາທີ"
+        assert self.locale._format_timeframe("minutes", 7) == "7 ນາທີ"
+        assert self.locale._format_timeframe("minutes", -20) == "20 ນາທີ"
+        # day(s)
+        assert self.locale._format_timeframe("day", 1) == "ມື້"
+        assert self.locale._format_timeframe("day", -1) == "ມື້"
+        assert self.locale._format_timeframe("days", 7) == "7 ມື້"
+        assert self.locale._format_timeframe("days", -20) == "20 ມື້"
+        # week(s)
+        assert self.locale._format_timeframe("week", 1) == "ອາທິດ"
+        assert self.locale._format_timeframe("week", -1) == "ອາທິດ"
+        assert self.locale._format_timeframe("weeks", 7) == "7 ອາທິດ"
+        assert self.locale._format_timeframe("weeks", -20) == "20 ອາທິດ"
+        # month(s)
+        assert self.locale._format_timeframe("month", 1) == "ເດືອນ"
+        assert self.locale._format_timeframe("month", -1) == "ເດືອນ"
+        assert self.locale._format_timeframe("months", 7) == "7 ເດືອນ"
+        assert self.locale._format_timeframe("months", -20) == "20 ເດືອນ"
+        # year(s)
+        assert self.locale._format_timeframe("year", 1) == "ປີ"
+        assert self.locale._format_timeframe("year", -1) == "ປີ"
+        assert self.locale._format_timeframe("years", 7) == "7 ປີ"
+        assert self.locale._format_timeframe("years", -20) == "20 ປີ"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "ວັນເສົາ"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "ວັນເສົາ"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestThaiLocale:
     def test_year_full(self):
         assert self.locale.year_full(2015) == "2558"

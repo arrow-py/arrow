@@ -2470,6 +2470,8 @@ def locale_list_no_weeks() -> List[str]:
         "ka-ge",
         "kk",
         "kk-kz",
+        # "lo",
+        # "lo-la",
     ]
 
     return tested_langs
