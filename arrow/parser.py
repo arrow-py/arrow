@@ -81,15 +81,10 @@ _FORMAT_TYPE = Literal[
     "d",
     "a",
     "A",
-    "*",
-    "**",
-    "***",
-    "****",
 ]
 
 
 class _Parts(TypedDict, total=False):
-    wildcard: str
     year: int
     month: int
     day_of_year: int
@@ -108,28 +103,28 @@ class _Parts(TypedDict, total=False):
 
 class DateTimeParser:
     _FORMAT_RE: ClassVar[Pattern[str]] = re.compile(
-        r"((\*)?(\*)?(\*)?(\*)|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
+        r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
     )
     _ESCAPE_RE: ClassVar[Pattern[str]] = re.compile(r"\[[^\[\]]*\]")
 
-    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,2}|\*{1,2}")
-    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,3}|\*{1,3}")
-    _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d+|\*{1,}")
-    _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}|\*{2}")
-    _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{3}|\*{3}")
-    _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{4}|\*{4}")
+    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,2}")
+    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,3}")
+    _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d+")
+    _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}")
+    _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{3}")
+    _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{4}")
     _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
     _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
-    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d|\*+\.?\d|\*+$")
-    _TIMESTAMP_EXPANDED_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d|\*+$")
+    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+\.?\d+$")
+    _TIMESTAMP_EXPANDED_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+$")
     _TIME_RE: ClassVar[Pattern[str]] = re.compile(
         r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$"
     )
     _WEEK_DATE_RE: ClassVar[Pattern[str]] = re.compile(
-        r"(?P<year>\d{4}|\*{4})[\-]?W(?P<week>\d{2}|\*{2})[\-]?(?P<day>\d|\*)?"
+        r"(?P<year>\d{4})[\-]?W(?P<week>\d{2})[\-]?(?P<day>\d)?"
     )
 
     _BASE_INPUT_RE_MAP: ClassVar[Dict[_FORMAT_TYPE, Pattern[str]]] = {
@@ -455,11 +450,6 @@ class DateTimeParser:
             "ss",
             "s",
             "x",
-            "*",
-            "**",
-            "***",
-            "****",
-
         ],
         value: Union[str, bytes, SupportsInt, bytearray],
         parts: _Parts,
@@ -634,23 +624,23 @@ class DateTimeParser:
         if day_of_year is not None:
             _year = parts.get("year")
             month = parts.get("month")
-          #  if _year is None:
-          #      raise ParserError(
-          #          "Year component is required with the DDD and DDDD tokens."
-          #      )
+            if _year is None:
+                raise ParserError(
+                    "Year component is required with the DDD and DDDD tokens."
+                )
 
-          #  if month is not None:
-          #      raise ParserError(
-           #         "Month component is not allowed with the DDD and DDDD tokens."
-           #     )
+            if month is not None:
+                raise ParserError(
+                    "Month component is not allowed with the DDD and DDDD tokens."
+                )
 
-          #  date_string = f"{_year}-{day_of_year}"
-         #   try:
-        #        dt = datetime.strptime(date_string, "%Y-%j")
-        #    except ValueError:
-       #         raise ParserError(
-        #            f"The provided day of year {day_of_year!r} is invalid."
-        #        )
+            date_string = f"{_year}-{day_of_year}"
+            try:
+                dt = datetime.strptime(date_string, "%Y-%j")
+            except ValueError:
+                raise ParserError(
+                    f"The provided day of year {day_of_year!r} is invalid."
+                )
 
             parts["year"] = dt.year
             parts["month"] = dt.month

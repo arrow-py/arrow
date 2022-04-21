@@ -1320,6 +1320,13 @@ class TestDateTimeParserISO:
             2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)
         )
 
+        #wildcard token tests
+        assert self.parser.parse_iso("2018**17") == datetime(2018, "**", 17)
+        assert self.parser.parse_iso("****0127") == datetime("****", 1, 27)
+        assert self.parser.parse_iso("102909**") == datetime(1029, 9,"*")
+        assert self.parser.parse_iso("2022****") == datetime(2022, "**","*")
+
+
         # ordinal in basic format: YYYYDDDD
         assert self.parser.parse_iso("1998136") == datetime(1998, 5, 16)
 
@@ -1337,6 +1344,7 @@ class TestDateTimeParserISO:
         # too many digits in time
         with pytest.raises(ParserError):
             self.parser.parse_iso("20180517T1055213Z")
+        
 
     def test_midnight_end_day(self):
         assert self.parser.parse_iso("2019-10-30T24:00:00") == datetime(
