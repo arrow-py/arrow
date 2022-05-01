@@ -166,6 +166,8 @@ DEHUMANIZE_LOCALES = {
     "ka-ge",
     "kk",
     "kk-kz",
+    # "lo",
+    # "lo-la",
     "am",
     "am-et",
 }
