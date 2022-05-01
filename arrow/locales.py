@@ -2866,19 +2866,21 @@ class DanishLocale(Locale):
     names = ["da", "da-dk"]
 
     past = "for {0} siden"
-    future = "efter {0}"
+    future = "om {0}"
     and_word = "og"
 
     timeframes = {
         "now": "lige nu",
         "second": "et sekund",
-        "seconds": "{0} et par sekunder",
+        "seconds": "{0} sekunder",
         "minute": "et minut",
         "minutes": "{0} minutter",
         "hour": "en time",
         "hours": "{0} timer",
         "day": "en dag",
         "days": "{0} dage",
+        "week": "en uge",
+        "weeks": "{0} uger",
         "month": "en måned",
         "months": "{0} måneder",
         "year": "et år",
@@ -2927,6 +2929,9 @@ class DanishLocale(Locale):
         "søndag",
     ]
     day_abbreviations = ["", "man", "tir", "ons", "tor", "fre", "lør", "søn"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}."
 
 
 class MalayalamLocale(Locale):
@@ -5699,6 +5704,91 @@ class AlbanianLocale(Locale):
     ]
 
 
+class GeorgianLocale(Locale):
+
+    names = ["ka", "ka-ge"]
+
+    past = "{0} წინ"  # ts’in
+    future = "{0} შემდეგ"  # shemdeg
+    and_word = "და"  # da
+
+    timeframes = {
+        "now": "ახლა",  # akhla
+        # When a cardinal qualifies a noun, it stands in the singular
+        "second": "წამის",  # ts’amis
+        "seconds": "{0} წამის",
+        "minute": "წუთის",  # ts’utis
+        "minutes": "{0} წუთის",
+        "hour": "საათის",  # saatis
+        "hours": "{0} საათის",
+        "day": "დღის",  # dghis
+        "days": "{0} დღის",
+        "week": "კვირის",  # k’viris
+        "weeks": "{0} კვირის",
+        "month": "თვის",  # tvis
+        "months": "{0} თვის",
+        "year": "წლის",  # ts’lis
+        "years": "{0} წლის",
+    }
+
+    month_names = [
+        # modern month names
+        "",
+        "იანვარი",  # Ianvari
+        "თებერვალი",  # Tebervali
+        "მარტი",  # Mart'i
+        "აპრილი",  # Ap'rili
+        "მაისი",  # Maisi
+        "ივნისი",  # Ivnisi
+        "ივლისი",  # Ivlisi
+        "აგვისტო",  # Agvist'o
+        "სექტემბერი",  # Sekt'emberi
+        "ოქტომბერი",  # Okt'omberi
+        "ნოემბერი",  # Noemberi
+        "დეკემბერი",  # Dek'emberi
+    ]
+
+    month_abbreviations = [
+        # no abbr. found yet
+        "",
+        "იანვარი",  # Ianvari
+        "თებერვალი",  # Tebervali
+        "მარტი",  # Mart'i
+        "აპრილი",  # Ap'rili
+        "მაისი",  # Maisi
+        "ივნისი",  # Ivnisi
+        "ივლისი",  # Ivlisi
+        "აგვისტო",  # Agvist'o
+        "სექტემბერი",  # Sekt'emberi
+        "ოქტომბერი",  # Okt'omberi
+        "ნოემბერი",  # Noemberi
+        "დეკემბერი",  # Dek'emberi
+    ]
+
+    day_names = [
+        "",
+        "ორშაბათი",  # orshabati
+        "სამშაბათი",  # samshabati
+        "ოთხშაბათი",  # otkhshabati
+        "ხუთშაბათი",  # khutshabati
+        "პარასკევი",  # p’arask’evi
+        "შაბათი",  # shabati
+        # "k’vira" also serves as week; to avoid confusion "k’vira-dge" can be used for Sunday
+        "კვირა",  # k’vira
+    ]
+
+    day_abbreviations = [
+        "",
+        "ორშაბათი",  # orshabati
+        "სამშაბათი",  # samshabati
+        "ოთხშაბათი",  # otkhshabati
+        "ხუთშაბათი",  # khutshabati
+        "პარასკევი",  # p’arask’evi
+        "შაბათი",  # shabati
+        "კვირა",  # k’vira
+    ]
+
+
 class SinhalaLocale(Locale):
 
     names = ["si", "si-lk"]
@@ -6010,3 +6100,174 @@ class KazakhLocale(Locale):
         "Жексенбі",
     ]
     day_abbreviations = ["", "Дс", "Сс", "Ср", "Бс", "Жм", "Сб", "Жс"]
+
+
+class AmharicLocale(Locale):
+    names = ["am", "am-et"]
+
+    past = "{0} በፊት"
+    future = "{0} ውስጥ"
+    and_word = "እና"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[Mapping[str, str], str]]] = {
+        "now": "አሁን",
+        "second": {
+            "past": "ከአንድ ሰከንድ",
+            "future": "በአንድ ሰከንድ",
+        },
+        "seconds": {
+            "past": "ከ {0} ሰከንድ",
+            "future": "በ {0} ሰከንድ",
+        },
+        "minute": {
+            "past": "ከአንድ ደቂቃ",
+            "future": "በአንድ ደቂቃ",
+        },
+        "minutes": {
+            "past": "ከ {0} ደቂቃዎች",
+            "future": "በ {0} ደቂቃዎች",
+        },
+        "hour": {
+            "past": "ከአንድ ሰዓት",
+            "future": "በአንድ ሰዓት",
+        },
+        "hours": {
+            "past": "ከ {0} ሰዓታት",
+            "future": "በ {0} ሰከንድ",
+        },
+        "day": {
+            "past": "ከአንድ ቀን",
+            "future": "በአንድ ቀን",
+        },
+        "days": {
+            "past": "ከ {0} ቀናት",
+            "future": "በ {0} ቀናት",
+        },
+        "week": {
+            "past": "ከአንድ ሳምንት",
+            "future": "በአንድ ሳምንት",
+        },
+        "weeks": {
+            "past": "ከ {0} ሳምንታት",
+            "future": "በ {0} ሳምንታት",
+        },
+        "month": {
+            "past": "ከአንድ ወር",
+            "future": "በአንድ ወር",
+        },
+        "months": {
+            "past": "ከ {0} ወር",
+            "future": "በ {0} ወራት",
+        },
+        "year": {
+            "past": "ከአንድ አመት",
+            "future": "በአንድ አመት",
+        },
+        "years": {
+            "past": "ከ {0} ዓመታት",
+            "future": "በ {0} ዓመታት",
+        },
+    }
+    # Amharic: the general format to describe timeframe is different from past and future,
+    # so we do not copy the original timeframes dictionary
+    timeframes_only_distance = {
+        "second": "አንድ ሰከንድ",
+        "seconds": "{0} ሰከንድ",
+        "minute": "አንድ ደቂቃ",
+        "minutes": "{0} ደቂቃዎች",
+        "hour": "አንድ ሰዓት",
+        "hours": "{0} ሰዓት",
+        "day": "አንድ ቀን",
+        "days": "{0} ቀናት",
+        "week": "አንድ ሳምንት",
+        "weeks": "{0} ሳምንት",
+        "month": "አንድ ወር",
+        "months": "{0} ወራት",
+        "year": "አንድ አመት",
+        "years": "{0} ዓመታት",
+    }
+
+    month_names = [
+        "",
+        "ጃንዩወሪ",
+        "ፌብሩወሪ",
+        "ማርች",
+        "ኤፕሪል",
+        "ሜይ",
+        "ጁን",
+        "ጁላይ",
+        "ኦገስት",
+        "ሴፕቴምበር",
+        "ኦክቶበር",
+        "ኖቬምበር",
+        "ዲሴምበር",
+    ]
+
+    month_abbreviations = [
+        "",
+        "ጃንዩ",
+        "ፌብሩ",
+        "ማርች",
+        "ኤፕሪ",
+        "ሜይ",
+        "ጁን",
+        "ጁላይ",
+        "ኦገስ",
+        "ሴፕቴ",
+        "ኦክቶ",
+        "ኖቬም",
+        "ዲሴም",
+    ]
+
+    day_names = [
+        "",
+        "ሰኞ",
+        "ማክሰኞ",
+        "ረቡዕ",
+        "ሐሙስ",
+        "ዓርብ",
+        "ቅዳሜ",
+        "እሑድ",
+    ]
+    day_abbreviations = ["", "እ", "ሰ", "ማ", "ረ", "ሐ", "ዓ", "ቅ"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}ኛ"
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        """
+        Amharic awares time frame format function, takes into account
+        the differences between general, past, and future forms (three different suffixes).
+        """
+        abs_delta = abs(delta)
+        form = self.timeframes[timeframe]
+
+        if isinstance(form, str):
+            return form.format(abs_delta)
+
+        if delta > 0:
+            key = "future"
+        else:
+            key = "past"
+        form = form[key]
+
+        return form.format(abs_delta)
+
+    def describe(
+        self,
+        timeframe: TimeFrameLiteral,
+        delta: Union[float, int] = 1,  # key is always future when only_distance=False
+        only_distance: bool = False,
+    ) -> str:
+        """Describes a delta within a timeframe in plain language.
+
+        :param timeframe: a string representing a timeframe.
+        :param delta: a quantity representing a delta in a timeframe.
+        :param only_distance: return only distance eg: "11 seconds" without "in" or "ago" keywords
+        """
+
+        if not only_distance:
+            return super().describe(timeframe, delta, only_distance)
+        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+
+        return humanized

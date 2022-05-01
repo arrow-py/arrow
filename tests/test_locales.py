@@ -1342,6 +1342,59 @@ class TestFinnishLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestGeorgianLocale:
+    def test_format_timeframe(self):
+        # Now
+        assert self.locale._format_timeframe("now", 0) == "ახლა"
+
+        # Second(s)
+        assert self.locale._format_timeframe("second", -1) == "წამის"
+        assert self.locale._format_timeframe("second", 1) == "წამის"
+        assert self.locale._format_timeframe("seconds", -3) == "3 წამის"
+        assert self.locale._format_timeframe("seconds", 3) == "3 წამის"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", -1) == "წუთის"
+        assert self.locale._format_timeframe("minute", 1) == "წუთის"
+        assert self.locale._format_timeframe("minutes", -4) == "4 წუთის"
+        assert self.locale._format_timeframe("minutes", 4) == "4 წუთის"
+
+        # Hour(s)
+        assert self.locale._format_timeframe("hour", -1) == "საათის"
+        assert self.locale._format_timeframe("hour", 1) == "საათის"
+        assert self.locale._format_timeframe("hours", -23) == "23 საათის"
+        assert self.locale._format_timeframe("hours", 23) == "23 საათის"
+
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "დღის"
+        assert self.locale._format_timeframe("day", 1) == "დღის"
+        assert self.locale._format_timeframe("days", -12) == "12 დღის"
+        assert self.locale._format_timeframe("days", 12) == "12 დღის"
+
+        # Day(s)
+        assert self.locale._format_timeframe("week", -1) == "კვირის"
+        assert self.locale._format_timeframe("week", 1) == "კვირის"
+        assert self.locale._format_timeframe("weeks", -12) == "12 კვირის"
+        assert self.locale._format_timeframe("weeks", 12) == "12 კვირის"
+
+        # Month(s)
+        assert self.locale._format_timeframe("month", -1) == "თვის"
+        assert self.locale._format_timeframe("month", 1) == "თვის"
+        assert self.locale._format_timeframe("months", -2) == "2 თვის"
+        assert self.locale._format_timeframe("months", 2) == "2 თვის"
+
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "წლის"
+        assert self.locale._format_timeframe("year", 1) == "წლის"
+        assert self.locale._format_timeframe("years", -2) == "2 წლის"
+        assert self.locale._format_timeframe("years", 2) == "2 წლის"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "შაბათი"
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestGermanLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1."
@@ -2994,3 +3047,131 @@ class TestNewNorwegianLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "laurdag"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "la"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestDanishLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "lige nu"
+        assert self.locale.describe("now", only_distance=False) == "lige nu"
+
+    def test_plurals(self):
+        assert self.locale._format_timeframe("now", 0) == "lige nu"
+        assert self.locale._format_timeframe("second", 1) == "et sekund"
+        assert self.locale._format_timeframe("seconds", 30) == "30 sekunder"
+        assert self.locale._format_timeframe("minute", 1) == "et minut"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minutter"
+        assert self.locale._format_timeframe("hour", 1) == "en time"
+        assert self.locale._format_timeframe("hours", 23) == "23 timer"
+        assert self.locale._format_timeframe("day", 1) == "en dag"
+        assert self.locale._format_timeframe("days", 12) == "12 dage"
+        assert self.locale._format_timeframe("week", 1) == "en uge"
+        assert self.locale._format_timeframe("weeks", 38) == "38 uger"
+        assert self.locale._format_timeframe("month", 1) == "en måned"
+        assert self.locale._format_timeframe("months", 11) == "11 måneder"
+        assert self.locale._format_timeframe("year", 1) == "et år"
+        assert self.locale._format_timeframe("years", 12) == "12 år"
+
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(0) == "0."
+        assert self.locale.ordinal_number(1) == "1."
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("hours", 2) == "2 timer"
+        assert self.locale._format_timeframe("hour", 0) == "en time"
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("lige nu", "now", 0)
+
+        assert result == "lige nu"
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative("en time", "hour", 1)
+
+        assert result == "om en time"
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("en time", "hour", -1)
+
+        assert result == "for en time siden"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "lørdag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "lør"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAmharicLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "አሁን"
+        # second(s)
+        assert self.locale._format_timeframe("second", 1) == "በአንድ ሰከንድ"
+        assert self.locale._format_timeframe("second", -1) == "ከአንድ ሰከንድ"
+        assert self.locale._format_timeframe("seconds", 6) == "በ 6 ሰከንድ"
+        assert self.locale._format_timeframe("seconds", -36) == "ከ 36 ሰከንድ"
+        # minute(s)
+        assert self.locale._format_timeframe("minute", 1) == "በአንድ ደቂቃ"
+        assert self.locale._format_timeframe("minute", -1) == "ከአንድ ደቂቃ"
+        assert self.locale._format_timeframe("minutes", 7) == "በ 7 ደቂቃዎች"
+        assert self.locale._format_timeframe("minutes", -20) == "ከ 20 ደቂቃዎች"
+        # hour(s)
+        assert self.locale._format_timeframe("hour", 1) == "በአንድ ሰዓት"
+        assert self.locale._format_timeframe("hour", -1) == "ከአንድ ሰዓት"
+        assert self.locale._format_timeframe("hours", 7) == "በ 7 ሰከንድ"
+        assert self.locale._format_timeframe("hours", -20) == "ከ 20 ሰዓታት"
+        # day(s)
+        assert self.locale._format_timeframe("day", 1) == "በአንድ ቀን"
+        assert self.locale._format_timeframe("day", -1) == "ከአንድ ቀን"
+        assert self.locale._format_timeframe("days", 7) == "በ 7 ቀናት"
+        assert self.locale._format_timeframe("days", -20) == "ከ 20 ቀናት"
+        # week(s)
+        assert self.locale._format_timeframe("week", 1) == "በአንድ ሳምንት"
+        assert self.locale._format_timeframe("week", -1) == "ከአንድ ሳምንት"
+        assert self.locale._format_timeframe("weeks", 7) == "በ 7 ሳምንታት"
+        assert self.locale._format_timeframe("weeks", -20) == "ከ 20 ሳምንታት"
+        # month(s)
+        assert self.locale._format_timeframe("month", 1) == "በአንድ ወር"
+        assert self.locale._format_timeframe("month", -1) == "ከአንድ ወር"
+        assert self.locale._format_timeframe("months", 7) == "በ 7 ወራት"
+        assert self.locale._format_timeframe("months", -20) == "ከ 20 ወር"
+        # year(s)
+        assert self.locale._format_timeframe("year", 1) == "በአንድ አመት"
+        assert self.locale._format_timeframe("year", -1) == "ከአንድ አመት"
+        assert self.locale._format_timeframe("years", 7) == "በ 7 ዓመታት"
+        assert self.locale._format_timeframe("years", -20) == "ከ 20 ዓመታት"
+
+    def test_describe_am(self):
+        assert self.locale.describe("second", only_distance=True) == "አንድ ሰከንድ"
+        assert (
+            self.locale.describe("second", only_distance=False) == "በአንድ ሰከንድ ውስጥ"
+        )  # (in) a second
+
+        assert self.locale.describe("minute", only_distance=True) == "አንድ ደቂቃ"
+        assert (
+            self.locale.describe("minute", only_distance=False) == "በአንድ ደቂቃ ውስጥ"
+        )  # (in) a minute
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("አሁን", "now", 0)
+        assert result == "አሁን"
+
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(1) == "1ኛ"
+
+    def test_format_relative_future(self):
+
+        result = self.locale._format_relative("በአንድ ሰዓት", "hour", 1)
+
+        assert result == "በአንድ ሰዓት ውስጥ"  # (in) one hour
+
+    def test_format_relative_past(self):
+
+        result = self.locale._format_relative("ከአንድ ሰዓት", "hour", -1)
+
+        assert result == "ከአንድ ሰዓት በፊት"  # an hour ago
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "ቅዳሜ"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "ዓ"

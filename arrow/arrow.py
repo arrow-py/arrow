@@ -1384,7 +1384,7 @@ class Arrow:
                 search_string = search_string.format(r"\d+")
 
                 # Create search pattern and find within string
-                pattern = re.compile(fr"(^|\b|\d){search_string}")
+                pattern = re.compile(rf"(^|\b|\d){search_string}")
                 match = pattern.search(input_string)
 
                 # If there is no match continue to next iteration
@@ -1426,12 +1426,12 @@ class Arrow:
         # Sign logic
         future_string = locale_obj.future
         future_string = future_string.format(".*")
-        future_pattern = re.compile(fr"^{future_string}$")
+        future_pattern = re.compile(rf"^{future_string}$")
         future_pattern_match = future_pattern.findall(input_string)
 
         past_string = locale_obj.past
         past_string = past_string.format(".*")
-        past_pattern = re.compile(fr"^{past_string}$")
+        past_pattern = re.compile(rf"^{past_string}$")
         past_pattern_match = past_pattern.findall(input_string)
 
         # If a string contains the now unit, there will be no relative units, hence the need to check if the now unit
