@@ -170,4 +170,6 @@ DEHUMANIZE_LOCALES = {
     # "lo-la",
     "am",
     "am-et",
+    "uz",
+    "uz-uz",
 }
