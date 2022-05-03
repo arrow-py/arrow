@@ -45,7 +45,6 @@ _TimeFrameElements = Union[
     str, Sequence[str], Mapping[str, str], Mapping[str, Sequence[str]]
 ]
 
-
 _locale_map: Dict[str, Type["Locale"]] = {}
 
 
@@ -296,7 +295,6 @@ class Locale:
 
 
 class EnglishLocale(Locale):
-
     names = [
         "en",
         "en-us",
@@ -560,7 +558,6 @@ class SpanishLocale(Locale):
 
 
 class FrenchBaseLocale(Locale):
-
     past = "il y a {0}"
     future = "dans {0}"
     and_word = "et"
@@ -622,7 +619,6 @@ class FrenchBaseLocale(Locale):
 
 
 class FrenchLocale(FrenchBaseLocale, Locale):
-
     names = ["fr", "fr-fr"]
 
     month_abbreviations = [
@@ -643,7 +639,6 @@ class FrenchLocale(FrenchBaseLocale, Locale):
 
 
 class FrenchCanadianLocale(FrenchBaseLocale, Locale):
-
     names = ["fr-ca"]
 
     month_abbreviations = [
@@ -664,7 +659,6 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 
 
 class GreekLocale(Locale):
-
     names = ["el", "el-gr"]
 
     past = "{0} πριν"
@@ -734,7 +728,6 @@ class GreekLocale(Locale):
 
 
 class JapaneseLocale(Locale):
-
     names = ["ja", "ja-jp"]
 
     past = "{0}前"
@@ -795,7 +788,6 @@ class JapaneseLocale(Locale):
 
 
 class SwedishLocale(Locale):
-
     names = ["sv", "sv-se"]
 
     past = "för {0} sen"
@@ -865,7 +857,6 @@ class SwedishLocale(Locale):
 
 
 class FinnishLocale(Locale):
-
     names = ["fi", "fi-fi"]
 
     # The finnish grammar is very complex, and its hard to convert
@@ -952,7 +943,6 @@ class FinnishLocale(Locale):
 
 
 class ChineseCNLocale(Locale):
-
     names = ["zh", "zh-cn"]
 
     past = "{0}前"
@@ -1012,7 +1002,6 @@ class ChineseCNLocale(Locale):
 
 
 class ChineseTWLocale(Locale):
-
     names = ["zh-tw"]
 
     past = "{0}前"
@@ -1073,7 +1062,6 @@ class ChineseTWLocale(Locale):
 
 
 class HongKongLocale(Locale):
-
     names = ["zh-hk"]
 
     past = "{0}前"
@@ -1133,7 +1121,6 @@ class HongKongLocale(Locale):
 
 
 class KoreanLocale(Locale):
-
     names = ["ko", "ko-kr"]
 
     past = "{0} 전"
@@ -1229,7 +1216,6 @@ class KoreanLocale(Locale):
 
 # derived locale types & implementations.
 class DutchLocale(Locale):
-
     names = ["nl", "nl-nl"]
 
     past = "{0} geleden"
@@ -1318,7 +1304,6 @@ class SlavicBaseLocale(Locale):
 
 
 class BelarusianLocale(SlavicBaseLocale):
-
     names = ["be", "be-by"]
 
     past = "{0} таму"
@@ -1397,7 +1382,6 @@ class BelarusianLocale(SlavicBaseLocale):
 
 
 class PolishLocale(SlavicBaseLocale):
-
     names = ["pl", "pl-pl"]
 
     past = "{0} temu"
@@ -1488,7 +1472,6 @@ class PolishLocale(SlavicBaseLocale):
 
 
 class RussianLocale(SlavicBaseLocale):
-
     names = ["ru", "ru-ru"]
 
     past = "{0} назад"
@@ -1579,7 +1562,6 @@ class RussianLocale(SlavicBaseLocale):
 
 
 class AfrikaansLocale(Locale):
-
     names = ["af", "af-nl"]
 
     past = "{0} gelede"
@@ -1646,7 +1628,6 @@ class AfrikaansLocale(Locale):
 
 
 class BulgarianLocale(SlavicBaseLocale):
-
     names = ["bg", "bg-bg"]
 
     past = "{0} назад"
@@ -1725,7 +1706,6 @@ class BulgarianLocale(SlavicBaseLocale):
 
 
 class UkrainianLocale(SlavicBaseLocale):
-
     names = ["ua", "uk", "uk-ua"]
 
     past = "{0} тому"
@@ -1903,7 +1883,6 @@ class MacedonianLocale(SlavicBaseLocale):
 
 
 class GermanBaseLocale(Locale):
-
     past = "vor {0}"
     future = "in {0}"
     and_word = "und"
@@ -2009,17 +1988,14 @@ class GermanBaseLocale(Locale):
 
 
 class GermanLocale(GermanBaseLocale, Locale):
-
     names = ["de", "de-de"]
 
 
 class SwissLocale(GermanBaseLocale, Locale):
-
     names = ["de-ch"]
 
 
 class AustrianLocale(GermanBaseLocale, Locale):
-
     names = ["de-at"]
 
     month_names = [
@@ -2040,7 +2016,6 @@ class AustrianLocale(GermanBaseLocale, Locale):
 
 
 class NorwegianLocale(Locale):
-
     names = ["nb", "nb-no"]
 
     past = "for {0} siden"
@@ -2112,7 +2087,6 @@ class NorwegianLocale(Locale):
 
 
 class NewNorwegianLocale(Locale):
-
     names = ["nn", "nn-no"]
 
     past = "for {0} sidan"
@@ -2259,7 +2233,6 @@ class BrazilianPortugueseLocale(PortugueseLocale):
 
 
 class TagalogLocale(Locale):
-
     names = ["tl", "tl-ph"]
 
     past = "nakaraang {0}"
@@ -2333,7 +2306,6 @@ class TagalogLocale(Locale):
 
 
 class VietnameseLocale(Locale):
-
     names = ["vi", "vi-vn"]
 
     past = "{0} trước"
@@ -2402,7 +2374,6 @@ class VietnameseLocale(Locale):
 
 
 class TurkishLocale(Locale):
-
     names = ["tr", "tr-tr"]
 
     past = "{0} önce"
@@ -2474,7 +2445,6 @@ class TurkishLocale(Locale):
 
 
 class AzerbaijaniLocale(Locale):
-
     names = ["az", "az-az"]
 
     past = "{0} əvvəl"
@@ -2862,7 +2832,6 @@ class IcelandicLocale(Locale):
 
 
 class DanishLocale(Locale):
-
     names = ["da", "da-dk"]
 
     past = "for {0} siden"
@@ -2935,7 +2904,6 @@ class DanishLocale(Locale):
 
 
 class MalayalamLocale(Locale):
-
     names = ["ml"]
 
     past = "{0} മുമ്പ്"
@@ -3009,7 +2977,6 @@ class MalayalamLocale(Locale):
 
 
 class HindiLocale(Locale):
-
     names = ["hi", "hi-in"]
 
     past = "{0} पहले"
@@ -3338,7 +3305,6 @@ class SlovakLocale(Locale):
 
 
 class FarsiLocale(Locale):
-
     names = ["fa", "fa-ir"]
 
     past = "{0} قبل"
@@ -3412,7 +3378,6 @@ class FarsiLocale(Locale):
 
 
 class HebrewLocale(Locale):
-
     names = ["he", "he-il"]
 
     past = "לפני {0}"
@@ -3523,7 +3488,6 @@ class HebrewLocale(Locale):
 
 
 class MarathiLocale(Locale):
-
     names = ["mr"]
 
     past = "{0} आधी"
@@ -3730,7 +3694,6 @@ class BasqueLocale(Locale):
 
 
 class HungarianLocale(Locale):
-
     names = ["hu", "hu-hu"]
 
     past = "{0} ezelőtt"
@@ -3882,7 +3845,6 @@ class EsperantoLocale(Locale):
 
 
 class ThaiLocale(Locale):
-
     names = ["th", "th-th"]
 
     past = "{0} ที่ผ่านมา"
@@ -3971,8 +3933,115 @@ class ThaiLocale(Locale):
         return relative_string
 
 
-class BengaliLocale(Locale):
+class LaotianLocale(Locale):
 
+    names = ["lo", "lo-la"]
+
+    past = "{0} ກ່ອນຫນ້ານີ້"
+    future = "ໃນ {0}"
+
+    timeframes = {
+        "now": "ດຽວນີ້",
+        "second": "ວິນາທີ",
+        "seconds": "{0} ວິນາທີ",
+        "minute": "ນາທີ",
+        "minutes": "{0} ນາທີ",
+        "hour": "ຊົ່ວໂມງ",
+        "hours": "{0} ຊົ່ວໂມງ",
+        "day": "ມື້",
+        "days": "{0} ມື້",
+        "week": "ອາທິດ",
+        "weeks": "{0} ອາທິດ",
+        "month": "ເດືອນ",
+        "months": "{0} ເດືອນ",
+        "year": "ປີ",
+        "years": "{0} ປີ",
+    }
+
+    month_names = [
+        "",
+        "ມັງກອນ",  # mangkon
+        "ກຸມພາ",  # kumpha
+        "ມີນາ",  # mina
+        "ເມສາ",  # mesa
+        "ພຶດສະພາ",  # phudsapha
+        "ມິຖຸນາ",  # mithuna
+        "ກໍລະກົດ",  # kolakod
+        "ສິງຫາ",  # singha
+        "ກັນຍາ",  # knaia
+        "ຕຸລາ",  # tula
+        "ພະຈິກ",  # phachik
+        "ທັນວາ",  # thanuaa
+    ]
+    month_abbreviations = [
+        "",
+        "ມັງກອນ",
+        "ກຸມພາ",
+        "ມີນາ",
+        "ເມສາ",
+        "ພຶດສະພາ",
+        "ມິຖຸນາ",
+        "ກໍລະກົດ",
+        "ສິງຫາ",
+        "ກັນຍາ",
+        "ຕຸລາ",
+        "ພະຈິກ",
+        "ທັນວາ",
+    ]
+
+    day_names = [
+        "",
+        "ວັນຈັນ",  # vanchan
+        "ວັນອັງຄານ",  # vnoangkhan
+        "ວັນພຸດ",  # vanphud
+        "ວັນພະຫັດ",  # vanphahad
+        "ວັນ​ສຸກ",  # vansuk
+        "ວັນເສົາ",  # vansao
+        "ວັນອາທິດ",  # vnoathid
+    ]
+    day_abbreviations = [
+        "",
+        "ວັນຈັນ",
+        "ວັນອັງຄານ",
+        "ວັນພຸດ",
+        "ວັນພະຫັດ",
+        "ວັນ​ສຸກ",
+        "ວັນເສົາ",
+        "ວັນອາທິດ",
+    ]
+
+    BE_OFFSET = 543
+
+    def year_full(self, year: int) -> str:
+        """Lao always use Buddhist Era (BE) which is CE + 543"""
+        year += self.BE_OFFSET
+        return f"{year:04d}"
+
+    def year_abbreviation(self, year: int) -> str:
+        """Lao always use Buddhist Era (BE) which is CE + 543"""
+        year += self.BE_OFFSET
+        return f"{year:04d}"[2:]
+
+    def _format_relative(
+        self,
+        humanized: str,
+        timeframe: TimeFrameLiteral,
+        delta: Union[float, int],
+    ) -> str:
+        """Lao normally doesn't have any space between words"""
+        if timeframe == "now":
+            return humanized
+
+        direction = self.past if delta < 0 else self.future
+        relative_string = direction.format(humanized)
+
+        if timeframe == "seconds":
+            relative_string = relative_string.replace(" ", "")
+
+        return relative_string
+
+
+class BengaliLocale(Locale):
     names = ["bn", "bn-bd", "bn-in"]
 
     past = "{0} আগে"
@@ -4053,7 +4122,6 @@ class BengaliLocale(Locale):
 
 
 class RomanshLocale(Locale):
-
     names = ["rm", "rm-ch"]
 
     past = "avant {0}"
@@ -4260,7 +4328,6 @@ class SlovenianLocale(Locale):
 
 
 class IndonesianLocale(Locale):
-
     names = ["id", "id-id"]
 
     past = "{0} yang lalu"
@@ -4480,7 +4547,6 @@ class EstonianLocale(Locale):
 
 
 class LatvianLocale(Locale):
-
     names = ["lv", "lv-lv"]
 
     past = "pirms {0}"
@@ -4561,7 +4627,6 @@ class LatvianLocale(Locale):
 
 
 class SwahiliLocale(Locale):
-
     names = [
         "sw",
         "sw-ke",
@@ -4646,7 +4711,6 @@ class SwahiliLocale(Locale):
 
 
 class CroatianLocale(Locale):
-
     names = ["hr", "hr-hr"]
 
     past = "prije {0}"
@@ -4738,7 +4802,6 @@ class CroatianLocale(Locale):
 
 
 class LatinLocale(Locale):
-
     names = ["la", "la-va"]
 
     past = "ante {0}"
@@ -4819,7 +4882,6 @@ class LatinLocale(Locale):
 
 
 class LithuanianLocale(Locale):
-
     names = ["lt", "lt-lt"]
 
     past = "prieš {0}"
@@ -4900,7 +4962,6 @@ class LithuanianLocale(Locale):
 
 
 class MalayLocale(Locale):
-
     names = ["ms", "ms-my", "ms-bn"]
 
     past = "{0} yang lalu"
@@ -4981,7 +5042,6 @@ class MalayLocale(Locale):
 
 
 class MalteseLocale(Locale):
-
     names = ["mt", "mt-mt"]
 
     past = "{0} ilu"
@@ -5073,7 +5133,6 @@ class MalteseLocale(Locale):
 
 
 class SamiLocale(Locale):
-
     names = ["se", "se-fi", "se-no", "se-se"]
 
     past = "{0} dassái"
@@ -5153,7 +5212,6 @@ class SamiLocale(Locale):
 
 
 class OdiaLocale(Locale):
-
     names = ["or", "or-in"]
 
     past = "{0} ପୂର୍ବେ"
@@ -5244,7 +5302,6 @@ class OdiaLocale(Locale):
 
 
 class SerbianLocale(Locale):
-
     names = ["sr", "sr-rs", "sr-sp"]
 
     past = "pre {0}"
@@ -5336,7 +5393,6 @@ class SerbianLocale(Locale):
 
 
 class LuxembourgishLocale(Locale):
-
     names = ["lb", "lb-lu"]
 
     past = "virun {0}"
@@ -5427,7 +5483,6 @@ class LuxembourgishLocale(Locale):
         delta: Union[int, float] = 0,
         only_distance: bool = False,
     ) -> str:
-
         if not only_distance:
             return super().describe(timeframe, delta, only_distance)
 
@@ -5438,7 +5493,6 @@ class LuxembourgishLocale(Locale):
 
 
 class ZuluLocale(Locale):
-
     names = ["zu", "zu-za"]
 
     past = "{0} edlule"
@@ -5536,7 +5590,6 @@ class ZuluLocale(Locale):
 
 
 class TamilLocale(Locale):
-
     names = ["ta", "ta-in", "ta-lk"]
 
     past = "{0} நேரத்திற்கு முன்பு"
@@ -5624,7 +5677,6 @@ class TamilLocale(Locale):
 
 
 class AlbanianLocale(Locale):
-
     names = ["sq", "sq-al"]
 
     past = "{0} më parë"
@@ -5705,7 +5757,6 @@ class AlbanianLocale(Locale):
 
 
 class GeorgianLocale(Locale):
-
     names = ["ka", "ka-ge"]
 
     past = "{0} წინ"  # ts’in
@@ -5790,7 +5841,6 @@ class GeorgianLocale(Locale):
 
 
 class SinhalaLocale(Locale):
-
     names = ["si", "si-lk"]
 
     past = "{0}ට පෙර"
@@ -5954,7 +6004,6 @@ class SinhalaLocale(Locale):
 
 
 class UrduLocale(Locale):
-
     names = ["ur", "ur-pk"]
 
     past = "پہلے {0}"
@@ -6035,7 +6084,6 @@ class UrduLocale(Locale):
 
 
 class KazakhLocale(Locale):
-
     names = ["kk", "kk-kz"]
 
     past = "{0} бұрын"
@@ -6271,3 +6319,70 @@ class AmharicLocale(Locale):
         humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
 
         return humanized
+
+
+class UzbekLocale(Locale):
+    names = ["uz", "uz-uz"]
+    past = "{0}dan avval"
+    future = "{0}dan keyin"
+    timeframes = {
+        "now": "hozir",
+        "second": "bir soniya",
+        "seconds": "{0} soniya",
+        "minute": "bir daqiqa",
+        "minutes": "{0} daqiqa",
+        "hour": "bir soat",
+        "hours": "{0} soat",
+        "day": "bir kun",
+        "days": "{0} kun",
+        "week": "bir hafta",
+        "weeks": "{0} hafta",
+        "month": "bir oy",
+        "months": "{0} oy",
+        "year": "bir yil",
+        "years": "{0} yil",
+    }
+
+    month_names = [
+        "",
+        "Yanvar",
+        "Fevral",
+        "Mart",
+        "Aprel",
+        "May",
+        "Iyun",
+        "Iyul",
+        "Avgust",
+        "Sentyabr",
+        "Oktyabr",
+        "Noyabr",
+        "Dekabr",
+    ]
+
+    month_abbreviations = [
+        "",
+        "Yan",
+        "Fev",
+        "Mar",
+        "Apr",
+        "May",
+        "Iyn",
+        "Iyl",
+        "Avg",
+        "Sen",
+        "Okt",
+        "Noy",
+        "Dek",
+    ]
+
+    day_names = [
+        "",
+        "Dushanba",
+        "Seshanba",
+        "Chorshanba",
+        "Payshanba",
+        "Juma",
+        "Shanba",
+        "Yakshanba",
+    ]
+    day_abbreviations = ["", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"]
