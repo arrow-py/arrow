@@ -6382,7 +6382,7 @@ class ArmenianLocale(Locale):
         "հոկտեմբեր",
         "նոյեմբեր",
         "դեկտեմբեր",
-    }
+    ]
       
     day_names = [
         "",
