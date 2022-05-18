@@ -6366,7 +6366,7 @@ class ArmenianLocale(Locale):
         "հոկտեմբեր",
         "նոյեմբեր",
         "դեկտեմբեր",
-    }
+    ]
 
     month_abbreviations = [
         "",
