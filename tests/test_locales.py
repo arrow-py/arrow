@@ -3111,8 +3111,8 @@ class TestArmenianLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "շաբաթ"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "շաբ."
-        
-        
+
+
 @pytest.mark.usefixtures("lang_locale")
 class TestUzbekLocale:
     def test_singles_mk(self):

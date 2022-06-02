@@ -6325,7 +6325,7 @@ class ArmenianLocale(Locale):
     names = ["hy", "hy-am"]
     past = "{0} առաջ"
     future = "{0}ից"
-    and_word = "Եվ"
+    and_word = "Եվ"  # Yev
 
     timeframes = {
         "now": "հիմա",
@@ -6351,7 +6351,7 @@ class ArmenianLocale(Locale):
         "AM": "Ամ",
         "PM": "պ.մ.",
     }
-    
+
     month_names = [
         "",
         "հունվար",
@@ -6383,7 +6383,7 @@ class ArmenianLocale(Locale):
         "նոյեմբեր",
         "դեկտեմբեր",
     ]
-      
+
     day_names = [
         "",
         "երկուշաբթի",
@@ -6393,7 +6393,7 @@ class ArmenianLocale(Locale):
         "ուրբաթ",
         "շաբաթ",
         "կիրակի",
-        ]
+    ]
 
     day_abbreviations = [
         "",
@@ -6406,7 +6406,7 @@ class ArmenianLocale(Locale):
         "կիր.",
     ]
 
-      
+
 class UzbekLocale(Locale):
     names = ["uz", "uz-uz"]
     past = "{0}dan avval"
@@ -6471,6 +6471,5 @@ class UzbekLocale(Locale):
         "Shanba",
         "Yakshanba",
     ]
-      
-    day_abbreviations = ["", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"]
 
+    day_abbreviations = ["", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"]
