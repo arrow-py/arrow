@@ -558,55 +558,55 @@ class SpanishLocale(Locale):
 
 
 class FrenchBaseLocale(Locale):
-    past = "il y a {0}"
-    future = "dans {0}"
+    past = "Il y a {0}"
+    future = "Dans {0}"
     and_word = "et"
 
     timeframes = {
-        "now": "maintenant",
-        "second": "une seconde",
+        "now": "Maintenant",
+        "second": "Une seconde",
         "seconds": "{0} secondes",
-        "minute": "une minute",
+        "minute": "Une minute",
         "minutes": "{0} minutes",
-        "hour": "une heure",
+        "hour": "Une heure",
         "hours": "{0} heures",
-        "day": "un jour",
+        "day": "Un jour",
         "days": "{0} jours",
-        "week": "une semaine",
+        "week": "Une semaine",
         "weeks": "{0} semaines",
-        "month": "un mois",
+        "month": "Un mois",
         "months": "{0} mois",
-        "year": "un an",
+        "year": "Un an",
         "years": "{0} ans",
     }
 
     month_names = [
         "",
-        "janvier",
-        "février",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "août",
-        "septembre",
-        "octobre",
-        "novembre",
-        "décembre",
+        "Janvier",
+        "Février",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Août",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Décembre",
     ]
 
     day_names = [
         "",
-        "lundi",
-        "mardi",
-        "mercredi",
-        "jeudi",
-        "vendredi",
-        "samedi",
-        "dimanche",
+        "Lundi",
+        "Mardi",
+        "Mercredi",
+        "Jeudi",
+        "Vendredi",
+        "Samedi",
+        "Dimanche",
     ]
-    day_abbreviations = ["", "lun", "mar", "mer", "jeu", "ven", "sam", "dim"]
+    day_abbreviations = ["", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
 
     ordinal_day_re = (
         r"((?P<value>\b1(?=er\b)|[1-3]?[02-9](?=e\b)|[1-3]1(?=e\b))(er|e)\b)"
@@ -623,18 +623,18 @@ class FrenchLocale(FrenchBaseLocale, Locale):
 
     month_abbreviations = [
         "",
-        "janv",
-        "févr",
-        "mars",
-        "avr",
-        "mai",
-        "juin",
-        "juil",
-        "août",
-        "sept",
-        "oct",
-        "nov",
-        "déc",
+        "Jan",
+        "Févr",
+        "Mars",
+        "Avr",
+        "Mai",
+        "Juin",
+        "Juil",
+        "Août",
+        "Sept",
+        "Oct",
+        "Nov",
+        "Déc",
     ]
 
 
