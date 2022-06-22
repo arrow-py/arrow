@@ -30,7 +30,7 @@ master_doc = "index"
 source_suffix = ".rst"
 pygments_style = "sphinx"
 
-language = None
+language = "en"
 
 # -- Options for HTML output -------------------------------------------------
 
