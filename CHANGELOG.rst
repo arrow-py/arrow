@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.2.3 (2022-06-25)
+------------------
+
+- [NEW] Added Amharic, Armenian, Georgian, Laotian and Uzbek locales.
+- [FIX] Updated Danish locale and associated tests.
+- [INTERNAl] Small fixes to CI.
+
 1.2.2 (2022-01-19)
 ------------------
 
