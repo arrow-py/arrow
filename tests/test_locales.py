@@ -1111,9 +1111,9 @@ class TestFinnishLocale:
 
         # Second(s)
         assert self.locale._format_timeframe("second", -1) == "sekunti"
-        assert self.locale._format_timeframe("second", 1) == "sekunti"
-        assert self.locale._format_timeframe("seconds", -2) == "2 muutama sekunti"
-        assert self.locale._format_timeframe("seconds", 2) == "2 muutaman sekunnin"
+        assert self.locale._format_timeframe("second", 1) == "sekunnin"
+        assert self.locale._format_timeframe("seconds", -2) == "2 sekuntia"
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekunnin"
 
         # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "minuutti"
@@ -1129,7 +1129,7 @@ class TestFinnishLocale:
 
         # Day(s)
         assert self.locale._format_timeframe("day", -1) == "päivä"
-        assert self.locale._format_timeframe("day", 1) == "päivä"
+        assert self.locale._format_timeframe("day", 1) == "päivän"
         assert self.locale._format_timeframe("days", -2) == "2 päivää"
         assert self.locale._format_timeframe("days", 2) == "2 päivän"
 
