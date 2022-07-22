@@ -867,13 +867,13 @@ class FinnishLocale(Locale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "juuri nyt",
-        "second": "sekunti",
-        "seconds": {"past": "{0} muutama sekunti", "future": "{0} muutaman sekunnin"},
+        "second": {"past": "sekunti", "future": "sekunnin"},
+        "seconds": {"past": "{0} sekuntia", "future": "{0} sekunnin"},
         "minute": {"past": "minuutti", "future": "minuutin"},
         "minutes": {"past": "{0} minuuttia", "future": "{0} minuutin"},
         "hour": {"past": "tunti", "future": "tunnin"},
         "hours": {"past": "{0} tuntia", "future": "{0} tunnin"},
-        "day": "päivä",
+        "day": {"past": "päivä", "future": "päivän"},
         "days": {"past": "{0} päivää", "future": "{0} päivän"},
         "month": {"past": "kuukausi", "future": "kuukauden"},
         "months": {"past": "{0} kuukautta", "future": "{0} kuukauden"},
