@@ -4137,6 +4137,8 @@ class RomanshLocale(Locale):
         "hours": "{0} ura",
         "day": "in di",
         "days": "{0} dis",
+        "week": "in'emna",
+        "weeks": "{0} emnas",
         "month": "in mais",
         "months": "{0} mais",
         "year": "in onn",
