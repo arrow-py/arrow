@@ -60,6 +60,16 @@ Parse from a string:
     >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
     <Arrow [2013-05-05T12:30:45+00:00]>
 
+It is possible to override the default UTC timezone for a naive datetime
+(any timezone-aware datetime will keep it's original timezone):
+
+.. code-block:: python
+
+    >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss', default_tz='US/Pacific')
+    <Arrow [2013-05-05T12:30:45-07:00]>
+    >>> arrow.get('2013-05-05 12:30:45Z', 'YYYY-MM-DD HH:mm:ssZ', default_tz='US/Pacific')
+    <Arrow [2013-05-05T12:30:45+00:00]>
+
 Search a date in a string:
 
 .. code-block:: python

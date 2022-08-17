@@ -81,6 +81,50 @@ class TestTestArrowInit:
         assert before == after
         assert before.utcoffset() != after.utcoffset()
 
+    def test_init_default_tz(self):
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999, default_tz=tz.gettz("Europe/Oslo"))
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Oslo")
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+        assert result.default_tz_used
+        assert result.default_tz == tz.gettz("Europe/Oslo")
+
+    def test_init_default_tz_string(self):
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999, default_tz="Europe/Oslo")
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Oslo")
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+        assert result.default_tz_used
+        assert result.default_tz == "Europe/Oslo"
+
+    def test_init_default_tz_none(self):
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999)
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc()
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+        assert result.default_tz_used is True
+        assert result.default_tz == tz.tzutc()
+
+    def test_init_default_tz_existing_tzinfo(self):
+
+        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc(), default_tz=tz.gettz("Europe/Oslo"))
+        self.expected = datetime(
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc()
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+        assert result.default_tz_used is False
+        assert result.default_tz == tz.gettz("Europe/Oslo")
+
 
 class TestTestArrowFactory:
     def test_now(self):

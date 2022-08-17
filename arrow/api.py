@@ -9,6 +9,8 @@ from datetime import tzinfo as dt_tzinfo
 from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
+from dateutil import tz as dateutil_tz
+
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.constants import DEFAULT_LOCALE
 from arrow.factory import ArrowFactory
@@ -26,6 +28,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -36,6 +39,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -57,6 +61,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -69,6 +74,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -81,6 +87,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
