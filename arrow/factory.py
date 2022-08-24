@@ -220,15 +220,19 @@ class ArrowFactory:
 
         if arg_count == 1:
             arg = args[0]
-            if isinstance(arg, Decimal):
-                arg = float(arg)
 
             # (None) -> raises an exception
             if arg is None:
                 raise TypeError("Cannot parse argument of type None.")
 
+            if isinstance(arg, Decimal):
+                arg = float(arg)
+
             # try (int, float) -> from timestamp @ tzinfo
-            elif not isinstance(arg, str) and is_timestamp(arg):
+            if not isinstance(arg, str) and is_timestamp(arg):
+                if default_tz is None:
+                    # set to UTC by default
+                    default_tz = dateutil_tz.tzutc()
                 return self.type.fromtimestamp(arg, default_tz=default_tz, tzinfo=tz)
 
             # (Arrow) -> from the object's datetime @ tzinfo
