@@ -867,13 +867,13 @@ class FinnishLocale(Locale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "juuri nyt",
-        "second": "sekunti",
-        "seconds": {"past": "{0} muutama sekunti", "future": "{0} muutaman sekunnin"},
+        "second": {"past": "sekunti", "future": "sekunnin"},
+        "seconds": {"past": "{0} sekuntia", "future": "{0} sekunnin"},
         "minute": {"past": "minuutti", "future": "minuutin"},
         "minutes": {"past": "{0} minuuttia", "future": "{0} minuutin"},
         "hour": {"past": "tunti", "future": "tunnin"},
         "hours": {"past": "{0} tuntia", "future": "{0} tunnin"},
-        "day": "päivä",
+        "day": {"past": "päivä", "future": "päivän"},
         "days": {"past": "{0} päivää", "future": "{0} päivän"},
         "month": {"past": "kuukausi", "future": "kuukauden"},
         "months": {"past": "{0} kuukautta", "future": "{0} kuukauden"},
@@ -6321,6 +6321,92 @@ class AmharicLocale(Locale):
         return humanized
 
 
+class ArmenianLocale(Locale):
+    names = ["hy", "hy-am"]
+    past = "{0} առաջ"
+    future = "{0}ից"
+    and_word = "Եվ"  # Yev
+
+    timeframes = {
+        "now": "հիմա",
+        "second": "վայրկյան",
+        "seconds": "{0} վայրկյան",
+        "minute": "րոպե",
+        "minutes": "{0} րոպե",
+        "hour": "ժամ",
+        "hours": "{0} ժամ",
+        "day": "օր",
+        "days": "{0} օր",
+        "month": "ամիս",
+        "months": "{0} ամիս",
+        "year": "տարին",
+        "years": "{0} տարին",
+        "week": "շաբաթ",
+        "weeks": "{0} շաբաթ",
+    }
+
+    meridians = {
+        "am": "Ամ",
+        "pm": "պ.մ.",
+        "AM": "Ամ",
+        "PM": "պ.մ.",
+    }
+
+    month_names = [
+        "",
+        "հունվար",
+        "փետրվար",
+        "մարտ",
+        "ապրիլ",
+        "մայիս",
+        "հունիս",
+        "հուլիս",
+        "օգոստոս",
+        "սեպտեմբեր",
+        "հոկտեմբեր",
+        "նոյեմբեր",
+        "դեկտեմբեր",
+    ]
+
+    month_abbreviations = [
+        "",
+        "հունվար",
+        "փետրվար",
+        "մարտ",
+        "ապրիլ",
+        "մայիս",
+        "հունիս",
+        "հուլիս",
+        "օգոստոս",
+        "սեպտեմբեր",
+        "հոկտեմբեր",
+        "նոյեմբեր",
+        "դեկտեմբեր",
+    ]
+
+    day_names = [
+        "",
+        "երկուշաբթի",
+        "երեքշաբթի",
+        "չորեքշաբթի",
+        "հինգշաբթի",
+        "ուրբաթ",
+        "շաբաթ",
+        "կիրակի",
+    ]
+
+    day_abbreviations = [
+        "",
+        "երկ.",
+        "երեք.",
+        "չորեք.",
+        "հինգ.",
+        "ուրբ.",
+        "շաբ.",
+        "կիր.",
+    ]
+
+
 class UzbekLocale(Locale):
     names = ["uz", "uz-uz"]
     past = "{0}dan avval"
@@ -6385,4 +6471,5 @@ class UzbekLocale(Locale):
         "Shanba",
         "Yakshanba",
     ]
+
     day_abbreviations = ["", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"]

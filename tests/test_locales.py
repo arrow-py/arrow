@@ -1111,9 +1111,9 @@ class TestFinnishLocale:
 
         # Second(s)
         assert self.locale._format_timeframe("second", -1) == "sekunti"
-        assert self.locale._format_timeframe("second", 1) == "sekunti"
-        assert self.locale._format_timeframe("seconds", -2) == "2 muutama sekunti"
-        assert self.locale._format_timeframe("seconds", 2) == "2 muutaman sekunnin"
+        assert self.locale._format_timeframe("second", 1) == "sekunnin"
+        assert self.locale._format_timeframe("seconds", -2) == "2 sekuntia"
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekunnin"
 
         # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "minuutti"
@@ -1129,7 +1129,7 @@ class TestFinnishLocale:
 
         # Day(s)
         assert self.locale._format_timeframe("day", -1) == "päivä"
-        assert self.locale._format_timeframe("day", 1) == "päivä"
+        assert self.locale._format_timeframe("day", 1) == "päivän"
         assert self.locale._format_timeframe("days", -2) == "2 päivää"
         assert self.locale._format_timeframe("days", 2) == "2 päivän"
 
@@ -3052,6 +3052,65 @@ class TestAmharicLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "ቅዳሜ"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "ዓ"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestArmenianLocale:
+    def test_describe(self):
+        assert self.locale.describe("now", only_distance=True) == "հիմա"
+        assert self.locale.describe("now", only_distance=False) == "հիմա"
+
+    def test_meridians_hy(self):
+        assert self.locale.meridian(7, "A") == "Ամ"
+        assert self.locale.meridian(18, "A") == "պ.մ."
+        assert self.locale.meridian(10, "a") == "Ամ"
+        assert self.locale.meridian(22, "a") == "պ.մ."
+
+    def test_format_timeframe(self):
+        # Second(s)
+        assert self.locale._format_timeframe("second", -1) == "վայրկյան"
+        assert self.locale._format_timeframe("second", 1) == "վայրկյան"
+        assert self.locale._format_timeframe("seconds", -3) == "3 վայրկյան"
+        assert self.locale._format_timeframe("seconds", 3) == "3 վայրկյան"
+        assert self.locale._format_timeframe("seconds", 30) == "30 վայրկյան"
+
+        # Minute(s)
+        assert self.locale._format_timeframe("minute", -1) == "րոպե"
+        assert self.locale._format_timeframe("minute", 1) == "րոպե"
+        assert self.locale._format_timeframe("minutes", -4) == "4 րոպե"
+        assert self.locale._format_timeframe("minutes", 4) == "4 րոպե"
+        assert self.locale._format_timeframe("minutes", 40) == "40 րոպե"
+
+        # Hour(s)
+        assert self.locale._format_timeframe("hour", -1) == "ժամ"
+        assert self.locale._format_timeframe("hour", 1) == "ժամ"
+        assert self.locale._format_timeframe("hours", -23) == "23 ժամ"
+        assert self.locale._format_timeframe("hours", 23) == "23 ժամ"
+
+        # Day(s)
+        assert self.locale._format_timeframe("day", -1) == "օր"
+        assert self.locale._format_timeframe("day", 1) == "օր"
+        assert self.locale._format_timeframe("days", -12) == "12 օր"
+        assert self.locale._format_timeframe("days", 12) == "12 օր"
+
+        # Month(s)
+        assert self.locale._format_timeframe("month", -1) == "ամիս"
+        assert self.locale._format_timeframe("month", 1) == "ամիս"
+        assert self.locale._format_timeframe("months", -2) == "2 ամիս"
+        assert self.locale._format_timeframe("months", 2) == "2 ամիս"
+        assert self.locale._format_timeframe("months", 11) == "11 ամիս"
+
+        # Year(s)
+        assert self.locale._format_timeframe("year", -1) == "տարին"
+        assert self.locale._format_timeframe("year", 1) == "տարին"
+        assert self.locale._format_timeframe("years", -2) == "2 տարին"
+        assert self.locale._format_timeframe("years", 2) == "2 տարին"
+        assert self.locale._format_timeframe("years", 12) == "12 տարին"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "շաբաթ"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "շաբ."
 
 
 @pytest.mark.usefixtures("lang_locale")

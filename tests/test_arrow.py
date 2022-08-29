@@ -2470,6 +2470,8 @@ def locale_list_no_weeks() -> List[str]:
         "ka-ge",
         "kk",
         "kk-kz",
+        "hy",
+        "hy-am",
         "uz",
         "uz-uz",
         # "lo",
@@ -2548,6 +2550,8 @@ def locale_list_with_weeks() -> List[str]:
         "ta-lk",
         "kk",
         "kk-kz",
+        "hy",
+        "hy-am",
         "uz",
         "uz-uz",
     ]
