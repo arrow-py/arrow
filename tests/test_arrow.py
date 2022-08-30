@@ -83,7 +83,9 @@ class TestTestArrowInit:
 
     def test_init_default_tz(self):
 
-        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999, default_tz=tz.gettz("Europe/Oslo"))
+        result = arrow.Arrow(
+            2013, 2, 2, 12, 30, 45, 999999, default_tz=tz.gettz("Europe/Oslo")
+        )
         self.expected = datetime(
             2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Oslo")
         )
@@ -106,9 +108,7 @@ class TestTestArrowInit:
     def test_init_default_tz_none(self):
 
         result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999)
-        self.expected = datetime(
-            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc()
-        )
+        self.expected = datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc())
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
         assert result.default_tz_used is True
@@ -116,10 +116,18 @@ class TestTestArrowInit:
 
     def test_init_default_tz_existing_tzinfo(self):
 
-        result = arrow.Arrow(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc(), default_tz=tz.gettz("Europe/Oslo"))
-        self.expected = datetime(
-            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc()
+        result = arrow.Arrow(
+            2013,
+            2,
+            2,
+            12,
+            30,
+            45,
+            999999,
+            tzinfo=tz.tzutc(),
+            default_tz=tz.gettz("Europe/Oslo"),
         )
+        self.expected = datetime(2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.tzutc())
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
         assert result.default_tz_used is False
@@ -211,6 +219,9 @@ class TestTestArrowFactory:
 
         result = arrow.Arrow.fromdate(dt, tz.gettz("US/Pacific"))
 
+        assert result._datetime == datetime(2013, 2, 3, tzinfo=tz.gettz("US/Pacific"))
+
+        result = arrow.Arrow.fromdate(dt, default_tz=tz.gettz("US/Pacific"))
         assert result._datetime == datetime(2013, 2, 3, tzinfo=tz.gettz("US/Pacific"))
 
     def test_strptime(self):
@@ -331,6 +342,19 @@ class TestArrowAttribute:
     def test_tzinfo(self):
 
         assert self.arrow.tzinfo == tz.tzutc()
+
+    def test_default_tz(self):
+
+        assert self.arrow.default_tz == tz.tzutc()
+        assert self.arrow.default_tz_used is True
+
+        result = arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz("Europe/Oslo"))
+        assert result.default_tz == tz.tzutc()
+        assert result.default_tz_used is False
+
+        result = arrow.Arrow(2013, 1, 1, default_tz=tz.gettz("Europe/Oslo"))
+        assert result.default_tz == tz.gettz("Europe/Oslo")
+        assert result.default_tz_used
 
     def test_naive(self):
 

@@ -4,14 +4,11 @@ methods for use as a module API.
 
 """
 
-from datetime import date, datetime
-from datetime import tzinfo as dt_tzinfo
+from datetime import date, datetime, tzinfo as dt_tzinfo
 from time import struct_time
-from typing import Any, List, Optional, Tuple, Type, Union, overload
+from typing import Any, List, Optional, overload, Tuple, Type, Union
 
-from dateutil import tz as dateutil_tz
-
-from arrow.arrow import TZ_EXPR, Arrow
+from arrow.arrow import Arrow, TZ_EXPR
 from arrow.constants import DEFAULT_LOCALE
 from arrow.factory import ArrowFactory
 

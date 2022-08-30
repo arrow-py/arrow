@@ -237,7 +237,9 @@ class ArrowFactory:
 
             # (Arrow) -> from the object's datetime @ tzinfo
             elif isinstance(arg, Arrow):
-                return self.type.fromdatetime(arg.datetime, default_tz=default_tz, tzinfo=tz)
+                return self.type.fromdatetime(
+                    arg.datetime, default_tz=default_tz, tzinfo=tz
+                )
 
             # (datetime) -> from datetime @ tzinfo
             elif isinstance(arg, datetime):
@@ -276,7 +278,9 @@ class ArrowFactory:
 
                 # (datetime, tzinfo/str) -> fromdatetime @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
-                    return self.type.fromdatetime(arg_1, default_tz=default_tz, tzinfo=arg_2)
+                    return self.type.fromdatetime(
+                        arg_1, default_tz=default_tz, tzinfo=arg_2
+                    )
                 else:
                     raise TypeError(
                         f"Cannot parse two arguments of types 'datetime', {type(arg_2)!r}."
@@ -286,7 +290,9 @@ class ArrowFactory:
 
                 # (date, tzinfo/str) -> fromdate @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
-                    return self.type.fromdate(arg_1, default_tz=default_tz, tzinfo=arg_2)
+                    return self.type.fromdate(
+                        arg_1, default_tz=default_tz, tzinfo=arg_2
+                    )
                 else:
                     raise TypeError(
                         f"Cannot parse two arguments of types 'date', {type(arg_2)!r}."

@@ -90,6 +90,18 @@ class TestGet:
             self.factory.get(timestamp, tzinfo=timezone), timestamp_dt
         )
 
+    def test_one_arg_timestamp_with_default_tz(self):
+
+        timestamp = time.time()
+        timestamp_dt = datetime.fromtimestamp(timestamp, tz=tz.tzutc()).astimezone(
+            tz.gettz("US/Pacific")
+        )
+        timezone = tz.gettz("US/Pacific")
+
+        assert_datetime_equality(
+            self.factory.get(timestamp, default_tz=timezone), timestamp_dt
+        )
+
     def test_one_arg_str(self):
 
         result = self.factory.get("1990-01-01 12:30:45")
@@ -167,10 +179,7 @@ class TestGet:
 
     def test_kwarg_default_tz(self):
 
-        self.expected = (
-            datetime.now()
-            .astimezone(tz.gettz("Europe/Oslo"))
-        )
+        self.expected = datetime.now().astimezone(tz.gettz("Europe/Oslo"))
 
         assert_datetime_equality(
             self.factory.get(default_tz=tz.gettz("Europe/Oslo")), self.expected
@@ -178,12 +187,11 @@ class TestGet:
 
     def test_kwarg_default_tz_string(self):
 
-        self.expected = (
-            datetime.now()
-            .astimezone(tz.gettz("Europe/Oslo"))
-        )
+        self.expected = datetime.now().astimezone(tz.gettz("Europe/Oslo"))
 
-        assert_datetime_equality(self.factory.get(default_tz="Europe/Oslo"), self.expected)
+        assert_datetime_equality(
+            self.factory.get(default_tz="Europe/Oslo"), self.expected
+        )
 
         with pytest.raises(ParserError):
             self.factory.get(default_tz="Europe/OsloInvalidTzinfo")
@@ -192,8 +200,10 @@ class TestGet:
 
         self.expected = datetime(1990, 1, 1, 12, 30, 45).replace(tzinfo=tz.tzutc())
 
-        assert_datetime_equality(self.factory.get("1990-01-01 12:30:45+00:00", default_tz="Europe/Oslo"), self.expected)
-
+        assert_datetime_equality(
+            self.factory.get("1990-01-01 12:30:45+00:00", default_tz="Europe/Oslo"),
+            self.expected,
+        )
 
     def test_kwarg_normalize_whitespace(self):
         result = self.factory.get(
@@ -244,6 +254,19 @@ class TestGet:
 
         assert result.date() == expected.date()
         assert result.tzinfo == expected.tzinfo
+
+    def test_one_arg_date_default_tz_kwarg(self):
+
+        da = date(2021, 4, 29)
+
+        result = self.factory.get(da, default_tz="America/Chicago")
+
+        expected = Arrow(2021, 4, 29, tzinfo=tz.gettz("America/Chicago"))
+
+        assert result.date() == expected.date()
+        assert result.tzinfo == expected.tzinfo
+        assert result.default_tz == "America/Chicago"
+        assert result.default_tz_used is True
 
     def test_one_arg_iso_calendar_tzinfo_kwarg(self):
 

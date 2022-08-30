@@ -8,32 +8,34 @@ replacement.
 import calendar
 import re
 import sys
-from datetime import date
-from datetime import datetime as dt_datetime
-from datetime import time as dt_time
-from datetime import timedelta
-from datetime import tzinfo as dt_tzinfo
+from datetime import (
+    date,
+    datetime as dt_datetime,
+    time as dt_time,
+    timedelta,
+    tzinfo as dt_tzinfo,
+)
 from math import trunc
 from time import struct_time
 from typing import (
     Any,
+    cast,
     ClassVar,
     Generator,
     Iterable,
     List,
     Mapping,
     Optional,
+    overload,
     Tuple,
     Union,
-    cast,
-    overload,
 )
 
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
-from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
+from arrow.constants import DEFAULT_LOCALE, DEFAULT_TZ, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
 
 if sys.version_info < (3, 8):  # pragma: no cover
@@ -162,7 +164,7 @@ class Arrow:
         second: int = 0,
         microsecond: int = 0,
         tzinfo: Optional[TZ_EXPR] = None,
-        default_tz: TZ_EXPR = dateutil_tz.tzutc(),
+        default_tz: TZ_EXPR = DEFAULT_TZ,
         default_tz_used: bool = False,
         **kwargs: Any,
     ) -> None:
@@ -170,7 +172,14 @@ class Arrow:
         self.default_tz_used = default_tz_used
         # If default_tz_used is already set, tzinfo should also already be set
         if not default_tz_used:
-            tzinfo, self.default_tz_used = util.get_tzinfo_default_used(default_tz=self.default_tz, tzinfo=tzinfo)
+            tzinfo, self.default_tz_used = util.get_tzinfo_default_used(
+                default_tz=self.default_tz, tzinfo=tzinfo
+            )
+
+        # Cast due to mypy error
+        # Argument 8 to "datetime" has incompatible type
+        # "Union[tzinfo, str, None]"; expected "Optional[tzinfo]"
+        cast(dt_tzinfo, tzinfo)
 
         fold = kwargs.get("fold", 0)
 
@@ -183,7 +192,7 @@ class Arrow:
     @classmethod
     def now(
         cls,
-        tzinfo: Optional[dt_tzinfo] = None,
+        tzinfo: Optional[TZ_EXPR] = None,
         default_tz: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
@@ -203,7 +212,9 @@ class Arrow:
         if default_tz is None:
             default_tz = dateutil_tz.tzlocal()
 
-        tzinfo, default_tz_used = util.get_tzinfo_default_used(default_tz=default_tz, tzinfo=tzinfo)
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
 
         dt = dt_datetime.now(tzinfo)
 
@@ -269,7 +280,9 @@ class Arrow:
         if default_tz is None:
             default_tz = dateutil_tz.tzlocal()
 
-        tzinfo, default_tz_used = util.get_tzinfo_default_used(default_tz=default_tz, tzinfo=tzinfo)
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = dt_datetime.fromtimestamp(timestamp, tzinfo)
@@ -316,10 +329,10 @@ class Arrow:
 
     @classmethod
     def fromdatetime(
-            cls,
-            dt: dt_datetime,
-            tzinfo: Optional[TZ_EXPR] = None,
-            default_tz: Optional[TZ_EXPR] = None,
+        cls,
+        dt: dt_datetime,
+        tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
@@ -342,7 +355,9 @@ class Arrow:
         if default_tz is None:
             default_tz = dateutil_tz.tzutc()
 
-        tzinfo, default_tz_used = util.get_tzinfo_default_used(default_tz=default_tz, dt=dt, tzinfo=tzinfo)
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, dt=dt, tzinfo=tzinfo
+        )
 
         return cls(
             dt.year,
@@ -360,10 +375,10 @@ class Arrow:
 
     @classmethod
     def fromdate(
-            cls,
-            date: date,
-            tzinfo: Optional[TZ_EXPR] = None,
-            default_tz: Optional[TZ_EXPR] = None,
+        cls,
+        date: date,
+        tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  All time values are set to 0.
@@ -378,7 +393,9 @@ class Arrow:
         if default_tz is None:
             default_tz = dateutil_tz.tzutc()
 
-        tzinfo, default_tz_used = util.get_tzinfo_default_used(default_tz=default_tz, tzinfo=tzinfo)
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
 
         return cls(
             date.year,
