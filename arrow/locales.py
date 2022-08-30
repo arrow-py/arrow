@@ -3709,6 +3709,8 @@ class HungarianLocale(Locale):
         "hours": {"past": "{0} órával", "future": "{0} óra"},
         "day": {"past": "egy nappal", "future": "egy nap"},
         "days": {"past": "{0} nappal", "future": "{0} nap"},
+        "week": {"past": "egy héttel", "future": "egy hét"},
+        "weeks": {"past": "{0} héttel", "future": "{0} hét"},
         "month": {"past": "egy hónappal", "future": "egy hónap"},
         "months": {"past": "{0} hónappal", "future": "{0} hónap"},
         "year": {"past": "egy évvel", "future": "egy év"},
