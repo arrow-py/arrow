@@ -740,7 +740,7 @@ class DateTimeParser:
 
 class TzinfoParser:
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$"
+        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
     )
 
     @classmethod
