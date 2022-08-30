@@ -1269,6 +1269,12 @@ class TestHungarianLocale:
         assert self.locale._format_timeframe("days", -2) == "2 nappal"
         assert self.locale._format_timeframe("days", 2) == "2 nap"
 
+        # Week(s)
+        assert self.locale._format_timeframe("week", -1) == "egy héttel"
+        assert self.locale._format_timeframe("week", 1) == "egy hét"
+        assert self.locale._format_timeframe("weeks", -2) == "2 héttel"
+        assert self.locale._format_timeframe("weeks", 2) == "2 hét"
+
         # Month(s)
         assert self.locale._format_timeframe("month", -1) == "egy hónappal"
         assert self.locale._format_timeframe("month", 1) == "egy hónap"
