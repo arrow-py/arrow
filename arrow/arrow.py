@@ -170,16 +170,16 @@ class Arrow:
     ) -> None:
         self.default_tz = default_tz
         self.default_tz_used = default_tz_used
-        # If default_tz_used is already set, tzinfo should also already be set
-        if not default_tz_used:
+        # If tzinfo is not a datetime.tzinfo object parse tzinfo
+        # Also detects if tzinfo is a pytz object (issue #626)
+        if not isinstance(tzinfo, dt_tzinfo) or (
+            hasattr(tzinfo, "localize")
+            and hasattr(tzinfo, "zone")
+            and tzinfo.zone  # type: ignore[attr-defined]
+        ):
             tzinfo, self.default_tz_used = util.get_tzinfo_default_used(
                 default_tz=self.default_tz, tzinfo=tzinfo
             )
-
-        # Cast due to mypy error
-        # Argument 8 to "datetime" has incompatible type
-        # "Union[tzinfo, str, None]"; expected "Optional[tzinfo]"
-        cast(dt_tzinfo, tzinfo)
 
         fold = kwargs.get("fold", 0)
 
