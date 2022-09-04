@@ -8,27 +8,25 @@ replacement.
 import calendar
 import re
 import sys
-from datetime import (
-    date,
-    datetime as dt_datetime,
-    time as dt_time,
-    timedelta,
-    tzinfo as dt_tzinfo,
-)
+from datetime import date
+from datetime import datetime as dt_datetime
+from datetime import time as dt_time
+from datetime import timedelta
+from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
 from typing import (
     Any,
-    cast,
     ClassVar,
     Generator,
     Iterable,
     List,
     Mapping,
     Optional,
-    overload,
     Tuple,
     Union,
+    cast,
+    overload,
 )
 
 from dateutil import tz as dateutil_tz

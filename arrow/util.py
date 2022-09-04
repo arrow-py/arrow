@@ -1,8 +1,9 @@
 """Helpful functions used internally within arrow."""
 
 import datetime
-from datetime import tzinfo as dt_tzinfo, datetime as dt_datetime
-from typing import Any, Optional, cast, Tuple, Union
+from datetime import datetime as dt_datetime
+from datetime import tzinfo as dt_tzinfo
+from typing import Any, Optional, Tuple, Union, cast
 
 from dateutil.rrule import WEEKLY, rrule
 
@@ -120,9 +121,9 @@ __all__ = ["next_weekday", "is_timestamp", "validate_ordinal", "iso_to_gregorian
 
 
 def get_tzinfo_default_used(
-        default_tz: Union[dt_tzinfo, str],
-        dt: Optional[dt_datetime] = None,
-        tzinfo: Optional[Union[dt_tzinfo, str]] = None
+    default_tz: Union[dt_tzinfo, str],
+    dt: Optional[dt_datetime] = None,
+    tzinfo: Optional[Union[dt_tzinfo, str]] = None,
 ) -> Tuple[dt_tzinfo, bool]:
     """Get the tzinfo to use, and indicate if it was based on ``default_tz``.
 
@@ -143,10 +144,10 @@ def get_tzinfo_default_used(
 
     # detect that tzinfo is a pytz object (issue #626)
     if (
-            isinstance(tzinfo, dt_tzinfo)
-            and hasattr(tzinfo, "localize")
-            and hasattr(tzinfo, "zone")
-            and tzinfo.zone  # type: ignore[attr-defined]
+        isinstance(tzinfo, dt_tzinfo)
+        and hasattr(tzinfo, "localize")
+        and hasattr(tzinfo, "zone")
+        and tzinfo.zone  # type: ignore[attr-defined]
     ):
         tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore[attr-defined]
     elif isinstance(tzinfo, str):
