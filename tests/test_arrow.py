@@ -1909,7 +1909,7 @@ class TestArrowHumanize:
         assert self.now.humanize(later4000, granularity="day") == "0 days ago"
         assert later4000.humanize(self.now, granularity="day") == "in 0 days"
 
-        later105 = self.now.shift(seconds=10 ** 5)
+        later105 = self.now.shift(seconds=10**5)
         assert self.now.humanize(later105, granularity="hour") == "27 hours ago"
         assert later105.humanize(self.now, granularity="hour") == "in 27 hours"
         assert self.now.humanize(later105, granularity="day") == "a day ago"
@@ -1921,7 +1921,7 @@ class TestArrowHumanize:
         assert self.now.humanize(later105, granularity=["month"]) == "0 months ago"
         assert later105.humanize(self.now, granularity=["month"]) == "in 0 months"
 
-        later106 = self.now.shift(seconds=3 * 10 ** 6)
+        later106 = self.now.shift(seconds=3 * 10**6)
         assert self.now.humanize(later106, granularity="day") == "34 days ago"
         assert later106.humanize(self.now, granularity="day") == "in 34 days"
         assert self.now.humanize(later106, granularity="week") == "4 weeks ago"
@@ -1931,7 +1931,7 @@ class TestArrowHumanize:
         assert self.now.humanize(later106, granularity="year") == "0 years ago"
         assert later106.humanize(self.now, granularity="year") == "in 0 years"
 
-        later506 = self.now.shift(seconds=50 * 10 ** 6)
+        later506 = self.now.shift(seconds=50 * 10**6)
         assert self.now.humanize(later506, granularity="week") == "82 weeks ago"
         assert later506.humanize(self.now, granularity="week") == "in 82 weeks"
         assert self.now.humanize(later506, granularity="month") == "18 months ago"
@@ -1943,27 +1943,27 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later1, granularity="quarter") == "0 quarters ago"
         assert later1.humanize(self.now, granularity="quarter") == "in 0 quarters"
-        later107 = self.now.shift(seconds=10 ** 7)
+        later107 = self.now.shift(seconds=10**7)
         assert self.now.humanize(later107, granularity="quarter") == "a quarter ago"
         assert later107.humanize(self.now, granularity="quarter") == "in a quarter"
-        later207 = self.now.shift(seconds=2 * 10 ** 7)
+        later207 = self.now.shift(seconds=2 * 10**7)
         assert self.now.humanize(later207, granularity="quarter") == "2 quarters ago"
         assert later207.humanize(self.now, granularity="quarter") == "in 2 quarters"
-        later307 = self.now.shift(seconds=3 * 10 ** 7)
+        later307 = self.now.shift(seconds=3 * 10**7)
         assert self.now.humanize(later307, granularity="quarter") == "3 quarters ago"
         assert later307.humanize(self.now, granularity="quarter") == "in 3 quarters"
-        later377 = self.now.shift(seconds=3.7 * 10 ** 7)
+        later377 = self.now.shift(seconds=3.7 * 10**7)
         assert self.now.humanize(later377, granularity="quarter") == "4 quarters ago"
         assert later377.humanize(self.now, granularity="quarter") == "in 4 quarters"
-        later407 = self.now.shift(seconds=4 * 10 ** 7)
+        later407 = self.now.shift(seconds=4 * 10**7)
         assert self.now.humanize(later407, granularity="quarter") == "5 quarters ago"
         assert later407.humanize(self.now, granularity="quarter") == "in 5 quarters"
 
-        later108 = self.now.shift(seconds=10 ** 8)
+        later108 = self.now.shift(seconds=10**8)
         assert self.now.humanize(later108, granularity="year") == "3 years ago"
         assert later108.humanize(self.now, granularity="year") == "in 3 years"
 
-        later108onlydistance = self.now.shift(seconds=10 ** 8)
+        later108onlydistance = self.now.shift(seconds=10**8)
         assert (
             self.now.humanize(
                 later108onlydistance, only_distance=True, granularity="year"
@@ -2012,7 +2012,7 @@ class TestArrowHumanize:
             == "0 days an hour and 6 minutes ago"
         )
 
-        later105 = self.now.shift(seconds=10 ** 5)
+        later105 = self.now.shift(seconds=10**5)
         assert (
             self.now.humanize(later105, granularity=["hour", "day", "minute"])
             == "a day 3 hours and 46 minutes ago"
@@ -2020,7 +2020,7 @@ class TestArrowHumanize:
         with pytest.raises(ValueError):
             self.now.humanize(later105, granularity=["error", "second"])
 
-        later108onlydistance = self.now.shift(seconds=10 ** 8)
+        later108onlydistance = self.now.shift(seconds=10**8)
         assert (
             self.now.humanize(
                 later108onlydistance, only_distance=True, granularity=["year"]
@@ -2470,6 +2470,12 @@ def locale_list_no_weeks() -> List[str]:
         "ka-ge",
         "kk",
         "kk-kz",
+        "hy",
+        "hy-am",
+        "uz",
+        "uz-uz",
+        # "lo",
+        # "lo-la",
     ]
 
     return tested_langs
@@ -2544,6 +2550,10 @@ def locale_list_with_weeks() -> List[str]:
         "ta-lk",
         "kk",
         "kk-kz",
+        "hy",
+        "hy-am",
+        "uz",
+        "uz-uz",
     ]
 
     return tested_langs

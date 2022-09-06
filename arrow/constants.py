@@ -21,7 +21,7 @@ except (OverflowError, ValueError, OSError):  # pragma: no cover
     # Must get max value of ctime on Windows based on architecture (x32 vs x64)
     # https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/ctime-ctime32-ctime64-wctime-wctime32-wctime64
     # Note: this may occur on both 32-bit Linux systems (issue #930) along with Windows systems
-    is_64bits = sys.maxsize > 2 ** 32
+    is_64bits = sys.maxsize > 2**32
     _MAX_TIMESTAMP = (
         datetime(3000, 1, 1, 23, 59, 59, 999999).timestamp()
         if is_64bits
@@ -166,6 +166,12 @@ DEHUMANIZE_LOCALES = {
     "ka-ge",
     "kk",
     "kk-kz",
+    # "lo",
+    # "lo-la",
     "am",
     "am-et",
+    "hy-am",
+    "hy",
+    "uz",
+    "uz-uz",
 }
