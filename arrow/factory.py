@@ -96,7 +96,7 @@ class ArrowFactory:
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
-        :param locale: (optional) a ``s
+        :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en-us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
             the timezone in a positional argument.
