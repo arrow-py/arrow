@@ -4121,6 +4121,7 @@ class BengaliLocale(Locale):
             return f"{n}র্থ"
         if n == 6:
             return f"{n}ষ্ঠ"
+        return ""
 
 
 class RomanshLocale(Locale):
