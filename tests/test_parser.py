@@ -917,9 +917,9 @@ class TestDateTimeParserRegex:
 
     def test_time(self):
         time_re = parser.DateTimeParser._TIME_RE
-        time_seperators = [":", ""]
+        time_separators = [":", ""]
 
-        for sep in time_seperators:
+        for sep in time_separators:
             assert time_re.findall("12") == [("12", "", "", "", "")]
             assert time_re.findall(f"12{sep}35") == [("12", "35", "", "", "")]
             assert time_re.findall("12{sep}35{sep}46".format(sep=sep)) == [
