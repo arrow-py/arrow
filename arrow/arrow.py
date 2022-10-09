@@ -1419,7 +1419,7 @@ class Arrow:
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
-                "Input string not valid. Note: Some locales do not support the week granulairty in Arrow. "
+                "Input string not valid. Note: Some locales do not support the week granularity in Arrow. "
                 "If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."
             )
 
