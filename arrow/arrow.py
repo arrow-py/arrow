@@ -1314,7 +1314,7 @@ class Arrow:
 
     def dehumanize(self, input_string: str, locale: str = "en_us") -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
-        the time difference relative to the attrbiutes of the
+        the time difference relative to the attributes of the
         :class:`Arrow <arrow.arrow.Arrow>` object.
 
         :param timestring: a ``str`` representing a humanized relative time.
