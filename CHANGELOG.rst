@@ -659,7 +659,7 @@ The following will work in v0.15.0:
 - [NEW] Brazilian locale (Augusto2112)
 - [NEW] Dutch locale (OrangeTux)
 - [NEW] Italian locale (Pertux)
-- [NEW] Austrain locale (LeChewbacca)
+- [NEW] Austrian locale (LeChewbacca)
 - [NEW] Tagalog locale (Marksteve)
 - [FIX] Corrected spelling and day numbers in German locale (LeChewbacca)
 - [FIX] Factory ``get`` method should now handle unicode strings correctly (Bwells)
