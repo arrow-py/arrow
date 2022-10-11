@@ -285,7 +285,7 @@ After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python 
 - [FIX] Consolidated and simplified German locales.
 - [INTERNAL] Moved testing suite from nosetest/Chai to pytest/pytest-mock.
 - [INTERNAL] Converted xunit-style setup and teardown functions in tests to pytest fixtures.
-- [INTERNAL] Setup Github Actions for CI alongside Travis.
+- [INTERNAL] Setup GitHub Actions for CI alongside Travis.
 - [INTERNAL] Help support Arrow's future development by donating to the project on `Open Collective <https://opencollective.com/arrow>`_.
 
 0.15.5 (2020-01-03)
