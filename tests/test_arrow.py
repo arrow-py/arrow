@@ -2295,8 +2295,8 @@ class TestArrowHumanize:
             arw.humanize(later, granularity=[])
 
     # Bulgarian is an example of a language that overrides _format_timeframe
-    # Applicabale to all locales. Note: Contributors need to make sure
-    # that if they override describe or describe_mutli, that delta
+    # Applicable to all locales. Note: Contributors need to make sure
+    # that if they override describe or describe_multi, that delta
     # is truncated on call
 
     def test_no_floats(self):
