@@ -495,7 +495,7 @@ class Arrow:
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore
+            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
                 **{frame_relative: relative_steps}
             )
 
@@ -578,7 +578,7 @@ class Arrow:
             for _ in range(3 - len(values)):
                 values.append(1)
 
-            floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
+            floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore[misc]
 
             if frame_absolute == "week":
                 # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
@@ -1259,7 +1259,7 @@ class Arrow:
                     )
 
                 if trunc(abs(delta)) != 1:
-                    granularity += "s"  # type: ignore
+                    granularity += "s"  # type: ignore[assignment]
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
             else:

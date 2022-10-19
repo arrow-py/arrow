@@ -187,7 +187,7 @@ class DateTimeParser:
             }
         )
         if cache_size > 0:
-            self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore
+            self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore[assignment]
                 self._generate_pattern_re
             )
 
@@ -341,7 +341,7 @@ class DateTimeParser:
                     f"Unable to find a match group for the specified token {token!r}."
                 )
 
-            self._parse_token(token, value, parts)  # type: ignore
+            self._parse_token(token, value, parts)  # type: ignore[arg-type]
 
         return self._build_datetime(parts)
 
@@ -508,7 +508,7 @@ class DateTimeParser:
 
         elif token in ["MMMM", "MMM"]:
             # FIXME: month_number() is nullable
-            parts["month"] = self.locale.month_number(value.lower())  # type: ignore
+            parts["month"] = self.locale.month_number(value.lower())  # type: ignore[typeddict-item]
 
         elif token in ["MM", "M"]:
             parts["month"] = int(value)
