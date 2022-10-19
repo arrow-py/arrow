@@ -1314,7 +1314,7 @@ class Arrow:
 
     def dehumanize(self, input_string: str, locale: str = "en_us") -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
-        the time difference relative to the attrbiutes of the
+        the time difference relative to the attributes of the
         :class:`Arrow <arrow.arrow.Arrow>` object.
 
         :param timestring: a ``str`` representing a humanized relative time.
@@ -1419,7 +1419,7 @@ class Arrow:
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
-                "Input string not valid. Note: Some locales do not support the week granulairty in Arrow. "
+                "Input string not valid. Note: Some locales do not support the week granularity in Arrow. "
                 "If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."
             )
 
