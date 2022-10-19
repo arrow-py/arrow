@@ -285,7 +285,7 @@ After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python 
 - [FIX] Consolidated and simplified German locales.
 - [INTERNAL] Moved testing suite from nosetest/Chai to pytest/pytest-mock.
 - [INTERNAL] Converted xunit-style setup and teardown functions in tests to pytest fixtures.
-- [INTERNAL] Setup Github Actions for CI alongside Travis.
+- [INTERNAL] Setup GitHub Actions for CI alongside Travis.
 - [INTERNAL] Help support Arrow's future development by donating to the project on `Open Collective <https://opencollective.com/arrow>`_.
 
 0.15.5 (2020-01-03)
@@ -659,7 +659,7 @@ The following will work in v0.15.0:
 - [NEW] Brazilian locale (Augusto2112)
 - [NEW] Dutch locale (OrangeTux)
 - [NEW] Italian locale (Pertux)
-- [NEW] Austrain locale (LeChewbacca)
+- [NEW] Austrian locale (LeChewbacca)
 - [NEW] Tagalog locale (Marksteve)
 - [FIX] Corrected spelling and day numbers in German locale (LeChewbacca)
 - [FIX] Factory ``get`` method should now handle unicode strings correctly (Bwells)

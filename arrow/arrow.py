@@ -495,7 +495,7 @@ class Arrow:
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore
+            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
                 **{frame_relative: relative_steps}
             )
 
@@ -578,7 +578,7 @@ class Arrow:
             for _ in range(3 - len(values)):
                 values.append(1)
 
-            floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore
+            floor = self.__class__(*values, tzinfo=self.tzinfo)  # type: ignore[misc]
 
             if frame_absolute == "week":
                 # if week_start is greater than self.isoweekday() go back one week by setting delta = 7
@@ -1259,7 +1259,7 @@ class Arrow:
                     )
 
                 if trunc(abs(delta)) != 1:
-                    granularity += "s"  # type: ignore
+                    granularity += "s"  # type: ignore[assignment]
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
             else:
@@ -1314,7 +1314,7 @@ class Arrow:
 
     def dehumanize(self, input_string: str, locale: str = "en_us") -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, that represents
-        the time difference relative to the attrbiutes of the
+        the time difference relative to the attributes of the
         :class:`Arrow <arrow.arrow.Arrow>` object.
 
         :param timestring: a ``str`` representing a humanized relative time.
@@ -1419,7 +1419,7 @@ class Arrow:
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
-                "Input string not valid. Note: Some locales do not support the week granulairty in Arrow. "
+                "Input string not valid. Note: Some locales do not support the week granularity in Arrow. "
                 "If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."
             )
 
