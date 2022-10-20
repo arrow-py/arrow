@@ -1,10 +1,13 @@
 """Helpful functions used internally within arrow."""
 
 import datetime
-from typing import Any, Optional, cast
+from datetime import datetime as dt_datetime
+from datetime import tzinfo as dt_tzinfo
+from typing import Any, Optional, Tuple, Union, cast
 
 from dateutil.rrule import WEEKLY, rrule
 
+from arrow import parser
 from arrow.constants import (
     MAX_ORDINAL,
     MAX_TIMESTAMP,
@@ -115,3 +118,39 @@ def validate_bounds(bounds: str) -> None:
 
 
 __all__ = ["next_weekday", "is_timestamp", "validate_ordinal", "iso_to_gregorian"]
+
+
+def get_tzinfo_default_used(
+    default_tz: Union[dt_tzinfo, str],
+    dt: Optional[dt_datetime] = None,
+    tzinfo: Optional[Union[dt_tzinfo, str]] = None,
+) -> Tuple[dt_tzinfo, bool]:
+    """Get the tzinfo to use, and indicate if it was based on ``default_tz``.
+
+    :param default_tz: A :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
+    :param dt: (optional) a ``datetime`` object.
+    :param tzinfo: (optional) a ``tzinfo`` object.
+    """
+
+    default_tz_used = False
+
+    if tzinfo is None:
+        if dt and dt.tzinfo:
+            tzinfo = dt.tzinfo
+
+        else:
+            tzinfo = default_tz
+            default_tz_used = True
+
+    # detect that tzinfo is a pytz object (issue #626)
+    if (
+        isinstance(tzinfo, dt_tzinfo)
+        and hasattr(tzinfo, "localize")
+        and hasattr(tzinfo, "zone")
+        and tzinfo.zone  # type: ignore[attr-defined]
+    ):
+        tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore[attr-defined]
+    elif isinstance(tzinfo, str):
+        tzinfo = parser.TzinfoParser.parse(tzinfo)
+
+    return tzinfo, default_tz_used

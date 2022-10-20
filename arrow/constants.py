@@ -1,7 +1,9 @@
 """Constants used internally in arrow."""
 
 import sys
-from datetime import datetime
+from datetime import datetime, tzinfo
+
+from dateutil import tz
 
 if sys.version_info < (3, 8):  # pragma: no cover
     from typing_extensions import Final
@@ -35,6 +37,7 @@ MAX_TIMESTAMP_US: Final[float] = MAX_TIMESTAMP * 1_000_000
 MAX_ORDINAL: Final[int] = datetime.max.toordinal()
 MIN_ORDINAL: Final[int] = 1
 
+DEFAULT_TZ: tzinfo = tz.tzutc()
 DEFAULT_LOCALE: Final[str] = "en-us"
 
 # Supported dehumanize locales

@@ -26,6 +26,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -36,6 +37,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -57,6 +59,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -69,6 +72,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 
@@ -81,6 +85,7 @@ def get(
     locale: str = DEFAULT_LOCALE,
     tzinfo: Optional[TZ_EXPR] = None,
     normalize_whitespace: bool = False,
+    default_tz: Optional[TZ_EXPR] = None,
 ) -> Arrow:
     ...  # pragma: no cover
 

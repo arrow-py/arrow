@@ -33,7 +33,7 @@ from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
 from arrow import formatter, locales, parser, util
-from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
+from arrow.constants import DEFAULT_LOCALE, DEFAULT_TZ, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
 
 if sys.version_info < (3, 8):  # pragma: no cover
@@ -93,7 +93,8 @@ class Arrow:
     :param minute: (optional) the minute, Defaults to 0.
     :param second: (optional) the second, Defaults to 0.
     :param microsecond: (optional) the microsecond. Defaults to 0.
-    :param tzinfo: (optional) A timezone expression.  Defaults to UTC.
+    :param default_tz: A timezone expression that will be used on naive datetimes. Defaults to UTC.
+    :param tzinfo: (optional) A timezone expression.
     :param fold: (optional) 0 or 1, used to disambiguate repeated wall times. Defaults to 0.
 
     .. _tz-expr:
@@ -148,6 +149,8 @@ class Arrow:
     }
 
     _datetime: dt_datetime
+    default_tz: TZ_EXPR
+    default_tz_used: bool
 
     def __init__(
         self,
@@ -159,20 +162,22 @@ class Arrow:
         second: int = 0,
         microsecond: int = 0,
         tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: TZ_EXPR = DEFAULT_TZ,
+        default_tz_used: bool = False,
         **kwargs: Any,
     ) -> None:
-        if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
-        # detect that tzinfo is a pytz object (issue #626)
-        elif (
-            isinstance(tzinfo, dt_tzinfo)
-            and hasattr(tzinfo, "localize")
+        self.default_tz = default_tz
+        self.default_tz_used = default_tz_used
+        # If tzinfo is not a datetime.tzinfo object parse tzinfo
+        # Also detects if tzinfo is a pytz object (issue #626)
+        if not isinstance(tzinfo, dt_tzinfo) or (
+            hasattr(tzinfo, "localize")
             and hasattr(tzinfo, "zone")
             and tzinfo.zone  # type: ignore[attr-defined]
         ):
-            tzinfo = parser.TzinfoParser.parse(tzinfo.zone)  # type: ignore[attr-defined]
-        elif isinstance(tzinfo, str):
-            tzinfo = parser.TzinfoParser.parse(tzinfo)
+            tzinfo, self.default_tz_used = util.get_tzinfo_default_used(
+                default_tz=self.default_tz, tzinfo=tzinfo
+            )
 
         fold = kwargs.get("fold", 0)
 
@@ -183,11 +188,17 @@ class Arrow:
     # factories: single object, both original and from datetime.
 
     @classmethod
-    def now(cls, tzinfo: Optional[dt_tzinfo] = None) -> "Arrow":
+    def now(
+        cls,
+        tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object, representing "now" in the given
         timezone.
 
-        :param tzinfo: (optional) a ``tzinfo`` object. Defaults to local time.
+        :param tzinfo: (optional) a ``tzinfo`` object.
+        :param default_tz: (optional) a :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
+            Defaults to local timezone.
 
         Usage::
 
@@ -196,8 +207,12 @@ class Arrow:
 
         """
 
-        if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+        if default_tz is None:
+            default_tz = dateutil_tz.tzlocal()
+
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
 
         dt = dt_datetime.now(tzinfo)
 
@@ -209,7 +224,9 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dt.tzinfo,
+            tzinfo=dt.tzinfo,
+            default_tz=default_tz,
+            default_tz_used=default_tz_used,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -235,7 +252,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dt.tzinfo,
+            tzinfo=dt.tzinfo,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -244,22 +261,26 @@ class Arrow:
         cls,
         timestamp: Union[int, float, str],
         tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
-
+        :param tzinfo: (optional) a ``tzinfo`` object.
+        :param default_tz: (optional) a :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
+            Defaults to local timezone.
         """
-
-        if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
-        elif isinstance(tzinfo, str):
-            tzinfo = parser.TzinfoParser.parse(tzinfo)
 
         if not util.is_timestamp(timestamp):
             raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
+
+        if default_tz is None:
+            default_tz = dateutil_tz.tzlocal()
+
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = dt_datetime.fromtimestamp(timestamp, tzinfo)
@@ -272,7 +293,9 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dt.tzinfo,
+            tzinfo=dt.tzinfo,
+            default_tz=default_tz,
+            default_tz_used=default_tz_used,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -298,18 +321,25 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dateutil_tz.tzutc(),
+            tzinfo=dateutil_tz.tzutc(),
             fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(
+        cls,
+        dt: dt_datetime,
+        tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
         :param dt: the ``datetime``
         :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to ``dt``'s
-            timezone, or UTC if naive.
+            timezone, or ``default_tz`` if naive.
+        :param default_tz: (optional) a :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
+            Defaults to UTC.
 
         Usage::
 
@@ -320,11 +350,12 @@ class Arrow:
 
         """
 
-        if tzinfo is None:
-            if dt.tzinfo is None:
-                tzinfo = dateutil_tz.tzutc()
-            else:
-                tzinfo = dt.tzinfo
+        if default_tz is None:
+            default_tz = dateutil_tz.tzutc()
+
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, dt=dt, tzinfo=tzinfo
+        )
 
         return cls(
             dt.year,
@@ -334,24 +365,44 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            tzinfo,
+            tzinfo=tzinfo,
+            default_tz=default_tz,
+            default_tz_used=default_tz_used,
             fold=getattr(dt, "fold", 0),
         )
 
     @classmethod
-    def fromdate(cls, date: date, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdate(
+        cls,
+        date: date,
+        tzinfo: Optional[TZ_EXPR] = None,
+        default_tz: Optional[TZ_EXPR] = None,
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  All time values are set to 0.
 
         :param date: the ``date``
-        :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to UTC.
+        :param tzinfo: (optional) A :ref:`timezone expression <tz-expr>`.
+        :param default_tz: (optional) a :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
+            Defaults to UTC.
 
         """
 
-        if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+        if default_tz is None:
+            default_tz = dateutil_tz.tzutc()
 
-        return cls(date.year, date.month, date.day, tzinfo=tzinfo)
+        tzinfo, default_tz_used = util.get_tzinfo_default_used(
+            default_tz=default_tz, tzinfo=tzinfo
+        )
+
+        return cls(
+            date.year,
+            date.month,
+            date.day,
+            tzinfo=tzinfo,
+            default_tz=default_tz,
+            default_tz_used=default_tz_used,
+        )
 
     @classmethod
     def strptime(
@@ -384,7 +435,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            tzinfo,
+            tzinfo=tzinfo,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -412,7 +463,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dt.tzinfo,
+            tzinfo=dt.tzinfo,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -1086,7 +1137,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dt.tzinfo,
+            tzinfo=dt.tzinfo,
             fold=getattr(dt, "fold", 0),
         )
 

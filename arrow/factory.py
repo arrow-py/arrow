@@ -41,6 +41,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> Arrow:
         ...  # pragma: no cover
 
@@ -62,6 +63,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> Arrow:
         ...  # pragma: no cover
 
@@ -74,6 +76,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> Arrow:
         ...  # pragma: no cover
 
@@ -86,6 +89,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        default_tz: Optional[TZ_EXPR] = None,
     ) -> Arrow:
         ...  # pragma: no cover
 
@@ -95,10 +99,11 @@ class ArrowFactory:
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en-us'.
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
-            the timezone in a positional argument. Defaults to UTC.
+            the timezone in a positional argument.
         :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
             redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
-            Defaults to false.
+            Defaults to false.tr`` specifying a locale for the parser. Defaults to 'en-us'.
+        :param default_tz: (optional) a :ref:`timezone expression <tz-expr>` that will be used on naive datetimes.
 
         Usage::
 
@@ -196,6 +201,7 @@ class ArrowFactory:
         arg_count = len(args)
         locale = kwargs.pop("locale", DEFAULT_LOCALE)
         tz = kwargs.get("tzinfo", None)
+        default_tz = kwargs.get("default_tz", None)
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
         # if kwargs given, send to constructor unless only tzinfo provided
@@ -203,47 +209,45 @@ class ArrowFactory:
             arg_count = 3
 
         # tzinfo kwarg is not provided
-        if len(kwargs) == 1 and tz is None:
+        if len(kwargs) == 1 and tz is None and default_tz is None:
             arg_count = 3
 
-        # () -> now, @ tzinfo or utc
+        # () -> now, @ tzinfo or default_tz or utc
         if arg_count == 0:
-            if isinstance(tz, str):
-                tz = parser.TzinfoParser.parse(tz)
-                return self.type.now(tzinfo=tz)
-
-            if isinstance(tz, dt_tzinfo):
-                return self.type.now(tzinfo=tz)
-
-            return self.type.utcnow()
+            if default_tz is None:
+                default_tz = dateutil_tz.tzutc()
+            return self.type.now(default_tz=default_tz, tzinfo=tz)
 
         if arg_count == 1:
             arg = args[0]
-            if isinstance(arg, Decimal):
-                arg = float(arg)
 
             # (None) -> raises an exception
             if arg is None:
                 raise TypeError("Cannot parse argument of type None.")
 
+            if isinstance(arg, Decimal):
+                arg = float(arg)
+
             # try (int, float) -> from timestamp @ tzinfo
-            elif not isinstance(arg, str) and is_timestamp(arg):
-                if tz is None:
+            if not isinstance(arg, str) and is_timestamp(arg):
+                if default_tz is None:
                     # set to UTC by default
-                    tz = dateutil_tz.tzutc()
-                return self.type.fromtimestamp(arg, tzinfo=tz)
+                    default_tz = dateutil_tz.tzutc()
+                return self.type.fromtimestamp(arg, default_tz=default_tz, tzinfo=tz)
 
             # (Arrow) -> from the object's datetime @ tzinfo
             elif isinstance(arg, Arrow):
-                return self.type.fromdatetime(arg.datetime, tzinfo=tz)
+                return self.type.fromdatetime(
+                    arg.datetime, default_tz=default_tz, tzinfo=tz
+                )
 
             # (datetime) -> from datetime @ tzinfo
             elif isinstance(arg, datetime):
-                return self.type.fromdatetime(arg, tzinfo=tz)
+                return self.type.fromdatetime(arg, default_tz=default_tz, tzinfo=tz)
 
             # (date) -> from date @ tzinfo
             elif isinstance(arg, date):
-                return self.type.fromdate(arg, tzinfo=tz)
+                return self.type.fromdate(arg, default_tz=default_tz, tzinfo=tz)
 
             # (tzinfo) -> now @ tzinfo
             elif isinstance(arg, dt_tzinfo):
@@ -252,7 +256,7 @@ class ArrowFactory:
             # (str) -> parse @ tzinfo
             elif isinstance(arg, str):
                 dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
-                return self.type.fromdatetime(dt, tzinfo=tz)
+                return self.type.fromdatetime(dt, default_tz=default_tz, tzinfo=tz)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
@@ -261,7 +265,7 @@ class ArrowFactory:
             # (iso calendar) -> convert then from date @ tzinfo
             elif isinstance(arg, tuple) and len(arg) == 3:
                 d = iso_to_gregorian(*arg)
-                return self.type.fromdate(d, tzinfo=tz)
+                return self.type.fromdate(d, default_tz=default_tz, tzinfo=tz)
 
             else:
                 raise TypeError(f"Cannot parse single argument of type {type(arg)!r}.")
@@ -274,7 +278,9 @@ class ArrowFactory:
 
                 # (datetime, tzinfo/str) -> fromdatetime @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
-                    return self.type.fromdatetime(arg_1, tzinfo=arg_2)
+                    return self.type.fromdatetime(
+                        arg_1, default_tz=default_tz, tzinfo=arg_2
+                    )
                 else:
                     raise TypeError(
                         f"Cannot parse two arguments of types 'datetime', {type(arg_2)!r}."
@@ -284,7 +290,9 @@ class ArrowFactory:
 
                 # (date, tzinfo/str) -> fromdate @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
-                    return self.type.fromdate(arg_1, tzinfo=arg_2)
+                    return self.type.fromdate(
+                        arg_1, default_tz=default_tz, tzinfo=arg_2
+                    )
                 else:
                     raise TypeError(
                         f"Cannot parse two arguments of types 'date', {type(arg_2)!r}."
@@ -295,7 +303,7 @@ class ArrowFactory:
                 dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
-                return self.type.fromdatetime(dt, tzinfo=tz)
+                return self.type.fromdatetime(dt, default_tz=default_tz, tzinfo=tz)
 
             else:
                 raise TypeError(
@@ -340,9 +348,4 @@ class ArrowFactory:
             <Arrow [2013-05-07T22:19:39.130059-07:00]>
         """
 
-        if tz is None:
-            tz = dateutil_tz.tzlocal()
-        elif not isinstance(tz, dt_tzinfo):
-            tz = parser.TzinfoParser.parse(tz)
-
-        return self.type.now(tz)
+        return self.type.now(default_tz=dateutil_tz.tzlocal(), tzinfo=tz)
