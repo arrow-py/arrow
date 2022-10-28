@@ -369,7 +369,7 @@ class Arrow:
         fold: Optional[int] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
-        in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
+        in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone and fold.
 
         :param date_str: the date string.
         :param fmt: the format string using datetime format codes.
