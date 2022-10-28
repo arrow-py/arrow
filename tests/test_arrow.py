@@ -3080,6 +3080,52 @@ class TestArrowIsBetween:
             target.span("week", week_start=55)
 
 
+class TestExcelDate:
+    def test_windows_date_leap_year_edge_case(self):
+        start = arrow.Arrow.fromdatetime(datetime(1900, 2, 28))
+        test = arrow.Arrow.excel_date(59)
+        assert start == test
+
+    def test_windows_date_leap_year_edge_case_after(self):
+        # Extra day loops back to be 02/28/1900
+        start = arrow.Arrow.fromdatetime(datetime(1900, 2, 28))
+        test = arrow.Arrow.excel_date(60)
+        assert start == test
+
+    def test_windows_date_begin(self):
+        # Testing in Excel shows 1/1/1900 is serial number 1,
+        start = arrow.Arrow.fromdatetime(datetime(1900, 1, 1))
+        test = arrow.Arrow.excel_date(1)
+        assert start == test
+
+    def test_windows_date_large(self):
+        start = arrow.Arrow.fromdatetime(datetime(1994, 7, 4))
+        test = arrow.Arrow.excel_date(34519)
+        assert start == test
+
+    def test_mac_date_leap_year_edge_case(self):
+        start = arrow.Arrow.fromdatetime(datetime(1904, 2, 29))
+        test = arrow.Arrow.excel_date(59, default_windows_date=False)
+        assert start == test
+
+    def test_mac_date_leap_year_edge_case_after(self):
+        # Should be no lopp back as no edge case with macOS date system
+        start = arrow.Arrow.fromdatetime(datetime(1904, 3, 1))
+        test = arrow.Arrow.excel_date(60, default_windows_date=False)
+        assert start == test
+
+    def test_mac_date_begin(self):
+        # Testing in Excel shows 1/1/1904 is serial number 0,
+        start = arrow.Arrow.fromdatetime(datetime(1904, 1, 1))
+        test = arrow.Arrow.excel_date(0, default_windows_date=False)
+        assert start == test
+
+    def test_mac_date_large(self):
+        start = arrow.Arrow.fromdatetime(datetime(1998, 7, 5))
+        test = arrow.Arrow.excel_date(34519, default_windows_date=False)
+        assert start == test
+
+
 class TestArrowUtil:
     def test_get_datetime(self):
 
