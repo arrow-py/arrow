@@ -97,11 +97,30 @@ class TestGet:
 
         assert arw == result
 
+    def test_one_arg_arrow_with_fold(self):
+
+        arw = self.factory.utcnow()
+        result = self.factory.get(arw, fold=1)
+
+        # fold is ignored for comparison
+        assert arw.fold == 0
+        assert result.fold == 1
+        assert arw == result
+
     def test_one_arg_datetime(self):
 
         dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
 
         assert self.factory.get(dt) == dt
+
+    def test_one_arg_datetime_with_fold(self):
+
+        dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
+        result = self.factory.get(dt, fold=1)
+
+        assert dt.fold == 0
+        assert result.fold == 1
+        assert result == dt
 
     def test_one_arg_date(self):
 
