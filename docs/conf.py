@@ -20,7 +20,11 @@ release = about["__version__"]
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ["sphinx.ext.autodoc", "sphinx_autodoc_typehints"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
+    "sphinx_rtd_theme",
+]
 
 templates_path = []
 
@@ -34,7 +38,7 @@ language = "en"
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 html_theme_path = []
 html_static_path = []
 
@@ -42,21 +46,21 @@ html_show_sourcelink = False
 html_show_sphinx = False
 html_show_copyright = True
 
-# https://alabaster.readthedocs.io/en/latest/customization.html
-html_theme_options = {
-    "description": "Arrow is a sensible and human-friendly approach to dates, times and timestamps.",
+html_context = {
+    "display_github": True,
     "github_user": "arrow-py",
     "github_repo": "arrow",
-    "github_banner": True,
-    "show_related": False,
-    "show_powered_by": False,
-    "github_button": True,
-    "github_type": "star",
-    "github_count": "true",  # must be a string
+    "github_version": "master/docs/",
 }
 
-html_sidebars = {
-    "**": ["about.html", "localtoc.html", "relations.html", "searchbox.html"]
+# https://sphinx-rtd-theme.readthedocs.io/en/stable/index.html
+html_theme_options = {
+    "logo_only": False,
+    "prev_next_buttons_location": "both",
+    "style_nav_header_background": "grey",
+    # TOC options
+    "collapse_navigation": False,
+    "navigation_depth": 3,
 }
 
 # Generate PDFs with unicode characters
