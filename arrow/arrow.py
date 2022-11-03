@@ -8,6 +8,7 @@ replacement.
 import calendar
 import re
 import sys
+from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
 from datetime import timedelta
@@ -1273,9 +1274,7 @@ class Arrow:
                     value = sign * _delta / self._SECS_MAP[_frame]
                     _delta %= self._SECS_MAP[_frame]
                     if trunc(abs(value)) != 1:
-                        timeframes.append(
-                            (cast(TimeFrameLiteral, _frame + "s"), value)
-                        )
+                        timeframes.append((cast(TimeFrameLiteral, _frame + "s"), value))
                     else:
                         timeframes.append((_frame, value))
                 return _delta
