@@ -8,7 +8,6 @@ replacement.
 import calendar
 import re
 import sys
-from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
 from datetime import timedelta
@@ -709,7 +708,7 @@ class Arrow:
                     ceil += relativedelta(microseconds=-1)
             if floor == end:
                 break
-            elif floor + relativedelta(microseconds=-1) == end:
+            if floor + relativedelta(microseconds=-1) == end:
                 break
             yield floor, ceil
 
@@ -1187,34 +1186,34 @@ class Arrow:
                         "seconds", seconds, only_distance=only_distance
                     )
 
-                elif diff < self._SECS_PER_MINUTE * 2:
+                if diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_HOUR:
+                if diff < self._SECS_PER_HOUR:
                     minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
 
-                elif diff < self._SECS_PER_HOUR * 2:
+                if diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY:
+                if diff < self._SECS_PER_DAY:
                     hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
                     return locale.describe("hours", hours, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY * 2:
+                if diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_WEEK:
+                if diff < self._SECS_PER_WEEK:
                     days = sign * max(delta_second // self._SECS_PER_DAY, 2)
                     return locale.describe("days", days, only_distance=only_distance)
 
-                elif diff < self._SECS_PER_WEEK * 2:
+                if diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_MONTH:
+                if diff < self._SECS_PER_MONTH:
                     weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
-                elif diff < self._SECS_PER_MONTH * 2:
+                if diff < self._SECS_PER_MONTH * 2:
                     return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_YEAR:
+                if diff < self._SECS_PER_YEAR:
                     # TODO revisit for humanization during leap years
                     self_months = self._datetime.year * 12 + self._datetime.month
                     other_months = dt.year * 12 + dt.month
@@ -1225,13 +1224,12 @@ class Arrow:
                         "months", months, only_distance=only_distance
                     )
 
-                elif diff < self._SECS_PER_YEAR * 2:
+                if diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
-                else:
-                    years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
-                    return locale.describe("years", years, only_distance=only_distance)
+                years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
+                return locale.describe("years", years, only_distance=only_distance)
 
-            elif isinstance(granularity, str):
+            if isinstance(granularity, str):
                 granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
 
                 if granularity == "second":
@@ -1262,49 +1260,47 @@ class Arrow:
                     granularity += "s"  # type: ignore[assignment]
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
-            else:
-
-                if not granularity:
-                    raise ValueError(
-                        "Empty granularity list provided. "
-                        "Please select one or more from 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'."
-                    )
-
-                timeframes: List[Tuple[TimeFrameLiteral, float]] = []
-
-                def gather_timeframes(_delta: float, _frame: TimeFrameLiteral) -> float:
-                    if _frame in granularity:
-                        value = sign * _delta / self._SECS_MAP[_frame]
-                        _delta %= self._SECS_MAP[_frame]
-                        if trunc(abs(value)) != 1:
-                            timeframes.append(
-                                (cast(TimeFrameLiteral, _frame + "s"), value)
-                            )
-                        else:
-                            timeframes.append((_frame, value))
-                    return _delta
-
-                delta = float(delta_second)
-                frames: Tuple[TimeFrameLiteral, ...] = (
-                    "year",
-                    "quarter",
-                    "month",
-                    "week",
-                    "day",
-                    "hour",
-                    "minute",
-                    "second",
+            if not granularity:
+                raise ValueError(
+                    "Empty granularity list provided. "
+                    "Please select one or more from 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'."
                 )
-                for frame in frames:
-                    delta = gather_timeframes(delta, frame)
 
-                if len(timeframes) < len(granularity):
-                    raise ValueError(
-                        "Invalid level of granularity. "
-                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
-                    )
+            timeframes: List[Tuple[TimeFrameLiteral, float]] = []
 
-                return locale.describe_multi(timeframes, only_distance=only_distance)
+            def gather_timeframes(_delta: float, _frame: TimeFrameLiteral) -> float:
+                if _frame in granularity:
+                    value = sign * _delta / self._SECS_MAP[_frame]
+                    _delta %= self._SECS_MAP[_frame]
+                    if trunc(abs(value)) != 1:
+                        timeframes.append(
+                            (cast(TimeFrameLiteral, _frame + "s"), value)
+                        )
+                    else:
+                        timeframes.append((_frame, value))
+                return _delta
+
+            delta = float(delta_second)
+            frames: Tuple[TimeFrameLiteral, ...] = (
+                "year",
+                "quarter",
+                "month",
+                "week",
+                "day",
+                "hour",
+                "minute",
+                "second",
+            )
+            for frame in frames:
+                delta = gather_timeframes(delta, frame)
+
+            if len(timeframes) < len(granularity):
+                raise ValueError(
+                    "Invalid level of granularity. "
+                    "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
+                )
+
+            return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
             raise ValueError(
@@ -1740,10 +1736,10 @@ class Arrow:
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
 
-        elif isinstance(other, dt_datetime):
+        if isinstance(other, dt_datetime):
             return self._datetime - other
 
-        elif isinstance(other, Arrow):
+        if isinstance(other, Arrow):
             return self._datetime - other._datetime
 
         return NotImplemented
@@ -1807,11 +1803,10 @@ class Arrow:
             return dateutil_tz.tzutc()
         if isinstance(tz_expr, dt_tzinfo):
             return tz_expr
-        else:
-            try:
-                return parser.TzinfoParser.parse(tz_expr)
-            except parser.ParserError:
-                raise ValueError(f"{tz_expr!r} not recognized as a timezone.")
+        try:
+            return parser.TzinfoParser.parse(tz_expr)
+        except parser.ParserError:
+            raise ValueError(f"{tz_expr!r} not recognized as a timezone.")
 
     @classmethod
     def _get_datetime(
@@ -1820,13 +1815,12 @@ class Arrow:
         """Get datetime object from a specified expression."""
         if isinstance(expr, Arrow):
             return expr.datetime
-        elif isinstance(expr, dt_datetime):
+        if isinstance(expr, dt_datetime):
             return expr
-        elif util.is_timestamp(expr):
+        if util.is_timestamp(expr):
             timestamp = float(expr)
             return cls.utcfromtimestamp(timestamp).datetime
-        else:
-            raise ValueError(f"{expr!r} not recognized as a datetime or timestamp.")
+        raise ValueError(f"{expr!r} not recognized as a datetime or timestamp.")
 
     @classmethod
     def _get_frames(cls, name: _T_FRAMES) -> Tuple[str, str, int]:
@@ -1837,29 +1831,28 @@ class Arrow:
         """
         if name in cls._ATTRS:
             return name, f"{name}s", 1
-        elif name[-1] == "s" and name[:-1] in cls._ATTRS:
+        if name[-1] == "s" and name[:-1] in cls._ATTRS:
             return name[:-1], name, 1
-        elif name in ["week", "weeks"]:
+        if name in ["week", "weeks"]:
             return "week", "weeks", 1
-        elif name in ["quarter", "quarters"]:
+        if name in ["quarter", "quarters"]:
             return "quarter", "months", 3
-        else:
-            supported = ", ".join(
-                [
-                    "year(s)",
-                    "month(s)",
-                    "day(s)",
-                    "hour(s)",
-                    "minute(s)",
-                    "second(s)",
-                    "microsecond(s)",
-                    "week(s)",
-                    "quarter(s)",
-                ]
-            )
-            raise ValueError(
-                f"Range or span over frame {name} not supported. Supported frames: {supported}."
-            )
+        supported = ", ".join(
+            [
+                "year(s)",
+                "month(s)",
+                "day(s)",
+                "hour(s)",
+                "minute(s)",
+                "second(s)",
+                "microsecond(s)",
+                "week(s)",
+                "quarter(s)",
+            ]
+        )
+        raise ValueError(
+            f"Range or span over frame {name} not supported. Supported frames: {supported}."
+        )
 
     @classmethod
     def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
@@ -1871,10 +1864,9 @@ class Arrow:
 
             return cls.max, limit
 
-        else:
-            if limit is None:
-                return end, sys.maxsize
-            return end, limit
+        if limit is None:
+            return end, sys.maxsize
+        return end, limit
 
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:

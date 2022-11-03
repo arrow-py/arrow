@@ -383,9 +383,9 @@ class EnglishLocale(Locale):
             remainder = abs(n) % 10
             if remainder == 1:
                 return f"{n}st"
-            elif remainder == 2:
+            if remainder == 2:
                 return f"{n}nd"
-            elif remainder == 3:
+            if remainder == 3:
                 return f"{n}rd"
         return f"{n}th"
 
@@ -5675,10 +5675,9 @@ class TamilLocale(Locale):
     def _ordinal_number(self, n: int) -> str:
         if n == 1:
             return f"{n}வது"
-        elif n >= 0:
+        if n >= 0:
             return f"{n}ஆம்"
-        else:
-            return ""
+        return ""
 
 
 class AlbanianLocale(Locale):

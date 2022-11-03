@@ -340,20 +340,20 @@ class TestArrowComparison:
 
         assert self.arrow == self.arrow
         assert self.arrow == self.arrow.datetime
-        assert not (self.arrow == "abc")
+        assert not self.arrow == "abc"
 
     def test_ne(self):
 
-        assert not (self.arrow != self.arrow)
-        assert not (self.arrow != self.arrow.datetime)
+        assert not self.arrow != self.arrow
+        assert not self.arrow != self.arrow.datetime
         assert self.arrow != "abc"
 
     def test_gt(self):
 
         arrow_cmp = self.arrow.shift(minutes=1)
 
-        assert not (self.arrow > self.arrow)
-        assert not (self.arrow > self.arrow.datetime)
+        assert not self.arrow > self.arrow
+        assert not self.arrow > self.arrow.datetime
 
         with pytest.raises(TypeError):
             self.arrow > "abc"  # noqa: B015
@@ -373,8 +373,8 @@ class TestArrowComparison:
 
         arrow_cmp = self.arrow.shift(minutes=1)
 
-        assert not (self.arrow < self.arrow)
-        assert not (self.arrow < self.arrow.datetime)
+        assert not self.arrow < self.arrow
+        assert not self.arrow < self.arrow.datetime
 
         with pytest.raises(TypeError):
             self.arrow < "abc"  # noqa: B015

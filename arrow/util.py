@@ -66,7 +66,7 @@ def validate_ordinal(value: Any) -> None:
     """
     if isinstance(value, bool) or not isinstance(value, int):
         raise TypeError(f"Ordinal must be an integer (got type {type(value)}).")
-    if not (MIN_ORDINAL <= value <= MAX_ORDINAL):
+    if not MIN_ORDINAL <= value <= MAX_ORDINAL:
         raise ValueError(f"Ordinal {value} is out of range.")
 
 

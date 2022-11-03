@@ -73,14 +73,14 @@ class TestDateTimeParser:
     def test_parse_token_nonsense(self):
         parts = {}
         self.parser._parse_token("NONSENSE", "1900", parts)
-        assert parts == {}
+        assert not parts
 
     def test_parse_token_invalid_meridians(self):
         parts = {}
         self.parser._parse_token("A", "a..m", parts)
-        assert parts == {}
+        assert not parts
         self.parser._parse_token("a", "p..m", parts)
-        assert parts == {}
+        assert not parts
 
     def test_parser_no_caching(self, mocker):
 
