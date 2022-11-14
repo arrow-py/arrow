@@ -147,7 +147,7 @@ class TestDateTimeParser:
 
         assert self.parser.parse(
             "15/01/2019T04:05:06.789120Z",
-            ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
+            ["D/MM/YYThh:mm:ss.SZ", "D/MM/YYYYThh:mm:ss.SZ"],
         ) == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
 
     # regression test for issue #447
