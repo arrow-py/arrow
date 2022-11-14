@@ -790,6 +790,23 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("  \n Jun   1\t 2005\n ", "MMM D YYYY")
 
+    def test_parse_leading_zero(self):
+        # Regression tests for issue #1084
+        with pytest.raises(ParserError):
+            self.parser.parse("01", "M")
+
+        with pytest.raises(ParserError):
+            self.parser.parse("01", "D")
+
+        with pytest.raises(ParserError):
+            self.parser.parse("01", "H")
+
+        with pytest.raises(ParserError):
+            self.parser.parse("01", "h")
+
+        with pytest.raises(ParserError):
+            self.parser.parse("01", "s")
+
 
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
