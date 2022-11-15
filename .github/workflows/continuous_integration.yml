@@ -9,18 +9,18 @@ on:
     - cron: "0 0 1 * *"
 
 jobs:
-  test:
+  unit-tests:
     name: ${{ matrix.os }} (${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["pypy-3.7", "3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: ["pypy-3.9", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
         os: [ubuntu-latest, macos-latest, windows-latest]
         exclude:
           # pypy3 randomly fails on Windows builds
           - os: windows-latest
-            python-version: "pypy-3.7"
+            python-version: "pypy-3.9"
         include:
           - os: ubuntu-latest
             path: ~/.cache/pip
@@ -51,26 +51,25 @@ jobs:
         with:
           file: coverage.xml
 
-  lint:
+  linting:
+    name: Linting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - name: Cache pip
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
-      - name: Cache pre-commit
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
           restore-keys: ${{ runner.os }}-pre-commit-
+      - name: Set up Python ${{ runner.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel

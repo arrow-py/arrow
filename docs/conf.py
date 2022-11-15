@@ -13,7 +13,7 @@ with open("../arrow/_version.py", encoding="utf-8") as f:
 # -- Project information -----------------------------------------------------
 
 project = "Arrow 🏹"
-copyright = "2021, Chris Smith"
+copyright = "2023, Chris Smith"
 author = "Chris Smith"
 
 release = about["__version__"]
