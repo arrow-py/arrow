@@ -13,6 +13,7 @@ extensions = [
     Extension(
         "*",
         ["arrow/*.py"],
+        define_macros=[("CYTHON_TRACE", "1")],
     )
 ]
 
@@ -54,6 +55,8 @@ setup(
         "Bug Reports": "https://github.com/arrow-py/arrow/issues",
         "Documentation": "https://arrow.readthedocs.io",
     },
-    ext_modules=cythonize(extensions, language_level="3"),
+    ext_modules=cythonize(
+        extensions, language_level="3", compiler_directives={"linetrace": True}
+    ),
     cmdclass={"build_ext": build_ext},
 )
