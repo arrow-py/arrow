@@ -1,12 +1,20 @@
 # mypy: ignore-errors
 from pathlib import Path
 
-from setuptools import setup
+from Cython.Build import build_ext, cythonize
+from setuptools import Extension, setup
 
 readme = Path("README.rst").read_text(encoding="utf-8")
 version = Path("arrow/_version.py").read_text(encoding="utf-8")
 about = {}
 exec(version, about)
+
+extensions = [
+    Extension(
+        "*",
+        ["arrow/*.py"],
+    )
+]
 
 setup(
     name="arrow",
@@ -46,4 +54,6 @@ setup(
         "Bug Reports": "https://github.com/arrow-py/arrow/issues",
         "Documentation": "https://arrow.readthedocs.io",
     },
+    ext_modules=cythonize(extensions, language_level="3"),
+    cmdclass={"build_ext": build_ext},
 )
