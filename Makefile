@@ -1,4 +1,4 @@
-.PHONY: auto test docs clean
+.PHONY: auto test docs clean compile-cython
 
 auto: build310
 
@@ -16,6 +16,10 @@ build36 build37 build38 build39 build310: clean
 	pip install -r requirements/requirements-tests.txt; \
 	pip install -r requirements/requirements-docs.txt; \
 	pre-commit install
+
+compile-cython:
+	. venv/bin/activate; \
+	python setup.py build_ext --inplace
 
 test:
 	rm -f .coverage coverage.xml
@@ -45,7 +49,7 @@ clean: clean-dist
 clean-dist:
 	rm -rf dist build .egg .eggs arrow.egg-info
 
-build-dist:
+build-dist: compile-cython
 	. venv/bin/activate; \
 	pip install -U pip setuptools twine wheel; \
 	python setup.py sdist bdist_wheel
