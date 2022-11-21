@@ -15,11 +15,15 @@ build36 build37 build38 build39 build310: clean
 	pip install -U pip setuptools wheel; \
 	pip install -r requirements/requirements-tests.txt; \
 	pip install -r requirements/requirements-docs.txt; \
-	pre-commit install
+	pre-commit install; \
+	python setup.py build_ext --inplace
 
 compile-cython:
 	. venv/bin/activate; \
 	python setup.py build_ext --inplace
+
+clean-cython:
+	rm -f ./arrow/*.c ./arrow/*.so ./arrow/*.pyd
 
 test:
 	rm -f .coverage coverage.xml
@@ -42,7 +46,7 @@ live-docs: clean-docs
 	. venv/bin/activate; \
 	sphinx-autobuild docs docs/_build/html
 
-clean: clean-dist
+clean: clean-dist clean-cython
 	rm -rf venv .pytest_cache ./**/__pycache__
 	rm -f .coverage coverage.xml ./**/*.pyc
 
