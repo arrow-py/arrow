@@ -32,7 +32,6 @@ setup(
     zip_safe=False,
     python_requires=">=3.6",
     install_requires=[
-        "Cython>=3.0.0a11",
         "python-dateutil>=2.7.0",
         "typing_extensions; python_version<'3.8'",
     ],
