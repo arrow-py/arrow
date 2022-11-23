@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
-          pip install -U tox tox-gh-actions
+          pip install -U tox tox-gh-actions "Cython>=3.0.0a11"
       - name: Test with tox
         run: tox
       - name: Upload coverage to Codecov
