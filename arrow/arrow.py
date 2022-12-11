@@ -1090,6 +1090,33 @@ class Arrow:
             fold=getattr(dt, "fold", 0),
         )
 
+    def time_diff(self, tz: TZ_EXPR) -> int:
+        """Returns a integer represent the time difference between two timezone. Early is positive, otherwise, negative
+
+        :param tz: A :ref:int.
+
+        Usage::
+
+            >>> utc.timeDef('US/Pacific')
+            8
+
+        """
+
+        if not isinstance(tz, dt_tzinfo):
+            tz = parser.TzinfoParser.parse(tz)
+
+        dt = self._datetime.astimezone(tz)
+
+        if dt.date == self._datetime.date:
+            return self._datetime.hour - dt.hour
+        elif dt.date > self._datetime.date:
+            return self._datetime.hour - dt.hour + 24
+        else:
+            return self._datetime.hour - dt.hour - 24
+
+
+        return self.datetime.hour - dt.hour
+
     # string output and formatting
 
     def format(
