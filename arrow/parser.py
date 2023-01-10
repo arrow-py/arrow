@@ -102,6 +102,15 @@ class _Parts(TypedDict, total=False):
 
 
 class DateTimeParser:
+    """A :class:`DateTimeParser <arrow.arrow.parser>` object
+
+    Contains the regular expressions and functions to parse and split the input strings into tokens and eventually
+    produce a datetime that is used by :class:`Arrow <arrow.arrow.Arrow>` internally.
+
+    :param locale: the locale string
+    :param cache_size: the size of the LRU cache used for regular expressions. Defaults to 0.
+
+    """
     _FORMAT_RE: ClassVar[Pattern[str]] = re.compile(
         r"(YYY?Y?|MM?M?M?|Do|DD?D?D?|d?d?d?d|HH?|hh?|mm?|ss?|S+|ZZ?Z?|a|A|x|X|W)"
     )
@@ -196,7 +205,14 @@ class DateTimeParser:
     def parse_iso(
         self, datetime_string: str, normalize_whitespace: bool = False
     ) -> datetime:
+        """Parses a string by using preset formats and regular expressions to heuristically determine a format from an
+        input string and produce a datetime object
 
+        :param datetime_string: datetime string
+        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
+            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
+            Defaults to False.
+        """
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string.strip())
 
@@ -303,7 +319,15 @@ class DateTimeParser:
         fmt: Union[List[str], str],
         normalize_whitespace: bool = False,
     ) -> datetime:
+        """Parses a string by using user defined formats to heuristically determine a match in the input string and
+        produce a datetime object.
 
+        :param datetime_string: datetime string
+        :param fmt: str or List of str, user defined formats that can be matched against.
+        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
+            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
+            Defaults to False.
+        """
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string)
 
@@ -346,11 +370,18 @@ class DateTimeParser:
         return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt: str) -> Tuple[List[_FORMAT_TYPE], Pattern[str]]:
+        """A regex pattern generator
 
-        # fmt is a string of tokens like 'YYYY-MM-DD'
-        # we construct a new string by replacing each
-        # token by its pattern:
-        # 'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
+        It translated date time tokens such as 'YYYY' or 'MM' to a regular expressions string to be used in
+        date time format matching.
+
+        Example::
+
+        'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
+
+        :param fmt: A string consisting of date time tokens like 'YYYY-MM-DD'
+        """
+
         tokens: List[_FORMAT_TYPE] = []
         offset = 0
 
