@@ -303,7 +303,9 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(
+        cls, dt: Union["Arrow", dt_datetime], tzinfo: Optional[TZ_EXPR] = None
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -317,6 +319,10 @@ class Arrow:
             datetime.datetime(2021, 4, 7, 13, 48, tzinfo=tzfile('/usr/share/zoneinfo/US/Pacific'))
             >>> arrow.Arrow.fromdatetime(dt)
             <Arrow [2021-04-07T13:48:00-07:00]>
+
+        **NOTE**:
+            Although you can pass a :class:`Arrow <arrow.arrow.Arrow>`, doing so is not recommended
+            except for some cases where it simplifies handling both.
 
         """
 
@@ -646,8 +652,8 @@ class Arrow:
         representing a series of timespans between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param start: A datetime expression, the start of the range.
-        :param end: (optional) A datetime expression, the end of the range.
+        :param start: A datetime or :class:`Arrow <arrow.arrow.Arrow>` expression, the start of the range.
+        :param end: (optional) A datetime or :class:`Arrow <arrow.arrow.Arrow>` expression, the end of the range.
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
             ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
@@ -792,7 +798,6 @@ class Arrow:
         return self._datetime.isoformat()
 
     def __format__(self, formatstr: str) -> str:
-
         if len(formatstr) > 0:
             return self.format(formatstr)
 
@@ -804,7 +809,6 @@ class Arrow:
     # attributes and properties
 
     def __getattr__(self, name: str) -> int:
-
         if name == "week":
             return self.isocalendar()[1]
 
@@ -908,7 +912,8 @@ class Arrow:
 
     @property
     def fold(self) -> int:
-        """Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object."""
+        """Returns the ``fold`` value of the :class:`Arrow <arrow.arrow.Arrow>` object.
+        """
 
         return self._datetime.fold
 
@@ -923,7 +928,8 @@ class Arrow:
 
     @property
     def imaginary(self) -> bool:
-        """Indicates whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current timezone."""
+        """Indicates whether the :class: `Arrow <arrow.arrow.Arrow>` object exists in the current timezone.
+        """
 
         return not dateutil_tz.datetime_exists(self._datetime)
 
@@ -965,7 +971,6 @@ class Arrow:
         absolute_kwargs = {}
 
         for key, value in kwargs.items():
-
             if key in self._ATTRS:
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
@@ -1022,13 +1027,13 @@ class Arrow:
         additional_attrs = ["weeks", "quarters", "weekday"]
 
         for key, value in kwargs.items():
-
             if key in self._ATTRS_PLURAL or key in additional_attrs:
                 relative_kwargs[key] = value
             else:
                 supported_attr = ", ".join(self._ATTRS_PLURAL + additional_attrs)
                 raise ValueError(
-                    f"Invalid shift time frame. Please select one of the following: {supported_attr}."
+                    "Invalid shift time frame. Please select one of the following:"
+                    f" {supported_attr}."
                 )
 
         # core datetime does not support quarters, translate to months.
@@ -1254,8 +1259,9 @@ class Arrow:
                     delta = sign * delta_second / self._SECS_PER_YEAR
                 else:
                     raise ValueError(
-                        "Invalid level of granularity. "
-                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
+                        "Invalid level of granularity. Please select between 'second',"
+                        " 'minute', 'hour', 'day', 'week', 'month', 'quarter' or"
+                        " 'year'."
                     )
 
                 if trunc(abs(delta)) != 1:
@@ -1263,11 +1269,11 @@ class Arrow:
                 return locale.describe(granularity, delta, only_distance=only_distance)
 
             else:
-
                 if not granularity:
                     raise ValueError(
-                        "Empty granularity list provided. "
-                        "Please select one or more from 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'."
+                        "Empty granularity list provided. Please select one or more"
+                        " from 'second', 'minute', 'hour', 'day', 'week', 'month',"
+                        " 'quarter', 'year'."
                     )
 
                 timeframes: List[Tuple[TimeFrameLiteral, float]] = []
@@ -1300,16 +1306,18 @@ class Arrow:
 
                 if len(timeframes) < len(granularity):
                     raise ValueError(
-                        "Invalid level of granularity. "
-                        "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
+                        "Invalid level of granularity. Please select between 'second',"
+                        " 'minute', 'hour', 'day', 'week', 'month', 'quarter' or"
+                        " 'year'."
                     )
 
                 return locale.describe_multi(timeframes, only_distance=only_distance)
 
         except KeyError as e:
             raise ValueError(
-                f"Humanization of the {e} granularity is not currently translated in the {locale_name!r} locale. "
-                "Please consider making a contribution to this locale."
+                f"Humanization of the {e} granularity is not currently translated in"
+                f" the {locale_name!r} locale. Please consider making a contribution to"
+                " this locale."
             )
 
     def dehumanize(self, input_string: str, locale: str = "en_us") -> "Arrow":
@@ -1346,7 +1354,8 @@ class Arrow:
 
         if normalized_locale_name not in DEHUMANIZE_LOCALES:
             raise ValueError(
-                f"Dehumanize does not currently support the {locale} locale, please consider making a contribution to add support for this locale."
+                f"Dehumanize does not currently support the {locale} locale, please"
+                " consider making a contribution to add support for this locale."
             )
 
         current_time = self.fromdatetime(self._datetime)
@@ -1367,7 +1376,6 @@ class Arrow:
 
         # Search input string for each time unit within locale
         for unit, unit_object in locale_obj.timeframes.items():
-
             # Need to check the type of unit_object to create the correct dictionary
             if isinstance(unit_object, Mapping):
                 strings_to_search = unit_object
@@ -1378,7 +1386,6 @@ class Arrow:
             # Needs to cycle all through strings as some locales have strings that
             # could overlap in a regex match, since input validation isn't being performed.
             for time_delta, time_string in strings_to_search.items():
-
                 # Replace {0} with regex \d representing digits
                 search_string = str(time_string)
                 search_string = search_string.format(r"\d+")
@@ -1419,8 +1426,10 @@ class Arrow:
         # Assert error if string does not modify any units
         if not any([True for k, v in unit_visited.items() if v]):
             raise ValueError(
-                "Input string not valid. Note: Some locales do not support the week granularity in Arrow. "
-                "If you are attempting to use the week granularity on an unsupported locale, this could be the cause of this error."
+                "Input string not valid. Note: Some locales do not support the week"
+                " granularity in Arrow. If you are attempting to use the week"
+                " granularity on an unsupported locale, this could be the cause of this"
+                " error."
             )
 
         # Sign logic
@@ -1444,9 +1453,9 @@ class Arrow:
             sign_val = 0
         else:
             raise ValueError(
-                "Invalid input String. String does not contain any relative time information. "
-                "String should either represent a time in the future or a time in the past. "
-                "Ex: 'in 5 seconds' or '5 seconds ago'."
+                "Invalid input String. String does not contain any relative time"
+                " information. String should either represent a time in the future or a"
+                " time in the past. Ex: 'in 5 seconds' or '5 seconds ago'."
             )
 
         time_changes = {k: sign_val * v for k, v in time_object_info.items()}
@@ -1718,7 +1727,6 @@ class Arrow:
     # math
 
     def __add__(self, other: Any) -> "Arrow":
-
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime + other, self._datetime.tzinfo)
 
@@ -1736,7 +1744,6 @@ class Arrow:
         pass  # pragma: no cover
 
     def __sub__(self, other: Any) -> Union[timedelta, "Arrow"]:
-
         if isinstance(other, (timedelta, relativedelta)):
             return self.fromdatetime(self._datetime - other, self._datetime.tzinfo)
 
@@ -1749,7 +1756,6 @@ class Arrow:
         return NotImplemented
 
     def __rsub__(self, other: Any) -> timedelta:
-
         if isinstance(other, dt_datetime):
             return other - self._datetime
 
@@ -1758,42 +1764,36 @@ class Arrow:
     # comparisons
 
     def __eq__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return False
 
         return self._datetime == self._get_datetime(other)
 
     def __ne__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return True
 
         return not self.__eq__(other)
 
     def __gt__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
         return self._datetime > self._get_datetime(other)
 
     def __ge__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
         return self._datetime >= self._get_datetime(other)
 
     def __lt__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
         return self._datetime < self._get_datetime(other)
 
     def __le__(self, other: Any) -> bool:
-
         if not isinstance(other, (Arrow, dt_datetime)):
             return NotImplemented
 
@@ -1858,14 +1858,14 @@ class Arrow:
                 ]
             )
             raise ValueError(
-                f"Range or span over frame {name} not supported. Supported frames: {supported}."
+                f"Range or span over frame {name} not supported. Supported frames:"
+                f" {supported}."
             )
 
     @classmethod
     def _get_iteration_params(cls, end: Any, limit: Optional[int]) -> Tuple[Any, int]:
         """Sets default end and limit values for range method."""
         if end is None:
-
             if limit is None:
                 raise ValueError("One of 'end' or 'limit' is required.")
 
@@ -1878,7 +1878,8 @@ class Arrow:
 
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:
-        """Returns a boolean indicating whether the datetime is the last day of the month."""
+        """Returns a boolean indicating whether the datetime is the last day of the month.
+        """
         return date.day == calendar.monthrange(date.year, date.month)[1]
 
 
