@@ -875,6 +875,8 @@ class FinnishLocale(Locale):
         "hours": {"past": "{0} tuntia", "future": "{0} tunnin"},
         "day": {"past": "päivä", "future": "päivän"},
         "days": {"past": "{0} päivää", "future": "{0} päivän"},
+        "week": {"past": "viikko", "future": "viikon"},
+        "weeks": {"past": "{0} viikkoa", "future": "{0} viikon"},
         "month": {"past": "kuukausi", "future": "kuukauden"},
         "months": {"past": "{0} kuukautta", "future": "{0} kuukauden"},
         "year": {"past": "vuosi", "future": "vuoden"},
