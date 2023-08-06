@@ -15,6 +15,7 @@ from arrow import (
     FORMAT_RFC3339,
     FORMAT_RSS,
     FORMAT_W3C,
+    FORMAT_ES,
 )
 
 from .utils import make_full_tz_list
@@ -277,4 +278,10 @@ class TestFormatterBuiltinFormats:
         assert (
             self.formatter.format(self.datetime, FORMAT_W3C)
             == "1975-12-25 14:15:16-05:00"
+        )
+
+    def test_elasticsearch(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_ES)
+            == "1975-12-25 14:15:16.000-0500"
         )

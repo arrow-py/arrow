@@ -13,6 +13,7 @@ from .formatter import (
     FORMAT_RFC3339,
     FORMAT_RSS,
     FORMAT_W3C,
+    FORMAT_ES,
 )
 from .parser import ParserError
 
@@ -35,5 +36,6 @@ __all__ = [
     "FORMAT_RFC3339",
     "FORMAT_RSS",
     "FORMAT_W3C",
+    "FORMAT_ES",
     "ParserError",
 ]

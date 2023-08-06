@@ -26,6 +26,7 @@ FORMAT_RFC2822: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_RFC3339: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
 FORMAT_RSS: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_W3C: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_ES: Final[str] = "yyyy-MM-dd HH:mm:ss.SSSZ"
 
 
 class DateTimeFormatter:
@@ -35,7 +36,7 @@ class DateTimeFormatter:
     # emulated in Python's re library, see https://stackoverflow.com/a/13577411/2701578
 
     _FORMAT_RE: Final[Pattern[str]] = re.compile(
-        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
+        r"(\[(?:(?=(?P<literal>[^]]))(?P=literal))*\]|YYY?Y?|yyy?y?|MM?M?M?|Do|DD?D?D?|d?dd?d?|HH?|hh?|mm?|ss?|SS?S?S?S?S?|ZZ?Z?|a|A|X|x|W)"
     )
 
     locale: locales.Locale
@@ -56,9 +57,9 @@ class DateTimeFormatter:
         if token and token.startswith("[") and token.endswith("]"):
             return token[1:-1]
 
-        if token == "YYYY":
+        if token in ("YYYY", "yyyy"):
             return self.locale.year_full(dt.year)
-        if token == "YY":
+        if token in ("YY", "yy"):
             return self.locale.year_abbreviation(dt.year)
 
         if token == "MMMM":
@@ -74,7 +75,7 @@ class DateTimeFormatter:
             return f"{dt.timetuple().tm_yday:03d}"
         if token == "DDD":
             return f"{dt.timetuple().tm_yday}"
-        if token == "DD":
+        if token in ("DD", "dd"):
             return f"{dt.day:02d}"
         if token == "D":
             return f"{dt.day}"
