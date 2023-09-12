@@ -159,7 +159,6 @@ class DateTimeParser:
     _input_re_map: Dict[_FORMAT_TYPE, Pattern[str]]
 
     def __init__(self, locale: str = DEFAULT_LOCALE, cache_size: int = 0) -> None:
-
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
         self._input_re_map.update(
@@ -187,7 +186,7 @@ class DateTimeParser:
             }
         )
         if cache_size > 0:
-            self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore[assignment]
+            self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore
                 self._generate_pattern_re
             )
 
@@ -196,7 +195,6 @@ class DateTimeParser:
     def parse_iso(
         self, datetime_string: str, normalize_whitespace: bool = False
     ) -> datetime:
-
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string.strip())
 
@@ -236,13 +234,14 @@ class DateTimeParser:
         ]
 
         if has_time:
-
             if has_space_divider:
                 date_string, time_string = datetime_string.split(" ", 1)
             else:
                 date_string, time_string = datetime_string.split("T", 1)
 
-            time_parts = re.split(r"[\+\-Z]", time_string, 1, re.IGNORECASE)
+            time_parts = re.split(
+                r"[\+\-Z]", time_string, maxsplit=1, flags=re.IGNORECASE
+            )
 
             time_components: Optional[Match[str]] = self._TIME_RE.match(time_parts[0])
 
@@ -303,7 +302,6 @@ class DateTimeParser:
         fmt: Union[List[str], str],
         normalize_whitespace: bool = False,
     ) -> datetime:
-
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string)
 
@@ -346,7 +344,6 @@ class DateTimeParser:
         return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt: str) -> Tuple[List[_FORMAT_TYPE], Pattern[str]]:
-
         # fmt is a string of tokens like 'YYYY-MM-DD'
         # we construct a new string by replacing each
         # token by its pattern:
@@ -498,7 +495,6 @@ class DateTimeParser:
         value: Any,
         parts: _Parts,
     ) -> None:
-
         if token == "YYYY":
             parts["year"] = int(value)
 
@@ -588,7 +584,6 @@ class DateTimeParser:
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
-
             year, week = int(weekdate[0]), int(weekdate[1])
 
             if weekdate[2] is not None:
@@ -712,7 +707,6 @@ class DateTimeParser:
         )
 
     def _parse_multiformat(self, string: str, formats: Iterable[str]) -> datetime:
-
         _datetime: Optional[datetime] = None
 
         for fmt in formats:
@@ -745,7 +739,6 @@ class TzinfoParser:
 
     @classmethod
     def parse(cls, tzinfo_string: str) -> dt_tzinfo:
-
         tzinfo: Optional[dt_tzinfo] = None
 
         if tzinfo_string == "local":
@@ -755,7 +748,6 @@ class TzinfoParser:
             tzinfo = tz.tzutc()
 
         else:
-
             iso_match = cls._TZINFO_RE.match(tzinfo_string)
 
             if iso_match:
