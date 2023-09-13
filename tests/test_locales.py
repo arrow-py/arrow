@@ -75,13 +75,10 @@ class TestModule:
         mock_locale_cls = mocker.Mock()
         mock_locale_obj = mock_locale_cls.return_value = mocker.Mock()
 
-        globals_fn = mocker.Mock()
-        globals_fn.return_value = {"NonExistentLocale": mock_locale_cls}
-
         with pytest.raises(ValueError):
             arrow.locales.get_locale_by_class_name("NonExistentLocale")
 
-        mocker.patch.object(locales, "globals", globals_fn)
+        mocker.patch.object(locales, "NonExistentLocale", mock_locale_cls, create=True)
         result = arrow.locales.get_locale_by_class_name("NonExistentLocale")
 
         mock_locale_cls.assert_called_once_with()

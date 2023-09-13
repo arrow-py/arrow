@@ -1144,7 +1144,7 @@ class Arrow:
         """
 
         locale_name = locale
-        locale = locales.get_locale(locale)
+        locale_cls = locales.get_locale(locale)
 
         if other is None:
             utc = dt_datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
@@ -1175,41 +1175,55 @@ class Arrow:
         try:
             if granularity == "auto":
                 if diff < 10:
-                    return locale.describe("now", only_distance=only_distance)
+                    return locale_cls.describe("now", only_distance=only_distance)
 
                 if diff < self._SECS_PER_MINUTE:
                     seconds = sign * delta_second
-                    return locale.describe(
+                    return locale_cls.describe(
                         "seconds", seconds, only_distance=only_distance
                     )
 
                 elif diff < self._SECS_PER_MINUTE * 2:
-                    return locale.describe("minute", sign, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "minute", sign, only_distance=only_distance
+                    )
                 elif diff < self._SECS_PER_HOUR:
                     minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
-                    return locale.describe(
+                    return locale_cls.describe(
                         "minutes", minutes, only_distance=only_distance
                     )
 
                 elif diff < self._SECS_PER_HOUR * 2:
-                    return locale.describe("hour", sign, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "hour", sign, only_distance=only_distance
+                    )
                 elif diff < self._SECS_PER_DAY:
                     hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
-                    return locale.describe("hours", hours, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "hours", hours, only_distance=only_distance
+                    )
                 elif diff < self._SECS_PER_DAY * 2:
-                    return locale.describe("day", sign, only_distance=only_distance)
+                    return locale_cls.describe("day", sign, only_distance=only_distance)
                 elif diff < self._SECS_PER_WEEK:
                     days = sign * max(delta_second // self._SECS_PER_DAY, 2)
-                    return locale.describe("days", days, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "days", days, only_distance=only_distance
+                    )
 
                 elif diff < self._SECS_PER_WEEK * 2:
-                    return locale.describe("week", sign, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "week", sign, only_distance=only_distance
+                    )
                 elif diff < self._SECS_PER_MONTH:
                     weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
-                    return locale.describe("weeks", weeks, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "weeks", weeks, only_distance=only_distance
+                    )
 
                 elif diff < self._SECS_PER_MONTH * 2:
-                    return locale.describe("month", sign, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "month", sign, only_distance=only_distance
+                    )
                 elif diff < self._SECS_PER_YEAR:
                     # TODO revisit for humanization during leap years
                     self_months = self._datetime.year * 12 + self._datetime.month
@@ -1217,15 +1231,19 @@ class Arrow:
 
                     months = sign * max(abs(other_months - self_months), 2)
 
-                    return locale.describe(
+                    return locale_cls.describe(
                         "months", months, only_distance=only_distance
                     )
 
                 elif diff < self._SECS_PER_YEAR * 2:
-                    return locale.describe("year", sign, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "year", sign, only_distance=only_distance
+                    )
                 else:
                     years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
-                    return locale.describe("years", years, only_distance=only_distance)
+                    return locale_cls.describe(
+                        "years", years, only_distance=only_distance
+                    )
 
             elif isinstance(granularity, str):
                 granularity = cast(TimeFrameLiteral, granularity)  # type: ignore[assignment]
@@ -1233,7 +1251,7 @@ class Arrow:
                 if granularity == "second":
                     delta = sign * float(delta_second)
                     if abs(delta) < 2:
-                        return locale.describe("now", only_distance=only_distance)
+                        return locale_cls.describe("now", only_distance=only_distance)
                 elif granularity == "minute":
                     delta = sign * delta_second / self._SECS_PER_MINUTE
                 elif granularity == "hour":
@@ -1256,7 +1274,9 @@ class Arrow:
 
                 if trunc(abs(delta)) != 1:
                     granularity += "s"  # type: ignore[assignment]
-                return locale.describe(granularity, delta, only_distance=only_distance)
+                return locale_cls.describe(
+                    granularity, delta, only_distance=only_distance
+                )
 
             else:
                 if not granularity:
@@ -1299,7 +1319,9 @@ class Arrow:
                         "Please select between 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter' or 'year'."
                     )
 
-                return locale.describe_multi(timeframes, only_distance=only_distance)
+                return locale_cls.describe_multi(
+                    timeframes, only_distance=only_distance
+                )
 
         except KeyError as e:
             raise ValueError(
@@ -1403,9 +1425,7 @@ class Arrow:
 
                 # Add change value to the correct unit (incorporates the plurality that exists within timeframe i.e second v.s seconds)
                 time_unit_to_change = str(unit)
-                time_unit_to_change += (
-                    "s" if (str(time_unit_to_change)[-1] != "s") else ""
-                )
+                time_unit_to_change += "s" if time_unit_to_change[-1] != "s" else ""
                 time_object_info[time_unit_to_change] = change_value
                 unit_visited[time_unit_to_change] = True
 
@@ -1656,7 +1676,8 @@ class Arrow:
 
         """
 
-        return self._datetime.isocalendar()
+        cal = tuple(self._datetime.isocalendar())
+        return (cal[0], cal[1], cal[2])
 
     def isoformat(self, sep: str = "T", timespec: str = "auto") -> str:
         """Returns an ISO 8601 formatted representation of the date and time.
