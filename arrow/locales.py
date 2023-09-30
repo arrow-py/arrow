@@ -129,7 +129,6 @@ class Locale:
             _locale_map[locale_name.lower().replace("_", "-")] = cls
 
     def __init__(self) -> None:
-
         self._month_name_to_ordinal = None
 
     def describe(
@@ -174,7 +173,7 @@ class Locale:
             # Needed to determine the correct relative string to use
             timeframe_value = 0
 
-            for _unit_name, unit_value in timeframes:
+            for _, unit_value in timeframes:
                 if trunc(unit_value) != 0:
                     timeframe_value = trunc(unit_value)
                     break
@@ -285,7 +284,6 @@ class Locale:
         timeframe: TimeFrameLiteral,
         delta: Union[float, int],
     ) -> str:
-
         if timeframe == "now":
             return humanized
 
@@ -1889,7 +1887,7 @@ class GermanBaseLocale(Locale):
     future = "in {0}"
     and_word = "und"
 
-    timeframes = {
+    timeframes: ClassVar[Dict[TimeFrameLiteral, str]] = {
         "now": "gerade eben",
         "second": "einer Sekunde",
         "seconds": "{0} Sekunden",
@@ -1984,7 +1982,9 @@ class GermanBaseLocale(Locale):
             return super().describe(timeframe, delta, only_distance)
 
         # German uses a different case without 'in' or 'ago'
-        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+        humanized: str = self.timeframes_only_distance[timeframe].format(
+            trunc(abs(delta))
+        )
 
         return humanized
 
@@ -3938,7 +3938,6 @@ class ThaiLocale(Locale):
 
 
 class LaotianLocale(Locale):
-
     names = ["lo", "lo-la"]
 
     past = "{0} ກ່ອນຫນ້ານີ້"
@@ -5406,7 +5405,7 @@ class LuxembourgishLocale(Locale):
     future = "an {0}"
     and_word = "an"
 
-    timeframes = {
+    timeframes: ClassVar[Dict[TimeFrameLiteral, str]] = {
         "now": "just elo",
         "second": "enger Sekonn",
         "seconds": "{0} Sekonnen",
@@ -5494,7 +5493,9 @@ class LuxembourgishLocale(Locale):
             return super().describe(timeframe, delta, only_distance)
 
         # Luxembourgish uses a different case without 'in' or 'ago'
-        humanized = self.timeframes_only_distance[timeframe].format(trunc(abs(delta)))
+        humanized: str = self.timeframes_only_distance[timeframe].format(
+            trunc(abs(delta))
+        )
 
         return humanized
 

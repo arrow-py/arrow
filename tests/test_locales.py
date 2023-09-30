@@ -8,7 +8,6 @@ class TestLocaleValidation:
     """Validate locales to ensure that translations are valid and complete"""
 
     def test_locale_validation(self):
-
         for locale_cls in self.locales.values():
             # 7 days + 1 spacer to allow for 1-indexing of months
             assert len(locale_cls.day_names) == 8
@@ -34,7 +33,6 @@ class TestLocaleValidation:
             assert locale_cls.future is not None
 
     def test_locale_name_validation(self):
-
         for locale_cls in self.locales.values():
             for locale_name in locale_cls.names:
                 assert len(locale_name) == 2 or len(locale_name) == 5
@@ -90,7 +88,6 @@ class TestModule:
         assert result == mock_locale_obj
 
     def test_locales(self):
-
         assert len(locales._locale_map) > 0
 
 
@@ -116,24 +113,20 @@ class TestEnglishLocale:
         assert self.locale.describe("now", only_distance=False) == "just now"
 
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 hours"
         assert self.locale._format_timeframe("hour", 0) == "an hour"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("just now", "now", 0)
 
         assert result == "just now"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("an hour", "hour", 1)
 
         assert result == "in an hour"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("an hour", "hour", -1)
 
         assert result == "an hour ago"
@@ -438,7 +431,6 @@ class TestRussianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestPolishLocale:
     def test_plurals(self):
-
         assert self.locale._format_timeframe("seconds", 0) == "0 sekund"
         assert self.locale._format_timeframe("second", 1) == "sekundę"
         assert self.locale._format_timeframe("seconds", 2) == "2 sekundy"
@@ -491,7 +483,6 @@ class TestPolishLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestIcelandicLocale:
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("now", 0) == "rétt í þessu"
 
         assert self.locale._format_timeframe("second", -1) == "sekúndu"
@@ -534,23 +525,19 @@ class TestIcelandicLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestMalayalamLocale:
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 മണിക്കൂർ"
         assert self.locale._format_timeframe("hour", 0) == "ഒരു മണിക്കൂർ"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("ഇപ്പോൾ", "now", 0)
 
         assert result == "ഇപ്പോൾ"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("ഒരു മണിക്കൂർ", "hour", 1)
         assert result == "ഒരു മണിക്കൂർ ശേഷം"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("ഒരു മണിക്കൂർ", "hour", -1)
         assert result == "ഒരു മണിക്കൂർ മുമ്പ്"
 
@@ -585,22 +572,18 @@ class TestMalteseLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestHindiLocale:
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 घंटे"
         assert self.locale._format_timeframe("hour", 0) == "एक घंटा"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("अभी", "now", 0)
         assert result == "अभी"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("एक घंटा", "hour", 1)
         assert result == "एक घंटा बाद"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("एक घंटा", "hour", -1)
         assert result == "एक घंटा पहले"
 
@@ -675,17 +658,14 @@ class TestCzechLocale:
         assert self.locale._format_timeframe("years", 5) == "5 let"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("Teď", "now", 0)
         assert result == "Teď"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("hodinu", "hour", 1)
         assert result == "Za hodinu"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("hodinou", "hour", -1)
         assert result == "Před hodinou"
 
@@ -693,7 +673,6 @@ class TestCzechLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestSlovakLocale:
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("seconds", -5) == "5 sekundami"
         assert self.locale._format_timeframe("seconds", -2) == "2 sekundami"
         assert self.locale._format_timeframe("second", -1) == "sekundou"
@@ -753,17 +732,14 @@ class TestSlovakLocale:
         assert self.locale._format_timeframe("now", 0) == "Teraz"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("Teraz", "now", 0)
         assert result == "Teraz"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("hodinu", "hour", 1)
         assert result == "O hodinu"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("hodinou", "hour", -1)
         assert result == "Pred hodinou"
 
@@ -1400,7 +1376,6 @@ class TestBengaliLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestRomanianLocale:
     def test_timeframes(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 ore"
         assert self.locale._format_timeframe("months", 2) == "2 luni"
 
@@ -1435,7 +1410,6 @@ class TestRomanianLocale:
 @pytest.mark.usefixtures("lang_locale")
 class TestArabicLocale:
     def test_timeframes(self):
-
         # single
         assert self.locale._format_timeframe("minute", 1) == "دقيقة"
         assert self.locale._format_timeframe("hour", 1) == "ساعة"
@@ -2514,22 +2488,18 @@ class TestOdiaLocale:
         assert self.locale._ordinal_number(-1) == ""
 
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 ଘଣ୍ଟା"
         assert self.locale._format_timeframe("hour", 0) == "ଏକ ଘଣ୍ଟା"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("ବର୍ତ୍ତମାନ", "now", 0)
         assert result == "ବର୍ତ୍ତମାନ"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("ଏକ ଘଣ୍ଟା", "hour", 1)
         assert result == "ଏକ ଘଣ୍ଟା ପରେ"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("ଏକ ଘଣ୍ଟା", "hour", -1)
         assert result == "ଏକ ଘଣ୍ଟା ପୂର୍ବେ"
 
@@ -2758,13 +2728,11 @@ class TestSinhalaLocale:
         assert result == "දැන්"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("පැයකින්", "පැය", 1)
 
         assert result == "පැයකින්"  # (in) one hour
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("පැයක", "පැය", -1)
 
         assert result == "පැයකට පෙර"  # an hour ago
@@ -2868,24 +2836,20 @@ class TestNorwegianLocale:
         assert self.locale.ordinal_number(1) == "1."
 
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 timer"
         assert self.locale._format_timeframe("hour", 0) == "en time"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("nå nettopp", "now", 0)
 
         assert result == "nå nettopp"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("en time", "hour", 1)
 
         assert result == "om en time"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("en time", "hour", -1)
 
         assert result == "for en time siden"
@@ -2924,24 +2888,20 @@ class TestNewNorwegianLocale:
         assert self.locale.ordinal_number(1) == "1."
 
     def test_format_timeframe(self):
-
         assert self.locale._format_timeframe("hours", 2) == "2 timar"
         assert self.locale._format_timeframe("hour", 0) == "ein time"
 
     def test_format_relative_now(self):
-
         result = self.locale._format_relative("no nettopp", "now", 0)
 
         assert result == "no nettopp"
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("ein time", "hour", 1)
 
         assert result == "om ein time"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("ein time", "hour", -1)
 
         assert result == "for ein time sidan"
@@ -3063,13 +3023,11 @@ class TestAmharicLocale:
         assert self.locale.ordinal_number(1) == "1ኛ"
 
     def test_format_relative_future(self):
-
         result = self.locale._format_relative("በአንድ ሰዓት", "hour", 1)
 
         assert result == "በአንድ ሰዓት ውስጥ"  # (in) one hour
 
     def test_format_relative_past(self):
-
         result = self.locale._format_relative("ከአንድ ሰዓት", "hour", -1)
 
         assert result == "ከአንድ ሰዓት በፊት"  # an hour ago

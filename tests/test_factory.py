@@ -14,13 +14,11 @@ from .utils import assert_datetime_equality
 @pytest.mark.usefixtures("arrow_factory")
 class TestGet:
     def test_no_args(self):
-
         assert_datetime_equality(
             self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc())
         )
 
     def test_timestamp_one_arg_no_arg(self):
-
         no_arg = self.factory.get(1406430900).timestamp()
         one_arg = self.factory.get("1406430900", "X").timestamp()
 
@@ -31,14 +29,12 @@ class TestGet:
             self.factory.get(None)
 
     def test_struct_time(self):
-
         assert_datetime_equality(
             self.factory.get(time.gmtime()),
             datetime.utcnow().replace(tzinfo=tz.tzutc()),
         )
 
     def test_one_arg_timestamp(self):
-
         int_timestamp = int(time.time())
         timestamp_dt = datetime.utcfromtimestamp(int_timestamp).replace(
             tzinfo=tz.tzutc()
@@ -66,7 +62,6 @@ class TestGet:
             self.factory.get(timestamp)
 
     def test_one_arg_expanded_timestamp(self):
-
         millisecond_timestamp = 1591328104308
         microsecond_timestamp = 1591328104308505
 
@@ -79,7 +74,6 @@ class TestGet:
         ).replace(tzinfo=tz.tzutc())
 
     def test_one_arg_timestamp_with_tzinfo(self):
-
         timestamp = time.time()
         timestamp_dt = datetime.fromtimestamp(timestamp, tz=tz.tzutc()).astimezone(
             tz.gettz("US/Pacific")
@@ -91,27 +85,23 @@ class TestGet:
         )
 
     def test_one_arg_arrow(self):
-
         arw = self.factory.utcnow()
         result = self.factory.get(arw)
 
         assert arw == result
 
     def test_one_arg_datetime(self):
-
         dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
 
         assert self.factory.get(dt) == dt
 
     def test_one_arg_date(self):
-
         d = date.today()
         dt = datetime(d.year, d.month, d.day, tzinfo=tz.tzutc())
 
         assert self.factory.get(d) == dt
 
     def test_one_arg_tzinfo(self):
-
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
@@ -132,7 +122,6 @@ class TestGet:
         assert dt_output == expected
 
     def test_kwarg_tzinfo(self):
-
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
@@ -144,7 +133,6 @@ class TestGet:
         )
 
     def test_kwarg_tzinfo_string(self):
-
         self.expected = (
             datetime.utcnow()
             .replace(tzinfo=tz.tzutc())
@@ -176,7 +164,6 @@ class TestGet:
 
     # regression test for #944
     def test_one_arg_datetime_tzinfo_kwarg(self):
-
         dt = datetime(2021, 4, 29, 6)
 
         result = self.factory.get(dt, tzinfo="America/Chicago")
@@ -186,7 +173,6 @@ class TestGet:
         assert_datetime_equality(result._datetime, expected)
 
     def test_one_arg_arrow_tzinfo_kwarg(self):
-
         arw = Arrow(2021, 4, 29, 6)
 
         result = self.factory.get(arw, tzinfo="America/Chicago")
@@ -196,7 +182,6 @@ class TestGet:
         assert_datetime_equality(result._datetime, expected)
 
     def test_one_arg_date_tzinfo_kwarg(self):
-
         da = date(2021, 4, 29)
 
         result = self.factory.get(da, tzinfo="America/Chicago")
@@ -207,7 +192,6 @@ class TestGet:
         assert result.tzinfo == expected.tzinfo
 
     def test_one_arg_iso_calendar_tzinfo_kwarg(self):
-
         result = self.factory.get((2004, 1, 7), tzinfo="America/Chicago")
 
         expected = Arrow(2004, 1, 4, tzinfo="America/Chicago")
@@ -215,7 +199,6 @@ class TestGet:
         assert_datetime_equality(result, expected)
 
     def test_one_arg_iso_str(self):
-
         dt = datetime.utcnow()
 
         assert_datetime_equality(
@@ -223,7 +206,6 @@ class TestGet:
         )
 
     def test_one_arg_iso_calendar(self):
-
         pairs = [
             (datetime(2004, 1, 4), (2004, 1, 7)),
             (datetime(2008, 12, 30), (2009, 1, 2)),
@@ -252,12 +234,10 @@ class TestGet:
             self.factory.get((2014, 7, 10))
 
     def test_one_arg_other(self):
-
         with pytest.raises(TypeError):
             self.factory.get(object())
 
     def test_one_arg_bool(self):
-
         with pytest.raises(TypeError):
             self.factory.get(False)
 
@@ -272,47 +252,39 @@ class TestGet:
         )
 
     def test_two_args_datetime_tzinfo(self):
-
         result = self.factory.get(datetime(2013, 1, 1), tz.gettz("US/Pacific"))
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
 
     def test_two_args_datetime_tz_str(self):
-
         result = self.factory.get(datetime(2013, 1, 1), "US/Pacific")
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
 
     def test_two_args_date_tzinfo(self):
-
         result = self.factory.get(date(2013, 1, 1), tz.gettz("US/Pacific"))
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
 
     def test_two_args_date_tz_str(self):
-
         result = self.factory.get(date(2013, 1, 1), "US/Pacific")
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
 
     def test_two_args_datetime_other(self):
-
         with pytest.raises(TypeError):
             self.factory.get(datetime.utcnow(), object())
 
     def test_two_args_date_other(self):
-
         with pytest.raises(TypeError):
             self.factory.get(date.today(), object())
 
     def test_two_args_str_str(self):
-
         result = self.factory.get("2013-01-01", "YYYY-MM-DD")
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
     def test_two_args_str_tzinfo(self):
-
         result = self.factory.get("2013-01-01", tzinfo=tz.gettz("US/Pacific"))
 
         assert_datetime_equality(
@@ -320,7 +292,6 @@ class TestGet:
         )
 
     def test_two_args_twitter_format(self):
-
         # format returned by twitter API for created_at:
         twitter_date = "Fri Apr 08 21:08:54 +0000 2016"
         result = self.factory.get(twitter_date, "ddd MMM DD HH:mm:ss Z YYYY")
@@ -328,24 +299,20 @@ class TestGet:
         assert result._datetime == datetime(2016, 4, 8, 21, 8, 54, tzinfo=tz.tzutc())
 
     def test_two_args_str_list(self):
-
         result = self.factory.get("2013-01-01", ["MM/DD/YYYY", "YYYY-MM-DD"])
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
     def test_two_args_unicode_unicode(self):
-
         result = self.factory.get("2013-01-01", "YYYY-MM-DD")
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
     def test_two_args_other(self):
-
         with pytest.raises(TypeError):
             self.factory.get(object(), object())
 
     def test_three_args_with_tzinfo(self):
-
         timefmt = "YYYYMMDD"
         d = "20150514"
 
@@ -354,11 +321,9 @@ class TestGet:
         )
 
     def test_three_args(self):
-
         assert self.factory.get(2013, 1, 1) == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
     def test_full_kwargs(self):
-
         assert self.factory.get(
             year=2016,
             month=7,
@@ -370,7 +335,6 @@ class TestGet:
         ) == datetime(2016, 7, 14, 7, 16, 45, 631092, tzinfo=tz.tzutc())
 
     def test_three_kwargs(self):
-
         assert self.factory.get(year=2016, month=7, day=14) == datetime(
             2016, 7, 14, 0, 0, tzinfo=tz.tzutc()
         )
@@ -380,7 +344,6 @@ class TestGet:
         assert result._datetime == datetime(2019, 7, 28, 7, 0, 0, 0, tzinfo=tz.tzutc())
 
     def test_insufficient_kwargs(self):
-
         with pytest.raises(TypeError):
             self.factory.get(year=2016)
 
@@ -409,7 +372,6 @@ class TestGet:
 @pytest.mark.usefixtures("arrow_factory")
 class TestUtcNow:
     def test_utcnow(self):
-
         assert_datetime_equality(
             self.factory.utcnow()._datetime,
             datetime.utcnow().replace(tzinfo=tz.tzutc()),
@@ -419,15 +381,12 @@ class TestUtcNow:
 @pytest.mark.usefixtures("arrow_factory")
 class TestNow:
     def test_no_tz(self):
-
         assert_datetime_equality(self.factory.now(), datetime.now(tz.tzlocal()))
 
     def test_tzinfo(self):
-
         assert_datetime_equality(
             self.factory.now(tz.gettz("EST")), datetime.now(tz.gettz("EST"))
         )
 
     def test_tz_str(self):
-
         assert_datetime_equality(self.factory.now("EST"), datetime.now(tz.gettz("EST")))

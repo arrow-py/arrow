@@ -267,11 +267,9 @@ class ArrowFactory:
                 raise TypeError(f"Cannot parse single argument of type {type(arg)!r}.")
 
         elif arg_count == 2:
-
             arg_1, arg_2 = args[0], args[1]
 
             if isinstance(arg_1, datetime):
-
                 # (datetime, tzinfo/str) -> fromdatetime @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdatetime(arg_1, tzinfo=arg_2)
@@ -281,7 +279,6 @@ class ArrowFactory:
                     )
 
             elif isinstance(arg_1, date):
-
                 # (date, tzinfo/str) -> fromdate @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
                     return self.type.fromdate(arg_1, tzinfo=arg_2)
