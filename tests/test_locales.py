@@ -1414,6 +1414,7 @@ class TestArabicLocale:
         assert self.locale._format_timeframe("minute", 1) == "دقيقة"
         assert self.locale._format_timeframe("hour", 1) == "ساعة"
         assert self.locale._format_timeframe("day", 1) == "يوم"
+        assert self.locale._format_timeframe("week", 1) == "اسبوع"
         assert self.locale._format_timeframe("month", 1) == "شهر"
         assert self.locale._format_timeframe("year", 1) == "سنة"
 
@@ -1421,6 +1422,7 @@ class TestArabicLocale:
         assert self.locale._format_timeframe("minutes", 2) == "دقيقتين"
         assert self.locale._format_timeframe("hours", 2) == "ساعتين"
         assert self.locale._format_timeframe("days", 2) == "يومين"
+        assert self.locale._format_timeframe("weeks", 2) == "اسبوعين"
         assert self.locale._format_timeframe("months", 2) == "شهرين"
         assert self.locale._format_timeframe("years", 2) == "سنتين"
 
@@ -1428,12 +1430,14 @@ class TestArabicLocale:
         assert self.locale._format_timeframe("minutes", 3) == "3 دقائق"
         assert self.locale._format_timeframe("hours", 4) == "4 ساعات"
         assert self.locale._format_timeframe("days", 5) == "5 أيام"
+        assert self.locale._format_timeframe("weeks", 7) == "7 أسابيع"
         assert self.locale._format_timeframe("months", 6) == "6 أشهر"
         assert self.locale._format_timeframe("years", 10) == "10 سنوات"
 
         # more than ten
         assert self.locale._format_timeframe("minutes", 11) == "11 دقيقة"
         assert self.locale._format_timeframe("hours", 19) == "19 ساعة"
+        assert self.locale._format_timeframe("weeks", 20) == "20 اسبوع"
         assert self.locale._format_timeframe("months", 24) == "24 شهر"
         assert self.locale._format_timeframe("days", 50) == "50 يوم"
         assert self.locale._format_timeframe("years", 115) == "115 سنة"
