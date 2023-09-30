@@ -4,5 +4,5 @@ pre-commit
 pytest
 pytest-cov
 pytest-mock
-pytz==2023.3.post1
+pytz==2021.1
 simplejson==3.*
