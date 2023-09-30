@@ -1,12 +1,24 @@
 Changelog
 =========
 
+1.3.0 (2023-09-30)
+------------------
+
+- [ADDED] Added official support for Python 3.11 and 3.12.
+- [ADDED] Added dependency on ``types-python-dateutil`` to improve Arrow mypy compatibility. `PR #1102 <https://github.com/arrow-py/arrow/pull/1102>`_
+- [FIX] Updates to Italian, Romansh, Hungarian, Finish and Arabic locales.
+- [FIX] Handling parsing of UTC prefix in timezone strings.
+- [CHANGED] Update documentation to improve readability.
+- [CHANGED] Dropped support for Python 3.6 and 3.7, which are end-of-life.
+- [INTERNAL] Migrate from ``setup.py``/Twine to ``pyproject.toml``/Flit for packaging and distribution.
+- [INTERNAL] Adopt ``.readthedocs.yaml`` configuration file for continued ReadTheDocs support.
+
 1.2.3 (2022-06-25)
 ------------------
 
 - [NEW] Added Amharic, Armenian, Georgian, Laotian and Uzbek locales.
 - [FIX] Updated Danish locale and associated tests.
-- [INTERNAl] Small fixes to CI.
+- [INTERNAL] Small fixes to CI.
 
 1.2.2 (2022-01-19)
 ------------------
