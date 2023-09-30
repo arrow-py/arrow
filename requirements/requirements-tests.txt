@@ -4,7 +4,5 @@ pre-commit
 pytest
 pytest-cov
 pytest-mock
-python-dateutil>=2.7.0
 pytz==2021.1
 simplejson==3.*
-typing_extensions; python_version < '3.8'
