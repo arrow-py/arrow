@@ -23,7 +23,7 @@ test:
 
 lint:
 	. venv/bin/activate; \
-	pre-commit run --all-files
+	pre-commit run --all-files --show-diff-on-failure
 
 clean-docs:
 	rm -rf docs/_build
@@ -42,15 +42,9 @@ clean: clean-dist
 	rm -f .coverage coverage.xml ./**/*.pyc
 
 clean-dist:
-	rm -rf dist build .egg .eggs arrow.egg-info
+	rm -rf dist build *.egg *.eggs *.egg-info
 
-build-dist:
+build-dist: clean-dist
 	. venv/bin/activate; \
-	pip install -U pip setuptools twine wheel; \
-	python setup.py sdist bdist_wheel
-
-upload-dist:
-	. venv/bin/activate; \
-	twine upload dist/*
-
-publish: test clean-dist build-dist upload-dist clean-dist
+	pip install -U flit; \
+	flit build

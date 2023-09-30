@@ -1,0 +1,30 @@
+name: release
+
+on:
+  workflow_dispatch: # run manually
+  push: # run on matching tags
+    tags:
+      - '*.*.*'
+
+jobs:
+  release-to-pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install -U tox
+      - name: Publish package to PyPI
+        env:
+          FLIT_USERNAME: __token__
+          FLIT_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: tox -e publish
