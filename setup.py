@@ -21,10 +21,10 @@ setup(
     packages=["arrow"],
     package_data={"arrow": ["py.typed"]},
     zip_safe=False,
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     install_requires=[
         "python-dateutil>=2.7.0",
-        "typing_extensions; python_version<'3.8'",
+        "types-python-dateutil>=2.8.10",
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -33,12 +33,11 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     keywords="arrow date time datetime timestamp timezone humanize",
     project_urls={
