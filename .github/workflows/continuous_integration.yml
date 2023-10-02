@@ -9,115 +9,72 @@ on:
     - cron: "0 0 1 * *"
 
 jobs:
-  test:
+  unit-tests:
     name: ${{ matrix.os }} (${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["pypy-3.7", "3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["pypy-3.9", "3.8", "3.9", "3.10", "3.11", "3.12-dev"]
         os: [ubuntu-latest, macos-latest, windows-latest]
         exclude:
           # pypy3 randomly fails on Windows builds
           - os: windows-latest
-            python-version: "pypy-3.7"
-
+            python-version: "pypy-3.9"
+        include:
+          - os: ubuntu-latest
+            path: ~/.cache/pip
+          - os: macos-latest
+            path: ~/Library/Caches/pip
+          - os: windows-latest
+            path: ~\AppData\Local\pip\Cache
     steps:
-      # Check out latest code
-      - uses: actions/checkout@v2
-
-      # Configure pip cache
-      - name: Cache pip (Linux)
-        uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
+      - uses: actions/checkout@v3
+      - name: Cache pip
+        uses: actions/cache@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache pip (macOS)
-        uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
-        with:
-          path: ~/Library/Caches/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache pip (Windows)
-        uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows')
-        with:
-          path: ~\AppData\Local\pip\Cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      # Set up Python
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
-      # Install dependencies
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
           pip install -U tox tox-gh-actions
-
-      # Run tests
       - name: Test with tox
         run: tox
-
-      # Upload coverage report
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           file: coverage.xml
 
-  lint:
+  linting:
+    name: Linting
     runs-on: ubuntu-latest
-
     steps:
-      # Check out latest code
-      - uses: actions/checkout@v2
-
-      # Set up Python
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"
-
-      # Configure pip cache
-      - name: Cache pip
-        uses: actions/cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      # Configure pre-commit cache
-      - name: Cache pre-commit
-        uses: actions/cache@v2
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pre-commit-
-
-      # Install dependencies
+          restore-keys: ${{ runner.os }}-pre-commit-
+      - name: Set up Python ${{ runner.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
           pip install -U tox
-
-      # Lint code
       - name: Lint code
-        run: tox -e lint
-
-      # Lint docs
+        run: tox -e lint -- --show-diff-on-failure
       - name: Lint docs
         run: tox -e docs

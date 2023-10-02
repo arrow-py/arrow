@@ -83,7 +83,6 @@ class TestDateTimeParser:
         assert parts == {}
 
     def test_parser_no_caching(self, mocker):
-
         mocked_parser = mocker.patch(
             "arrow.parser.DateTimeParser._generate_pattern_re", fmt="fmt_a"
         )
@@ -135,7 +134,6 @@ class TestDateTimeParser:
         assert mocked_parser.call_args_list[1] == mocker.call(fmt="fmt_b")
 
     def test_YY_and_YYYY_format_list(self):
-
         assert self.parser.parse("15/01/19", ["DD/MM/YY", "DD/MM/YYYY"]) == datetime(
             2019, 1, 15
         )
@@ -145,24 +143,18 @@ class TestDateTimeParser:
             2019, 1, 15
         )
 
-        assert (
-            self.parser.parse(
-                "15/01/2019T04:05:06.789120Z",
-                ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
-            )
-            == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
-        )
+        assert self.parser.parse(
+            "15/01/2019T04:05:06.789120Z",
+            ["D/M/YYThh:mm:ss.SZ", "D/M/YYYYThh:mm:ss.SZ"],
+        ) == datetime(2019, 1, 15, 4, 5, 6, 789120, tzinfo=tz.tzutc())
 
     # regression test for issue #447
     def test_timestamp_format_list(self):
         # should not match on the "X" token
-        assert (
-            self.parser.parse(
-                "15 Jul 2000",
-                ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
-            )
-            == datetime(2000, 7, 15)
-        )
+        assert self.parser.parse(
+            "15 Jul 2000",
+            ["MM/DD/YYYY", "YYYY-MM-DD", "X", "DD-MMMM-YYYY", "D MMM YYYY"],
+        ) == datetime(2000, 7, 15)
 
         with pytest.raises(ParserError):
             self.parser.parse("15 Jul", "X")
@@ -171,7 +163,6 @@ class TestDateTimeParser:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserParse:
     def test_parse_list(self, mocker):
-
         mocker.patch(
             "arrow.parser.DateTimeParser._parse_multiformat",
             string="str",
@@ -183,7 +174,6 @@ class TestDateTimeParserParse:
         assert result == "result"
 
     def test_parse_unrecognized_token(self, mocker):
-
         mocker.patch.dict("arrow.parser.DateTimeParser._BASE_INPUT_RE_MAP")
         del arrow.parser.DateTimeParser._BASE_INPUT_RE_MAP["YYYY"]
 
@@ -193,17 +183,14 @@ class TestDateTimeParserParse:
             _parser.parse("2013-01-01", "YYYY-MM-DD")
 
     def test_parse_parse_no_match(self):
-
         with pytest.raises(ParserError):
             self.parser.parse("01-01", "YYYY-MM-DD")
 
     def test_parse_separators(self):
-
         with pytest.raises(ParserError):
             self.parser.parse("1403549231", "YYYY-MM-DD")
 
     def test_parse_numbers(self):
-
         self.expected = datetime(2012, 1, 1, 12, 5, 10)
         assert (
             self.parser.parse("2012-01-01 12:05:10", "YYYY-MM-DD HH:mm:ss")
@@ -211,19 +198,16 @@ class TestDateTimeParserParse:
         )
 
     def test_parse_am(self):
-
         with pytest.raises(ParserMatchError):
             self.parser.parse("2021-01-30 14:00:00 AM", "YYYY-MM-DD HH:mm:ss A")
 
     def test_parse_year_two_digit(self):
-
         self.expected = datetime(1979, 1, 1, 12, 5, 10)
         assert (
             self.parser.parse("79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") == self.expected
         )
 
     def test_parse_timestamp(self):
-
         tz_utc = tz.tzutc()
         float_timestamp = time.time()
         int_timestamp = int(float_timestamp)
@@ -302,14 +286,12 @@ class TestDateTimeParserParse:
             self.parser.parse(f"{timestamp:f}", "x")
 
     def test_parse_names(self):
-
         self.expected = datetime(2012, 1, 1)
 
         assert self.parser.parse("January 1, 2012", "MMMM D, YYYY") == self.expected
         assert self.parser.parse("Jan 1, 2012", "MMM D, YYYY") == self.expected
 
     def test_parse_pm(self):
-
         self.expected = datetime(1, 1, 1, 13, 0, 0)
         assert self.parser.parse("1 pm", "H a") == self.expected
         assert self.parser.parse("1 pm", "h a") == self.expected
@@ -327,19 +309,16 @@ class TestDateTimeParserParse:
         assert self.parser.parse("12 pm", "h A") == self.expected
 
     def test_parse_tz_hours_only(self):
-
         self.expected = datetime(2025, 10, 17, 5, 30, 10, tzinfo=tz.tzoffset(None, 0))
         parsed = self.parser.parse("2025-10-17 05:30:10+00", "YYYY-MM-DD HH:mm:ssZ")
         assert parsed == self.expected
 
     def test_parse_tz_zz(self):
-
         self.expected = datetime(2013, 1, 1, tzinfo=tz.tzoffset(None, -7 * 3600))
         assert self.parser.parse("2013-01-01 -07:00", "YYYY-MM-DD ZZ") == self.expected
 
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_parse_tz_name_zzz(self, full_tz_name):
-
         self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
         assert (
             self.parser.parse(f"2013-01-01 {full_tz_name}", "YYYY-MM-DD ZZZ")
@@ -503,21 +482,15 @@ class TestDateTimeParserParse:
             "2016-05-16T04:05:06.789120 blah", "YYYY-MM-DDThh:mm:ss.S"
         ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
 
-        assert (
-            self.parser.parse(
-                "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
-                "YYYY-MM-DDThh:mm:ss.S",
-            )
-            == datetime(2016, 5, 16, 4, 5, 6, 789120)
-        )
+        assert self.parser.parse(
+            "Meet me at 2016-05-16T04:05:06.789120 at the restaurant.",
+            "YYYY-MM-DDThh:mm:ss.S",
+        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
 
-        assert (
-            self.parser.parse(
-                "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
-                "YYYY-MM-DD hh:mm:ss.S",
-            )
-            == datetime(2016, 5, 16, 4, 5, 6, 789120)
-        )
+        assert self.parser.parse(
+            "Meet me at 2016-05-16 04:05:06.789120 at the restaurant.",
+            "YYYY-MM-DD hh:mm:ss.S",
+        ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
 
     # regression test for issue #701
     # tests cases of a partial match surrounded by punctuation
@@ -739,7 +712,6 @@ class TestDateTimeParserParse:
             self.parser.parse("2019-12-31T24:00:00.999999", "YYYY-MM-DDTHH:mm:ss.S")
 
     def test_parse_W(self):
-
         assert self.parser.parse("2011-W05-4", "W") == datetime(2011, 2, 3)
         assert self.parser.parse("2011W054", "W") == datetime(2011, 2, 3)
         assert self.parser.parse("2011-W05", "W") == datetime(2011, 1, 31)
@@ -783,14 +755,11 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("Jun 1 2005  1:33PM", "MMM D YYYY H:mmA")
 
-        assert (
-            self.parser.parse(
-                "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
-                "YYYY-MM-DD T HH:mm:ss S",
-                normalize_whitespace=True,
-            )
-            == datetime(2013, 5, 5, 12, 30, 45, 123456)
-        )
+        assert self.parser.parse(
+            "\t 2013-05-05  T \n   12:30:45\t123456 \t \n",
+            "YYYY-MM-DD T HH:mm:ss S",
+            normalize_whitespace=True,
+        ) == datetime(2013, 5, 5, 12, 30, 45, 123456)
 
         with pytest.raises(ParserError):
             self.parser.parse(
@@ -809,31 +778,24 @@ class TestDateTimeParserParse:
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
     def test_format_year(self):
-
         assert self.format_regex.findall("YYYY-YY") == ["YYYY", "YY"]
 
     def test_format_month(self):
-
         assert self.format_regex.findall("MMMM-MMM-MM-M") == ["MMMM", "MMM", "MM", "M"]
 
     def test_format_day(self):
-
         assert self.format_regex.findall("DDDD-DDD-DD-D") == ["DDDD", "DDD", "DD", "D"]
 
     def test_format_hour(self):
-
         assert self.format_regex.findall("HH-H-hh-h") == ["HH", "H", "hh", "h"]
 
     def test_format_minute(self):
-
         assert self.format_regex.findall("mm-m") == ["mm", "m"]
 
     def test_format_second(self):
-
         assert self.format_regex.findall("ss-s") == ["ss", "s"]
 
     def test_format_subsecond(self):
-
         assert self.format_regex.findall("SSSSSS-SSSSS-SSSS-SSS-SS-S") == [
             "SSSSSS",
             "SSSSS",
@@ -844,23 +806,18 @@ class TestDateTimeParserRegex:
         ]
 
     def test_format_tz(self):
-
         assert self.format_regex.findall("ZZZ-ZZ-Z") == ["ZZZ", "ZZ", "Z"]
 
     def test_format_am_pm(self):
-
         assert self.format_regex.findall("A-a") == ["A", "a"]
 
     def test_format_timestamp(self):
-
         assert self.format_regex.findall("X") == ["X"]
 
     def test_format_timestamp_milli(self):
-
         assert self.format_regex.findall("x") == ["x"]
 
     def test_escape(self):
-
         escape_regex = parser.DateTimeParser._ESCAPE_RE
 
         assert escape_regex.findall("2018-03-09 8 [h] 40 [hello]") == ["[h]", "[hello]"]
@@ -884,7 +841,6 @@ class TestDateTimeParserRegex:
         assert result == calendar.month_abbr[1:]
 
     def test_digits(self):
-
         assert parser.DateTimeParser._ONE_OR_TWO_DIGIT_RE.findall("4-56") == ["4", "56"]
         assert parser.DateTimeParser._ONE_OR_TWO_OR_THREE_DIGIT_RE.findall(
             "4-56-789"
@@ -932,9 +888,9 @@ class TestDateTimeParserRegex:
 
     def test_time(self):
         time_re = parser.DateTimeParser._TIME_RE
-        time_seperators = [":", ""]
+        time_separators = [":", ""]
 
-        for sep in time_seperators:
+        for sep in time_separators:
             assert time_re.findall("12") == [("12", "", "", "", "")]
             assert time_re.findall(f"12{sep}35") == [("12", "35", "", "", "")]
             assert time_re.findall("12{sep}35{sep}46".format(sep=sep)) == [
@@ -955,7 +911,6 @@ class TestDateTimeParserRegex:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserISO:
     def test_YYYY(self):
-
         assert self.parser.parse_iso("2013") == datetime(2013, 1, 1)
 
     def test_YYYY_DDDD(self):
@@ -983,7 +938,6 @@ class TestDateTimeParserISO:
         assert self.parser.parse_iso("2017-366") == datetime(2018, 1, 1)
 
     def test_YYYY_DDDD_HH_mm_ssZ(self):
-
         assert self.parser.parse_iso("2013-036 04:05:06+01:00") == datetime(
             2013, 2, 5, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
         )
@@ -997,67 +951,55 @@ class TestDateTimeParserISO:
             self.parser.parse_iso("2014-05-125")
 
     def test_YYYY_MM(self):
-
         for separator in DateTimeParser.SEPARATORS:
             assert self.parser.parse_iso(separator.join(("2013", "02"))) == datetime(
                 2013, 2, 1
             )
 
     def test_YYYY_MM_DD(self):
-
         for separator in DateTimeParser.SEPARATORS:
             assert self.parser.parse_iso(
                 separator.join(("2013", "02", "03"))
             ) == datetime(2013, 2, 3)
 
     def test_YYYY_MM_DDTHH_mmZ(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05+01:00") == datetime(
             2013, 2, 3, 4, 5, tzinfo=tz.tzoffset(None, 3600)
         )
 
     def test_YYYY_MM_DDTHH_mm(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05") == datetime(2013, 2, 3, 4, 5)
 
     def test_YYYY_MM_DDTHH(self):
-
         assert self.parser.parse_iso("2013-02-03T04") == datetime(2013, 2, 3, 4)
 
     def test_YYYY_MM_DDTHHZ(self):
-
         assert self.parser.parse_iso("2013-02-03T04+01:00") == datetime(
             2013, 2, 3, 4, tzinfo=tz.tzoffset(None, 3600)
         )
 
     def test_YYYY_MM_DDTHH_mm_ssZ(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05:06+01:00") == datetime(
             2013, 2, 3, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
         )
 
     def test_YYYY_MM_DDTHH_mm_ss(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05:06") == datetime(
             2013, 2, 3, 4, 5, 6
         )
 
     def test_YYYY_MM_DD_HH_mmZ(self):
-
         assert self.parser.parse_iso("2013-02-03 04:05+01:00") == datetime(
             2013, 2, 3, 4, 5, tzinfo=tz.tzoffset(None, 3600)
         )
 
     def test_YYYY_MM_DD_HH_mm(self):
-
         assert self.parser.parse_iso("2013-02-03 04:05") == datetime(2013, 2, 3, 4, 5)
 
     def test_YYYY_MM_DD_HH(self):
-
         assert self.parser.parse_iso("2013-02-03 04") == datetime(2013, 2, 3, 4)
 
     def test_invalid_time(self):
-
         with pytest.raises(ParserError):
             self.parser.parse_iso("2013-02-03T")
 
@@ -1068,19 +1010,16 @@ class TestDateTimeParserISO:
             self.parser.parse_iso("2013-02-03 04:05:06.")
 
     def test_YYYY_MM_DD_HH_mm_ssZ(self):
-
         assert self.parser.parse_iso("2013-02-03 04:05:06+01:00") == datetime(
             2013, 2, 3, 4, 5, 6, tzinfo=tz.tzoffset(None, 3600)
         )
 
     def test_YYYY_MM_DD_HH_mm_ss(self):
-
         assert self.parser.parse_iso("2013-02-03 04:05:06") == datetime(
             2013, 2, 3, 4, 5, 6
         )
 
     def test_YYYY_MM_DDTHH_mm_ss_S(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05:06.7") == datetime(
             2013, 2, 3, 4, 5, 6, 700000
         )
@@ -1115,7 +1054,6 @@ class TestDateTimeParserISO:
         )
 
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
-
         assert self.parser.parse_iso("2013-02-03T04:05:06.7+01:00") == datetime(
             2013, 2, 3, 4, 5, 6, 700000, tzinfo=tz.tzoffset(None, 3600)
         )
@@ -1141,7 +1079,6 @@ class TestDateTimeParserISO:
         )
 
     def test_W(self):
-
         assert self.parser.parse_iso("2011-W05-4") == datetime(2011, 2, 3)
 
         assert self.parser.parse_iso("2011-W05-4T14:17:01") == datetime(
@@ -1155,7 +1092,6 @@ class TestDateTimeParserISO:
         )
 
     def test_invalid_Z(self):
-
         with pytest.raises(ParserError):
             self.parser.parse_iso("2013-02-03T04:05:06.78912z")
 
@@ -1213,7 +1149,6 @@ class TestDateTimeParserISO:
         )
 
     def test_isoformat(self):
-
         dt = datetime.utcnow()
 
         assert self.parser.parse_iso(dt.isoformat()) == dt
@@ -1374,16 +1309,21 @@ class TestDateTimeParserISO:
 @pytest.mark.usefixtures("tzinfo_parser")
 class TestTzinfoParser:
     def test_parse_local(self):
-
         assert self.parser.parse("local") == tz.tzlocal()
 
     def test_parse_utc(self):
-
         assert self.parser.parse("utc") == tz.tzutc()
         assert self.parser.parse("UTC") == tz.tzutc()
 
-    def test_parse_iso(self):
+    def test_parse_utc_withoffset(self):
+        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse("(UTC-01:00") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse(
+            "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
+        ) == tz.tzoffset(None, 3600)
 
+    def test_parse_iso(self):
         assert self.parser.parse("01:00") == tz.tzoffset(None, 3600)
         assert self.parser.parse("11:35") == tz.tzoffset(None, 11 * 3600 + 2100)
         assert self.parser.parse("+01:00") == tz.tzoffset(None, 3600)
@@ -1398,11 +1338,9 @@ class TestTzinfoParser:
         assert self.parser.parse("-01") == tz.tzoffset(None, -3600)
 
     def test_parse_str(self):
-
         assert self.parser.parse("US/Pacific") == tz.gettz("US/Pacific")
 
     def test_parse_fails(self):
-
         with pytest.raises(parser.ParserError):
             self.parser.parse("fail")
 
@@ -1410,31 +1348,25 @@ class TestTzinfoParser:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthName:
     def test_shortmonth_capitalized(self):
-
         assert self.parser.parse("2013-Jan-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
     def test_shortmonth_allupper(self):
-
         assert self.parser.parse("2013-JAN-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
     def test_shortmonth_alllower(self):
-
         assert self.parser.parse("2013-jan-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
     def test_month_capitalized(self):
-
         assert self.parser.parse("2013-January-01", "YYYY-MMMM-DD") == datetime(
             2013, 1, 1
         )
 
     def test_month_allupper(self):
-
         assert self.parser.parse("2013-JANUARY-01", "YYYY-MMMM-DD") == datetime(
             2013, 1, 1
         )
 
     def test_month_alllower(self):
-
         assert self.parser.parse("2013-january-01", "YYYY-MMMM-DD") == datetime(
             2013, 1, 1
         )
@@ -1581,13 +1513,11 @@ class TestDateTimeParserMonthOrdinalDay:
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserSearchDate:
     def test_parse_search(self):
-
         assert self.parser.parse(
             "Today is 25 of September of 2003", "DD of MMMM of YYYY"
         ) == datetime(2003, 9, 25)
 
     def test_parse_search_with_numbers(self):
-
         assert self.parser.parse(
             "2000 people met the 2012-01-01 12:05:10", "YYYY-MM-DD HH:mm:ss"
         ) == datetime(2012, 1, 1, 12, 5, 10)
@@ -1597,7 +1527,6 @@ class TestDateTimeParserSearchDate:
         ) == datetime(1979, 1, 1, 12, 5, 10)
 
     def test_parse_search_with_names(self):
-
         assert self.parser.parse("June was born in May 1980", "MMMM YYYY") == datetime(
             1980, 5, 1
         )
@@ -1614,12 +1543,10 @@ class TestDateTimeParserSearchDate:
         )
 
     def test_parse_search_fails(self):
-
         with pytest.raises(parser.ParserError):
             self.parser.parse("Jag föddes den 25 Augusti 1975", "DD MMMM YYYY")
 
     def test_escape(self):
-
         format = "MMMM D, YYYY [at] h:mma"
         assert self.parser.parse(
             "Thursday, December 10, 2015 at 5:09pm", format

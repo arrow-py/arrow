@@ -1,0 +1,8 @@
+-r requirements.txt
+dateparser==1.*
+pre-commit
+pytest
+pytest-cov
+pytest-mock
+pytz==2021.1
+simplejson==3.*

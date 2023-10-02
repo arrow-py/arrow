@@ -1,18 +1,19 @@
 .PHONY: auto test docs clean
 
-auto: build39
+auto: build311
 
-build36: PYTHON_VER = python3.6
-build37: PYTHON_VER = python3.7
 build38: PYTHON_VER = python3.8
 build39: PYTHON_VER = python3.9
 build310: PYTHON_VER = python3.10
+build311: PYTHON_VER = python3.11
+build312: PYTHON_VER = python3.12
 
-build36 build37 build38 build39 build310: clean
+build36 build37 build38 build39 build310 build311 build312: clean
 	$(PYTHON_VER) -m venv venv
 	. venv/bin/activate; \
 	pip install -U pip setuptools wheel; \
-	pip install -r requirements-dev.txt; \
+	pip install -r requirements/requirements-tests.txt; \
+	pip install -r requirements/requirements-docs.txt; \
 	pre-commit install
 
 test:
@@ -24,26 +25,26 @@ lint:
 	. venv/bin/activate; \
 	pre-commit run --all-files --show-diff-on-failure
 
-docs:
+clean-docs:
 	rm -rf docs/_build
+
+docs:
 	. venv/bin/activate; \
 	cd docs; \
 	make html
+
+live-docs: clean-docs
+	. venv/bin/activate; \
+	sphinx-autobuild docs docs/_build/html
 
 clean: clean-dist
 	rm -rf venv .pytest_cache ./**/__pycache__
 	rm -f .coverage coverage.xml ./**/*.pyc
 
 clean-dist:
-	rm -rf dist build .egg .eggs arrow.egg-info
+	rm -rf dist build *.egg *.eggs *.egg-info
 
-build-dist:
+build-dist: clean-dist
 	. venv/bin/activate; \
-	pip install -U pip setuptools twine wheel; \
-	python setup.py sdist bdist_wheel
-
-upload-dist:
-	. venv/bin/activate; \
-	twine upload dist/*
-
-publish: test clean-dist build-dist upload-dist clean-dist
+	pip install -U flit; \
+	flit build

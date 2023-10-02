@@ -1,0 +1,6 @@
+-r requirements.txt
+doc8
+sphinx>=7.0.0
+sphinx-autobuild
+sphinx-autodoc-typehints
+sphinx_rtd_theme>=1.3.0

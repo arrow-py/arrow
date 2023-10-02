@@ -1,6 +1,36 @@
 Changelog
 =========
 
+1.3.0 (2023-09-30)
+------------------
+
+- [ADDED] Added official support for Python 3.11 and 3.12.
+- [ADDED] Added dependency on ``types-python-dateutil`` to improve Arrow mypy compatibility. `PR #1102 <https://github.com/arrow-py/arrow/pull/1102>`_
+- [FIX] Updates to Italian, Romansh, Hungarian, Finish and Arabic locales.
+- [FIX] Handling parsing of UTC prefix in timezone strings.
+- [CHANGED] Update documentation to improve readability.
+- [CHANGED] Dropped support for Python 3.6 and 3.7, which are end-of-life.
+- [INTERNAL] Migrate from ``setup.py``/Twine to ``pyproject.toml``/Flit for packaging and distribution.
+- [INTERNAL] Adopt ``.readthedocs.yaml`` configuration file for continued ReadTheDocs support.
+
+1.2.3 (2022-06-25)
+------------------
+
+- [NEW] Added Amharic, Armenian, Georgian, Laotian and Uzbek locales.
+- [FIX] Updated Danish locale and associated tests.
+- [INTERNAL] Small fixes to CI.
+
+1.2.2 (2022-01-19)
+------------------
+
+- [NEW] Added Kazakh locale.
+- [FIX] The Belarusian, Bulgarian, Czech, Macedonian, Polish, Russian, Slovak and Ukrainian locales now support ``dehumanize``.
+- [FIX] Minor bug fixes and improvements to ChineseCN, Indonesian, Norwegian, and Russian locales.
+- [FIX] Expanded testing for multiple locales.
+- [INTERNAL] Started using ``xelatex`` for pdf generation in documentation.
+- [INTERNAL] Split requirements file into ``requirements.txt``, ``requirements-docs.txt`` and ``requirements-tests.txt``.
+- [INTERNAL] Added ``flake8-annotations`` package for type linting in ``pre-commit``.
+
 1.2.1 (2021-10-24)
 ------------------
 
@@ -267,7 +297,7 @@ After 8 years we're pleased to announce Arrow v1.0. Thanks to the entire Python 
 - [FIX] Consolidated and simplified German locales.
 - [INTERNAL] Moved testing suite from nosetest/Chai to pytest/pytest-mock.
 - [INTERNAL] Converted xunit-style setup and teardown functions in tests to pytest fixtures.
-- [INTERNAL] Setup Github Actions for CI alongside Travis.
+- [INTERNAL] Setup GitHub Actions for CI alongside Travis.
 - [INTERNAL] Help support Arrow's future development by donating to the project on `Open Collective <https://opencollective.com/arrow>`_.
 
 0.15.5 (2020-01-03)
@@ -641,7 +671,7 @@ The following will work in v0.15.0:
 - [NEW] Brazilian locale (Augusto2112)
 - [NEW] Dutch locale (OrangeTux)
 - [NEW] Italian locale (Pertux)
-- [NEW] Austrain locale (LeChewbacca)
+- [NEW] Austrian locale (LeChewbacca)
 - [NEW] Tagalog locale (Marksteve)
 - [FIX] Corrected spelling and day numbers in German locale (LeChewbacca)
 - [FIX] Factory ``get`` method should now handle unicode strings correctly (Bwells)
