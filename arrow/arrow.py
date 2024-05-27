@@ -29,6 +29,11 @@ from typing import (
     overload,
 )
 
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
 from dateutil import tz as dateutil_tz
 from dateutil.relativedelta import relativedelta
 
@@ -303,7 +308,7 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> Self:
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -597,7 +602,7 @@ class Arrow:
 
         return floor, ceil
 
-    def floor(self, frame: _T_FRAMES) -> "Arrow":
+    def floor(self, frame: _T_FRAMES) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the first element in the 2-tuple returned by
@@ -612,9 +617,9 @@ class Arrow:
 
         """
 
-        return self.span(frame)[0]
+        return cast(Self, self.span(frame)[0])
 
-    def ceil(self, frame: _T_FRAMES) -> "Arrow":
+    def ceil(self, frame: _T_FRAMES) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the second element in the 2-tuple returned by
@@ -629,7 +634,7 @@ class Arrow:
 
         """
 
-        return self.span(frame)[1]
+        return cast(Self, self.span(frame)[1])
 
     @classmethod
     def span_range(
@@ -927,7 +932,7 @@ class Arrow:
 
     # mutation and duplication.
 
-    def clone(self) -> "Arrow":
+    def clone(self) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, cloned from the current one.
 
         Usage:
@@ -939,7 +944,7 @@ class Arrow:
 
         return self.fromdatetime(self._datetime)
 
-    def replace(self, **kwargs: Any) -> "Arrow":
+    def replace(self, **kwargs: Any) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
@@ -985,7 +990,7 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def shift(self, **kwargs: Any) -> "Arrow":
+    def shift(self, **kwargs: Any) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
@@ -1040,7 +1045,7 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def to(self, tz: TZ_EXPR) -> "Arrow":
+    def to(self, tz: TZ_EXPR) -> Self:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
