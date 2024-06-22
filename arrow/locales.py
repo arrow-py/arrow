@@ -1,12 +1,12 @@
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
-import sys
 from math import trunc
 from typing import (
     Any,
     ClassVar,
     Dict,
     List,
+    Literal,
     Mapping,
     Optional,
     Sequence,
@@ -15,11 +15,6 @@ from typing import (
     Union,
     cast,
 )
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Literal
-else:
-    from typing import Literal  # pragma: no cover
 
 TimeFrameLiteral = Literal[
     "now",

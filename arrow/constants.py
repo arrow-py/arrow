@@ -2,11 +2,7 @@
 
 import sys
 from datetime import datetime
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Final
-else:
-    from typing import Final  # pragma: no cover
+from typing import Final
 
 # datetime.max.timestamp() errors on Windows, so we must hardcode
 # the highest possible datetime value that can output a timestamp.
