@@ -18,9 +18,11 @@ from time import struct_time
 from typing import (
     Any,
     ClassVar,
+    Final,
     Generator,
     Iterable,
     List,
+    Literal,
     Mapping,
     Optional,
     Tuple,
@@ -35,12 +37,6 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Final, Literal
-else:
-    from typing import Final, Literal  # pragma: no cover
-
 
 TZ_EXPR = Union[dt_tzinfo, str]
 
