@@ -2,7 +2,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-ast
       - id: check-yaml
@@ -18,11 +18,11 @@ repos:
         args: [requirements/requirements.txt, requirements/requirements-docs.txt, requirements/requirements-tests.txt]
       - id: trailing-whitespace
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.13.0
+    rev: v3.16.0
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -48,7 +48,7 @@ repos:
       - id: flake8
         additional_dependencies: [flake8-bugbear,flake8-annotations]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.5.1
+    rev: v1.10.0
     hooks:
       - id: mypy
         additional_dependencies: [types-python-dateutil]
