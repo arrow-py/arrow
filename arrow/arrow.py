@@ -155,7 +155,8 @@ class Arrow:
         second: int = 0,
         microsecond: int = 0,
         tzinfo: Optional[TZ_EXPR] = None,
-        **kwargs: Any,
+        *,
+        fold: int = 0,
     ) -> None:
         if tzinfo is None:
             tzinfo = dateutil_tz.tzutc()
@@ -169,8 +170,6 @@ class Arrow:
             tzinfo = parser.TzinfoParser.parse(tzinfo.zone)
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
-
-        fold = kwargs.get("fold", 0)
 
         self._datetime = dt_datetime(
             year, month, day, hour, minute, second, microsecond, tzinfo, fold=fold
@@ -206,7 +205,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     @classmethod
@@ -232,7 +231,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     @classmethod
@@ -269,7 +268,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     @classmethod
@@ -295,11 +294,16 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dateutil_tz.tzutc(),
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(
+        cls,
+        dt: dt_datetime,
+        tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -322,6 +326,9 @@ class Arrow:
             else:
                 tzinfo = dt.tzinfo
 
+        if fold is None:
+            fold = dt.fold
+
         return cls(
             dt.year,
             dt.month,
@@ -331,7 +338,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=fold,
         )
 
     @classmethod
@@ -351,10 +358,14 @@ class Arrow:
 
     @classmethod
     def strptime(
-        cls, date_str: str, fmt: str, tzinfo: Optional[TZ_EXPR] = None
+        cls,
+        date_str: str,
+        fmt: str,
+        tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a date string and format,
-        in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone.
+        in the style of ``datetime.strptime``.  Optionally replaces the parsed timezone and fold.
 
         :param date_str: the date string.
         :param fmt: the format string using datetime format codes.
@@ -372,6 +383,9 @@ class Arrow:
         if tzinfo is None:
             tzinfo = dt.tzinfo
 
+        if fold is None:
+            fold = dt.fold
+
         return cls(
             dt.year,
             dt.month,
@@ -381,7 +395,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=fold,
         )
 
     @classmethod
@@ -409,7 +423,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     # factories: ranges and spans
@@ -1079,7 +1093,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             dt.tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=dt.fold,
         )
 
     # string output and formatting
