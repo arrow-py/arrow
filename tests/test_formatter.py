@@ -1,7 +1,11 @@
+try:
+    import zoneinfo
+except ImportError:
+    from backports import zoneinfo
+
 from datetime import datetime, timezone
 
 import pytest
-import pytz
 from dateutil import tz as dateutil_tz
 
 from arrow import (
@@ -124,7 +128,7 @@ class TestFormatterFormatToken:
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_timezone_formatter(self, full_tz_name):
         # This test will fail if we use "now" as date as soon as we change from/to DST
-        dt = datetime(1986, 2, 14, tzinfo=pytz.timezone("UTC")).replace(
+        dt = datetime(1986, 2, 14, tzinfo=zoneinfo.ZoneInfo("UTC")).replace(
             tzinfo=dateutil_tz.gettz(full_tz_name)
         )
         abbreviation = dt.tzname()

@@ -41,6 +41,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
+    "backports.zoneinfo==0.2.1;python_version<'3.9'",
     "dateparser==1.*",
     "pre-commit",
     "pytest",
