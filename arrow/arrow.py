@@ -1088,7 +1088,8 @@ class Arrow:
         self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = DEFAULT_LOCALE
     ) -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
-        formatted according to the provided format string.
+        formatted according to the provided format string. For a list of formatting values,
+        see :ref:`supported-tokens`
 
         :param fmt: the format string.
         :param locale: the locale to format.
