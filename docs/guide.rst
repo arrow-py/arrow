@@ -156,6 +156,8 @@ Move between the earlier and later moments of an ambiguous time:
 Format
 ~~~~~~
 
+For a list of formatting values, see :ref:`supported-tokens`
+
 .. code-block:: python
 
     >>> arrow.utcnow().format('YYYY-MM-DD HH:mm:ss ZZ')
@@ -364,6 +366,8 @@ Then get and use a factory for it:
 
     >>> custom.days_till_xmas()
     >>> 211
+
+.. _supported-tokens:
 
 Supported Tokens
 ~~~~~~~~~~~~~~~~
