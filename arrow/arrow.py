@@ -4,7 +4,6 @@ replacement.
 
 """
 
-
 import calendar
 import re
 import sys
