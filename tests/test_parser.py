@@ -1316,9 +1316,8 @@ class TestTzinfoParser:
         assert self.parser.parse("UTC") == tz.tzutc()
 
     def test_parse_utc_withoffset(self):
-        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("(UTC-01:00") == tz.tzoffset(None, -3600)
-        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse("(UTC-01:00)") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("(UTC+01:00)") == tz.tzoffset(None, 3600)
         assert self.parser.parse(
             "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
         ) == tz.tzoffset(None, 3600)
@@ -1341,8 +1340,23 @@ class TestTzinfoParser:
         assert self.parser.parse("US/Pacific") == tz.gettz("US/Pacific")
 
     def test_parse_fails(self):
-        with pytest.raises(parser.ParserError):
-            self.parser.parse("fail")
+        pytest.raises(parser.ParserError, self.parser.parse, "fail")
+        pytest.raises(parser.ParserError, self.parser.parse, "+03:00.34")
+        pytest.raises(parser.ParserError, self.parser.parse, "+03:00 ")
+        pytest.raises(
+            parser.ParserError,
+            self.parser.parse,
+            "(UTC+01:00 Amsterdam, Berlin, Bern, Rom, Stockholm, Wien",
+        )
+        pytest.raises(
+            parser.ParserError,
+            self.parser.parse,
+            "+01:00 Amsterdam, Berlin, Bern, Rom, Stockholm, Wien",
+        )
+
+        # These get parsed by dateutil.tz.gettz(), albeit it probably shouldn't
+        # pytest.raises(parser.ParserError, self.parser.parse, "(UTC+01:00")
+        # pytest.raises(parser.ParserError, self.parser.parse, "(UTC+01:00 Amsterdam")
 
 
 @pytest.mark.usefixtures("dt_parser")
