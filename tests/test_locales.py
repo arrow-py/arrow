@@ -2390,14 +2390,14 @@ class TestKoreanLocale:
         assert self.locale._format_relative("2시간", "hours", -2) == "2시간 전"
         assert self.locale._format_relative("하루", "day", -1) == "어제"
         assert self.locale._format_relative("2일", "days", -2) == "그제"
-        assert self.locale._format_relative("3일", "days", -3) == "그끄제"
+        assert self.locale._format_relative("3일", "days", -3) == "3일 전"
         assert self.locale._format_relative("4일", "days", -4) == "4일 전"
         assert self.locale._format_relative("1주", "week", -1) == "1주 전"
         assert self.locale._format_relative("2주", "weeks", -2) == "2주 전"
         assert self.locale._format_relative("한달", "month", -1) == "한달 전"
         assert self.locale._format_relative("2개월", "months", -2) == "2개월 전"
         assert self.locale._format_relative("1년", "year", -1) == "작년"
-        assert self.locale._format_relative("2년", "years", -2) == "제작년"
+        assert self.locale._format_relative("2년", "years", -2) == "재작년"
         assert self.locale._format_relative("3년", "years", -3) == "3년 전"
 
     def test_ordinal_number(self):
