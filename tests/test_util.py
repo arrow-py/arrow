@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 
@@ -87,7 +87,7 @@ class TestUtil:
         except (ValueError, TypeError) as exp:
             pytest.fail(f"Exception raised when shouldn't have ({type(exp)}).")
 
-        ordinal = datetime.utcnow().toordinal()
+        ordinal = datetime.now(timezone.utc).toordinal()
         ordinal_str = str(ordinal)
         ordinal_float = float(ordinal) + 0.5
 

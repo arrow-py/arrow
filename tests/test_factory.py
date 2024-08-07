@@ -1,5 +1,5 @@
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
 import pytest
@@ -15,7 +15,7 @@ from .utils import assert_datetime_equality
 class TestGet:
     def test_no_args(self):
         assert_datetime_equality(
-            self.factory.get(), datetime.utcnow().replace(tzinfo=tz.tzutc())
+            self.factory.get(), datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
         )
 
     def test_timestamp_one_arg_no_arg(self):
@@ -31,7 +31,7 @@ class TestGet:
     def test_struct_time(self):
         assert_datetime_equality(
             self.factory.get(time.gmtime()),
-            datetime.utcnow().replace(tzinfo=tz.tzutc()),
+            datetime.now(timezone.utc).replace(tzinfo=tz.tzutc()),
         )
 
     def test_one_arg_timestamp(self):
@@ -91,7 +91,7 @@ class TestGet:
         assert arw == result
 
     def test_one_arg_datetime(self):
-        dt = datetime.utcnow().replace(tzinfo=tz.tzutc())
+        dt = datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
 
         assert self.factory.get(dt) == dt
 
@@ -103,7 +103,7 @@ class TestGet:
 
     def test_one_arg_tzinfo(self):
         self.expected = (
-            datetime.utcnow()
+            datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
             .astimezone(tz.gettz("US/Pacific"))
         )
@@ -123,7 +123,7 @@ class TestGet:
 
     def test_kwarg_tzinfo(self):
         self.expected = (
-            datetime.utcnow()
+            datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
             .astimezone(tz.gettz("US/Pacific"))
         )
@@ -134,7 +134,7 @@ class TestGet:
 
     def test_kwarg_tzinfo_string(self):
         self.expected = (
-            datetime.utcnow()
+            datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
             .astimezone(tz.gettz("US/Pacific"))
         )
@@ -199,7 +199,7 @@ class TestGet:
         assert_datetime_equality(result, expected)
 
     def test_one_arg_iso_str(self):
-        dt = datetime.utcnow()
+        dt = datetime.now(timezone.utc)
 
         assert_datetime_equality(
             self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc())
@@ -273,7 +273,7 @@ class TestGet:
 
     def test_two_args_datetime_other(self):
         with pytest.raises(TypeError):
-            self.factory.get(datetime.utcnow(), object())
+            self.factory.get(datetime.now(timezone.utc), object())
 
     def test_two_args_date_other(self):
         with pytest.raises(TypeError):
@@ -374,7 +374,7 @@ class TestUtcNow:
     def test_utcnow(self):
         assert_datetime_equality(
             self.factory.utcnow()._datetime,
-            datetime.utcnow().replace(tzinfo=tz.tzutc()),
+            datetime.now(timezone.utc).replace(tzinfo=tz.tzutc()),
         )
 
 

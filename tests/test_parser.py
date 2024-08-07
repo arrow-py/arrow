@@ -1,7 +1,7 @@
 import calendar
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from dateutil import tz
@@ -1149,7 +1149,7 @@ class TestDateTimeParserISO:
         )
 
     def test_isoformat(self):
-        dt = datetime.utcnow()
+        dt = datetime.now(timezone.utc)
 
         assert self.parser.parse_iso(dt.isoformat()) == dt
 
