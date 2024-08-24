@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 import pytz
@@ -113,7 +113,7 @@ class TestFormatterFormatToken:
         assert self.formatter._format_token(dt, "x") == expected
 
     def test_timezone(self):
-        dt = datetime.utcnow().replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
+        dt = datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
 
         result = self.formatter._format_token(dt, "ZZ")
         assert result == "-07:00" or result == "-08:00"
