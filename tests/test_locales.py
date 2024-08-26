@@ -3178,3 +3178,14 @@ class TestUzbekLocale:
         assert self.locale._format_timeframe("months", 11) == "11 oy"
         assert self.locale._format_timeframe("year", 1) == "bir yil"
         assert self.locale._format_timeframe("years", 12) == "12 yil"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestGreekLocale:
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("μία ώρα", "ώρα", -1)
+
+        assert result == "πριν από μία ώρα"  # an hour ago
+
+    def test_month_abbreviation(self):
+        assert self.locale.month_abbreviations[5] == "Μαΐ"

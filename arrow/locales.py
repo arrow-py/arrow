@@ -654,7 +654,7 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 class GreekLocale(Locale):
     names = ["el", "el-gr"]
 
-    past = "{0} πριν"
+    past = "πριν από {0}"
     future = "σε {0}"
     and_word = "και"
 
@@ -697,7 +697,7 @@ class GreekLocale(Locale):
         "Φεβ",
         "Μαρ",
         "Απρ",
-        "Μαϊ",
+        "Μαΐ",
         "Ιον",
         "Ιολ",
         "Αυγ",
