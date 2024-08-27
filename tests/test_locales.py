@@ -3189,3 +3189,9 @@ class TestGreekLocale:
 
     def test_month_abbreviation(self):
         assert self.locale.month_abbreviations[5] == "Μαΐ"
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("second", 1) == "ένα δευτερόλεπτο"
+        assert self.locale._format_timeframe("seconds", 3) == "3 δευτερόλεπτα"
+        assert self.locale._format_timeframe("day", 1) == "μία ημέρα"
+        assert self.locale._format_timeframe("days", 6) == "6 ημέρες"
