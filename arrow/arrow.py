@@ -11,7 +11,7 @@ import sys
 from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
-from datetime import timedelta
+from datetime import timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
@@ -1144,7 +1144,7 @@ class Arrow:
         locale = locales.get_locale(locale)
 
         if other is None:
-            utc = dt_datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
+            utc = dt_datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.tzutc())
             dt = utc.astimezone(self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):

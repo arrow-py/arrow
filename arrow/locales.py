@@ -654,20 +654,20 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 class GreekLocale(Locale):
     names = ["el", "el-gr"]
 
-    past = "{0} πριν"
+    past = "πριν από {0}"
     future = "σε {0}"
     and_word = "και"
 
     timeframes = {
         "now": "τώρα",
-        "second": "ένα δεύτερο",
+        "second": "ένα δευτερόλεπτο",
         "seconds": "{0} δευτερόλεπτα",
         "minute": "ένα λεπτό",
         "minutes": "{0} λεπτά",
         "hour": "μία ώρα",
         "hours": "{0} ώρες",
-        "day": "μία μέρα",
-        "days": "{0} μέρες",
+        "day": "μία ημέρα",
+        "days": "{0} ημέρες",
         "week": "μία εβδομάδα",
         "weeks": "{0} εβδομάδες",
         "month": "ένα μήνα",
@@ -697,7 +697,7 @@ class GreekLocale(Locale):
         "Φεβ",
         "Μαρ",
         "Απρ",
-        "Μαϊ",
+        "Μαΐ",
         "Ιον",
         "Ιολ",
         "Αυγ",
