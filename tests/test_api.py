@@ -25,3 +25,12 @@ class TestModule:
 
         assert isinstance(result, arrow.factory.ArrowFactory)
         assert isinstance(result.utcnow(), MockCustomArrowClass)
+
+    def test_timezone(self, mocker):
+        mocker.patch(
+            "arrow.api._factory.timezone",
+            zone_name="zone_name",
+            return_value="timezone",
+        )
+
+        assert arrow.api.timezone("zone_name") == "timezone"
