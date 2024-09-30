@@ -3570,6 +3570,8 @@ class CatalanLocale(Locale):
         "hours": "{0} hores",
         "day": "un dia",
         "days": "{0} dies",
+        "week": "una setmana",
+        "weeks": "{0} setmanes",
         "month": "un mes",
         "months": "{0} mesos",
         "year": "un any",
