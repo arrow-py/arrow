@@ -1029,12 +1029,35 @@ class Arrow:
             relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
         )
 
+        # Store the original datetime before shifting
+        original_datetime = self._datetime
+
+        # Shift using relative delta
         current = self._datetime + relativedelta(**relative_kwargs)
 
+        # Check if the shifted datetime exists in the timezone
         if not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
 
+        # Adjust for DST transitions if there's a change in offset
+        original_offset = original_datetime.utcoffset()
+        new_offset = current.utcoffset()
+
+        if new_offset != original_offset:
+            offset_difference = new_offset - original_offset
+
+            # Adjust for the spring-forward transition (skipped hour)
+            if offset_difference.total_seconds() > 0:
+                # Add the offset difference to the current time
+                current += offset_difference
+
+            # Adjust for the fall-back transition (repeated hour)
+            elif offset_difference.total_seconds() < 0:
+                # Use `fold=1` to indicate the second occurrence of the repeated hour
+                current = current.replace(fold=1)
+
         return self.fromdatetime(current)
+
 
     def to(self, tz: TZ_EXPR) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
