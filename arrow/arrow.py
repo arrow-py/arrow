@@ -491,7 +491,7 @@ class Arrow:
             yield current
 
             values = [getattr(current, f) for f in cls._ATTRS]
-            current = cls(*values).shift(
+            current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
                 check_imaginary=True, **{frame_relative: relative_steps}
             )
 
