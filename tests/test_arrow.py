@@ -847,6 +847,16 @@ class TestArrowShift:
             2011, 12, 31, 23, tzinfo="Pacific/Apia"
         )
 
+    def test_shift_with_imaginary_check(self):
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        shifted = dt.shift(hours=1)
+        assert shifted.datetime.hour == 3
+
+    def test_shift_without_imaginary_check(self):
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        shifted = dt.shift(hours=1, check_imaginary=False)
+        assert shifted.datetime.hour == 3
+
     @pytest.mark.skipif(
         dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"
     )
