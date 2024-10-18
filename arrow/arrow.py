@@ -11,16 +11,18 @@ import sys
 from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
-from datetime import timedelta
+from datetime import timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
 from typing import (
     Any,
     ClassVar,
+    Final,
     Generator,
     Iterable,
     List,
+    Literal,
     Mapping,
     Optional,
     Tuple,
@@ -35,12 +37,6 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Final, Literal
-else:
-    from typing import Final, Literal  # pragma: no cover
-
 
 TZ_EXPR = Union[dt_tzinfo, str]
 
@@ -1092,7 +1088,8 @@ class Arrow:
         self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = DEFAULT_LOCALE
     ) -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
-        formatted according to the provided format string.
+        formatted according to the provided format string. For a list of formatting values,
+        see :ref:`supported-tokens`
 
         :param fmt: the format string.
         :param locale: the locale to format.
@@ -1147,7 +1144,7 @@ class Arrow:
         locale = locales.get_locale(locale)
 
         if other is None:
-            utc = dt_datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
+            utc = dt_datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.tzutc())
             dt = utc.astimezone(self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):

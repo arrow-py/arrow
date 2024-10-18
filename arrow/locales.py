@@ -1,12 +1,12 @@
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
-import sys
 from math import trunc
 from typing import (
     Any,
     ClassVar,
     Dict,
     List,
+    Literal,
     Mapping,
     Optional,
     Sequence,
@@ -15,11 +15,6 @@ from typing import (
     Union,
     cast,
 )
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Literal
-else:
-    from typing import Literal  # pragma: no cover
 
 TimeFrameLiteral = Literal[
     "now",
@@ -659,20 +654,20 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 class GreekLocale(Locale):
     names = ["el", "el-gr"]
 
-    past = "{0} πριν"
+    past = "πριν από {0}"
     future = "σε {0}"
     and_word = "και"
 
     timeframes = {
         "now": "τώρα",
-        "second": "ένα δεύτερο",
+        "second": "ένα δευτερόλεπτο",
         "seconds": "{0} δευτερόλεπτα",
         "minute": "ένα λεπτό",
         "minutes": "{0} λεπτά",
         "hour": "μία ώρα",
         "hours": "{0} ώρες",
-        "day": "μία μέρα",
-        "days": "{0} μέρες",
+        "day": "μία ημέρα",
+        "days": "{0} ημέρες",
         "week": "μία εβδομάδα",
         "weeks": "{0} εβδομάδες",
         "month": "ένα μήνα",
@@ -702,7 +697,7 @@ class GreekLocale(Locale):
         "Φεβ",
         "Μαρ",
         "Απρ",
-        "Μαϊ",
+        "Μαΐ",
         "Ιον",
         "Ιολ",
         "Αυγ",
