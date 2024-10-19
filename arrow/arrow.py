@@ -800,7 +800,7 @@ class Arrow:
 
     # attributes and properties
 
-    def __getattr__(self, name: str) -> int:
+    def __getattr__(self, name: str) -> Any:
         if name == "week":
             return self.isocalendar()[1]
 
@@ -808,7 +808,7 @@ class Arrow:
             return int((self.month - 1) / self._MONTHS_PER_QUARTER) + 1
 
         if not name.startswith("_"):
-            value: Optional[int] = getattr(self._datetime, name, None)
+            value: Optional[Any] = getattr(self._datetime, name, None)
 
             if value is not None:
                 return value
@@ -1867,7 +1867,7 @@ class Arrow:
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:
         """Returns a boolean indicating whether the datetime is the last day of the month."""
-        return date.day == calendar.monthrange(date.year, date.month)[1]
+        return cast(int, date.day) == calendar.monthrange(date.year, date.month)[1]
 
 
 Arrow.min = Arrow.fromdatetime(dt_datetime.min)

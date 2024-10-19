@@ -1140,7 +1140,6 @@ class KoreanLocale(Locale):
     }
 
     special_dayframes = {
-        -3: "그끄제",
         -2: "그제",
         -1: "어제",
         1: "내일",
@@ -1149,7 +1148,7 @@ class KoreanLocale(Locale):
         4: "그글피",
     }
 
-    special_yearframes = {-2: "제작년", -1: "작년", 1: "내년", 2: "내후년"}
+    special_yearframes = {-2: "재작년", -1: "작년", 1: "내년", 2: "내후년"}
 
     month_names = [
         "",
