@@ -492,7 +492,7 @@ class Arrow:
 
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
-                **{frame_relative: relative_steps}
+                check_imaginary=True, **{frame_relative: relative_steps}
             )
 
             if frame in ["month", "quarter", "year"] and current.day < original_day:
@@ -583,7 +583,9 @@ class Arrow:
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
-        ceil = floor.shift(**{frame_relative: count * relative_steps})
+        ceil = floor.shift(
+            check_imaginary=True, **{frame_relative: count * relative_steps}
+        )
 
         if bounds[0] == "(":
             floor = floor.shift(microseconds=+1)
@@ -981,9 +983,14 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def shift(self, **kwargs: Any) -> "Arrow":
+    def shift(self, check_imaginary: bool = True, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
+
+        Parameters:
+        check_imaginary (bool): If True (default), will check for and resolve
+        imaginary times (like during DST transitions). If False, skips this check.
+
 
         Use pluralized property names to relatively shift their current value:
 
@@ -1031,7 +1038,8 @@ class Arrow:
 
         current = self._datetime + relativedelta(**relative_kwargs)
 
-        if not dateutil_tz.datetime_exists(current):
+        # If check_imaginary is True, perform the check for imaginary times (DST transitions)
+        if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
@@ -1441,7 +1449,7 @@ class Arrow:
 
         time_changes = {k: sign_val * v for k, v in time_object_info.items()}
 
-        return current_time.shift(**time_changes)
+        return current_time.shift(check_imaginary=True, **time_changes)
 
     # query functions
 
