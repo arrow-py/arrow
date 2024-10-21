@@ -11,16 +11,18 @@ import sys
 from datetime import date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
-from datetime import timedelta
+from datetime import timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from math import trunc
 from time import struct_time
 from typing import (
     Any,
     ClassVar,
+    Final,
     Generator,
     Iterable,
     List,
+    Literal,
     Mapping,
     Optional,
     Tuple,
@@ -35,12 +37,6 @@ from dateutil.relativedelta import relativedelta
 from arrow import formatter, locales, parser, util
 from arrow.constants import DEFAULT_LOCALE, DEHUMANIZE_LOCALES
 from arrow.locales import TimeFrameLiteral
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Final, Literal
-else:
-    from typing import Final, Literal  # pragma: no cover
-
 
 TZ_EXPR = Union[dt_tzinfo, str]
 
@@ -496,7 +492,7 @@ class Arrow:
 
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
-                **{frame_relative: relative_steps}
+                check_imaginary=True, **{frame_relative: relative_steps}
             )
 
             if frame in ["month", "quarter", "year"] and current.day < original_day:
@@ -587,7 +583,9 @@ class Arrow:
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
-        ceil = floor.shift(**{frame_relative: count * relative_steps})
+        ceil = floor.shift(
+            check_imaginary=True, **{frame_relative: count * relative_steps}
+        )
 
         if bounds[0] == "(":
             floor = floor.shift(microseconds=+1)
@@ -802,7 +800,7 @@ class Arrow:
 
     # attributes and properties
 
-    def __getattr__(self, name: str) -> int:
+    def __getattr__(self, name: str) -> Any:
         if name == "week":
             return self.isocalendar()[1]
 
@@ -810,7 +808,7 @@ class Arrow:
             return int((self.month - 1) / self._MONTHS_PER_QUARTER) + 1
 
         if not name.startswith("_"):
-            value: Optional[int] = getattr(self._datetime, name, None)
+            value: Optional[Any] = getattr(self._datetime, name, None)
 
             if value is not None:
                 return value
@@ -985,9 +983,14 @@ class Arrow:
 
         return self.fromdatetime(current)
 
-    def shift(self, **kwargs: Any) -> "Arrow":
+    def shift(self, check_imaginary: bool = True, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
+
+        Parameters:
+        check_imaginary (bool): If True (default), will check for and resolve
+        imaginary times (like during DST transitions). If False, skips this check.
+
 
         Use pluralized property names to relatively shift their current value:
 
@@ -1035,7 +1038,8 @@ class Arrow:
 
         current = self._datetime + relativedelta(**relative_kwargs)
 
-        if not dateutil_tz.datetime_exists(current):
+        # If check_imaginary is True, perform the check for imaginary times (DST transitions)
+        if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
@@ -1092,7 +1096,8 @@ class Arrow:
         self, fmt: str = "YYYY-MM-DD HH:mm:ssZZ", locale: str = DEFAULT_LOCALE
     ) -> str:
         """Returns a string representation of the :class:`Arrow <arrow.arrow.Arrow>` object,
-        formatted according to the provided format string.
+        formatted according to the provided format string. For a list of formatting values,
+        see :ref:`supported-tokens`
 
         :param fmt: the format string.
         :param locale: the locale to format.
@@ -1147,7 +1152,7 @@ class Arrow:
         locale = locales.get_locale(locale)
 
         if other is None:
-            utc = dt_datetime.utcnow().replace(tzinfo=dateutil_tz.tzutc())
+            utc = dt_datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.tzutc())
             dt = utc.astimezone(self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):
@@ -1444,7 +1449,7 @@ class Arrow:
 
         time_changes = {k: sign_val * v for k, v in time_object_info.items()}
 
-        return current_time.shift(**time_changes)
+        return current_time.shift(check_imaginary=True, **time_changes)
 
     # query functions
 
@@ -1862,7 +1867,7 @@ class Arrow:
     @staticmethod
     def _is_last_day_of_month(date: "Arrow") -> bool:
         """Returns a boolean indicating whether the datetime is the last day of the month."""
-        return date.day == calendar.monthrange(date.year, date.month)[1]
+        return cast(int, date.day) == calendar.monthrange(date.year, date.month)[1]
 
 
 Arrow.min = Arrow.fromdatetime(dt_datetime.min)

@@ -1,7 +1,7 @@
 import pickle
 import sys
 import time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from typing import List
 
 import dateutil
@@ -91,7 +91,7 @@ class TestTestArrowFactory:
         result = arrow.Arrow.utcnow()
 
         assert_datetime_equality(
-            result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
         )
 
         assert result.fold == 0
@@ -124,7 +124,7 @@ class TestTestArrowFactory:
 
         result = arrow.Arrow.utcfromtimestamp(timestamp)
         assert_datetime_equality(
-            result._datetime, datetime.utcnow().replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
         )
 
         with pytest.raises(ValueError):
@@ -847,6 +847,16 @@ class TestArrowShift:
             2011, 12, 31, 23, tzinfo="Pacific/Apia"
         )
 
+    def test_shift_with_imaginary_check(self):
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        shifted = dt.shift(hours=1)
+        assert shifted.datetime.hour == 3
+
+    def test_shift_without_imaginary_check(self):
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        shifted = dt.shift(hours=1, check_imaginary=False)
+        assert shifted.datetime.hour == 3
+
     @pytest.mark.skipif(
         dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"
     )
@@ -1055,7 +1065,11 @@ class TestArrowRange:
 
     def test_unsupported(self):
         with pytest.raises(ValueError):
-            next(arrow.Arrow.range("abc", datetime.utcnow(), datetime.utcnow()))
+            next(
+                arrow.Arrow.range(
+                    "abc", datetime.now(timezone.utc), datetime.now(timezone.utc)
+                )
+            )
 
     def test_range_over_months_ending_on_different_days(self):
         # regression test for issue #842
@@ -2889,7 +2903,7 @@ class TestArrowUtil:
         get_datetime = arrow.Arrow._get_datetime
 
         arw = arrow.Arrow.utcnow()
-        dt = datetime.utcnow()
+        dt = datetime.now(timezone.utc)
         timestamp = time.time()
 
         assert get_datetime(arw) == arw.datetime

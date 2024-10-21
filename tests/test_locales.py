@@ -2390,14 +2390,14 @@ class TestKoreanLocale:
         assert self.locale._format_relative("2시간", "hours", -2) == "2시간 전"
         assert self.locale._format_relative("하루", "day", -1) == "어제"
         assert self.locale._format_relative("2일", "days", -2) == "그제"
-        assert self.locale._format_relative("3일", "days", -3) == "그끄제"
+        assert self.locale._format_relative("3일", "days", -3) == "3일 전"
         assert self.locale._format_relative("4일", "days", -4) == "4일 전"
         assert self.locale._format_relative("1주", "week", -1) == "1주 전"
         assert self.locale._format_relative("2주", "weeks", -2) == "2주 전"
         assert self.locale._format_relative("한달", "month", -1) == "한달 전"
         assert self.locale._format_relative("2개월", "months", -2) == "2개월 전"
         assert self.locale._format_relative("1년", "year", -1) == "작년"
-        assert self.locale._format_relative("2년", "years", -2) == "제작년"
+        assert self.locale._format_relative("2년", "years", -2) == "재작년"
         assert self.locale._format_relative("3년", "years", -3) == "3년 전"
 
     def test_ordinal_number(self):
@@ -3178,3 +3178,20 @@ class TestUzbekLocale:
         assert self.locale._format_timeframe("months", 11) == "11 oy"
         assert self.locale._format_timeframe("year", 1) == "bir yil"
         assert self.locale._format_timeframe("years", 12) == "12 yil"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestGreekLocale:
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("μία ώρα", "ώρα", -1)
+
+        assert result == "πριν από μία ώρα"  # an hour ago
+
+    def test_month_abbreviation(self):
+        assert self.locale.month_abbreviations[5] == "Μαΐ"
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("second", 1) == "ένα δευτερόλεπτο"
+        assert self.locale._format_timeframe("seconds", 3) == "3 δευτερόλεπτα"
+        assert self.locale._format_timeframe("day", 1) == "μία ημέρα"
+        assert self.locale._format_timeframe("days", 6) == "6 ημέρες"
