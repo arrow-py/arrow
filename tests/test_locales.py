@@ -1442,6 +1442,7 @@ class TestArabicLocale:
         assert self.locale._format_timeframe("days", 50) == "50 يوم"
         assert self.locale._format_timeframe("years", 115) == "115 سنة"
 
+
 @pytest.mark.usefixtures("lang_locale")
 class TestFarsiLocale:
     def test_timeframes(self):
@@ -1462,7 +1463,6 @@ class TestFarsiLocale:
         assert self.locale._format_timeframe("months", 2) == "2 ماه"
         assert self.locale._format_timeframe("years", 2) == "2 سال"
 
-        
 
 @pytest.mark.usefixtures("lang_locale")
 class TestNepaliLocale:
