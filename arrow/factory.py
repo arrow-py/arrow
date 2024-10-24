@@ -5,7 +5,6 @@ construction scenarios.
 
 """
 
-
 import calendar
 from datetime import date, datetime
 from datetime import tzinfo as dt_tzinfo
