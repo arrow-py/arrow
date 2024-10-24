@@ -47,7 +47,7 @@ Features
 --------
 
 - Fully-implemented, drop-in replacement for datetime
-- Support for Python 3.6+
+- Support for Python 3.8+
 - Timezone-aware and UTC by default
 - Super-simple creation options for many common input scenarios
 - ``shift`` method with support for relative offsets, including weeks

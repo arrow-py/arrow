@@ -1,12 +1,12 @@
 """Provides internationalization for arrow in over 60 languages and dialects."""
 
-import sys
 from math import trunc
 from typing import (
     Any,
     ClassVar,
     Dict,
     List,
+    Literal,
     Mapping,
     Optional,
     Sequence,
@@ -15,11 +15,6 @@ from typing import (
     Union,
     cast,
 )
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Literal
-else:
-    from typing import Literal  # pragma: no cover
 
 TimeFrameLiteral = Literal[
     "now",
@@ -659,20 +654,20 @@ class FrenchCanadianLocale(FrenchBaseLocale, Locale):
 class GreekLocale(Locale):
     names = ["el", "el-gr"]
 
-    past = "{0} πριν"
+    past = "πριν από {0}"
     future = "σε {0}"
     and_word = "και"
 
     timeframes = {
         "now": "τώρα",
-        "second": "ένα δεύτερο",
+        "second": "ένα δευτερόλεπτο",
         "seconds": "{0} δευτερόλεπτα",
         "minute": "ένα λεπτό",
         "minutes": "{0} λεπτά",
         "hour": "μία ώρα",
         "hours": "{0} ώρες",
-        "day": "μία μέρα",
-        "days": "{0} μέρες",
+        "day": "μία ημέρα",
+        "days": "{0} ημέρες",
         "week": "μία εβδομάδα",
         "weeks": "{0} εβδομάδες",
         "month": "ένα μήνα",
@@ -702,7 +697,7 @@ class GreekLocale(Locale):
         "Φεβ",
         "Μαρ",
         "Απρ",
-        "Μαϊ",
+        "Μαΐ",
         "Ιον",
         "Ιολ",
         "Αυγ",
@@ -781,7 +776,16 @@ class JapaneseLocale(Locale):
         "12",
     ]
 
-    day_names = ["", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日"]
+    day_names = [
+        "",
+        "月曜日",
+        "火曜日",
+        "水曜日",
+        "木曜日",
+        "金曜日",
+        "土曜日",
+        "日曜日",
+    ]
     day_abbreviations = ["", "月", "火", "水", "木", "金", "土", "日"]
 
 
@@ -997,7 +1001,16 @@ class ChineseCNLocale(Locale):
         "12",
     ]
 
-    day_names = ["", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+    day_names = [
+        "",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六",
+        "星期日",
+    ]
     day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
 
 
@@ -1116,7 +1129,16 @@ class HongKongLocale(Locale):
         "12",
     ]
 
-    day_names = ["", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+    day_names = [
+        "",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六",
+        "星期日",
+    ]
     day_abbreviations = ["", "一", "二", "三", "四", "五", "六", "日"]
 
 
@@ -1145,7 +1167,6 @@ class KoreanLocale(Locale):
     }
 
     special_dayframes = {
-        -3: "그끄제",
         -2: "그제",
         -1: "어제",
         1: "내일",
@@ -1154,7 +1175,7 @@ class KoreanLocale(Locale):
         4: "그글피",
     }
 
-    special_yearframes = {-2: "제작년", -1: "작년", 1: "내년", 2: "내후년"}
+    special_yearframes = {-2: "재작년", -1: "작년", 1: "내년", 2: "내후년"}
 
     month_names = [
         "",
@@ -1187,11 +1208,32 @@ class KoreanLocale(Locale):
         "12",
     ]
 
-    day_names = ["", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+    day_names = [
+        "",
+        "월요일",
+        "화요일",
+        "수요일",
+        "목요일",
+        "금요일",
+        "토요일",
+        "일요일",
+    ]
     day_abbreviations = ["", "월", "화", "수", "목", "금", "토", "일"]
 
     def _ordinal_number(self, n: int) -> str:
-        ordinals = ["0", "첫", "두", "세", "네", "다섯", "여섯", "일곱", "여덟", "아홉", "열"]
+        ordinals = [
+            "0",
+            "첫",
+            "두",
+            "세",
+            "네",
+            "다섯",
+            "여섯",
+            "일곱",
+            "여덟",
+            "아홉",
+            "열",
+        ]
         if n < len(ordinals):
             return f"{ordinals[n]}번째"
         return f"{n}번째"
@@ -3324,6 +3366,10 @@ class FarsiLocale(Locale):
         "hours": "{0} ساعت",
         "day": "یک روز",
         "days": "{0} روز",
+        "week": "یک هفته",
+        "weeks": "{0} هفته",
+        "quarter": "یک فصل",
+        "quarters": "{0} فصل",
         "month": "یک ماه",
         "months": "{0} ماه",
         "year": "یک سال",
@@ -3584,6 +3630,8 @@ class CatalanLocale(Locale):
         "hours": "{0} hores",
         "day": "un dia",
         "days": "{0} dies",
+        "week": "una setmana",
+        "weeks": "{0} setmanes",
         "month": "un mes",
         "months": "{0} mesos",
         "year": "un any",

@@ -1,7 +1,6 @@
 """Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better way to parse datetime strings."""
 
 import re
-import sys
 from datetime import datetime, timedelta
 from datetime import tzinfo as dt_tzinfo
 from functools import lru_cache
@@ -11,12 +10,14 @@ from typing import (
     Dict,
     Iterable,
     List,
+    Literal,
     Match,
     Optional,
     Pattern,
     SupportsFloat,
     SupportsInt,
     Tuple,
+    TypedDict,
     Union,
     cast,
     overload,
@@ -27,11 +28,6 @@ from dateutil import tz
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
 from arrow.util import next_weekday, normalize_timestamp
-
-if sys.version_info < (3, 8):  # pragma: no cover
-    from typing_extensions import Literal, TypedDict
-else:
-    from typing import Literal, TypedDict  # pragma: no cover
 
 
 class ParserError(ValueError):
