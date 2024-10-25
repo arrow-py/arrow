@@ -1463,6 +1463,11 @@ class TestFarsiLocale:
         assert self.locale._format_timeframe("months", 2) == "2 ماه"
         assert self.locale._format_timeframe("years", 2) == "2 سال"
 
+    def test_weekday(self):
+        fa = arrow.Arrow(2024, 10, 25, 17, 30, 00)
+        assert self.locale.day_name(fa.isoweekday()) == "جمعه"
+        assert self.locale.day_abbreviation(fa.isoweekday()) == "جمعه"
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestNepaliLocale:
