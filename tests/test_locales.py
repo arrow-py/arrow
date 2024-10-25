@@ -1467,6 +1467,8 @@ class TestFarsiLocale:
         fa = arrow.Arrow(2024, 10, 25, 17, 30, 00)
         assert self.locale.day_name(fa.isoweekday()) == "جمعه"
         assert self.locale.day_abbreviation(fa.isoweekday()) == "جمعه"
+        assert self.locale.month_name(fa.month) == "اکتبر"
+        assert self.locale.month_abbreviation(fa.month) == "اکتبر"
 
 
 @pytest.mark.usefixtures("lang_locale")
