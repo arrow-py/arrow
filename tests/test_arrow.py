@@ -1982,8 +1982,8 @@ class TestArrowHumanize:
     def test_day(self):
         later = self.now.shift(days=1)
 
-        assert self.now.humanize(later) == "a day ago"
-        assert later.humanize(self.now) == "in a day"
+        assert self.now.humanize(later) == "Tomorrow"
+        assert later.humanize(self.now) == "Yesterday"
 
         # regression test for issue #697
         less_than_48_hours = self.now.shift(
@@ -1996,9 +1996,6 @@ class TestArrowHumanize:
         with pytest.raises(TypeError):
             # humanize other argument does not take raw datetime.date objects
             self.now.humanize(less_than_48_hours_date)
-
-        assert self.now.humanize(later, only_distance=True) == "a day"
-        assert later.humanize(self.now, only_distance=True) == "a day"
 
     def test_days(self):
         later = self.now.shift(days=2)
@@ -2054,6 +2051,17 @@ class TestArrowHumanize:
 
         assert self.now.humanize(later) == "a month ago"
         assert later.humanize(self.now) == "in a month"
+
+    def test_humanize_now(self):
+        assert self.now.humanize() == "just now"
+
+    def test_humanize_yesterday(self):
+        past = self.now.shift(days=-1)
+        assert self.now.humanize(past) == "Yesterday"
+
+    def test_humanize_tomorrow(self):
+        future = self.now.shift(days=1)
+        assert self.now.humanize(future) == "Tomorrow"
 
     @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_months(self):

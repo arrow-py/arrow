@@ -1178,6 +1178,15 @@ class Arrow:
 
         try:
             if granularity == "auto":
+                # Calculate day difference to handle custom cases
+                days_diff = (self._datetime.date() - dt.date()).days
+
+                if days_diff == 1:
+                    return "Yesterday"
+
+                elif days_diff == -1:
+                    return "Tomorrow"
+
                 if diff < 10:
                     return locale.describe("now", only_distance=only_distance)
 
