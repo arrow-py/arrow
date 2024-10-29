@@ -3374,6 +3374,10 @@ class FarsiLocale(Locale):
         "months": "{0} ماه",
         "year": "یک سال",
         "years": "{0} سال",
+        "week": "یک هفته",
+        "weeks": "{0} هفته",
+        "quarter": "یک فصل",
+        "quarters": "{0} فصل",
     }
 
     meridians = {
