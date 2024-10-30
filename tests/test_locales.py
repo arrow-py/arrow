@@ -33,14 +33,12 @@ class TestLocaleValidation:
             assert locale_cls.future is not None
 
     def test_locale_name_validation(self):
+        import re
         for locale_cls in self.locales.values():
             for locale_name in locale_cls.names:
-                assert len(locale_name) == 2 or len(locale_name) == 5
                 assert locale_name.islower()
-                # Not a two-letter code
-                if len(locale_name) > 2:
-                    assert "-" in locale_name
-                    assert locale_name.count("-") == 1
+                pattern = r'^[a-z]{2}(-[a-z]{2})?(?:-latn|-cyrl)?$'
+                assert re.match(pattern, locale_name)
 
     def test_duplicated_locale_name(self):
         with pytest.raises(LookupError):
