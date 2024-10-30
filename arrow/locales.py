@@ -1925,7 +1925,7 @@ class MacedonianLocale(SlavicBaseLocale):
 
 
 class MacedonianLatinLocale(SlavicBaseLocale):
-    names = ["mk-mk-latn"]
+    names = ["mk-latn", "mk-mk-latn"]
 
     past = "pred {0}"
     future = "za {0}"
