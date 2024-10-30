@@ -34,10 +34,11 @@ class TestLocaleValidation:
 
     def test_locale_name_validation(self):
         import re
+
         for locale_cls in self.locales.values():
             for locale_name in locale_cls.names:
                 assert locale_name.islower()
-                pattern = r'^[a-z]{2}(-[a-z]{2})?(?:-latn|-cyrl)?$'
+                pattern = r"^[a-z]{2}(-[a-z]{2})?(?:-latn|-cyrl)?$"
                 assert re.match(pattern, locale_name)
 
     def test_duplicated_locale_name(self):
