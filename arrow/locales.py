@@ -1924,6 +1924,105 @@ class MacedonianLocale(SlavicBaseLocale):
     ]
 
 
+class MacedonianLatinLocale(SlavicBaseLocale):
+    names = ["mk-mk-latn"]
+
+    past = "pred {0}"
+    future = "za {0}"
+
+    timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
+        "now": "sega",
+        "second": "edna sekunda",
+        "seconds": {
+            "singular": "{0} sekunda",
+            "dual": "{0} sekundi",
+            "plural": "{0} sekundi",
+        },
+        "minute": "edna minuta",
+        "minutes": {
+            "singular": "{0} minuta",
+            "dual": "{0} minuti",
+            "plural": "{0} minuti",
+        },
+        "hour": "eden saat",
+        "hours": {"singular": "{0} saat", "dual": "{0} saati", "plural": "{0} saati"},
+        "day": "eden den",
+        "days": {"singular": "{0} den", "dual": "{0} dena", "plural": "{0} dena"},
+        "week": "edna nedela",
+        "weeks": {
+            "singular": "{0} nedela",
+            "dual": "{0} nedeli",
+            "plural": "{0} nedeli",
+        },
+        "month": "eden mesec",
+        "months": {
+            "singular": "{0} mesec",
+            "dual": "{0} meseci",
+            "plural": "{0} meseci",
+        },
+        "year": "edna godina",
+        "years": {
+            "singular": "{0} godina",
+            "dual": "{0} godini",
+            "plural": "{0} godini",
+        },
+    }
+
+    meridians = {"am": "dp", "pm": "pp", "AM": "pretpladne", "PM": "popladne"}
+
+    month_names = [
+        "",
+        "Januari",
+        "Fevruari",
+        "Mart",
+        "April",
+        "Maj",
+        "Juni",
+        "Juli",
+        "Avgust",
+        "Septemvri",
+        "Oktomvri",
+        "Noemvri",
+        "Dekemvri",
+    ]
+    month_abbreviations = [
+        "",
+        "Jan",
+        "Fev",
+        "Mar",
+        "Apr",
+        "Maj",
+        "Jun",
+        "Jul",
+        "Avg",
+        "Sep",
+        "Okt",
+        "Noe",
+        "Dek",
+    ]
+
+    day_names = [
+        "",
+        "Ponedelnik",
+        "Vtornik",
+        "Sreda",
+        "Chetvrtok",
+        "Petok",
+        "Sabota",
+        "Nedela",
+    ]
+    day_abbreviations = [
+        "",
+        "Pon",
+        "Vt",
+        "Sre",
+        "Chet",
+        "Pet",
+        "Sab",
+        "Ned",
+    ]
+
+
 class GermanBaseLocale(Locale):
     past = "vor {0}"
     future = "in {0}"
