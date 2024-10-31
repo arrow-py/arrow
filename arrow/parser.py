@@ -31,6 +31,14 @@ from arrow.util import next_weekday, normalize_timestamp
 
 
 class ParserError(ValueError):
+    """
+    A custom exception class for handling parsing errors in the parser.
+
+    Notes:
+        This class inherits from the built-in `ValueError` class and is used to raise exceptions
+        when an error occurs during the parsing process.
+    """
+
     pass
 
 
@@ -40,6 +48,14 @@ class ParserError(ValueError):
 # _parse_multiformat() and the appropriate error message was not
 # transmitted to the user.
 class ParserMatchError(ParserError):
+    """
+    This class is a subclass of the ParserError class and is used to raise errors that occur during the matching process.
+
+    Notes:
+        This class is part of the Arrow parser and is used to provide error handling when a parsing match fails.
+
+    """
+
     pass
 
 
@@ -81,6 +97,29 @@ _FORMAT_TYPE = Literal[
 
 
 class _Parts(TypedDict, total=False):
+    """
+    A dictionary that represents different parts of a datetime.
+
+    :class:`_Parts` is a TypedDict that represents various components of a date or time,
+    such as year, month, day, hour, minute, second, microsecond, timestamp, expanded_timestamp, tzinfo,
+    am_pm, day_of_week, and weekdate.
+
+    :ivar year: The year, if present, as an integer.
+    :ivar month: The month, if present, as an integer.
+    :ivar day_of_year: The day of the year, if present, as an integer.
+    :ivar day: The day, if present, as an integer.
+    :ivar hour: The hour, if present, as an integer.
+    :ivar minute: The minute, if present, as an integer.
+    :ivar second: The second, if present, as an integer.
+    :ivar microsecond: The microsecond, if present, as an integer.
+    :ivar timestamp: The timestamp, if present, as a float.
+    :ivar expanded_timestamp: The expanded timestamp, if present, as an integer.
+    :ivar tzinfo: The timezone info, if present, as a :class:`dt_tzinfo` object.
+    :ivar am_pm: The AM/PM indicator, if present, as a string literal "am" or "pm".
+    :ivar day_of_week: The day of the week, if present, as an integer.
+    :ivar weekdate: The week date, if present, as a tuple of three integers or None.
+    """
+
     year: int
     month: int
     day_of_year: int
@@ -165,6 +204,15 @@ class DateTimeParser:
     _input_re_map: Dict[_FORMAT_TYPE, Pattern[str]]
 
     def __init__(self, locale: str = DEFAULT_LOCALE, cache_size: int = 0) -> None:
+        """
+        Contains the regular expressions and functions to parse and split the input strings into tokens and eventually
+        produce a datetime that is used by :class:`Arrow <arrow.arrow.Arrow>` internally.
+
+        :param locale: the locale string
+        :type locale: str
+        :param cache_size: the size of the LRU cache used for regular expressions. Defaults to 0.
+        :type cache_size: int
+        """
         self.locale = locales.get_locale(locale)
         self._input_re_map = self._BASE_INPUT_RE_MAP.copy()
         self._input_re_map.update(
@@ -201,13 +249,22 @@ class DateTimeParser:
     def parse_iso(
         self, datetime_string: str, normalize_whitespace: bool = False
     ) -> datetime:
-        """Parses a string by using preset formats and regular expressions to heuristically determine a format from an
-        input string and produce a datetime object
+        """
+        Parses a datetime string using a ISO 8601-like format.
 
-        :param datetime_string: datetime string
-        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
-            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
-            Defaults to False.
+        :param datetime_string: The datetime string to parse.
+        :param normalize_whitespace: Whether to normalize whitespace in the datetime string (default is False).
+        :type datetime_string: str
+        :type normalize_whitespace: bool
+        :returns: The parsed datetime object.
+        :rtype: datetime
+        :raises ParserError: If the datetime string is not in a valid ISO 8601-like format.
+
+        Usage::
+        >>> import arrow.parser
+        >>> arrow.parser.DateTimeParser().parse_iso('2021-10-12T14:30:00')
+        datetime.datetime(2021, 10, 12, 14, 30)
+
         """
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string.strip())
@@ -316,14 +373,26 @@ class DateTimeParser:
         fmt: Union[List[str], str],
         normalize_whitespace: bool = False,
     ) -> datetime:
-        """Parses a string by using user defined formats to heuristically determine a match in the input string and
-        produce a datetime object.
+        """
+        Parses a datetime string using a specified format.
 
-        :param datetime_string: datetime string
-        :param fmt: str or List of str, user defined formats that can be matched against.
-        :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
-            redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
-            Defaults to False.
+        :param datetime_string: The datetime string to parse.
+        :param fmt: The format string or list of format strings to use for parsing.
+        :param normalize_whitespace: Whether to normalize whitespace in the datetime string (default is False).
+        :type datetime_string: str
+        :type fmt: Union[List[str], str]
+        :type normalize_whitespace: bool
+        :returns: The parsed datetime object.
+        :rtype: datetime
+        :raises ParserMatchError: If the datetime string does not match the specified format.
+
+        Usage::
+
+        >>> import arrow.parser
+        >>> arrow.parser.DateTimeParser().parse('2021-10-12 14:30:00', 'YYYY-MM-DD HH:mm:ss')
+        datetime.datetime(2021, 10, 12, 14, 30)
+
+
         """
         if normalize_whitespace:
             datetime_string = re.sub(r"\s+", " ", datetime_string)
@@ -367,18 +436,15 @@ class DateTimeParser:
         return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt: str) -> Tuple[List[_FORMAT_TYPE], Pattern[str]]:
-        r"""A regex pattern generator
-
-        It translated date time tokens such as 'YYYY' or 'MM' to a regular expressions string to be used in
-        date time format matching.
-
-        Example::
-
-        'YYYY-MM-DD' -> '(?P<YYYY>\d{4})-(?P<MM>\d{2})-(?P<DD>\d{2})'
-
-        :param fmt: A string consisting of date time tokens like 'YYYY-MM-DD'
         """
+        Generates a regular expression pattern from a format string.
 
+        :param fmt: The format string to convert into a regular expression pattern.
+        :type fmt: str
+        :returns: A tuple containing a list of format tokens and the corresponding regular expression pattern.
+        :rtype: Tuple[List[_FORMAT_TYPE], Pattern[str]]
+        :raises ParserError: If an unrecognized token is encountered in the format string.
+        """
         # fmt is a string of tokens like 'YYYY-MM-DD'
         # we construct a new string by replacing each
         # token by its pattern:
@@ -530,6 +596,20 @@ class DateTimeParser:
         value: Any,
         parts: _Parts,
     ) -> None:
+        """
+        Parse a token and its value, and update the `_Parts` dictionary with the parsed values.
+
+        The function supports several tokens, including "YYYY", "YY", "MMMM", "MMM", "MM", "M", "DDDD", "DDD", "DD", "D", "Do", "dddd", "ddd", "HH", "H", "mm", "m", "ss", "s", "S", "X", "x", "ZZZ", "ZZ", "Z", "a", "A", and "W". Each token is matched and the corresponding value is parsed and added to the `_Parts` dictionary.
+
+        :param token: The token to parse.
+        :type token: Any
+        :param value: The value of the token.
+        :type value: Any
+        :param parts: A dictionary to update with the parsed values.
+        :type parts: _Parts
+        :raises ParserMatchError: If the hour token value is not between 0 and 12 inclusive for tokens "a" or "A".
+
+        """
         if token == "YYYY":
             parts["year"] = int(value)
 
@@ -616,6 +696,14 @@ class DateTimeParser:
 
     @staticmethod
     def _build_datetime(parts: _Parts) -> datetime:
+        """
+        Build a datetime object from a dictionary of date parts.
+
+        :param parts: A dictionary containing the date parts extracted from a date string.
+        :type parts: dict
+        :return: A datetime object representing the date and time.
+        :rtype: datetime.datetime
+        """
         weekdate = parts.get("weekdate")
 
         if weekdate is not None:
@@ -742,6 +830,21 @@ class DateTimeParser:
         )
 
     def _parse_multiformat(self, string: str, formats: Iterable[str]) -> datetime:
+        """
+        Parse a date and time string using multiple formats.
+
+        Tries to parse the provided string with each format in the given `formats`
+        iterable, returning the resulting `datetime` object if a match is found. If no
+        format matches the string, a `ParserError` is raised.
+
+        :param string: The date and time string to parse.
+        :type string: str
+        :param formats: An iterable of date and time format strings to try, in order.
+        :type formats: Iterable[str]
+        :returns: The parsed date and time.
+        :rtype: datetime.datetime
+        :raises ParserError: If no format matches the input string.
+        """
         _datetime: Optional[datetime] = None
 
         for fmt in formats:
@@ -764,16 +867,43 @@ class DateTimeParser:
     def _generate_choice_re(
         choices: Iterable[str], flags: Union[int, re.RegexFlag] = 0
     ) -> Pattern[str]:
+        """
+        Generate a regular expression pattern that matches a choice from an iterable.
+
+        Takes an iterable of strings (`choices`) and returns a compiled regular expression
+        pattern that matches any of the choices. The pattern is created by joining the
+        choices with the '|' (OR) operator, which matches any of the enclosed patterns.
+
+        :param choices: An iterable of strings to match.
+        :type choices: Iterable[str]
+        :param flags: Optional regular expression flags. Default is 0.
+        :type flags: Union[int, re.RegexFlag], optional
+        :returns: A compiled regular expression pattern that matches any of the choices.
+        :rtype: re.Pattern[str]
+        """
         return re.compile(r"({})".format("|".join(choices)), flags=flags)
 
 
 class TzinfoParser:
+    """
+    Parser for timezone information.
+    """
+
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
         r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
     )
 
     @classmethod
     def parse(cls, tzinfo_string: str) -> dt_tzinfo:
+        """
+        Parse a timezone string and return a datetime timezone object.
+
+        :param tzinfo_string: The timezone string to parse.
+        :type tzinfo_string: str
+        :returns: The parsed datetime timezone object.
+        :rtype: datetime.timezone
+        :raises ParserError: If the timezone string cannot be parsed.
+        """
         tzinfo: Optional[dt_tzinfo] = None
 
         if tzinfo_string == "local":
