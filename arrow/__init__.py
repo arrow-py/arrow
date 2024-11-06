@@ -11,6 +11,7 @@ from .formatter import (
     FORMAT_RFC1123,
     FORMAT_RFC2822,
     FORMAT_RFC3339,
+    FORMAT_RFC3339_STRICT,
     FORMAT_RSS,
     FORMAT_W3C,
 )
@@ -33,6 +34,7 @@ __all__ = [
     "FORMAT_RFC1123",
     "FORMAT_RFC2822",
     "FORMAT_RFC3339",
+    "FORMAT_RFC3339_STRICT",
     "FORMAT_RSS",
     "FORMAT_W3C",
     "ParserError",

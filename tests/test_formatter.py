@@ -13,6 +13,7 @@ from arrow import (
     FORMAT_RFC1123,
     FORMAT_RFC2822,
     FORMAT_RFC3339,
+    FORMAT_RFC3339_STRICT,
     FORMAT_RSS,
     FORMAT_W3C,
 )
@@ -252,6 +253,12 @@ class TestFormatterBuiltinFormats:
         assert (
             self.formatter.format(self.datetime, FORMAT_RFC3339)
             == "1975-12-25 14:15:16-05:00"
+        )
+
+    def test_rfc3339_strict(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC3339_STRICT)
+            == "1975-12-25T14:15:16-05:00"
         )
 
     def test_rss(self):
