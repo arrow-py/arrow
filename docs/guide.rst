@@ -237,6 +237,8 @@ Indicate a specific time granularity (or multiple):
     'an hour and 6 minutes ago'
     >>> future.humanize(present, only_distance=True, granularity=["hour", "minute"])
     'an hour and 6 minutes'
+    >>> future.humanize(present, granularity="all")
+    'in 0 years 0 months 0 weeks 0 days an hour 6 minutes and 0 seconds'
 
 Support for a growing number of locales (see ``locales.py`` for supported languages):
 
