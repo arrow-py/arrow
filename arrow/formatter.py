@@ -17,6 +17,7 @@ FORMAT_RFC1036: Final[str] = "ddd, DD MMM YY HH:mm:ss Z"
 FORMAT_RFC1123: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_RFC2822: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_RFC3339: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_RFC3339_STRICT: Final[str] = "YYYY-MM-DDTHH:mm:ssZZ"
 FORMAT_RSS: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_W3C: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
 
