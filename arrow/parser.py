@@ -890,7 +890,7 @@ class TzinfoParser:
     """
 
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
+        r"^(?:(\(UTC))*([\+\-])?(\d{2})(?:\:?(\d{2}))?(?(1)\)|$)"
     )
 
     @classmethod
@@ -919,7 +919,7 @@ class TzinfoParser:
                 sign: Optional[str]
                 hours: str
                 minutes: Union[str, int, None]
-                sign, hours, minutes = iso_match.groups()
+                _, sign, hours, minutes = iso_match.groups()
                 seconds = int(hours) * 3600 + int(minutes or 0) * 60
 
                 if sign == "-":
