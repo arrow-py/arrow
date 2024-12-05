@@ -86,9 +86,6 @@ class TestTestArrowInit:
         before = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
         after = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1)
 
-        assert hasattr(before, "fold")
-        assert hasattr(after, "fold")
-
         # PEP-495 requires the comparisons below to be true
         assert before == after
         assert before.utcoffset() != after.utcoffset()
@@ -185,6 +182,14 @@ class TestTestArrowFactory:
         assert result._datetime == datetime(
             2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")
         )
+
+    def test_strptime_with_fold(self):
+
+        formatted = datetime(2013, 2, 3, 12, 30, 45).strftime("%Y-%m-%d %H:%M:%S")
+
+        result = arrow.Arrow.strptime(formatted, "%Y-%m-%d %H:%M:%S", fold=1)
+        assert result._datetime == datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.tzutc())
+        assert result.fold == 1
 
     def test_fromordinal(self):
         timestamp = 1607066909.937968

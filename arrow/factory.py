@@ -39,6 +39,7 @@ class ArrowFactory:
         *,
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
         ...  # pragma: no cover
@@ -60,6 +61,7 @@ class ArrowFactory:
         *,
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
         ...  # pragma: no cover
@@ -72,6 +74,7 @@ class ArrowFactory:
         *,
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
         ...  # pragma: no cover
@@ -84,6 +87,7 @@ class ArrowFactory:
         *,
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
+        fold: Optional[int] = None,
         normalize_whitespace: bool = False,
     ) -> Arrow:
         ...  # pragma: no cover
@@ -95,6 +99,11 @@ class ArrowFactory:
         :param tzinfo: (optional) a :ref:`timezone expression <tz-expr>` or tzinfo object.
             Replaces the timezone unless using an input form that is explicitly UTC or specifies
             the timezone in a positional argument. Defaults to UTC.
+        :param fold: (optional) an ``int`` value of 0 or 1.
+            Replaces the fold value, used to disambiguate repeated wall times.
+            Used only when the first argument is an Arrow instance/datetime/datetime string,
+            or datetime constructor kwargs were provided.
+
         :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
             redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
             Defaults to false.
@@ -195,14 +204,19 @@ class ArrowFactory:
         arg_count = len(args)
         locale = kwargs.pop("locale", DEFAULT_LOCALE)
         tz = kwargs.get("tzinfo", None)
+        fold = kwargs.get("fold")
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
-        # if kwargs given, send to constructor unless only tzinfo provided
-        if len(kwargs) > 1:
+        # if kwargs given, send to constructor unless only tzinfo and/or fold provided
+        if len(kwargs) > 2:
             arg_count = 3
 
-        # tzinfo kwarg is not provided
-        if len(kwargs) == 1 and tz is None:
+        # either tzinfo or fold kwarg is not provided
+        elif len(kwargs) == 2 and None in (tz, fold):
+            arg_count = 3
+
+        # tzinfo and fold kwargs are both not provided
+        elif len(kwargs) == 1 and tz is fold is None:
             arg_count = 3
 
         # () -> now, @ tzinfo or utc
@@ -234,11 +248,11 @@ class ArrowFactory:
 
             # (Arrow) -> from the object's datetime @ tzinfo
             elif isinstance(arg, Arrow):
-                return self.type.fromdatetime(arg.datetime, tzinfo=tz)
+                return self.type.fromdatetime(arg.datetime, tzinfo=tz, fold=fold)
 
             # (datetime) -> from datetime @ tzinfo
             elif isinstance(arg, datetime):
-                return self.type.fromdatetime(arg, tzinfo=tz)
+                return self.type.fromdatetime(arg, tzinfo=tz, fold=fold)
 
             # (date) -> from date @ tzinfo
             elif isinstance(arg, date):
@@ -251,7 +265,7 @@ class ArrowFactory:
             # (str) -> parse @ tzinfo
             elif isinstance(arg, str):
                 dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
-                return self.type.fromdatetime(dt, tzinfo=tz)
+                return self.type.fromdatetime(dt, tzinfo=tz, fold=fold)
 
             # (struct_time) -> from struct_time
             elif isinstance(arg, struct_time):
@@ -271,7 +285,7 @@ class ArrowFactory:
             if isinstance(arg_1, datetime):
                 # (datetime, tzinfo/str) -> fromdatetime @ tzinfo
                 if isinstance(arg_2, (dt_tzinfo, str)):
-                    return self.type.fromdatetime(arg_1, tzinfo=arg_2)
+                    return self.type.fromdatetime(arg_1, tzinfo=arg_2, fold=fold)
                 else:
                     raise TypeError(
                         f"Cannot parse two arguments of types 'datetime', {type(arg_2)!r}."
@@ -291,7 +305,7 @@ class ArrowFactory:
                 dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
-                return self.type.fromdatetime(dt, tzinfo=tz)
+                return self.type.fromdatetime(dt, tzinfo=tz, fold=fold)
 
             else:
                 raise TypeError(
