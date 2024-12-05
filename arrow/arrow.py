@@ -701,6 +701,8 @@ class Arrow:
         for r in _range:
             day_is_clipped = False
             floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+
+            # check that no dates are lost (#1185)
             next = ceil.shift(microseconds=+1)
             if frame == "month" and next.day < start.day:
                 day_is_clipped = True
@@ -710,6 +712,7 @@ class Arrow:
                     - next.day
                 )
                 ceil = ceil.shift(days=days_to_shift)
+
             if ceil > end:
                 ceil = end
                 if bounds[1] == ")":
