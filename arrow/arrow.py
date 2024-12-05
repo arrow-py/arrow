@@ -699,7 +699,17 @@ class Arrow:
                 yield r.span(frame, bounds=bounds, exact=exact)
 
         for r in _range:
+            day_is_clipped = False
             floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+            next = ceil.shift(microseconds=+1)
+            if frame == "month" and next.day < start.day:
+                day_is_clipped = True
+            if day_is_clipped and not next._is_last_day_of_month(next):
+                days_to_shift = (
+                    min(start.day, calendar.monthrange(next.year, next.month)[1])
+                    - next.day
+                )
+                ceil = ceil.shift(days=days_to_shift)
             if ceil > end:
                 ceil = end
                 if bounds[1] == ")":
