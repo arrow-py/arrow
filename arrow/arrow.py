@@ -298,7 +298,9 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(
+        cls, dt: Union["Arrow", dt_datetime], tzinfo: Optional[TZ_EXPR] = None
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -312,6 +314,10 @@ class Arrow:
             datetime.datetime(2021, 4, 7, 13, 48, tzinfo=tzfile('/usr/share/zoneinfo/US/Pacific'))
             >>> arrow.Arrow.fromdatetime(dt)
             <Arrow [2021-04-07T13:48:00-07:00]>
+
+        **NOTE**:
+            Although you can pass a :class:`Arrow <arrow.arrow.Arrow>`, doing so is not recommended
+            except for some cases where it simplifies handling both.
 
         """
 
@@ -632,8 +638,8 @@ class Arrow:
     def span_range(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         tz: Optional[TZ_EXPR] = None,
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
@@ -643,8 +649,8 @@ class Arrow:
         representing a series of timespans between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param start: A datetime expression, the start of the range.
-        :param end: (optional) A datetime expression, the end of the range.
+        :param start: A datetime or :class:`Arrow <arrow.arrow.Arrow>` expression, the start of the range.
+        :param end: (optional) A datetime or :class:`Arrow <arrow.arrow.Arrow>` expression, the end of the range.
         :param tz: (optional) A :ref:`timezone expression <tz-expr>`.  Defaults to
             ``start``'s timezone, or UTC if ``start`` is naive.
         :param limit: (optional) A maximum number of tuples to return.
