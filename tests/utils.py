@@ -1,11 +1,14 @@
-import pytz
+try:
+    import zoneinfo
+except ImportError:
+    from backports import zoneinfo
 from dateutil.zoneinfo import get_zonefile_instance
 
 
 def make_full_tz_list():
     dateutil_zones = set(get_zonefile_instance().zones)
-    pytz_zones = set(pytz.all_timezones)
-    return dateutil_zones.union(pytz_zones)
+    zoneinfo_zones = set(zoneinfo.available_timezones())
+    return dateutil_zones.union(zoneinfo_zones)
 
 
 def assert_datetime_equality(dt1, dt2, within=10):

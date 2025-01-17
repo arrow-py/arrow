@@ -1,3 +1,8 @@
+try:
+    import zoneinfo
+except ImportError:
+    from backports import zoneinfo
+
 import pickle
 import sys
 import time
@@ -63,6 +68,16 @@ class TestTestArrowInit:
         )
         self.expected = datetime(
             2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+
+    def test_init_zoneinfo_timezone(self):
+        result = arrow.Arrow(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=zoneinfo.ZoneInfo("Europe/Paris")
+        )
+        self.expected = datetime(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=zoneinfo.ZoneInfo("Europe/Paris")
         )
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
