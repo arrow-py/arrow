@@ -112,6 +112,10 @@ def now(tz: Optional[TZ_EXPR] = None) -> Arrow:
 now.__doc__ = _factory.now.__doc__
 
 
+def timezone(zone_name: str) -> dt_tzinfo:
+    return _factory.timezone(zone_name)
+
+
 def factory(type: Type[Arrow]) -> ArrowFactory:
     """Returns an :class:`.ArrowFactory` for the specified :class:`Arrow <arrow.arrow.Arrow>`
     or derived type.
@@ -123,4 +127,4 @@ def factory(type: Type[Arrow]) -> ArrowFactory:
     return ArrowFactory(type)
 
 
-__all__ = ["get", "utcnow", "now", "factory"]
+__all__ = ["get", "utcnow", "now", "factory", "timezone"]
