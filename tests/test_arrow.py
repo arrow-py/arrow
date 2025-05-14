@@ -2058,7 +2058,6 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 weeks"
         assert later.humanize(self.now, only_distance=True) == "2 weeks"
 
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_month(self):
         later = self.now.shift(months=1)
 
@@ -2076,7 +2075,6 @@ class TestArrowHumanize:
         assert self.now.humanize(later) == "a month ago"
         assert later.humanize(self.now) == "in a month"
 
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_months(self):
         later = self.now.shift(months=2)
         earlier = self.now.shift(months=-2)
