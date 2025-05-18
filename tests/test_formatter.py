@@ -17,11 +17,12 @@ from arrow import (
     FORMAT_RFC1123,
     FORMAT_RFC2822,
     FORMAT_RFC3339,
+    FORMAT_RFC3339_STRICT,
     FORMAT_RSS,
     FORMAT_W3C,
 )
 
-from .utils import make_full_tz_list
+from .utils import get_timezone, make_full_tz_list
 
 
 @pytest.mark.usefixtures("arrow_formatter")
@@ -117,7 +118,7 @@ class TestFormatterFormatToken:
         assert self.formatter._format_token(dt, "x") == expected
 
     def test_timezone(self):
-        dt = datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
+        dt = datetime.now(timezone.utc).replace(tzinfo=get_timezone("US/Pacific"))
 
         result = self.formatter._format_token(dt, "ZZ")
         assert result == "-07:00" or result == "-08:00"
@@ -129,7 +130,7 @@ class TestFormatterFormatToken:
     def test_timezone_formatter(self, full_tz_name):
         # This test will fail if we use "now" as date as soon as we change from/to DST
         dt = datetime(1986, 2, 14, tzinfo=zoneinfo.ZoneInfo("UTC")).replace(
-            tzinfo=dateutil_tz.gettz(full_tz_name)
+            tzinfo=get_timezone(full_tz_name)
         )
         abbreviation = dt.tzname()
 
@@ -256,6 +257,12 @@ class TestFormatterBuiltinFormats:
         assert (
             self.formatter.format(self.datetime, FORMAT_RFC3339)
             == "1975-12-25 14:15:16-05:00"
+        )
+
+    def test_rfc3339_strict(self):
+        assert (
+            self.formatter.format(self.datetime, FORMAT_RFC3339_STRICT)
+            == "1975-12-25T14:15:16-05:00"
         )
 
     def test_rss(self):
