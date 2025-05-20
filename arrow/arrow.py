@@ -1035,7 +1035,14 @@ class Arrow:
             relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
         )
 
-        current = self._datetime + relativedelta(**relative_kwargs)
+        # current = self._datetime + relativedelta(**relative_kwargs)
+        original_tz = self.tzinfo
+        if self._datetime.tzinfo is not None:
+            utc_dt = self._datetime.astimezone(dateutil_tz.UTC)
+            current = utc_dt + relativedelta(**relative_kwargs)
+            current = current.astimezone(original_tz)
+        else:
+            current = self._datetime + relativedelta(**relative_kwargs)
 
         # If check_imaginary is True, perform the check for imaginary times (DST transitions)
         if check_imaginary and not dateutil_tz.datetime_exists(current):
