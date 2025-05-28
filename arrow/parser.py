@@ -419,19 +419,30 @@ class DateTimeParser:
         parts: _Parts = {}
         for token in fmt_tokens:
             value: Union[Tuple[str, str, str], str]
-            if token == "Do":
-                value = match.group("value")
-            elif token == "W":
-                value = (match.group("year"), match.group("week"), match.group("day"))
-            else:
-                value = match.group(token)
-
+            try:
+                if token == "Do":
+                    value = match.group("value")
+                elif token == "W":
+                    value = (
+                        match.group("year"),
+                        match.group("week"),
+                        match.group("day"),
+                        )
+                else:
+                    value = match.group(token)
+            except IndexError:
+                raise ParserMatchError(
+                    f"Format string {fmt!r} does not match input {datetime_string!r} (missing group for token {token!r})."
+                    )
+            except Exception as e:
+                raise ParserMatchError(
+                    f"Error while matching group for token {token!r}: {e}"
+                    )
             if value is None:
                 raise ParserMatchError(
                     f"Unable to find a match group for the specified token {token!r}."
-                )
-
-            self._parse_token(token, value, parts)  # type: ignore[arg-type]
+                    )
+            self._parse_token(token, value, parts)
 
         return self._build_datetime(parts)
 
