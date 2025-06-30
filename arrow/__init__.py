@@ -1,5 +1,5 @@
 from ._version import __version__
-from .api import get, now, utcnow
+from .api import get, now, timezone, utcnow
 from .arrow import Arrow
 from .factory import ArrowFactory
 from .formatter import (
@@ -24,6 +24,7 @@ __all__ = [
     "get",
     "now",
     "utcnow",
+    "timezone",
     "Arrow",
     "ArrowFactory",
     "FORMAT_ATOM",
