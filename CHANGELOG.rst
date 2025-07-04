@@ -1,6 +1,28 @@
 Changelog
 =========
 
+1.4.0 (2025-07-04)
+------------------
+
+- [ADDED] Added FORMAT_RFC3339_STRICT with a T separator for strict RFC3339 formatting.
+- [ADDED] Added Macedonian in Latin locale support.
+- [ADDED] Added week and quarter support to Persian/Farsi locale.
+- [ADDED] Added weeks support to Catalan locale.
+- [CHANGED] Updated to use zoneinfo instead of pytz for timezone handling.
+- [CHANGED] Updated shift() method to address issue #1145 with better handling of edge cases.
+- [CHANGED] Addressed datetime.utcnow deprecation warning by using recommended alternatives.
+- [CHANGED] Removed typing_extensions dependency.
+- [CHANGED] Moved dateutil types to test requirements.
+- [FIX] Fixed type hint of Arrow.__getattr__ method.
+- [FIX] Fixed Persian/Farsi locale with proper month names, month abbreviations, and day abbreviations.
+- [FIX] Improved Greek locale translations for "second", "day(s)", and "ago".
+- [FIX] Fixed Korean locale spelling and removed poorly used expressions.
+- [INTERNAL] Added comprehensive docstrings to parser.py.
+- [INTERNAL] Added dependabot for GitHub Actions dependency management.
+- [INTERNAL] Updated CI dependencies and added support for newer Python versions.
+- [INTERNAL] Bumped various GitHub Actions to latest versions (checkout, setup-python, cache, codecov).
+- [INTERNAL] Added documentation link for arrow.format method.
+
 1.3.0 (2023-09-30)
 ------------------
 
