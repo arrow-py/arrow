@@ -4026,7 +4026,7 @@ class ThaiLocale(Locale):
         "days": "{0} วัน",
         "month": "1 เดือน",
         "months": "{0} เดือน",
-        "quarter": "ไตรมาส",
+        "quarter": "1 ไตรมาส",
         "quarters": "{0} ไตรมาส",
         "year": "1 ปี",
         "years": "{0} ปี",
