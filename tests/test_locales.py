@@ -1493,6 +1493,14 @@ class TestThaiLocale:
         assert result == "ในอีก {0} ชั่วโมง"
         result = self.locale._format_relative("ไม่กี่วินาที", "seconds", 42)
         assert result == "ในอีกไม่กี่วินาที"
+        result = self.locale._format_relative("1 สัปดาห์", "week", 1)
+        assert result == "ในอีก 1 สัปดาห์"
+        result = self.locale._format_relative("{0} สัปดาห์", "weeks", 2)
+        assert result == "ในอีก {} สัปดาห์"
+        result = self.locale._format_relative("1 ไตรมาส", "quarter", 1)
+        assert result == "ในอีก 1 ไตรมาส"
+        result = self.locale._format_relative("{0} ไตรมาส", "quarters", 2)
+        assert result == "ในอีก {} ไตรมาส"
 
     def test_format_relative_future(self):
         result = self.locale._format_relative("1 ชั่วโมง", "hour", -1)
