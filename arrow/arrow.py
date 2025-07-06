@@ -283,7 +283,7 @@ class Arrow:
             raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
-        dt = dt_datetime.utcfromtimestamp(timestamp)
+        dt = dt_datetime.fromtimestamp(timestamp, timezone.utc)
 
         return cls(
             dt.year,

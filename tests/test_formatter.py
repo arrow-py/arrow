@@ -1,7 +1,7 @@
 try:
-    import zoneinfo
+    from zoneinfo import ZoneInfo
 except ImportError:
-    from backports import zoneinfo
+    from backports.zoneinfo import ZoneInfo
 
 from datetime import datetime, timezone
 
@@ -118,7 +118,7 @@ class TestFormatterFormatToken:
         assert self.formatter._format_token(dt, "x") == expected
 
     def test_timezone(self):
-        dt = datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.gettz("US/Pacific"))
+        dt = datetime.now(timezone.utc).replace(tzinfo=ZoneInfo("US/Pacific"))
 
         result = self.formatter._format_token(dt, "ZZ")
         assert result == "-07:00" or result == "-08:00"
@@ -129,8 +129,8 @@ class TestFormatterFormatToken:
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_timezone_formatter(self, full_tz_name):
         # This test will fail if we use "now" as date as soon as we change from/to DST
-        dt = datetime(1986, 2, 14, tzinfo=zoneinfo.ZoneInfo("UTC")).replace(
-            tzinfo=dateutil_tz.gettz(full_tz_name)
+        dt = datetime(1986, 2, 14, tzinfo=timezone.utc).replace(
+            tzinfo=ZoneInfo(full_tz_name)
         )
         abbreviation = dt.tzname()
 

@@ -25,6 +25,11 @@ from typing import (
 
 from dateutil import tz
 
+try:
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+except ImportError:
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[no-redef]
+
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
 from arrow.util import next_weekday, normalize_timestamp
@@ -928,7 +933,10 @@ class TzinfoParser:
                 tzinfo = tz.tzoffset(None, seconds)
 
             else:
-                tzinfo = tz.gettz(tzinfo_string)
+                try:
+                    tzinfo = ZoneInfo(tzinfo_string)
+                except ZoneInfoNotFoundError:
+                    tzinfo = None
 
         if tzinfo is None:
             raise ParserError(f"Could not parse timezone expression {tzinfo_string!r}.")

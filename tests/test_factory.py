@@ -5,6 +5,11 @@ from decimal import Decimal
 import pytest
 from dateutil import tz
 
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
+
 from arrow import Arrow
 from arrow.parser import ParserError
 
@@ -36,7 +41,7 @@ class TestGet:
 
     def test_one_arg_timestamp(self):
         int_timestamp = int(time.time())
-        timestamp_dt = datetime.utcfromtimestamp(int_timestamp).replace(
+        timestamp_dt = datetime.fromtimestamp(int_timestamp, timezone.utc).replace(
             tzinfo=tz.tzutc()
         )
 
@@ -46,7 +51,7 @@ class TestGet:
             self.factory.get(str(int_timestamp))
 
         float_timestamp = time.time()
-        timestamp_dt = datetime.utcfromtimestamp(float_timestamp).replace(
+        timestamp_dt = datetime.fromtimestamp(float_timestamp, timezone.utc).replace(
             tzinfo=tz.tzutc()
         )
 
@@ -66,19 +71,19 @@ class TestGet:
         microsecond_timestamp = 1591328104308505
 
         # Regression test for issue #796
-        assert self.factory.get(millisecond_timestamp) == datetime.utcfromtimestamp(
-            1591328104.308
+        assert self.factory.get(millisecond_timestamp) == datetime.fromtimestamp(
+            1591328104.308, timezone.utc
         ).replace(tzinfo=tz.tzutc())
-        assert self.factory.get(microsecond_timestamp) == datetime.utcfromtimestamp(
-            1591328104.308505
+        assert self.factory.get(microsecond_timestamp) == datetime.fromtimestamp(
+            1591328104.308505, timezone.utc
         ).replace(tzinfo=tz.tzutc())
 
     def test_one_arg_timestamp_with_tzinfo(self):
         timestamp = time.time()
         timestamp_dt = datetime.fromtimestamp(timestamp, tz=tz.tzutc()).astimezone(
-            tz.gettz("US/Pacific")
+            ZoneInfo("US/Pacific")
         )
-        timezone = tz.gettz("US/Pacific")
+        timezone = ZoneInfo("US/Pacific")
 
         assert_datetime_equality(
             self.factory.get(timestamp, tzinfo=timezone), timestamp_dt
@@ -105,11 +110,11 @@ class TestGet:
         self.expected = (
             datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(
-            self.factory.get(tz.gettz("US/Pacific")), self.expected
+            self.factory.get(ZoneInfo("US/Pacific")), self.expected
         )
 
     # regression test for issue #658
@@ -125,18 +130,18 @@ class TestGet:
         self.expected = (
             datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(
-            self.factory.get(tzinfo=tz.gettz("US/Pacific")), self.expected
+            self.factory.get(tzinfo=ZoneInfo("US/Pacific")), self.expected
         )
 
     def test_kwarg_tzinfo_string(self):
         self.expected = (
             datetime.now(timezone.utc)
             .replace(tzinfo=tz.tzutc())
-            .astimezone(tz.gettz("US/Pacific"))
+            .astimezone(ZoneInfo("US/Pacific"))
         )
 
         assert_datetime_equality(self.factory.get(tzinfo="US/Pacific"), self.expected)
@@ -168,7 +173,7 @@ class TestGet:
 
         result = self.factory.get(dt, tzinfo="America/Chicago")
 
-        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+        expected = datetime(2021, 4, 29, 6, tzinfo=ZoneInfo("America/Chicago"))
 
         assert_datetime_equality(result._datetime, expected)
 
@@ -177,7 +182,7 @@ class TestGet:
 
         result = self.factory.get(arw, tzinfo="America/Chicago")
 
-        expected = datetime(2021, 4, 29, 6, tzinfo=tz.gettz("America/Chicago"))
+        expected = datetime(2021, 4, 29, 6, tzinfo=ZoneInfo("America/Chicago"))
 
         assert_datetime_equality(result._datetime, expected)
 
@@ -186,7 +191,7 @@ class TestGet:
 
         result = self.factory.get(da, tzinfo="America/Chicago")
 
-        expected = Arrow(2021, 4, 29, tzinfo=tz.gettz("America/Chicago"))
+        expected = Arrow(2021, 4, 29, tzinfo=ZoneInfo("America/Chicago"))
 
         assert result.date() == expected.date()
         assert result.tzinfo == expected.tzinfo
@@ -252,24 +257,24 @@ class TestGet:
         )
 
     def test_two_args_datetime_tzinfo(self):
-        result = self.factory.get(datetime(2013, 1, 1), tz.gettz("US/Pacific"))
+        result = self.factory.get(datetime(2013, 1, 1), ZoneInfo("US/Pacific"))
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_datetime_tz_str(self):
         result = self.factory.get(datetime(2013, 1, 1), "US/Pacific")
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_date_tzinfo(self):
-        result = self.factory.get(date(2013, 1, 1), tz.gettz("US/Pacific"))
+        result = self.factory.get(date(2013, 1, 1), ZoneInfo("US/Pacific"))
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_date_tz_str(self):
         result = self.factory.get(date(2013, 1, 1), "US/Pacific")
 
-        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_two_args_datetime_other(self):
         with pytest.raises(TypeError):
@@ -285,10 +290,10 @@ class TestGet:
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
     def test_two_args_str_tzinfo(self):
-        result = self.factory.get("2013-01-01", tzinfo=tz.gettz("US/Pacific"))
+        result = self.factory.get("2013-01-01", tzinfo=ZoneInfo("US/Pacific"))
 
         assert_datetime_equality(
-            result._datetime, datetime(2013, 1, 1, tzinfo=tz.gettz("US/Pacific"))
+            result._datetime, datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
         )
 
     def test_two_args_twitter_format(self):
@@ -365,8 +370,8 @@ class TestGet:
         assert res.tzinfo == tz.tzutc()
 
     def test_locale_with_tzinfo(self):
-        res = self.factory.get(locale="ja", tzinfo=tz.gettz("Asia/Tokyo"))
-        assert res.tzinfo == tz.gettz("Asia/Tokyo")
+        res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
+        assert res.tzinfo == ZoneInfo("Asia/Tokyo")
 
 
 @pytest.mark.usefixtures("arrow_factory")
@@ -385,8 +390,8 @@ class TestNow:
 
     def test_tzinfo(self):
         assert_datetime_equality(
-            self.factory.now(tz.gettz("EST")), datetime.now(tz.gettz("EST"))
+            self.factory.now(ZoneInfo("EST")), datetime.now(ZoneInfo("EST"))
         )
 
     def test_tz_str(self):
-        assert_datetime_equality(self.factory.now("EST"), datetime.now(tz.gettz("EST")))
+        assert_datetime_equality(self.factory.now("EST"), datetime.now(ZoneInfo("EST")))

@@ -6,6 +6,11 @@ from datetime import datetime, timezone
 import pytest
 from dateutil import tz
 
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
+
 import arrow
 from arrow import formatter, parser
 from arrow.constants import MAX_TIMESTAMP_US
@@ -319,7 +324,7 @@ class TestDateTimeParserParse:
 
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_parse_tz_name_zzz(self, full_tz_name):
-        self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
+        self.expected = datetime(2013, 1, 1, tzinfo=ZoneInfo(full_tz_name))
         assert (
             self.parser.parse(f"2013-01-01 {full_tz_name}", "YYYY-MM-DD ZZZ")
             == self.expected
@@ -1338,7 +1343,7 @@ class TestTzinfoParser:
         assert self.parser.parse("-01") == tz.tzoffset(None, -3600)
 
     def test_parse_str(self):
-        assert self.parser.parse("US/Pacific") == tz.gettz("US/Pacific")
+        assert self.parser.parse("US/Pacific") == ZoneInfo("US/Pacific")
 
     def test_parse_fails(self):
         with pytest.raises(parser.ParserError):
