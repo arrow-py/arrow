@@ -16,5 +16,21 @@ def make_full_tz_list():
 
 
 def assert_datetime_equality(dt1, dt2, within=10):
-    assert dt1.tzinfo == dt2.tzinfo
+    # Compare timezone behavior instead of object identity for cross-platform compatibility
+    assert_timezone_equivalence(dt1.tzinfo, dt2.tzinfo, dt1)
     assert abs((dt1 - dt2).total_seconds()) < within
+
+
+def assert_timezone_equivalence(tz1, tz2, dt):
+    # Timezone objects are equivalent
+    if tz1 == tz2:
+        return
+
+    # Compare timezone names
+    assert tz1.tzname(dt) == tz2.tzname(dt)
+
+    # Compare UTC offset and DST behavior at the given datetime
+    assert tz1.utcoffset(dt) == tz2.utcoffset(
+        dt
+    ), f"UTC offset mismatch: {tz1.utcoffset(dt)} != {tz2.utcoffset(dt)}"
+    assert tz1.dst(dt) == tz2.dst(dt), f"DST mismatch: {tz1.dst(dt)} != {tz2.dst(dt)}"

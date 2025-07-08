@@ -82,6 +82,16 @@ class TestTestArrowInit:
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
 
+    def test_init_dateutil_timezone(self):
+        result = arrow.Arrow(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.expected = datetime(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+
     def test_init_with_fold(self):
         before = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm")
         after = arrow.Arrow(2017, 10, 29, 2, 0, tzinfo="Europe/Stockholm", fold=1)
