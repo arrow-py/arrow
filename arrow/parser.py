@@ -23,8 +23,6 @@ from typing import (
     overload,
 )
 
-from dateutil import tz
-
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 except ImportError:
@@ -912,7 +910,7 @@ class TzinfoParser:
         tzinfo: Optional[dt_tzinfo] = None
 
         if tzinfo_string == "local":
-            tzinfo = tz.tzlocal()
+            tzinfo = datetime.now().astimezone().tzinfo
 
         elif tzinfo_string in ["utc", "UTC", "Z"]:
             tzinfo = timezone.utc

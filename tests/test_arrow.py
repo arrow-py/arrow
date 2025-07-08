@@ -98,9 +98,7 @@ class TestTestArrowFactory:
     def test_now(self):
         result = arrow.Arrow.now()
 
-        assert_datetime_equality(
-            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
-        )
+        assert_datetime_equality(result._datetime, datetime.now().astimezone())
 
     def test_utcnow(self):
         result = arrow.Arrow.utcnow()
@@ -115,9 +113,7 @@ class TestTestArrowFactory:
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-        assert_datetime_equality(
-            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
-        )
+        assert_datetime_equality(result._datetime, datetime.now().astimezone())
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=ZoneInfo("Europe/Paris"))
         assert_datetime_equality(

@@ -12,8 +12,6 @@ from decimal import Decimal
 from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
-from dateutil import tz as dateutil_tz
-
 from arrow import parser
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.constants import DEFAULT_LOCALE
@@ -337,7 +335,7 @@ class ArrowFactory:
         """
 
         if tz is None:
-            tz = dateutil_tz.tzlocal()
+            tz = datetime.now().astimezone().tzinfo
         elif not isinstance(tz, dt_tzinfo):
             tz = parser.TzinfoParser.parse(tz)
 

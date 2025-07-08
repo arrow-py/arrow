@@ -192,7 +192,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
 
         dt = dt_datetime.now(tzinfo)
 
@@ -249,7 +249,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 

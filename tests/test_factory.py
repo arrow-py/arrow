@@ -206,9 +206,7 @@ class TestGet:
     def test_one_arg_iso_str(self):
         dt = datetime.now(timezone.utc)
 
-        assert_datetime_equality(
-            self.factory.get(dt.isoformat()), dt.replace(tzinfo=tz.tzutc())
-        )
+        assert_datetime_equality(self.factory.get(dt.isoformat()), dt)
 
     def test_one_arg_iso_calendar(self):
         pairs = [
@@ -367,7 +365,7 @@ class TestGet:
 
     def test_locale_kwarg_only(self):
         res = self.factory.get(locale="ja")
-        assert res.tzinfo == tz.tzutc()
+        assert res.tzinfo == timezone.utc
 
     def test_locale_with_tzinfo(self):
         res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
@@ -379,14 +377,14 @@ class TestUtcNow:
     def test_utcnow(self):
         assert_datetime_equality(
             self.factory.utcnow()._datetime,
-            datetime.now(timezone.utc).replace(tzinfo=tz.tzutc()),
+            datetime.now(timezone.utc),
         )
 
 
 @pytest.mark.usefixtures("arrow_factory")
 class TestNow:
     def test_no_tz(self):
-        assert_datetime_equality(self.factory.now(), datetime.now(tz.tzlocal()))
+        assert_datetime_equality(self.factory.now(), datetime.now().astimezone())
 
     def test_tzinfo(self):
         assert_datetime_equality(
