@@ -106,7 +106,7 @@ class TestTestArrowFactory:
         result = arrow.Arrow.utcnow()
 
         assert_datetime_equality(
-            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
         assert result.fold == 0
@@ -139,7 +139,7 @@ class TestTestArrowFactory:
 
         result = arrow.Arrow.utcfromtimestamp(timestamp)
         assert_datetime_equality(
-            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
         with pytest.raises(ValueError):
@@ -277,7 +277,7 @@ class TestArrowAttribute:
         assert self.arrow.year == 2013
 
     def test_tzinfo(self):
-        assert self.arrow.tzinfo == tz.tzutc()
+        assert self.arrow.tzinfo == timezone.utc
 
     def test_naive(self):
         assert self.arrow.naive == self.arrow._datetime.replace(tzinfo=None)

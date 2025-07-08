@@ -1,7 +1,7 @@
 """Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better way to parse datetime strings."""
 
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from functools import lru_cache
 from typing import (
@@ -732,14 +732,14 @@ class DateTimeParser:
         timestamp = parts.get("timestamp")
 
         if timestamp is not None:
-            return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
 
         expanded_timestamp = parts.get("expanded_timestamp")
 
         if expanded_timestamp is not None:
             return datetime.fromtimestamp(
                 normalize_timestamp(expanded_timestamp),
-                tz=tz.tzutc(),
+                tz=timezone.utc,
             )
 
         day_of_year = parts.get("day_of_year")
@@ -915,7 +915,7 @@ class TzinfoParser:
             tzinfo = tz.tzlocal()
 
         elif tzinfo_string in ["utc", "UTC", "Z"]:
-            tzinfo = tz.tzutc()
+            tzinfo = timezone.utc
 
         else:
             iso_match = cls._TZINFO_RE.match(tzinfo_string)
@@ -930,7 +930,7 @@ class TzinfoParser:
                 if sign == "-":
                     seconds *= -1
 
-                tzinfo = tz.tzoffset(None, seconds)
+                tzinfo = timezone(timedelta(seconds=seconds))
 
             else:
                 try:

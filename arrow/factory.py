@@ -6,7 +6,7 @@ construction scenarios.
 """
 
 import calendar
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from datetime import tzinfo as dt_tzinfo
 from decimal import Decimal
 from time import struct_time
@@ -229,7 +229,7 @@ class ArrowFactory:
             elif not isinstance(arg, str) and is_timestamp(arg):
                 if tz is None:
                     # set to UTC by default
-                    tz = dateutil_tz.tzutc()
+                    tz = timezone.utc
                 return self.type.fromtimestamp(arg, tzinfo=tz)
 
             # (Arrow) -> from the object's datetime @ tzinfo

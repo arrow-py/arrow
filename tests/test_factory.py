@@ -20,7 +20,7 @@ from .utils import assert_datetime_equality
 class TestGet:
     def test_no_args(self):
         assert_datetime_equality(
-            self.factory.get(), datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
+            self.factory.get(), datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
     def test_timestamp_one_arg_no_arg(self):
@@ -36,7 +36,7 @@ class TestGet:
     def test_struct_time(self):
         assert_datetime_equality(
             self.factory.get(time.gmtime()),
-            datetime.now(timezone.utc).replace(tzinfo=tz.tzutc()),
+            datetime.now(timezone.utc).replace(tzinfo=timezone.utc),
         )
 
     def test_one_arg_timestamp(self):
