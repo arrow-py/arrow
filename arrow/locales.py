@@ -4014,14 +4014,16 @@ class ThaiLocale(Locale):
 
     timeframes = {
         "now": "ขณะนี้",
-        "second": "วินาที",
-        "seconds": "{0} ไม่กี่วินาที",
+        "second": "1 วินาที",
+        "seconds": "{0} วินาที",
         "minute": "1 นาที",
         "minutes": "{0} นาที",
         "hour": "1 ชั่วโมง",
         "hours": "{0} ชั่วโมง",
         "day": "1 วัน",
         "days": "{0} วัน",
+        "week": "1 สัปดาห์",
+        "weeks": "{0} สัปดาห์",
         "month": "1 เดือน",
         "months": "{0} เดือน",
         "year": "1 ปี",
