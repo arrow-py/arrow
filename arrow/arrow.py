@@ -157,7 +157,7 @@ class Arrow:
         **kwargs: Any,
     ) -> None:
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+            tzinfo = timezone.utc
         # detect that tzinfo is a pytz object (issue #626)
         elif (
             isinstance(tzinfo, dt_tzinfo)
@@ -192,7 +192,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
 
         dt = dt_datetime.now(tzinfo)
 
@@ -220,7 +220,7 @@ class Arrow:
 
         """
 
-        dt = dt_datetime.now(dateutil_tz.tzutc())
+        dt = dt_datetime.now(timezone.utc)
 
         return cls(
             dt.year,
@@ -249,7 +249,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
@@ -283,7 +283,7 @@ class Arrow:
             raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
-        dt = dt_datetime.utcfromtimestamp(timestamp)
+        dt = dt_datetime.fromtimestamp(timestamp, timezone.utc)
 
         return cls(
             dt.year,
@@ -293,7 +293,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dateutil_tz.tzutc(),
+            timezone.utc,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -317,7 +317,7 @@ class Arrow:
 
         if tzinfo is None:
             if dt.tzinfo is None:
-                tzinfo = dateutil_tz.tzutc()
+                tzinfo = timezone.utc
             else:
                 tzinfo = dt.tzinfo
 
@@ -344,7 +344,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+            tzinfo = timezone.utc
 
         return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
@@ -1151,7 +1151,7 @@ class Arrow:
         locale = locales.get_locale(locale)
 
         if other is None:
-            utc = dt_datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.tzutc())
+            utc = dt_datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
             dt = utc.astimezone(self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):
@@ -1792,7 +1792,7 @@ class Arrow:
     def _get_tzinfo(tz_expr: Optional[TZ_EXPR]) -> dt_tzinfo:
         """Get normalized tzinfo object from various inputs."""
         if tz_expr is None:
-            return dateutil_tz.tzutc()
+            return timezone.utc
         if isinstance(tz_expr, dt_tzinfo):
             return tz_expr
         else:

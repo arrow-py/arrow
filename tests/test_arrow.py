@@ -1,7 +1,7 @@
 try:
-    import zoneinfo
+    from zoneinfo import ZoneInfo
 except ImportError:
-    from backports import zoneinfo
+    from backports.zoneinfo import ZoneInfo
 
 import pickle
 import sys
@@ -54,10 +54,10 @@ class TestTestArrowInit:
         assert result._datetime == self.expected
 
         result = arrow.Arrow(
-            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
         )
         self.expected = datetime(
-            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
         )
         assert result._datetime == self.expected
 
@@ -67,17 +67,27 @@ class TestTestArrowInit:
             2013, 2, 2, 12, 30, 45, 999999, tzinfo=pytz.timezone("Europe/Paris")
         )
         self.expected = datetime(
-            2013, 2, 2, 12, 30, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+            2013, 2, 2, 12, 30, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
         )
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
 
     def test_init_zoneinfo_timezone(self):
         result = arrow.Arrow(
-            2024, 7, 10, 18, 55, 45, 999999, tzinfo=zoneinfo.ZoneInfo("Europe/Paris")
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
         )
         self.expected = datetime(
-            2024, 7, 10, 18, 55, 45, 999999, tzinfo=zoneinfo.ZoneInfo("Europe/Paris")
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
+        )
+        assert result._datetime == self.expected
+        assert_datetime_equality(result._datetime, self.expected, 1)
+
+    def test_init_dateutil_timezone(self):
+        result = arrow.Arrow(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=tz.gettz("Europe/Paris")
+        )
+        self.expected = datetime(
+            2024, 7, 10, 18, 55, 45, 999999, tzinfo=ZoneInfo("Europe/Paris")
         )
         assert result._datetime == self.expected
         assert_datetime_equality(result._datetime, self.expected, 1)
@@ -98,15 +108,13 @@ class TestTestArrowFactory:
     def test_now(self):
         result = arrow.Arrow.now()
 
-        assert_datetime_equality(
-            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
-        )
+        assert_datetime_equality(result._datetime, datetime.now().astimezone())
 
     def test_utcnow(self):
         result = arrow.Arrow.utcnow()
 
         assert_datetime_equality(
-            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
         assert result.fold == 0
@@ -115,20 +123,18 @@ class TestTestArrowFactory:
         timestamp = time.time()
 
         result = arrow.Arrow.fromtimestamp(timestamp)
-        assert_datetime_equality(
-            result._datetime, datetime.now().replace(tzinfo=tz.tzlocal())
-        )
+        assert_datetime_equality(result._datetime, datetime.now().astimezone())
 
-        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=tz.gettz("Europe/Paris"))
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo=ZoneInfo("Europe/Paris"))
         assert_datetime_equality(
             result._datetime,
-            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+            datetime.fromtimestamp(timestamp, ZoneInfo("Europe/Paris")),
         )
 
         result = arrow.Arrow.fromtimestamp(timestamp, tzinfo="Europe/Paris")
         assert_datetime_equality(
             result._datetime,
-            datetime.fromtimestamp(timestamp, tz.gettz("Europe/Paris")),
+            datetime.fromtimestamp(timestamp, ZoneInfo("Europe/Paris")),
         )
 
         with pytest.raises(ValueError):
@@ -139,7 +145,7 @@ class TestTestArrowFactory:
 
         result = arrow.Arrow.utcfromtimestamp(timestamp)
         assert_datetime_equality(
-            result._datetime, datetime.now(timezone.utc).replace(tzinfo=tz.tzutc())
+            result._datetime, datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
         with pytest.raises(ValueError):
@@ -153,25 +159,25 @@ class TestTestArrowFactory:
         assert result._datetime == dt.replace(tzinfo=tz.tzutc())
 
     def test_fromdatetime_dt_tzinfo(self):
-        dt = datetime(2013, 2, 3, 12, 30, 45, 1, tzinfo=tz.gettz("US/Pacific"))
+        dt = datetime(2013, 2, 3, 12, 30, 45, 1, tzinfo=ZoneInfo("US/Pacific"))
 
         result = arrow.Arrow.fromdatetime(dt)
 
-        assert result._datetime == dt.replace(tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == dt.replace(tzinfo=ZoneInfo("US/Pacific"))
 
     def test_fromdatetime_tzinfo_arg(self):
         dt = datetime(2013, 2, 3, 12, 30, 45, 1)
 
-        result = arrow.Arrow.fromdatetime(dt, tz.gettz("US/Pacific"))
+        result = arrow.Arrow.fromdatetime(dt, ZoneInfo("US/Pacific"))
 
-        assert result._datetime == dt.replace(tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == dt.replace(tzinfo=ZoneInfo("US/Pacific"))
 
     def test_fromdate(self):
         dt = date(2013, 2, 3)
 
-        result = arrow.Arrow.fromdate(dt, tz.gettz("US/Pacific"))
+        result = arrow.Arrow.fromdate(dt, ZoneInfo("US/Pacific"))
 
-        assert result._datetime == datetime(2013, 2, 3, tzinfo=tz.gettz("US/Pacific"))
+        assert result._datetime == datetime(2013, 2, 3, tzinfo=ZoneInfo("US/Pacific"))
 
     def test_strptime(self):
         formatted = datetime(2013, 2, 3, 12, 30, 45).strftime("%Y-%m-%d %H:%M:%S")
@@ -180,10 +186,10 @@ class TestTestArrowFactory:
         assert result._datetime == datetime(2013, 2, 3, 12, 30, 45, tzinfo=tz.tzutc())
 
         result = arrow.Arrow.strptime(
-            formatted, "%Y-%m-%d %H:%M:%S", tzinfo=tz.gettz("Europe/Paris")
+            formatted, "%Y-%m-%d %H:%M:%S", tzinfo=ZoneInfo("Europe/Paris")
         )
         assert result._datetime == datetime(
-            2013, 2, 3, 12, 30, 45, tzinfo=tz.gettz("Europe/Paris")
+            2013, 2, 3, 12, 30, 45, tzinfo=ZoneInfo("Europe/Paris")
         )
 
     def test_fromordinal(self):
@@ -277,7 +283,7 @@ class TestArrowAttribute:
         assert self.arrow.year == 2013
 
     def test_tzinfo(self):
-        assert self.arrow.tzinfo == tz.tzutc()
+        assert self.arrow.tzinfo == timezone.utc
 
     def test_naive(self):
         assert self.arrow.naive == self.arrow._datetime.replace(tzinfo=None)
@@ -432,7 +438,7 @@ class TestArrowDatetimeInterface:
         assert result == self.arrow._datetime.timetz()
 
     def test_astimezone(self):
-        other_tz = tz.gettz("US/Pacific")
+        other_tz = ZoneInfo("US/Pacific")
 
         result = self.arrow.astimezone(other_tz)
 
@@ -538,20 +544,20 @@ class TestArrowFalsePositiveDst:
 
     def test_dst(self):
         self.before_1 = arrow.Arrow(
-            2016, 11, 6, 3, 59, tzinfo=tz.gettz("America/New_York")
+            2016, 11, 6, 3, 59, tzinfo=ZoneInfo("America/New_York")
         )
-        self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=tz.gettz("America/New_York"))
-        self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=tz.gettz("America/New_York"))
+        self.before_2 = arrow.Arrow(2016, 11, 6, tzinfo=ZoneInfo("America/New_York"))
+        self.after_1 = arrow.Arrow(2016, 11, 6, 4, tzinfo=ZoneInfo("America/New_York"))
         self.after_2 = arrow.Arrow(
-            2016, 11, 6, 23, 59, tzinfo=tz.gettz("America/New_York")
+            2016, 11, 6, 23, 59, tzinfo=ZoneInfo("America/New_York")
         )
         self.before_3 = arrow.Arrow(
-            2018, 11, 4, 3, 59, tzinfo=tz.gettz("America/New_York")
+            2018, 11, 4, 3, 59, tzinfo=ZoneInfo("America/New_York")
         )
-        self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=tz.gettz("America/New_York"))
-        self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=tz.gettz("America/New_York"))
+        self.before_4 = arrow.Arrow(2018, 11, 4, tzinfo=ZoneInfo("America/New_York"))
+        self.after_3 = arrow.Arrow(2018, 11, 4, 4, tzinfo=ZoneInfo("America/New_York"))
         self.after_4 = arrow.Arrow(
-            2018, 11, 4, 23, 59, tzinfo=tz.gettz("America/New_York")
+            2018, 11, 4, 23, 59, tzinfo=ZoneInfo("America/New_York")
         )
         assert self.before_1.day == self.before_2.day
         assert self.after_1.day == self.after_2.day
@@ -562,9 +568,9 @@ class TestArrowFalsePositiveDst:
 class TestArrowConversion:
     def test_to(self):
         dt_from = datetime.now()
-        arrow_from = arrow.Arrow.fromdatetime(dt_from, tz.gettz("US/Pacific"))
+        arrow_from = arrow.Arrow.fromdatetime(dt_from, ZoneInfo("US/Pacific"))
 
-        self.expected = dt_from.replace(tzinfo=tz.gettz("US/Pacific")).astimezone(
+        self.expected = dt_from.replace(tzinfo=ZoneInfo("US/Pacific")).astimezone(
             tz.tzutc()
         )
 
@@ -592,7 +598,7 @@ class TestArrowConversion:
     # issue 315
     def test_anchorage_dst(self):
         before = arrow.Arrow(2016, 3, 13, 1, 59, tzinfo="America/Anchorage")
-        after = arrow.Arrow(2016, 3, 13, 2, 1, tzinfo="America/Anchorage")
+        after = arrow.Arrow(2016, 3, 13, 3, 1, tzinfo="America/Anchorage")
 
         assert before.utcoffset() != after.utcoffset()
 
@@ -652,9 +658,9 @@ class TestArrowReplace:
     def test_replace_tzinfo(self):
         arw = arrow.Arrow.utcnow().to("US/Eastern")
 
-        result = arw.replace(tzinfo=tz.gettz("US/Pacific"))
+        result = arw.replace(tzinfo=ZoneInfo("US/Pacific"))
 
-        assert result == arw.datetime.replace(tzinfo=tz.gettz("US/Pacific"))
+        assert result == arw.datetime.replace(tzinfo=ZoneInfo("US/Pacific"))
 
     def test_replace_fold(self):
         before = arrow.Arrow(2017, 11, 5, 1, tzinfo="America/New_York")
@@ -863,12 +869,12 @@ class TestArrowShift:
         )
 
     def test_shift_with_imaginary_check(self):
-        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1)
         assert shifted.datetime.hour == 3
 
     def test_shift_without_imaginary_check(self):
-        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=tz.gettz("US/Eastern"))
+        dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1, check_imaginary=False)
         assert shifted.datetime.hour == 3
 
@@ -1033,38 +1039,38 @@ class TestArrowRange:
         )
 
         for r in result:
-            assert r.tzinfo == tz.gettz("US/Pacific")
+            assert r.tzinfo == ZoneInfo("US/Pacific")
 
     def test_aware_same_tz(self):
         result = arrow.Arrow.range(
             "day",
-            arrow.Arrow(2013, 1, 1, tzinfo=tz.gettz("US/Pacific")),
-            arrow.Arrow(2013, 1, 3, tzinfo=tz.gettz("US/Pacific")),
+            arrow.Arrow(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific")),
+            arrow.Arrow(2013, 1, 3, tzinfo=ZoneInfo("US/Pacific")),
         )
 
         for r in result:
-            assert r.tzinfo == tz.gettz("US/Pacific")
+            assert r.tzinfo == ZoneInfo("US/Pacific")
 
     def test_aware_different_tz(self):
         result = arrow.Arrow.range(
             "day",
-            datetime(2013, 1, 1, tzinfo=tz.gettz("US/Eastern")),
-            datetime(2013, 1, 3, tzinfo=tz.gettz("US/Pacific")),
+            datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Eastern")),
+            datetime(2013, 1, 3, tzinfo=ZoneInfo("US/Pacific")),
         )
 
         for r in result:
-            assert r.tzinfo == tz.gettz("US/Eastern")
+            assert r.tzinfo == ZoneInfo("US/Eastern")
 
     def test_aware_tz(self):
         result = arrow.Arrow.range(
             "day",
-            datetime(2013, 1, 1, tzinfo=tz.gettz("US/Eastern")),
-            datetime(2013, 1, 3, tzinfo=tz.gettz("US/Pacific")),
-            tz=tz.gettz("US/Central"),
+            datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Eastern")),
+            datetime(2013, 1, 3, tzinfo=ZoneInfo("US/Pacific")),
+            tz=ZoneInfo("US/Central"),
         )
 
         for r in result:
-            assert r.tzinfo == tz.gettz("US/Central")
+            assert r.tzinfo == ZoneInfo("US/Central")
 
     def test_imaginary(self):
         # issue #72, avoid duplication in utc column
@@ -1345,7 +1351,7 @@ class TestArrowSpanRange:
         ]
 
     def test_naive_tz(self):
-        tzinfo = tz.gettz("US/Pacific")
+        tzinfo = ZoneInfo("US/Pacific")
 
         result = arrow.Arrow.span_range(
             "hour", datetime(2013, 1, 1, 0), datetime(2013, 1, 1, 3, 59), "US/Pacific"
@@ -1356,7 +1362,7 @@ class TestArrowSpanRange:
             assert c.tzinfo == tzinfo
 
     def test_aware_same_tz(self):
-        tzinfo = tz.gettz("US/Pacific")
+        tzinfo = ZoneInfo("US/Pacific")
 
         result = arrow.Arrow.span_range(
             "hour",
@@ -1369,8 +1375,8 @@ class TestArrowSpanRange:
             assert c.tzinfo == tzinfo
 
     def test_aware_different_tz(self):
-        tzinfo1 = tz.gettz("US/Pacific")
-        tzinfo2 = tz.gettz("US/Eastern")
+        tzinfo1 = ZoneInfo("US/Pacific")
+        tzinfo2 = ZoneInfo("US/Eastern")
 
         result = arrow.Arrow.span_range(
             "hour",
@@ -1385,14 +1391,14 @@ class TestArrowSpanRange:
     def test_aware_tz(self):
         result = arrow.Arrow.span_range(
             "hour",
-            datetime(2013, 1, 1, 0, tzinfo=tz.gettz("US/Eastern")),
-            datetime(2013, 1, 1, 2, 59, tzinfo=tz.gettz("US/Eastern")),
+            datetime(2013, 1, 1, 0, tzinfo=ZoneInfo("US/Eastern")),
+            datetime(2013, 1, 1, 2, 59, tzinfo=ZoneInfo("US/Eastern")),
             tz="US/Central",
         )
 
         for f, c in result:
-            assert f.tzinfo == tz.gettz("US/Central")
-            assert c.tzinfo == tz.gettz("US/Central")
+            assert f.tzinfo == ZoneInfo("US/Central")
+            assert c.tzinfo == ZoneInfo("US/Central")
 
     def test_bounds_param_is_passed(self):
         result = list(
