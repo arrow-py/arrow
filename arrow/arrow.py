@@ -549,14 +549,14 @@ class Arrow:
             (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
 
         """
-        if not 1 <= week_start <= 7:
-            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
         if frame_absolute == "week":
+            if not 1 <= week_start <= 7:
+                raise ValueError("week_start argument must be between 1 and 7.")
             attr = "day"
         elif frame_absolute == "quarter":
             attr = "month"
