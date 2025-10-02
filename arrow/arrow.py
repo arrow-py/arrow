@@ -123,6 +123,7 @@ class Arrow:
     ]
     _ATTRS_PLURAL: Final[List[str]] = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER: Final[int] = 3
+    _MONTHS_PER_YEAR: Final[int] = 12
     _SECS_PER_MINUTE: Final[int] = 60
     _SECS_PER_HOUR: Final[int] = 60 * 60
     _SECS_PER_DAY: Final[int] = 60 * 60 * 24
@@ -1189,6 +1190,7 @@ class Arrow:
 
                 elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_HOUR:
                     minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
@@ -1197,36 +1199,54 @@ class Arrow:
 
                 elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_DAY:
                     hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
                     return locale.describe("hours", hours, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY * 2:
+
+                calendar_diff = (
+                    relativedelta(dt, self._datetime)
+                    if self._datetime < dt
+                    else relativedelta(self._datetime, dt)
+                )
+                calendar_months = (
+                    calendar_diff.years * self._MONTHS_PER_YEAR + calendar_diff.months
+                )
+
+                # For months, if more than 2 weeks, count as a full month
+                if calendar_diff.days > 14:
+                    calendar_months += 1
+
+                calendar_months = min(calendar_months, self._MONTHS_PER_YEAR)
+
+                if diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_WEEK:
                     days = sign * max(delta_second // self._SECS_PER_DAY, 2)
                     return locale.describe("days", days, only_distance=only_distance)
 
+                elif calendar_months >= 1 and diff < self._SECS_PER_YEAR:
+                    if calendar_months == 1:
+                        return locale.describe(
+                            "month", sign, only_distance=only_distance
+                        )
+                    else:
+                        months = sign * calendar_months
+                        return locale.describe(
+                            "months", months, only_distance=only_distance
+                        )
+
                 elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_MONTH:
                     weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
-                elif diff < self._SECS_PER_MONTH * 2:
-                    return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_YEAR:
-                    # TODO revisit for humanization during leap years
-                    self_months = self._datetime.year * 12 + self._datetime.month
-                    other_months = dt.year * 12 + dt.month
-
-                    months = sign * max(abs(other_months - self_months), 2)
-
-                    return locale.describe(
-                        "months", months, only_distance=only_distance
-                    )
-
                 elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
+
                 else:
                     years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
                     return locale.describe("years", years, only_distance=only_distance)
