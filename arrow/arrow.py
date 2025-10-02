@@ -550,14 +550,14 @@ class Arrow:
             (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
 
         """
-        if not 1 <= week_start <= 7:
-            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
         if frame_absolute == "week":
+            if not 1 <= week_start <= 7:
+                raise ValueError("week_start argument must be between 1 and 7.")
             attr = "day"
         elif frame_absolute == "quarter":
             attr = "month"
@@ -595,39 +595,49 @@ class Arrow:
 
         return floor, ceil
 
-    def floor(self, frame: _T_FRAMES) -> "Arrow":
+    def floor(self, frame: _T_FRAMES, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the first element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Usage::
 
             >>> arrow.utcnow().floor('hour')
             <Arrow [2013-05-09T03:00:00+00:00]>
 
+            >>> arrow.utcnow().floor('week', week_start=7)
+            <Arrow [2021-02-21T00:00:00+00:00]>
+
         """
 
-        return self.span(frame)[0]
+        return self.span(frame, **kwargs)[0]
 
-    def ceil(self, frame: _T_FRAMES) -> "Arrow":
+    def ceil(self, frame: _T_FRAMES, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the second element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Usage::
 
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
 
+            >>> arrow.utcnow().ceil('week', week_start=7)
+            <Arrow [2021-02-27T23:59:59.999999+00:00]>
+
         """
 
-        return self.span(frame)[1]
+        return self.span(frame, **kwargs)[1]
 
     @classmethod
     def span_range(
