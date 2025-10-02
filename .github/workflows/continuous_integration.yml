@@ -50,6 +50,11 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           file: coverage.xml
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   linting:
     name: Linting

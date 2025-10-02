@@ -1727,6 +1727,162 @@ class TestArrowSpan:
         assert floor == self.arrow.floor("month")
         assert ceil == self.arrow.ceil("month")
 
+    def test_floor_week_start(self):
+        """
+        Test floor method with week_start parameter for different week starts.
+        """
+        # Test with default week_start=1 (Monday)
+        floor_default = self.arrow.floor("week")
+        floor_span_default, _ = self.arrow.span("week")
+        assert floor_default == floor_span_default
+
+        # Test with week_start=1 (Monday) - explicit
+        floor_monday = self.arrow.floor("week", week_start=1)
+        floor_span_monday, _ = self.arrow.span("week", week_start=1)
+        assert floor_monday == floor_span_monday
+
+        # Test with week_start=7 (Sunday)
+        floor_sunday = self.arrow.floor("week", week_start=7)
+        floor_span_sunday, _ = self.arrow.span("week", week_start=7)
+        assert floor_sunday == floor_span_sunday
+
+        # Test with week_start=6 (Saturday)
+        floor_saturday = self.arrow.floor("week", week_start=6)
+        floor_span_saturday, _ = self.arrow.span("week", week_start=6)
+        assert floor_saturday == floor_span_saturday
+
+        # Test with week_start=2 (Tuesday)
+        floor_tuesday = self.arrow.floor("week", week_start=2)
+        floor_span_tuesday, _ = self.arrow.span("week", week_start=2)
+        assert floor_tuesday == floor_span_tuesday
+
+    def test_ceil_week_start(self):
+        """
+        Test ceil method with week_start parameter for different week starts.
+        """
+        # Test with default week_start=1 (Monday)
+        ceil_default = self.arrow.ceil("week")
+        _, ceil_span_default = self.arrow.span("week")
+        assert ceil_default == ceil_span_default
+
+        # Test with week_start=1 (Monday) - explicit
+        ceil_monday = self.arrow.ceil("week", week_start=1)
+        _, ceil_span_monday = self.arrow.span("week", week_start=1)
+        assert ceil_monday == ceil_span_monday
+
+        # Test with week_start=7 (Sunday)
+        ceil_sunday = self.arrow.ceil("week", week_start=7)
+        _, ceil_span_sunday = self.arrow.span("week", week_start=7)
+        assert ceil_sunday == ceil_span_sunday
+
+        # Test with week_start=6 (Saturday)
+        ceil_saturday = self.arrow.ceil("week", week_start=6)
+        _, ceil_span_saturday = self.arrow.span("week", week_start=6)
+        assert ceil_saturday == ceil_span_saturday
+
+        # Test with week_start=2 (Tuesday)
+        ceil_tuesday = self.arrow.ceil("week", week_start=2)
+        _, ceil_span_tuesday = self.arrow.span("week", week_start=2)
+        assert ceil_tuesday == ceil_span_tuesday
+
+    def test_floor_ceil_week_start_values(self):
+        """
+        Test specific date values for floor and ceil with different week_start values.
+        The test arrow is 2013-02-15 (Friday, isoweekday=5).
+        """
+        # Test Monday start (week_start=1)
+        # Friday should floor to previous Monday (2013-02-11)
+        floor_mon = self.arrow.floor("week", week_start=1)
+        assert floor_mon == datetime(2013, 2, 11, tzinfo=tz.tzutc())
+        # Friday should ceil to next Sunday (2013-02-17)
+        ceil_mon = self.arrow.ceil("week", week_start=1)
+        assert ceil_mon == datetime(2013, 2, 17, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+
+        # Test Sunday start (week_start=7)
+        # Friday should floor to previous Sunday (2013-02-10)
+        floor_sun = self.arrow.floor("week", week_start=7)
+        assert floor_sun == datetime(2013, 2, 10, tzinfo=tz.tzutc())
+        # Friday should ceil to next Saturday (2013-02-16)
+        ceil_sun = self.arrow.ceil("week", week_start=7)
+        assert ceil_sun == datetime(2013, 2, 16, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+
+        # Test Saturday start (week_start=6)
+        # Friday should floor to previous Saturday (2013-02-09)
+        floor_sat = self.arrow.floor("week", week_start=6)
+        assert floor_sat == datetime(2013, 2, 9, tzinfo=tz.tzutc())
+        # Friday should ceil to next Friday (2013-02-15)
+        ceil_sat = self.arrow.ceil("week", week_start=6)
+        assert ceil_sat == datetime(2013, 2, 15, 23, 59, 59, 999999, tzinfo=tz.tzutc())
+
+    def test_floor_ceil_week_start_backward_compatibility(self):
+        """
+        Test that floor and ceil methods maintain backward compatibility
+        when called without the week_start parameter.
+        """
+        # Test that calling floor/ceil without parameters works the same as before
+        floor_old = self.arrow.floor("week")
+        floor_new = self.arrow.floor("week", week_start=1)  # default value
+        assert floor_old == floor_new
+
+        ceil_old = self.arrow.ceil("week")
+        ceil_new = self.arrow.ceil("week", week_start=1)  # default value
+        assert ceil_old == ceil_new
+
+    def test_floor_ceil_week_start_ignored_for_non_week_frames(self):
+        """
+        Test that week_start parameter is ignored for non-week frames.
+        """
+        # Test that week_start parameter is ignored for different frames
+        for frame in ["hour", "day", "month", "year"]:
+            # floor should work the same with or without week_start for non-week frames
+            floor_without = self.arrow.floor(frame)
+            floor_with = self.arrow.floor(frame, week_start=7)  # should be ignored
+            assert floor_without == floor_with
+
+            # ceil should work the same with or without week_start for non-week frames
+            ceil_without = self.arrow.ceil(frame)
+            ceil_with = self.arrow.ceil(frame, week_start=7)  # should be ignored
+            assert ceil_without == ceil_with
+
+    def test_floor_ceil_week_start_validation(self):
+        """
+        Test that week_start parameter validation works correctly for week frames.
+        """
+        # Valid values should work for week frames
+        for week_start in range(1, 8):
+            self.arrow.floor("week", week_start=week_start)
+            self.arrow.ceil("week", week_start=week_start)
+
+        # Invalid values should raise ValueError for week frames
+        with pytest.raises(
+            ValueError, match="week_start argument must be between 1 and 7"
+        ):
+            self.arrow.floor("week", week_start=0)
+
+        with pytest.raises(
+            ValueError, match="week_start argument must be between 1 and 7"
+        ):
+            self.arrow.floor("week", week_start=8)
+
+        with pytest.raises(
+            ValueError, match="week_start argument must be between 1 and 7"
+        ):
+            self.arrow.ceil("week", week_start=0)
+
+        with pytest.raises(
+            ValueError, match="week_start argument must be between 1 and 7"
+        ):
+            self.arrow.ceil("week", week_start=8)
+
+        # Invalid week_start values should be ignored for non-week frames (no validation)
+        # This ensures the parameter doesn't cause errors for other frames
+        for frame in ["hour", "day", "month", "year"]:
+            # These should not raise errors even though week_start is invalid
+            self.arrow.floor(frame, week_start=0)
+            self.arrow.floor(frame, week_start=8)
+            self.arrow.ceil(frame, week_start=0)
+            self.arrow.ceil(frame, week_start=8)
+
     def test_span_inclusive_inclusive(self):
         floor, ceil = self.arrow.span("hour", bounds="[]")
 
@@ -2058,25 +2214,15 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 weeks"
         assert later.humanize(self.now, only_distance=True) == "2 weeks"
 
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_month(self):
         later = self.now.shift(months=1)
 
-        # TODO this test now returns "4 weeks ago", we need to fix this to be correct on a per month basis
         assert self.now.humanize(later) == "a month ago"
         assert later.humanize(self.now) == "in a month"
 
         assert self.now.humanize(later, only_distance=True) == "a month"
         assert later.humanize(self.now, only_distance=True) == "a month"
 
-    def test_month_plus_4_days(self):
-        # TODO needed for coverage, remove when month limits are fixed
-        later = self.now.shift(months=1, days=4)
-
-        assert self.now.humanize(later) == "a month ago"
-        assert later.humanize(self.now) == "in a month"
-
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_months(self):
         later = self.now.shift(months=2)
         earlier = self.now.shift(months=-2)

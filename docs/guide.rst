@@ -303,6 +303,12 @@ Or just get the floor and ceiling:
     >>> arrow.utcnow().ceil('hour')
     <Arrow [2013-05-07T05:59:59.999999+00:00]>
 
+    >>> arrow.utcnow().floor('week', week_start=7)
+    <Arrow [2013-05-05T00:00:00+00:00]>
+
+    >>> arrow.utcnow().ceil('week', week_start=7)
+    <Arrow [2013-05-11T23:59:59.999999+00:00]>
+
 You can also get a range of time spans:
 
 .. code-block:: python
