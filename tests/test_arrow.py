@@ -2214,25 +2214,15 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 weeks"
         assert later.humanize(self.now, only_distance=True) == "2 weeks"
 
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_month(self):
         later = self.now.shift(months=1)
 
-        # TODO this test now returns "4 weeks ago", we need to fix this to be correct on a per month basis
         assert self.now.humanize(later) == "a month ago"
         assert later.humanize(self.now) == "in a month"
 
         assert self.now.humanize(later, only_distance=True) == "a month"
         assert later.humanize(self.now, only_distance=True) == "a month"
 
-    def test_month_plus_4_days(self):
-        # TODO needed for coverage, remove when month limits are fixed
-        later = self.now.shift(months=1, days=4)
-
-        assert self.now.humanize(later) == "a month ago"
-        assert later.humanize(self.now) == "in a month"
-
-    @pytest.mark.xfail(reason="known issue with humanize month limits")
     def test_months(self):
         later = self.now.shift(months=2)
         earlier = self.now.shift(months=-2)
