@@ -738,8 +738,8 @@ class Arrow:
         representing a series of intervals between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param start: A datetime expression, the start of the range.
-        :param end: (optional) A datetime expression, the end of the range.
+        :param start: A datetime or Arrow expression, the start of the range.
+        :param end: (optional) A datetime or Arrow expression, the end of the range.
         :param interval: (optional) Time interval for the given time frame.
         :param tz: (optional) A timezone expression.  Defaults to UTC.
         :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
