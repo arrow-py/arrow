@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.0 (2025-10-02)
+1.4.0 (2025-10-18)
 ------------------
 
 - [ADDED] Added ``week_start`` parameter to ``floor()`` and ``ceil()`` methods. `PR #1222 <https://github.com/arrow-py/arrow/pull/1222>`_
