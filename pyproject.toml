@@ -25,6 +25,8 @@ classifiers = [
 ]
 dependencies = [
     "python-dateutil>=2.7.0",
+    "backports.zoneinfo==0.2.1;python_version<'3.9'",
+    "tzdata;python_version>='3.9'",
 ]
 requires-python = ">=3.8"
 description = "Better dates & times for Python"
@@ -41,13 +43,12 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
-    "backports.zoneinfo==0.2.1;python_version<'3.9'",
     "dateparser==1.*",
     "pre-commit",
     "pytest",
     "pytest-cov",
     "pytest-mock",
-    "pytz==2021.1",
+    "pytz==2025.2",
     "simplejson==3.*",
 ]
 doc = [

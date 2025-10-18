@@ -1,10 +1,8 @@
 """Provides the :class:`Arrow <arrow.formatter.DateTimeFormatter>` class, an improved formatter for datetimes."""
 
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Final, Optional, Pattern, cast
-
-from dateutil import tz as dateutil_tz
 
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
@@ -17,6 +15,7 @@ FORMAT_RFC1036: Final[str] = "ddd, DD MMM YY HH:mm:ss Z"
 FORMAT_RFC1123: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_RFC2822: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_RFC3339: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
+FORMAT_RFC3339_STRICT: Final[str] = "YYYY-MM-DDTHH:mm:ssZZ"
 FORMAT_RSS: Final[str] = "ddd, DD MMM YYYY HH:mm:ss Z"
 FORMAT_W3C: Final[str] = "YYYY-MM-DD HH:mm:ssZZ"
 
@@ -121,7 +120,7 @@ class DateTimeFormatter:
 
         if token in ["ZZ", "Z"]:
             separator = ":" if token == "ZZ" else ""
-            tz = dateutil_tz.tzutc() if dt.tzinfo is None else dt.tzinfo
+            tz = timezone.utc if dt.tzinfo is None else dt.tzinfo
             # `dt` must be aware object. Otherwise, this line will raise AttributeError
             # https://github.com/arrow-py/arrow/pull/883#discussion_r529866834
             # datetime awareness: https://docs.python.org/3/library/datetime.html#aware-and-naive-objects

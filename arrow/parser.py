@@ -1,7 +1,7 @@
 """Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better way to parse datetime strings."""
 
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from functools import lru_cache
 from typing import (
@@ -23,7 +23,10 @@ from typing import (
     overload,
 )
 
-from dateutil import tz
+try:
+    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+except ImportError:
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[no-redef]
 
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
@@ -727,14 +730,14 @@ class DateTimeParser:
         timestamp = parts.get("timestamp")
 
         if timestamp is not None:
-            return datetime.fromtimestamp(timestamp, tz=tz.tzutc())
+            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
 
         expanded_timestamp = parts.get("expanded_timestamp")
 
         if expanded_timestamp is not None:
             return datetime.fromtimestamp(
                 normalize_timestamp(expanded_timestamp),
-                tz=tz.tzutc(),
+                tz=timezone.utc,
             )
 
         day_of_year = parts.get("day_of_year")
@@ -907,10 +910,10 @@ class TzinfoParser:
         tzinfo: Optional[dt_tzinfo] = None
 
         if tzinfo_string == "local":
-            tzinfo = tz.tzlocal()
+            tzinfo = datetime.now().astimezone().tzinfo
 
         elif tzinfo_string in ["utc", "UTC", "Z"]:
-            tzinfo = tz.tzutc()
+            tzinfo = timezone.utc
 
         else:
             iso_match = cls._TZINFO_RE.match(tzinfo_string)
@@ -925,10 +928,13 @@ class TzinfoParser:
                 if sign == "-":
                     seconds *= -1
 
-                tzinfo = tz.tzoffset(None, seconds)
+                tzinfo = timezone(timedelta(seconds=seconds))
 
             else:
-                tzinfo = tz.gettz(tzinfo_string)
+                try:
+                    tzinfo = ZoneInfo(tzinfo_string)
+                except ZoneInfoNotFoundError:
+                    tzinfo = None
 
         if tzinfo is None:
             raise ParserError(f"Could not parse timezone expression {tzinfo_string!r}.")

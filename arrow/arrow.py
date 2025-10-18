@@ -123,6 +123,7 @@ class Arrow:
     ]
     _ATTRS_PLURAL: Final[List[str]] = [f"{a}s" for a in _ATTRS]
     _MONTHS_PER_QUARTER: Final[int] = 3
+    _MONTHS_PER_YEAR: Final[int] = 12
     _SECS_PER_MINUTE: Final[int] = 60
     _SECS_PER_HOUR: Final[int] = 60 * 60
     _SECS_PER_DAY: Final[int] = 60 * 60 * 24
@@ -157,7 +158,7 @@ class Arrow:
         **kwargs: Any,
     ) -> None:
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+            tzinfo = timezone.utc
         # detect that tzinfo is a pytz object (issue #626)
         elif (
             isinstance(tzinfo, dt_tzinfo)
@@ -192,7 +193,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
 
         dt = dt_datetime.now(tzinfo)
 
@@ -220,7 +221,7 @@ class Arrow:
 
         """
 
-        dt = dt_datetime.now(dateutil_tz.tzutc())
+        dt = dt_datetime.now(timezone.utc)
 
         return cls(
             dt.year,
@@ -249,7 +250,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzlocal()
+            tzinfo = dt_datetime.now().astimezone().tzinfo
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
@@ -283,7 +284,7 @@ class Arrow:
             raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
 
         timestamp = util.normalize_timestamp(float(timestamp))
-        dt = dt_datetime.utcfromtimestamp(timestamp)
+        dt = dt_datetime.fromtimestamp(timestamp, timezone.utc)
 
         return cls(
             dt.year,
@@ -293,7 +294,7 @@ class Arrow:
             dt.minute,
             dt.second,
             dt.microsecond,
-            dateutil_tz.tzutc(),
+            timezone.utc,
             fold=getattr(dt, "fold", 0),
         )
 
@@ -317,7 +318,7 @@ class Arrow:
 
         if tzinfo is None:
             if dt.tzinfo is None:
-                tzinfo = dateutil_tz.tzutc()
+                tzinfo = timezone.utc
             else:
                 tzinfo = dt.tzinfo
 
@@ -344,7 +345,7 @@ class Arrow:
         """
 
         if tzinfo is None:
-            tzinfo = dateutil_tz.tzutc()
+            tzinfo = timezone.utc
 
         return cls(date.year, date.month, date.day, tzinfo=tzinfo)
 
@@ -549,14 +550,14 @@ class Arrow:
             (<Arrow [2021-02-20T00:00:00+00:00]>, <Arrow [2021-02-26T23:59:59.999999+00:00]>)
 
         """
-        if not 1 <= week_start <= 7:
-            raise ValueError("week_start argument must be between 1 and 7.")
 
         util.validate_bounds(bounds)
 
         frame_absolute, frame_relative, relative_steps = self._get_frames(frame)
 
         if frame_absolute == "week":
+            if not 1 <= week_start <= 7:
+                raise ValueError("week_start argument must be between 1 and 7.")
             attr = "day"
         elif frame_absolute == "quarter":
             attr = "month"
@@ -594,39 +595,49 @@ class Arrow:
 
         return floor, ceil
 
-    def floor(self, frame: _T_FRAMES) -> "Arrow":
+    def floor(self, frame: _T_FRAMES, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "floor"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the first element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Usage::
 
             >>> arrow.utcnow().floor('hour')
             <Arrow [2013-05-09T03:00:00+00:00]>
 
+            >>> arrow.utcnow().floor('week', week_start=7)
+            <Arrow [2021-02-21T00:00:00+00:00]>
+
         """
 
-        return self.span(frame)[0]
+        return self.span(frame, **kwargs)[0]
 
-    def ceil(self, frame: _T_FRAMES) -> "Arrow":
+    def ceil(self, frame: _T_FRAMES, **kwargs: Any) -> "Arrow":
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, representing the "ceiling"
         of the timespan of the :class:`Arrow <arrow.arrow.Arrow>` object in a given timeframe.
         Equivalent to the second element in the 2-tuple returned by
         :func:`span <arrow.arrow.Arrow.span>`.
 
         :param frame: the timeframe.  Can be any ``datetime`` property (day, hour, minute...).
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Usage::
 
             >>> arrow.utcnow().ceil('hour')
             <Arrow [2013-05-09T03:59:59.999999+00:00]>
 
+            >>> arrow.utcnow().ceil('week', week_start=7)
+            <Arrow [2021-02-27T23:59:59.999999+00:00]>
+
         """
 
-        return self.span(frame)[1]
+        return self.span(frame, **kwargs)[1]
 
     @classmethod
     def span_range(
@@ -1164,7 +1175,7 @@ class Arrow:
         locale = locales.get_locale(locale)
 
         if other is None:
-            utc = dt_datetime.now(timezone.utc).replace(tzinfo=dateutil_tz.tzutc())
+            utc = dt_datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
             dt = utc.astimezone(self._datetime.tzinfo)
 
         elif isinstance(other, Arrow):
@@ -1202,6 +1213,7 @@ class Arrow:
 
                 elif diff < self._SECS_PER_MINUTE * 2:
                     return locale.describe("minute", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_HOUR:
                     minutes = sign * max(delta_second // self._SECS_PER_MINUTE, 2)
                     return locale.describe(
@@ -1210,36 +1222,54 @@ class Arrow:
 
                 elif diff < self._SECS_PER_HOUR * 2:
                     return locale.describe("hour", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_DAY:
                     hours = sign * max(delta_second // self._SECS_PER_HOUR, 2)
                     return locale.describe("hours", hours, only_distance=only_distance)
-                elif diff < self._SECS_PER_DAY * 2:
+
+                calendar_diff = (
+                    relativedelta(dt, self._datetime)
+                    if self._datetime < dt
+                    else relativedelta(self._datetime, dt)
+                )
+                calendar_months = (
+                    calendar_diff.years * self._MONTHS_PER_YEAR + calendar_diff.months
+                )
+
+                # For months, if more than 2 weeks, count as a full month
+                if calendar_diff.days > 14:
+                    calendar_months += 1
+
+                calendar_months = min(calendar_months, self._MONTHS_PER_YEAR)
+
+                if diff < self._SECS_PER_DAY * 2:
                     return locale.describe("day", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_WEEK:
                     days = sign * max(delta_second // self._SECS_PER_DAY, 2)
                     return locale.describe("days", days, only_distance=only_distance)
 
+                elif calendar_months >= 1 and diff < self._SECS_PER_YEAR:
+                    if calendar_months == 1:
+                        return locale.describe(
+                            "month", sign, only_distance=only_distance
+                        )
+                    else:
+                        months = sign * calendar_months
+                        return locale.describe(
+                            "months", months, only_distance=only_distance
+                        )
+
                 elif diff < self._SECS_PER_WEEK * 2:
                     return locale.describe("week", sign, only_distance=only_distance)
+
                 elif diff < self._SECS_PER_MONTH:
                     weeks = sign * max(delta_second // self._SECS_PER_WEEK, 2)
                     return locale.describe("weeks", weeks, only_distance=only_distance)
 
-                elif diff < self._SECS_PER_MONTH * 2:
-                    return locale.describe("month", sign, only_distance=only_distance)
-                elif diff < self._SECS_PER_YEAR:
-                    # TODO revisit for humanization during leap years
-                    self_months = self._datetime.year * 12 + self._datetime.month
-                    other_months = dt.year * 12 + dt.month
-
-                    months = sign * max(abs(other_months - self_months), 2)
-
-                    return locale.describe(
-                        "months", months, only_distance=only_distance
-                    )
-
                 elif diff < self._SECS_PER_YEAR * 2:
                     return locale.describe("year", sign, only_distance=only_distance)
+
                 else:
                     years = sign * max(delta_second // self._SECS_PER_YEAR, 2)
                     return locale.describe("years", years, only_distance=only_distance)
@@ -1805,7 +1835,7 @@ class Arrow:
     def _get_tzinfo(tz_expr: Optional[TZ_EXPR]) -> dt_tzinfo:
         """Get normalized tzinfo object from various inputs."""
         if tz_expr is None:
-            return dateutil_tz.tzutc()
+            return timezone.utc
         if isinstance(tz_expr, dt_tzinfo):
             return tz_expr
         else:
