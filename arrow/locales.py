@@ -1619,6 +1619,8 @@ class AfrikaansLocale(Locale):
         "hours": "{0} ure",
         "day": "een dag",
         "days": "{0} dae",
+        "week": "een week",
+        "weeks": "{0} weke",
         "month": "een maand",
         "months": "{0} maande",
         "year": "een jaar",
