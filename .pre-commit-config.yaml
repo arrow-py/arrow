@@ -2,7 +2,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-ast
       - id: check-yaml
@@ -12,17 +12,15 @@ repos:
       - id: check-builtin-literals
       - id: debug-statements
       - id: end-of-file-fixer
-      - id: fix-encoding-pragma
-        args: [--remove]
       - id: requirements-txt-fixer
         args: [requirements/requirements.txt, requirements/requirements-docs.txt, requirements/requirements-tests.txt]
       - id: trailing-whitespace
   - repo: https://github.com/timothycrosley/isort
-    rev: 5.13.2
+    rev: 7.0.0
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.16.0
+    rev: v3.21.0
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -38,17 +36,17 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 25.9.0
     hooks:
       - id: black
         args: [--safe, --quiet, --target-version=py36]
   - repo: https://github.com/pycqa/flake8
-    rev: 6.1.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         additional_dependencies: [flake8-bugbear,flake8-annotations]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+    rev: v1.18.2
     hooks:
       - id: mypy
         additional_dependencies: [types-python-dateutil]

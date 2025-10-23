@@ -18,7 +18,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.14"
       - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
