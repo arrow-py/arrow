@@ -3740,3 +3740,46 @@ class TestVietnameseLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("một giờ", "hour", 1) == "một giờ nữa"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestCatalanLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "Ara mateix"
+        assert self.locale._format_timeframe("second", 1) == "un segon"
+        assert self.locale._format_timeframe("minute", 1) == "un minut"
+        assert self.locale._format_timeframe("hour", 1) == "una hora"
+        assert self.locale._format_timeframe("day", 1) == "un dia"
+        assert self.locale._format_timeframe("week", 1) == "una setmana"
+        assert self.locale._format_timeframe("month", 1) == "un mes"
+        assert self.locale._format_timeframe("year", 1) == "un any"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 segons"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minuts"
+        assert self.locale._format_timeframe("hours", 2) == "2 hores"
+        assert self.locale._format_timeframe("days", 2) == "2 dies"
+        assert self.locale._format_timeframe("week", 2) == "2 setmanes"
+        assert self.locale._format_timeframe("months", 2) == "2 mesos"
+        assert self.locale._format_timeframe("years", 2) == "2 anys"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 segons"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minuts"
+        assert self.locale._format_timeframe("hours", 5) == "5 hores"
+        assert self.locale._format_timeframe("days", 5) == "5 dies"
+        assert self.locale._format_timeframe("week", 5) == "5 setmanes"
+        assert self.locale._format_timeframe("months", 5) == "5 mesos"
+        assert self.locale._format_timeframe("years", 5) == "5 anys"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "dissabte"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "ds."
+
+        assert self.locale.month_name(dt.month) == "abril"
+        assert self.locale.month_abbreviation(dt.month) == "abr."
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("una hora", "hour", -1) == "Fa una hora"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("una hora", "hour", 1) == "En una hora"
