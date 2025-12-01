@@ -3574,3 +3574,46 @@ class TestMoroccoArabicLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.month_name(dt.month) == "أبريل"
         assert self.locale.month_abbreviation(dt.month) == "أبريل"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestRomanshLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "en quest mument"
+        assert self.locale._format_timeframe("second", 1) == "in secunda"
+        assert self.locale._format_timeframe("minute", 1) == "ina minuta"
+        assert self.locale._format_timeframe("hour", 1) == "in'ura"
+        assert self.locale._format_timeframe("day", 1) == "in di"
+        assert self.locale._format_timeframe("week", 1) == "in'emna"
+        assert self.locale._format_timeframe("month", 1) == "in mais"
+        assert self.locale._format_timeframe("year", 1) == "in onn"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 secundas"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutas"
+        assert self.locale._format_timeframe("hours", 2) == "2 ura"
+        assert self.locale._format_timeframe("days", 2) == "2 dis"
+        assert self.locale._format_timeframe("week", 2) == "2 emnas"
+        assert self.locale._format_timeframe("months", 2) == "2 mais"
+        assert self.locale._format_timeframe("years", 2) == "2 onns"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 secundas"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutas"
+        assert self.locale._format_timeframe("hours", 5) == "5 ura"
+        assert self.locale._format_timeframe("days", 5) == "5 dis"
+        assert self.locale._format_timeframe("week", 5) == "5 emnas"
+        assert self.locale._format_timeframe("months", 5) == "5 mais"
+        assert self.locale._format_timeframe("years", 5) == "5 onns"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "sonda"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "so"
+
+        assert self.locale.month_name(dt.month) == "avrigl"
+        assert self.locale.month_abbreviation(dt.month) == "avr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("in'ura", "hour", -1) == "avant in'ura"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("in'ura", "hour", 1) == "en in'ura"
