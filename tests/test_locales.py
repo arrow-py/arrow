@@ -3402,3 +3402,43 @@ class TestGreekLocale:
         assert self.locale._format_timeframe("seconds", 3) == "3 δευτερόλεπτα"
         assert self.locale._format_timeframe("day", 1) == "μία ημέρα"
         assert self.locale._format_timeframe("days", 6) == "6 ημέρες"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAfrikaansLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "nou"
+        assert self.locale._format_timeframe("second", 1) == "n sekonde"
+        assert self.locale._format_timeframe("minute", 1) == "minuut"
+        assert self.locale._format_timeframe("hour", 1) == "uur"
+        assert self.locale._format_timeframe("day", 1) == "een dag"
+        assert self.locale._format_timeframe("month", 1) == "een maand"
+        assert self.locale._format_timeframe("year", 1) == "een jaar"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekondes"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minute"
+        assert self.locale._format_timeframe("hours", 2) == "2 ure"
+        assert self.locale._format_timeframe("days", 2) == "2 dae"
+        assert self.locale._format_timeframe("months", 2) == "2 maande"
+        assert self.locale._format_timeframe("years", 2) == "2 jaar"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekondes"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minute"
+        assert self.locale._format_timeframe("hours", 5) == "5 ure"
+        assert self.locale._format_timeframe("days", 5) == "5 dae"
+        assert self.locale._format_timeframe("months", 5) == "5 maande"
+        assert self.locale._format_timeframe("years", 5) == "5 jaar"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Saterdag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Za"
+
+        assert self.locale.month_name(dt.month) == "April"
+        assert self.locale.month_abbreviation(dt.month) == "Apr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("uur", "hour", -1) == "uur gelede"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("uur", "hour", 1) == "in uur"
