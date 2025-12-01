@@ -3550,3 +3550,11 @@ class TestBelarusianLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("гадзіну", "hour", 1) == "праз гадзіну"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLevantArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "نيسان"
+        assert self.locale.month_abbreviation(dt.month) == "نيسان"
