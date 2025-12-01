@@ -3697,3 +3697,46 @@ class TestUkrainianLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("годину", "hour", 1) == "за годину"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestVietnameseLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "hiện tại"
+        assert self.locale._format_timeframe("second", 1) == "một giây"
+        assert self.locale._format_timeframe("minute", 1) == "một phút"
+        assert self.locale._format_timeframe("hour", 1) == "một giờ"
+        assert self.locale._format_timeframe("day", 1) == "một ngày"
+        assert self.locale._format_timeframe("week", 1) == "một tuần"
+        assert self.locale._format_timeframe("month", 1) == "một tháng"
+        assert self.locale._format_timeframe("year", 1) == "một năm"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 giây"
+        assert self.locale._format_timeframe("minutes", 2) == "2 phút"
+        assert self.locale._format_timeframe("hours", 2) == "2 giờ"
+        assert self.locale._format_timeframe("days", 2) == "2 ngày"
+        assert self.locale._format_timeframe("weeks", 2) == "2 tuần"
+        assert self.locale._format_timeframe("months", 2) == "2 tháng"
+        assert self.locale._format_timeframe("years", 2) == "2 năm"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 giây"
+        assert self.locale._format_timeframe("minutes", 5) == "5 phút"
+        assert self.locale._format_timeframe("hours", 5) == "5 giờ"
+        assert self.locale._format_timeframe("days", 5) == "5 ngày"
+        assert self.locale._format_timeframe("weeks", 5) == "5 tuần"
+        assert self.locale._format_timeframe("months", 5) == "5 tháng"
+        assert self.locale._format_timeframe("years", 5) == "5 năm"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Thứ Bảy"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Thứ 7"
+
+        assert self.locale.month_name(dt.month) == "Tháng Tư"
+        assert self.locale.month_abbreviation(dt.month) == "Tháng 4"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("một giờ", "hour", -1) == "một giờ trước"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("một giờ", "hour", 1) == "một giờ nữa"
