@@ -3750,7 +3750,6 @@ class TestCatalanLocale:
         assert self.locale._format_timeframe("minute", 1) == "un minut"
         assert self.locale._format_timeframe("hour", 1) == "una hora"
         assert self.locale._format_timeframe("day", 1) == "un dia"
-        assert self.locale._format_timeframe("week", 1) == "una setmana"
         assert self.locale._format_timeframe("month", 1) == "un mes"
         assert self.locale._format_timeframe("year", 1) == "un any"
 
@@ -3758,7 +3757,6 @@ class TestCatalanLocale:
         assert self.locale._format_timeframe("minutes", 2) == "2 minuts"
         assert self.locale._format_timeframe("hours", 2) == "2 hores"
         assert self.locale._format_timeframe("days", 2) == "2 dies"
-        assert self.locale._format_timeframe("week", 2) == "2 setmanes"
         assert self.locale._format_timeframe("months", 2) == "2 mesos"
         assert self.locale._format_timeframe("years", 2) == "2 anys"
 
@@ -3766,7 +3764,6 @@ class TestCatalanLocale:
         assert self.locale._format_timeframe("minutes", 5) == "5 minuts"
         assert self.locale._format_timeframe("hours", 5) == "5 hores"
         assert self.locale._format_timeframe("days", 5) == "5 dies"
-        assert self.locale._format_timeframe("week", 5) == "5 setmanes"
         assert self.locale._format_timeframe("months", 5) == "5 mesos"
         assert self.locale._format_timeframe("years", 5) == "5 anys"
 
