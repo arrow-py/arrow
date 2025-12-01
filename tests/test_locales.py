@@ -3617,3 +3617,43 @@ class TestRomanshLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("in'ura", "hour", 1) == "en in'ura"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestSlovenianLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "zdaj"
+        assert self.locale._format_timeframe("second", 1) == "sekundo"
+        assert self.locale._format_timeframe("minute", 1) == "minuta"
+        assert self.locale._format_timeframe("hour", 1) == "uro"
+        assert self.locale._format_timeframe("day", 1) == "dan"
+        assert self.locale._format_timeframe("month", 1) == "mesec"
+        assert self.locale._format_timeframe("year", 1) == "leto"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekund"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutami"
+        assert self.locale._format_timeframe("hours", 2) == "2 ur"
+        assert self.locale._format_timeframe("days", 2) == "2 dni"
+        assert self.locale._format_timeframe("months", 2) == "2 mesecev"
+        assert self.locale._format_timeframe("years", 2) == "2 let"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekund"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutami"
+        assert self.locale._format_timeframe("hours", 5) == "5 ur"
+        assert self.locale._format_timeframe("days", 5) == "5 dni"
+        assert self.locale._format_timeframe("months", 5) == "5 mesecev"
+        assert self.locale._format_timeframe("years", 5) == "5 let"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Sobota"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sob"
+
+        assert self.locale.month_name(dt.month) == "April"
+        assert self.locale.month_abbreviation(dt.month) == "Apr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("in'ura", "hour", -1) == "pred in'ura"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("in'ura", "hour", 1) == "čez in'ura"
