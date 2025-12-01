@@ -3470,3 +3470,43 @@ class TestAustrianLocale:
 
         assert self.locale.month_name(dt.month) == "Jänner"
         assert self.locale.month_abbreviation(dt.month) == "Jan"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestBasqueLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "Orain"
+        assert self.locale._format_timeframe("second", 1) == "segundo bat"
+        assert self.locale._format_timeframe("minute", 1) == "minutu bat"
+        assert self.locale._format_timeframe("hour", 1) == "ordu bat"
+        assert self.locale._format_timeframe("day", 1) == "egun bat"
+        assert self.locale._format_timeframe("month", 1) == "hilabete bat"
+        assert self.locale._format_timeframe("year", 1) == "urte bat"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 segundu"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutu"
+        assert self.locale._format_timeframe("hours", 2) == "2 ordu"
+        assert self.locale._format_timeframe("days", 2) == "2 egun"
+        assert self.locale._format_timeframe("months", 2) == "2 hilabet"
+        assert self.locale._format_timeframe("years", 2) == "2 urte"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 segundu"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutu"
+        assert self.locale._format_timeframe("hours", 5) == "5 ordu"
+        assert self.locale._format_timeframe("days", 5) == "5 egun"
+        assert self.locale._format_timeframe("months", 5) == "5 hilabet"
+        assert self.locale._format_timeframe("years", 5) == "5 urte"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "larunbata"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "lr"
+
+        assert self.locale.month_name(dt.month) == "apirilak"
+        assert self.locale.month_abbreviation(dt.month) == "api"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("ordu bat", "hour", -1) == "duela ordu bat"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("ordu bat", "hour", 1) == "ordu bat"
