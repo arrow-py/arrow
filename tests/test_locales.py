@@ -3566,3 +3566,11 @@ class TestMauritaniaArabicLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.month_name(dt.month) == "إبريل"
         assert self.locale.month_abbreviation(dt.month) == "إبريل"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestMoroccoArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "أبريل"
+        assert self.locale.month_abbreviation(dt.month) == "أبريل"
