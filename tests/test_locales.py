@@ -3459,3 +3459,14 @@ class TestAlgeriaTunisiaArabicLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("ساعة", "hour", 1) == "خلال ساعة"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAustrianLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 1, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Sonntag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "So"
+
+        assert self.locale.month_name(dt.month) == "Jänner"
+        assert self.locale.month_abbreviation(dt.month) == "Jan"
