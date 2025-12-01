@@ -3442,3 +3442,20 @@ class TestAfrikaansLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("uur", "hour", 1) == "in uur"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAlgeriaTunisiaArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "السبت"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "سبت"
+
+        assert self.locale.month_name(dt.month) == "أفريل"
+        assert self.locale.month_abbreviation(dt.month) == "أفريل"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("ساعة", "hour", -1) == "منذ ساعة"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("ساعة", "hour", 1) == "خلال ساعة"
