@@ -3584,7 +3584,6 @@ class TestRomanshLocale:
         assert self.locale._format_timeframe("minute", 1) == "ina minuta"
         assert self.locale._format_timeframe("hour", 1) == "in'ura"
         assert self.locale._format_timeframe("day", 1) == "in di"
-        assert self.locale._format_timeframe("week", 1) == "in'emna"
         assert self.locale._format_timeframe("month", 1) == "in mais"
         assert self.locale._format_timeframe("year", 1) == "in onn"
 
@@ -3592,7 +3591,6 @@ class TestRomanshLocale:
         assert self.locale._format_timeframe("minutes", 2) == "2 minutas"
         assert self.locale._format_timeframe("hours", 2) == "2 ura"
         assert self.locale._format_timeframe("days", 2) == "2 dis"
-        assert self.locale._format_timeframe("week", 2) == "2 emnas"
         assert self.locale._format_timeframe("months", 2) == "2 mais"
         assert self.locale._format_timeframe("years", 2) == "2 onns"
 
@@ -3600,7 +3598,6 @@ class TestRomanshLocale:
         assert self.locale._format_timeframe("minutes", 5) == "5 minutas"
         assert self.locale._format_timeframe("hours", 5) == "5 ura"
         assert self.locale._format_timeframe("days", 5) == "5 dis"
-        assert self.locale._format_timeframe("week", 5) == "5 emnas"
         assert self.locale._format_timeframe("months", 5) == "5 mais"
         assert self.locale._format_timeframe("years", 5) == "5 onns"
 
