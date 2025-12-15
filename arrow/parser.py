@@ -26,7 +26,7 @@ from typing import (
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 except ImportError:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[no-redef]
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[import-not-found, no-redef]
 
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE

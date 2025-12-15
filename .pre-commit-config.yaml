@@ -20,7 +20,7 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -36,7 +36,7 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/psf/black
-    rev: 25.9.0
+    rev: 25.12.0
     hooks:
       - id: black
         args: [--safe, --quiet, --target-version=py36]
@@ -46,7 +46,8 @@ repos:
       - id: flake8
         additional_dependencies: [flake8-bugbear,flake8-annotations]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.18.2
+    rev: v1.19.0
     hooks:
       - id: mypy
+        args: [--cache-fine-grained, --show-error-codes]
         additional_dependencies: [types-python-dateutil]
