@@ -26,7 +26,7 @@ from typing import (
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 except ImportError:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[no-redef]
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[import-not-found, no-redef]
 
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
@@ -554,8 +554,7 @@ class DateTimeParser:
         ],
         value: Union[str, bytes, SupportsInt, bytearray],
         parts: _Parts,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -563,8 +562,7 @@ class DateTimeParser:
         token: Literal["X"],
         value: Union[str, bytes, SupportsFloat, bytearray],
         parts: _Parts,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -572,8 +570,7 @@ class DateTimeParser:
         token: Literal["MMMM", "MMM", "dddd", "ddd", "S"],
         value: Union[str, bytes, bytearray],
         parts: _Parts,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -581,8 +578,7 @@ class DateTimeParser:
         token: Literal["a", "A", "ZZZ", "ZZ", "Z"],
         value: Union[str, bytes],
         parts: _Parts,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     @overload
     def _parse_token(
@@ -590,8 +586,7 @@ class DateTimeParser:
         token: Literal["W"],
         value: Tuple[_WEEKDATE_ELEMENT, _WEEKDATE_ELEMENT, Optional[_WEEKDATE_ELEMENT]],
         parts: _Parts,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     def _parse_token(
         self,
