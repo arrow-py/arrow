@@ -3402,3 +3402,378 @@ class TestGreekLocale:
         assert self.locale._format_timeframe("seconds", 3) == "3 δευτερόλεπτα"
         assert self.locale._format_timeframe("day", 1) == "μία ημέρα"
         assert self.locale._format_timeframe("days", 6) == "6 ημέρες"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAfrikaansLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "nou"
+        assert self.locale._format_timeframe("second", 1) == "n sekonde"
+        assert self.locale._format_timeframe("minute", 1) == "minuut"
+        assert self.locale._format_timeframe("hour", 1) == "uur"
+        assert self.locale._format_timeframe("day", 1) == "een dag"
+        assert self.locale._format_timeframe("month", 1) == "een maand"
+        assert self.locale._format_timeframe("year", 1) == "een jaar"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekondes"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minute"
+        assert self.locale._format_timeframe("hours", 2) == "2 ure"
+        assert self.locale._format_timeframe("days", 2) == "2 dae"
+        assert self.locale._format_timeframe("months", 2) == "2 maande"
+        assert self.locale._format_timeframe("years", 2) == "2 jaar"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekondes"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minute"
+        assert self.locale._format_timeframe("hours", 5) == "5 ure"
+        assert self.locale._format_timeframe("days", 5) == "5 dae"
+        assert self.locale._format_timeframe("months", 5) == "5 maande"
+        assert self.locale._format_timeframe("years", 5) == "5 jaar"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Saterdag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Za"
+
+        assert self.locale.month_name(dt.month) == "April"
+        assert self.locale.month_abbreviation(dt.month) == "Apr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("uur", "hour", -1) == "uur gelede"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("uur", "hour", 1) == "in uur"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAlgeriaTunisiaArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "السبت"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "سبت"
+
+        assert self.locale.month_name(dt.month) == "أفريل"
+        assert self.locale.month_abbreviation(dt.month) == "أفريل"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("ساعة", "hour", -1) == "منذ ساعة"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("ساعة", "hour", 1) == "خلال ساعة"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestAustrianLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 1, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Sonntag"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "So"
+
+        assert self.locale.month_name(dt.month) == "Jänner"
+        assert self.locale.month_abbreviation(dt.month) == "Jan"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestBasqueLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "Orain"
+        assert self.locale._format_timeframe("second", 1) == "segundo bat"
+        assert self.locale._format_timeframe("minute", 1) == "minutu bat"
+        assert self.locale._format_timeframe("hour", 1) == "ordu bat"
+        assert self.locale._format_timeframe("day", 1) == "egun bat"
+        assert self.locale._format_timeframe("month", 1) == "hilabete bat"
+        assert self.locale._format_timeframe("year", 1) == "urte bat"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 segundu"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutu"
+        assert self.locale._format_timeframe("hours", 2) == "2 ordu"
+        assert self.locale._format_timeframe("days", 2) == "2 egun"
+        assert self.locale._format_timeframe("months", 2) == "2 hilabet"
+        assert self.locale._format_timeframe("years", 2) == "2 urte"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 segundu"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutu"
+        assert self.locale._format_timeframe("hours", 5) == "5 ordu"
+        assert self.locale._format_timeframe("days", 5) == "5 egun"
+        assert self.locale._format_timeframe("months", 5) == "5 hilabet"
+        assert self.locale._format_timeframe("years", 5) == "5 urte"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "larunbata"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "lr"
+
+        assert self.locale.month_name(dt.month) == "apirilak"
+        assert self.locale.month_abbreviation(dt.month) == "api"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("ordu bat", "hour", -1) == "duela ordu bat"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("ordu bat", "hour", 1) == "ordu bat"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestBelarusianLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "зараз"
+        assert self.locale._format_timeframe("second", 1) == "секунду"
+        assert self.locale._format_timeframe("minute", 1) == "хвіліну"
+        assert self.locale._format_timeframe("hour", 1) == "гадзіну"
+        assert self.locale._format_timeframe("day", 1) == "дзень"
+        assert self.locale._format_timeframe("month", 1) == "месяц"
+        assert self.locale._format_timeframe("year", 1) == "год"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 некалькі секунд"
+        assert self.locale._format_timeframe("minutes", 2) == "2 хвіліны"
+        assert self.locale._format_timeframe("hours", 2) == "2 гадзіны"
+        assert self.locale._format_timeframe("days", 2) == "2 дні"
+        assert self.locale._format_timeframe("months", 2) == "2 месяцы"
+        assert self.locale._format_timeframe("years", 2) == "2 гады"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 некалькі секунд"
+        assert self.locale._format_timeframe("minutes", 5) == "5 хвілін"
+        assert self.locale._format_timeframe("hours", 5) == "5 гадзін"
+        assert self.locale._format_timeframe("days", 5) == "5 дзён"
+        assert self.locale._format_timeframe("months", 5) == "5 месяцаў"
+        assert self.locale._format_timeframe("years", 5) == "5 гадоў"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "субота"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "сб"
+
+        assert self.locale.month_name(dt.month) == "красавіка"
+        assert self.locale.month_abbreviation(dt.month) == "крас"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("гадзіну", "hour", -1) == "гадзіну таму"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("гадзіну", "hour", 1) == "праз гадзіну"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestLevantArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "نيسان"
+        assert self.locale.month_abbreviation(dt.month) == "نيسان"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestMauritaniaArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "إبريل"
+        assert self.locale.month_abbreviation(dt.month) == "إبريل"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestMoroccoArabicLocale:
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "أبريل"
+        assert self.locale.month_abbreviation(dt.month) == "أبريل"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestRomanshLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "en quest mument"
+        assert self.locale._format_timeframe("second", 1) == "in secunda"
+        assert self.locale._format_timeframe("minute", 1) == "ina minuta"
+        assert self.locale._format_timeframe("hour", 1) == "in'ura"
+        assert self.locale._format_timeframe("day", 1) == "in di"
+        assert self.locale._format_timeframe("month", 1) == "in mais"
+        assert self.locale._format_timeframe("year", 1) == "in onn"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 secundas"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutas"
+        assert self.locale._format_timeframe("hours", 2) == "2 ura"
+        assert self.locale._format_timeframe("days", 2) == "2 dis"
+        assert self.locale._format_timeframe("months", 2) == "2 mais"
+        assert self.locale._format_timeframe("years", 2) == "2 onns"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 secundas"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutas"
+        assert self.locale._format_timeframe("hours", 5) == "5 ura"
+        assert self.locale._format_timeframe("days", 5) == "5 dis"
+        assert self.locale._format_timeframe("months", 5) == "5 mais"
+        assert self.locale._format_timeframe("years", 5) == "5 onns"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "sonda"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "so"
+
+        assert self.locale.month_name(dt.month) == "avrigl"
+        assert self.locale.month_abbreviation(dt.month) == "avr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("in'ura", "hour", -1) == "avant in'ura"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("in'ura", "hour", 1) == "en in'ura"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestSlovenianLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "zdaj"
+        assert self.locale._format_timeframe("second", 1) == "sekundo"
+        assert self.locale._format_timeframe("minute", 1) == "minuta"
+        assert self.locale._format_timeframe("hour", 1) == "uro"
+        assert self.locale._format_timeframe("day", 1) == "dan"
+        assert self.locale._format_timeframe("month", 1) == "mesec"
+        assert self.locale._format_timeframe("year", 1) == "leto"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 sekund"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minutami"
+        assert self.locale._format_timeframe("hours", 2) == "2 ur"
+        assert self.locale._format_timeframe("days", 2) == "2 dni"
+        assert self.locale._format_timeframe("months", 2) == "2 mesecev"
+        assert self.locale._format_timeframe("years", 2) == "2 let"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 sekund"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minutami"
+        assert self.locale._format_timeframe("hours", 5) == "5 ur"
+        assert self.locale._format_timeframe("days", 5) == "5 dni"
+        assert self.locale._format_timeframe("months", 5) == "5 mesecev"
+        assert self.locale._format_timeframe("years", 5) == "5 let"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Sobota"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sob"
+
+        assert self.locale.month_name(dt.month) == "April"
+        assert self.locale.month_abbreviation(dt.month) == "Apr"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("in'ura", "hour", -1) == "pred in'ura"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("in'ura", "hour", 1) == "čez in'ura"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestUkrainianLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "зараз"
+        assert self.locale._format_timeframe("second", 1) == "секунда"
+        assert self.locale._format_timeframe("minute", 1) == "хвилину"
+        assert self.locale._format_timeframe("hour", 1) == "годину"
+        assert self.locale._format_timeframe("day", 1) == "день"
+        assert self.locale._format_timeframe("month", 1) == "місяць"
+        assert self.locale._format_timeframe("year", 1) == "рік"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 кілька секунд"
+        assert self.locale._format_timeframe("minutes", 2) == "2 хвилини"
+        assert self.locale._format_timeframe("hours", 2) == "2 години"
+        assert self.locale._format_timeframe("days", 2) == "2 дні"
+        assert self.locale._format_timeframe("months", 2) == "2 місяці"
+        assert self.locale._format_timeframe("years", 2) == "2 роки"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 кілька секунд"
+        assert self.locale._format_timeframe("minutes", 5) == "5 хвилин"
+        assert self.locale._format_timeframe("hours", 5) == "5 годин"
+        assert self.locale._format_timeframe("days", 5) == "5 днів"
+        assert self.locale._format_timeframe("months", 5) == "5 місяців"
+        assert self.locale._format_timeframe("years", 5) == "5 років"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "субота"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "сб"
+
+        assert self.locale.month_name(dt.month) == "квітня"
+        assert self.locale.month_abbreviation(dt.month) == "квіт"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("годину", "hour", -1) == "годину тому"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("годину", "hour", 1) == "за годину"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestVietnameseLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "hiện tại"
+        assert self.locale._format_timeframe("second", 1) == "một giây"
+        assert self.locale._format_timeframe("minute", 1) == "một phút"
+        assert self.locale._format_timeframe("hour", 1) == "một giờ"
+        assert self.locale._format_timeframe("day", 1) == "một ngày"
+        assert self.locale._format_timeframe("week", 1) == "một tuần"
+        assert self.locale._format_timeframe("month", 1) == "một tháng"
+        assert self.locale._format_timeframe("year", 1) == "một năm"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 giây"
+        assert self.locale._format_timeframe("minutes", 2) == "2 phút"
+        assert self.locale._format_timeframe("hours", 2) == "2 giờ"
+        assert self.locale._format_timeframe("days", 2) == "2 ngày"
+        assert self.locale._format_timeframe("weeks", 2) == "2 tuần"
+        assert self.locale._format_timeframe("months", 2) == "2 tháng"
+        assert self.locale._format_timeframe("years", 2) == "2 năm"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 giây"
+        assert self.locale._format_timeframe("minutes", 5) == "5 phút"
+        assert self.locale._format_timeframe("hours", 5) == "5 giờ"
+        assert self.locale._format_timeframe("days", 5) == "5 ngày"
+        assert self.locale._format_timeframe("weeks", 5) == "5 tuần"
+        assert self.locale._format_timeframe("months", 5) == "5 tháng"
+        assert self.locale._format_timeframe("years", 5) == "5 năm"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Thứ Bảy"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Thứ 7"
+
+        assert self.locale.month_name(dt.month) == "Tháng Tư"
+        assert self.locale.month_abbreviation(dt.month) == "Tháng 4"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("một giờ", "hour", -1) == "một giờ trước"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("một giờ", "hour", 1) == "một giờ nữa"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestCatalanLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "Ara mateix"
+        assert self.locale._format_timeframe("second", 1) == "un segon"
+        assert self.locale._format_timeframe("minute", 1) == "un minut"
+        assert self.locale._format_timeframe("hour", 1) == "una hora"
+        assert self.locale._format_timeframe("day", 1) == "un dia"
+        assert self.locale._format_timeframe("month", 1) == "un mes"
+        assert self.locale._format_timeframe("year", 1) == "un any"
+
+        assert self.locale._format_timeframe("seconds", 2) == "2 segons"
+        assert self.locale._format_timeframe("minutes", 2) == "2 minuts"
+        assert self.locale._format_timeframe("hours", 2) == "2 hores"
+        assert self.locale._format_timeframe("days", 2) == "2 dies"
+        assert self.locale._format_timeframe("months", 2) == "2 mesos"
+        assert self.locale._format_timeframe("years", 2) == "2 anys"
+
+        assert self.locale._format_timeframe("seconds", 5) == "5 segons"
+        assert self.locale._format_timeframe("minutes", 5) == "5 minuts"
+        assert self.locale._format_timeframe("hours", 5) == "5 hores"
+        assert self.locale._format_timeframe("days", 5) == "5 dies"
+        assert self.locale._format_timeframe("months", 5) == "5 mesos"
+        assert self.locale._format_timeframe("years", 5) == "5 anys"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "dissabte"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "ds."
+
+        assert self.locale.month_name(dt.month) == "abril"
+        assert self.locale.month_abbreviation(dt.month) == "abr."
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("una hora", "hour", -1) == "Fa una hora"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("una hora", "hour", 1) == "En una hora"
