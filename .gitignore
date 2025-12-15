@@ -214,3 +214,6 @@ $RECYCLE.BIN/
 # Claude Code configurations
 CLAUDE*.md
 .claude/
+
+# Kiro
+.kiro/**
