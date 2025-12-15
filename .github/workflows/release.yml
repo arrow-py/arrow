@@ -10,7 +10,7 @@ jobs:
   release-to-pypi:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
