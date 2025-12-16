@@ -3408,7 +3408,7 @@ class TestGreekLocale:
 class TestAfrikaansLocale:
     def test_timeframes(self):
         assert self.locale._format_timeframe("now", 0) == "nou"
-        
+
         # singular
         assert self.locale._format_timeframe("second", 1) == "n sekonde"
         assert self.locale._format_timeframe("minute", 1) == "minuut"
