@@ -3408,17 +3408,22 @@ class TestGreekLocale:
 class TestAfrikaansLocale:
     def test_timeframes(self):
         assert self.locale._format_timeframe("now", 0) == "nou"
+
+        # singular
         assert self.locale._format_timeframe("second", 1) == "n sekonde"
         assert self.locale._format_timeframe("minute", 1) == "minuut"
         assert self.locale._format_timeframe("hour", 1) == "uur"
         assert self.locale._format_timeframe("day", 1) == "een dag"
+        assert self.locale._format_timeframe("week", 1) == "een week"
         assert self.locale._format_timeframe("month", 1) == "een maand"
         assert self.locale._format_timeframe("year", 1) == "een jaar"
 
+        # plural
         assert self.locale._format_timeframe("seconds", 2) == "2 sekondes"
         assert self.locale._format_timeframe("minutes", 2) == "2 minute"
         assert self.locale._format_timeframe("hours", 2) == "2 ure"
         assert self.locale._format_timeframe("days", 2) == "2 dae"
+        assert self.locale._format_timeframe("weeks", 2) == "2 weke"
         assert self.locale._format_timeframe("months", 2) == "2 maande"
         assert self.locale._format_timeframe("years", 2) == "2 jaar"
 
