@@ -299,7 +299,9 @@ class Arrow:
         )
 
     @classmethod
-    def fromdatetime(cls, dt: dt_datetime, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdatetime(
+        cls, dt: Union["Arrow", dt_datetime], tzinfo: Optional[TZ_EXPR] = None
+    ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``datetime`` and
         optional replacement timezone.
 
@@ -643,8 +645,8 @@ class Arrow:
     def span_range(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         tz: Optional[TZ_EXPR] = None,
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
@@ -725,8 +727,8 @@ class Arrow:
     def interval(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         interval: int = 1,
         tz: Optional[TZ_EXPR] = None,
         bounds: _BOUNDS = "[)",
@@ -736,8 +738,8 @@ class Arrow:
         representing a series of intervals between two inputs.
 
         :param frame: The timeframe.  Can be any ``datetime`` property (day, hour, minute...).
-        :param start: A datetime expression, the start of the range.
-        :param end: (optional) A datetime expression, the end of the range.
+        :param start: A datetime or Arrow expression, the start of the range.
+        :param end: (optional) A datetime or Arrow expression, the end of the range.
         :param interval: (optional) Time interval for the given time frame.
         :param tz: (optional) A timezone expression.  Defaults to UTC.
         :param bounds: (optional) a ``str`` of either '()', '(]', '[)', or '[]' that specifies
