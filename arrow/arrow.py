@@ -7,7 +7,7 @@ replacement.
 import calendar
 import re
 import sys
-from datetime import date
+from datetime import date as dt_date
 from datetime import datetime as dt_datetime
 from datetime import time as dt_time
 from datetime import timedelta, timezone
@@ -335,7 +335,7 @@ class Arrow:
         )
 
     @classmethod
-    def fromdate(cls, date: date, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
+    def fromdate(cls, date: dt_date, tzinfo: Optional[TZ_EXPR] = None) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a ``date`` and optional
         replacement timezone.  All time values are set to 0.
 
@@ -1555,7 +1555,7 @@ class Arrow:
 
     # datetime methods
 
-    def date(self) -> date:
+    def date(self) -> dt_date:
         """Returns a ``date`` object with the same year, month and day.
 
         Usage::
