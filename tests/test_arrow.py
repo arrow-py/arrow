@@ -1191,6 +1191,42 @@ class TestArrowSpanRange:
             (arrow.Arrow(2013, 4, 1), arrow.Arrow(2013, 4, 30, 23, 59, 59, 999999)),
         ]
 
+    def test_month_exact(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "month", datetime(2013, 1, 31), datetime(2014, 1, 31), exact=True
+            )
+        )
+
+        assert result == [
+            (arrow.Arrow(2013, 1, 31), arrow.Arrow(2013, 2, 27, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 28), arrow.Arrow(2013, 3, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 3, 31), arrow.Arrow(2013, 4, 29, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 4, 30), arrow.Arrow(2013, 5, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 5, 31), arrow.Arrow(2013, 6, 29, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 6, 30), arrow.Arrow(2013, 7, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 7, 31), arrow.Arrow(2013, 8, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 8, 31), arrow.Arrow(2013, 9, 29, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 9, 30), arrow.Arrow(2013, 10, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 10, 31), arrow.Arrow(2013, 11, 29, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 11, 30), arrow.Arrow(2013, 12, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 12, 31), arrow.Arrow(2014, 1, 30, 23, 59, 59, 999999)),
+        ]
+
+    def test_month_exact_leap(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "month", datetime(2012, 1, 31), datetime(2012, 5, 31), exact=True
+            )
+        )
+
+        assert result == [
+            (arrow.Arrow(2012, 1, 31), arrow.Arrow(2012, 2, 28, 23, 59, 59, 999999)),
+            (arrow.Arrow(2012, 2, 29), arrow.Arrow(2012, 3, 30, 23, 59, 59, 999999)),
+            (arrow.Arrow(2012, 3, 31), arrow.Arrow(2012, 4, 29, 23, 59, 59, 999999)),
+            (arrow.Arrow(2012, 4, 30), arrow.Arrow(2012, 5, 30, 23, 59, 59, 999999)),
+        ]
+
     def test_week(self):
         result = list(
             arrow.Arrow.span_range("week", datetime(2013, 2, 2), datetime(2013, 2, 28))
