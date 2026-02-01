@@ -846,37 +846,65 @@ class TestArrowShift:
         )
 
     def test_shift_negative_imaginary(self):
+        # With actual elapsed time semantics, shift(hours=-1) from 03:30-04:00
+        # goes back 1 actual hour to 01:30-05:00 (during fall-back, we "gain" an hour)
         new_york = arrow.Arrow(2011, 3, 13, 3, 30, tzinfo="America/New_York")
+        # Going back 1 actual hour from 03:30 EDT crosses into EST
         assert new_york.shift(hours=-1) == arrow.Arrow(
-            2011, 3, 13, 3, 30, tzinfo="America/New_York"
-        )
-        assert new_york.shift(hours=-2) == arrow.Arrow(
             2011, 3, 13, 1, 30, tzinfo="America/New_York"
         )
+        # Going back 2 actual hours from 03:30 EDT
+        assert new_york.shift(hours=-2) == arrow.Arrow(
+            2011, 3, 13, 0, 30, tzinfo="America/New_York"
+        )
 
+
+        # London: 02:00 BST (+01:00) minus 1 actual hour = 00:00 GMT (+00:00)
         london = arrow.Arrow(2019, 3, 31, 2, tzinfo="Europe/London")
         assert london.shift(hours=-1) == arrow.Arrow(
-            2019, 3, 31, 2, tzinfo="Europe/London"
-        )
-        assert london.shift(hours=-2) == arrow.Arrow(
             2019, 3, 31, 0, tzinfo="Europe/London"
         )
+        # London: 02:00 BST minus 2 actual hours = 23:00 GMT (previous day)
+        assert london.shift(hours=-2) == arrow.Arrow(
+            2019, 3, 30, 23, tzinfo="Europe/London"
+        )
 
-        # edge case, crossing the international dateline
+        # edge case, crossing the international dateline (Apia skipped Dec 30, 2011)
+        # 2011-12-31 01:00+14:00 in Apia minus 2 actual hours crosses the dateline change
         apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
         assert apia.shift(hours=-2) == arrow.Arrow(
-            2011, 12, 31, 23, tzinfo="Pacific/Apia"
+            2011, 12, 29, 23, tzinfo="Pacific/Apia"
         )
 
     def test_shift_with_imaginary_check(self):
+        # 2024-03-10 02:30 is imaginary (DST spring forward)
+        # Arrow constructor resolves it to 03:30, then shift adds 1 actual hour = 04:30
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1)
-        assert shifted.datetime.hour == 3
+        assert shifted.datetime.hour == 4
 
     def test_shift_without_imaginary_check(self):
+        # Same as above - the imaginary time is resolved before shift
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1, check_imaginary=False)
-        assert shifted.datetime.hour == 3
+        assert shifted.datetime.hour == 4
+
+    def test_shift_dst_spring_forward_issue_1209(self):
+        # Regression test for issue #1209
+        # shift(hours=10) should add 10 actual hours even across DST spring forward
+        # DST in US/Central: March 9, 2025 at 2am clocks spring forward to 3am
+        start = arrow.Arrow(2025, 3, 8, 18, 30, tzinfo="US/Central")
+        shifted = start.shift(hours=10)
+        
+        # 18:30 + 10 hours = 04:30 next day (wall clock), but due to DST spring forward
+        # 10 actual hours later should be 05:30
+        assert shifted.datetime.hour == 5
+        assert shifted.datetime.minute == 30
+        assert shifted.datetime.day == 9
+        
+        # Verify actual elapsed time is 10 hours (36000 seconds)
+        elapsed_seconds = shifted.timestamp() - start.timestamp()
+        assert elapsed_seconds == 36000  # 10 hours * 3600 seconds
 
     @pytest.mark.skipif(
         dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"

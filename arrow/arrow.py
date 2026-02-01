@@ -1030,6 +1030,8 @@ class Arrow:
 
         relative_kwargs = {}
         additional_attrs = ["weeks", "quarters", "weekday"]
+        # Absolute time units that should use timedelta for correct DST handling
+        absolute_time_attrs = ["hours", "minutes", "seconds", "microseconds"]
 
         for key, value in kwargs.items():
             if key in self._ATTRS_PLURAL or key in additional_attrs:
@@ -1046,7 +1048,26 @@ class Arrow:
             relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
         )
 
+        # Separate absolute time units from relative ones.
+        # Absolute time units (hours, minutes, seconds, microseconds) should be
+        # added in UTC to ensure correct DST handling - they represent actual
+        # elapsed time, not wall-clock time.
+        absolute_time_kwargs = {}
+        for attr in absolute_time_attrs:
+            if attr in relative_kwargs:
+                absolute_time_kwargs[attr] = relative_kwargs.pop(attr)
+
+        # First apply calendar-based shifts using relativedelta
         current = self._datetime + relativedelta(**relative_kwargs)
+
+        # Then apply absolute time shifts by converting to UTC first, adding the
+        # timedelta, then converting back. This ensures we add actual elapsed
+        # time rather than wall-clock time, which matters during DST transitions.
+        if absolute_time_kwargs:
+            original_tz = current.tzinfo
+            utc_current = current.astimezone(timezone.utc)
+            utc_current = utc_current + timedelta(**absolute_time_kwargs)
+            current = utc_current.astimezone(original_tz)
 
         # If check_imaginary is True, perform the check for imaginary times (DST transitions)
         if check_imaginary and not dateutil_tz.datetime_exists(current):
