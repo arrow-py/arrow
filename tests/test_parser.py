@@ -779,6 +779,15 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("  \n Jun   1\t 2005\n ", "MMM D YYYY")
 
+    def test_parse_malformed_fmt_no_indexerror(self):
+        """Malformed format strings should raise ParserMatchError, not IndexError."""
+        with pytest.raises(ParserMatchError):
+            self.parser.parse(
+                "foo",
+                "[-FFFFFFFFFFFFFFFFFFFFF-[-FFFFFFFFFFFF"
+                "[ |||||||| 7   v.dG(dG\\][3zasks  &",
+            )
+
 
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
