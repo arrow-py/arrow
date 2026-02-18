@@ -1605,3 +1605,13 @@ class TestFuzzInput:
 
         with pytest.raises(parser.ParserMatchError):
             self.parser.parse(payload, fmt_str)
+
+    # Regression test for issue #1191
+    def test_malformed_format_with_brackets(self):
+        fmt_str = (
+            "[-FFFFFFFFFFFFFFFFFFFFF-[-FFFFFFFFFFFF[ |||||||| 7   v.dG(dG\\][3zasks  &"
+        )
+        payload = "foo"
+
+        with pytest.raises(parser.ParserMatchError):
+            self.parser.parse(payload, fmt_str)
