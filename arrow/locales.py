@@ -1757,8 +1757,12 @@ class UkrainianLocale(SlavicBaseLocale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "зараз",
-        "second": "секунда",
-        "seconds": "{0} кілька секунд",
+        "second": "секунду",
+        "seconds": {
+            "singular": "{0} секунду",
+            "dual": "{0} секунди",
+            "plural": "{0} секунд",
+        },
         "minute": "хвилину",
         "minutes": {
             "singular": "{0} хвилину",
@@ -1773,6 +1777,12 @@ class UkrainianLocale(SlavicBaseLocale):
         },
         "day": "день",
         "days": {"singular": "{0} день", "dual": "{0} дні", "plural": "{0} днів"},
+        "week": "тиждень",
+        "weeks": {
+            "singular": "{0} тиждень",
+            "dual": "{0} тижні",
+            "plural": "{0} тижнів",
+        },
         "month": "місяць",
         "months": {
             "singular": "{0} місяць",
