@@ -2223,6 +2223,14 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "a month"
         assert later.humanize(self.now, only_distance=True) == "a month"
 
+    def test_month_boundary_with_large_delta(self):
+        """~31 days where calendar_months is 0 but elapsed exceeds _SECS_PER_MONTH."""
+        # Jan 15 -> Feb 15: calendar_months may round to 0, but 31 days > 30.5
+        arw = arrow.Arrow(2013, 1, 15)
+        later = arrow.Arrow(2013, 2, 15)
+        assert arw.humanize(later) == "a month ago"
+        assert later.humanize(arw) == "in a month"
+
     def test_months(self):
         later = self.now.shift(months=2)
         earlier = self.now.shift(months=-2)
