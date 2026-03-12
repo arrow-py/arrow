@@ -23,6 +23,12 @@ class TestGet:
             self.factory.get(), datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
+    def test_no_args_tzinfo_none(self):
+        assert_datetime_equality(
+            self.factory.get(tzinfo=None),
+            datetime.now(timezone.utc).replace(tzinfo=timezone.utc),
+        )
+
     def test_timestamp_one_arg_no_arg(self):
         no_arg = self.factory.get(1406430900).timestamp()
         one_arg = self.factory.get("1406430900", "X").timestamp()
@@ -208,6 +214,11 @@ class TestGet:
 
         assert_datetime_equality(self.factory.get(dt.isoformat()), dt)
 
+    def test_one_arg_str_tzinfo_none(self):
+        result = self.factory.get("2013-01-01", tzinfo=None)
+
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
+
     def test_one_arg_iso_calendar(self):
         pairs = [
             (datetime(2004, 1, 4), (2004, 1, 7)),
@@ -284,6 +295,11 @@ class TestGet:
 
     def test_two_args_str_str(self):
         result = self.factory.get("2013-01-01", "YYYY-MM-DD")
+
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
+
+    def test_two_args_str_str_tzinfo_none(self):
+        result = self.factory.get("2013-01-01", "YYYY-MM-DD", tzinfo=None)
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
