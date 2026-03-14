@@ -38,6 +38,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        fold: Optional[int] = None,
     ) -> Arrow: ...  # pragma: no cover
 
     @overload
@@ -58,6 +59,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        fold: Optional[int] = None,
     ) -> Arrow: ...  # pragma: no cover
 
     @overload
@@ -69,6 +71,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        fold: Optional[int] = None,
     ) -> Arrow: ...  # pragma: no cover
 
     @overload
@@ -80,6 +83,7 @@ class ArrowFactory:
         locale: str = DEFAULT_LOCALE,
         tzinfo: Optional[TZ_EXPR] = None,
         normalize_whitespace: bool = False,
+        fold: Optional[int] = None,
     ) -> Arrow: ...  # pragma: no cover
 
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
@@ -92,6 +96,8 @@ class ArrowFactory:
         :param normalize_whitespace: (optional) a ``bool`` specifying whether or not to normalize
             redundant whitespace (spaces, tabs, and newlines) in a datetime string before parsing.
             Defaults to false.
+        :param fold: (optional) an ``int`` (0 or 1) to disambiguate repeated wall times during
+            DST transitions. Defaults to None (uses the parsed value or 0).
 
         Usage::
 
@@ -190,6 +196,7 @@ class ArrowFactory:
         locale = kwargs.pop("locale", DEFAULT_LOCALE)
         tz = kwargs.get("tzinfo", None)
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
+        fold = kwargs.pop("fold", None)
 
         # if kwargs given, send to constructor unless only tzinfo provided
         if len(kwargs) > 1:
@@ -245,6 +252,8 @@ class ArrowFactory:
             # (str) -> parse @ tzinfo
             elif isinstance(arg, str):
                 dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
+                if fold is not None:
+                    dt = dt.replace(fold=fold)
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             # (struct_time) -> from struct_time
@@ -285,6 +294,8 @@ class ArrowFactory:
                 dt = parser.DateTimeParser(locale).parse(
                     args[0], args[1], normalize_whitespace
                 )
+                if fold is not None:
+                    dt = dt.replace(fold=fold)
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
