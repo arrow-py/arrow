@@ -643,8 +643,8 @@ class Arrow:
     def span_range(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         tz: Optional[TZ_EXPR] = None,
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
@@ -725,8 +725,8 @@ class Arrow:
     def interval(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         interval: int = 1,
         tz: Optional[TZ_EXPR] = None,
         bounds: _BOUNDS = "[)",
