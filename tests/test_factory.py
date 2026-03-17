@@ -346,6 +346,12 @@ class TestGet:
         result = self.factory.get("2019072807", "YYYYMMDDHH", tzinfo="UTC")
         assert result._datetime == datetime(2019, 7, 28, 7, 0, 0, 0, tzinfo=tz.tzutc())
 
+    def test_tzinfo_none_kwargs(self):
+        # regression test for issue #1259
+        # passing tzinfo=None explicitly should not raise TypeError
+        result = self.factory.get("2025-01-01", "YYYY-MM-DD", tzinfo=None)
+        assert result._datetime == datetime(2025, 1, 1, 0, 0, 0, 0, tzinfo=tz.tzutc())
+
     def test_insufficient_kwargs(self):
         with pytest.raises(TypeError):
             self.factory.get(year=2016)
