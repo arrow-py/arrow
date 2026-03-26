@@ -188,6 +188,7 @@ class ArrowFactory:
 
         arg_count = len(args)
         locale = kwargs.pop("locale", DEFAULT_LOCALE)
+        tzinfo_provided = "tzinfo" in kwargs
         tz = kwargs.get("tzinfo", None)
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
@@ -195,8 +196,9 @@ class ArrowFactory:
         if len(kwargs) > 1:
             arg_count = 3
 
-        # tzinfo kwarg is not provided
-        if len(kwargs) == 1 and tz is None:
+        # Treat an explicit tzinfo=None the same as omitting tzinfo, but keep
+        # other single-keyword cases (for example year=...) on the constructor path.
+        if len(kwargs) == 1 and tz is None and not tzinfo_provided:
             arg_count = 3
 
         # () -> now, @ tzinfo or utc
