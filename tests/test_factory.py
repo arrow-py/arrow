@@ -287,6 +287,24 @@ class TestGet:
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
+    def test_two_args_str_str_tzinfo_none(self):
+        # Regression test for issue #1259:
+        # Explicitly passing tzinfo=None must behave identically to omitting tzinfo.
+        # Previously this crashed with TypeError because len(kwargs)==1 and tz is None
+        # triggered the 3+ arg constructor path instead of the 2-arg str+format parse path.
+        result = self.factory.get("2025-01-01", "YYYY-MM-DD", tzinfo=None)
+        assert result._datetime == datetime(2025, 1, 1, tzinfo=tz.tzutc())
+
+    def test_no_args_tzinfo_none(self):
+        # Regression test for issue #1259:
+        # arrow.get(tzinfo=None) must return current UTC time, same as arrow.get().
+        from arrow.util import is_timestamp
+        result = self.factory.get(tzinfo=None)
+        now_utc = self.factory.utcnow()
+        # Allow a 2-second window to avoid flakiness
+        assert abs((result - now_utc).total_seconds()) < 2
+
+
     def test_two_args_str_tzinfo(self):
         result = self.factory.get("2013-01-01", tzinfo=ZoneInfo("US/Pacific"))
 
