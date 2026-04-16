@@ -306,23 +306,29 @@ class EnglishLocale(Locale):
 
     timeframes = {
         "now": "just now",
-        "second": "a second",
+        "second": {"a_form": "a second", "one_form": "1 second"},
         "seconds": "{0} seconds",
-        "minute": "a minute",
+        "minute": {"a_form": "a minute", "one_form": "1 minute"},
         "minutes": "{0} minutes",
-        "hour": "an hour",
+        "hour": {"a_form": "an hour", "one_form": "1 hour"},
         "hours": "{0} hours",
-        "day": "a day",
+        "day": {"a_form": "a day", "one_form": "1 day"},
         "days": "{0} days",
-        "week": "a week",
+        "week": {"a_form": "a week", "one_form": "1 week"},
         "weeks": "{0} weeks",
-        "month": "a month",
+        "month": {"a_form": "a month", "one_form": "1 month"},
         "months": "{0} months",
-        "quarter": "a quarter",
+        "quarter": {"a_form": "a quarter", "one_form": "1 quarter"},
         "quarters": "{0} quarters",
-        "year": "a year",
+        "year": {"a_form": "a year", "one_form": "1 year"},
         "years": "{0} years",
     }
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        form = self.timeframes[timeframe]
+        if isinstance(form, Mapping):
+            form = form["a_form"]
+        return cast(str, form).format(trunc(abs(delta)))
 
     meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
 
