@@ -114,6 +114,8 @@ class TestEnglishLocale:
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "2 hours"
         assert self.locale._format_timeframe("hour", 0) == "an hour"
+        assert self.locale._format_timeframe("day", 1) == "a day"
+        assert self.locale._format_timeframe("year", 1) == "a year"
 
     def test_format_relative_now(self):
         result = self.locale._format_relative("just now", "now", 0)
