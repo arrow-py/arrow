@@ -3665,24 +3665,27 @@ class TestSlovenianLocale:
 class TestUkrainianLocale:
     def test_timeframes(self):
         assert self.locale._format_timeframe("now", 0) == "зараз"
-        assert self.locale._format_timeframe("second", 1) == "секунда"
+        assert self.locale._format_timeframe("second", 1) == "секунду"
         assert self.locale._format_timeframe("minute", 1) == "хвилину"
         assert self.locale._format_timeframe("hour", 1) == "годину"
+        assert self.locale._format_timeframe("week", 1) == "тиждень"
         assert self.locale._format_timeframe("day", 1) == "день"
         assert self.locale._format_timeframe("month", 1) == "місяць"
         assert self.locale._format_timeframe("year", 1) == "рік"
 
-        assert self.locale._format_timeframe("seconds", 2) == "2 кілька секунд"
+        assert self.locale._format_timeframe("seconds", 2) == "2 секунди"
         assert self.locale._format_timeframe("minutes", 2) == "2 хвилини"
         assert self.locale._format_timeframe("hours", 2) == "2 години"
         assert self.locale._format_timeframe("days", 2) == "2 дні"
+        assert self.locale._format_timeframe("weeks", 2) == "2 тижні"
         assert self.locale._format_timeframe("months", 2) == "2 місяці"
         assert self.locale._format_timeframe("years", 2) == "2 роки"
 
-        assert self.locale._format_timeframe("seconds", 5) == "5 кілька секунд"
+        assert self.locale._format_timeframe("seconds", 5) == "5 секунд"
         assert self.locale._format_timeframe("minutes", 5) == "5 хвилин"
         assert self.locale._format_timeframe("hours", 5) == "5 годин"
         assert self.locale._format_timeframe("days", 5) == "5 днів"
+        assert self.locale._format_timeframe("weeks", 5) == "5 тижнів"
         assert self.locale._format_timeframe("months", 5) == "5 місяців"
         assert self.locale._format_timeframe("years", 5) == "5 років"
 
