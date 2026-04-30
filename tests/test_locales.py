@@ -3782,3 +3782,47 @@ class TestCatalanLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("una hora", "hour", 1) == "En una hora"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestIrishGaelicLocale:
+    def test_timeframes(self):
+        assert self.locale._format_timeframe("now", 0) == "anois"
+
+        # singular
+        assert self.locale._format_timeframe("second", 1) == "soicind"
+        assert self.locale._format_timeframe("minute", 1) == "nóiméad"
+        assert self.locale._format_timeframe("hour", 1) == "uair an chloig"
+        assert self.locale._format_timeframe("day", 1) == "lá"
+        assert self.locale._format_timeframe("week", 1) == "seachtain"
+        assert self.locale._format_timeframe("month", 1) == "mí"
+        assert self.locale._format_timeframe("year", 1) == "bliain"
+
+        # plural
+        assert self.locale._format_timeframe("seconds", 2) == "2 soicind"
+        assert self.locale._format_timeframe("minutes", 2) == "2 nóiméad"
+        assert self.locale._format_timeframe("hours", 2) == "2 uair an chloig"
+        assert self.locale._format_timeframe("days", 2) == "2 lá"
+        assert self.locale._format_timeframe("weeks", 2) == "2 seachtain"
+        assert self.locale._format_timeframe("months", 2) == "2 mí"
+        assert self.locale._format_timeframe("years", 2) == "2 bliain"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "Satharn"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "Sat"
+
+        assert self.locale.month_name(dt.month) == "Aibreán"
+        assert self.locale.month_abbreviation(dt.month) == "Aib"
+
+    def test_format_relative_past(self):
+        assert (
+            self.locale._format_relative("uair an chloig", "hour", -1)
+            == "uair an chloig ó shin"
+        )
+
+    def test_format_relative_future(self):
+        assert (
+            self.locale._format_relative("uair an chloig", "hour", 1)
+            == "i gceann uair an chloig"
+        )

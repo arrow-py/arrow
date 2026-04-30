@@ -6652,3 +6652,75 @@ class UzbekLocale(Locale):
     ]
 
     day_abbreviations = ["", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"]
+
+
+class IrishGaelicLocale(Locale):
+    names = ["ga", "ga-ie"]
+
+    past = "{0} ó shin"
+    future = "i gceann {0}"
+
+    timeframes = {
+        "now": "anois",
+        "second": "soicind",
+        "seconds": "{0} soicind",
+        "minute": "nóiméad",
+        "minutes": "{0} nóiméad",
+        "hour": "uair an chloig",
+        "hours": "{0} uair an chloig",
+        "day": "lá",
+        "days": "{0} lá",
+        "week": "seachtain",
+        "weeks": "{0} seachtain",
+        "month": "mí",
+        "months": "{0} mí",
+        "quarter": "ráithe",
+        "quarters": "{0} ráithe",
+        "year": "bliain",
+        "years": "{0} bliain",
+    }
+
+    month_names = [
+        "",
+        "Eanáir",
+        "Feabhra",
+        "Márta",
+        "Aibreán",
+        "Bealtaine",
+        "Meitheamh",
+        "Iúil",
+        "Lúnasa",
+        "Meán Fómhair",
+        "Deireadh Fómhair",
+        "Samhain",
+        "Nollaig",
+    ]
+
+    month_abbreviations = [
+        "",
+        "Ean",
+        "Feabh",
+        "Már",
+        "Aib",
+        "Beal",
+        "Meith",
+        "Iúil",
+        "Lún",
+        "M.F.",
+        "D.F.",
+        "Samh",
+        "Noll",
+    ]
+
+    day_names = [
+        "",
+        "Luan",
+        "Máirt",
+        "Céadaoin",
+        "Déardaoin",
+        "Aoine",
+        "Satharn",
+        "Domhnach",
+    ]
+
+    day_abbreviations = ["", "Lua", "Mái", "Céa", "Déa", "Aoi", "Sat", "Dom"]
