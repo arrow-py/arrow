@@ -155,7 +155,7 @@ class DateTimeParser:
     )
     _ESCAPE_RE: ClassVar[Pattern[str]] = re.compile(r"\[[^\[\]]*\]")
 
-    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,2}")
+    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[1-9]\d|\d")
     _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,3}")
     _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d+")
     _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}")
