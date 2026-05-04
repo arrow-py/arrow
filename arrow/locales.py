@@ -550,6 +550,79 @@ class SpanishLocale(Locale):
         return f"{n}º"
 
 
+class GalicianLocale(Locale):
+    names = ["gl", "gl-es"]
+    past = "hai {0}"
+    future = "en {0}"
+    and_word = "e"
+
+    timeframes = {
+        "now": "agora",
+        "second": "un segundo",
+        "seconds": "{0} segundos",
+        "minute": "un minuto",
+        "minutes": "{0} minutos",
+        "hour": "unha hora",
+        "hours": "{0} horas",
+        "day": "un día",
+        "days": "{0} días",
+        "week": "unha semana",
+        "weeks": "{0} semanas",
+        "month": "un mes",
+        "months": "{0} meses",
+        "year": "un ano",
+        "years": "{0} anos",
+    }
+
+    meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
+
+    month_names = [
+        "",
+        "xaneiro",
+        "febreiro",
+        "marzo",
+        "abril",
+        "maio",
+        "xuño",
+        "xullo",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "decembro",
+    ]
+    month_abbreviations = [
+        "",
+        "xan",
+        "feb",
+        "mar",
+        "abr",
+        "mai",
+        "xuñ",
+        "xul",
+        "ago",
+        "set",
+        "out",
+        "nov",
+        "dec",
+    ]
+
+    day_names = [
+        "",
+        "luns",
+        "martes",
+        "mércores",
+        "xoves",
+        "venres",
+        "sábado",
+        "domingo",
+    ]
+    day_abbreviations = ["", "lun", "mar", "mér", "xov", "ven", "sáb", "dom"]
+
+    def _ordinal_number(self, n: int) -> str:
+        return f"{n}º"
+
+
 class FrenchBaseLocale(Locale):
     past = "il y a {0}"
     future = "dans {0}"

@@ -227,6 +227,44 @@ class TestSpanishLocale:
 
 
 @pytest.mark.usefixtures("lang_locale")
+class TestGalicianLocale:
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(1) == "1º"
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "agora"
+        assert self.locale._format_timeframe("seconds", 1) == "1 segundos"
+        assert self.locale._format_timeframe("seconds", 3) == "3 segundos"
+        assert self.locale._format_timeframe("seconds", 30) == "30 segundos"
+        assert self.locale._format_timeframe("minute", 1) == "un minuto"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minutos"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minutos"
+        assert self.locale._format_timeframe("hour", 1) == "unha hora"
+        assert self.locale._format_timeframe("hours", 5) == "5 horas"
+        assert self.locale._format_timeframe("hours", 23) == "23 horas"
+        assert self.locale._format_timeframe("day", 1) == "un día"
+        assert self.locale._format_timeframe("days", 6) == "6 días"
+        assert self.locale._format_timeframe("days", 12) == "12 días"
+        assert self.locale._format_timeframe("week", 1) == "unha semana"
+        assert self.locale._format_timeframe("weeks", 2) == "2 semanas"
+        assert self.locale._format_timeframe("weeks", 3) == "3 semanas"
+        assert self.locale._format_timeframe("month", 1) == "un mes"
+        assert self.locale._format_timeframe("months", 7) == "7 meses"
+        assert self.locale._format_timeframe("months", 11) == "11 meses"
+        assert self.locale._format_timeframe("year", 1) == "un ano"
+        assert self.locale._format_timeframe("years", 8) == "8 anos"
+        assert self.locale._format_timeframe("years", 12) == "12 anos"
+
+    def test_format_relative(self):
+        assert (
+            self.locale._format_relative("un segundo", "second", 1) == "en un segundo"
+        )
+        assert (
+            self.locale._format_relative("un segundo", "second", -1) == "hai un segundo"
+        )
+
+
+@pytest.mark.usefixtures("lang_locale")
 class TestFrenchLocale:
     def test_ordinal_number(self):
         assert self.locale.ordinal_number(1) == "1er"
