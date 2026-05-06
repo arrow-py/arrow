@@ -1587,6 +1587,48 @@ class TestArrowInterval:
             ),
         ]
 
+    def test_arrow_objects_input(self):
+        # start and end passed as Arrow instances instead of datetime
+        start = arrow.Arrow(2013, 5, 5, 12, 30)
+        end = arrow.Arrow(2013, 5, 5, 17, 15)
+        result = list(arrow.Arrow.interval("hour", start, end, 2))
+
+        assert result == [
+            (
+                arrow.Arrow(2013, 5, 5, 12),
+                arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14),
+                arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16),
+                arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),
+            ),
+        ]
+
+    def test_arrow_and_datetime_input(self):
+        # mixed types should also be accepted
+        start = arrow.Arrow(2013, 5, 5, 12, 30)
+        end = datetime(2013, 5, 5, 17, 15)
+        result = list(arrow.Arrow.interval("hour", start, end, 2))
+
+        assert result == [
+            (
+                arrow.Arrow(2013, 5, 5, 12),
+                arrow.Arrow(2013, 5, 5, 13, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 14),
+                arrow.Arrow(2013, 5, 5, 15, 59, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 5, 5, 16),
+                arrow.Arrow(2013, 5, 5, 17, 59, 59, 999999),
+            ),
+        ]
+
     def test_bounds_param_is_passed(self):
         result = list(
             arrow.Arrow.interval(
