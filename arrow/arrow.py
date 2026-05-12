@@ -1680,6 +1680,30 @@ class Arrow:
 
         return self._datetime.isoweekday()
 
+    def is_weekday(self) -> bool:
+        """Returns a boolean indicating whether the day is a weekday (Monday-Friday).
+
+        Usage::
+
+            >>> arrow.utcnow().is_weekday()
+            True
+
+        """
+
+        return self.weekday() in range(0, 5)
+
+    def is_weekend(self) -> bool:
+        """Returns a boolean indicating whether the day is a weekend (Saturday-Sunday).
+
+        Usage::
+
+            >>> arrow.utcnow().is_weekend()
+            False
+
+        """
+
+        return self.weekday() in (5, 6)
+
     def isocalendar(self) -> Tuple[int, int, int]:
         """Returns a 3-tuple, (ISO year, ISO week number, ISO weekday).
 

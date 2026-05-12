@@ -479,6 +479,20 @@ class TestArrowDatetimeInterface:
 
         assert result == self.arrow._datetime.isoweekday()
 
+    def test_is_weekday(self):
+        monday = arrow.Arrow(2023, 1, 2)
+        saturday = arrow.Arrow(2023, 1, 7)
+
+        assert monday.is_weekday() is True
+        assert saturday.is_weekday() is False
+
+    def test_is_weekend(self):
+        saturday = arrow.Arrow(2023, 1, 7)
+        monday = arrow.Arrow(2023, 1, 2)
+
+        assert saturday.is_weekend() is True
+        assert monday.is_weekend() is False
+
     def test_isocalendar(self):
         result = self.arrow.isocalendar()
 
