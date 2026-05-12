@@ -166,7 +166,7 @@ class DateTimeParser:
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
-    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+\.?\d+$")
+    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^[-+]?\d+(?:\.\d+)?$")
     _TIMESTAMP_EXPANDED_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+$")
     _TIME_RE: ClassVar[Pattern[str]] = re.compile(
         r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$"
@@ -725,7 +725,7 @@ class DateTimeParser:
         timestamp = parts.get("timestamp")
 
         if timestamp is not None:
-            return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+            return datetime.fromtimestamp(float(timestamp), tz=timezone.utc)
 
         expanded_timestamp = parts.get("expanded_timestamp")
 

@@ -137,6 +137,12 @@ class TestGet:
             self.factory.get(tzinfo=ZoneInfo("US/Pacific")), self.expected
         )
 
+    def test_kwarg_tzinfo_none(self):
+        assert_datetime_equality(
+            self.factory.get(tzinfo=None),
+            datetime.now(timezone.utc).replace(tzinfo=timezone.utc),
+        )
+
     def test_kwarg_tzinfo_string(self):
         self.expected = (
             datetime.now(timezone.utc)
@@ -284,6 +290,11 @@ class TestGet:
 
     def test_two_args_str_str(self):
         result = self.factory.get("2013-01-01", "YYYY-MM-DD")
+
+        assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
+
+    def test_two_args_str_str_tzinfo_none(self):
+        result = self.factory.get("2013-01-01", "YYYY-MM-DD", tzinfo=None)
 
         assert result._datetime == datetime(2013, 1, 1, tzinfo=tz.tzutc())
 
