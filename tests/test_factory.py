@@ -371,6 +371,52 @@ class TestGet:
         res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
         assert res.tzinfo == ZoneInfo("Asia/Tokyo")
 
+    def test_fold_kwarg_iso_string(self):
+        # Test fold=0 (first occurrence during DST transition)
+        result = self.factory.get(
+            "2001-10-28T01:30:00",
+            tzinfo=ZoneInfo("US/Pacific"),
+            fold=0,
+        )
+        assert result._datetime.fold == 0
+        assert result._datetime == datetime(
+            2001, 10, 28, 1, 30, 0, tzinfo=ZoneInfo("US/Pacific")
+        )
+
+        # Test fold=1 (second occurrence during DST transition)
+        result = self.factory.get(
+            "2001-10-28T01:30:00",
+            tzinfo=ZoneInfo("US/Pacific"),
+            fold=1,
+        )
+        assert result._datetime.fold == 1
+
+    def test_fold_kwarg_format_string(self):
+        # Test fold with explicit format string
+        result = self.factory.get(
+            "2001-10-28 01:30:00",
+            "YYYY-MM-DD HH:mm:ss",
+            tzinfo=ZoneInfo("US/Pacific"),
+            fold=0,
+        )
+        assert result._datetime.fold == 0
+
+        result = self.factory.get(
+            "2001-10-28 01:30:00",
+            "YYYY-MM-DD HH:mm:ss",
+            tzinfo=ZoneInfo("US/Pacific"),
+            fold=1,
+        )
+        assert result._datetime.fold == 1
+
+    def test_fold_kwarg_default(self):
+        # When fold is not specified, it should default to 0 (parser default)
+        result = self.factory.get(
+            "2001-10-28T01:30:00",
+            tzinfo=ZoneInfo("US/Pacific"),
+        )
+        assert result._datetime.fold == 0
+
 
 @pytest.mark.usefixtures("arrow_factory")
 class TestUtcNow:
