@@ -1,6 +1,7 @@
 from ._version import __version__
 from .api import get, now, utcnow
 from .arrow import Arrow
+from .duration import Duration
 from .factory import ArrowFactory
 from .formatter import (
     FORMAT_ATOM,
@@ -26,6 +27,7 @@ __all__ = [
     "utcnow",
     "Arrow",
     "ArrowFactory",
+    "Duration",
     "FORMAT_ATOM",
     "FORMAT_COOKIE",
     "FORMAT_RFC822",
