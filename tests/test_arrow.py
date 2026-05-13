@@ -2987,6 +2987,34 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_singular_nouns_english(self):
+        """Test that dehumanize recognizes '1 day ago', '1 hour ago', etc.
+
+        Regression test for https://github.com/arrow-py/arrow/issues/1150
+        """
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # All singular units should work with numeric "1"
+        assert arw.dehumanize("1 second ago") == arw.shift(seconds=-1)
+        assert arw.dehumanize("1 minute ago") == arw.shift(minutes=-1)
+        assert arw.dehumanize("1 hour ago") == arw.shift(hours=-1)
+        assert arw.dehumanize("1 day ago") == arw.shift(days=-1)
+        assert arw.dehumanize("1 week ago") == arw.shift(weeks=-1)
+        assert arw.dehumanize("1 month ago") == arw.shift(months=-1)
+        assert arw.dehumanize("1 year ago") == arw.shift(years=-1)
+
+        # Future tense
+        assert arw.dehumanize("in 1 day") == arw.shift(days=1)
+        assert arw.dehumanize("in 1 hour") == arw.shift(hours=1)
+
+        # "a/an" forms should still work
+        assert arw.dehumanize("a day ago") == arw.shift(days=-1)
+        assert arw.dehumanize("an hour ago") == arw.shift(hours=-1)
+
+        # Plural forms should still work
+        assert arw.dehumanize("2 days ago") == arw.shift(days=-2)
+        assert arw.dehumanize("3 hours ago") == arw.shift(hours=-3)
+
 
 class TestArrowIsBetween:
     def test_start_before_end(self):

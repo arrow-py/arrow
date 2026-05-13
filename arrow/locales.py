@@ -307,24 +307,30 @@ class EnglishLocale(Locale):
     timeframes = {
         "now": "just now",
         "second": "a second",
-        "seconds": "{0} seconds",
+        "seconds": {"singular": "{0} second", "plural": "{0} seconds"},
         "minute": "a minute",
-        "minutes": "{0} minutes",
+        "minutes": {"singular": "{0} minute", "plural": "{0} minutes"},
         "hour": "an hour",
-        "hours": "{0} hours",
+        "hours": {"singular": "{0} hour", "plural": "{0} hours"},
         "day": "a day",
-        "days": "{0} days",
+        "days": {"singular": "{0} day", "plural": "{0} days"},
         "week": "a week",
-        "weeks": "{0} weeks",
+        "weeks": {"singular": "{0} week", "plural": "{0} weeks"},
         "month": "a month",
-        "months": "{0} months",
+        "months": {"singular": "{0} month", "plural": "{0} months"},
         "quarter": "a quarter",
-        "quarters": "{0} quarters",
+        "quarters": {"singular": "{0} quarter", "plural": "{0} quarters"},
         "year": "a year",
-        "years": "{0} years",
+        "years": {"singular": "{0} year", "plural": "{0} years"},
     }
 
     meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        form = self.timeframes[timeframe]
+        if isinstance(form, Mapping):
+            form = form["singular"] if abs(delta) == 1 else form["plural"]
+        return form.format(trunc(abs(delta)))
 
     month_names = [
         "",
