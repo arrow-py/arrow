@@ -2988,6 +2988,32 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(future_string, locale=lang) == future
 
 
+class TestArrowDehumanizeDecimals:
+    def test_decimal_hours(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("3.5 hours ago") == arw.shift(hours=-3.5)
+
+    def test_decimal_with_multiple_units(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("2 days 3.5 hours ago") == arw.shift(days=-2, hours=-3.5)
+
+    def test_decimal_comma_separator(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("3,5 hours ago") == arw.shift(hours=-3.5)
+
+    def test_decimal_future(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("in 1.5 hours") == arw.shift(hours=1.5)
+
+    def test_decimal_minutes(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("2.5 minutes ago") == arw.shift(minutes=-2.5)
+
+    def test_integer_values_still_work(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+        assert arw.dehumanize("3 hours ago") == arw.shift(hours=-3)
+
+
 class TestArrowIsBetween:
     def test_start_before_end(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
