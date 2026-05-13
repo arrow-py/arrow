@@ -1410,6 +1410,10 @@ class Arrow:
                 search_string = str(time_string)
                 search_string = search_string.format(r"\d+")
 
+                # Make trailing 's' optional so both "1 day" and "2 days" match
+                if search_string.endswith("s"):
+                    search_string = search_string[:-1] + "s?"
+
                 # Create search pattern and find within string
                 pattern = re.compile(rf"(^|\b|\d){search_string}")
                 match = pattern.search(input_string)

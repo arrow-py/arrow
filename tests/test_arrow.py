@@ -2987,6 +2987,21 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_singular_units(self):
+        arw = arrow.Arrow(2023, 1, 1)
+
+        assert arw.dehumanize("1 day ago") == arw.shift(days=-1)
+        assert arw.dehumanize("1 hour ago") == arw.shift(hours=-1)
+        assert arw.dehumanize("1 minute ago") == arw.shift(minutes=-1)
+        assert arw.dehumanize("1 second ago") == arw.shift(seconds=-1)
+        assert arw.dehumanize("1 week ago") == arw.shift(weeks=-1)
+        assert arw.dehumanize("1 month ago") == arw.shift(months=-1)
+        assert arw.dehumanize("1 year ago") == arw.shift(years=-1)
+
+        assert arw.dehumanize("in 1 day") == arw.shift(days=1)
+        assert arw.dehumanize("in 1 hour") == arw.shift(hours=1)
+        assert arw.dehumanize("in 1 minute") == arw.shift(minutes=1)
+
 
 class TestArrowIsBetween:
     def test_start_before_end(self):
