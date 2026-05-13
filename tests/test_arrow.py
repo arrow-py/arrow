@@ -846,37 +846,69 @@ class TestArrowShift:
         )
 
     def test_shift_negative_imaginary(self):
+        # Absolute time arithmetic via UTC: shifting by hours should reflect
+        # real elapsed time, not wall-clock arithmetic.
+
+        # 3:30 EDT (7:30 UTC) - 1 real hour = 6:30 UTC = 1:30 EST
         new_york = arrow.Arrow(2011, 3, 13, 3, 30, tzinfo="America/New_York")
         assert new_york.shift(hours=-1) == arrow.Arrow(
-            2011, 3, 13, 3, 30, tzinfo="America/New_York"
-        )
-        assert new_york.shift(hours=-2) == arrow.Arrow(
             2011, 3, 13, 1, 30, tzinfo="America/New_York"
         )
+        # 3:30 EDT (7:30 UTC) - 2 real hours = 5:30 UTC = 0:30 EST
+        assert new_york.shift(hours=-2) == arrow.Arrow(
+            2011, 3, 13, 0, 30, tzinfo="America/New_York"
+        )
 
+        # 2:00 BST (1:00 UTC) - 1 real hour = 0:00 UTC = 0:00 GMT
         london = arrow.Arrow(2019, 3, 31, 2, tzinfo="Europe/London")
         assert london.shift(hours=-1) == arrow.Arrow(
-            2019, 3, 31, 2, tzinfo="Europe/London"
-        )
-        assert london.shift(hours=-2) == arrow.Arrow(
             2019, 3, 31, 0, tzinfo="Europe/London"
+        )
+        # 2:00 BST (1:00 UTC) - 2 real hours = 23:00 UTC = 23:00 GMT Mar 30
+        assert london.shift(hours=-2) == arrow.Arrow(
+            2019, 3, 30, 23, tzinfo="Europe/London"
         )
 
         # edge case, crossing the international dateline
+        # 1:00 +14:00 (Dec 30 11:00 UTC) - 2 real hours = Dec 30 9:00 UTC = Dec 29 23:00 -10:00
         apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
         assert apia.shift(hours=-2) == arrow.Arrow(
-            2011, 12, 31, 23, tzinfo="Pacific/Apia"
+            2011, 12, 29, 23, tzinfo="Pacific/Apia"
+        )
+
+    def test_shift_dst_absolute_time(self):
+        # GH #1209: shift(hours=N) across DST should use absolute (UTC) time.
+        # 18:30 CST (00:30 UTC) + 10 real hours = 10:30 UTC = 05:30 CDT
+        start = arrow.Arrow(2025, 3, 8, 18, 30, tzinfo=ZoneInfo("US/Central"))
+        assert start.shift(hours=10) == arrow.Arrow(
+            2025, 3, 9, 5, 30, tzinfo=ZoneInfo("US/Central")
+        )
+
+        # Fall-back: 0:30 CDT (5:30 UTC) + 2 real hours = 7:30 UTC = 1:30 CST
+        fall_start = arrow.Arrow(2025, 11, 2, 0, 30, tzinfo=ZoneInfo("US/Central"))
+        assert fall_start.shift(hours=2) == arrow.Arrow(
+            2025, 11, 2, 1, 30, tzinfo=ZoneInfo("US/Central")
+        )
+
+        # Mixed calendar + absolute: shift(days=1, hours=3) should apply
+        # days as wall-clock, then hours as absolute.
+        mixed = arrow.Arrow(2025, 3, 8, 18, 30, tzinfo=ZoneInfo("US/Central"))
+        assert mixed.shift(days=1, hours=3) == arrow.Arrow(
+            2025, 3, 9, 21, 30, tzinfo=ZoneInfo("US/Central")
         )
 
     def test_shift_with_imaginary_check(self):
+        # Starting from an imaginary time (2:30 AM during spring-forward gap),
+        # ZoneInfo assigns EST offset (-05:00) so 2:30 EST = 7:30 UTC.
+        # +1 real hour = 8:30 UTC = 4:30 EDT.
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1)
-        assert shifted.datetime.hour == 3
+        assert shifted.datetime.hour == 4
 
     def test_shift_without_imaginary_check(self):
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1, check_imaginary=False)
-        assert shifted.datetime.hour == 3
+        assert shifted.datetime.hour == 4
 
     @pytest.mark.skipif(
         dateutil.__version__ < "2.7.1", reason="old tz database (2018d needed)"

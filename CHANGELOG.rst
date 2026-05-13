@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.4.1 (unreleased)
+------------------
+
+- [FIXED] Fixed ``shift()`` producing incorrect results when shifting by hours/minutes/seconds across DST transitions. Absolute time units are now added via UTC to reflect real elapsed time. `Issue #1209 <https://github.com/arrow-py/arrow/issues/1209>`_
+
 1.4.0 (2025-10-18)
 ------------------
 

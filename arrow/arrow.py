@@ -1046,11 +1046,30 @@ class Arrow:
             relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
         )
 
+        # Separate absolute time units from calendar units.  Absolute units
+        # (hours, minutes, seconds, microseconds) represent fixed durations and
+        # must be added in UTC to correctly handle DST transitions.  Calendar
+        # units (years, months, weeks, days, weekday) are wall-clock relative
+        # and use relativedelta directly.
+        absolute_keys = ("hours", "minutes", "seconds", "microseconds")
+        absolute_kwargs = {
+            k: relative_kwargs.pop(k)
+            for k in absolute_keys
+            if k in relative_kwargs
+        }
+
+        # Step 1: Apply calendar units via relativedelta (wall-clock semantics).
         current = self._datetime + relativedelta(**relative_kwargs)
 
         # If check_imaginary is True, perform the check for imaginary times (DST transitions)
         if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
+
+        # Step 2: Apply absolute units via UTC to handle DST correctly.
+        if any(v != 0 for v in absolute_kwargs.values()):
+            utc_current = current.astimezone(timezone.utc)
+            utc_current += timedelta(**absolute_kwargs)
+            current = utc_current.astimezone(current.tzinfo)
 
         return self.fromdatetime(current)
 
