@@ -294,6 +294,15 @@ class TestGet:
             result._datetime, datetime(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific"))
         )
 
+    def test_two_args_str_str_tzinfo_none(self):
+        # Regression test for issue #1259: explicit tzinfo=None should be
+        # treated the same as omitting tzinfo entirely.
+        result = self.factory.get("2025-01-01", "YYYY-MM-DD", tzinfo=None)
+        expected = self.factory.get("2025-01-01", "YYYY-MM-DD")
+
+        assert result == expected
+        assert result._datetime == datetime(2025, 1, 1, tzinfo=tz.tzutc())
+
     def test_two_args_twitter_format(self):
         # format returned by twitter API for created_at:
         twitter_date = "Fri Apr 08 21:08:54 +0000 2016"
