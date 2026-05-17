@@ -2987,6 +2987,33 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_negative_values(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # Negative time values should raise ValueError instead of
+        # silently dropping the sign and returning a wrong result.
+        # See: https://github.com/arrow-py/arrow/issues/1278
+        negative_inputs = [
+            "in -1 hours",
+            "in -2 days",
+            "-3 minutes ago",
+            "in -30 seconds",
+        ]
+
+        for s in negative_inputs:
+            with pytest.raises(ValueError, match="Negative time values"):
+                arw.dehumanize(s)
+
+        # Positive time values should continue to succeed
+        assert arw.dehumanize("in 1 hours") == arw.shift(hours=1)
+        assert arw.dehumanize("2 days ago") == arw.shift(days=-2)
+
+        # Hyphenated strings without spaces preceding the minus/hyphen should not
+        # trigger the negative validation error (they will raise ValueError for unrecognized units).
+        with pytest.raises(ValueError) as excinfo:
+            arw.dehumanize("some-2nd-hour")
+        assert "Negative time values" not in str(excinfo.value)
+
 
 class TestArrowIsBetween:
     def test_start_before_end(self):

@@ -1380,6 +1380,18 @@ class Arrow:
 
         current_time = self.fromdatetime(self._datetime)
 
+        # Reject negative time values early.  The number-extraction regex
+        # (\d+) only matches unsigned digits, so an input like "in -1 hours"
+        # would silently drop the minus sign and return the *opposite*
+        # direction.  Raising here gives the caller a clear message instead
+        # of a quietly wrong result.
+        if re.search(r"(?:^|\s)-\d", input_string):
+            raise ValueError(
+                f"Negative time values are not supported in dehumanize "
+                f"(got {input_string!r}). "
+                f"Use a positive value with 'ago' or 'in' to indicate direction."
+            )
+
         # Create an object containing the relative time info
         time_object_info = dict.fromkeys(
             ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
