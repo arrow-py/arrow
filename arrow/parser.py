@@ -422,12 +422,17 @@ class DateTimeParser:
         parts: _Parts = {}
         for token in fmt_tokens:
             value: Union[Tuple[str, str, str], str]
-            if token == "Do":
-                value = match.group("value")
-            elif token == "W":
-                value = (match.group("year"), match.group("week"), match.group("day"))
-            else:
-                value = match.group(token)
+            try:
+                if token == "Do":
+                    value = match.group("value")
+                elif token == "W":
+                    value = (match.group("year"), match.group("week"), match.group("day"))
+                else:
+                    value = match.group(token)
+            except IndexError:
+                raise ParserMatchError(
+                    f"Failed to match {fmt!r} when parsing {datetime_string!r}."
+                )
 
             if value is None:
                 raise ParserMatchError(
