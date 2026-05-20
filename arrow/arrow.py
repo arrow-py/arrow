@@ -582,6 +582,8 @@ class Arrow:
                 floor = floor.shift(days=-(self.isoweekday() - week_start) - delta)
             elif frame_absolute == "quarter":
                 floor = floor.shift(months=-((self.month - 1) % 3))
+            else:
+                floor = floor.shift(**{frame_relative: -(getattr(self, frame_absolute) % count * relative_steps)})
 
         ceil = floor.shift(
             check_imaginary=True, **{frame_relative: count * relative_steps}
