@@ -411,7 +411,7 @@ class ItalianLocale(Locale):
     timeframes = {
         "now": "adesso",
         "second": "un secondo",
-        "seconds": "{0} qualche secondo",
+        "seconds": "{0} secondi",
         "minute": "un minuto",
         "minutes": "{0} minuti",
         "hour": "un'ora",
