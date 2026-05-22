@@ -170,4 +170,6 @@ DEHUMANIZE_LOCALES = {
     "hy",
     "uz",
     "uz-uz",
+    "te",
+    "te-in",
 }

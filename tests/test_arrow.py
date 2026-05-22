@@ -2501,6 +2501,8 @@ def locale_list_no_weeks() -> List[str]:
         "uz-uz",
         # "lo",
         # "lo-la",
+        "te",
+        "te-in",
     ]
 
     return tested_langs
@@ -2579,6 +2581,8 @@ def locale_list_with_weeks() -> List[str]:
         "hy-am",
         "uz",
         "uz-uz",
+        "te",
+        "te-in",
     ]
 
     return tested_langs

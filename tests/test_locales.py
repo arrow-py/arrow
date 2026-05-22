@@ -3782,3 +3782,47 @@ class TestCatalanLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("una hora", "hour", 1) == "En una hora"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestTeluguLocale:
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "ఇప్పుడు"
+        assert self.locale._format_timeframe("second", 1) == "ఒక సెకను"
+        assert self.locale._format_timeframe("seconds", 3) == "3 సెకన్లు"
+        assert self.locale._format_timeframe("minute", 1) == "ఒక నిమిషం"
+        assert self.locale._format_timeframe("minutes", 4) == "4 నిమిషాలు"
+        assert self.locale._format_timeframe("hour", 1) == "ఒక గంట"
+        assert self.locale._format_timeframe("hours", 23) == "23 గంటలు"
+        assert self.locale._format_timeframe("day", 1) == "ఒక రోజు"
+        assert self.locale._format_timeframe("days", 12) == "12 రోజులు"
+        assert self.locale._format_timeframe("week", 1) == "ఒక వారం"
+        assert self.locale._format_timeframe("weeks", 12) == "12 వారాలు"
+        assert self.locale._format_timeframe("month", 1) == "ఒక నెల"
+        assert self.locale._format_timeframe("months", 2) == "2 నెలలు"
+        assert self.locale._format_timeframe("year", 1) == "ఒక సంవత్సరం"
+        assert self.locale._format_timeframe("years", 2) == "2 సంవత్సరాలు"
+
+    def test_ordinal_number(self):
+        assert self.locale._ordinal_number(0) == "0వ"
+        assert self.locale._ordinal_number(1) == "1వ"
+        assert self.locale._ordinal_number(3) == "3వ"
+        assert self.locale._ordinal_number(11) == "11వ"
+        assert self.locale._ordinal_number(-1) == ""
+
+    def test_format_relative_now(self):
+        result = self.locale._format_relative("ఇప్పుడు", "now", 0)
+        assert result == "ఇప్పుడు"
+
+    def test_format_relative_past(self):
+        result = self.locale._format_relative("ఒక గంట", "hour", -1)
+        assert result == "ఒక గంట క్రితం"
+
+    def test_format_relative_future(self):
+        result = self.locale._format_relative("ఒక గంట", "hour", 1)
+        assert result == "ఒక గంటలో"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "శనివారం"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "శని"
