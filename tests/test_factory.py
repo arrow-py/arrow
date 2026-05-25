@@ -23,6 +23,26 @@ class TestGet:
             self.factory.get(), datetime.now(timezone.utc).replace(tzinfo=timezone.utc)
         )
 
+    def test_tzinfo_none_explicit_omission_consistency(self):
+        # Test with timestamp input
+        timestamp = 1623456789
+        explicit_none = self.factory.get(timestamp, tzinfo=None)
+        omitted = self.factory.get(timestamp)
+        assert explicit_none == omitted
+
+        # Test with datetime input
+        dt = datetime(2021, 6, 1, 12, 0, 0)
+        explicit_none_dt = self.factory.get(dt, tzinfo=None)
+        omitted_dt = self.factory.get(dt)
+        assert explicit_none_dt == omitted_dt
+
+        # Test with string input and format
+        date_str = "2021-06-01"
+        date_format = "YYYY-MM-DD"
+        explicit_none_str = self.factory.get(date_str, date_format, tzinfo=None)
+        omitted_str = self.factory.get(date_str, date_format)
+        assert explicit_none_str == omitted_str
+
     def test_timestamp_one_arg_no_arg(self):
         no_arg = self.factory.get(1406430900).timestamp()
         one_arg = self.factory.get("1406430900", "X").timestamp()

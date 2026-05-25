@@ -83,6 +83,9 @@ class ArrowFactory:
     ) -> Arrow: ...  # pragma: no cover
 
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
+        tzinfo = kwargs.get('tzinfo')
+        if tzinfo is None:
+            kwargs.pop('tzinfo', None)
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
         :param locale: (optional) a ``str`` specifying a locale for the parser. Defaults to 'en-us'.
