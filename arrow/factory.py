@@ -245,6 +245,11 @@ class ArrowFactory:
             # (str) -> parse @ tzinfo
             elif isinstance(arg, str):
                 dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
+                if tz is not None and dt.tzinfo is not None:
+                    # If the parsed string already has offset info, convert to
+                    # the target timezone (preserving the UTC moment) rather than
+                    # replacing the tzinfo, so ambiguous times are resolved correctly issue #1162.
+                    return self.type.fromdatetime(dt).to(tz)
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             # (struct_time) -> from struct_time
