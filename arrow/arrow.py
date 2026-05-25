@@ -321,7 +321,27 @@ class Arrow:
                 tzinfo = timezone.utc
             else:
                 tzinfo = dt.tzinfo
-
+            fold = getattr(dt, "fold", 0)
+        else:
+            # When replacing tzinfo, infer the correct fold by comparing
+            # the original UTC offset to what fold=1 produces in the new tz.
+            # This correctly handles ambiguous times (e.g. DST fall-back) issue #1162.
+            fold = getattr(dt, "fold", 0)
+            if dt.tzinfo is not None and dt.utcoffset() is not None:
+                resolved = cls._get_tzinfo(tzinfo)
+                dt_fold1 = dt_datetime(
+                    dt.year,
+                    dt.month,
+                    dt.day,
+                    dt.hour,
+                    dt.minute,
+                    dt.second,
+                    dt.microsecond,
+                    tzinfo=resolved,
+                    fold=1,
+                )
+                if dt_fold1.utcoffset() == dt.utcoffset():
+                    fold = 1
         return cls(
             dt.year,
             dt.month,
@@ -331,7 +351,7 @@ class Arrow:
             dt.second,
             dt.microsecond,
             tzinfo,
-            fold=getattr(dt, "fold", 0),
+            fold=fold,
         )
 
     @classmethod
