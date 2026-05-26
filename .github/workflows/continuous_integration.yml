@@ -15,12 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["pypy-3.9", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["pypy-3.11", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        exclude:
-          # pypy3 randomly fails on Windows builds
-          - os: windows-latest
-            python-version: "pypy-3.9"
         include:
           - os: ubuntu-latest
             path: ~/.cache/pip
@@ -29,15 +25,15 @@ jobs:
           - os: windows-latest
             path: ~\AppData\Local\pip\Cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Cache pip
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ matrix.path }}
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -47,27 +43,34 @@ jobs:
       - name: Test with tox
         run: tox
       - name: Upload coverage to Codecov
+        if: ${{ success() }}
         uses: codecov/codecov-action@v5
         with:
-          file: coverage.xml
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   linting:
     name: Linting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v6
+      - uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
           restore-keys: ${{ runner.os }}-pip-
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
           restore-keys: ${{ runner.os }}-pre-commit-
       - name: Set up Python ${{ runner.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install dependencies

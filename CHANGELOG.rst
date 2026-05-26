@@ -1,6 +1,31 @@
 Changelog
 =========
 
+1.4.0 (2025-10-18)
+------------------
+
+- [ADDED] Added ``week_start`` parameter to ``floor()`` and ``ceil()`` methods. `PR #1222 <https://github.com/arrow-py/arrow/pull/1222>`_
+- [ADDED] Added ``FORMAT_RFC3339_STRICT`` with a T separator. `PR #1201 <https://github.com/arrow-py/arrow/pull/1201>`_
+- [ADDED] Added Macedonian in Latin locale support. `PR #1200 <https://github.com/arrow-py/arrow/pull/1200>`_
+- [ADDED] Added Persian/Farsi locale support. `PR #1190 <https://github.com/arrow-py/arrow/pull/1190>`_
+- [ADDED] Added week and weeks to Thai locale timeframes. `PR #1218 <https://github.com/arrow-py/arrow/pull/1218>`_
+- [ADDED] Added weeks to Catalan locale. `PR #1189 <https://github.com/arrow-py/arrow/pull/1189>`_
+- [ADDED] Added Persian names of months, month-abbreviations and day-abbreviations in Gregorian calendar. `PR #1172 <https://github.com/arrow-py/arrow/pull/1172>`_
+- [CHANGED] Migrated Arrow to use ZoneInfo for timezones instead of pytz. `PR #1217 <https://github.com/arrow-py/arrow/pull/1217>`_
+- [FIXED] Fixed humanize month limits. `PR #1224 <https://github.com/arrow-py/arrow/pull/1224>`_
+- [FIXED] Fixed type hint of ``Arrow.__getattr__``. `PR #1171 <https://github.com/arrow-py/arrow/pull/1171>`_
+- [FIXED] Fixed spelling and removed poorly used expressions in Korean locale. `PR #1181 <https://github.com/arrow-py/arrow/pull/1181>`_
+- [FIXED] Updated ``shift()`` method for issue #1145. `PR #1194 <https://github.com/arrow-py/arrow/pull/1194>`_
+- [FIXED] Improved Greek locale translations (seconds, days, "ago", and month typo). `PR #1184 <https://github.com/arrow-py/arrow/pull/1184>`_, `PR #1186 <https://github.com/arrow-py/arrow/pull/1186>`_
+- [FIXED] Addressed ``datetime.utcnow`` deprecation warning. `PR #1182 <https://github.com/arrow-py/arrow/pull/1182>`_
+- [INTERNAL] Added codecov test results. `PR #1223 <https://github.com/arrow-py/arrow/pull/1223>`_
+- [INTERNAL] Updated CI dependencies (actions/setup-python, actions/checkout, codecov/codecov-action, actions/cache).
+- [INTERNAL] Added docstrings to parser.py. `PR #1010 <https://github.com/arrow-py/arrow/pull/1010>`_
+- [INTERNAL] Updated Python versions support and bumped CI dependencies. `PR #1177 <https://github.com/arrow-py/arrow/pull/1177>`_
+- [INTERNAL] Added dependabot for GitHub actions. `PR #1193 <https://github.com/arrow-py/arrow/pull/1193>`_
+- [INTERNAL] Moved dateutil types to test requirements. `PR #1183 <https://github.com/arrow-py/arrow/pull/1183>`_
+- [INTERNAL] Added documentation link for ``arrow.format``. `PR #1180 <https://github.com/arrow-py/arrow/pull/1180>`_
+
 1.3.0 (2023-09-30)
 ------------------
 

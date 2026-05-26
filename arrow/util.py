@@ -1,7 +1,7 @@
 """Helpful functions used internally within arrow."""
 
 import datetime
-from typing import Any, Optional, cast
+from typing import Any, Optional
 
 from dateutil.rrule import WEEKLY, rrule
 
@@ -39,10 +39,7 @@ def next_weekday(
     """
     if weekday < 0 or weekday > 6:
         raise ValueError("Weekday must be between 0 (Monday) and 6 (Sunday).")
-    return cast(
-        datetime.datetime,
-        rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0],
-    )
+    return rrule(freq=WEEKLY, dtstart=start_date, byweekday=weekday, count=1)[0]
 
 
 def is_timestamp(value: Any) -> bool:

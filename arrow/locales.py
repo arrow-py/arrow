@@ -1619,6 +1619,8 @@ class AfrikaansLocale(Locale):
         "hours": "{0} ure",
         "day": "een dag",
         "days": "{0} dae",
+        "week": "een week",
+        "weeks": "{0} weke",
         "month": "een maand",
         "months": "{0} maande",
         "year": "een jaar",
@@ -4015,16 +4017,18 @@ class ThaiLocale(Locale):
     timeframes = {
         "now": "ขณะนี้",
         "second": "วินาที",
-        "seconds": "{0} ไม่กี่วินาที",
-        "minute": "1 นาที",
+        "seconds": "{0} วินาที",
+        "minute": "นาที",
         "minutes": "{0} นาที",
-        "hour": "1 ชั่วโมง",
+        "hour": "ชั่วโมง",
         "hours": "{0} ชั่วโมง",
-        "day": "1 วัน",
+        "day": "วัน",
         "days": "{0} วัน",
-        "month": "1 เดือน",
+        "week": "สัปดาห์",
+        "weeks": "{0} สัปดาห์",
+        "month": "เดือน",
         "months": "{0} เดือน",
-        "year": "1 ปี",
+        "year": "ปี",
         "years": "{0} ปี",
     }
 
@@ -4059,8 +4063,17 @@ class ThaiLocale(Locale):
         "ธ.ค.",
     ]
 
-    day_names = ["", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"]
-    day_abbreviations = ["", "จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"]
+    day_names = [
+        "",
+        "วันจันทร์",
+        "วันอังคาร",
+        "วันพุธ",
+        "วันพฤหัสบดี",
+        "วันศุกร์",
+        "วันเสาร์",
+        "วันอาทิตย์",
+    ]
+    day_abbreviations = ["", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส.", "อา."]
 
     meridians = {"am": "am", "pm": "pm", "AM": "AM", "PM": "PM"}
 

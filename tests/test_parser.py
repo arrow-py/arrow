@@ -1,10 +1,15 @@
 import calendar
 import os
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from dateutil import tz
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
 
 import arrow
 from arrow import formatter, parser
@@ -319,7 +324,7 @@ class TestDateTimeParserParse:
 
     @pytest.mark.parametrize("full_tz_name", make_full_tz_list())
     def test_parse_tz_name_zzz(self, full_tz_name):
-        self.expected = datetime(2013, 1, 1, tzinfo=tz.gettz(full_tz_name))
+        self.expected = datetime(2013, 1, 1, tzinfo=ZoneInfo(full_tz_name))
         assert (
             self.parser.parse(f"2013-01-01 {full_tz_name}", "YYYY-MM-DD ZZZ")
             == self.expected
@@ -1309,36 +1314,40 @@ class TestDateTimeParserISO:
 @pytest.mark.usefixtures("tzinfo_parser")
 class TestTzinfoParser:
     def test_parse_local(self):
-        assert self.parser.parse("local") == tz.tzlocal()
+        from datetime import datetime
+
+        assert self.parser.parse("local") == datetime.now().astimezone().tzinfo
 
     def test_parse_utc(self):
-        assert self.parser.parse("utc") == tz.tzutc()
-        assert self.parser.parse("UTC") == tz.tzutc()
+        assert self.parser.parse("utc") == timezone.utc
+        assert self.parser.parse("UTC") == timezone.utc
 
     def test_parse_utc_withoffset(self):
-        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("(UTC-01:00") == tz.tzoffset(None, -3600)
-        assert self.parser.parse("(UTC+01:00") == tz.tzoffset(None, 3600)
+        assert self.parser.parse("(UTC+01:00") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("(UTC-01:00") == timezone(timedelta(seconds=-3600))
+        assert self.parser.parse("(UTC+01:00") == timezone(timedelta(seconds=3600))
         assert self.parser.parse(
             "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
-        ) == tz.tzoffset(None, 3600)
+        ) == timezone(timedelta(seconds=3600))
 
     def test_parse_iso(self):
-        assert self.parser.parse("01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("11:35") == tz.tzoffset(None, 11 * 3600 + 2100)
-        assert self.parser.parse("+01:00") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-01:00") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("01:00") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("11:35") == timezone(
+            timedelta(seconds=11 * 3600 + 2100)
+        )
+        assert self.parser.parse("+01:00") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("-01:00") == timezone(timedelta(seconds=-3600))
 
-        assert self.parser.parse("0100") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("+0100") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-0100") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("0100") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("+0100") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("-0100") == timezone(timedelta(seconds=-3600))
 
-        assert self.parser.parse("01") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("+01") == tz.tzoffset(None, 3600)
-        assert self.parser.parse("-01") == tz.tzoffset(None, -3600)
+        assert self.parser.parse("01") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("+01") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("-01") == timezone(timedelta(seconds=-3600))
 
     def test_parse_str(self):
-        assert self.parser.parse("US/Pacific") == tz.gettz("US/Pacific")
+        assert self.parser.parse("US/Pacific") == ZoneInfo("US/Pacific")
 
     def test_parse_fails(self):
         with pytest.raises(parser.ParserError):
