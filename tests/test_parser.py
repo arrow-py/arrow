@@ -371,6 +371,18 @@ class TestDateTimeParserParse:
             == self.expected
         )
 
+        # Test parsing with up to 9 fractional second digits
+        for i in range(1, 10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            expected_microseconds = int(f"987654321"[0:i].ljust(6, "0"))  # Expected µs
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert (
+                self.parser.parse(
+                    f"2013-01-01 12:30:45.{fractional_seconds}", "YYYY-MM-DD HH:mm:ss.SSSSSSSSS"
+                )
+                == self.expected
+            )
+
         self.expected = datetime(2013, 1, 1, 12, 30, 45, 987654)
         assert (
             self.parser.parse(
