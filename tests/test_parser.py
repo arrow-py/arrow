@@ -371,6 +371,130 @@ class TestDateTimeParserParse:
             == self.expected
         )
 
+        # Test cases for fractional seconds with varying precision (0 to 9 digits)
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional part
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected µs
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+    def test_parse_iso_fractional_seconds(self):
+        # Test cases for fractional seconds with varying precision (0 to 9 digits)
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            expected_microseconds = int(
+                f"987654321"[0:i] + "0" * (6 - i)
+            )  # Calculate expected microseconds
+            self.expected = datetime(
+                2013, 1, 1, 12, 30, 45, expected_microseconds
+            )  # Expected datetime object
+
+            # Test with 'T' separator
+            assert self.parser.parse_iso(
+                f"2013-01-01T12:30:45.{fractional_seconds}"
+            ) == self.expected
+
+            # Test with space separator
+            assert self.parser.parse_iso(
+                f"2013-01-01 12:30:45.{fractional_seconds}"
+            ) == self.expected
+
+        # Edge case: no fractional seconds
+        self.expected = datetime(2013, 1, 1, 12, 30, 45)
+        assert self.parser.parse_iso("2013-01-01T12:30:45") == self.expected
+        assert self.parser.parse_iso("2013-01-01 12:30:45") == self.expected
+
+        # Test cases for fractional seconds with varying precision (0 to 9 digits)
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional part
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected µs
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+    def test_parse_iso_fractional_seconds(self):
+        # Test cases for fractional seconds with varying precision (0 to 9 digits)
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            expected_microseconds = int(
+                f"987654321"[0:i] + "0" * (6 - i)
+            )  # Calculate expected microseconds
+            self.expected = datetime(
+                2013, 1, 1, 12, 30, 45, expected_microseconds
+            )  # Expected datetime object
+
+            # Test with 'T' separator
+            assert self.parser.parse_iso(
+                f"2013-01-01T12:30:45.{fractional_seconds}"
+            ) == self.expected
+
+            # Test with space separator
+            assert self.parser.parse_iso(
+                f"2013-01-01 12:30:45.{fractional_seconds}"
+            ) == self.expected
+
+        # Edge case: no fractional seconds
+        self.expected = datetime(2013, 1, 1, 12, 30, 45)
+        assert self.parser.parse_iso("2013-01-01T12:30:45") == self.expected
+        assert self.parser.parse_iso("2013-01-01 12:30:45") == self.expected
+
+        # Test cases for fractional seconds with varying precision (0 to 9 digits)
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional part
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected µs
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
+        # Test parsing with up to 9 fractional second digits
+        for i in range(10):
+            fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
+            datetime_string = f"2013-01-01 12:30:45.{fractional_seconds}"
+            expected_microseconds = int(f"987654321"[0:i] + "0" * (6 - i))  # Calculate expected microseconds
+            self.expected = datetime(2013, 1, 1, 12, 30, 45, expected_microseconds)
+            assert self.parser.parse_iso(datetime_string) == self.expected
+
         # Test parsing with up to 9 fractional second digits
         for i in range(1, 10):
             fractional_seconds = f"{987654321:.{i}f}"[2:]  # Generate fractional seconds
