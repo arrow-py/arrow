@@ -550,6 +550,7 @@ class DateTimeParser:
             "m",
             "ss",
             "s",
+            "d",
             "x",
         ],
         value: Union[str, bytes, SupportsInt, bytearray],
@@ -644,6 +645,9 @@ class DateTimeParser:
                 value.lower()
             )
             parts["day_of_week"] = day_of_week - 1
+
+        elif token == "d":
+            parts["day_of_week"] = int(value) - 1
 
         elif token.upper() in ["HH", "H"]:
             parts["hour"] = int(value)

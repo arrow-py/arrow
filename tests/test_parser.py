@@ -586,6 +586,9 @@ class TestDateTimeParserParse:
         assert self.parser.parse("Tuesday", "dddd") == expected
         assert fr_parser.parse("mardi", "dddd") == expected
 
+        # Get first Wednesday after epoch by ISO day of week
+        assert arrow.get("3", "d") == arrow.get(1970, 1, 7)
+
         # Get first Tuesday in 2020
         expected = datetime(2020, 1, 7)
         assert self.parser.parse("Tue 2020", "ddd YYYY") == expected
