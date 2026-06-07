@@ -315,6 +315,15 @@ class TestGet:
         with pytest.raises(TypeError):
             self.factory.get(object(), object())
 
+    # regression test for issue #1259
+    def test_explicit_tzinfo_none(self):
+        # passing tzinfo=None should behave the same as omitting it, rather
+        # than routing the call to the Arrow constructor
+        expected = datetime(2013, 1, 1, tzinfo=tz.tzutc())
+
+        assert self.factory.get("2013-01-01", "YYYY-MM-DD", tzinfo=None) == expected
+        assert self.factory.get("2013-01-01", tzinfo=None) == expected
+
     def test_three_args_with_tzinfo(self):
         timefmt = "YYYYMMDD"
         d = "20150514"
