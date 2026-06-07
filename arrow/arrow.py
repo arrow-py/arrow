@@ -998,7 +998,7 @@ class Arrow:
         according to inputs.
 
         Parameters:
-        check_imaginary (bool): If True (default), will check for and resolve
+        check_imaginary (bool): If True (default), checks for and resolves
         imaginary times (like during DST transitions). If False, skips this check.
 
 
@@ -1048,9 +1048,11 @@ class Arrow:
 
         current = self._datetime + relativedelta(**relative_kwargs)
 
-        # If check_imaginary is True, perform the check for imaginary times (DST transitions)
-        if check_imaginary and not dateutil_tz.datetime_exists(current):
-            current = dateutil_tz.resolve_imaginary(current)
+        if check_imaginary:
+            # Check if the resulting datetime exists (not imaginary during DST transition)
+            if not dateutil_tz.datetime_exists(current):
+                # Resolve imaginary time by adjusting to the appropriate DST offset
+                current = dateutil_tz.resolve_imaginary(current)
 
         return self.fromdatetime(current)
 
