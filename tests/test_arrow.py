@@ -2930,6 +2930,17 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    # Negative numbers are not valid: direction comes from "ago"/"in" wording,
+    # not a sign, and the sign would otherwise be silently dropped.
+    def test_negative_number(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        with pytest.raises(ValueError):
+            arw.dehumanize("in -1 hours")
+
+        with pytest.raises(ValueError):
+            arw.dehumanize("-2 days ago")
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [
