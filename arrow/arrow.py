@@ -1380,6 +1380,16 @@ class Arrow:
 
         current_time = self.fromdatetime(self._datetime)
 
+        # Humanized strings encode direction with the locale's past/future
+        # wording ("ago"/"in"), not a sign on the number. A negative value such
+        # as "in -1 hours" would otherwise have its sign dropped by the number
+        # regex below and be parsed as positive, so reject it explicitly.
+        if re.search(r"-\d", input_string):
+            raise ValueError(
+                "Invalid input string: negative numbers are not supported. "
+                "Use the past or future wording instead, e.g. '1 hour ago' or 'in 1 hour'."
+            )
+
         # Create an object containing the relative time info
         time_object_info = dict.fromkeys(
             ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
