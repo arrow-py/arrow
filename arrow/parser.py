@@ -888,7 +888,7 @@ class TzinfoParser:
     """
 
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
+        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?(?![0-9.:])"
     )
 
     @classmethod

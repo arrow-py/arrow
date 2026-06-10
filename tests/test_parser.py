@@ -1330,6 +1330,14 @@ class TestTzinfoParser:
             "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
         ) == timezone(timedelta(seconds=3600))
 
+    def test_parse_partial_offset_fail(self):
+        # Regression tests for issue where partial offsets were matched
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("+03:00.34")
+
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("+03005")
+
     def test_parse_iso(self):
         assert self.parser.parse("01:00") == timezone(timedelta(seconds=3600))
         assert self.parser.parse("11:35") == timezone(
