@@ -689,6 +689,10 @@ class DateTimeParser:
                     )
             elif value in (self.locale.meridians["pm"], self.locale.meridians["PM"]):
                 parts["am_pm"] = "pm"
+                if "hour" in parts and not 0 <= parts["hour"] <= 12:
+                    raise ParserMatchError(
+                        f"Hour token value must be between 0 and 12 inclusive for token {token!r}."
+                    )
         elif token == "W":
             parts["weekdate"] = value
 
