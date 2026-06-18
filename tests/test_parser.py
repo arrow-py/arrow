@@ -1323,9 +1323,8 @@ class TestTzinfoParser:
         assert self.parser.parse("UTC") == timezone.utc
 
     def test_parse_utc_withoffset(self):
-        assert self.parser.parse("(UTC+01:00") == timezone(timedelta(seconds=3600))
-        assert self.parser.parse("(UTC-01:00") == timezone(timedelta(seconds=-3600))
-        assert self.parser.parse("(UTC+01:00") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("(UTC+01:00)") == timezone(timedelta(seconds=3600))
+        assert self.parser.parse("(UTC-01:00)") == timezone(timedelta(seconds=-3600))
         assert self.parser.parse(
             "(UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien"
         ) == timezone(timedelta(seconds=3600))
@@ -1352,6 +1351,16 @@ class TestTzinfoParser:
     def test_parse_fails(self):
         with pytest.raises(parser.ParserError):
             self.parser.parse("fail")
+        # invalid trailing characters (issue #1294)
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("+03:00.34")
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("+03:00 ")
+        # unclosed UTC parenthetical
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("(UTC+01:00")
+        with pytest.raises(parser.ParserError):
+            self.parser.parse("(UTC+01:00 Amsterdam, Berlin")
 
 
 @pytest.mark.usefixtures("dt_parser")
