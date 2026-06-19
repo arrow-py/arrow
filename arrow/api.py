@@ -12,6 +12,7 @@ from typing import Any, List, Optional, Tuple, Type, Union, overload
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.constants import DEFAULT_LOCALE
 from arrow.factory import ArrowFactory
+from arrow.parser import TzinfoParser
 
 # internal default factory.
 _factory = ArrowFactory()
@@ -118,4 +119,20 @@ def factory(type: Type[Arrow]) -> ArrowFactory:
     return ArrowFactory(type)
 
 
-__all__ = ["get", "utcnow", "now", "factory"]
+def timezone(tz_str: str) -> dt_tzinfo:
+    """Returns a timezone object from a timezone string expression.
+
+    :param tz_str: A timezone string expression, e.g. ``"US/Pacific"``, ``"UTC"``, ``"local"``.
+
+    Usage::
+
+        >>> arrow.timezone("US/Pacific")
+        zoneinfo.ZoneInfo(key='US/Pacific')
+        >>> arrow.timezone("UTC")
+        datetime.timezone.utc
+
+    """
+    return TzinfoParser.parse(tz_str)
+
+
+__all__ = ["get", "utcnow", "now", "factory", "timezone"]
