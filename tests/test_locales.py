@@ -3782,3 +3782,260 @@ class TestCatalanLocale:
 
     def test_format_relative_future(self):
         assert self.locale._format_relative("una hora", "hour", 1) == "En una hora"
+
+
+@pytest.mark.usefixtures("lang_locale")
+class TestGalicianLocale:
+    def test_ordinal_number(self):
+        assert self.locale.ordinal_number(0) == "0º"
+        assert self.locale.ordinal_number(1) == "1º"
+        assert self.locale.ordinal_number(31) == "31º"
+
+    def test_format_timeframe(self):
+        assert self.locale._format_timeframe("now", 0) == "agora"
+        assert self.locale._format_timeframe("second", 1) == "un segundo"
+        assert self.locale._format_timeframe("seconds", 1) == "1 segundos"
+        assert self.locale._format_timeframe("seconds", 3) == "3 segundos"
+        assert self.locale._format_timeframe("seconds", 30) == "30 segundos"
+        assert self.locale._format_timeframe("minute", 1) == "un minuto"
+        assert self.locale._format_timeframe("minutes", 4) == "4 minutos"
+        assert self.locale._format_timeframe("minutes", 40) == "40 minutos"
+        assert self.locale._format_timeframe("hour", 1) == "unha hora"
+        assert self.locale._format_timeframe("hours", 5) == "5 horas"
+        assert self.locale._format_timeframe("hours", 23) == "23 horas"
+        assert self.locale._format_timeframe("day", 1) == "un día"
+        assert self.locale._format_timeframe("days", 6) == "6 días"
+        assert self.locale._format_timeframe("days", 12) == "12 días"
+        assert self.locale._format_timeframe("week", 1) == "unha semana"
+        assert self.locale._format_timeframe("weeks", 2) == "2 semanas"
+        assert self.locale._format_timeframe("weeks", 3) == "3 semanas"
+        assert self.locale._format_timeframe("month", 1) == "un mes"
+        assert self.locale._format_timeframe("months", 7) == "7 meses"
+        assert self.locale._format_timeframe("months", 11) == "11 meses"
+        assert self.locale._format_timeframe("year", 1) == "un ano"
+        assert self.locale._format_timeframe("years", 8) == "8 anos"
+        assert self.locale._format_timeframe("years", 12) == "12 anos"
+
+    def test_format_timeframe_past(self):
+        assert self.locale._format_timeframe("now", 0) == "agora"
+        assert self.locale._format_timeframe("second", -1) == "un segundo"
+        assert self.locale._format_timeframe("seconds", -9) == "9 segundos"
+        assert self.locale._format_timeframe("minute", -1) == "un minuto"
+        assert self.locale._format_timeframe("minutes", -10) == "10 minutos"
+        assert self.locale._format_timeframe("hour", -1) == "unha hora"
+        assert self.locale._format_timeframe("hours", -11) == "11 horas"
+        assert self.locale._format_timeframe("day", -1) == "un día"
+        assert self.locale._format_timeframe("days", -12) == "12 días"
+        assert self.locale._format_timeframe("week", -1) == "unha semana"
+        assert self.locale._format_timeframe("weeks", -3) == "3 semanas"
+        assert self.locale._format_timeframe("month", -1) == "un mes"
+        assert self.locale._format_timeframe("months", -13) == "13 meses"
+        assert self.locale._format_timeframe("year", -1) == "un ano"
+        assert self.locale._format_timeframe("years", -14) == "14 anos"
+
+    def test_format_relative_now(self):
+        assert self.locale._format_relative("agora", "now", 0) == "agora"
+
+    def test_format_relative_past(self):
+        assert self.locale._format_relative("unha hora", "hour", -1) == "hai unha hora"
+
+    def test_format_relative_future(self):
+        assert self.locale._format_relative("unha hora", "hour", 1) == "en unha hora"
+
+    def test_weekday(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.day_name(dt.isoweekday()) == "sábado"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "sáb"
+
+    def test_month_name(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        assert self.locale.month_name(dt.month) == "abril"
+        assert self.locale.month_abbreviation(dt.month) == "abr"
+
+    def test_meridians_in_western_locale(self):
+        assert self.locale.meridian(7, "A") == "AM"
+        assert self.locale.meridian(18, "A") == "PM"
+        assert self.locale.meridian(10, "a") == "am"
+        assert self.locale.meridian(22, "a") == "pm"
+
+    def test_format_full(self):
+        dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
+        result = self.locale._format_timeframe("days", 2)
+        assert result == "2 días"
+        assert self.locale.month_name(dt.month) == "abril"
+
+    def test_describe(self):
+        assert self.locale.describe("hour", only_distance=False) == "en unha hora"
+        assert self.locale.describe("hour", only_distance=True) == "unha hora"
+        assert self.locale.describe("now", only_distance=True) == "agora"
+
+    def test_describe_multi(self):
+        describe = self.locale.describe_multi(
+            [("hours", 2), ("minutes", 30)], only_distance=True
+        )
+        assert describe == "2 horas e 30 minutos"
+
+        describe = self.locale.describe_multi(
+            [("hours", 2), ("minutes", 30)], only_distance=False
+        )
+        assert describe == "en 2 horas e 30 minutos"
+
+        describe = self.locale.describe_multi(
+            [("hours", -2), ("minutes", -30)], only_distance=False
+        )
+        assert describe == "hai 2 horas e 30 minutos"
+
+    def test_all_month_names(self):
+        assert self.locale.month_name(1) == "xaneiro"
+        assert self.locale.month_name(2) == "febreiro"
+        assert self.locale.month_name(3) == "marzo"
+        assert self.locale.month_name(4) == "abril"
+        assert self.locale.month_name(5) == "maio"
+        assert self.locale.month_name(6) == "xuño"
+        assert self.locale.month_name(7) == "xullo"
+        assert self.locale.month_name(8) == "agosto"
+        assert self.locale.month_name(9) == "setembro"
+        assert self.locale.month_name(10) == "outubro"
+        assert self.locale.month_name(11) == "novembro"
+        assert self.locale.month_name(12) == "decembro"
+
+    def test_all_month_abbreviations(self):
+        assert self.locale.month_abbreviation(1) == "xan"
+        assert self.locale.month_abbreviation(2) == "feb"
+        assert self.locale.month_abbreviation(3) == "mar"
+        assert self.locale.month_abbreviation(4) == "abr"
+        assert self.locale.month_abbreviation(5) == "mai"
+        assert self.locale.month_abbreviation(6) == "xuñ"
+        assert self.locale.month_abbreviation(7) == "xul"
+        assert self.locale.month_abbreviation(8) == "ago"
+        assert self.locale.month_abbreviation(9) == "set"
+        assert self.locale.month_abbreviation(10) == "out"
+        assert self.locale.month_abbreviation(11) == "nov"
+        assert self.locale.month_abbreviation(12) == "dec"
+
+    def test_all_day_names(self):
+        assert self.locale.day_name(1) == "luns"
+        assert self.locale.day_name(2) == "martes"
+        assert self.locale.day_name(3) == "mércores"
+        assert self.locale.day_name(4) == "xoves"
+        assert self.locale.day_name(5) == "venres"
+        assert self.locale.day_name(6) == "sábado"
+        assert self.locale.day_name(7) == "domingo"
+
+    def test_all_day_abbreviations(self):
+        assert self.locale.day_abbreviation(1) == "lun"
+        assert self.locale.day_abbreviation(2) == "mar"
+        assert self.locale.day_abbreviation(3) == "mér"
+        assert self.locale.day_abbreviation(4) == "xov"
+        assert self.locale.day_abbreviation(5) == "ven"
+        assert self.locale.day_abbreviation(6) == "sáb"
+        assert self.locale.day_abbreviation(7) == "dom"
+
+    def test_year_methods(self):
+        assert self.locale.year_full(2015) == "2015"
+        assert self.locale.year_abbreviation(2015) == "15"
+
+    def test_regional_locale_lookup(self):
+        regional = locales.get_locale("gl-es")
+        assert isinstance(regional, locales.GalicianLocale)
+        assert regional.month_name(1) == "xaneiro"
+
+        base = locales.get_locale("gl")
+        assert isinstance(base, locales.GalicianLocale)
+
+    def test_format_via_public_api(self):
+        dt = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+        assert dt.format("MMMM", locale="gl") == "maio"
+        assert dt.format("MMM", locale="gl") == "mai"
+        assert dt.format("dddd", locale="gl") == "domingo"
+        assert dt.format("ddd", locale="gl") == "dom"
+
+    def test_ordinal_number_in_format(self):
+        dt = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+        assert dt.format("Do", locale="gl") == "5º"
+
+    def test_humanize_relative_units(self):
+        start = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+
+        assert start.humanize(start.shift(seconds=10), locale="gl") == "hai 10 segundos"
+        assert start.humanize(start.shift(seconds=-10), locale="gl") == "en 10 segundos"
+        assert start.humanize(start.shift(minutes=5), locale="gl") == "hai 5 minutos"
+        assert start.humanize(start.shift(minutes=-5), locale="gl") == "en 5 minutos"
+        assert start.humanize(start.shift(hours=3), locale="gl") == "hai 3 horas"
+        assert start.humanize(start.shift(hours=-3), locale="gl") == "en 3 horas"
+        assert start.humanize(start.shift(days=2), locale="gl") == "hai 2 días"
+        assert start.humanize(start.shift(days=-2), locale="gl") == "en 2 días"
+        assert start.humanize(start.shift(weeks=2), locale="gl") == "hai 2 semanas"
+        assert start.humanize(start.shift(weeks=-2), locale="gl") == "en 2 semanas"
+        assert start.humanize(start.shift(months=4), locale="gl") == "hai 4 meses"
+        assert start.humanize(start.shift(months=-4), locale="gl") == "en 4 meses"
+        assert start.humanize(start.shift(years=5), locale="gl") == "hai 5 anos"
+        assert start.humanize(start.shift(years=-5), locale="gl") == "en 5 anos"
+
+    def test_format_relative_singular_units(self):
+        assert (
+            self.locale._format_relative("un segundo", "second", 1) == "en un segundo"
+        )
+        assert self.locale._format_relative("un minuto", "minute", 1) == "en un minuto"
+        assert self.locale._format_relative("unha hora", "hour", 1) == "en unha hora"
+        assert self.locale._format_relative("un día", "day", 1) == "en un día"
+        assert (
+            self.locale._format_relative("unha semana", "week", 1) == "en unha semana"
+        )
+        assert self.locale._format_relative("un mes", "month", 1) == "en un mes"
+        assert self.locale._format_relative("un ano", "year", 1) == "en un ano"
+        assert self.locale._format_relative("un ano", "year", -1) == "hai un ano"
+
+    def test_humanize_now(self):
+        start = arrow.Arrow(2013, 5, 5, 12, 30, 45)
+        assert start.humanize(start, locale="gl") == "agora"
+
+    def test_meridian_values(self):
+        assert self.locale.meridians["am"] == "am"
+        assert self.locale.meridians["pm"] == "pm"
+        assert self.locale.meridians["AM"] == "AM"
+        assert self.locale.meridians["PM"] == "PM"
+
+    def test_locale_attributes(self):
+        assert self.locale.past == "hai {0}"
+        assert self.locale.future == "en {0}"
+        assert self.locale.and_word == "e"
+        assert "gl" in self.locale.names
+        assert "gl-es" in self.locale.names
+
+    def test_month_and_day_list_integrity(self):
+        # Index 0 is reserved as an empty spacer for 1-based indexing.
+        assert self.locale.month_names[0] == ""
+        assert self.locale.month_abbreviations[0] == ""
+        assert self.locale.day_names[0] == ""
+        assert self.locale.day_abbreviations[0] == ""
+
+        assert len(self.locale.month_names) == 13
+        assert len(self.locale.month_abbreviations) == 13
+        assert len(self.locale.day_names) == 8
+        assert len(self.locale.day_abbreviations) == 8
+
+        assert all(name for name in self.locale.month_names[1:])
+        assert all(name for name in self.locale.month_abbreviations[1:])
+        assert all(name for name in self.locale.day_names[1:])
+        assert all(name for name in self.locale.day_abbreviations[1:])
+
+    def test_timeframe_keys_present(self):
+        expected = {
+            "now",
+            "second",
+            "seconds",
+            "minute",
+            "minutes",
+            "hour",
+            "hours",
+            "day",
+            "days",
+            "week",
+            "weeks",
+            "month",
+            "months",
+            "year",
+            "years",
+        }
+        assert expected.issubset(set(self.locale.timeframes.keys()))
