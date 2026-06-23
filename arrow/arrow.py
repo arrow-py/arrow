@@ -1380,6 +1380,12 @@ class Arrow:
 
         current_time = self.fromdatetime(self._datetime)
 
+        if re.search(r"-\s*\d", input_string):
+            raise ValueError(
+                "Negative numbers are not supported in dehumanize. "
+                "Use 'ago' or 'in' to indicate direction."
+            )
+
         # Create an object containing the relative time info
         time_object_info = dict.fromkeys(
             ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
