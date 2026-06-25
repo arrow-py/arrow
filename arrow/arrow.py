@@ -643,8 +643,8 @@ class Arrow:
     def span_range(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         tz: Optional[TZ_EXPR] = None,
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
@@ -702,8 +702,10 @@ class Arrow:
         """
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdatetime(start, tzinfo).span(frame, exact=exact)[0]
-        end = cls.fromdatetime(end, tzinfo)
+        start = cls.fromdatetime(cls._get_datetime(start), tzinfo).span(
+            frame, exact=exact
+        )[0]
+        end = cls.fromdatetime(cls._get_datetime(end), tzinfo)
         _range = cls.range(frame, start, end, tz, limit)
         if not exact:
             for r in _range:
@@ -725,8 +727,8 @@ class Arrow:
     def interval(
         cls,
         frame: _T_FRAMES,
-        start: dt_datetime,
-        end: dt_datetime,
+        start: Union["Arrow", dt_datetime],
+        end: Union["Arrow", dt_datetime],
         interval: int = 1,
         tz: Optional[TZ_EXPR] = None,
         bounds: _BOUNDS = "[)",

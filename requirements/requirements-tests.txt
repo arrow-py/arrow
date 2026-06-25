@@ -1,6 +1,6 @@
 -r requirements.txt
-dateparser==1.*
-pre-commit
+dateparser==1.*; platform_python_implementation != "PyPy" or sys_platform != "win32"
+pre-commit; platform_python_implementation != "PyPy" or sys_platform != "win32"
 pytest
 pytest-cov
 pytest-mock
