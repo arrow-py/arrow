@@ -1430,6 +1430,26 @@ class Arrow:
                 else:
                     change_value = int(num_match.group())
 
+                    # Reject explicitly-negative values such as "in -1 hours".
+                    # The digit-only num_pattern above never captures a sign,
+                    # so the minus was previously dropped silently and
+                    # "in -1 hours" produced the same (wrong) result as
+                    # "in 1 hours". ``humanize`` always expresses direction
+                    # through the past/future templates ("... ago" / "in ...")
+                    # with a positive magnitude, so a negative number here is
+                    # malformed input rather than a second, conflicting
+                    # direction signal. Detect the sign by inspecting the
+                    # character that immediately precedes the matched digits in
+                    # the original input string.
+                    num_start = match.start() + num_match.start()
+                    if num_start > 0 and input_string[num_start - 1] == "-":
+                        raise ValueError(
+                            f"Invalid input string. Negative time value "
+                            f"'-{num_match.group()}' is not supported; express "
+                            "direction using the past ('... ago') or future "
+                            "('in ...') form with a positive value instead."
+                        )
+
                 # No time to update if now is the unit
                 if unit == "now":
                     unit_visited[unit] = True

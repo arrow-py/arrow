@@ -2888,6 +2888,29 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(second_future_string, locale=lang)
 
+    def test_negative_values(self):
+        # Negative numeric values are malformed input: humanize only ever
+        # emits positive magnitudes and expresses direction through the
+        # past/future templates. They were previously silently dropped, so
+        # "in -1 hours" returned the same (wrong) result as "in 1 hours".
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # Sanity check: the corresponding positive strings still work and the
+        # buggy result must not equal the positive result.
+        assert arw.dehumanize("in 1 hours") == arw.shift(hours=1)
+        assert arw.dehumanize("1 hours ago") == arw.shift(hours=-1)
+
+        negative_strings = [
+            "in -1 hours",
+            "in -5 days",
+            "-3 hours ago",
+            "in -2 years",
+            "-10 seconds ago",
+        ]
+        for negative_string in negative_strings:
+            with pytest.raises(ValueError):
+                arw.dehumanize(negative_string)
+
     # Test for scrambled input
     def test_scrambled_input(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:
