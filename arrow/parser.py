@@ -887,8 +887,27 @@ class TzinfoParser:
     Parser for timezone information.
     """
 
-    _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
+    # Plain ISO-8601 offset like ``+01:00``, ``-0530``, ``+01`` (or the
+    # legacy 3- and 4-digit short forms ``+100`` / ``+0530`` that arrow
+    # has accepted historically). The offset must be the *entire* string
+    # — anything trailing (``.34``, whitespace, a city name, …) means
+    # the input is not a valid numeric offset and is rejected. See
+    # arrow-py/arrow#1294.
+    _TZINFO_ISO_RE: ClassVar[Pattern[str]] = re.compile(
+        r"^([\+\-])?(\d{2})(?:\:?(\d{2}))?$"
+    )
+
+    # The legacy ``(UTC±HH:MM) Optional city name`` form preserved for
+    # backwards compatibility. The leading ``(UTC`` is required. The
+    # boundary after the minutes can be either:
+    #   * a closing ``)`` (followed by an optional city name), or
+    #   * end-of-string with no other characters at all (the legacy
+    #     ``(UTC+01:00`` shorthand).
+    # Anything else — including ``(UTC+01:00 Amsterdam`` — is rejected
+    # so that malformed inputs no longer silently parse as the offset
+    # alone. See arrow-py/arrow#1294.
+    _TZINFO_UTC_PREFIX_RE: ClassVar[Pattern[str]] = re.compile(
+        r"^\(UTC(?P<sign>[\+\-])(?P<hours>\d{2})(?::?(?P<minutes>\d{2}))?(?:\)|\Z)"
     )
 
     @classmethod
@@ -911,13 +930,15 @@ class TzinfoParser:
             tzinfo = timezone.utc
 
         else:
-            iso_match = cls._TZINFO_RE.match(tzinfo_string)
+            iso_match = cls._TZINFO_ISO_RE.match(tzinfo_string)
+            utc_prefix_match = cls._TZINFO_UTC_PREFIX_RE.match(tzinfo_string)
 
-            if iso_match:
+            if iso_match or utc_prefix_match:
+                match = iso_match or utc_prefix_match  # type: ignore[assignment]
                 sign: Optional[str]
                 hours: str
                 minutes: Union[str, int, None]
-                sign, hours, minutes = iso_match.groups()
+                sign, hours, minutes = match.groups()  # type: ignore[union-attr]
                 seconds = int(hours) * 3600 + int(minutes or 0) * 60
 
                 if sign == "-":

@@ -2960,6 +2960,35 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_negative_numeric_value_raises(self):
+        # Regression for arrow-py/arrow#1278: the internal number-extraction
+        # regex matched unsigned digits only, so "in -1 hours" silently dropped
+        # the sign and produced the same result as "in 1 hours". Surface a
+        # ValueError instead of producing a wrong datetime.
+        arw = arrow.Arrow(2025, 1, 1, 12, 0, 0)
+
+        for bad in (
+            "in -1 hours",
+            "in -2 days",
+            "-3 minutes ago",
+            "in -1.5 hours",
+            "-2 days",
+            "in  -7 seconds",  # internal whitespace doesn't change sign
+        ):
+            with pytest.raises(ValueError, match="negative"):
+                arw.dehumanize(bad)
+
+    def test_negative_value_check_does_not_break_positive_inputs(self):
+        # The negative-value guard must not affect normally-formatted
+        # humanized strings. Sample a few representative cases.
+        arw = arrow.Arrow(2025, 6, 1, 9, 30, 0)
+
+        assert arw.dehumanize("in 3 hours") == arw.shift(hours=3)
+        assert arw.dehumanize("in 2 days") == arw.shift(days=2)
+        assert arw.dehumanize("3 hours ago") == arw.shift(hours=-3)
+        assert arw.dehumanize("2 days ago") == arw.shift(days=-2)
+        assert arw.dehumanize("in 15 minutes") == arw.shift(minutes=15)
+
     def test_czech_slovak(self):
         # Relevant units for Slavic locale plural logic
         units = [

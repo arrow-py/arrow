@@ -1378,6 +1378,16 @@ class Arrow:
                 f"Dehumanize does not currently support the {locale} locale, please consider making a contribution to add support for this locale."
             )
 
+        # Reject inputs that contain a negative integer literal. Humanized time
+        # strings use locale-defined "ago"/"in" markers for direction, so a
+        # leading "-N" sign is almost certainly a user error and would
+        # otherwise be silently dropped by the \d+ number matcher.
+        if re.search(r"-\d+", input_string):
+            raise ValueError(
+                "Dehumanize does not support negative numeric values; "
+                "use the locale's past/future marker to indicate direction."
+            )
+
         current_time = self.fromdatetime(self._datetime)
 
         # Create an object containing the relative time info

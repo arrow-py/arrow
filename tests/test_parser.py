@@ -1353,6 +1353,38 @@ class TestTzinfoParser:
         with pytest.raises(parser.ParserError):
             self.parser.parse("fail")
 
+    def test_parse_iso_rejects_trailing_garbage(self):
+        # The ISO offset regex must match the entire string, so any
+        # trailing character (numeric fraction, suffix, whitespace)
+        # is treated as a malformed timezone. Regression test for
+        # arrow-py/arrow#1294 where ``+03:00.34`` was silently parsed
+        # as ``+03:00``.
+        for value in (
+            "+03:00.34",
+            "+03:00x",
+            "+03:00 ",
+            "+03:00.",
+            "+01:00 Amsterdam",
+            "01:00:00",
+            "+01:00abc",
+        ):
+            with pytest.raises(parser.ParserError):
+                self.parser.parse(value)
+
+    def test_parse_utc_prefix_rejects_unclosed_garbage(self):
+        # The legacy "(UTC±HH:MM)" prefix form needs a clean boundary
+        # after the minutes: a closing ")" (optionally followed by a
+        # city name) or end-of-string. Inputs that miss both the
+        # closing paren and the end-of-string boundary must be
+        # rejected. Regression test for arrow-py/arrow#1294.
+        for value in (
+            "(UTC+01:00Amsterdam",
+            "(UTC+01:00:Amsterdam",
+            "(UTC+01:00 Amsterdam, Berlin, Bern, Rom, Stockholm, Wien",
+        ):
+            with pytest.raises(parser.ParserError):
+                self.parser.parse(value)
+
 
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthName:
