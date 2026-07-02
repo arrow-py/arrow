@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from arrow import util
+from arrow import constants, util
 
 
 class TestUtil:
@@ -121,6 +121,14 @@ class TestUtil:
         assert util.normalize_timestamp(timestamp) == timestamp
         assert util.normalize_timestamp(millisecond_timestamp) == 1591161115.194
         assert util.normalize_timestamp(microsecond_timestamp) == 1591161115.194556
+
+        # GH #1159: a valid second-precision timestamp near datetime.max must be
+        # left untouched, regardless of the host's local time zone. Previously the
+        # constant collapsed to a year-3000 fallback on non-UTC hosts, so this value
+        # exceeded MAX_TIMESTAMP and was wrongly rescaled as ms -> a 1978 datetime.
+        max_year_timestamp = 253402214400.0  # arrow.get("9999-12-31").timestamp()
+        assert max_year_timestamp <= constants.MAX_TIMESTAMP
+        assert util.normalize_timestamp(max_year_timestamp) == max_year_timestamp
 
         with pytest.raises(ValueError):
             util.normalize_timestamp(3e17)

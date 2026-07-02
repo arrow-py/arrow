@@ -3097,3 +3097,17 @@ class TestArrowUtil:
 
         with pytest.raises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
+
+
+class TestArrowConstants:
+    def test_max_timestamp_is_utc_based(self):
+        from arrow.constants import MAX_TIMESTAMP
+
+        expected = datetime.max.replace(tzinfo=timezone.utc).timestamp()
+        assert MAX_TIMESTAMP == expected
+
+    def test_max_timestamp_derived_constants(self):
+        from arrow.constants import MAX_TIMESTAMP, MAX_TIMESTAMP_MS, MAX_TIMESTAMP_US
+
+        assert MAX_TIMESTAMP_MS == MAX_TIMESTAMP * 1000
+        assert MAX_TIMESTAMP_US == MAX_TIMESTAMP * 1_000_000
