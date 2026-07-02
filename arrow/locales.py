@@ -4011,12 +4011,12 @@ class EsperantoLocale(Locale):
 class ThaiLocale(Locale):
     names = ["th", "th-th"]
 
-    past = "{0} ที่ผ่านมา"
+    past = "{0} ที่แล้ว"
     future = "ในอีก {0}"
 
     timeframes = {
         "now": "ขณะนี้",
-        "second": "วินาที",
+        "second": "1 วินาที",
         "seconds": "{0} วินาที",
         "minute": "นาที",
         "minutes": "{0} นาที",
