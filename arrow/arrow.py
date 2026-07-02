@@ -997,10 +997,21 @@ class Arrow:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object with attributes updated
         according to inputs.
 
-        Parameters:
-        check_imaginary (bool): If True (default), will check for and resolve
-        imaginary times (like during DST transitions). If False, skips this check.
-
+        :param check_imaginary: If ``True`` (default), checks for and resolves
+            imaginary times (e.g. during DST transitions). If ``False``, skips this check.
+        :param years: Number of years to shift. Can be negative.
+        :param months: Number of months to shift. Can be negative.
+        :param weeks: Number of weeks to shift. Can be negative.
+        :param days: Number of days to shift. Can be negative.
+        :param hours: Number of hours to shift. Can be negative.
+        :param minutes: Number of minutes to shift. Can be negative.
+        :param seconds: Number of seconds to shift. Can be negative.
+        :param microseconds: Number of microseconds to shift. Can be negative.
+        :param quarters: Number of quarters (3-month periods) to shift. Can be negative.
+        :param weekday: A weekday number (Monday=0, Sunday=6) or a dateutil
+            ``relativedelta`` weekday instance (``MO``, ``TU``, ``WE``, ``TH``,
+            ``FR``, ``SA``, ``SU``). When using weekday numbers, the returned
+            date will always be greater than or equal to the starting date.
 
         Use pluralized property names to relatively shift their current value:
 
