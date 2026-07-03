@@ -1525,7 +1525,7 @@ class Arrow:
             )
 
         if not isinstance(end, Arrow):
-            raise TypeError(f"Cannot parse end date argument type of {type(start)!r}.")
+            raise TypeError(f"Cannot parse end date argument type of {type(end)!r}.")
 
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
