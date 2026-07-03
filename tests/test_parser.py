@@ -244,6 +244,15 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse(".1565982019", "X")
 
+    def test_parse_timestamp_long_invalid_input(self):
+        # a long digit run followed by a non-digit character used to trigger
+        # quadratic backtracking in the timestamp regex (_TIMESTAMP_RE)
+        malformed = "9" * 50000 + "!"
+        start = time.perf_counter()
+        with pytest.raises(ParserError):
+            self.parser.parse(malformed, "X")
+        assert time.perf_counter() - start < 1.0
+
     # NOTE: negative timestamps cannot be handled by datetime on Windows
     # Must use timedelta to handle them: https://stackoverflow.com/questions/36179914
     @pytest.mark.skipif(
