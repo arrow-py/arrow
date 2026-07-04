@@ -2868,6 +2868,15 @@ class TestArrowDehumanize:
         assert arw.dehumanize(second_ago_string, locale="zh_hk") == second_ago
         assert arw.dehumanize(second_future_string, locale="zh_hk") == second_future
 
+    # Ensures a negative number is rejected rather than silently dropping the
+    # sign and producing a result in the opposite direction (see gh-1278).
+    def test_negative_number(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        for input_string in ("in -1 hours", "in -2 days", "-3 minutes ago"):
+            with pytest.raises(ValueError):
+                arw.dehumanize(input_string)
+
     # Ensures relative units are required in string
     def test_require_relative_unit(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:
