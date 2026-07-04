@@ -1394,6 +1394,20 @@ class Arrow:
         # Create a regex pattern object for numbers
         num_pattern = re.compile(r"\d+")
 
+        # Detect a negative integer anywhere in the input. dehumanize uses
+        # ago/in for direction, so a literal '-' in front of a digit (e.g.
+        # 'in -1 hours' or '-2 days ago') is a sign of user error: the
+        # magnitude-only num_pattern below would silently drop it and the
+        # caller would get a datetime offset in the wrong direction.
+        # '2 days ago - 1 hour' and other arithmetic-style strings are
+        # out of scope (they don't match the locale timeframes anyway).
+        if re.search(r"-\d+", input_string):
+            raise ValueError(
+                f"Dehumanize string {input_string!r} contains a negative number; "
+                "use 'ago' / 'in' (or the equivalent locale word) to express "
+                "direction instead of a leading minus sign."
+            )
+
         # Search input string for each time unit within locale
         for unit, unit_object in locale_obj.timeframes.items():
             # Need to check the type of unit_object to create the correct dictionary

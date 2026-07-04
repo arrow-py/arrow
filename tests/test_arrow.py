@@ -2930,6 +2930,22 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    def test_dehumanize_rejects_negative_numbers(self) -> None:
+        # dehumanize parses the input via a \d+-only regex, so a leading minus
+        # sign on the quantity was silently dropped, making "in -1 hours" and
+        # "in 1 hours" return the same result. Direction is expressed by the
+        # "ago" / "in" word, so a negative number is always a user error.
+        arw = arrow.Arrow(2025, 1, 1, 12, 0, 0)
+        negative_inputs = [
+            "in -1 hours",
+            "in -2 days",
+            "-3 minutes ago",
+            "-1 year",
+        ]
+        for bad_input in negative_inputs:
+            with pytest.raises(ValueError, match="negative number"):
+                arw.dehumanize(bad_input)
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [
