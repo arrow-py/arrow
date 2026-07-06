@@ -2930,6 +2930,17 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    def test_long_malformed_input(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # A long run of digits with no trailing time unit used to make the
+        # per-unit search regex backtrack quadratically (ReDoS). It must be
+        # rejected quickly, not hang.
+        start = time.time()
+        with pytest.raises(ValueError):
+            arw.dehumanize("9" * 50000)
+        assert time.time() - start < 1.0
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [

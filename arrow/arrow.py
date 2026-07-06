@@ -1411,7 +1411,7 @@ class Arrow:
                 search_string = search_string.format(r"\d+")
 
                 # Create search pattern and find within string
-                pattern = re.compile(rf"(^|\b|\d){search_string}")
+                pattern = re.compile(rf"(^|\b){search_string}")
                 match = pattern.search(input_string)
 
                 # If there is no match continue to next iteration
