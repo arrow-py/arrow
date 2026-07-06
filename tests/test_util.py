@@ -125,6 +125,15 @@ class TestUtil:
         with pytest.raises(ValueError):
             util.normalize_timestamp(3e17)
 
+    def test_normalize_timestamp_negative(self):
+        assert util.normalize_timestamp(-1e10) == -1e10
+        assert util.normalize_timestamp(-1e11) == -1e8
+        assert util.normalize_timestamp(-1e15) == -1e9
+        with pytest.raises(ValueError):
+            util.normalize_timestamp(-3e17)
+        with pytest.raises(ValueError):
+            util.normalize_timestamp(float("-inf"))
+
     def test_iso_gregorian(self):
         with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 0, 5)

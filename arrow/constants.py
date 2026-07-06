@@ -28,6 +28,27 @@ MAX_TIMESTAMP: Final[float] = _MAX_TIMESTAMP
 MAX_TIMESTAMP_MS: Final[float] = MAX_TIMESTAMP * 1000
 MAX_TIMESTAMP_US: Final[float] = MAX_TIMESTAMP * 1_000_000
 
+# datetime.min.timestamp() errors on Windows (year-0 out of range) and on
+# some 32-bit systems (ValueError/OverflowError/OSError). Mirror the
+# _MAX_TIMESTAMP pattern above: try the platform call first, fall back to a
+# hardcoded conservative floor. datetime(1, 1, 2) is the earliest year-1 date
+# that datetime.fromtimestamp can round-trip on systems whose local timezone
+# offset is slightly positive (e.g. historical UTC+00:01:40); the extra
+# one-day cushion keeps the boundary stable. 32-bit systems can only represent
+# timestamps from the 1970 epoch, so we hardcode 0.0 there.
+try:
+    # Get min timestamp. Works on POSIX-based systems like Linux and macOS.
+    _MIN_TIMESTAMP = datetime.min.timestamp()
+except (OverflowError, ValueError, OSError):  # pragma: no cover
+    is_64bits = sys.maxsize > 2**32
+    _MIN_TIMESTAMP = (
+        datetime(1, 1, 2).timestamp() if is_64bits else 0.0
+    )
+
+MIN_TIMESTAMP: Final[float] = _MIN_TIMESTAMP
+MIN_TIMESTAMP_MS: Final[float] = MIN_TIMESTAMP * 1000
+MIN_TIMESTAMP_US: Final[float] = MIN_TIMESTAMP * 1_000_000
+
 MAX_ORDINAL: Final[int] = datetime.max.toordinal()
 MIN_ORDINAL: Final[int] = 1
 

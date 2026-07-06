@@ -11,6 +11,9 @@ from arrow.constants import (
     MAX_TIMESTAMP_MS,
     MAX_TIMESTAMP_US,
     MIN_ORDINAL,
+    MIN_TIMESTAMP,
+    MIN_TIMESTAMP_MS,
+    MIN_TIMESTAMP_US,
 )
 
 
@@ -68,14 +71,35 @@ def validate_ordinal(value: Any) -> None:
 
 
 def normalize_timestamp(timestamp: float) -> float:
-    """Normalize millisecond and microsecond timestamps into normal timestamps."""
+    """Normalize millisecond and microsecond timestamps into normal timestamps.
+
+    A timestamp whose magnitude is below the platform's representable
+    range (about year 1 on 64-bit POSIX, the 1970 epoch on 32-bit systems)
+    is rejected with ``ValueError("... too small")`` so the user sees a
+    clear, consistent error message instead of the
+    ``ValueError: year -31686769 is out of range`` that
+    ``datetime.fromtimestamp`` would otherwise raise deep inside the
+    ``arrow.get`` call. The same shape is already used for the
+    positive direction ("too large").
+    """
     if timestamp > MAX_TIMESTAMP:
         if timestamp < MAX_TIMESTAMP_MS:
             timestamp /= 1000
         elif timestamp < MAX_TIMESTAMP_US:
             timestamp /= 1_000_000
         else:
-            raise ValueError(f"The specified timestamp {timestamp!r} is too large.")
+            raise ValueError(
+                f"The specified timestamp {timestamp!r} is too large."
+            )
+    elif timestamp < MIN_TIMESTAMP:
+        if timestamp > MIN_TIMESTAMP_MS:
+            timestamp /= 1000
+        elif timestamp > MIN_TIMESTAMP_US:
+            timestamp /= 1_000_000
+        else:
+            raise ValueError(
+                f"The specified timestamp {timestamp!r} is too small."
+            )
     return timestamp
 
 
