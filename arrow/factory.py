@@ -195,8 +195,8 @@ class ArrowFactory:
         if len(kwargs) > 1:
             arg_count = 3
 
-        # tzinfo kwarg is not provided
-        if len(kwargs) == 1 and tz is None:
+        # tzinfo kwarg is not provided (or explicitly set to None)
+        if len(kwargs) == 1 and "tzinfo" not in kwargs:
             arg_count = 3
 
         # () -> now, @ tzinfo or utc
