@@ -191,6 +191,17 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("01-01", "YYYY-MM-DD")
 
+    def test_parse_malformed_format_string(self):
+        """Test that malformed format strings raise ParserError instead of IndexError.
+
+        This tests the fix for issue #1191 - when a malformed format string is passed,
+        it can cause an IndexError because the regex group doesn't exist.
+        """
+        # Test with a format string that would cause IndexError before the fix
+        # The key is to have a token in fmt_tokens that doesn't match a regex group
+        with pytest.raises(ParserError):
+            self.parser.parse("2013-01-01", "YYYY-MM-DD[invalid]")
+
     def test_parse_separators(self):
         with pytest.raises(ParserError):
             self.parser.parse("1403549231", "YYYY-MM-DD")

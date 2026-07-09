@@ -427,7 +427,13 @@ class DateTimeParser:
             elif token == "W":
                 value = (match.group("year"), match.group("week"), match.group("day"))
             else:
-                value = match.group(token)
+                try:
+                    value = match.group(token)
+                except IndexError:
+                    raise ParserError(
+                        f"Failed to find a match group for the token {token!r} in the format string {fmt!r}. "
+                        "The format string may contain an invalid token or is malformed."
+                    )
 
             if value is None:
                 raise ParserMatchError(
