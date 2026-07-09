@@ -202,6 +202,20 @@ class TestDateTimeParserParse:
             == self.expected
         )
 
+    def test_parse_non_ascii_digits_rejected(self):
+        # \d matches the whole Unicode decimal category, so non-ASCII numerals
+        # (fullwidth, Arabic-Indic, ...) used to slip through the numeric tokens.
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("２０２１-０１-０２", "YYYY-MM-DD")
+
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("٢٠٢١-٠١-٠٢", "YYYY-MM-DD")
+
+        with pytest.raises(ParserMatchError):
+            self.parser.parse(
+                "２０２１-０１-０２T１２:３０:４５", "YYYY-MM-DDTHH:mm:ss"
+            )
+
     def test_parse_am(self):
         with pytest.raises(ParserMatchError):
             self.parser.parse("2021-01-30 14:00:00 AM", "YYYY-MM-DD HH:mm:ss A")

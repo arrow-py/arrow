@@ -155,24 +155,28 @@ class DateTimeParser:
     )
     _ESCAPE_RE: ClassVar[Pattern[str]] = re.compile(r"\[[^\[\]]*\]")
 
-    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,2}")
-    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,3}")
-    _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d+")
-    _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}")
-    _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{3}")
-    _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{4}")
-    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
-    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
+    _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]{1,2}")
+    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]{1,3}")
+    _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]+")
+    _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]{2}")
+    _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]{3}")
+    _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"[0-9]{4}")
+    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])([0-9]{2})(?:([0-9]{2}))?|Z"
+    )
+    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])([0-9]{2})(?:\:([0-9]{2}))?|Z"
+    )
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
     _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+\.?\d+$")
     _TIMESTAMP_EXPANDED_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+$")
     _TIME_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$"
+        r"^([0-9]{2})(?:\:?([0-9]{2}))?(?:\:?([0-9]{2}))?(?:([\.\,])([0-9]+))?$"
     )
     _WEEK_DATE_RE: ClassVar[Pattern[str]] = re.compile(
-        r"(?P<year>\d{4})[\-]?W(?P<week>\d{2})[\-]?(?P<day>\d)?"
+        r"(?P<year>[0-9]{4})[\-]?W(?P<week>[0-9]{2})[\-]?(?P<day>[0-9])?"
     )
 
     _BASE_INPUT_RE_MAP: ClassVar[Dict[_FORMAT_TYPE, Pattern[str]]] = {
@@ -888,7 +892,7 @@ class TzinfoParser:
     """
 
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
+        r"^(?:\(UTC)*([\+\-])?([0-9]{2})(?:\:?([0-9]{2}))?"
     )
 
     @classmethod
