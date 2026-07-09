@@ -2214,6 +2214,17 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 weeks"
         assert later.humanize(self.now, only_distance=True) == "2 weeks"
 
+    def test_16_days_not_a_month(self):
+        # Regression test for issue #1240: 16 days should show as "in 2 weeks"
+        # not "in a month"
+        later = self.now.shift(days=16)
+
+        assert self.now.humanize(later) == "2 weeks ago"
+        assert later.humanize(self.now) == "in 2 weeks"
+
+        assert self.now.humanize(later, only_distance=True) == "2 weeks"
+        assert later.humanize(self.now, only_distance=True) == "2 weeks"
+
     def test_month(self):
         later = self.now.shift(months=1)
 
