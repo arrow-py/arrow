@@ -3047,6 +3047,16 @@ class TestArrowIsBetween:
         with pytest.raises(TypeError):
             target.is_between(None, None)
 
+    def test_is_between_error_message_mentions_end_type(self):
+        target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
+        start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
+        end = datetime(2013, 5, 8)
+        with pytest.raises(TypeError) as excinfo:
+            target.is_between(start, end)
+        assert "end" in str(excinfo.value)
+        assert "datetime" in str(excinfo.value)
+        assert "Arrow" not in str(excinfo.value)
+
     def test_value_error_exception(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
         start = arrow.Arrow.fromdatetime(datetime(2013, 5, 5))
