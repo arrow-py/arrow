@@ -56,6 +56,21 @@ class TestUtil:
         full_datetime = "2019-06-23T13:12:42"
         assert not util.is_timestamp(full_datetime)
 
+    def test_is_timestamp_rejects_non_finite(self):
+        # Non-finite floats (inf/-inf/nan) cannot be turned into a real
+        # datetime, so is_timestamp must not treat them as a valid timestamp
+        # and let them reach the regex- or float()-driven downstream paths.
+        assert not util.is_timestamp(float("inf"))
+        assert not util.is_timestamp(float("-inf"))
+        assert not util.is_timestamp(float("nan"))
+        assert not util.is_timestamp("inf")
+        assert not util.is_timestamp("-inf")
+        assert not util.is_timestamp("nan")
+        assert not util.is_timestamp("Infinity")
+        assert not util.is_timestamp("NaN")
+        # A literal that overflows float() into +inf must be rejected too.
+        assert not util.is_timestamp("1e1000")
+
     def test_validate_ordinal(self):
         timestamp_float = 1607066816.815537
         timestamp_int = int(timestamp_float)

@@ -1,6 +1,7 @@
 """Helpful functions used internally within arrow."""
 
 import datetime
+import math
 from typing import Any, Optional
 
 from dateutil.rrule import WEEKLY, rrule
@@ -43,16 +44,23 @@ def next_weekday(
 
 
 def is_timestamp(value: Any) -> bool:
-    """Check if value is a valid timestamp."""
+    """Check if value is a valid timestamp.
+
+    A value is considered a valid timestamp when it is an ``int``, ``float``,
+    or ``str`` that parses via :func:`float` to a finite real number. ``bool``
+    is rejected (it is technically an ``int`` subclass). Non-finite floats —
+    ``inf``, ``-inf``, and ``nan`` — are rejected because they cannot be
+    converted into a real datetime.
+    """
     if isinstance(value, bool):
         return False
     if not isinstance(value, (int, float, str)):
         return False
     try:
-        float(value)
-        return True
+        parsed = float(value)
     except ValueError:
         return False
+    return math.isfinite(parsed)
 
 
 def validate_ordinal(value: Any) -> None:
