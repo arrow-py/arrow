@@ -662,12 +662,21 @@ class DateTimeParser:
 
             # floating-point (IEEE-754) defaults to half-to-even rounding
             seventh_digit = int(value[6])
-            if seventh_digit == 5:
-                rounding = int(value[5]) % 2
-            elif seventh_digit > 5:
+            if seventh_digit > 5:
+                # Strictly above the half-way point, always round up.
                 rounding = 1
-            else:
+            elif seventh_digit < 5:
+                # Strictly below the half-way point, always round down.
                 rounding = 0
+            else:
+                # Exactly at the half-way point: only use round-half-to-even
+                # (banker's rounding) when the trailing digits are all zero.
+                # If anything non-zero follows the 5, the truncated value is
+                # strictly above the midpoint and we must round up.
+                if any(ch != "0" for ch in value[7:]):
+                    rounding = 1
+                else:
+                    rounding = int(value[5]) % 2
 
             parts["microsecond"] = int(value[:6]) + rounding
 
