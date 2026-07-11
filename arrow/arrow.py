@@ -1414,6 +1414,15 @@ class Arrow:
                 pattern = re.compile(rf"(^|\b|\d){search_string}")
                 match = pattern.search(input_string)
 
+                # Singular forms like "a day" have no {0} placeholder, so the
+                # primary pattern never matches "1 day".  Try a numeric form
+                # using the unit key (e.g. r"\d+\s+day\b") as a fallback.
+                if not match and "{0}" not in str(time_string):
+                    alt_pattern = re.compile(
+                        rf"(^|\b)\d+\s+{re.escape(str(time_delta))}\b"
+                    )
+                    match = alt_pattern.search(input_string)
+
                 # If there is no match continue to next iteration
                 if not match:
                     continue
