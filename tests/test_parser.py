@@ -393,15 +393,28 @@ class TestDateTimeParserParse:
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
 
-        # round half-up
+        # round up (non-zero trailing past 5)
         string = "2013-01-01 12:30:45.987653521"
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
 
-        # round half-down
+        # round up (6th=4, non-zero trailing past 5) - 6th=4, 7th=5, trailing "210" non-zero,
+        # so the value is strictly above the half-way point and must round up
         string = "2013-01-01 12:30:45.9876545210"
+        expected_round_up = datetime(2013, 1, 1, 12, 30, 45, 987655)
+        assert self.parser.parse(string, datetime_format) == expected_round_up
+        assert self.parser.parse_iso(string) == expected_round_up
+
+        # round half-to-even (6th=3, exact .5) - 6th is odd, so round up to even
+        string = "2013-01-01 12:30:45.9876535"
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
+
+        # round half-to-even (6th=4, exact .5) - 6th is even, so round down to even
+        string = "2013-01-01 12:30:45.9876545"
+        expected_half_to_even = datetime(2013, 1, 1, 12, 30, 45, 987654)
+        assert self.parser.parse(string, datetime_format) == expected_half_to_even
+        assert self.parser.parse_iso(string) == expected_half_to_even
 
     # overflow (zero out the subseconds and increment the seconds)
     # regression tests for issue #636
@@ -746,11 +759,33 @@ class TestDateTimeParserParse:
             "thstrdjtrsrd676776r65",
             "2002-W66-1T14:17:01",
             "2002-W23-03T14:17:01",
+            "2023-W53-1",
+            "2024-W53-1",
         ]
 
         for fmt in bad_formats:
             with pytest.raises(ParserError):
                 self.parser.parse(fmt, "W")
+
+    def test_parse_weekdate_nonexistent_week_raises_parser_error(self):
+        # ISO 8601 only has a week 53 in years where Jan 1 is a Thursday
+        # or where the year is a leap year that starts on Wednesday.
+        # 2023 and 2024 do not qualify, so W53-1 is invalid; the parser
+        # should raise a ParserError (wrapping the underlying strptime
+        # ValueError) so callers can catch a single typed exception.
+        for bad in ("2023-W53-1", "2024-W53-1"):
+            with pytest.raises(ParserError):
+                self.parser.parse(bad, "W")
+            with pytest.raises(ParserError):
+                self.parser.parse_iso(bad)
+
+        # 2020 and 2026 *do* have a week 53, so the same shape is valid.
+        for good, expected in (
+            ("2020-W53-1", datetime(2020, 12, 28)),
+            ("2026-W53-1", datetime(2026, 12, 28)),
+        ):
+            assert self.parser.parse(good, "W") == expected
+            assert self.parser.parse_iso(good) == expected
 
     def test_parse_normalize_whitespace(self):
         assert self.parser.parse(
@@ -1058,6 +1093,22 @@ class TestDateTimeParserISO:
             2013, 2, 3, 4, 5, 6, 789124
         )
 
+    def test_YYYY_MM_DDTHH_mm_ss_S_round_half_up(self):
+        # When the 7th digit is 5, the truncated value sits at the half-way
+        # point of the 6th digit. The value is strictly greater than the
+        # midpoint iff at least one trailing digit is non-zero, in which
+        # case we must round up rather than apply banker's rounding to
+        # the 6th digit.
+        # 6th digit even, 7th == 5, nothing trailing -> banker's rounds down
+        assert self.parser.parse_iso("2013-02-03T04:05:06.789124500") == datetime(
+            2013, 2, 3, 4, 5, 6, 789124
+        )
+        # 6th digit even, 7th == 5, non-zero digit after -> strictly above
+        # midpoint, must round up (was rounding down before the fix)
+        assert self.parser.parse_iso("2013-02-03T04:05:06.789124501") == datetime(
+            2013, 2, 3, 4, 5, 6, 789125
+        )
+
     def test_YYYY_MM_DDTHH_mm_ss_SZ(self):
         assert self.parser.parse_iso("2013-02-03T04:05:06.7+01:00") == datetime(
             2013, 2, 3, 4, 5, 6, 700000, tzinfo=tz.tzoffset(None, 3600)
@@ -1144,8 +1195,10 @@ class TestDateTimeParserISO:
     def test_gnu_date(self):
         """Regression tests for parsing output from GNU date."""
         # date -Ins
+        # 7th digit is 5, trailing "57" is non-zero, so the value is strictly
+        # above the half-way point and must round up from 895636 to 895637
         assert self.parser.parse_iso("2016-11-16T09:46:30,895636557-0800") == datetime(
-            2016, 11, 16, 9, 46, 30, 895636, tzinfo=tz.tzoffset(None, -3600 * 8)
+            2016, 11, 16, 9, 46, 30, 895637, tzinfo=tz.tzoffset(None, -3600 * 8)
         )
 
         # date --rfc-3339=ns

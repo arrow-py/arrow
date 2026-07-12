@@ -56,6 +56,17 @@ class TestUtil:
         full_datetime = "2019-06-23T13:12:42"
         assert not util.is_timestamp(full_datetime)
 
+        # NaN and ±inf are float-parseable but not real timestamps: passing
+        # them to ``datetime.fromtimestamp`` would raise ``OverflowError`` for
+        # -inf and a generic ``ValueError`` for the others, neither of which
+        # names the actual problem.
+        assert not util.is_timestamp(float("nan"))
+        assert not util.is_timestamp(float("inf"))
+        assert not util.is_timestamp(float("-inf"))
+        assert not util.is_timestamp("nan")
+        assert not util.is_timestamp("inf")
+        assert not util.is_timestamp("-inf")
+
     def test_validate_ordinal(self):
         timestamp_float = 1607066816.815537
         timestamp_int = int(timestamp_float)
