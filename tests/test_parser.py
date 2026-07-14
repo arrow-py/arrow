@@ -1353,6 +1353,13 @@ class TestTzinfoParser:
         with pytest.raises(parser.ParserError):
             self.parser.parse("fail")
 
+    def test_parse_out_of_range_offset(self):
+        # minutes >= 60 were silently normalized (+0099 -> +01:39) and
+        # hours >= 24 leaked a raw datetime ValueError out of the parser
+        for expr in ["+0099", "-0099", "+1260", "+2500", "+9999", "(UTC+25:00"]:
+            with pytest.raises(parser.ParserError):
+                self.parser.parse(expr)
+
 
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMonthName:
