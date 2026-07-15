@@ -427,7 +427,7 @@ class DateTimeParser:
             elif token == "W":
                 value = (match.group("year"), match.group("week"), match.group("day"))
             else:
-                value = match.group(token)
+                value = match.groupdict().get(token)
 
             if value is None:
                 raise ParserMatchError(
