@@ -2868,6 +2868,14 @@ class TestArrowDehumanize:
         assert arw.dehumanize(second_ago_string, locale="zh_hk") == second_ago
         assert arw.dehumanize(second_future_string, locale="zh_hk") == second_future
 
+    # Non-str input should raise a clear TypeError rather than crashing
+    # deep in the regex / timeframes iteration with AttributeError.
+    def test_non_str_input_raises_typeerror(self):
+        arw = arrow.Arrow(2024, 1, 1)
+        for bad in (123, None, [1, 2], b"bytes"):
+            with pytest.raises(TypeError, match="input_string must be str"):
+                arw.dehumanize(bad)
+
     # Ensures relative units are required in string
     def test_require_relative_unit(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:

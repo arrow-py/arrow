@@ -1394,6 +1394,11 @@ class Arrow:
         # Create a regex pattern object for numbers
         num_pattern = re.compile(r"\d+")
 
+        if not isinstance(input_string, str):
+            raise TypeError(
+                f"input_string must be str, not {type(input_string).__name__}."
+            )
+
         # Search input string for each time unit within locale
         for unit, unit_object in locale_obj.timeframes.items():
             # Need to check the type of unit_object to create the correct dictionary
