@@ -939,8 +939,10 @@ class TestDateTimeParserISO:
         # Since 2016 is a leap year, the 366th day falls in the same year
         assert self.parser.parse_iso("2016-366") == datetime(2016, 12, 31)
 
-        # Since 2017 is not a leap year, the 366th day falls in the next year
-        assert self.parser.parse_iso("2017-366") == datetime(2018, 1, 1)
+        # 2017 is not a leap year, so its 366th day does not exist and is
+        # rejected rather than rolling over into the next year
+        with pytest.raises(ParserError):
+            self.parser.parse_iso("2017-366")
 
     def test_YYYY_DDDD_HH_mm_ssZ(self):
         assert self.parser.parse_iso("2013-036 04:05:06+01:00") == datetime(

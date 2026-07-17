@@ -758,6 +758,13 @@ class DateTimeParser:
                     f"The provided day of year {day_of_year!r} is invalid."
                 )
 
+            # strptime accepts day 366 in a non-leap year and rolls the result
+            # over into the next year instead of rejecting it; guard that here.
+            if dt.year != int(_year):
+                raise ParserError(
+                    f"The provided day of year {day_of_year!r} is invalid."
+                )
+
             parts["year"] = dt.year
             parts["month"] = dt.month
             parts["day"] = dt.day
