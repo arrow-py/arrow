@@ -421,13 +421,13 @@ class DateTimeParser:
 
         parts: _Parts = {}
         for token in fmt_tokens:
-            value: Union[Tuple[str, str, str], str]
+            value: Union[Tuple[str, str, str], str, None]
             if token == "Do":
                 value = match.group("value")
             elif token == "W":
                 value = (match.group("year"), match.group("week"), match.group("day"))
             else:
-                value = match.group(token)
+                value = match.groupdict().get(token)
 
             if value is None:
                 raise ParserMatchError(
