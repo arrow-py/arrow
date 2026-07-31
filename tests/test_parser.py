@@ -61,6 +61,15 @@ class TestDateTimeParser:
         with pytest.raises(parser.ParserError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
 
+    def test_parse_multiformat_reports_generator_formats(self, mocker):
+        mocker.patch(
+            "arrow.parser.DateTimeParser.parse",
+            side_effect=parser.ParserMatchError,
+        )
+
+        with pytest.raises(parser.ParserError, match="fmt_a, fmt_b"):
+            self.parser._parse_multiformat("str", (fmt for fmt in ("fmt_a", "fmt_b")))
+
     def test_parse_multiformat_unself_expected_fail(self, mocker):
         class UnselfExpectedError(Exception):
             pass

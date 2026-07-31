@@ -844,6 +844,7 @@ class DateTimeParser:
         :raises ParserError: If no format matches the input string.
         """
         _datetime: Optional[datetime] = None
+        formats = list(formats)
 
         for fmt in formats:
             try:

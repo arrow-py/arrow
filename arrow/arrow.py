@@ -773,7 +773,7 @@ class Arrow:
             (<Arrow [2013-05-05T14:00:00+00:00]>, <Arrow [2013-05-05T15:59:59.999999+00:00]>)
             (<Arrow [2013-05-05T16:00:00+00:00]>, <Arrow [2013-05-05T17:59:59.999999+00:0]>)
         """
-        if interval < 1:
+        if isinstance(interval, bool) or not isinstance(interval, int) or interval < 1:
             raise ValueError("interval has to be a positive integer")
 
         spanRange = iter(
@@ -1367,7 +1367,7 @@ class Arrow:
 
         """
 
-        # Create a locale object based off given local
+        # Create a locale object based off given localee
         locale_obj = locales.get_locale(locale)
 
         # Check to see if locale is supported
@@ -1379,6 +1379,14 @@ class Arrow:
             )
 
         current_time = self.fromdatetime(self._datetime)
+
+        # Reject non-string input before looking up locale-specific patterns.
+        # This keeps the public error stable even when a locale stores timeframes
+        # in a mapping that would otherwise be searched with regex operations.
+        if not isinstance(input_string, str):
+            raise TypeError(
+                f"input_string must be str, not {type(input_string).__name__}."
+            )
 
         # Create an object containing the relative time info
         time_object_info = dict.fromkeys(
@@ -1392,7 +1400,7 @@ class Arrow:
         )
 
         # Create a regex pattern object for numbers
-        num_pattern = re.compile(r"\d+")
+        num_pattern = re.compile(r"\d+(?:\.\d+)?")
 
         # Search input string for each time unit within locale
         for unit, unit_object in locale_obj.timeframes.items():
@@ -1408,7 +1416,7 @@ class Arrow:
             for time_delta, time_string in strings_to_search.items():
                 # Replace {0} with regex \d representing digits
                 search_string = str(time_string)
-                search_string = search_string.format(r"\d+")
+                search_string = search_string.format(r"\d+(?:\.\d+)?")
 
                 # Create search pattern and find within string
                 pattern = re.compile(rf"(^|\b|\d){search_string}")
@@ -1428,7 +1436,7 @@ class Arrow:
                         1 if not time_delta.isnumeric() else abs(int(time_delta))
                     )
                 else:
-                    change_value = int(num_match.group())
+                    change_value = float(num_match.group())
 
                 # No time to update if now is the unit
                 if unit == "now":

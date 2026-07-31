@@ -1557,11 +1557,12 @@ class TestArrowSpanRange:
 
 
 class TestArrowInterval:
-    def test_incorrect_input(self):
-        with pytest.raises(ValueError):
+    @pytest.mark.parametrize("interval", [0, -1, 1.5, True])
+    def test_incorrect_input(self, interval):
+        with pytest.raises(ValueError, match="positive integer"):
             list(
                 arrow.Arrow.interval(
-                    "month", datetime(2013, 1, 2), datetime(2013, 4, 15), 0
+                    "month", datetime(2013, 1, 2), datetime(2013, 4, 15), interval
                 )
             )
 
@@ -2606,6 +2607,12 @@ def slavic_locales() -> List[str]:
 
 
 class TestArrowDehumanize:
+    def test_non_string_input_raises_type_error(self):
+        arw = arrow.Arrow.utcnow()
+
+        with pytest.raises(TypeError, match="input_string must be str"):
+            arw.dehumanize(None)
+
     def test_now(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:
             arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
@@ -2831,6 +2838,12 @@ class TestArrowDehumanize:
 
             assert arw.dehumanize(past_string, locale=lang) == past
             assert arw.dehumanize(future_string, locale=lang) == future
+
+    def test_decimal_unit_quantity_preserves_fraction(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        assert arw.dehumanize("in 1.5 hours") == arw.shift(hours=1.5)
+        assert arw.dehumanize("1.5 hours ago") == arw.shift(hours=-1.5)
 
     # Test to make sure unsupported locales error out
     def test_unsupported_locale(self):
