@@ -1555,6 +1555,27 @@ class TestArrowSpanRange:
 
         assert result == expected
 
+    def test_exact_month_no_gaps_when_day_clipped(self):
+        """Regression test for #1185: span_range with frame='month' and
+        exact=True must produce contiguous spans even when the start day
+        exceeds the number of days in a shorter month (day clipping)."""
+        result = list(
+            arrow.Arrow.span_range(
+                "month",
+                datetime(2023, 1, 31, tzinfo=ZoneInfo("Europe/Berlin")),
+                datetime(2023, 4, 1, tzinfo=ZoneInfo("Europe/Berlin")),
+                exact=True,
+            )
+        )
+
+        # Spans must be contiguous: each floor == previous ceil + 1 µs
+        for i in range(1, len(result)):
+            prev_ceil = result[i - 1][1]
+            curr_floor = result[i][0]
+            assert curr_floor == prev_ceil.shift(
+                microseconds=+1
+            ), f"Gap between span {i - 1} and {i}"
+
 
 class TestArrowInterval:
     def test_incorrect_input(self):
