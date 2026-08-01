@@ -709,8 +709,16 @@ class Arrow:
             for r in _range:
                 yield r.span(frame, bounds=bounds, exact=exact)
 
+        prev_ceil = None
         for r in _range:
             floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+            if prev_ceil is not None:
+                # Ensure consecutive spans are contiguous by using the
+                # previous span's ceiling (+1 microsecond) as the floor,
+                # preventing gaps caused by month-length day clipping.
+                expected_floor = prev_ceil.shift(microseconds=+1)
+                if floor > expected_floor:
+                    floor = expected_floor
             if ceil > end:
                 ceil = end
                 if bounds[1] == ")":
@@ -719,6 +727,7 @@ class Arrow:
                 break
             elif floor + relativedelta(microseconds=-1) == end:
                 break
+            prev_ceil = ceil
             yield floor, ceil
 
     @classmethod
