@@ -2930,6 +2930,43 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    def test_negative_number(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        for input_string in [
+            "in -1 hours",
+            "in -2 days",
+            "-3 minutes ago",
+            "in -1 years",
+        ]:
+            with pytest.raises(ValueError, match="negative number"):
+                arw.dehumanize(input_string)
+
+    def test_negative_number_not_confused_with_positive(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        assert arw.dehumanize("in 2 hours") == arw.shift(hours=2)
+        assert arw.dehumanize("2 hours ago") == arw.shift(hours=-2)
+
+    def test_hyphen_between_digits_is_not_a_negative_number(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # Still invalid input, but a separator is not a sign. Reporting these as
+        # negative numbers would send the caller looking for a sign that is not
+        # there, instead of at the string not being a humanized one.
+        for input_string in ["2020-01-01", "2020-01-01 00:00:00"]:
+            with pytest.raises(ValueError, match="Input string not valid"):
+                arw.dehumanize(input_string)
+
+    def test_leading_negative_number_is_still_rejected(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # The lookbehind must not lose the cases the guard exists for: a sign at
+        # the start of the string, or after a space or an opening bracket.
+        for input_string in ["-1 hours ago", "in -1 hours", "(-1 hours ago)"]:
+            with pytest.raises(ValueError, match="negative number"):
+                arw.dehumanize(input_string)
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [
