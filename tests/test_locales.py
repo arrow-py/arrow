@@ -2951,7 +2951,26 @@ class TestSinhalaLocale:
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "සෙනසුරාදා"
-        assert self.locale.day_abbreviation(dt.isoweekday()) == "අ"
+        assert self.locale.day_abbreviation(dt.isoweekday()) == "සෙන"
+
+    def test_day_abbreviations(self):
+        # Each abbreviation must label the day it belongs to. Tuesday through
+        # Saturday used to be shifted by one, so Tuesday and Wednesday shared
+        # "බදා" and Thursday had no abbreviation of its own.
+        assert self.locale.day_abbreviation(1) == "සදුද"
+        assert self.locale.day_abbreviation(2) == "අ"
+        assert self.locale.day_abbreviation(3) == "බදා"
+        assert self.locale.day_abbreviation(4) == "බ්‍රහ"
+        assert self.locale.day_abbreviation(5) == "සිකු"
+        assert self.locale.day_abbreviation(6) == "සෙන"
+        assert self.locale.day_abbreviation(7) == "ඉරිදා"
+
+        for day in range(1, 8):
+            assert self.locale.day_name(day).startswith(
+                self.locale.day_abbreviation(day)
+            )
+
+        assert len(set(self.locale.day_abbreviations[1:])) == 7
 
 
 @pytest.mark.usefixtures("lang_locale")

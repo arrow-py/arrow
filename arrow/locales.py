@@ -6173,11 +6173,11 @@ class SinhalaLocale(Locale):
     day_abbreviations = [
         "",
         "සදුද",
+        "අ",
         "බදා",
-        "බදා",
+        "බ්‍රහ",
         "සිකු",
         "සෙන",
-        "අ",
         "ඉරිදා",
     ]
 
