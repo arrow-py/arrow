@@ -422,12 +422,24 @@ class DateTimeParser:
         parts: _Parts = {}
         for token in fmt_tokens:
             value: Union[Tuple[str, str, str], str]
-            if token == "Do":
-                value = match.group("value")
-            elif token == "W":
-                value = (match.group("year"), match.group("week"), match.group("day"))
-            else:
-                value = match.group(token)
+            try:
+                if token == "Do":
+                    value = match.group("value")
+                elif token == "W":
+                    value = (
+                        match.group("year"),
+                        match.group("week"),
+                        match.group("day"),
+                    )
+                else:
+                    value = match.group(token)
+            except IndexError:
+                # A malformed format can leave a token in ``fmt_tokens`` without a
+                # corresponding capture group in the compiled pattern. Surface this
+                # as a ParserError rather than letting a raw IndexError escape.
+                raise ParserMatchError(
+                    f"Unable to find a match group for the specified token {token!r}."
+                )
 
             if value is None:
                 raise ParserMatchError(

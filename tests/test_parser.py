@@ -191,6 +191,14 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("01-01", "YYYY-MM-DD")
 
+    def test_parse_malformed_fmt_no_match_group(self):
+        # A malformed format string can leave a token without a corresponding
+        # capture group in the compiled pattern; this must raise a ParserError
+        # rather than leaking a raw IndexError from match.group().
+        # Regression test for https://github.com/arrow-py/arrow/issues/1191
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("foo", "[|(\\]s")
+
     def test_parse_separators(self):
         with pytest.raises(ParserError):
             self.parser.parse("1403549231", "YYYY-MM-DD")
