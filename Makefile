@@ -9,8 +9,9 @@ build311: PYTHON_VER = python3.11
 build312: PYTHON_VER = python3.12
 build313: PYTHON_VER = python3.13
 build314: PYTHON_VER = python3.14
+build315: PYTHON_VER = python3.15
 
-build36 build37 build38 build39 build310 build311 build312 build313 build314: clean
+build36 build37 build38 build39 build310 build311 build312 build313 build314 build315: clean
 	$(PYTHON_VER) -m venv venv
 	. venv/bin/activate; \
 	pip install -U pip setuptools wheel; \
