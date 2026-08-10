@@ -15,15 +15,15 @@ repos:
       - id: requirements-txt-fixer
         args: [requirements/requirements.txt, requirements/requirements-docs.txt, requirements/requirements-tests.txt]
       - id: trailing-whitespace
-  - repo: https://github.com/timothycrosley/isort
-    rev: 7.0.0
+  - repo: https://github.com/PyCQA/isort
+    rev: 9.0.0b2
     hooks:
       - id: isort
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.21.2
     hooks:
       - id: pyupgrade
-        args: [--py36-plus]
+        args: [--py38-plus]
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:
@@ -35,11 +35,11 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
-  - repo: https://github.com/psf/black
-    rev: 25.12.0
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 26.5.1
     hooks:
       - id: black
-        args: [--safe, --quiet, --target-version=py36]
+        args: [--safe, --quiet, --target-version=py38]
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
