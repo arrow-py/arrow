@@ -529,6 +529,14 @@ class TestDateTimeParserParse:
 
         assert self.parser.parse("      2016      ", "YYYY") == datetime(2016, 1, 1)
 
+    def test_parse_Do_indexerror_becomes_parser_match_error(self):
+        """Regression for #1191: On locales whose ordinal_day_re does not expose
+        a named 'value' capture group (e.g. GermanLocale), match.group('value')
+        previously raised a bare IndexError. It must raise ParserMatchError."""
+        de_parser = DateTimeParser(locale="de")
+        with pytest.raises(ParserMatchError):
+            de_parser.parse("1", "Do")
+
         assert self.parser.parse(
             "      2016-05-16 04:05:06.789120      ", "YYYY-MM-DD hh:mm:ss.S"
         ) == datetime(2016, 5, 16, 4, 5, 6, 789120)
