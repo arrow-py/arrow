@@ -101,6 +101,12 @@ def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.dat
     year_start = fourth_jan - delta
     gregorian = year_start + datetime.timedelta(days=iso_day - 1, weeks=iso_week - 1)
 
+    # Only some years have 53 ISO weeks. For the ones that don't, the
+    # arithmetic above quietly lands in the next ISO year rather than failing,
+    # so reject a week the requested year does not actually have.
+    if gregorian.isocalendar()[0] != iso_year:
+        raise ValueError(f"ISO Calendar year {iso_year} has no week {iso_week}.")
+
     return gregorian
 
 
