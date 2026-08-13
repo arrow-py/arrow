@@ -131,3 +131,15 @@ class TestUtil:
 
         with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 8, 0)
+
+    def test_iso_gregorian_week_53(self):
+        # 2026 is one of the years that has 53 ISO weeks
+        assert util.iso_to_gregorian(2026, 53, 1) == datetime(2026, 12, 28).date()
+
+        # 2025 only has 52, so week 53 must be rejected rather than rolling
+        # over into the first week of 2026
+        with pytest.raises(ValueError):
+            util.iso_to_gregorian(2025, 53, 1)
+
+        with pytest.raises(ValueError):
+            util.iso_to_gregorian(2024, 53, 1)

@@ -236,6 +236,11 @@ class TestGet:
         with pytest.raises(ValueError):
             self.factory.get((2014, 7, 10))
 
+        # 2025 has 52 ISO weeks, so week 53 is not a date in that year and
+        # must not silently become the first week of 2026
+        with pytest.raises(ValueError):
+            self.factory.get((2025, 53, 1))
+
     def test_one_arg_other(self):
         with pytest.raises(TypeError):
             self.factory.get(object())
