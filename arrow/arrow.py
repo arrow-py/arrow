@@ -12,6 +12,7 @@ from datetime import datetime as dt_datetime
 from datetime import time as dt_time
 from datetime import timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
+from decimal import Decimal
 from math import trunc
 from time import struct_time
 from typing import (
@@ -238,16 +239,20 @@ class Arrow:
     @classmethod
     def fromtimestamp(
         cls,
-        timestamp: Union[int, float, str],
+        timestamp: Union[int, float, str, Decimal],
         tzinfo: Optional[TZ_EXPR] = None,
     ) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, converted to
         the given timezone.
 
-        :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
+        :param timestamp: an ``int``, ``float`` or ``Decimal`` timestamp, or a ``str`` that
+            converts to one of those.
         :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
 
         """
+
+        if isinstance(timestamp, Decimal):
+            timestamp = float(timestamp)
 
         if tzinfo is None:
             tzinfo = dt_datetime.now().astimezone().tzinfo
@@ -273,12 +278,16 @@ class Arrow:
         )
 
     @classmethod
-    def utcfromtimestamp(cls, timestamp: Union[int, float, str]) -> "Arrow":
+    def utcfromtimestamp(cls, timestamp: Union[int, float, str, Decimal]) -> "Arrow":
         """Constructs an :class:`Arrow <arrow.arrow.Arrow>` object from a timestamp, in UTC time.
 
-        :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
+        :param timestamp: an ``int``, ``float`` or ``Decimal`` timestamp, or a ``str`` that
+            converts to one of those.
 
         """
+
+        if isinstance(timestamp, Decimal):
+            timestamp = float(timestamp)
 
         if not util.is_timestamp(timestamp):
             raise ValueError(f"The provided timestamp {timestamp!r} is invalid.")
