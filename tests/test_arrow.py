@@ -7,6 +7,7 @@ import pickle
 import sys
 import time
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal
 from typing import List
 
 import dateutil
@@ -140,6 +141,18 @@ class TestTestArrowFactory:
         with pytest.raises(ValueError):
             arrow.Arrow.fromtimestamp("invalid timestamp")
 
+    def test_fromtimestamp_decimal(self):
+        # arrow.get() accepts a Decimal timestamp, so the constructor it stands
+        # in for has to accept one too.
+        timestamp = Decimal("1591328104.308505")
+
+        result = arrow.Arrow.fromtimestamp(timestamp, tzinfo="Europe/Paris")
+
+        assert_datetime_equality(
+            result._datetime,
+            datetime.fromtimestamp(float(timestamp), ZoneInfo("Europe/Paris")),
+        )
+
     def test_utcfromtimestamp(self):
         timestamp = time.time()
 
@@ -150,6 +163,15 @@ class TestTestArrowFactory:
 
         with pytest.raises(ValueError):
             arrow.Arrow.utcfromtimestamp("invalid timestamp")
+
+    def test_utcfromtimestamp_decimal(self):
+        timestamp = Decimal("1591328104.308505")
+
+        result = arrow.Arrow.utcfromtimestamp(timestamp)
+
+        assert result._datetime == datetime(
+            2020, 6, 5, 3, 35, 4, 308505, tzinfo=timezone.utc
+        )
 
     def test_fromdatetime(self):
         dt = datetime(2013, 2, 3, 12, 30, 45, 1)
