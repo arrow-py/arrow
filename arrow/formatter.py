@@ -110,7 +110,7 @@ class DateTimeFormatter:
             return f"{dt.microsecond // 100000}"
 
         if token == "X":
-            return f"{dt.timestamp()}"
+            return f"{int(dt.timestamp())}"
 
         if token == "x":
             return f"{dt.timestamp() * 1_000_000:.0f}"
