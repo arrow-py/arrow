@@ -1428,6 +1428,19 @@ class Arrow:
                         1 if not time_delta.isnumeric() else abs(int(time_delta))
                     )
                 else:
+                    # num_pattern only matches unsigned digits, so a literal minus
+                    # sign right before the number (e.g. "-1 hours") is invisible
+                    # to it and would otherwise be silently dropped. Direction is
+                    # already conveyed by the "ago"/"in" phrasing, so treat a sign
+                    # here as invalid input rather than letting it disappear.
+                    number_start = match.start() + num_match.start()
+                    if number_start > 0 and input_string[number_start - 1] == "-":
+                        raise ValueError(
+                            "Invalid input String. Negative numbers are not "
+                            "supported by dehumanize(), as direction is already "
+                            "conveyed by phrases such as 'ago' or 'in'. Found a "
+                            f"negative value near: {match_string!r}"
+                        )
                     change_value = int(num_match.group())
 
                 # No time to update if now is the unit

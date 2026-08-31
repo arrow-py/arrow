@@ -2960,6 +2960,25 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_negative_numbers_rejected(self):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        # A literal minus sign is invisible to the unsigned number regex, so
+        # without a check these used to silently return the same result as
+        # their unsigned counterpart instead of raising.
+        with pytest.raises(ValueError):
+            arw.dehumanize("in -1 hours")
+
+        with pytest.raises(ValueError):
+            arw.dehumanize("-3 minutes ago")
+
+        with pytest.raises(ValueError):
+            arw.dehumanize("in -2 days")
+
+        # unsigned input must still work exactly as before
+        assert arw.dehumanize("in 1 hours") == arw.shift(hours=1)
+        assert arw.dehumanize("3 minutes ago") == arw.shift(minutes=-3)
+
     def test_czech_slovak(self):
         # Relevant units for Slavic locale plural logic
         units = [
