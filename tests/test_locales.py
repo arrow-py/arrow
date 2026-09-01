@@ -3192,8 +3192,12 @@ class TestAmharicLocale:
         # hour(s)
         assert self.locale._format_timeframe("hour", 1) == "በአንድ ሰዓት"
         assert self.locale._format_timeframe("hour", -1) == "ከአንድ ሰዓት"
-        assert self.locale._format_timeframe("hours", 7) == "በ 7 ሰከንድ"
+        assert self.locale._format_timeframe("hours", 7) == "በ 7 ሰዓታት"
         assert self.locale._format_timeframe("hours", -20) == "ከ 20 ሰዓታት"
+        # "hours" must not reuse the "seconds" noun (ሰከንድ)
+        assert self.locale._format_timeframe(
+            "hours", 7
+        ) != self.locale._format_timeframe("seconds", 7)
         # day(s)
         assert self.locale._format_timeframe("day", 1) == "በአንድ ቀን"
         assert self.locale._format_timeframe("day", -1) == "ከአንድ ቀን"
