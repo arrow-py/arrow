@@ -27,6 +27,7 @@ Release v\ |release| (`Installation`_) (`Changelog <releases.html>`_)
     :maxdepth: 2
 
     api-guide
+    locale-contributor-guide
 
 ---------------
 
