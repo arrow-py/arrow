@@ -2930,6 +2930,41 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    def test_fractional_value(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+
+        assert arw.dehumanize("1.5 hours ago") == arrow.Arrow(2025, 12, 10, 7, 30, 0)
+        assert arw.dehumanize("in 0.5 hours") == arrow.Arrow(2025, 12, 10, 9, 30, 0)
+        assert arw.dehumanize("2.25 minutes ago") == arrow.Arrow(
+            2025, 12, 10, 8, 57, 45
+        )
+        assert arw.dehumanize("in 1.5 days") == arrow.Arrow(2025, 12, 11, 21, 0, 0)
+
+    def test_fractional_value_comma_separator(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+
+        assert arw.dehumanize("1,5 hours ago") == arw.dehumanize("1.5 hours ago")
+
+    def test_fractional_value_with_multiple_units(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+
+        assert arw.dehumanize("2 days 3.5 hours ago") == arrow.Arrow(
+            2025, 12, 8, 5, 30, 0
+        )
+        assert arw.dehumanize("in 2 days 3.5 hours") == arrow.Arrow(
+            2025, 12, 12, 12, 30, 0
+        )
+
+    def test_fractional_months_and_years_are_rejected(self):
+        arw = arrow.Arrow(2025, 12, 10, 9, 0, 0)
+
+        # relativedelta cannot represent these unambiguously
+        with pytest.raises(ValueError):
+            arw.dehumanize("1.5 months ago")
+
+        with pytest.raises(ValueError):
+            arw.dehumanize("in 1.5 years")
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [

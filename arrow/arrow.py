@@ -17,6 +17,7 @@ from time import struct_time
 from typing import (
     Any,
     ClassVar,
+    Dict,
     Final,
     Generator,
     Iterable,
@@ -73,6 +74,9 @@ _GRANULARITY = Literal[
     "quarter",
     "year",
 ]
+
+# An unsigned integer or decimal, as accepted by dehumanize()
+_NUMBER_PATTERN = r"\d+(?:[.,]\d+)?"
 
 
 class Arrow:
@@ -1381,7 +1385,8 @@ class Arrow:
         current_time = self.fromdatetime(self._datetime)
 
         # Create an object containing the relative time info
-        time_object_info = dict.fromkeys(
+        # float as well as int: a value may carry a decimal fraction
+        time_object_info: Dict[str, Union[int, float]] = dict.fromkeys(
             ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
         )
 
@@ -1391,8 +1396,13 @@ class Arrow:
             False,
         )
 
-        # Create a regex pattern object for numbers
-        num_pattern = re.compile(r"\d+")
+        # Create a regex pattern object for numbers.
+        # A value may carry a decimal fraction ("3.5 hours"). Both separators
+        # are accepted because the input is written by hand rather than
+        # produced by humanize(), and the locale objects carry no separator
+        # information. A separator is only read as a decimal point when digits
+        # follow it, so digit grouping ("1,500 hours") is not supported.
+        num_pattern = re.compile(_NUMBER_PATTERN)
 
         # Search input string for each time unit within locale
         for unit, unit_object in locale_obj.timeframes.items():
@@ -1406,9 +1416,9 @@ class Arrow:
             # Needs to cycle all through strings as some locales have strings that
             # could overlap in a regex match, since input validation isn't being performed.
             for time_delta, time_string in strings_to_search.items():
-                # Replace {0} with regex \d representing digits
+                # Replace {0} with the regex matching a numeric value
                 search_string = str(time_string)
-                search_string = search_string.format(r"\d+")
+                search_string = search_string.format(_NUMBER_PATTERN)
 
                 # Create search pattern and find within string
                 pattern = re.compile(rf"(^|\b|\d){search_string}")
@@ -1423,12 +1433,18 @@ class Arrow:
 
                 # If no number matches
                 # Need for absolute value as some locales have signs included in their objects
+                change_value: Union[int, float]
                 if not num_match:
                     change_value = (
                         1 if not time_delta.isnumeric() else abs(int(time_delta))
                     )
                 else:
-                    change_value = int(num_match.group())
+                    matched_number = num_match.group().replace(",", ".")
+                    change_value = (
+                        float(matched_number)
+                        if "." in matched_number
+                        else int(matched_number)
+                    )
 
                 # No time to update if now is the unit
                 if unit == "now":
