@@ -6360,7 +6360,7 @@ class AmharicLocale(Locale):
         },
         "hours": {
             "past": "ከ {0} ሰዓታት",
-            "future": "በ {0} ሰከንድ",
+            "future": "በ {0} ሰዓታት",
         },
         "day": {
             "past": "ከአንድ ቀን",
