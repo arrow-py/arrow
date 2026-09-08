@@ -91,7 +91,9 @@ class TestModule:
 
 
 class TestCustomLocale:
-    def test_custom_locale_subclass(self):
+    def test_custom_locale_subclass(self, mocker):
+        mocker.patch.dict(locales._locale_map)
+
         class CustomLocale1(locales.Locale):
             names = ["foo", "foo-BAR"]
 
