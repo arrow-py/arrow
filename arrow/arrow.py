@@ -1428,6 +1428,20 @@ class Arrow:
                         1 if not time_delta.isnumeric() else abs(int(time_delta))
                     )
                 else:
+                    # The digit pattern itself only matches unsigned numbers, so a
+                    # leading minus sign right before the matched digits (e.g. "in -1
+                    # hours") is invisible to num_match. Look at the characters that
+                    # precede the digits in the original string to catch it, since
+                    # dehumanize already conveys direction via "ago"/"in" and a sign
+                    # on top of that would be ambiguous rather than doubly negative.
+                    digit_start = match.start() + num_match.start()
+                    preceding_text = input_string[:digit_start]
+                    if re.search(r"-\s*$", preceding_text):
+                        raise ValueError(
+                            "Negative numbers are not supported in dehumanize() inputs. "
+                            "Direction should be expressed with 'ago' or 'in', not a sign, "
+                            f"but got: {input_string!r}"
+                        )
                     change_value = int(num_match.group())
 
                 # No time to update if now is the unit
