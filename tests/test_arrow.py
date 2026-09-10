@@ -2987,6 +2987,12 @@ class TestArrowDehumanize:
                 assert arw.dehumanize(past_string, locale=lang) == past
                 assert arw.dehumanize(future_string, locale=lang) == future
 
+    def test_fractional_units(self):
+        arw = arrow.Arrow(2026, 1, 1, tzinfo="UTC")
+        assert arw.dehumanize("1.5 hours ago") == arw.shift(hours=-1.5)
+        assert arw.dehumanize("0.5 days ago") == arw.shift(days=-0.5)
+        assert arw.dehumanize("in 1.5 hours") == arw.shift(hours=1.5)
+
 
 class TestArrowIsBetween:
     def test_start_before_end(self):
