@@ -1382,7 +1382,7 @@ class Arrow:
 
         # Create an object containing the relative time info
         time_object_info = dict.fromkeys(
-            ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0
+            ["seconds", "minutes", "hours", "days", "weeks", "months", "years"], 0.0
         )
 
         # Create an object representing if unit has been seen
@@ -1425,7 +1425,7 @@ class Arrow:
                 # Need for absolute value as some locales have signs included in their objects
                 if not num_match:
                     change_value = (
-                        1 if not time_delta.isnumeric() else abs(int(time_delta))
+                        1.0 if not time_delta.isnumeric() else abs(float(time_delta))
                     )
                 else:
                     change_value = float(num_match.group())
