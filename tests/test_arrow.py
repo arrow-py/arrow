@@ -898,6 +898,33 @@ class TestArrowShift:
 
 
 class TestArrowRange:
+    @pytest.mark.parametrize(
+        "frame",
+        [
+            "year",
+            "quarter",
+            "month",
+            "week",
+            "day",
+            "hour",
+            "minute",
+            "second",
+            "microsecond",
+        ],
+    )
+    @pytest.mark.parametrize("end", [None, datetime.max])
+    def test_limit_at_datetime_max(self, frame, end):
+        result = list(arrow.Arrow.range(frame, datetime.max, end=end, limit=1))
+
+        assert result == [arrow.Arrow.max]
+
+    @pytest.mark.parametrize("limit", [0, 1, 2])
+    def test_limit_near_datetime_max(self, limit):
+        start = datetime(9999, 12, 30, 23, 59, 59, 999999)
+        result = list(arrow.Arrow.range("day", start, limit=limit))
+
+        assert result == [arrow.Arrow.fromdatetime(start), arrow.Arrow.max][:limit]
+
     def test_year(self):
         result = list(
             arrow.Arrow.range(

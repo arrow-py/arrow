@@ -490,6 +490,9 @@ class Arrow:
             i += 1
             yield current
 
+            if i >= limit:
+                return
+
             values = [getattr(current, f) for f in cls._ATTRS]
             current = cls(*values, tzinfo=tzinfo).shift(  # type: ignore[misc]
                 check_imaginary=True, **{frame_relative: relative_steps}
