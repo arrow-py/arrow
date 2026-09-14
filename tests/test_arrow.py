@@ -1123,6 +1123,35 @@ class TestArrowRange:
             arrow.Arrow(2015, 5, 31),
         ]
 
+    @pytest.mark.parametrize(
+        ("frame", "start", "expected"),
+        [
+            (
+                "months",
+                datetime(2015, 1, 31),
+                [(2015, 1, 31), (2015, 2, 28), (2015, 3, 31), (2015, 4, 30)],
+            ),
+            (
+                "quarters",
+                datetime(2014, 11, 30),
+                [(2014, 11, 30), (2015, 2, 28), (2015, 5, 30)],
+            ),
+            (
+                "years",
+                datetime(2012, 2, 29),
+                [(2012, 2, 29), (2013, 2, 28), (2016, 2, 29)],
+            ),
+        ],
+    )
+    def test_range_plural_frames_restore_clipped_day(self, frame, start, expected):
+        # Plural frame names are accepted by range() and must restore a day that was
+        # clipped at the end of a shorter month, exactly like the singular names.
+        limit = 5 if frame == "years" else len(expected)
+        result = list(arrow.Arrow.range(frame, start, limit=limit))
+        if frame == "years":
+            result = [result[0], result[1], result[4]]
+        assert result == [arrow.Arrow(*ymd) for ymd in expected]
+
     def test_range_over_quarter_months_ending_on_different_days(self):
         result = list(arrow.Arrow.range("quarter", datetime(2014, 11, 30), limit=3))
         assert result == [

@@ -473,7 +473,7 @@ class Arrow:
 
         """
 
-        _, frame_relative, relative_steps = cls._get_frames(frame)
+        frame_absolute, frame_relative, relative_steps = cls._get_frames(frame)
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
 
@@ -495,7 +495,10 @@ class Arrow:
                 check_imaginary=True, **{frame_relative: relative_steps}
             )
 
-            if frame in ["month", "quarter", "year"] and current.day < original_day:
+            if (
+                frame_absolute in ["month", "quarter", "year"]
+                and current.day < original_day
+            ):
                 day_is_clipped = True
 
             if day_is_clipped and not cls._is_last_day_of_month(current):
