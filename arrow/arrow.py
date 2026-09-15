@@ -1346,7 +1346,7 @@ class Arrow:
         the time difference relative to the attributes of the
         :class:`Arrow <arrow.arrow.Arrow>` object.
 
-        :param timestring: a ``str`` representing a humanized relative time.
+        :param input_string: a ``str`` representing a humanized relative time.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en-us'.
 
         Usage::
