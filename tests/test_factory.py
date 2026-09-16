@@ -33,6 +33,14 @@ class TestGet:
         with pytest.raises(TypeError):
             self.factory.get(None)
 
+    def test_one_arg_tzinfo_none(self):
+        d = self.factory.get("2025-01-01", "YYYY-MM-DD", tzinfo=None)
+        assert d.year == 2025
+        assert d.month == 1
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.tzinfo == timezone.utc
+
     def test_struct_time(self):
         assert_datetime_equality(
             self.factory.get(time.gmtime()),
