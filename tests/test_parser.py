@@ -882,6 +882,31 @@ class TestDateTimeParserRegex:
         assert timestamp_re.findall("1565707550") == ["1565707550"]
         assert timestamp_re.findall("1565707550.") == []
         assert timestamp_re.findall(".1565707550") == []
+        # integers, decimals, and negatives must still parse via the "X" token
+        dt_parser = parser.DateTimeParser()
+        assert dt_parser.parse("1565707550", "X") == datetime.fromtimestamp(
+            1565707550, tz=timezone.utc
+        )
+        parsed = dt_parser.parse("1565707550.452729", "X")
+        assert parsed == datetime.fromtimestamp(1565707550.452729, tz=timezone.utc)
+        assert timestamp_re.match("-1565707550") is not None
+        assert timestamp_re.match("-1565707550.452729") is not None
+
+    def test_timestamp_regex_is_linear(self):
+        # Regression test for issue #1353: `^\-?\d+\.?\d+$` is quadratic on
+        # digit-heavy non-matches such as "9"*N + "x" because two greedy \d+
+        # groups compete across an optional dot.
+        timestamp_re = parser.DateTimeParser._TIMESTAMP_RE
+        assert r"\d+\.?\d+" not in timestamp_re.pattern
+
+        payload = "9" * 40000 + "x"
+        t0 = time.perf_counter()
+        assert timestamp_re.match(payload) is None
+        elapsed = time.perf_counter() - t0
+        assert elapsed < 0.25
+
+        with pytest.raises(ParserMatchError):
+            parser.DateTimeParser().parse(payload, "X")
 
     def test_timestamp_milli(self):
         timestamp_expanded_re = parser.DateTimeParser._TIMESTAMP_EXPANDED_RE
