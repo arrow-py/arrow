@@ -655,6 +655,14 @@ class TestArrowReplace:
         assert arw.replace(minute=1) == arrow.Arrow(2013, 5, 5, 12, 1, 45)
         assert arw.replace(second=1) == arrow.Arrow(2013, 5, 5, 12, 30, 1)
 
+    def test_replace_rejects_bool(self):
+        arw = arrow.Arrow(2024, 6, 15, 12, 30, 45, tzinfo="UTC")
+        for key in ("year", "month", "day", "hour", "minute", "second", "microsecond"):
+            with pytest.raises(TypeError, match=key):
+                arw.replace(**{key: True})
+            with pytest.raises(TypeError, match=key):
+                arw.replace(**{key: False})
+
     def test_replace_tzinfo(self):
         arw = arrow.Arrow.utcnow().to("US/Eastern")
 
@@ -698,6 +706,26 @@ class TestArrowReplace:
 
 
 class TestArrowShift:
+
+    def test_shift_rejects_bool(self):
+        arw = arrow.Arrow(2024, 6, 15, 12, 30, 45, tzinfo="UTC")
+        for key in (
+            "years",
+            "months",
+            "days",
+            "hours",
+            "minutes",
+            "seconds",
+            "microseconds",
+            "weeks",
+            "quarters",
+            "weekday",
+        ):
+            with pytest.raises(TypeError, match=key):
+                arw.shift(**{key: True})
+            with pytest.raises(TypeError, match=key):
+                arw.shift(**{key: False})
+
     def test_not_attr(self):
         now = arrow.Arrow.utcnow()
 

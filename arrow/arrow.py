@@ -972,6 +972,11 @@ class Arrow:
 
         for key, value in kwargs.items():
             if key in self._ATTRS:
+                # bool is a subclass of int; reject so year=True does not become year 1
+                if isinstance(value, bool):
+                    raise TypeError(
+                        f"{key} must be an integer, not bool (got {value!r})."
+                    )
                 absolute_kwargs[key] = value
             elif key in ["week", "quarter"]:
                 raise ValueError(f"Setting absolute {key} is not supported.")
@@ -1033,6 +1038,11 @@ class Arrow:
 
         for key, value in kwargs.items():
             if key in self._ATTRS_PLURAL or key in additional_attrs:
+                # bool is a subclass of int; reject so days=True does not shift by 1
+                if isinstance(value, bool):
+                    raise TypeError(
+                        f"{key} must be an integer, not bool (got {value!r})."
+                    )
                 relative_kwargs[key] = value
             else:
                 supported_attr = ", ".join(self._ATTRS_PLURAL + additional_attrs)
