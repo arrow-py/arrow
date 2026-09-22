@@ -3,7 +3,7 @@ try:
 except ImportError:
     from backports.zoneinfo import ZoneInfo
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from dateutil import tz as dateutil_tz
@@ -116,6 +116,48 @@ class TestFormatterFormatToken:
         # than 6 digits of precision
         expected = str(int(dt.timestamp() * 1000000))
         assert self.formatter._format_token(dt, "x") == expected
+
+    @pytest.mark.parametrize(
+        "dt, expected",
+        [
+            (
+                datetime(2500, 1, 1, microsecond=1, tzinfo=timezone.utc),
+                "16725225600000001",
+            ),
+            (
+                datetime(1, 1, 1, microsecond=1, tzinfo=timezone.utc),
+                "-62135596799999999",
+            ),
+            (datetime.max.replace(tzinfo=timezone.utc), "253402300799999999"),
+            (datetime(1969, 12, 31, 23, 59, 59, 999999, timezone.utc), "-1"),
+            (datetime(1970, 1, 1, tzinfo=timezone.utc), "0"),
+            (datetime(1970, 1, 1, microsecond=1, tzinfo=timezone.utc), "1"),
+            (
+                datetime(
+                    2500, 1, 1, 8, microsecond=1, tzinfo=timezone(timedelta(hours=8))
+                ),
+                "16725225600000001",
+            ),
+            (
+                datetime(
+                    1970,
+                    1,
+                    1,
+                    second=1,
+                    microsecond=2,
+                    tzinfo=timezone(timedelta(seconds=1, microseconds=1)),
+                ),
+                "1",
+            ),
+        ],
+    )
+    def test_microsecond_timestamp_is_exact(self, dt, expected):
+        assert self.formatter.format(dt, "x") == expected
+
+    def test_microsecond_timestamp_naive_uses_local_timezone(self):
+        dt = datetime(2020, 1, 1, microsecond=123456)
+        expected = int(dt.replace(microsecond=0).timestamp()) * 1_000_000 + 123456
+        assert self.formatter.format(dt, "x") == str(expected)
 
     def test_timezone(self):
         dt = datetime.now(timezone.utc).replace(tzinfo=ZoneInfo("US/Pacific"))
