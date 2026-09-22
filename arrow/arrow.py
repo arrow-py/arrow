@@ -1351,19 +1351,19 @@ class Arrow:
 
         Usage::
 
-                >>> arw = arrow.utcnow()
+                >>> arw = arrow.Arrow(2021, 4, 20, 22, 27, 34, 787885)
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
                 >>> earlier = arw.dehumanize("2 days ago")
                 >>> earlier
                 <Arrow [2021-04-18T22:27:34.787885+00:00]>
 
-                >>> arw = arrow.utcnow()
+                >>> arw = arrow.Arrow(2021, 4, 20, 22, 27, 34, 787885)
                 >>> arw
                 <Arrow [2021-04-20T22:27:34.787885+00:00]>
                 >>> later = arw.dehumanize("in a month")
                 >>> later
-                <Arrow [2021-05-18T22:27:34.787885+00:00]>
+                <Arrow [2021-05-20T22:27:34.787885+00:00]>
 
         """
 

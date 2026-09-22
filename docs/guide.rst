@@ -254,7 +254,7 @@ Take a human readable string and use it to shift into a past time:
 
 .. code-block:: python
 
-    >>> arw = arrow.utcnow()
+    >>> arw = arrow.Arrow(2021, 4, 20, 22, 27, 34, 787885)
     >>> arw
     <Arrow [2021-04-20T22:27:34.787885+00:00]>
     >>> earlier = arw.dehumanize("2 days ago")
@@ -265,23 +265,23 @@ Or use it to shift into a future time:
 
 .. code-block:: python
 
-    >>> arw = arrow.utcnow()
+    >>> arw = arrow.Arrow(2021, 4, 20, 22, 27, 34, 787885)
     >>> arw
     <Arrow [2021-04-20T22:27:34.787885+00:00]>
     >>> later = arw.dehumanize("in a month")
     >>> later
-    <Arrow [2021-05-18T22:27:34.787885+00:00]>
+    <Arrow [2021-05-20T22:27:34.787885+00:00]>
 
 Support for a growing number of locales (see ``constants.py`` for supported languages):
 
 .. code-block:: python
 
-    >>> arw = arrow.utcnow()
+    >>> arw = arrow.Arrow(2021, 4, 20, 22, 27, 34, 787885)
     >>> arw
     <Arrow [2021-04-20T22:27:34.787885+00:00]>
     >>> later = arw.dehumanize("एक माह बाद", locale="hi")
     >>> later
-    <Arrow [2021-05-18T22:27:34.787885+00:00]>
+    <Arrow [2021-05-20T22:27:34.787885+00:00]>
 
 Ranges & Spans
 ~~~~~~~~~~~~~~
