@@ -166,7 +166,13 @@ class DateTimeParser:
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
-    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+\.?\d+$")
+    # Two independently-greedy \d+ groups either side of an optional "." let the
+    # regex engine try every possible split point between them before failing on
+    # non-matching input, which is quadratic in the input length (GHSA/issue: ReDoS
+    # via a long digit string with no valid split, e.g. arrow.get("9"*50000, "X")).
+    # Wrapping the fractional part as a single optional non-capturing group removes
+    # the ambiguity: there's only one way to consume the "." once it's found.
+    _TIMESTAMP_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+(?:\.\d+)?$")
     _TIMESTAMP_EXPANDED_RE: ClassVar[Pattern[str]] = re.compile(r"^\-?\d+$")
     _TIME_RE: ClassVar[Pattern[str]] = re.compile(
         r"^(\d{2})(?:\:?(\d{2}))?(?:\:?(\d{2}))?(?:([\.\,])(\d+))?$"
