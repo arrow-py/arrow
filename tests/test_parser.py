@@ -882,6 +882,27 @@ class TestDateTimeParserRegex:
         assert timestamp_re.findall("1565707550") == ["1565707550"]
         assert timestamp_re.findall("1565707550.") == []
         assert timestamp_re.findall(".1565707550") == []
+        # A single digit is a valid Unix timestamp (e.g. epoch 0 == 1970-01-01);
+        # the previous _TIMESTAMP_RE required two \d+ groups either side of an
+        # optional ".", so it rejected any purely-integer input under two digits.
+        assert timestamp_re.findall("0") == ["0"]
+        assert timestamp_re.findall("-5") == ["-5"]
+
+    def test_timestamp_does_not_backtrack_quadratically(self):
+        # Regression test for a ReDoS: the previous _TIMESTAMP_RE had two
+        # independently-greedy \d+ groups either side of an optional ".", so
+        # non-matching digit-heavy input made it try every split point between
+        # them before failing. 200k digits finishes in well under a second with
+        # the fix; the previous implementation took single-digit seconds at 10k
+        # and would take tens of minutes at this size.
+        timestamp_re = parser.DateTimeParser._TIMESTAMP_RE
+        payload = "9" * 200_000 + "x"
+
+        start = time.perf_counter()
+        assert timestamp_re.findall(payload) == []
+        elapsed = time.perf_counter() - start
+
+        assert elapsed < 5
 
     def test_timestamp_milli(self):
         timestamp_expanded_re = parser.DateTimeParser._TIMESTAMP_EXPANDED_RE
