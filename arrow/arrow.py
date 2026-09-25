@@ -1047,7 +1047,7 @@ class Arrow:
         )
 
         current = self._datetime + relativedelta(**relative_kwargs)
-
+        current = dateutil_tz.enfold(current, fold=self._datetime.fold)
         # If check_imaginary is True, perform the check for imaginary times (DST transitions)
         if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
