@@ -113,6 +113,57 @@ Call datetime functions that return properties:
     >>> a.time()
     datetime.time(4, 38, 15, 447644)
 
+Compare
+~~~~~~~
+
+Compare Arrow objects with ``==``, ``!=``, ``<``, ``<=``, ``>`` and ``>=``.
+Arrow compares the underlying datetime objects, following Python's
+`datetime comparison rules <https://docs.python.org/3/library/datetime.html#datetime.datetime>`_.
+For example, these two objects represent the same instant with different offsets:
+
+.. code-block:: python
+
+    >>> utc = arrow.get('2020-01-01T12:00:00+00:00')
+    >>> local = utc.to('+02:00')
+    >>> local
+    <Arrow [2020-01-01T14:00:00+02:00]>
+    >>> utc == local
+    True
+    >>> utc < utc.shift(hours=1)
+    True
+
+Use the same comparisons to sort a collection of Arrow objects:
+
+.. code-block:: python
+
+    >>> earlier = arrow.get('2020-01-01T12:00:00+02:00')
+    >>> later = arrow.get('2020-01-01T11:00:00+00:00')
+    >>> [a.isoformat() for a in sorted([later, earlier])]
+    ['2020-01-01T12:00:00+02:00', '2020-01-01T11:00:00+00:00']
+
+You can also compare an Arrow object with a timezone-aware datetime.
+Equality with a naive datetime is false, and ordering raises ``TypeError``.
+
+.. code-block:: python
+
+    >>> utc == utc.datetime
+    True
+    >>> utc == utc.naive
+    False
+
+When both datetime objects share the same ``tzinfo`` object, Python compares
+their local date and time and ignores ``fold``. During a repeated daylight-saving
+hour, convert both Arrow objects to UTC to compare the instants they represent:
+
+.. code-block:: python
+
+    >>> first = arrow.Arrow(2019, 10, 27, 2, 30, tzinfo='Europe/Paris', fold=0)
+    >>> second = first.replace(fold=1)
+    >>> first == second
+    True
+    >>> first.to('UTC') < second.to('UTC')
+    True
+
 Replace & Shift
 ~~~~~~~~~~~~~~~
 
