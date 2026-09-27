@@ -1697,6 +1697,27 @@ class TestArrowSpan:
         assert floor == datetime(2013, 2, 15, tzinfo=tz.tzutc())
         assert ceil == datetime(2013, 2, 15, 23, 59, 59, 999999, tzinfo=tz.tzutc())
 
+    def test_span_day_before_dst_gap_at_midnight(self):
+        # America/Santiago skips 2022-09-11 00:00-01:00, so the next midnight does not exist
+        santiago = tz.gettz("America/Santiago")
+        dt = arrow.Arrow(2022, 9, 10, 12, tzinfo=santiago)
+
+        floor, ceil = dt.span("day")
+
+        assert floor == datetime(2022, 9, 10, tzinfo=santiago)
+        assert ceil == datetime(2022, 9, 10, 23, 59, 59, 999999, tzinfo=santiago)
+        assert ceil.utcoffset() == timedelta(hours=-4)
+        assert dt.ceil("day") == ceil
+
+    def test_span_day_of_dst_gap_at_midnight(self):
+        santiago = tz.gettz("America/Santiago")
+        dt = arrow.Arrow(2022, 9, 11, 12, tzinfo=santiago)
+
+        assert dt.ceil("day") == datetime(
+            2022, 9, 11, 23, 59, 59, 999999, tzinfo=santiago
+        )
+        assert dt.ceil("day").utcoffset() == timedelta(hours=-3)
+
     def test_span_hour(self):
         floor, ceil = self.arrow.span("hour")
 
