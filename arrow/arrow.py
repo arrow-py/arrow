@@ -584,7 +584,7 @@ class Arrow:
                 floor = floor.shift(months=-((self.month - 1) % 3))
 
         ceil = floor.shift(
-            check_imaginary=True, **{frame_relative: count * relative_steps}
+            check_imaginary=False, **{frame_relative: count * relative_steps}
         )
 
         if bounds[0] == "(":
