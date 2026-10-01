@@ -848,30 +848,30 @@ class TestArrowShift:
     def test_shift_negative_imaginary(self):
         new_york = arrow.Arrow(2011, 3, 13, 3, 30, tzinfo="America/New_York")
         assert new_york.shift(hours=-1) == arrow.Arrow(
-            2011, 3, 13, 3, 30, tzinfo="America/New_York"
+            2011, 3, 13, 1, 30, tzinfo="America/New_York"
         )
         assert new_york.shift(hours=-2) == arrow.Arrow(
-            2011, 3, 13, 1, 30, tzinfo="America/New_York"
+            2011, 3, 13, 0, 30, tzinfo="America/New_York"
         )
 
         london = arrow.Arrow(2019, 3, 31, 2, tzinfo="Europe/London")
         assert london.shift(hours=-1) == arrow.Arrow(
-            2019, 3, 31, 2, tzinfo="Europe/London"
+            2019, 3, 31, 0, tzinfo="Europe/London"
         )
         assert london.shift(hours=-2) == arrow.Arrow(
-            2019, 3, 31, 0, tzinfo="Europe/London"
+            2019, 3, 30, 23, tzinfo="Europe/London"
         )
 
         # edge case, crossing the international dateline
         apia = arrow.Arrow(2011, 12, 31, 1, tzinfo="Pacific/Apia")
         assert apia.shift(hours=-2) == arrow.Arrow(
-            2011, 12, 31, 23, tzinfo="Pacific/Apia"
+            2011, 12, 29, 23, tzinfo="Pacific/Apia"
         )
 
     def test_shift_with_imaginary_check(self):
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
         shifted = dt.shift(hours=1)
-        assert shifted.datetime.hour == 3
+        assert shifted.datetime.hour == 4
 
     def test_shift_without_imaginary_check(self):
         dt = arrow.Arrow(2024, 3, 10, 2, 30, tzinfo=ZoneInfo("US/Eastern"))
@@ -894,9 +894,15 @@ class TestArrowShift:
         monrovia = arrow.Arrow(1972, 1, 6, 23, tzinfo="Africa/Monrovia")
         assert monrovia.shift(hours=+1, minutes=+30) == arrow.Arrow(
             1972, 1, 7, 1, 14, 30, tzinfo="Africa/Monrovia"
-        )
-
-
+            )
+    
+    def test_shift_dst_spring_forward_is_consistent(self):
+        # America/Los_Angeles: clocks jump from 02 : 00 to 03 : 00 on 2023-03-12
+        x = arrow.Arrow(2023, 3, 12, tzinfo="America/Los_Angeles")
+        # shift by 2 hours and 3 hours must NOT land on the same moment
+        assert x.shift(hours=2) != x.shift(hours=3)
+        # Shifting by 1 hour three times must equal to shifting by 3 hours once
+        assert x.shift(hours=1).shift(hours=1).shift(hours=1) == x.shift(hours=3)
 class TestArrowRange:
     def test_year(self):
         result = list(

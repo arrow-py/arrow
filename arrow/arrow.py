@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import date as dt_date
 from datetime import datetime as dt_datetime
+from datetime import datetime, timedelta
 from datetime import time as dt_time
 from datetime import timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
@@ -1046,9 +1047,21 @@ class Arrow:
             relative_kwargs.pop("quarters", 0) * self._MONTHS_PER_QUARTER
         )
 
-        current = self._datetime + relativedelta(**relative_kwargs)
+        CALENDAR_ATTRS = {"years", "months", "weeks", "days", "weekday"}
+        DURATION_ATTRS = {"hours", "minutes", "seconds", "microseconds"}
 
-        # If check_imaginary is True, perform the check for imaginary times (DST transitions)
+        calendar_kwargs = {k: v for k, v in relative_kwargs.items() if k in CALENDAR_ATTRS}
+        duration_kwargs = {k: v for k, v in relative_kwargs.items() if k in DURATION_ATTRS}
+
+        current = self._datetime + relativedelta(**calendar_kwargs)
+
+        if duration_kwargs and check_imaginary:
+            utc_current = current.astimezone(dateutil_tz.UTC)
+            utc_current = utc_current + timedelta(**duration_kwargs)
+            current = utc_current.astimezone(current.tzinfo)
+        else:
+            current = current + timedelta(**duration_kwargs)
+
         if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
 
