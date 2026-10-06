@@ -870,7 +870,7 @@ class DateTimeParser:
 
         Takes an iterable of strings (`choices`) and returns a compiled regular expression
         pattern that matches any of the choices. The pattern is created by joining the
-        choices with the '|' (OR) operator, which matches any of the enclosed patterns.
+        escaped choices with the '|' (OR) operator, matching each choice literally.
 
         :param choices: An iterable of strings to match.
         :type choices: Iterable[str]
@@ -879,7 +879,9 @@ class DateTimeParser:
         :returns: A compiled regular expression pattern that matches any of the choices.
         :rtype: re.Pattern[str]
         """
-        return re.compile(r"({})".format("|".join(choices)), flags=flags)
+        return re.compile(
+            r"({})".format("|".join(map(re.escape, choices))), flags=flags
+        )
 
 
 class TzinfoParser:

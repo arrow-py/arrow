@@ -782,6 +782,32 @@ class TestDateTimeParserParse:
 
 @pytest.mark.usefixtures("dt_parser_regex")
 class TestDateTimeParserRegex:
+    @pytest.mark.parametrize(
+        "locale, value, fmt, expected",
+        [
+            ("ca", "2025-gen.-01", "YYYY-MMM-DD", datetime(2025, 1, 1)),
+            ("ca", "dl. 2025-01-06", "ddd YYYY-MM-DD", datetime(2025, 1, 6)),
+            (
+                "hy",
+                "2025-01-01 01:00 պ.մ.",
+                "YYYY-MM-DD hh:mm A",
+                datetime(2025, 1, 1, 13),
+            ),
+        ],
+    )
+    def test_locale_punctuation_is_literal(self, locale, value, fmt, expected):
+        dt_parser = DateTimeParser(locale)
+        assert dt_parser.parse(value, fmt) == expected
+
+        with pytest.raises(ParserMatchError):
+            dt_parser.parse(value.replace(".", "x"), fmt)
+
+    def test_invalid_locale_choice_allows_format_fallback(self):
+        dt_parser = DateTimeParser("ca")
+        assert dt_parser.parse(
+            "2025-genx-01", ["YYYY-MMM-DD", "YYYY-[genx]-DD"]
+        ) == datetime(2025, 1, 1)
+
     def test_format_year(self):
         assert self.format_regex.findall("YYYY-YY") == ["YYYY", "YY"]
 
