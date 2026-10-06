@@ -1530,14 +1530,17 @@ class Arrow:
         include_start = bounds[0] == "["
         include_end = bounds[1] == "]"
 
-        target_ts = self.float_timestamp
-        start_ts = start.float_timestamp
-        end_ts = end.float_timestamp
+        # Timedeltas preserve microseconds even when floating-point timestamps
+        # cannot, and avoid overflowing datetime's range during UTC conversion.
+        epoch = dt_datetime(1970, 1, 1, tzinfo=timezone.utc)
+        target_delta = self._datetime - epoch
+        start_delta = start._datetime - epoch
+        end_delta = end._datetime - epoch
 
         return (
-            (start_ts <= target_ts <= end_ts)
-            and (include_start or start_ts < target_ts)
-            and (include_end or target_ts < end_ts)
+            (start_delta <= target_delta <= end_delta)
+            and (include_start or start_delta < target_delta)
+            and (include_end or target_delta < end_delta)
         )
 
     # datetime methods

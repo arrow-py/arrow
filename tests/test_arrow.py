@@ -2989,6 +2989,51 @@ class TestArrowDehumanize:
 
 
 class TestArrowIsBetween:
+    @pytest.mark.parametrize("year", [1, 1900, 2025, 2255, 2500, 9999])
+    @pytest.mark.parametrize("bounds", ["()", "(]", "[)", "[]"])
+    def test_microsecond_precision(self, year, bounds):
+        start = arrow.Arrow(year, 1, 1)
+        target = start.shift(microseconds=1)
+        end = start.shift(microseconds=2)
+
+        assert target.is_between(start, end, bounds)
+        assert start.is_between(start, end, bounds) == (bounds[0] == "[")
+        assert end.is_between(start, end, bounds) == (bounds[1] == "]")
+        assert not start.is_between(target, end, bounds)
+        assert not end.is_between(start, target, bounds)
+
+    @pytest.mark.parametrize("year, offset", [(1, 14), (9999, -12)])
+    def test_timezone_beyond_datetime_utc_limits(self, year, offset):
+        start = arrow.Arrow(
+            year,
+            1 if year == 1 else 12,
+            1 if year == 1 else 31,
+            hour=0 if year == 1 else 23,
+            tzinfo=timezone(timedelta(hours=offset)),
+        )
+        target = start.replace(microsecond=1)
+        end = start.replace(microsecond=2)
+
+        assert target.is_between(start, end)
+
+    def test_equivalent_instants_with_different_timezones(self):
+        start = arrow.Arrow(2500, 1, 1, tzinfo="+14:00")
+        target = start.to("-12:00").shift(microseconds=1)
+        end = start.to("UTC").shift(microseconds=2)
+
+        assert target.is_between(start, end)
+        assert start.to("UTC").is_between(start, end, "[]")
+        assert not start.to("UTC").is_between(start, end, "()")
+
+    def test_fold_compares_instants(self):
+        start = arrow.Arrow(2025, 10, 26, 2, tzinfo="Europe/Paris", fold=1)
+        end = start.replace(hour=3)
+        first = start.replace(minute=30, fold=0)
+        second = first.replace(fold=1)
+
+        assert not first.is_between(start, end)
+        assert second.is_between(start, end)
+
     def test_start_before_end(self):
         target = arrow.Arrow.fromdatetime(datetime(2013, 5, 7))
         start = arrow.Arrow.fromdatetime(datetime(2013, 5, 8))
