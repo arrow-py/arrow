@@ -1301,31 +1301,74 @@ class Arrow:
 
                 timeframes: List[Tuple[TimeFrameLiteral, float]] = []
 
-                def gather_timeframes(_delta: float, _frame: TimeFrameLiteral) -> float:
-                    if _frame in granularity:
-                        value = sign * _delta / self._SECS_MAP[_frame]
-                        _delta %= self._SECS_MAP[_frame]
+                # 2026-10-06 Fix: Accurate multiple granularity math bypassing relativity scaling limitations
+                _start = self._datetime if sign == -1 else dt
+                _end = dt if sign == -1 else self._datetime
+                _orig_start = _start
+
+                cal_frames: Tuple[TimeFrameLiteral, ...] = ("year", "quarter", "month")
+                has_cal = any(frame in granularity for frame in cal_frames)
+
+                if has_cal:
+                    try:
+                        # Evaluate calendar components matching origin timezone to avoid false cross-zone day jumps
+                        _calendar_end = (
+                            _end.astimezone(_orig_start.tzinfo) if _end.tzinfo else _end
+                        )
+                        rd = relativedelta(_calendar_end, _orig_start)
+                    except OverflowError:
+                        rd = relativedelta(_end, _orig_start)
+                    total_months = rd.years * 12 + rd.months
+                else:
+                    total_months = 0
+                months_advanced = 0
+                for frame in cal_frames:
+                    if frame in granularity:
+                        if frame == "year":
+                            diff = total_months // 12
+                            total_months -= diff * 12
+                            months_advanced += diff * 12
+                        elif frame == "quarter":
+                            diff = total_months // 3
+                            total_months -= diff * 3
+                            months_advanced += diff * 3
+                        else:  # frame == "month"
+                            diff = total_months
+                            total_months = 0
+                            months_advanced += diff
+
+                        value = sign * float(diff)
                         if trunc(abs(value)) != 1:
                             timeframes.append(
-                                (cast(TimeFrameLiteral, _frame + "s"), value)
+                                (cast(TimeFrameLiteral, frame + "s"), value)
                             )
                         else:
-                            timeframes.append((_frame, value))
-                    return _delta
+                            timeframes.append((frame, value))
 
-                delta = float(delta_second)
-                frames: Tuple[TimeFrameLiteral, ...] = (
-                    "year",
-                    "quarter",
-                    "month",
+                if months_advanced != 0:
+                    # 2026-10-06 Fix: Preserve exact original start attributes (e.g., DST fold) by not adding zero relativedelta
+                    _start = _orig_start + relativedelta(months=months_advanced)
+                else:
+                    _start = _orig_start
+                _delta_sec = float(int(round((_end - _start).total_seconds())))
+
+                sec_frames: Tuple[TimeFrameLiteral, ...] = (
                     "week",
                     "day",
                     "hour",
                     "minute",
                     "second",
                 )
-                for frame in frames:
-                    delta = gather_timeframes(delta, frame)
+                for frame in sec_frames:
+                    if frame in granularity:
+                        value = sign * _delta_sec / self._SECS_MAP[frame]
+                        _delta_sec %= self._SECS_MAP[frame]
+                        if trunc(abs(value)) != 1:
+                            timeframes.append(
+                                (cast(TimeFrameLiteral, frame + "s"), value)
+                            )
+                        else:
+                            timeframes.append((frame, value))
 
                 if len(timeframes) < len(granularity):
                     raise ValueError(

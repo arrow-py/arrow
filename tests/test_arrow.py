@@ -2077,22 +2077,22 @@ class TestArrowHumanize:
         with pytest.raises(ValueError):
             self.now.humanize(later105, granularity=["error", "second"])
 
-        later108onlydistance = self.now.shift(seconds=10**8)
+        later108onlydistance = self.arrow.shift(seconds=10**8)
         assert (
-            self.now.humanize(
+            self.arrow.humanize(
                 later108onlydistance, only_distance=True, granularity=["year"]
             )
             == "3 years"
         )
         assert (
-            self.now.humanize(
+            self.arrow.humanize(
                 later108onlydistance, only_distance=True, granularity=["month", "week"]
             )
-            == "37 months and 4 weeks"
+            == "38 months and 0 weeks"
         )
         # this will change when leap years are implemented
         assert (
-            self.now.humanize(
+            self.arrow.humanize(
                 later108onlydistance, only_distance=True, granularity=["year", "second"]
             )
             == "3 years and 5392000 seconds"
@@ -3097,3 +3097,185 @@ class TestArrowUtil:
 
         with pytest.raises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
+
+
+class TestHumanizeMultiGranularity:
+    """2026-10-06 Fix: Accurate regression tests for multi-granularity humanize rounding, end-of-month, and timezone leaps."""
+
+    def test_issue_948(self):
+        import arrow
+
+        a = arrow.get("2017-01-01")
+        b = arrow.get("2018-05-03 06:00:02")
+        assert (
+            b.humanize(a, granularity=["year", "month", "day"])
+            == "in a year 4 months and 2 days"
+        )
+        assert (
+            a.humanize(b, granularity=["year", "month", "day"])
+            == "a year 4 months and 2 days ago"
+        )
+
+    def test_leap_year_end_of_month(self):
+        import arrow
+
+        a = arrow.get("2020-02-29")
+        b = arrow.get("2021-02-28")
+        assert (
+            b.humanize(a, granularity=["year", "month", "day"])
+            == "in a year 0 months and 0 days"
+        )
+        assert (
+            a.humanize(b, granularity=["year", "month", "day"])
+            == "a year 0 months and 0 days ago"
+        )
+
+    def test_subseconds_rounding_regression(self):
+        import datetime
+
+        import arrow
+
+        base = arrow.get(2020, 1, 1)
+        assert (
+            base.humanize(
+                base + datetime.timedelta(microseconds=59900000),
+                granularity=["minute", "second"],
+            )
+            == "a minute and 0 seconds ago"
+        )
+        assert (
+            base.humanize(
+                base + datetime.timedelta(microseconds=400000),
+                granularity=["day", "second"],
+            )
+            == "in 0 days and 0 seconds"
+        )
+
+    def test_dst_double_counting_regression(self):
+        import datetime
+
+        import arrow
+
+        base2 = arrow.get(2021, 3, 13, 12, tzinfo="America/New_York")
+        later = base2.to("UTC") + datetime.timedelta(hours=48)
+        assert (
+            later.humanize(base2, granularity=["month", "day", "hour"])
+            == "in 0 months 2 days and 0 hours"
+        )
+
+    def test_omitted_granularity(self):
+        import arrow
+
+        a = arrow.get("2017-01-01")
+        b = arrow.get("2018-05-03 06:00:02")
+        assert b.humanize(a, granularity=["year", "day"]) == "in a year and 122 days"
+
+    def test_end_of_month_anchoring_regression(self):
+        # 2026-10-06 Fix: Accumulate total calendar months from the original start date to preserve leap/end-of-month anchors.
+        import arrow
+
+        a = arrow.get("2020-02-29")
+        b = arrow.get("2021-03-29")
+        assert (
+            b.humanize(a, granularity=["year", "month", "day"])
+            == "in a year a month and 0 days"
+        )
+        assert (
+            a.humanize(b, granularity=["year", "month", "day"])
+            == "a year a month and 0 days ago"
+        )
+
+        c = arrow.get("2021-01-31")
+        d = arrow.get("2021-05-31")
+        assert (
+            d.humanize(c, granularity=["quarter", "month", "day"])
+            == "in a quarter a month and 0 days"
+        )
+        assert (
+            c.humanize(d, granularity=["quarter", "month", "day"])
+            == "a quarter a month and 0 days ago"
+        )
+
+    def test_dst_fold_zero_months_regression(self):
+        # 2026-10-06 Fix: Preserve exact original start attributes (e.g., DST fold) by not adding zero relativedelta
+        from datetime import timedelta
+
+        import arrow
+
+        try:
+            from zoneinfo import ZoneInfo
+        except ImportError:
+            from backports.zoneinfo import ZoneInfo
+
+        start = arrow.Arrow(
+            2021, 11, 7, 1, 30, tzinfo=ZoneInfo("America/New_York"), fold=1
+        )
+        end = start.to("UTC") + timedelta(hours=1)
+
+        # Forward, without cal frames
+        assert (
+            end.humanize(start, granularity=["hour", "second"])
+            == "in an hour and 0 seconds"
+        )
+        # Forward, with cal frames (but months=0)
+        assert (
+            end.humanize(start, granularity=["month", "hour", "second"])
+            == "in 0 months an hour and 0 seconds"
+        )
+
+        # Reverse, without cal frames
+        assert (
+            start.humanize(end, granularity=["hour", "second"])
+            == "an hour and 0 seconds ago"
+        )
+        # Reverse, with cal frames (but months=0)
+        assert (
+            start.humanize(end, granularity=["month", "hour", "second"])
+            == "0 months an hour and 0 seconds ago"
+        )
+
+    def test_cross_timezone_month_boundary_regression(self):
+        # 2026-10-06 Fix: Regression test for cross-timezone month boundary calculations
+        from datetime import timedelta, timezone
+
+        import arrow
+
+        a = arrow.Arrow(2020, 2, 1, tzinfo=timezone(timedelta(hours=14)))
+        b = arrow.Arrow(2020, 1, 31, 23, 30, tzinfo=timezone.utc)
+
+        # Forward
+        assert (
+            b.humanize(a, granularity=["month", "hour"]) == "in 0 months and 13 hours"
+        )
+
+        # Reverse
+        assert (
+            a.humanize(b, granularity=["month", "hour"]) == "0 months and 13 hours ago"
+        )
+
+    def test_timezone_overflow_regression(self):
+        # 2026-10-06 Fix: Test OverflowError fallback for timezone boundary limits
+        from datetime import timedelta, timezone
+
+        import arrow
+
+        start = arrow.Arrow(9999, 12, 31, tzinfo=timezone(timedelta(hours=14)))
+        end = arrow.Arrow(9999, 12, 31, tzinfo=timezone(timedelta(hours=-12)))
+
+        # Test without calendar frames (has_cal = False)
+        assert (
+            end.humanize(start, granularity=["day", "hour"]) == "in a day and 2 hours"
+        )
+        assert (
+            start.humanize(end, granularity=["day", "hour"]) == "a day and 2 hours ago"
+        )
+
+        # Test with calendar frames (has_cal = True)
+        assert (
+            end.humanize(start, granularity=["month", "hour"])
+            == "in 0 months and 26 hours"
+        )
+        assert (
+            start.humanize(end, granularity=["month", "hour"])
+            == "0 months and 26 hours ago"
+        )
