@@ -1411,6 +1411,46 @@ class TestDateTimeParserMeridians:
             2013, 1, 1, 17
         )
 
+    @pytest.mark.parametrize("token", ["a", "A"])
+    @pytest.mark.parametrize(
+        "locale, text, expected_hour",
+        [
+            ("en", "5 Pm", 17),
+            ("en", "5 pM", 17),
+            ("en", "12 Am", 0),
+            ("en", "12 aM", 0),
+            ("hu", "5 Du", 17),
+            ("hu", "12 De", 0),
+            ("tr", "5 Ös", 17),
+            ("tr", "12 Öö", 0),
+        ],
+    )
+    def test_meridians_mixed_case(self, token, locale, text, expected_hour):
+        parser_ = parser.DateTimeParser(locale)
+        assert parser_.parse(f"2013-01-01 {text}", f"YYYY-MM-DD h {token}") == datetime(
+            2013, 1, 1, expected_hour
+        )
+
+    @pytest.mark.parametrize(
+        "token, text, expected_hour",
+        [
+            ("a", "5 Пп", 17),
+            ("a", "12 Дп", 0),
+            ("A", "5 Попладне", 17),
+            ("A", "12 Претпладне", 0),
+        ],
+    )
+    def test_distinct_localized_meridians_mixed_case(self, token, text, expected_hour):
+        parser_ = parser.DateTimeParser("mk")
+        assert parser_.parse(f"2013-01-01 {text}", f"YYYY-MM-DD h {token}") == datetime(
+            2013, 1, 1, expected_hour
+        )
+
+    @pytest.mark.parametrize("token", ["a", "A"])
+    def test_mixed_case_am_validates_hour(self, token):
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("2013-01-01 13 Am", f"YYYY-MM-DD h {token}")
+
     def test_localized_meridians_lowercase(self):
         parser_ = parser.DateTimeParser("hu-hu")
         assert parser_.parse("2013-01-01 5 de", "YYYY-MM-DD h a") == datetime(

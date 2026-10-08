@@ -681,13 +681,20 @@ class DateTimeParser:
             parts["tzinfo"] = TzinfoParser.parse(value)
 
         elif token in ["a", "A"]:
-            if value in (self.locale.meridians["am"], self.locale.meridians["AM"]):
+            value = value.lower()
+            if value in (
+                self.locale.meridians["am"].lower(),
+                self.locale.meridians["AM"].lower(),
+            ):
                 parts["am_pm"] = "am"
                 if "hour" in parts and not 0 <= parts["hour"] <= 12:
                     raise ParserMatchError(
                         f"Hour token value must be between 0 and 12 inclusive for token {token!r}."
                     )
-            elif value in (self.locale.meridians["pm"], self.locale.meridians["PM"]):
+            elif value in (
+                self.locale.meridians["pm"].lower(),
+                self.locale.meridians["PM"].lower(),
+            ):
                 parts["am_pm"] = "pm"
         elif token == "W":
             parts["weekdate"] = value
