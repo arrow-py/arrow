@@ -1183,7 +1183,13 @@ class Arrow:
         if isinstance(granularity, list) and len(granularity) == 1:
             granularity = granularity[0]
 
-        _delta = int(round((self._datetime - dt).total_seconds()))
+        delta_time = self._datetime - dt
+        if self._datetime.tzinfo is dt.tzinfo:
+            # datetime subtraction ignores offset changes with a shared tzinfo.
+            delta_time += (dt.utcoffset() or timedelta()) - (
+                self._datetime.utcoffset() or timedelta()
+            )
+        _delta = int(round(delta_time.total_seconds()))
         sign = -1 if _delta < 0 else 1
         delta_second = diff = abs(_delta)
 

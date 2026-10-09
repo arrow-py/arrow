@@ -3097,3 +3097,72 @@ class TestArrowUtil:
 
         with pytest.raises(ValueError):
             arrow.Arrow._get_iteration_params(None, None)
+
+
+class TestHumanizeOffsetChanges:
+    @pytest.mark.parametrize(
+        "zone, first_parts, second_parts, minutes",
+        [
+            ("America/New_York", (2024, 11, 3, 1, 30, 0), (2024, 11, 3, 1, 30, 1), 60),
+            ("America/New_York", (2024, 11, 3, 1, 45, 0), (2024, 11, 3, 1, 15, 1), 30),
+            ("America/New_York", (2024, 3, 10, 1, 30, 0), (2024, 3, 10, 3, 30, 0), 60),
+            ("Australia/Lord_Howe", (2024, 4, 7, 1, 45, 0), (2024, 4, 7, 1, 45, 1), 30),
+        ],
+    )
+    @pytest.mark.parametrize("reference_kind", ["arrow", "datetime", "utc_arrow"])
+    @pytest.mark.parametrize("reverse", [False, True])
+    @pytest.mark.parametrize("granularity", ["auto", "minute"])
+    def test_humanize_elapsed_across_offset_change(
+        self,
+        zone,
+        first_parts,
+        second_parts,
+        minutes,
+        reference_kind,
+        reverse,
+        granularity,
+    ):
+        first = arrow.Arrow(*first_parts[:-1], tzinfo=zone, fold=first_parts[-1])
+        second = arrow.Arrow(*second_parts[:-1], tzinfo=zone, fold=second_parts[-1])
+        if reverse:
+            first, second = second, first
+        reference = second
+        if reference_kind == "datetime":
+            reference = second.datetime
+        elif reference_kind == "utc_arrow":
+            reference = second.to("UTC")
+        distance = (
+            "an hour"
+            if granularity == "auto" and minutes == 60
+            else f"{minutes} minutes"
+        )
+        expected = f"in {distance}" if reverse else f"{distance} ago"
+
+        assert first.humanize(reference, granularity=granularity) == expected
+        assert (
+            first.humanize(reference, granularity=granularity, only_distance=True)
+            == distance
+        )
+        assert first.humanize(reference, granularity=["hour", "minute"]) == first.to(
+            "UTC"
+        ).humanize(second.to("UTC"), granularity=["hour", "minute"])
+
+    def test_humanize_current_time_across_fold(self, mocker):
+        first = arrow.Arrow(2024, 11, 3, 1, 30, tzinfo="America/New_York", fold=0)
+        second = arrow.Arrow(2024, 11, 3, 1, 30, tzinfo="America/New_York", fold=1)
+        mocked_datetime = mocker.patch("arrow.arrow.dt_datetime", wraps=datetime)
+        mocked_datetime.now.return_value = second.to("UTC").datetime
+
+        assert first.humanize() == "an hour ago"
+
+    @pytest.mark.parametrize(
+        "year, month, day, hour, offset",
+        [(1, 1, 1, 0, 14), (9999, 12, 31, 22, -12)],
+    )
+    def test_humanize_elapsed_at_datetime_limits(self, year, month, day, hour, offset):
+        zone = timezone(timedelta(hours=offset))
+        first = arrow.Arrow(year, month, day, hour, tzinfo=zone)
+        second = arrow.Arrow(year, month, day, hour + 1, tzinfo=zone)
+
+        assert first.humanize(second) == "an hour ago"
+        assert second.humanize(first) == "in an hour"
