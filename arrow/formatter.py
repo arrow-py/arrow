@@ -137,4 +137,4 @@ class DateTimeFormatter:
 
         if token == "W":
             year, week, day = dt.isocalendar()
-            return f"{year}-W{week:02d}-{day}"
+            return f"{year:04d}-W{week:02d}-{day}"

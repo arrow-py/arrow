@@ -9,6 +9,7 @@ import pytest
 from dateutil import tz as dateutil_tz
 
 from arrow import (
+    Arrow,
     FORMAT_ATOM,
     FORMAT_COOKIE,
     FORMAT_RFC822,
@@ -153,6 +154,22 @@ class TestFormatterFormatToken:
         # make sure week is zero padded when needed
         dt_early = datetime(2011, 1, 20)
         assert self.formatter._format_token(dt_early, "W") == "2011-W03-4"
+
+    @pytest.mark.parametrize(
+        "dt, expected",
+        [
+            (datetime(1, 1, 1), "0001-W01-1"),
+            (datetime(9, 1, 4), "0009-W01-7"),
+            (datetime(99, 1, 4), "0099-W01-7"),
+            (datetime(999, 1, 4), "0999-W01-5"),
+            (datetime(999, 12, 31), "1000-W01-2"),
+            (datetime(1000, 1, 1), "1000-W01-3"),
+            (datetime(9999, 12, 31), "9999-W52-5"),
+        ],
+    )
+    def test_week_year_width(self, dt, expected):
+        assert self.formatter.format(dt, "W") == expected
+        assert Arrow.fromdatetime(dt).format("W") == expected
 
     def test_nonsense(self):
         dt = datetime(2012, 1, 1, 11)
