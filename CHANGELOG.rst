@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- [FIXED] Zero-pad the ISO week year to four digits when formatting with ``W``.
+
 1.4.0 (2025-10-18)
 ------------------
 
