@@ -1605,3 +1605,60 @@ class TestFuzzInput:
 
         with pytest.raises(parser.ParserMatchError):
             self.parser.parse(payload, fmt_str)
+
+
+@pytest.mark.parametrize("locale", ["tr", "tr-tr"])
+@pytest.mark.parametrize(
+    "text, token, expected",
+    [
+        ("MAYIS", "MMMM", datetime(2025, 5, 1)),
+        ("KASIM", "MMMM", datetime(2025, 11, 1)),
+        ("ARALIK", "MMMM", datetime(2025, 12, 1)),
+        ("NİSAN", "MMMM", datetime(2025, 4, 1)),
+        ("HAZİRAN", "MMMM", datetime(2025, 6, 1)),
+        ("EKİM", "MMMM", datetime(2025, 10, 1)),
+        ("NİS", "MMM", datetime(2025, 4, 1)),
+        ("EKİ", "MMM", datetime(2025, 10, 1)),
+    ],
+)
+def test_parse_turkish_uppercase_month_names(locale, text, token, expected):
+    assert DateTimeParser(locale).parse(f"{text} 2025", f"{token} YYYY") == expected
+
+
+@pytest.mark.parametrize("locale", ["tr", "tr-tr"])
+@pytest.mark.parametrize(
+    "text, token, expected",
+    [
+        ("SALI", "dddd", datetime(2025, 5, 6)),
+        ("PAZARTESİ", "dddd", datetime(2025, 5, 5)),
+        ("CUMARTESİ", "dddd", datetime(2025, 5, 3)),
+    ],
+)
+def test_parse_turkish_uppercase_day_names(locale, text, token, expected):
+    assert (
+        DateTimeParser(locale).parse(f"{text} 2025-05", f"{token} YYYY-MM") == expected
+    )
+
+
+@pytest.mark.parametrize("locale", ["en-us", "tr-tr", "ca-es"])
+def test_locale_name_case_normalization_preserves_existing_spellings(locale):
+    dt_parser = DateTimeParser(locale)
+    for token, names in [
+        ("MMMM", dt_parser.locale.month_names),
+        ("MMM", dt_parser.locale.month_abbreviations),
+    ]:
+        for month, name in enumerate(names[1:], 1):
+            for text in (name, name.lower()):
+                assert dt_parser.parse(f"{text} 2025", f"{token} YYYY") == datetime(
+                    2025, month, 1
+                )
+    for token, names in [
+        ("dddd", dt_parser.locale.day_names),
+        ("ddd", dt_parser.locale.day_abbreviations),
+    ]:
+        for weekday, name in enumerate(names[1:]):
+            for text in (name, name.lower()):
+                assert (
+                    dt_parser.parse(f"{text} 2025-05", f"{token} YYYY-MM").weekday()
+                    == weekday
+                )

@@ -608,6 +608,23 @@ class DateTimeParser:
         :raises ParserMatchError: If the hour token value is not between 0 and 12 inclusive for tokens "a" or "A".
 
         """
+        if token in ["MMMM", "MMM", "dddd", "ddd"]:
+            locale_names = {
+                "MMMM": self.locale.month_names,
+                "MMM": self.locale.month_abbreviations,
+                "dddd": self.locale.day_names,
+                "ddd": self.locale.day_abbreviations,
+            }
+            names = locale_names[token]
+            # IGNORECASE also matches Unicode pairs that lower() does not
+            # equate, such as Turkish I and dotless ı. Resolve those matches
+            # to the locale's spelling before the name-to-number lookup.
+            if value.lower() not in (name.lower() for name in names):
+                for name in names:
+                    if re.fullmatch(re.escape(name), value, flags=re.IGNORECASE):
+                        value = name
+                        break
+
         if token == "YYYY":
             parts["year"] = int(value)
 
