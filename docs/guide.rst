@@ -488,6 +488,13 @@ Escaping Formats
 
 Tokens, phrases, and regular expressions in a format string can be escaped when parsing and formatting by enclosing them within square brackets.
 
+Non-token separators are matched literally when parsing, including ``#``:
+
+.. code-block:: python
+
+    >>> arrow.get("2020#01#02", "YYYY#MM#DD")
+    <Arrow [2020-01-02T00:00:00+00:00]>
+
 Tokens & Phrases
 ++++++++++++++++
 

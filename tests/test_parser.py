@@ -1587,6 +1587,29 @@ class TestDateTimeParserSearchDate:
             "Dec 31, 2017 |^${}().*+?<>-& 2:00 AM", format
         ) == datetime(2017, 12, 31, 2, 0)
 
+    @pytest.mark.parametrize(
+        "string, fmt",
+        [
+            ("2020#01#02", "YYYY#MM#DD"),
+            ("2020##01##02", "YYYY##MM##DD"),
+            ("2020-01-02 # at 12:30", "YYYY-MM-DD # [at] HH:mm"),
+            ("2020-01-02 at # 12:30", "YYYY-MM-DD [at] # HH:mm"),
+            ("2020-01-02 # at # 12:30", "YYYY-MM-DD # [at] # HH:mm"),
+            ("2020-01-02 #  12:30", r"YYYY-MM-DD #[\s+]HH:mm"),
+            ("2020-01-02 # 12:30", "YYYY-MM-DD [#] HH:mm"),
+        ],
+    )
+    def test_parse_hash_literals(self, string, fmt):
+        expected = (
+            datetime(2020, 1, 2, 12, 30) if "12:30" in string else datetime(2020, 1, 2)
+        )
+        assert self.parser.parse(string, fmt) == expected
+
+    @pytest.mark.parametrize("string", ["20200102", "2020!01!02"])
+    def test_parse_hash_literals_required(self, string):
+        with pytest.raises(parser.ParserMatchError):
+            self.parser.parse(string, "YYYY#MM#DD")
+
 
 @pytest.mark.usefixtures("dt_parser")
 class TestFuzzInput:
