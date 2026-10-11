@@ -3,11 +3,13 @@ try:
 except ImportError:
     from backports.zoneinfo import ZoneInfo
 
+import operator
 import pickle
 import sys
 import time
 from datetime import date, datetime, timedelta, timezone
 from typing import List
+from unittest.mock import ANY
 
 import dateutil
 import pytest
@@ -335,6 +337,50 @@ class TestArrowComparison:
         assert not (self.arrow != self.arrow)
         assert not (self.arrow != self.arrow.datetime)
         assert self.arrow != "abc"
+
+    @pytest.mark.parametrize(
+        "compare, expected", [(operator.eq, True), (operator.ne, False)]
+    )
+    def test_equality_with_any(self, compare, expected):
+        assert compare(self.arrow, ANY) is expected
+        assert compare(ANY, self.arrow) is expected
+        assert compare(self.arrow.datetime, ANY) is expected
+
+    @pytest.mark.parametrize(
+        "compare, method", [(operator.eq, "__eq__"), (operator.ne, "__ne__")]
+    )
+    def test_equality_defers_to_other(self, compare, method):
+        result = object()
+        calls = []
+
+        def compare_other(other, value):
+            calls.append(value)
+            return result
+
+        other = type("Comparable", (), {method: compare_other})()
+
+        assert getattr(self.arrow, method)(other) is NotImplemented
+        assert compare(self.arrow, other) is result
+        assert calls == [self.arrow]
+
+    @pytest.mark.parametrize("other", [None, object(), "abc", 42, date(2024, 1, 1)])
+    def test_equality_with_unsupported_type(self, other):
+        assert (self.arrow == other) is False
+        assert (other == self.arrow) is False
+        assert (self.arrow != other) is True
+        assert (other != self.arrow) is True
+
+    def test_equality_when_both_operands_decline(self):
+        class Uncomparable:
+            def __eq__(self, other) -> bool:
+                return NotImplemented
+
+            def __ne__(self, other) -> bool:
+                return NotImplemented
+
+        other = Uncomparable()
+        assert (self.arrow == other) is False
+        assert (self.arrow != other) is True
 
     def test_gt(self):
         arrow_cmp = self.arrow.shift(minutes=1)

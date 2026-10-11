@@ -81,6 +81,9 @@ class Arrow:
     Implements the ``datetime`` interface, behaving as an aware ``datetime`` while implementing
     additional functionality.
 
+    Equality comparisons with other types allow the other object's comparison
+    methods to handle the operation, following Python's comparison protocol.
+
     :param year: the calendar year.
     :param month: the calendar month.
     :param day: the calendar day.
@@ -1783,13 +1786,13 @@ class Arrow:
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, (Arrow, dt_datetime)):
-            return False
+            return NotImplemented
 
         return self._datetime == self._get_datetime(other)
 
     def __ne__(self, other: Any) -> bool:
         if not isinstance(other, (Arrow, dt_datetime)):
-            return True
+            return NotImplemented
 
         return not self.__eq__(other)
 
