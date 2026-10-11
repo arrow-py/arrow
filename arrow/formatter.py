@@ -113,7 +113,13 @@ class DateTimeFormatter:
             return f"{dt.timestamp()}"
 
         if token == "x":
-            return f"{dt.timestamp() * 1_000_000:.0f}"
+            if dt.utcoffset() is None:
+                dt = dt.astimezone()
+            delta = dt - datetime(1970, 1, 1, tzinfo=timezone.utc)
+            microseconds = (
+                delta.days * 86400 + delta.seconds
+            ) * 1_000_000 + delta.microseconds
+            return str(microseconds)
 
         if token == "ZZZ":
             return dt.tzname()
