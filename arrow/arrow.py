@@ -1223,8 +1223,9 @@ class Arrow:
                     calendar_diff.years * self._MONTHS_PER_YEAR + calendar_diff.months
                 )
 
-                # For months, if more than 2 weeks, count as a full month
-                if calendar_diff.days > 14:
+                # Round the remaining days to a month only after three weeks.
+                # Shorter durations should continue to use week descriptions.
+                if calendar_diff.days > 21:
                     calendar_months += 1
 
                 calendar_months = min(calendar_months, self._MONTHS_PER_YEAR)
