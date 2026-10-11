@@ -3,7 +3,7 @@ try:
 except ImportError:
     from backports.zoneinfo import ZoneInfo
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from dateutil import tz as dateutil_tz
@@ -116,6 +116,21 @@ class TestFormatterFormatToken:
         # than 6 digits of precision
         expected = str(int(dt.timestamp() * 1000000))
         assert self.formatter._format_token(dt, "x") == expected
+
+    @pytest.mark.parametrize("year", [1900, 2243, 9999])
+    @pytest.mark.parametrize("microsecond", [1, 999999])
+    @pytest.mark.parametrize("offset", [0, -5, 5.5])
+    def test_microsecond_timestamp_is_exact(self, year, microsecond, offset):
+        dt = datetime(
+            year,
+            1,
+            1,
+            microsecond=microsecond,
+            tzinfo=timezone(timedelta(hours=offset)),
+        )
+        delta = dt - datetime(1970, 1, 1, tzinfo=timezone.utc)
+        expected = (delta.days * 86400 + delta.seconds) * 1000000 + delta.microseconds
+        assert self.formatter.format(dt, "x") == str(expected)
 
     def test_timezone(self):
         dt = datetime.now(timezone.utc).replace(tzinfo=ZoneInfo("US/Pacific"))
