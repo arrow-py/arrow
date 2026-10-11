@@ -91,6 +91,76 @@ class TestModule:
 
 
 class TestCustomLocale:
+    @pytest.mark.parametrize("name", ["en", "EN", "en-us", "en_us", "EN_US", "En-Us"])
+    def test_custom_locale_rejects_normalized_collision(self, mocker, name):
+        mocker.patch.dict(locales._locale_map)
+        original = locales._locale_map.copy()
+
+        with pytest.raises(LookupError, match="Duplicated locale name"):
+
+            class ConflictingLocale(locales.Locale):
+                names = [name]
+
+        assert locales._locale_map == original
+        assert isinstance(locales.get_locale("EN_US"), locales.EnglishLocale)
+        assert arrow.Arrow(2024, 1, 1).format("MMMM", locale="en-us") == "January"
+
+    @pytest.mark.parametrize("name", ["en", "EN_US", "en_us"])
+    def test_custom_locale_collision_does_not_register_other_aliases(
+        self, mocker, name
+    ):
+        mocker.patch.dict(locales._locale_map)
+        original = locales._locale_map.copy()
+
+        with pytest.raises(LookupError, match="Duplicated locale name"):
+
+            class ConflictingLocale(locales.Locale):
+                names = ["new-locale", name, "another-locale"]
+
+        assert locales._locale_map == original
+
+    @pytest.mark.parametrize(
+        "names",
+        [
+            ["new-locale", "new-locale"],
+            ["NEW-locale", "new-locale"],
+            ["new_locale", "NEW-LOCALE"],
+        ],
+    )
+    def test_custom_locale_rejects_duplicate_aliases_atomically(self, mocker, names):
+        mocker.patch.dict(locales._locale_map)
+        original = locales._locale_map.copy()
+
+        with pytest.raises(LookupError, match="Duplicated locale name"):
+            type("ConflictingLocale", (locales.Locale,), {"names": names})
+
+        assert locales._locale_map == original
+
+    def test_custom_locale_registers_distinct_normalized_aliases(self, mocker):
+        mocker.patch.dict(locales._locale_map)
+
+        class CustomEnglish(locales.EnglishLocale):
+            names = ["CUSTOM_En", "custom-ALT"]
+
+        assert CustomEnglish.names == ["CUSTOM_En", "custom-ALT"]
+        assert isinstance(locales.get_locale("custom-en"), CustomEnglish)
+        assert isinstance(locales.get_locale("CUSTOM_ALT"), CustomEnglish)
+        assert arrow.Arrow(2024, 1, 1).format("MMMM", locale="CUSTOM_EN") == "January"
+        assert isinstance(locales.get_locale("en-us"), locales.EnglishLocale)
+
+    def test_custom_locale_collision_preserves_existing_custom_class(self, mocker):
+        mocker.patch.dict(locales._locale_map)
+
+        class FirstLocale(locales.EnglishLocale):
+            names = ["custom-unique"]
+
+        with pytest.raises(LookupError, match="Duplicated locale name"):
+
+            class SecondLocale(locales.Locale):
+                names = ["CUSTOM_UNIQUE"]
+
+        assert isinstance(locales.get_locale("custom-unique"), FirstLocale)
+
     def test_custom_locale_subclass(self):
         class CustomLocale1(locales.Locale):
             names = ["foo", "foo-BAR"]
