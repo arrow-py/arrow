@@ -132,6 +132,11 @@ class TestFormatterFormatToken:
         expected = (delta.days * 86400 + delta.seconds) * 1000000 + delta.microseconds
         assert self.formatter.format(dt, "x") == str(expected)
 
+    def test_microsecond_timestamp_naive_local_time(self):
+        dt = datetime(2024, 1, 1, microsecond=500000)
+        expected = str(int(dt.timestamp() * 1000000))
+        assert self.formatter.format(dt, "x") == expected
+
     def test_timezone(self):
         dt = datetime.now(timezone.utc).replace(tzinfo=ZoneInfo("US/Pacific"))
 
