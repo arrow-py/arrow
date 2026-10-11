@@ -76,7 +76,12 @@ def get_locale_by_class_name(name: str) -> "Locale":
 
 
 class Locale:
-    """Represents locale-specific data and functionality."""
+    """Represents locale-specific data and functionality.
+
+    Subclasses automatically register their ``names`` as locale aliases. Aliases
+    are case-insensitive and treat underscores like hyphens. A duplicate alias
+    raises ``LookupError`` without registering any of the subclass's names.
+    """
 
     names: ClassVar[List[str]] = []
 
@@ -117,11 +122,18 @@ class Locale:
     _month_name_to_ordinal: Optional[Dict[str, int]]
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
+        locale_names = {}
         for locale_name in cls.names:
-            if locale_name in _locale_map:
+            normalized_locale_name = locale_name.lower().replace("_", "-")
+            if (
+                normalized_locale_name in _locale_map
+                or normalized_locale_name in locale_names
+            ):
                 raise LookupError(f"Duplicated locale name: {locale_name}")
 
-            _locale_map[locale_name.lower().replace("_", "-")] = cls
+            locale_names[normalized_locale_name] = cls
+
+        _locale_map.update(locale_names)
 
     def __init__(self) -> None:
         self._month_name_to_ordinal = None
