@@ -456,7 +456,8 @@ class DateTimeParser:
         offset = 0
 
         # Escape all special RegEx chars
-        escaped_fmt = re.escape(fmt)
+        # Keep literal hashes distinct from the escape placeholders below.
+        escaped_fmt = re.escape(fmt).replace(r"\#", r"\043")
 
         # Extract the bracketed expressions to be reinserted later.
         escaped_fmt = re.sub(self._ESCAPE_RE, "#", escaped_fmt)
