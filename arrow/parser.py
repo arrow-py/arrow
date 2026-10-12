@@ -879,7 +879,19 @@ class DateTimeParser:
         :returns: A compiled regular expression pattern that matches any of the choices.
         :rtype: re.Pattern[str]
         """
-        return re.compile(r"({})".format("|".join(choices)), flags=flags)
+        # The choices are locale text, not patterns, so escape them: several
+        # locales abbreviate with a trailing "." and an unescaped one matches
+        # any character. Longest first, because the alternation takes the first
+        # branch that matches and some choices are prefixes of others.
+        return re.compile(
+            r"({})".format(
+                "|".join(
+                    re.escape(choice)
+                    for choice in sorted(choices, key=len, reverse=True)
+                )
+            ),
+            flags=flags,
+        )
 
 
 class TzinfoParser:

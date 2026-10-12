@@ -1391,6 +1391,47 @@ class TestDateTimeParserMonthName:
         assert parser_.parse("2013-Gen-01", "YYYY-MMM-DD") == datetime(2013, 1, 1)
 
 
+class TestDateTimeParserLocaleChoices:
+    def test_month_name_sharing_a_prefix(self):
+        # Vietnamese October is a prefix of both November and December. The
+        # alternation matches the first branch that fits, so with nothing after
+        # the token to force the regex to backtrack, the shorter name used to
+        # win and the rest of the input was left unconsumed.
+        parser_ = parser.DateTimeParser("vi")
+
+        assert parser_.parse("Tháng Mười", "MMMM").month == 10
+        assert parser_.parse("Tháng Mười Một", "MMMM").month == 11
+        assert parser_.parse("Tháng Mười Hai", "MMMM").month == 12
+        assert parser_.parse("2013 Tháng Mười Hai", "YYYY MMMM") == datetime(
+            2013, 12, 1
+        )
+
+    def test_day_abbreviation_ending_in_a_dot(self):
+        # Thai abbreviates with a trailing ".", which is locale text and not
+        # a wildcard: "พ." must not match the "พฤ" of "พฤ.".
+        parser_ = parser.DateTimeParser("th")
+
+        for abbreviation, isoweekday in [
+            ("จ.", 1),
+            ("อ.", 2),
+            ("พ.", 3),
+            ("พฤ.", 4),
+            ("ศ.", 5),
+            ("ส.", 6),
+            ("อา.", 7),
+        ]:
+            assert parser_.parse(abbreviation, "ddd").isoweekday() == isoweekday
+
+    def test_day_abbreviation_rejects_a_different_character(self):
+        # The "." must not stand in for an arbitrary character, which used to
+        # match and then fail the name lookup with ValueError.
+        for locale_name, text in [("th", "พX"), ("ca", "dlX"), ("hy", "երկX")]:
+            parser_ = parser.DateTimeParser(locale_name)
+
+            with pytest.raises(ParserError):
+                parser_.parse(text, "ddd")
+
+
 @pytest.mark.usefixtures("dt_parser")
 class TestDateTimeParserMeridians:
     def test_meridians_lowercase(self):
