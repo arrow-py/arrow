@@ -567,6 +567,20 @@ class TestMalteseLocale:
         assert self.locale.day_name(dt.isoweekday()) == "Is-Sibt"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "S"
 
+    def test_day_abbreviations(self):
+        # "Il-Ħamis" and "Il-Ħadd" are only distinct from the third letter, so
+        # they need three where the others need one. A repeated abbreviation is
+        # unparseable, since the name is looked up by index.
+        assert self.locale.day_abbreviation(1) == "T"
+        assert self.locale.day_abbreviation(2) == "TL"
+        assert self.locale.day_abbreviation(3) == "E"
+        assert self.locale.day_abbreviation(4) == "Ħam"
+        assert self.locale.day_abbreviation(5) == "Ġ"
+        assert self.locale.day_abbreviation(6) == "S"
+        assert self.locale.day_abbreviation(7) == "Ħad"
+        abbreviations = self.locale.day_abbreviations[1:]
+        assert len(set(abbreviations)) == len(abbreviations)
+
 
 @pytest.mark.usefixtures("lang_locale")
 class TestHindiLocale:
@@ -2279,6 +2293,20 @@ class TestLatvianLocale:
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
         assert self.locale.day_name(dt.isoweekday()) == "sestdiena"
         assert self.locale.day_abbreviation(dt.isoweekday()) == "se"
+
+    def test_day_abbreviations(self):
+        # "piektdiena" shares its first two letters with "pirmdiena", so it
+        # takes the "pk" that Latvian uses to tell the two apart. A repeated
+        # abbreviation is unparseable, since the name is looked up by index.
+        assert self.locale.day_abbreviation(1) == "pi"
+        assert self.locale.day_abbreviation(2) == "ot"
+        assert self.locale.day_abbreviation(3) == "tr"
+        assert self.locale.day_abbreviation(4) == "ce"
+        assert self.locale.day_abbreviation(5) == "pk"
+        assert self.locale.day_abbreviation(6) == "se"
+        assert self.locale.day_abbreviation(7) == "sv"
+        abbreviations = self.locale.day_abbreviations[1:]
+        assert len(set(abbreviations)) == len(abbreviations)
 
 
 @pytest.mark.usefixtures("lang_locale")
