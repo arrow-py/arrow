@@ -4797,7 +4797,7 @@ class LatvianLocale(Locale):
         "ot",
         "tr",
         "ce",
-        "pi",
+        "pk",
         "se",
         "sv",
     ]
@@ -5291,10 +5291,10 @@ class MalteseLocale(Locale):
         "T",
         "TL",
         "E",
-        "Ħ",
+        "Ħam",
         "Ġ",
         "S",
-        "Ħ",
+        "Ħad",
     ]
 
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
