@@ -53,6 +53,14 @@ Parse from a string:
     >>> arrow.get('2013-05-05 12:30:45', 'YYYY-MM-DD HH:mm:ss')
     <Arrow [2013-05-05T12:30:45+00:00]>
 
+Try a list of formats in order. Here, the month-first format would require month
+31, so parsing continues with the valid day-first format:
+
+.. code-block:: python
+
+    >>> arrow.get('31-01-2020', ['MM-DD-YYYY', 'DD-MM-YYYY'])
+    <Arrow [2020-01-31T00:00:00+00:00]>
+
 Search a date in a string:
 
 .. code-block:: python

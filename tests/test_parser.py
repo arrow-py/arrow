@@ -75,6 +75,67 @@ class TestDateTimeParser:
         with pytest.raises(UnselfExpectedError):
             self.parser._parse_multiformat("str", ["fmt_a", "fmt_b"])
 
+    @pytest.mark.parametrize(
+        "value,formats,expected",
+        [
+            (
+                "31-01-2020",
+                ["MM-DD-YYYY", "DD-MM-YYYY"],
+                datetime(2020, 1, 31),
+            ),
+            (
+                "29-02-2020",
+                ["MM-DD-YYYY", "DD-MM-YYYY"],
+                datetime(2020, 2, 29),
+            ),
+            ("2020 59", ["YYYY DD", "YYYY DDD"], datetime(2020, 2, 28)),
+            ("25:12", ["HH:mm", "mm:ss"], datetime(1, 1, 1, 0, 25, 12)),
+            (
+                "2020 60",
+                ["YYYY mm", "YYYY ss", "YYYY DDD"],
+                datetime(2020, 2, 29),
+            ),
+            (
+                "31-01-2020",
+                ["YYYY/MM/DD", "MM-DD-YYYY", "DD-MM-YYYY"],
+                datetime(2020, 1, 31),
+            ),
+        ],
+    )
+    def test_multiformat_invalid_fields(self, value, formats, expected):
+        assert self.parser.parse(value, formats) == expected
+
+    def test_multiformat_invalid_fields_factory(self):
+        assert arrow.get("31-01-2020", ["MM-DD-YYYY", "DD-MM-YYYY"]) == arrow.Arrow(
+            2020, 1, 31
+        )
+
+    @pytest.mark.parametrize(
+        "formats",
+        [
+            ["HH:mm"],
+            ["HH:mm", "DD:MM"],
+            ["YYYY", "HH:mm", "DD:MM", "YYYY-MM-DD"],
+        ],
+    )
+    def test_multiformat_preserves_first_value_error(self, formats):
+        with pytest.raises(ValueError, match="minute must be in 0..59") as exc:
+            self.parser.parse("13:60", formats)
+        assert type(exc.value) is ValueError
+
+    def test_multiformat_preserves_first_valid_format(self):
+        assert self.parser.parse(
+            "01-02-2020", ["MM-DD-YYYY", "DD-MM-YYYY"]
+        ) == datetime(2020, 1, 2)
+
+    def test_multiformat_preserves_parser_error(self):
+        with pytest.raises(ParserError, match="Year component is required"):
+            self.parser.parse("145", ["DDD", "S"])
+
+    def test_multiformat_preserves_no_match_error(self):
+        with pytest.raises(ParserError, match="Could not match input"):
+            self.parser.parse("not a date", ["MM-DD-YYYY", "DD-MM-YYYY"])
+
     def test_parse_token_nonsense(self):
         parts = {}
         self.parser._parse_token("NONSENSE", "1900", parts)

@@ -844,6 +844,7 @@ class DateTimeParser:
         :raises ParserError: If no format matches the input string.
         """
         _datetime: Optional[datetime] = None
+        first_value_error: Optional[ValueError] = None
 
         for fmt in formats:
             try:
@@ -851,8 +852,15 @@ class DateTimeParser:
                 break
             except ParserMatchError:
                 pass
+            except ParserError:
+                raise
+            except ValueError as e:
+                if first_value_error is None:
+                    first_value_error = e
 
         if _datetime is None:
+            if first_value_error is not None:
+                raise first_value_error
             supported_formats = ", ".join(formats)
             raise ParserError(
                 f"Could not match input {string!r} to any of the following formats: {supported_formats}."
