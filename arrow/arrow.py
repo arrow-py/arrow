@@ -245,12 +245,14 @@ class Arrow:
         the given timezone.
 
         :param timestamp: an ``int`` or ``float`` timestamp, or a ``str`` that converts to either.
-        :param tzinfo: (optional) a ``tzinfo`` object.  Defaults to local time.
+        :param tzinfo: (optional) a ``tzinfo`` object or timezone expression. Defaults to
+            local time, using the local UTC offset at the timestamp being converted.
 
         """
 
-        if tzinfo is None:
-            tzinfo = dt_datetime.now().astimezone().tzinfo
+        local = tzinfo is None or tzinfo == "local"
+        if local:
+            tzinfo = timezone.utc
         elif isinstance(tzinfo, str):
             tzinfo = parser.TzinfoParser.parse(tzinfo)
 
@@ -259,6 +261,8 @@ class Arrow:
 
         timestamp = util.normalize_timestamp(float(timestamp))
         dt = dt_datetime.fromtimestamp(timestamp, tzinfo)
+        if local:
+            dt = dt.astimezone()
 
         return cls(
             dt.year,
@@ -1058,7 +1062,8 @@ class Arrow:
         """Returns a new :class:`Arrow <arrow.arrow.Arrow>` object, converted
         to the target timezone.
 
-        :param tz: A :ref:`timezone expression <tz-expr>`.
+        :param tz: A :ref:`timezone expression <tz-expr>`. For ``local``, the local UTC
+            offset at the time being converted is used.
 
         Usage::
 
@@ -1083,10 +1088,13 @@ class Arrow:
 
         """
 
-        if not isinstance(tz, dt_tzinfo):
-            tz = parser.TzinfoParser.parse(tz)
+        if tz == "local":
+            dt = self._datetime.astimezone()
+        else:
+            if not isinstance(tz, dt_tzinfo):
+                tz = parser.TzinfoParser.parse(tz)
 
-        dt = self._datetime.astimezone(tz)
+            dt = self._datetime.astimezone(tz)
 
         return self.__class__(
             dt.year,
