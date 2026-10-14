@@ -2606,6 +2606,86 @@ def slavic_locales() -> List[str]:
 
 
 class TestArrowDehumanize:
+    @pytest.mark.parametrize("locale", locales.EnglishLocale.names + ["EN_US"])
+    @pytest.mark.parametrize(
+        "abbreviation, unit", [("mins", "minutes"), ("secs", "seconds")]
+    )
+    @pytest.mark.parametrize("quantity", [0, 1, 50])
+    @pytest.mark.parametrize("direction", [-1, 1])
+    def test_english_abbreviations(
+        self, locale, abbreviation, unit, quantity, direction
+    ):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0, tzinfo="+08:00")
+        distance = f"{quantity} {abbreviation}"
+        full_distance = f"{quantity} {unit}"
+        if direction < 0:
+            phrase = f"{distance} ago"
+            full_phrase = f"{full_distance} ago"
+        else:
+            phrase = f"in {distance}"
+            full_phrase = f"in {full_distance}"
+
+        result = arw.dehumanize(phrase, locale=locale)
+        assert result == arw.shift(**{unit: direction * quantity})
+        assert result == arw.dehumanize(full_phrase, locale=locale)
+        assert result.tzinfo == arw.tzinfo
+
+    @pytest.mark.parametrize(
+        "phrase, changes",
+        [
+            ("2 mins and 30 secs ago", {"minutes": -2, "seconds": -30}),
+            ("in 2 mins and 30 secs", {"minutes": 2, "seconds": 30}),
+            ("2 minutes and 30 secs ago", {"minutes": -2, "seconds": -30}),
+            ("in 2 mins and 30 seconds", {"minutes": 2, "seconds": 30}),
+            (
+                "an hour, 2 mins and 30 secs ago",
+                {"hours": -1, "minutes": -2, "seconds": -30},
+            ),
+        ],
+    )
+    def test_english_abbreviations_multiple_units(self, phrase, changes):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        assert arw.dehumanize(phrase) == arw.shift(**changes)
+
+    @pytest.mark.parametrize(
+        "distance",
+        [
+            "50 minsuffix",
+            "50 secsuffix",
+            "50 mins_",
+            "50 secs2",
+            "50mins",
+            "50secs",
+            "mins",
+            "secs",
+            "50 MINS",
+            "50 SECS",
+            "50 min",
+            "50 sec",
+        ],
+    )
+    def test_english_abbreviations_invalid_tokens(self, distance):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        with pytest.raises(ValueError):
+            arw.dehumanize(f"{distance} ago")
+
+    @pytest.mark.parametrize("distance", ["50 mins", "50 secs"])
+    @pytest.mark.parametrize("locale", ["de", "fr"])
+    def test_english_abbreviations_not_used_by_other_locales(self, distance, locale):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        phrase = locales.get_locale(locale).past.format(distance)
+        with pytest.raises(ValueError):
+            arw.dehumanize(phrase, locale=locale)
+
+    @pytest.mark.parametrize("unit", ["minutes", "seconds"])
+    @pytest.mark.parametrize("direction", [-1, 1])
+    def test_english_abbreviations_do_not_change_humanize(self, unit, direction):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+        shifted = arw.shift(**{unit: direction * 50})
+        distance = f"50 {unit}"
+        expected = f"{distance} ago" if direction < 0 else f"in {distance}"
+        assert shifted.humanize(arw, granularity=unit[:-1]) == expected
+
     def test_now(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:
             arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)

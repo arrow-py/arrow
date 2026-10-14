@@ -1349,6 +1349,9 @@ class Arrow:
         :param timestring: a ``str`` representing a humanized relative time.
         :param locale: (optional) a ``str`` specifying a locale.  Defaults to 'en-us'.
 
+        English locales also accept the lowercase abbreviations ``mins`` and
+        ``secs`` with a numeric quantity, such as ``"50 mins ago"``.
+
         Usage::
 
                 >>> arw = arrow.utcnow()
@@ -1377,6 +1380,13 @@ class Arrow:
             raise ValueError(
                 f"Dehumanize does not currently support the {locale} locale, please consider making a contribution to add support for this locale."
             )
+
+        # Expand input-only aliases without changing the locale's humanize output.
+        if isinstance(locale_obj, locales.EnglishLocale):
+            for abbreviation, full_unit in (("mins", "minutes"), ("secs", "seconds")):
+                input_string = re.sub(
+                    rf"\b(\d+) {abbreviation}\b", rf"\1 {full_unit}", input_string
+                )
 
         current_time = self.fromdatetime(self._datetime)
 

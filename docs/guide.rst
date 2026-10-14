@@ -272,6 +272,18 @@ Or use it to shift into a future time:
     >>> later
     <Arrow [2021-05-18T22:27:34.787885+00:00]>
 
+English locales also accept the lowercase abbreviations ``mins`` and ``secs``
+with a numeric quantity. These abbreviations are accepted as input only;
+``humanize()`` continues to use the full unit names.
+
+.. code-block:: python
+
+    >>> arw = arrow.get("2021-04-20T22:27:34+00:00")
+    >>> arw.dehumanize("50 mins ago")
+    <Arrow [2021-04-20T21:37:34+00:00]>
+    >>> arw.dehumanize("in 50 secs")
+    <Arrow [2021-04-20T22:28:24+00:00]>
+
 Support for a growing number of locales (see ``constants.py`` for supported languages):
 
 .. code-block:: python
