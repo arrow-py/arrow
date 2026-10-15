@@ -26,7 +26,8 @@ from typing import (
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 except ImportError:
-    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError  # type: ignore[import-not-found, no-redef]
+    # type: ignore[import-not-found, no-redef]
+    from backports.zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from arrow import locales
 from arrow.constants import DEFAULT_LOCALE
@@ -136,7 +137,8 @@ class _Parts(TypedDict, total=False):
     tzinfo: dt_tzinfo
     am_pm: Literal["am", "pm"]
     day_of_week: int
-    weekdate: Tuple[_WEEKDATE_ELEMENT, _WEEKDATE_ELEMENT, Optional[_WEEKDATE_ELEMENT]]
+    weekdate: Tuple[_WEEKDATE_ELEMENT,
+                    _WEEKDATE_ELEMENT, Optional[_WEEKDATE_ELEMENT]]
 
 
 class DateTimeParser:
@@ -156,13 +158,16 @@ class DateTimeParser:
     _ESCAPE_RE: ClassVar[Pattern[str]] = re.compile(r"\[[^\[\]]*\]")
 
     _ONE_OR_TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,2}")
-    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{1,3}")
+    _ONE_OR_TWO_OR_THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(
+        r"\d{1,3}")
     _ONE_OR_MORE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d+")
     _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}")
     _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{4}")
-    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
-    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
+    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
+    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
@@ -317,7 +322,8 @@ class DateTimeParser:
                 r"[\+\-Z]", time_string, maxsplit=1, flags=re.IGNORECASE
             )
 
-            time_components: Optional[Match[str]] = self._TIME_RE.match(time_parts[0])
+            time_components: Optional[Match[str]
+                                      ] = self._TIME_RE.match(time_parts[0])
 
             if time_components is None:
                 raise ParserError(
@@ -352,7 +358,8 @@ class DateTimeParser:
                     time_sep=time_sep, subseconds_sep=subseconds_sep
                 )
             elif has_seconds:
-                time_string = "HH{time_sep}mm{time_sep}ss".format(time_sep=time_sep)
+                time_string = "HH{time_sep}mm{time_sep}ss".format(
+                    time_sep=time_sep)
             elif has_minutes:
                 time_string = f"HH{time_sep}mm"
             else:
@@ -422,12 +429,19 @@ class DateTimeParser:
         parts: _Parts = {}
         for token in fmt_tokens:
             value: Union[Tuple[str, str, str], str]
-            if token == "Do":
-                value = match.group("value")
-            elif token == "W":
-                value = (match.group("year"), match.group("week"), match.group("day"))
-            else:
-                value = match.group(token)
+            try:
+                if token == "Do":
+                    value = match.group("value")
+                elif token == "W":
+                    value = (match.group("year"), match.group(
+                        "week"), match.group("day"))
+                else:
+                    value = match.group(token)
+
+            except IndexError:
+                raise ParserMatchError(
+                    f"Unable to find a match group for the specified token {token!r}."
+                )
 
             if value is None:
                 raise ParserMatchError(
@@ -484,7 +498,7 @@ class DateTimeParser:
             fmt_pattern = (
                 fmt_pattern[: m.start() + offset]
                 + input_pattern
-                + fmt_pattern[m.end() + offset :]
+                + fmt_pattern[m.end() + offset:]
             )
             offset += len(input_pattern) - (m.end() - m.start())
 
@@ -510,16 +524,19 @@ class DateTimeParser:
         # see the documentation.
 
         starting_word_boundary = (
-            r"(?<!\S\S)"  # Don't have two consecutive non-whitespace characters. This ensures that we allow cases
+            # Don't have two consecutive non-whitespace characters. This ensures that we allow cases
+            r"(?<!\S\S)"
             # like .11.25.2019 but not 1.11.25.2019 (for pattern MM.DD.YYYY)
-            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)<>\s])"  # This is the list of punctuation that is ok before the
+            # This is the list of punctuation that is ok before the
+            r"(?<![^\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)<>\s])"
             # pattern (i.e. "It can't not be these characters before the pattern")
             r"(\b|^)"
             # The \b is to block cases like 1201912 but allow 201912 for pattern YYYYMM. The ^ was necessary to allow a
             # negative number through i.e. before epoch numbers
         )
         ending_word_boundary = (
-            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"  # Positive lookahead stating that these punctuation marks
+            # Positive lookahead stating that these punctuation marks
+            r"(?=[\,\.\;\:\?\!\"\'\`\[\]\{\}\(\)\<\>]?"
             # can appear after the pattern at most 1 time
             r"(?!\S))"  # Don't allow any non-whitespace character after the punctuation
         )
@@ -617,7 +634,8 @@ class DateTimeParser:
 
         elif token in ["MMMM", "MMM"]:
             # FIXME: month_number() is nullable
-            parts["month"] = self.locale.month_number(value.lower())  # type: ignore[typeddict-item]
+            parts["month"] = self.locale.month_number(
+                value.lower())  # type: ignore[typeddict-item]
 
         elif token in ["MM", "M"]:
             parts["month"] = int(value)
@@ -775,7 +793,8 @@ class DateTimeParser:
             # dddd YYYY => first day of week in specified year
             # dddd MM YYYY => first day of week in specified year and month
             # dddd MM => first day after epoch in specified month
-            next_weekday_dt = next_weekday(datetime(year, month, day), day_of_week)
+            next_weekday_dt = next_weekday(
+                datetime(year, month, day), day_of_week)
             parts["year"] = next_weekday_dt.year
             parts["month"] = next_weekday_dt.month
             parts["day"] = next_weekday_dt.day
@@ -791,9 +810,11 @@ class DateTimeParser:
         # Support for midnight at the end of day
         if hour == 24:
             if parts.get("minute", 0) != 0:
-                raise ParserError("Midnight at the end of day must not contain minutes")
+                raise ParserError(
+                    "Midnight at the end of day must not contain minutes")
             if parts.get("second", 0) != 0:
-                raise ParserError("Midnight at the end of day must not contain seconds")
+                raise ParserError(
+                    "Midnight at the end of day must not contain seconds")
             if parts.get("microsecond", 0) != 0:
                 raise ParserError(
                     "Midnight at the end of day must not contain microseconds"
@@ -932,6 +953,7 @@ class TzinfoParser:
                     tzinfo = None
 
         if tzinfo is None:
-            raise ParserError(f"Could not parse timezone expression {tzinfo_string!r}.")
+            raise ParserError(
+                f"Could not parse timezone expression {tzinfo_string!r}.")
 
         return tzinfo
