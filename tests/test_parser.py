@@ -394,14 +394,65 @@ class TestDateTimeParserParse:
         assert self.parser.parse_iso(string) == self.expected
 
         # round half-up
-        string = "2013-01-01 12:30:45.987653521"
+        string = "2013-01-01 12:30:45.9876535000"
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
 
         # round half-down
-        string = "2013-01-01 12:30:45.9876545210"
+        string = "2013-01-01 12:30:45.9876545000"
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
+
+    @pytest.mark.parametrize(
+        "fraction, microsecond",
+        [
+            ("1234565", 123456),
+            ("1234565000", 123456),
+            ("1234565001", 123457),
+            ("12345651", 123457),
+            ("12345659", 123457),
+            ("1234575", 123458),
+            ("1234575000", 123458),
+            ("1234575001", 123458),
+            ("1234564999", 123456),
+            ("9876545210", 987655),
+            ("0000005000000001", 1),
+            ("999998500001", 999999),
+            ("999999500001", 1000000),
+            ("1234565" + "0" * 4500 + "1", 123457),
+            ("١٢٣٤٥٦٥٠١", 123457),
+            ("١٢٣٤٥٦٥٠٠", 123456),
+        ],
+        ids=[
+            "even-tie",
+            "even-tie-trailing-zeros",
+            "above-even-tie",
+            "eight-digits",
+            "near-next-microsecond",
+            "odd-tie",
+            "odd-tie-trailing-zeros",
+            "above-odd-tie",
+            "below-tie",
+            "former-false-tie",
+            "near-zero",
+            "near-overflow",
+            "overflow",
+            "long-fraction",
+            "unicode-above-tie",
+            "unicode-tie",
+        ],
+    )
+    def test_parse_subsecond_rounding_tail(self, fraction, microsecond):
+        string = f"2013-01-01T12:30:45.{fraction}"
+        datetime_format = "YYYY-MM-DDTHH:mm:ss.S"
+        expected = datetime(2013, 1, 1, 12, 30, 45) + timedelta(
+            microseconds=microsecond
+        )
+
+        assert self.parser.parse(string, datetime_format) == expected
+        assert self.parser.parse_iso(string) == expected
+        assert arrow.get(string).naive == expected
+        assert arrow.get(string, datetime_format).naive == expected
 
     # overflow (zero out the subseconds and increment the seconds)
     # regression tests for issue #636
@@ -1145,7 +1196,7 @@ class TestDateTimeParserISO:
         """Regression tests for parsing output from GNU date."""
         # date -Ins
         assert self.parser.parse_iso("2016-11-16T09:46:30,895636557-0800") == datetime(
-            2016, 11, 16, 9, 46, 30, 895636, tzinfo=tz.tzoffset(None, -3600 * 8)
+            2016, 11, 16, 9, 46, 30, 895637, tzinfo=tz.tzoffset(None, -3600 * 8)
         )
 
         # date --rfc-3339=ns
