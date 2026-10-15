@@ -663,7 +663,10 @@ class DateTimeParser:
             # floating-point (IEEE-754) defaults to half-to-even rounding
             seventh_digit = int(value[6])
             if seventh_digit == 5:
-                rounding = int(value[5]) % 2
+                # Only an all-zero tail is an exact halfway case.
+                rounding = (
+                    1 if any(int(digit) for digit in value[7:]) else int(value[5]) % 2
+                )
             elif seventh_digit > 5:
                 rounding = 1
             else:
