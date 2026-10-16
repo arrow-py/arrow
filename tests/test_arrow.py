@@ -909,6 +909,19 @@ class TestArrowShift:
             f"but {dt.utcoffset()} became {shifted.utcoffset()}"
         )
 
+    def test_shift_zero_preserves_fold_first_occurrence(self):
+        dt = arrow.Arrow(2021, 11, 7, 1, 51, 23, tzinfo="America/Los_Angeles", fold=0)
+
+        assert dt.shift(seconds=0).utcoffset() == dt.utcoffset()
+
+    def test_shift_preserves_fold_second_occurrence(self):
+        dt = arrow.Arrow(2021, 11, 7, 1, 51, 23, tzinfo="America/Los_Angeles", fold=1)
+
+        shifted = dt.shift(minutes=1)
+
+        assert shifted.fold == 1
+        assert shifted.utcoffset() == dt.utcoffset()
+
 
 class TestArrowRange:
     def test_year(self):
