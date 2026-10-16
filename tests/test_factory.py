@@ -371,6 +371,25 @@ class TestGet:
         res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
         assert res.tzinfo == ZoneInfo("Asia/Tokyo")
 
+    def test_parser_reused_per_locale(self):
+        from arrow.factory import _get_parser
+
+        assert _get_parser("en-us") is _get_parser("en-us")
+        assert _get_parser("en-us") is not _get_parser("fr")
+
+        # cached parsers must not leak state between locales
+        assert self.factory.get("9 mai 2019", "D MMMM YYYY", locale="fr") == datetime(
+            2019, 5, 9, tzinfo=timezone.utc
+        )
+        assert self.factory.get("9 May 2019", "D MMMM YYYY") == datetime(
+            2019, 5, 9, tzinfo=timezone.utc
+        )
+        with pytest.raises(ParserError):
+            self.factory.get("9 May 2019", "D MMMM YYYY", locale="fr")
+
+        with pytest.raises(ValueError):
+            self.factory.get("2019", "YYYY", locale="xx-yy")
+
 
 @pytest.mark.usefixtures("arrow_factory")
 class TestUtcNow:

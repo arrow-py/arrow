@@ -9,6 +9,7 @@ import calendar
 from datetime import date, datetime, timezone
 from datetime import tzinfo as dt_tzinfo
 from decimal import Decimal
+from functools import lru_cache
 from time import struct_time
 from typing import Any, List, Optional, Tuple, Type, Union, overload
 
@@ -16,6 +17,16 @@ from arrow import parser
 from arrow.arrow import TZ_EXPR, Arrow
 from arrow.constants import DEFAULT_LOCALE
 from arrow.util import is_timestamp, iso_to_gregorian
+
+
+@lru_cache(maxsize=32)
+def _get_parser(locale: str) -> parser.DateTimeParser:
+    """Returns a cached :class:`DateTimeParser <arrow.parser.DateTimeParser>`
+    for ``locale``, so its regular expressions are built once instead of on
+    every call to :meth:`ArrowFactory.get`.
+    """
+
+    return parser.DateTimeParser(locale, cache_size=128)
 
 
 class ArrowFactory:
@@ -244,7 +255,7 @@ class ArrowFactory:
 
             # (str) -> parse @ tzinfo
             elif isinstance(arg, str):
-                dt = parser.DateTimeParser(locale).parse_iso(arg, normalize_whitespace)
+                dt = _get_parser(locale).parse_iso(arg, normalize_whitespace)
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             # (struct_time) -> from struct_time
@@ -282,9 +293,7 @@ class ArrowFactory:
 
             # (str, format) -> parse @ tzinfo
             elif isinstance(arg_1, str) and isinstance(arg_2, (str, list)):
-                dt = parser.DateTimeParser(locale).parse(
-                    args[0], args[1], normalize_whitespace
-                )
+                dt = _get_parser(locale).parse(args[0], args[1], normalize_whitespace)
                 return self.type.fromdatetime(dt, tzinfo=tz)
 
             else:
