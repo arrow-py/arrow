@@ -896,6 +896,32 @@ class TestArrowShift:
             1972, 1, 7, 1, 14, 30, tzinfo="Africa/Monrovia"
         )
 
+    def test_shift_zero_seconds_preserves_offset_on_ambiguous_dst_time(self):
+        # Reproduces https://github.com/arrow-py/arrow/issues/1067
+        dt = arrow.Arrow.fromdatetime(
+            datetime(2021, 11, 7, 1, 51, 23, tzinfo=timezone(timedelta(hours=-8)))
+        ).to("America/Los_Angeles")
+
+        shifted = dt.shift(seconds=0)
+
+        assert shifted.utcoffset() == dt.utcoffset(), (
+            f"Zero-second shift should not change UTC offset, "
+            f"but {dt.utcoffset()} became {shifted.utcoffset()}"
+        )
+
+    def test_shift_zero_preserves_fold_first_occurrence(self):
+        dt = arrow.Arrow(2021, 11, 7, 1, 51, 23, tzinfo="America/Los_Angeles", fold=0)
+
+        assert dt.shift(seconds=0).utcoffset() == dt.utcoffset()
+
+    def test_shift_preserves_fold_second_occurrence(self):
+        dt = arrow.Arrow(2021, 11, 7, 1, 51, 23, tzinfo="America/Los_Angeles", fold=1)
+
+        shifted = dt.shift(minutes=1)
+
+        assert shifted.fold == 1
+        assert shifted.utcoffset() == dt.utcoffset()
+
 
 class TestArrowRange:
     def test_year(self):
