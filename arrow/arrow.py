@@ -1050,6 +1050,7 @@ class Arrow:
         # Datetime arithmetic resets fold to 0 (PEP 495), so restore it to keep
         # ambiguous DST times resolving to the same UTC offset.
         current = dateutil_tz.enfold(current, fold=self._datetime.fold)
+
         # If check_imaginary is True, perform the check for imaginary times (DST transitions)
         if check_imaginary and not dateutil_tz.datetime_exists(current):
             current = dateutil_tz.resolve_imaginary(current)
