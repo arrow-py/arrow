@@ -895,6 +895,7 @@ class TestArrowShift:
         assert monrovia.shift(hours=+1, minutes=+30) == arrow.Arrow(
             1972, 1, 7, 1, 14, 30, tzinfo="Africa/Monrovia"
         )
+
     def test_shift_zero_seconds_preserves_offset_on_ambiguous_dst_time(self):
         # Reproduces https://github.com/arrow-py/arrow/issues/1067
         dt = arrow.Arrow.fromdatetime(
@@ -906,7 +907,8 @@ class TestArrowShift:
         assert shifted.utcoffset() == dt.utcoffset(), (
             f"Zero-second shift should not change UTC offset, "
             f"but {dt.utcoffset()} became {shifted.utcoffset()}"
-    )
+        )
+
 
 class TestArrowRange:
     def test_year(self):
