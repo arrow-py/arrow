@@ -665,7 +665,8 @@ class Arrow:
             If the bounds are not specified, the default bound '[)' is used.
         :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final span truncated
-            so as not to extend beyond ``end``.
+            so as not to extend beyond ``end``. The ``bounds`` argument determines
+            whether the truncated span includes ``end``.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
@@ -682,8 +683,9 @@ class Arrow:
             - An :class:`Arrow <arrow.arrow.Arrow>` object.
             - A ``datetime`` object.
 
-        **NOTE**: Unlike Python's ``range``, ``end`` will *always* be included in the returned
-        iterator of timespans.
+        **NOTE**: With ``exact=False``, the returned iterator includes the timespan
+        containing ``end``. With ``exact=True``, the final span is truncated at ``end``
+        according to ``bounds``.
 
         Usage:
 
@@ -711,7 +713,7 @@ class Arrow:
 
         for r in _range:
             floor, ceil = r.span(frame, bounds=bounds, exact=exact)
-            if ceil > end:
+            if ceil >= end:
                 ceil = end
                 if bounds[1] == ")":
                     ceil += relativedelta(microseconds=-1)
@@ -746,7 +748,8 @@ class Arrow:
             If the bounds are not specified, the default bound '[)' is used.
         :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final interval truncated
-            so as not to extend beyond ``end``.
+            so as not to extend beyond ``end``. The ``bounds`` argument determines
+            whether the truncated interval includes ``end``.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second
 

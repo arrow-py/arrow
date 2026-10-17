@@ -1448,6 +1448,34 @@ class TestArrowSpanRange:
 
         assert result == expected
 
+    @pytest.mark.parametrize(
+        "frame, boundary",
+        [
+            ("second", datetime(2020, 1, 1, 0, 0, 1)),
+            ("day", datetime(2020, 1, 2)),
+            ("month", datetime(2020, 2, 1)),
+        ],
+    )
+    @pytest.mark.parametrize("bounds", ["[)", "()", "[]", "(]"])
+    @pytest.mark.parametrize("end_offset", [-2, -1, 0])
+    def test_exact_upper_bound_at_frame_ceiling(
+        self, frame, boundary, bounds, end_offset
+    ):
+        start = datetime(2020, 1, 1)
+        end = boundary + timedelta(microseconds=end_offset)
+        expected_floor = arrow.Arrow.fromdatetime(
+            start + timedelta(microseconds=bounds[0] == "(")
+        )
+        expected_ceil = arrow.Arrow.fromdatetime(
+            end - timedelta(microseconds=bounds[1] == ")")
+        )
+
+        result = list(
+            arrow.Arrow.span_range(frame, start, end, bounds=bounds, exact=True)
+        )
+
+        assert result == [(expected_floor, expected_ceil)]
+
     def test_exact_floor_equals_end(self):
         result = list(
             arrow.Arrow.span_range(
@@ -1557,6 +1585,25 @@ class TestArrowSpanRange:
 
 
 class TestArrowInterval:
+    @pytest.mark.parametrize("bounds", ["[)", "()", "[]", "(]"])
+    @pytest.mark.parametrize("interval", [1, 2, 3])
+    def test_exact_upper_bound_at_frame_ceiling(self, bounds, interval):
+        start = datetime(2020, 1, 1, 12, 30)
+        end = datetime(2020, 1, 1, 15, 29, 59, 999999)
+
+        result = list(
+            arrow.Arrow.interval(
+                "hour", start, end, interval, bounds=bounds, exact=True
+            )
+        )
+
+        assert result[0][0] == arrow.Arrow.fromdatetime(
+            start + timedelta(microseconds=bounds[0] == "(")
+        )
+        assert result[-1][1] == arrow.Arrow.fromdatetime(
+            end - timedelta(microseconds=bounds[1] == ")")
+        )
+
     def test_incorrect_input(self):
         with pytest.raises(ValueError):
             list(
