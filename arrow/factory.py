@@ -188,7 +188,7 @@ class ArrowFactory:
 
         arg_count = len(args)
         locale = kwargs.pop("locale", DEFAULT_LOCALE)
-        tz = kwargs.get("tzinfo", None)
+        tz = kwargs.pop("tzinfo", None)
         normalize_whitespace = kwargs.pop("normalize_whitespace", False)
 
         # if kwargs given, send to constructor unless only tzinfo provided
