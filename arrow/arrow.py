@@ -1579,10 +1579,10 @@ class Arrow:
 
         return self._datetime.timetz()
 
-    def astimezone(self, tz: Optional[dt_tzinfo]) -> dt_datetime:
+    def astimezone(self, tz: Optional[dt_tzinfo] = None) -> dt_datetime:
         """Returns a ``datetime`` object, converted to the specified timezone.
 
-        :param tz: a ``tzinfo`` object.
+        :param tz: (optional) a ``tzinfo`` object. Defaults to local time.
 
         Usage::
 

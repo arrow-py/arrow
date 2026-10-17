@@ -444,6 +444,45 @@ class TestArrowDatetimeInterface:
 
         assert result == self.arrow._datetime.astimezone(other_tz)
 
+    @pytest.mark.parametrize(
+        "dt",
+        [
+            datetime(2026, 1, 15, 12, 34, 56, 123456, tzinfo=timezone.utc),
+            datetime(2026, 7, 15, 12, 34, 56, 123456, tzinfo=timezone.utc),
+            datetime(
+                2026,
+                1,
+                15,
+                12,
+                34,
+                56,
+                123456,
+                tzinfo=timezone(timedelta(hours=5, minutes=30)),
+            ),
+            datetime(
+                2026,
+                11,
+                1,
+                1,
+                30,
+                0,
+                123456,
+                tzinfo=ZoneInfo("America/New_York"),
+                fold=1,
+            ),
+        ],
+    )
+    def test_astimezone_default(self, dt):
+        arw = arrow.Arrow.fromdatetime(dt)
+
+        result = arw.astimezone()
+
+        assert isinstance(result, datetime)
+        assert result.isoformat() == dt.astimezone().isoformat()
+        assert result == arw.astimezone(None)
+        assert result == arw.astimezone(tz=None)
+        assert result.timestamp() == dt.timestamp()
+
     def test_utcoffset(self):
         result = self.arrow.utcoffset()
 
