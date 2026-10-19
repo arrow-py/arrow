@@ -1557,6 +1557,34 @@ class TestArrowSpanRange:
 
 
 class TestArrowInterval:
+    @pytest.mark.parametrize("bounds", ["()", "(]", "[)", "[]"])
+    @pytest.mark.parametrize("exact", [False, True])
+    @pytest.mark.parametrize("interval", [2, 100])
+    def test_stops_filling_exhausted_interval(self, mocker, bounds, exact, interval):
+        start = datetime(2013, 5, 5, 12, 30)
+        end = datetime(2013, 5, 5, 15, 30)
+        spans = list(
+            arrow.Arrow.span_range("hour", start, end, bounds=bounds, exact=exact)
+        )
+        source = mocker.MagicMock()
+        source.__iter__.side_effect = lambda: source
+        source.__next__.side_effect = iter(spans)
+        mocker.patch.object(arrow.Arrow, "span_range", return_value=source)
+
+        result = list(
+            arrow.Arrow.interval(
+                "hour", start, end, interval, bounds=bounds, exact=exact
+            )
+        )
+
+        expected = [
+            (spans[index][0], spans[min(index + interval, len(spans)) - 1][1])
+            for index in range(0, len(spans), interval)
+        ]
+        assert result == expected
+        # At most one failed read fills the last interval, and one ends iteration.
+        assert source.__next__.call_count <= len(spans) + 2
+
     def test_incorrect_input(self):
         with pytest.raises(ValueError):
             list(

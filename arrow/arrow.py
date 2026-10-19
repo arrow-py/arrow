@@ -786,7 +786,7 @@ class Arrow:
                     try:
                         _, intvlEnd = next(spanRange)
                     except StopIteration:
-                        continue
+                        break
                 yield intvlStart, intvlEnd
             except StopIteration:
                 return
