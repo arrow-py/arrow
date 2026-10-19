@@ -290,6 +290,21 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserMatchError):
             self.parser.parse(f"{timestamp:f}", "x")
 
+    @pytest.mark.skipif(
+        os.name == "nt", reason="negative timestamps are not supported on Windows"
+    )
+    @pytest.mark.parametrize(
+        "timestamp, expected",
+        [
+            (-1591161115194, datetime(1919, 7, 31, 18, 48, 4, 806000)),
+            (-1591161115194556, datetime(1919, 7, 31, 18, 48, 4, 805444)),
+        ],
+    )
+    def test_parse_negative_expanded_timestamp(self, timestamp, expected):
+        assert self.parser.parse(str(timestamp), "x") == expected.replace(
+            tzinfo=tz.tzutc()
+        )
+
     def test_parse_names(self):
         self.expected = datetime(2012, 1, 1)
 

@@ -454,6 +454,11 @@ Use the following tokens for parsing and formatting. Note that they are **not** 
 .. [#t4] timezone names from `tz database <https://www.iana.org/time-zones>`_ provided via dateutil package, note that abbreviations such as MST, PDT, BRST are unlikely to parse due to ambiguity. Use the full IANA zone name instead (Asia/Shanghai, Europe/London, America/Chicago etc).
 .. [#t5] this token cannot be used for parsing timestamps out of natural language strings due to compatibility reasons
 
+The ``x`` token infers seconds, milliseconds, or microseconds from the value's
+magnitude. Negative values outside ``datetime``'s representable seconds range
+are scaled to milliseconds or microseconds. Values within that range are
+interpreted as seconds, even if milliseconds or microseconds were intended.
+
 Built-in Formats
 ++++++++++++++++
 

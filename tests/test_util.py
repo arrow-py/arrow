@@ -125,6 +125,32 @@ class TestUtil:
         with pytest.raises(ValueError):
             util.normalize_timestamp(3e17)
 
+    @pytest.mark.parametrize("sign", [1, -1])
+    @pytest.mark.parametrize(
+        "timestamp, expected",
+        [
+            (0, 0),
+            (1591161115.194556, 1591161115.194556),
+            (1591161115194, 1591161115.194),
+            (1591161115194556, 1591161115.194556),
+        ],
+    )
+    def test_normalize_signed_timestamp(self, sign, timestamp, expected):
+        assert util.normalize_timestamp(sign * timestamp) == sign * expected
+
+    @pytest.mark.parametrize("scale", [1, 1000, 1_000_000])
+    def test_normalize_earliest_timestamp(self, scale):
+        assert util.normalize_timestamp(-62135596800 * scale) == -62135596800
+
+    @pytest.mark.parametrize("scale", [1, 1000, 1_000_000])
+    def test_normalize_large_negative_timestamp(self, scale):
+        assert util.normalize_timestamp(-60000000000 * scale) == -60000000000
+
+    @pytest.mark.parametrize("timestamp", [3e17, -3e17])
+    def test_normalize_signed_timestamp_too_large(self, timestamp):
+        with pytest.raises(ValueError, match="too large"):
+            util.normalize_timestamp(timestamp)
+
     def test_iso_gregorian(self):
         with pytest.raises(ValueError):
             util.iso_to_gregorian(2013, 0, 5)

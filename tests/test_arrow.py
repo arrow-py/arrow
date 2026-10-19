@@ -140,6 +140,22 @@ class TestTestArrowFactory:
         with pytest.raises(ValueError):
             arrow.Arrow.fromtimestamp("invalid timestamp")
 
+    @pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="negative timestamps are not supported on Windows",
+    )
+    @pytest.mark.parametrize("factory", ["fromtimestamp", "utcfromtimestamp"])
+    @pytest.mark.parametrize(
+        "timestamp, expected",
+        [
+            (-1591161115194, datetime(1919, 7, 31, 18, 48, 4, 806000)),
+            (-1591161115194556, datetime(1919, 7, 31, 18, 48, 4, 805444)),
+        ],
+    )
+    def test_from_negative_expanded_timestamp(self, factory, timestamp, expected):
+        result = getattr(arrow.Arrow, factory)(timestamp)
+        assert result.datetime == expected.replace(tzinfo=timezone.utc)
+
     def test_utcfromtimestamp(self):
         timestamp = time.time()
 
