@@ -1991,8 +1991,9 @@ class TestArrowHumanize:
         later506 = self.now.shift(seconds=50 * 10**6)
         assert self.now.humanize(later506, granularity="week") == "82 weeks ago"
         assert later506.humanize(self.now, granularity="week") == "in 82 weeks"
-        assert self.now.humanize(later506, granularity="month") == "18 months ago"
-        assert later506.humanize(self.now, granularity="month") == "in 18 months"
+        # 2013-01-01 to 2014-08-02 is 19 calendar months
+        assert self.now.humanize(later506, granularity="month") == "19 months ago"
+        assert later506.humanize(self.now, granularity="month") == "in 19 months"
         assert self.now.humanize(later506, granularity="quarter") == "6 quarters ago"
         assert later506.humanize(self.now, granularity="quarter") == "in 6 quarters"
         assert self.now.humanize(later506, granularity="year") == "a year ago"
@@ -2036,6 +2037,32 @@ class TestArrowHumanize:
 
         with pytest.raises(ValueError):
             self.now.humanize(later108, granularity="years")
+
+    def test_granularity_calendar_months(self):
+        start = arrow.Arrow(2023, 1, 31)
+
+        for months, expected in [(1, "a month"), (2, "2 months"), (6, "6 months")]:
+            end = start.shift(months=months)
+            assert end.humanize(start, granularity="month") == f"in {expected}"
+            assert start.humanize(end, granularity="month") == f"{expected} ago"
+
+        for months, expected in [
+            (3, "a quarter"),
+            (6, "2 quarters"),
+            (18, "6 quarters"),
+        ]:
+            end = start.shift(months=months)
+            assert end.humanize(start, granularity="quarter") == f"in {expected}"
+            assert start.humanize(end, granularity="quarter") == f"{expected} ago"
+
+        # Less than a calendar month, even though it is more than 30.5 days
+        end = arrow.Arrow(2023, 1, 31, 23, 59)
+        assert end.humanize(arrow.Arrow(2023, 1, 1), granularity="month") == (
+            "in 0 months"
+        )
+        assert arrow.Arrow(2023, 1, 1).humanize(end, granularity="month") == (
+            "0 months ago"
+        )
 
     def test_multiple_granularity(self):
         assert self.now.humanize(granularity="second") == "just now"

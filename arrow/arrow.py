@@ -1276,10 +1276,25 @@ class Arrow:
                     delta = sign * delta_second / self._SECS_PER_DAY
                 elif granularity == "week":
                     delta = sign * delta_second / self._SECS_PER_WEEK
-                elif granularity == "month":
-                    delta = sign * delta_second / self._SECS_PER_MONTH
-                elif granularity == "quarter":
-                    delta = sign * delta_second / self._SECS_PER_QUARTER
+                elif granularity in ("month", "quarter"):
+                    # Count calendar months, as the "auto" granularity does, so
+                    # that e.g. Jan 1 to Mar 1 is 2 months rather than 59 / 30.5.
+                    # The partial month is a fraction of the next calendar month,
+                    # which keeps it below 1 and keeps the sign of a 0 delta.
+                    start, end = sorted((self._datetime, dt))
+                    calendar_diff = relativedelta(end, start)
+                    calendar_months = (
+                        calendar_diff.years * self._MONTHS_PER_YEAR
+                        + calendar_diff.months
+                    )
+                    month_start = start + relativedelta(months=calendar_months)
+                    month_end = start + relativedelta(months=calendar_months + 1)
+                    elapsed_months = calendar_months + (end - month_start) / (
+                        month_end - month_start
+                    )
+                    if granularity == "quarter":
+                        elapsed_months /= self._MONTHS_PER_QUARTER
+                    delta = sign * elapsed_months
                 elif granularity == "year":
                     delta = sign * delta_second / self._SECS_PER_YEAR
                 else:
