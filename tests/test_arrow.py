@@ -898,6 +898,13 @@ class TestArrowShift:
 
 
 class TestArrowRange:
+    def test_zero_limit(self):
+        start = datetime(2020, 1, 1)
+        end = datetime(2020, 1, 3)
+
+        assert list(arrow.Arrow.range("day", start, end, limit=0)) == []
+        assert list(arrow.Arrow.range("day", start, limit=0)) == []
+
     def test_year(self):
         result = list(
             arrow.Arrow.range(
