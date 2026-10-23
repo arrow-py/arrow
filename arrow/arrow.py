@@ -1136,6 +1136,7 @@ class Arrow:
         locale: str = DEFAULT_LOCALE,
         only_distance: bool = False,
         granularity: Union[_GRANULARITY, List[_GRANULARITY]] = "auto",
+        numeric: bool = False,
     ) -> str:
         """Returns a localized, humanized representation of a relative difference in time.
 
@@ -1145,6 +1146,8 @@ class Arrow:
         :param only_distance: (optional) returns only time difference eg: "11 seconds" without "in" or "ago" part.
         :param granularity: (optional) defines the precision of the output. Set it to strings 'second', 'minute',
                            'hour', 'day', 'week', 'month' or 'year' or a list of any combination of these strings
+        :param numeric: (optional) use numeric singular time units for English locales,
+                        for example, '1 hour' instead of 'an hour'. Defaults to False.
 
         Usage::
 
@@ -1160,6 +1163,8 @@ class Arrow:
 
         locale_name = locale
         locale = locales.get_locale(locale)
+        if numeric and isinstance(locale, locales.EnglishLocale):
+            locale.numeric = True
 
         if other is None:
             utc = dt_datetime.now(timezone.utc).replace(tzinfo=timezone.utc)

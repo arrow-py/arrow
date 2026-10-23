@@ -303,6 +303,21 @@ class EnglishLocale(Locale):
     past = "{0} ago"
     future = "in {0}"
     and_word = "and"
+    numeric: bool = False
+
+    def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
+        if self.numeric and timeframe in (
+            "second",
+            "minute",
+            "hour",
+            "day",
+            "week",
+            "month",
+            "quarter",
+            "year",
+        ):
+            return f"1 {timeframe}"
+        return super()._format_timeframe(timeframe, delta)
 
     timeframes = {
         "now": "just now",
