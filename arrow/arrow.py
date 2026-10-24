@@ -644,7 +644,7 @@ class Arrow:
         cls,
         frame: _T_FRAMES,
         start: dt_datetime,
-        end: dt_datetime,
+        end: Optional[dt_datetime] = None,
         tz: Optional[TZ_EXPR] = None,
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
@@ -703,7 +703,7 @@ class Arrow:
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
         start = cls.fromdatetime(start, tzinfo).span(frame, exact=exact)[0]
-        end = cls.fromdatetime(end, tzinfo)
+        range_end = cls.fromdatetime(end, tzinfo) if end is not None else None
         _range = cls.range(frame, start, end, tz, limit)
         if not exact:
             for r in _range:
@@ -711,13 +711,13 @@ class Arrow:
 
         for r in _range:
             floor, ceil = r.span(frame, bounds=bounds, exact=exact)
-            if ceil > end:
-                ceil = end
+            if range_end is not None and ceil > range_end:
+                ceil = range_end
                 if bounds[1] == ")":
                     ceil += relativedelta(microseconds=-1)
-            if floor == end:
+            if floor == range_end:
                 break
-            elif floor + relativedelta(microseconds=-1) == end:
+            elif floor + relativedelta(microseconds=-1) == range_end:
                 break
             yield floor, ceil
 
