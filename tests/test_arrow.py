@@ -1448,6 +1448,68 @@ class TestArrowSpanRange:
 
         assert result == expected
 
+    def test_limit_without_end(self):
+        # ``end`` is documented as optional: passing ``limit`` alone must
+        # return at most ``limit`` timespans, counted from ``start``.
+        expected = [
+            (arrow.Arrow(2013, 1, 1), arrow.Arrow(2013, 1, 31, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 2, 1), arrow.Arrow(2013, 2, 28, 23, 59, 59, 999999)),
+            (arrow.Arrow(2013, 3, 1), arrow.Arrow(2013, 3, 31, 23, 59, 59, 999999)),
+        ]
+
+        assert (
+            list(arrow.Arrow.span_range("month", datetime(2013, 1, 1), limit=3))
+            == expected
+        )
+        assert (
+            list(arrow.Arrow.span_range("month", datetime(2013, 1, 1), None, limit=3))
+            == expected
+        )
+
+    def test_limit_without_end_quarter_and_tz(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "quarter", datetime(2013, 2, 2), tz="US/Pacific", limit=2
+            )
+        )
+
+        assert result == [
+            (
+                arrow.Arrow(2013, 1, 1, tzinfo=ZoneInfo("US/Pacific")),
+                arrow.Arrow(
+                    2013, 3, 31, 23, 59, 59, 999999, tzinfo=ZoneInfo("US/Pacific")
+                ),
+            ),
+            (
+                arrow.Arrow(2013, 4, 1, tzinfo=ZoneInfo("US/Pacific")),
+                arrow.Arrow(
+                    2013, 6, 30, 23, 59, 59, 999999, tzinfo=ZoneInfo("US/Pacific")
+                ),
+            ),
+        ]
+
+    def test_limit_without_end_exact(self):
+        result = list(
+            arrow.Arrow.span_range(
+                "month", datetime(2013, 1, 15, 12, 30), limit=2, exact=True
+            )
+        )
+
+        assert result == [
+            (
+                arrow.Arrow(2013, 1, 15, 12, 30),
+                arrow.Arrow(2013, 2, 15, 12, 29, 59, 999999),
+            ),
+            (
+                arrow.Arrow(2013, 2, 15, 12, 30),
+                arrow.Arrow(2013, 3, 15, 12, 29, 59, 999999),
+            ),
+        ]
+
+    def test_limit_or_end_is_required(self):
+        with pytest.raises(ValueError):
+            list(arrow.Arrow.span_range("month", datetime(2013, 1, 1)))
+
     def test_exact_floor_equals_end(self):
         result = list(
             arrow.Arrow.span_range(
