@@ -1,6 +1,7 @@
 """Provides the :class:`Arrow <arrow.parser.DateTimeParser>` class, a better way to parse datetime strings."""
 
 import re
+import threading
 from datetime import datetime, timedelta, timezone
 from datetime import tzinfo as dt_tzinfo
 from functools import lru_cache
@@ -97,6 +98,16 @@ _FORMAT_TYPE = Literal[
     "a",
     "A",
 ]
+
+_PATTERN_RE_CACHE_SIZE = 128
+# Class-level memo of (tokens, pattern) per format. The key embeds a
+# fingerprint of the parser's effective input map so per-instance or
+# per-subclass map customizations can never read another parser's entry.
+_PatternCacheKey = Tuple[str, str, Tuple[Tuple[str, str, int], ...]]
+_PATTERN_RE_CACHE: Dict[
+    Tuple[_PatternCacheKey, str], Tuple[List[_FORMAT_TYPE], Pattern[str]]
+] = {}
+_PATTERN_RE_CACHE_LOCK = threading.Lock()
 
 
 class _Parts(TypedDict, total=False):
@@ -241,6 +252,16 @@ class DateTimeParser:
                 # ensure backwards compatibility of this token
                 "A": self._generate_choice_re(self.locale.meridians.values()),
             }
+        )
+        self._pattern_cache_key: _PatternCacheKey = (
+            type(self).__name__,
+            locale,
+            tuple(
+                sorted(
+                    (token, input_re.pattern, input_re.flags)
+                    for token, input_re in self._input_re_map.items()
+                )
+            ),
         )
         if cache_size > 0:
             self._generate_pattern_re = lru_cache(maxsize=cache_size)(  # type: ignore
@@ -439,6 +460,26 @@ class DateTimeParser:
         return self._build_datetime(parts)
 
     def _generate_pattern_re(self, fmt: str) -> Tuple[List[_FORMAT_TYPE], Pattern[str]]:
+        # Class-level memo shared across instances: the factory builds a
+        # fresh DateTimeParser per arrow.get() call, so the per-instance
+        # lru_cache from cache_size cannot fire there. The key embeds the
+        # parser's input-map fingerprint (built in __init__), so custom
+        # maps can never read another parser's entry.
+        key = (self._pattern_cache_key, fmt)
+        try:
+            return _PATTERN_RE_CACHE[key]
+        except KeyError:
+            pass
+        result = self._generate_pattern_re_uncached(fmt)
+        with _PATTERN_RE_CACHE_LOCK:
+            if len(_PATTERN_RE_CACHE) >= _PATTERN_RE_CACHE_SIZE:
+                _PATTERN_RE_CACHE.pop(next(iter(_PATTERN_RE_CACHE)))
+            _PATTERN_RE_CACHE[key] = result
+        return result
+
+    def _generate_pattern_re_uncached(
+        self, fmt: str
+    ) -> Tuple[List[_FORMAT_TYPE], Pattern[str]]:
         """
         Generates a regular expression pattern from a format string.
 

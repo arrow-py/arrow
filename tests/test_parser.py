@@ -138,6 +138,44 @@ class TestDateTimeParser:
         assert mocked_parser.call_args_list[0] == mocker.call(fmt="fmt_a")
         assert mocked_parser.call_args_list[1] == mocker.call(fmt="fmt_b")
 
+    def test_pattern_re_shared_across_instances(self):
+        # the class-level memo serves fresh instances (the factory path),
+        # where the per-instance cache_size lru_cache cannot fire
+        first = parser.DateTimeParser()
+        second = parser.DateTimeParser()
+        assert first._generate_pattern_re("YYYY-MM-DD") is second._generate_pattern_re(
+            "YYYY-MM-DD"
+        )
+
+    def test_pattern_re_cache_locale_isolation(self):
+        # same fmt under different locales must not share an entry
+        parser._PATTERN_RE_CACHE.clear()
+        try:
+            assert parser.DateTimeParser("en").parse(
+                "January 15, 2013", "MMMM D, YYYY"
+            ) == datetime(2013, 1, 15)
+            assert parser.DateTimeParser("fr").parse(
+                "janvier 15, 2013", "MMMM D, YYYY"
+            ) == datetime(2013, 1, 15)
+            assert parser.DateTimeParser("de").parse(
+                "Januar 15, 2013", "MMMM D, YYYY"
+            ) == datetime(2013, 1, 15)
+        finally:
+            parser._PATTERN_RE_CACHE.clear()
+
+    def test_pattern_re_cache_bounded(self):
+        # more distinct formats than the bound evicts oldest entries,
+        # and evicted entries are transparently rebuilt
+        parser._PATTERN_RE_CACHE.clear()
+        try:
+            fresh = parser.DateTimeParser()
+            for i in range(parser._PATTERN_RE_CACHE_SIZE + 1):
+                fresh._generate_pattern_re(f"YYYY-MM-DD-{i:03d}")
+            assert len(parser._PATTERN_RE_CACHE) <= parser._PATTERN_RE_CACHE_SIZE
+            assert fresh.parse("2013-01-01", "YYYY-MM-DD") == datetime(2013, 1, 1)
+        finally:
+            parser._PATTERN_RE_CACHE.clear()
+
     def test_YY_and_YYYY_format_list(self):
         assert self.parser.parse("15/01/19", ["DD/MM/YY", "DD/MM/YYYY"]) == datetime(
             2019, 1, 15

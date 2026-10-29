@@ -371,6 +371,14 @@ class TestGet:
         res = self.factory.get(locale="ja", tzinfo=ZoneInfo("Asia/Tokyo"))
         assert res.tzinfo == ZoneInfo("Asia/Tokyo")
 
+    def test_get_parser_reuse(self):
+        # one parser per locale string: repeated arrow.get() calls share it
+        # instead of rebuilding locale regexes per call
+        from arrow.factory import _get_parser
+
+        assert _get_parser("en") is _get_parser("en")
+        assert _get_parser("en") is not _get_parser("fr")
+
 
 @pytest.mark.usefixtures("arrow_factory")
 class TestUtcNow:
