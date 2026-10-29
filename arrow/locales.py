@@ -160,7 +160,7 @@ class Locale:
             self._format_timeframe(timeframe, trunc(delta))
             for timeframe, delta in timeframes
         ]
-        if self.and_word:
+        if self.and_word and len(parts) > 1:
             parts.insert(-1, self.and_word)
         humanized = " ".join(parts)
 

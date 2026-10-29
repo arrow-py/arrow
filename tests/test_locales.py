@@ -111,6 +111,19 @@ class TestEnglishLocale:
         assert self.locale.describe("now", only_distance=True) == "instantly"
         assert self.locale.describe("now", only_distance=False) == "just now"
 
+    @pytest.mark.parametrize("delta", [-2, 2])
+    @pytest.mark.parametrize("only_distance", [False, True])
+    def test_describe_multi_single_timeframe(self, delta, only_distance):
+        assert self.locale.describe_multi(
+            [("hours", delta)], only_distance=only_distance
+        ) == self.locale.describe("hours", delta, only_distance=only_distance)
+
+    def test_describe_multi_conjunction(self):
+        assert (
+            self.locale.describe_multi([("hours", 2), ("minutes", 3)])
+            == "in 2 hours and 3 minutes"
+        )
+
     def test_format_timeframe(self):
         assert self.locale._format_timeframe("hours", 2) == "2 hours"
         assert self.locale._format_timeframe("hour", 0) == "an hour"
