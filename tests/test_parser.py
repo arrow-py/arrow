@@ -716,6 +716,20 @@ class TestDateTimeParserParse:
         with pytest.raises(ParserError):
             self.parser.parse("2019-12-31T24:00:00.999999", "YYYY-MM-DDTHH:mm:ss.S")
 
+    @pytest.mark.parametrize("year", [1, 4, 12, 99, 400, 999, 1000, 2024])
+    @pytest.mark.parametrize("token", ["DDD", "DDDD"])
+    def test_parse_low_year_ordinal(self, year, token):
+        ordinal = "2" if token == "DDD" else "002"
+        value = f"{year:04d}-{ordinal}"
+        assert self.parser.parse(value, f"YYYY-{token}") == datetime(year, 1, 2)
+
+    @pytest.mark.parametrize("year", [1, 4, 12, 99, 400, 999, 1000, 2024])
+    def test_parse_low_year_iso_week(self, year):
+        value = f"{year:04d}-W01-1"
+        expected = datetime.fromisocalendar(year, 1, 1)
+        assert self.parser.parse(value, "W") == expected
+        assert arrow.get(value) == arrow.Arrow.fromdatetime(expected)
+
     def test_parse_W(self):
         assert self.parser.parse("2011-W05-4", "W") == datetime(2011, 2, 3)
         assert self.parser.parse("2011W054", "W") == datetime(2011, 2, 3)
