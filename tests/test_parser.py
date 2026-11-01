@@ -429,6 +429,19 @@ class TestDateTimeParserParse:
         assert self.parser.parse(string, datetime_format) == self.expected
         assert self.parser.parse_iso(string) == self.expected
 
+        # Rounding a subsecond value at datetime.max up to the next second would
+        # push the result past the maximum representable datetime. The parser
+        # must clamp to the last representable microsecond instead of raising
+        # an unhandled OverflowError (e.g. the SQL Server datetime2 maximum).
+        self.expected = datetime(9999, 12, 31, 23, 59, 59, 999999)
+        string = "9999-12-31 23:59:59.9999999"
+        assert self.parser.parse(string, datetime_format) == self.expected
+        assert self.parser.parse_iso(string) == self.expected
+
+        self.expected = datetime(9999, 12, 31, 23, 59, 59, 999999, tz.tzutc())
+        string = "9999-12-31T23:59:59.999999999Z"
+        assert self.parser.parse_iso(string) == self.expected
+
     # Regression tests for issue #560
     def test_parse_long_year(self):
         with pytest.raises(ParserError):
