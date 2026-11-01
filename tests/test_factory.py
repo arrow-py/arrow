@@ -236,6 +236,11 @@ class TestGet:
         with pytest.raises(ValueError):
             self.factory.get((2014, 7, 10))
 
+    @pytest.mark.parametrize("year", [2014, 2019, 2021])
+    def test_one_arg_iso_calendar_invalid_week(self, year):
+        with pytest.raises(ValueError):
+            self.factory.get((year, 53, 1))
+
     def test_one_arg_other(self):
         with pytest.raises(TypeError):
             self.factory.get(object())

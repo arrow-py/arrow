@@ -713,10 +713,7 @@ class DateTimeParser:
                 # day not given, default to 1
                 _day = 1
 
-            date_string = f"{year}-{week}-{_day}"
-
-            #  tokens for ISO 8601 weekdates
-            dt = datetime.strptime(date_string, "%G-%V-%u")
+            dt = datetime.fromisocalendar(year, week, _day)
 
             parts["year"] = dt.year
             parts["month"] = dt.month

@@ -95,13 +95,7 @@ def iso_to_gregorian(iso_year: int, iso_week: int, iso_day: int) -> datetime.dat
     if not 1 <= iso_day <= 7:
         raise ValueError("ISO Calendar day value must be between 1-7")
 
-    # The first week of the year always contains 4 Jan.
-    fourth_jan = datetime.date(iso_year, 1, 4)
-    delta = datetime.timedelta(fourth_jan.isoweekday() - 1)
-    year_start = fourth_jan - delta
-    gregorian = year_start + datetime.timedelta(days=iso_day - 1, weeks=iso_week - 1)
-
-    return gregorian
+    return datetime.date.fromisocalendar(iso_year, iso_week, iso_day)
 
 
 def validate_bounds(bounds: str) -> None:

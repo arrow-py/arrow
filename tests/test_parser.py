@@ -752,6 +752,22 @@ class TestDateTimeParserParse:
             with pytest.raises(ParserError):
                 self.parser.parse(fmt, "W")
 
+    @pytest.mark.parametrize(
+        "value, expected",
+        [
+            ("0001-W01-1", datetime(1, 1, 1)),
+            ("0099-W01-1", datetime(98, 12, 29)),
+            ("0999-W01-1", datetime(998, 12, 31)),
+        ],
+    )
+    def test_parse_W_early_year(self, value, expected):
+        assert self.parser.parse(value, "W") == expected
+
+    @pytest.mark.parametrize("year", [2014, 2019, 2021])
+    def test_parse_W_invalid_week(self, year):
+        with pytest.raises(ValueError):
+            self.parser.parse(f"{year}-W53-1", "W")
+
     def test_parse_normalize_whitespace(self):
         assert self.parser.parse(
             "Jun 1 2005  1:33PM", "MMM D YYYY H:mmA", normalize_whitespace=True
