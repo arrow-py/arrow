@@ -813,19 +813,37 @@ class DateTimeParser:
 
         increment = timedelta(days=day_increment, seconds=second_increment)
 
-        return (
-            datetime(
+        try:
+            return (
+                datetime(
+                    year=parts.get("year", 1),
+                    month=parts.get("month", 1),
+                    day=parts.get("day", 1),
+                    hour=hour,
+                    minute=parts.get("minute", 0),
+                    second=parts.get("second", 0),
+                    microsecond=microsecond,
+                    tzinfo=parts.get("tzinfo"),
+                )
+                + increment
+            )
+        except OverflowError:
+            # Rounding a subsecond value such as "9999-12-31 23:59:59.9999999"
+            # up to the next second can push the result past datetime.max, the
+            # maximum representable datetime. Clamp to the last representable
+            # microsecond instead of raising an unhandled OverflowError.
+            if not second_increment:
+                raise
+            return datetime(
                 year=parts.get("year", 1),
                 month=parts.get("month", 1),
                 day=parts.get("day", 1),
                 hour=hour,
                 minute=parts.get("minute", 0),
                 second=parts.get("second", 0),
-                microsecond=microsecond,
+                microsecond=999999,
                 tzinfo=parts.get("tzinfo"),
             )
-            + increment
-        )
 
     def _parse_multiformat(self, string: str, formats: Iterable[str]) -> datetime:
         """
