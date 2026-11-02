@@ -82,6 +82,23 @@ class ArrowFactory:
         normalize_whitespace: bool = False,
     ) -> Arrow: ...  # pragma: no cover
 
+    @overload
+    def get(
+        self,
+        year: int,
+        month: int,
+        day: int,
+        hour: int = 0,
+        minute: int = 0,
+        second: int = 0,
+        microsecond: int = 0,
+        tzinfo: Optional[TZ_EXPR] = None,
+        *,
+        fold: int = 0,
+        locale: str = DEFAULT_LOCALE,
+        normalize_whitespace: bool = False,
+    ) -> Arrow: ...  # pragma: no cover
+
     def get(self, *args: Any, **kwargs: Any) -> Arrow:
         """Returns an :class:`Arrow <arrow.arrow.Arrow>` object based on flexible inputs.
 
