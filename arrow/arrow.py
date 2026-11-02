@@ -1855,7 +1855,7 @@ class Arrow:
         """
         if name in cls._ATTRS:
             return name, f"{name}s", 1
-        elif name[-1] == "s" and name[:-1] in cls._ATTRS:
+        elif name.endswith("s") and name[:-1] in cls._ATTRS:
             return name[:-1], name, 1
         elif name in ["week", "weeks"]:
             return "week", "weeks", 1
