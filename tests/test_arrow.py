@@ -1084,11 +1084,12 @@ class TestArrowRange:
         assert len(pacific_range) == len(set(pacific_range))
         assert len(utc_range) == len(set(utc_range))
 
-    def test_unsupported(self):
-        with pytest.raises(ValueError):
+    @pytest.mark.parametrize("frame", ["abc", ""])
+    def test_unsupported(self, frame):
+        with pytest.raises(ValueError, match="not supported. Supported frames:"):
             next(
                 arrow.Arrow.range(
-                    "abc", datetime.now(timezone.utc), datetime.now(timezone.utc)
+                    frame, datetime.now(timezone.utc), datetime.now(timezone.utc)
                 )
             )
 
@@ -1631,9 +1632,10 @@ class TestArrowInterval:
 
 @pytest.mark.usefixtures("time_2013_02_15")
 class TestArrowSpan:
-    def test_span_attribute(self):
-        with pytest.raises(ValueError):
-            self.arrow.span("span")
+    @pytest.mark.parametrize("frame", ["span", ""])
+    def test_span_attribute(self, frame):
+        with pytest.raises(ValueError, match="not supported. Supported frames:"):
+            self.arrow.span(frame)
 
     def test_span_year(self):
         floor, ceil = self.arrow.span("year")
