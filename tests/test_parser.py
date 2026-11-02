@@ -1260,6 +1260,14 @@ class TestDateTimeParserISO:
             2018, 5, 17, 10, 55, 13, tzinfo=tz.tzoffset(None, -25200)
         )
 
+        assert self.parser.parse_iso("1935-01-01T00:00:00-03:30:52") == datetime(
+            1935, 1, 1, 0, 0, 0, tzinfo=timezone(timedelta(seconds=-12652))
+        )
+
+        assert self.parser.parse_iso("19350101T000000-033052") == datetime(
+            1935, 1, 1, 0, 0, 0, tzinfo=timezone(timedelta(seconds=-12652))
+        )
+
         # ordinal in basic format: YYYYDDDD
         assert self.parser.parse_iso("1998136") == datetime(1998, 5, 16)
 
@@ -1345,6 +1353,10 @@ class TestTzinfoParser:
         assert self.parser.parse("01") == timezone(timedelta(seconds=3600))
         assert self.parser.parse("+01") == timezone(timedelta(seconds=3600))
         assert self.parser.parse("-01") == timezone(timedelta(seconds=-3600))
+
+        assert self.parser.parse("+01:02:03") == timezone(timedelta(seconds=3723))
+        assert self.parser.parse("-03:30:52") == timezone(timedelta(seconds=-12652))
+        assert self.parser.parse("-033052") == timezone(timedelta(seconds=-12652))
 
     def test_parse_str(self):
         assert self.parser.parse("US/Pacific") == ZoneInfo("US/Pacific")

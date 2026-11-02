@@ -161,8 +161,12 @@ class DateTimeParser:
     _TWO_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{2}")
     _THREE_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{3}")
     _FOUR_DIGIT_RE: ClassVar[Pattern[str]] = re.compile(r"\d{4}")
-    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:(\d{2}))?|Z")
-    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(r"([\+\-])(\d{2})(?:\:(\d{2}))?|Z")
+    _TZ_Z_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])(\d{2})(?:(\d{2})(?:\d{2})?)?|Z"
+    )
+    _TZ_ZZ_RE: ClassVar[Pattern[str]] = re.compile(
+        r"([\+\-])(\d{2})(?:\:(\d{2})(?:\:\d{2})?)?|Z"
+    )
     _TZ_NAME_RE: ClassVar[Pattern[str]] = re.compile(r"\w[\w+\-/]+")
     # NOTE: timestamps cannot be parsed from natural language strings (by removing the ^...$) because it will
     # break cases like "15 Jul 2000" and a format list (see issue #447)
@@ -888,7 +892,7 @@ class TzinfoParser:
     """
 
     _TZINFO_RE: ClassVar[Pattern[str]] = re.compile(
-        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2}))?"
+        r"^(?:\(UTC)*([\+\-])?(\d{2})(?:\:?(\d{2})(?:\:?(\d{2}))?)?"
     )
 
     @classmethod
@@ -917,8 +921,13 @@ class TzinfoParser:
                 sign: Optional[str]
                 hours: str
                 minutes: Union[str, int, None]
-                sign, hours, minutes = iso_match.groups()
-                seconds = int(hours) * 3600 + int(minutes or 0) * 60
+                seconds_part: Union[str, int, None]
+                sign, hours, minutes, seconds_part = iso_match.groups()
+                seconds = (
+                    int(hours) * 3600
+                    + int(minutes or 0) * 60
+                    + int(seconds_part or 0)
+                )
 
                 if sign == "-":
                     seconds *= -1
