@@ -122,6 +122,10 @@ class TestUtil:
         assert util.normalize_timestamp(millisecond_timestamp) == 1591161115.194
         assert util.normalize_timestamp(microsecond_timestamp) == 1591161115.194556
 
+        # Test timestamp for year 9999-12-31 is not mistakenly divided by 1000
+        max_year_ts = 253402214400.0
+        assert util.normalize_timestamp(max_year_ts) == max_year_ts
+
         with pytest.raises(ValueError):
             util.normalize_timestamp(3e17)
 
