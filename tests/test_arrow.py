@@ -2233,6 +2233,36 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 months"
         assert later.humanize(self.now, only_distance=True) == "2 months"
 
+    def test_months_never_reach_twelve(self):
+        # "12 months" is not a valid humanized value: twelve months *is* a
+        # year, so the month branch must never emit it. The month count is
+        # clamped to 12 (see `calendar_months = min(calendar_months, 12)`),
+        # and the month branch is guarded by `diff < _SECS_PER_YEAR`. Those
+        # two rules overlap for 350-364 days: relativedelta reports
+        # "11 months + 15..29 days", the `days > 14` rounding pushes the
+        # count to 12, the clamp keeps it at 12, and the guard still passes
+        # because the elapsed seconds are below a full year. The result is
+        # the impossible string "12 months". Pin the boundary so a future
+        # refactor cannot reintroduce it.
+        base = arrow.Arrow(2024, 1, 1)
+
+        # 350 days is the first day the rounding produces 12 months.
+        assert base.shift(days=350).humanize(base) == "in 12 months"
+        # 364 days is the last day before the year guard takes over.
+        assert base.shift(days=364).humanize(base) == "in 12 months"
+        # 365 days crosses _SECS_PER_YEAR and must report a year instead.
+        assert base.shift(days=365).humanize(base) == "in a year"
+
+        # The same boundary must hold in the past direction.
+        assert base.shift(days=-350).humanize(base) == "12 months ago"
+        assert base.shift(days=-364).humanize(base) == "12 months ago"
+        assert base.shift(days=-365).humanize(base) == "a year ago"
+
+        # And with only_distance, which bypasses the "in"/"ago" wrapper.
+        assert base.shift(days=350).humanize(base, only_distance=True) == "12 months"
+        assert base.shift(days=364).humanize(base, only_distance=True) == "12 months"
+        assert base.shift(days=365).humanize(base, only_distance=True) == "a year"
+
     def test_year(self):
         later = self.now.shift(years=1)
 
