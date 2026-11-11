@@ -3924,6 +3924,30 @@ class HungarianLocale(Locale):
 
     meridians = {"am": "de", "pm": "du", "AM": "DE", "PM": "DU"}
 
+    def describe(
+        self,
+        timeframe: TimeFrameLiteral,
+        delta: Union[float, int] = 0,
+        only_distance: bool = False,
+    ) -> str:
+        if only_distance:
+            form = self.timeframes[timeframe]
+            if isinstance(form, Mapping):
+                return form["future"].format(trunc(abs(delta)))
+        return super().describe(timeframe, delta, only_distance)
+
+    def describe_multi(
+        self,
+        timeframes: Sequence[Tuple[TimeFrameLiteral, Union[int, float]]],
+        only_distance: bool = False,
+    ) -> str:
+        if only_distance:
+            return " ".join(
+                self.describe(timeframe, delta, only_distance=True)
+                for timeframe, delta in timeframes
+            )
+        return super().describe_multi(timeframes, only_distance)
+
     def _format_timeframe(self, timeframe: TimeFrameLiteral, delta: int) -> str:
         form = self.timeframes[timeframe]
 
