@@ -1358,6 +1358,59 @@ class TestGermanLocale:
 
 @pytest.mark.usefixtures("lang_locale")
 class TestHungarianLocale:
+    @pytest.mark.parametrize(
+        "timeframe, delta, expected",
+        [
+            ("minute", -1, "egy perc"),
+            ("minutes", -2, "2 perc"),
+            ("hour", -1, "egy óra"),
+            ("hours", -2, "2 óra"),
+            ("day", -1, "egy nap"),
+            ("days", -2, "2 nap"),
+            ("week", -1, "egy hét"),
+            ("weeks", -2, "2 hét"),
+            ("month", -1, "egy hónap"),
+            ("months", -2, "2 hónap"),
+            ("year", -1, "egy év"),
+            ("years", -17, "17 év"),
+            ("days", 0, "0 nap"),
+            ("now", 0, "éppen most"),
+        ],
+    )
+    def test_describe_only_distance(self, timeframe, delta, expected):
+        assert self.locale.describe(timeframe, delta, only_distance=True) == expected
+        assert self.locale.describe(timeframe, -delta, only_distance=True) == expected
+
+    def test_describe_multi_only_distance(self):
+        timeframes = [("days", -2), ("hours", 0), ("minutes", -3)]
+        assert (
+            self.locale.describe_multi(timeframes, only_distance=True)
+            == "2 nap 0 óra 3 perc"
+        )
+        assert (
+            self.locale.describe_multi(timeframes)
+            == "2 nappal 0 órával 3 perccel ezelőtt"
+        )
+        assert timeframes == [("days", -2), ("hours", 0), ("minutes", -3)]
+
+    @pytest.mark.parametrize("locale", ["hu", "hu-hu", "hu_HU"])
+    def test_humanize_only_distance(self, locale):
+        other = arrow.Arrow(2020, 6, 1)
+        earlier = other.shift(years=-17)
+        assert earlier.humanize(other, locale=locale, only_distance=True) == "17 év"
+        assert earlier.humanize(other, locale=locale) == "17 évvel ezelőtt"
+        earlier = other.shift(days=-2, hours=-3)
+        assert (
+            earlier.humanize(
+                other, locale=locale, only_distance=True, granularity=["day", "hour"]
+            )
+            == "2 nap 3 óra"
+        )
+        assert (
+            earlier.humanize(other, locale=locale, granularity=["day", "hour"])
+            == "2 nappal 3 órával ezelőtt"
+        )
+
     def test_format_timeframe(self):
         # Now
         assert self.locale._format_timeframe("now", 0) == "éppen most"
