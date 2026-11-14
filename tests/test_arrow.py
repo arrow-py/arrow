@@ -2233,27 +2233,40 @@ class TestArrowHumanize:
         assert self.now.humanize(later, only_distance=True) == "2 months"
         assert later.humanize(self.now, only_distance=True) == "2 months"
 
-    def test_months_never_reach_twelve(self):
-        # "12 months" is not a valid humanized value: twelve months *is* a
-        # year, so the month branch must never emit it. The month count is
-        # clamped to 12 (see `calendar_months = min(calendar_months, 12)`),
-        # and the month branch is guarded by `diff < _SECS_PER_YEAR`. Those
-        # two rules overlap for 350-364 days: relativedelta reports
-        # "11 months + 15..29 days", the `days > 14` rounding pushes the
-        # count to 12, the clamp keeps it at 12, and the guard still passes
-        # because the elapsed seconds are below a full year. The result is
-        # the impossible string "12 months". Pin the boundary so a future
-        # refactor cannot reintroduce it.
+    def test_humanize_emits_twelve_months_before_a_year(self):
+        """Characterization test: documents current ``humanize()`` behaviour.
+
+        This test pins what Arrow does *today*; it is not an assertion that
+        the output is desirable. ``humanize()`` can emit ``"12 months"`` for
+        elapsed times between 350 and 364 days, i.e. before a full year has
+        passed. That happens because two independent rules overlap:
+
+        1. ``calendar_months = min(calendar_months, 12)`` clamps the month
+           count to 12 (``_MONTHS_PER_YEAR``).
+        2. The month branch is guarded by ``diff < _SECS_PER_YEAR``, so it
+           still applies while the elapsed seconds are below 365 days.
+
+        For 350-364 days ``relativedelta`` reports "11 months + 15..29 days";
+        the ``days > 14`` rounding pushes the count to 12, the clamp keeps it
+        at 12, and the year guard has not tripped yet. The result is the
+        string ``"12 months"``. At 365 days the year guard fails and the
+        output becomes ``"a year"``.
+
+        If Arrow ever decides that ``"12 months"`` should be reported as
+        ``"a year"``, this test is expected to fail and should be updated
+        together with the ``humanize()`` change. The 365-day control below
+        keeps the boundary honest either way.
+        """
         base = arrow.Arrow(2024, 1, 1)
 
-        # 350 days is the first day the rounding produces 12 months.
+        # 350 days is the first day the `days > 14` rounding produces 12 months.
         assert base.shift(days=350).humanize(base) == "in 12 months"
         # 364 days is the last day before the year guard takes over.
         assert base.shift(days=364).humanize(base) == "in 12 months"
-        # 365 days crosses _SECS_PER_YEAR and must report a year instead.
+        # Control: 365 days crosses _SECS_PER_YEAR and reports a year.
         assert base.shift(days=365).humanize(base) == "in a year"
 
-        # The same boundary must hold in the past direction.
+        # The same boundary holds in the past direction.
         assert base.shift(days=-350).humanize(base) == "12 months ago"
         assert base.shift(days=-364).humanize(base) == "12 months ago"
         assert base.shift(days=-365).humanize(base) == "a year ago"
