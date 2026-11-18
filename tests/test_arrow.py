@@ -2930,6 +2930,20 @@ class TestArrowDehumanize:
             with pytest.raises(ValueError):
                 arw.dehumanize(empty_future_string, locale=lang)
 
+    @pytest.mark.parametrize(
+        "input_string, locale",
+        [
+            ("in 2 hours ago", "en"),
+            ("in 2 days ago", "en"),
+            ("tra 2 ore fa", "it"),
+        ],
+    )
+    def test_conflicting_directions(self, input_string: str, locale: str):
+        arw = arrow.Arrow(2000, 6, 18, 5, 55, 0)
+
+        with pytest.raises(ValueError, match="both past and future"):
+            arw.dehumanize(input_string, locale=locale)
+
     def test_slavic_locales(self, slavic_locales: List[str]):
         # Relevant units for Slavic locale plural logic
         units = [

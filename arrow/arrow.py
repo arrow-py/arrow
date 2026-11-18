@@ -1461,6 +1461,11 @@ class Arrow:
         past_pattern = re.compile(rf"^{past_string}$")
         past_pattern_match = past_pattern.findall(input_string)
 
+        if past_pattern_match and future_pattern_match:
+            raise ValueError(
+                "Invalid input String. String contains both past and future time information."
+            )
+
         # If a string contains the now unit, there will be no relative units, hence the need to check if the now unit
         # was visited before raising a ValueError
         if past_pattern_match:
