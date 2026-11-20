@@ -114,6 +114,10 @@ class TestFormatterFormatToken:
         expected = str(int(dt.timestamp()))
         assert self.formatter._format_token(dt, "X") == expected
 
+        # Before the epoch, `X` floors to the previous second like 0.17.0 did
+        dt = datetime(1969, 12, 31, 23, 59, 59, 500000, tzinfo=dateutil_tz.UTC)
+        assert self.formatter._format_token(dt, "X") == "-1"
+
         # Must round because time.time() may return a float with greater
         # than 6 digits of precision
         expected = str(int(dt.timestamp() * 1000000))
