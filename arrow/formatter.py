@@ -1,5 +1,6 @@
 """Provides the :class:`Arrow <arrow.formatter.DateTimeFormatter>` class, an improved formatter for datetimes."""
 
+import calendar
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Final, Optional, Pattern, cast
@@ -110,7 +111,7 @@ class DateTimeFormatter:
             return f"{dt.microsecond // 100000}"
 
         if token == "X":
-            return f"{dt.timestamp()}"
+            return f"{calendar.timegm(dt.utctimetuple())}"
 
         if token == "x":
             return f"{dt.timestamp() * 1_000_000:.0f}"

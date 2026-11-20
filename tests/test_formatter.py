@@ -109,8 +109,14 @@ class TestFormatterFormatToken:
 
     def test_timestamp(self):
         dt = datetime.now(tz=dateutil_tz.UTC)
-        expected = str(dt.timestamp())
+        # `X` is the timestamp in whole seconds (see #933); it must not leak the
+        # fractional part, otherwise tokens like `XSSS` produce a stray dot and digits.
+        expected = str(int(dt.timestamp()))
         assert self.formatter._format_token(dt, "X") == expected
+
+        # Before the epoch, `X` floors to the previous second like 0.17.0 did
+        dt = datetime(1969, 12, 31, 23, 59, 59, 500000, tzinfo=dateutil_tz.UTC)
+        assert self.formatter._format_token(dt, "X") == "-1"
 
         # Must round because time.time() may return a float with greater
         # than 6 digits of precision
