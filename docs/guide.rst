@@ -457,11 +457,13 @@ Use the following tokens for parsing and formatting. Note that they are **not** 
 Built-in Formats
 ++++++++++++++++
 
-There are several formatting standards that are provided as built-in tokens.
+Arrow provides constants for common date and time formats. For RFC 3339,
+``FORMAT_RFC3339`` separates the date and time with a space, and
+``FORMAT_RFC3339_STRICT`` uses a ``T`` separator.
 
 .. code-block:: python
 
-    >>> arw = arrow.utcnow()
+    >>> arw = arrow.get(2020, 5, 27, 10, 30, 35)
     >>> arw.format(arrow.FORMAT_ATOM)
     '2020-05-27 10:30:35+00:00'
     >>> arw.format(arrow.FORMAT_COOKIE)
@@ -478,9 +480,11 @@ There are several formatting standards that are provided as built-in tokens.
     'Wed, 27 May 2020 10:30:35 +0000'
     >>> arw.format(arrow.FORMAT_RFC2822)
     'Wed, 27 May 2020 10:30:35 +0000'
-     >>> arw.format(arrow.FORMAT_RFC3339)
+    >>> arw.format(arrow.FORMAT_RFC3339)
     '2020-05-27 10:30:35+00:00'
-     >>> arw.format(arrow.FORMAT_W3C)
+    >>> arw.format(arrow.FORMAT_RFC3339_STRICT)
+    '2020-05-27T10:30:35+00:00'
+    >>> arw.format(arrow.FORMAT_W3C)
     '2020-05-27 10:30:35+00:00'
 
 Escaping Formats
