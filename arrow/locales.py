@@ -4970,7 +4970,7 @@ class CroatianLocale(Locale):
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
-            if 1 < delta <= 4:
+            if 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
                 form = form["double"]
             else:
                 form = form["higher"]
@@ -5561,7 +5561,7 @@ class SerbianLocale(Locale):
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
-            if 1 < delta <= 4:
+            if 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
                 form = form["double"]
             else:
                 form = form["higher"]
