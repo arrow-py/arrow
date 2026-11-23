@@ -4897,19 +4897,39 @@ class CroatianLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "upravo sad",
         "second": "sekundu",
-        "seconds": {"double": "{0} sekunde", "higher": "{0} sekundi"},
+        "seconds": {
+            "singular": "{0} sekundu",
+            "double": "{0} sekunde",
+            "higher": "{0} sekundi",
+        },
         "minute": "minutu",
-        "minutes": {"double": "{0} minute", "higher": "{0} minuta"},
+        "minutes": {
+            "singular": "{0} minutu",
+            "double": "{0} minute",
+            "higher": "{0} minuta",
+        },
         "hour": "sat",
-        "hours": {"double": "{0} sata", "higher": "{0} sati"},
+        "hours": {"singular": "{0} sat", "double": "{0} sata", "higher": "{0} sati"},
         "day": "jedan dan",
-        "days": {"double": "{0} dana", "higher": "{0} dana"},
+        "days": {"singular": "{0} dan", "double": "{0} dana", "higher": "{0} dana"},
         "week": "tjedan",
-        "weeks": {"double": "{0} tjedna", "higher": "{0} tjedana"},
+        "weeks": {
+            "singular": "{0} tjedan",
+            "double": "{0} tjedna",
+            "higher": "{0} tjedana",
+        },
         "month": "mjesec",
-        "months": {"double": "{0} mjeseca", "higher": "{0} mjeseci"},
+        "months": {
+            "singular": "{0} mjesec",
+            "double": "{0} mjeseca",
+            "higher": "{0} mjeseci",
+        },
         "year": "godinu",
-        "years": {"double": "{0} godine", "higher": "{0} godina"},
+        "years": {
+            "singular": "{0} godinu",
+            "double": "{0} godine",
+            "higher": "{0} godina",
+        },
     }
 
     month_names = [
@@ -4970,7 +4990,9 @@ class CroatianLocale(Locale):
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
-            if 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
+            if delta % 10 == 1 and delta % 100 != 11:
+                form = form["singular"]
+            elif 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
                 form = form["double"]
             else:
                 form = form["higher"]
@@ -5488,19 +5510,39 @@ class SerbianLocale(Locale):
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "sada",
         "second": "sekundu",
-        "seconds": {"double": "{0} sekunde", "higher": "{0} sekundi"},
+        "seconds": {
+            "singular": "{0} sekundu",
+            "double": "{0} sekunde",
+            "higher": "{0} sekundi",
+        },
         "minute": "minutu",
-        "minutes": {"double": "{0} minute", "higher": "{0} minuta"},
+        "minutes": {
+            "singular": "{0} minutu",
+            "double": "{0} minute",
+            "higher": "{0} minuta",
+        },
         "hour": "sat",
-        "hours": {"double": "{0} sata", "higher": "{0} sati"},
+        "hours": {"singular": "{0} sat", "double": "{0} sata", "higher": "{0} sati"},
         "day": "dan",
-        "days": {"double": "{0} dana", "higher": "{0} dana"},
+        "days": {"singular": "{0} dan", "double": "{0} dana", "higher": "{0} dana"},
         "week": "nedelju",
-        "weeks": {"double": "{0} nedelje", "higher": "{0} nedelja"},
+        "weeks": {
+            "singular": "{0} nedelju",
+            "double": "{0} nedelje",
+            "higher": "{0} nedelja",
+        },
         "month": "mesec",
-        "months": {"double": "{0} meseca", "higher": "{0} meseci"},
+        "months": {
+            "singular": "{0} mesec",
+            "double": "{0} meseca",
+            "higher": "{0} meseci",
+        },
         "year": "godinu",
-        "years": {"double": "{0} godine", "higher": "{0} godina"},
+        "years": {
+            "singular": "{0} godinu",
+            "double": "{0} godine",
+            "higher": "{0} godina",
+        },
     }
 
     month_names = [
@@ -5561,7 +5603,9 @@ class SerbianLocale(Locale):
         form = self.timeframes[timeframe]
         delta = abs(delta)
         if isinstance(form, Mapping):
-            if 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
+            if delta % 10 == 1 and delta % 100 != 11:
+                form = form["singular"]
+            elif 2 <= delta % 10 <= 4 and not 12 <= delta % 100 <= 14:
                 form = form["double"]
             else:
                 form = form["higher"]
