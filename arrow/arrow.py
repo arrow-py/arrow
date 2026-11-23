@@ -649,6 +649,7 @@ class Arrow:
         limit: Optional[int] = None,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
+        week_start: int = 1,
     ) -> Iterable[Tuple["Arrow", "Arrow"]]:
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of timespans between two inputs.
@@ -666,6 +667,8 @@ class Arrow:
         :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final span truncated
             so as not to extend beyond ``end``.
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         **NOTE**: The ``end`` or ``limit`` must be provided.  Call with ``end`` alone to
         return the entire range.  Call with ``limit`` alone to return a maximum # of results from
@@ -702,15 +705,19 @@ class Arrow:
         """
 
         tzinfo = cls._get_tzinfo(start.tzinfo if tz is None else tz)
-        start = cls.fromdatetime(start, tzinfo).span(frame, exact=exact)[0]
+        start = cls.fromdatetime(start, tzinfo).span(
+            frame, exact=exact, week_start=week_start
+        )[0]
         end = cls.fromdatetime(end, tzinfo)
         _range = cls.range(frame, start, end, tz, limit)
         if not exact:
             for r in _range:
-                yield r.span(frame, bounds=bounds, exact=exact)
+                yield r.span(frame, bounds=bounds, exact=exact, week_start=week_start)
 
         for r in _range:
-            floor, ceil = r.span(frame, bounds=bounds, exact=exact)
+            floor, ceil = r.span(
+                frame, bounds=bounds, exact=exact, week_start=week_start
+            )
             if ceil > end:
                 ceil = end
                 if bounds[1] == ")":
@@ -731,6 +738,7 @@ class Arrow:
         tz: Optional[TZ_EXPR] = None,
         bounds: _BOUNDS = "[)",
         exact: bool = False,
+        week_start: int = 1,
     ) -> Iterable[Tuple["Arrow", "Arrow"]]:
         """Returns an iterator of tuples, each :class:`Arrow <arrow.arrow.Arrow>` objects,
         representing a series of intervals between two inputs.
@@ -747,6 +755,8 @@ class Arrow:
         :param exact: (optional) whether to have the first timespan start exactly
             at the time specified by ``start`` and the final interval truncated
             so as not to extend beyond ``end``.
+        :param week_start: (optional) only used in combination with the week timeframe. Follows isoweekday() where
+            Monday is 1 and Sunday is 7.
 
         Supported frame values: year, quarter, month, week, day, hour, minute, second
 
@@ -777,7 +787,9 @@ class Arrow:
             raise ValueError("interval has to be a positive integer")
 
         spanRange = iter(
-            cls.span_range(frame, start, end, tz, bounds=bounds, exact=exact)
+            cls.span_range(
+                frame, start, end, tz, bounds=bounds, exact=exact, week_start=week_start
+            )
         )
         while True:
             try:
