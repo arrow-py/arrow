@@ -1912,7 +1912,8 @@ class TestCroatianLocale:
         # Hour(s)
         assert self.locale._format_timeframe("hour", 1) == "sat"
         assert self.locale._format_timeframe("hours", 4) == "4 sata"
-        assert self.locale._format_timeframe("hours", 23) == "23 sati"
+        assert self.locale._format_timeframe("hours", 23) == "23 sata"
+        assert self.locale._format_timeframe("hours", 5) == "5 sati"
 
         # Day(s)
         assert self.locale._format_timeframe("day", 1) == "jedan dan"
@@ -1933,6 +1934,13 @@ class TestCroatianLocale:
         assert self.locale._format_timeframe("year", 1) == "godinu"
         assert self.locale._format_timeframe("years", 2) == "2 godine"
         assert self.locale._format_timeframe("years", 12) == "12 godina"
+        assert self.locale._format_timeframe("years", 22) == "22 godine"
+        assert self.locale._format_timeframe("years", -34) == "34 godine"
+        assert self.locale._format_timeframe("years", 112) == "112 godina"
+        assert self.locale._format_timeframe("years", 21) == "21 godinu"
+        assert self.locale._format_timeframe("years", 11) == "11 godina"
+        assert self.locale._format_timeframe("years", 111) == "111 godina"
+        assert self.locale._format_timeframe("hours", 31) == "31 sat"
 
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
@@ -1959,7 +1967,8 @@ class TestSerbianLocale:
         # Hour(s)
         assert self.locale._format_timeframe("hour", 1) == "sat"
         assert self.locale._format_timeframe("hours", 3) == "3 sata"
-        assert self.locale._format_timeframe("hours", 23) == "23 sati"
+        assert self.locale._format_timeframe("hours", 23) == "23 sata"
+        assert self.locale._format_timeframe("hours", 5) == "5 sati"
 
         # Day(s)
         assert self.locale._format_timeframe("day", 1) == "dan"
@@ -1980,6 +1989,13 @@ class TestSerbianLocale:
         assert self.locale._format_timeframe("year", 1) == "godinu"
         assert self.locale._format_timeframe("years", 2) == "2 godine"
         assert self.locale._format_timeframe("years", 12) == "12 godina"
+        assert self.locale._format_timeframe("years", 22) == "22 godine"
+        assert self.locale._format_timeframe("years", -34) == "34 godine"
+        assert self.locale._format_timeframe("years", 112) == "112 godina"
+        assert self.locale._format_timeframe("years", 21) == "21 godinu"
+        assert self.locale._format_timeframe("years", 11) == "11 godina"
+        assert self.locale._format_timeframe("years", 111) == "111 godina"
+        assert self.locale._format_timeframe("hours", 31) == "31 sat"
 
     def test_weekday(self):
         dt = arrow.Arrow(2015, 4, 11, 17, 30, 00)
