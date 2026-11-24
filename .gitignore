@@ -50,6 +50,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
+junit.xml
 *.cover
 .hypothesis/
 .pytest_cache/
@@ -213,3 +214,6 @@ $RECYCLE.BIN/
 # Claude Code configurations
 CLAUDE*.md
 .claude/
+
+# Kiro
+.kiro/**
