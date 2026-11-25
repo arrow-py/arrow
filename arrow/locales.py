@@ -3863,8 +3863,8 @@ class HungarianLocale(Locale):
 
     timeframes: ClassVar[Mapping[TimeFrameLiteral, Union[str, Mapping[str, str]]]] = {
         "now": "éppen most",
-        "second": {"past": "egy második", "future": "egy második"},
-        "seconds": {"past": "{0} másodpercekkel", "future": "{0} pár másodperc"},
+        "second": {"past": "egy másodperccel", "future": "egy másodperc"},
+        "seconds": {"past": "{0} másodperccel", "future": "{0} másodperc"},
         "minute": {"past": "egy perccel", "future": "egy perc"},
         "minutes": {"past": "{0} perccel", "future": "{0} perc"},
         "hour": {"past": "egy órával", "future": "egy óra"},
