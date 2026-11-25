@@ -1363,10 +1363,10 @@ class TestHungarianLocale:
         assert self.locale._format_timeframe("now", 0) == "éppen most"
 
         # Second(s)
-        assert self.locale._format_timeframe("second", -1) == "egy második"
-        assert self.locale._format_timeframe("second", 1) == "egy második"
-        assert self.locale._format_timeframe("seconds", -2) == "2 másodpercekkel"
-        assert self.locale._format_timeframe("seconds", 2) == "2 pár másodperc"
+        assert self.locale._format_timeframe("second", -1) == "egy másodperccel"
+        assert self.locale._format_timeframe("second", 1) == "egy másodperc"
+        assert self.locale._format_timeframe("seconds", -2) == "2 másodperccel"
+        assert self.locale._format_timeframe("seconds", 2) == "2 másodperc"
 
         # Minute(s)
         assert self.locale._format_timeframe("minute", -1) == "egy perccel"
