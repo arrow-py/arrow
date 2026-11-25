@@ -212,6 +212,19 @@ class TestDateTimeParserParse:
             self.parser.parse("79-01-01 12:05:10", "YY-MM-DD HH:mm:ss") == self.expected
         )
 
+    def test_parse_timestamp_single_digit(self):
+        self.expected = datetime.fromtimestamp(5, tz=tz.tzutc())
+        assert self.parser.parse("5", "X") == self.expected
+
+        self.expected = datetime.fromtimestamp(-5, tz=tz.tzutc())
+        assert self.parser.parse("-5", "X") == self.expected
+
+    def test_parse_timestamp_no_backtracking(self):
+        # a digit-heavy non-matching input must fail fast, without the
+        # quadratic backtracking the previous "X" regex had (#1353)
+        with pytest.raises(ParserMatchError):
+            self.parser.parse("9" * 5000 + "x", "X")
+
     def test_parse_timestamp(self):
         tz_utc = tz.tzutc()
         float_timestamp = time.time()
