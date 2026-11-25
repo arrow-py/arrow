@@ -2768,6 +2768,20 @@ class TestArrowDehumanize:
             assert arw.dehumanize(year_ago_string, locale=lang) == year_ago
             assert arw.dehumanize(year_future_string, locale=lang) == year_future
 
+    @pytest.mark.parametrize(
+        ("locale", "phrase", "hours", "minutes"),
+        [
+            ("zh-cn", "2小时3分钟后", 2, 3),
+            ("ja", "2時間3分前", -2, -3),
+            ("zh-cn", "2小时30分钟后", 2, 30),
+        ],
+    )
+    def test_adjacent_numbered_units(self, locale, phrase, hours, minutes):
+        start = arrow.Arrow(2025, 1, 1)
+        assert start.dehumanize(phrase, locale=locale) == start.shift(
+            hours=hours, minutes=minutes
+        )
+
     def test_mixed_granularity(self, locale_list_no_weeks: List[str]):
         for lang in locale_list_no_weeks:
             arw = arrow.Arrow(2000, 1, 10, 5, 55, 0)
