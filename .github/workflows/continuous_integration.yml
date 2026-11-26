@@ -17,8 +17,20 @@ jobs:
       matrix:
         python-version: ["pypy-3.11", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [ubuntu-latest, macos-latest, windows-latest]
+        exclude:
+          # setup-python does not provide these versions for Ubuntu 26.04+
+          - os: ubuntu-latest
+            python-version: "3.8"
+          - os: ubuntu-latest
+            python-version: "3.9"
         include:
           - os: ubuntu-latest
+            path: ~/.cache/pip
+          - os: ubuntu-24.04
+            python-version: "3.8"
+            path: ~/.cache/pip
+          - os: ubuntu-24.04
+            python-version: "3.9"
             path: ~/.cache/pip
           - os: macos-latest
             path: ~/Library/Caches/pip
@@ -30,8 +42,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-          restore-keys: ${{ runner.os }}-pip-
+          key: ${{ runner.os }}-${{ matrix.python-version }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.python-version }}-pip-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:

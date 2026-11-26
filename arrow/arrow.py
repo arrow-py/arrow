@@ -1410,8 +1410,12 @@ class Arrow:
                 search_string = str(time_string)
                 search_string = search_string.format(r"\d+")
 
-                # Create search pattern and find within string
-                pattern = re.compile(rf"(^|\b|\d){search_string}")
+                # A number can follow the previous unit without a word boundary,
+                # as in "2小时3分钟". Match it from its first digit.
+                prefix = (
+                    r"(?<!\d)" if search_string.startswith(r"\d+") else r"(^|\b|\d)"
+                )
+                pattern = re.compile(prefix + search_string)
                 match = pattern.search(input_string)
 
                 # If there is no match continue to next iteration
